@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { articlePillars, ArticleType, ArticlePillar } from 'src/common'
 import { StyleSheet, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 
 const getFirstLast = <T extends any>(arr: T[]): T[] => [
     arr[0],

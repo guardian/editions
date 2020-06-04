@@ -16,6 +16,7 @@ import { EditionsScreen } from 'src/screens/settings/editions-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
+import { LightboxScreen } from 'src/screens/lightbox'
 import {
     GdprConsentScreen,
     GdprConsentScreenForOnboarding,
@@ -219,6 +220,7 @@ const RootNavigator = createAppContainer(
             ),
             [routeNames.SignIn]: AuthSwitcherScreen,
             [routeNames.CasSignIn]: CasSignInScreen,
+            [routeNames.Lightbox]: LightboxScreen,
         },
         {
             initialRouteName: 'AppRoot',

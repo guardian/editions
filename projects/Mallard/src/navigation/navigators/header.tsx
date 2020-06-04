@@ -7,7 +7,7 @@ import {
 
 import React from 'react'
 import { Header } from 'src/components/layout/header/header'
-import { Button } from 'src/components/button/button'
+import { Button } from 'src/components/Button/Button'
 import { IssueTitle } from 'src/components/issue/issue-title'
 import { addStaticRouter } from '../helpers/base'
 

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
+import { appleNativeAuth } from 'src/authentication/services/apple'
 import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
 import { SignInFailedModalCard } from 'src/components/sign-in-failed-modal-card'
@@ -14,6 +15,7 @@ import { Alert } from 'react-native'
 import { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
+import { getAppleOAuthURL } from 'src/authentication/apple-oauth'
 
 const useRandomState = () =>
     useState(
@@ -97,14 +99,12 @@ const AuthSwitcherScreen = ({
                             }
                             navigation.goBack()
                         } else {
+                            attempt.reason && setError(attempt.reason)
                             // push this into the catch logic below
                             throw attempt.reason
                         }
                     } catch (e) {
                         setIsLoading(false)
-                        setError(
-                            typeof e === 'string' ? e : 'Something went wrong',
-                        )
                     }
                 },
                 deny: async () => {
@@ -153,6 +153,12 @@ const AuthSwitcherScreen = ({
                     { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
             }
+            onApplePress={() =>
+                handleAuthClick(() => appleNativeAuth(validatorString), {
+                    requiresFunctionalConsent: true,
+                    signInName: 'Apple',
+                })
+            }
             onSubmit={() =>
                 handleAuthClick(
                     async () => ({
@@ -163,6 +169,13 @@ const AuthSwitcherScreen = ({
                 )
             }
             errorMessage={error}
+            appleOauthUrl={getAppleOAuthURL(validatorString)}
+            onAppleOAuthPress={(token: AuthParams) => {
+                handleAuthClick(() => Promise.resolve(token), {
+                    requiresFunctionalConsent: true,
+                    signInName: 'AppleOauth',
+                })
+            }}
         />
     )
 }

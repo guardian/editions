@@ -7,7 +7,7 @@ import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { routeNames } from 'src/navigation/routes'
-import { Button } from 'src/components/button/button'
+import { Button } from 'src/components/Button/Button'
 import { metrics } from 'src/theme/spacing'
 import { useToast } from 'src/hooks/use-toast'
 import { isInTestFlight, isInBeta } from 'src/helpers/release-stream'
@@ -19,14 +19,17 @@ import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
-import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
+import {
+    getPushTracking,
+    clearPushTracking,
+} from 'src/push-notifications/push-tracking'
 import { getFileList } from 'src/helpers/files'
-import { deleteIssueFiles } from 'src/helpers/files'
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
 import { Switch } from 'react-native-gesture-handler'
 import { useNetInfo } from 'src/hooks/use-net-info'
 import { locale } from 'src/helpers/locale'
 import { imageForScreenSize } from 'src/helpers/screen'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (

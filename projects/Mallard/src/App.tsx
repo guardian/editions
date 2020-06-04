@@ -9,7 +9,6 @@ import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { enableScreens } from 'react-native-screens'
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationState } from 'react-navigation'
-import { clearAndDownloadIssue } from 'src/helpers/clear-download-issue'
 import { NavPositionProvider } from 'src/hooks/use-nav-position'
 import { RootNavigator } from 'src/navigation'
 import {
@@ -22,21 +21,29 @@ import { createApolloClient } from './apollo'
 import { AccessProvider } from './authentication/AccessContext'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
-import { BugButton } from './components/BugButton'
+import { BugButtonHandler } from './components/Button/BugButtonHandler'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { nestProviders } from './helpers/provider'
-import { pushNotifcationRegistration } from './helpers/push-notifications'
+import { pushNotifcationRegistration } from './push-notifications/push-notifications'
 import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
 import { NetInfoDevOverlay } from './components/NetInfoDevOverlay'
-import { ConfigProvider } from 'src/hooks/use-config-provider'
-import { Lightbox } from './screens/lightbox'
-import { LightboxProvider } from './screens/use-lightbox-modal'
+import {
+    ConfigProvider,
+    largeDeviceMemory,
+} from 'src/hooks/use-config-provider'
 import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
+import ApolloClient from 'apollo-client'
+import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
+import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue'
+import { initialiseRemoteConfig } from './services/remote-config'
+import analytics from '@react-native-firebase/analytics'
+
+analytics().setAnalyticsCollectionEnabled(false)
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -54,7 +61,7 @@ loggingService.init(apolloClient)
 // eslint-disable-next-line react-hooks/rules-of-hooks
 Platform.OS === 'ios' && enableScreens()
 pushNotifcationRegistration(apolloClient)
-Platform.OS === 'android' && clearAndDownloadIssue(apolloClient)
+Platform.OS === 'android' && prepareAndDownloadTodaysIssue(apolloClient)
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -130,24 +137,32 @@ const WithProviders = nestProviders(
     ToastProvider,
     NavPositionProvider,
     ConfigProvider,
-    LightboxProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
     setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)
 
+const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
+    const largeRAM = await largeDeviceMemory()
+    if (largeRAM) {
+        pushDownloadFailsafe(client)
+    }
+}
+
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
         weatherHider(apolloClient)
-        clearAndDownloadIssue(apolloClient)
+        initialiseRemoteConfig()
+
+        prepareAndDownloadTodaysIssue(apolloClient)
+        shouldHavePushFailsafe(apolloClient)
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
-                clearAndDownloadIssue(apolloClient)
+                prepareAndDownloadTodaysIssue(apolloClient)
             }
         })
-        loggingService.postQueuedLogs()
     }
 
     async componentDidCatch(e: Error) {
@@ -188,9 +203,8 @@ export default class App extends React.Component<{}, {}> {
                                     <NetInfoAutoToast />
                                 </View>
                                 <ModalRenderer />
-                                <BugButton />
+                                <BugButtonHandler />
                                 <DeprecateVersionModal />
-                                <Lightbox />
                             </AccessProvider>
                         </WithProviders>
                     </NetInfoDevOverlay>

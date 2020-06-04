@@ -1,4 +1,4 @@
-import { Level, loggingService } from '../logging'
+import { Level, Logging } from '../logging'
 import MockDate from 'mockdate'
 
 MockDate.set('2019-08-21')
@@ -16,6 +16,7 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => {
 describe('logging service (Android and Release)', () => {
     describe('baseLog', () => {
         it('should return a log object that matches the snapshot', async () => {
+            const loggingService = new Logging()
             loggingService.getExternalInfo = jest.fn().mockReturnValue({
                 networkStatus: { type: 'wifi' },
                 userData: {

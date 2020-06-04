@@ -4,8 +4,8 @@ import {
     OnboardingCard,
     CardAppearance,
 } from 'src/components/onboarding/onboarding-card'
-import { ButtonAppearance } from 'src/components/button/button'
-import { ModalButton } from 'src/components/modal-button'
+import { ButtonAppearance } from 'src/components/Button/Button'
+import { ModalButton } from 'src/components/Button/ModalButton'
 import { LinkNav } from 'src/components/link'
 import {
     gdprSwitchSettings,

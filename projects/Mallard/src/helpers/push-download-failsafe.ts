@@ -1,8 +1,8 @@
 import BackgroundFetch from 'react-native-background-fetch'
-import { pushTracking } from './push-tracking'
-import { clearAndDownloadIssue } from './clear-download-issue'
+import { pushTracking } from '../push-notifications/push-tracking'
 import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'
+import { prepareAndDownloadTodaysIssue } from 'src/download-edition/prepare-and-download-issue'
 
 const feature = Feature.BACKGROUNG_DOWNLOAD
 
@@ -15,7 +15,7 @@ const pushDownloadFailsafe = (client: ApolloClient<object>) => {
         },
         async () => {
             await pushTracking('backgroundFetch', 'started', feature)
-            await clearAndDownloadIssue(client)
+            await prepareAndDownloadTodaysIssue(client)
             await pushTracking('backgroundFetch', 'ended', feature)
             BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA)
         },

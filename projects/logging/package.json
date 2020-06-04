@@ -34,7 +34,8 @@
         "encoding": "^0.1.12",
         "express": "^4.17.1",
         "jest": "^24.8.0",
-        "log4js": "^6.2.1"
+        "log4js": "^6.2.1",
+        "object-sizeof": "^1.6.0"
     },
     "resolutions": {
         "handlebars": "4.6.0"

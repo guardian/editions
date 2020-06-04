@@ -1,24 +1,16 @@
 import moment, { MomentInput } from 'moment'
 import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
-import {
-    fetchFromNotificationService,
-    notificationTracking,
-} from 'src/helpers/fetch'
-import {
-    clearOldIssues,
-    downloadAndUnzipIssue,
-    matchSummmaryToKey,
-} from 'src/helpers/files'
-import { imageForScreenSize } from 'src/helpers/screen'
-import { getIssueSummary } from 'src/hooks/use-issue-summary'
-import { pushNotificationRegistrationCache } from './storage'
+import { pushNotificationRegistrationCache } from '../helpers/storage'
 import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
-import { pushTracking } from 'src/helpers/push-tracking'
+import { pushTracking } from './push-tracking'
 import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'
+import { registerWithNotificationService } from './notification-service'
+import { notificationTracking } from './notification-tracking'
+import { downloadViaNotification } from 'src/download-edition/download-via-notification'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -42,7 +34,7 @@ const maybeRegister = async (
     token: string,
     // mocks for testing
     pushNotificationRegistrationCacheImpl = pushNotificationRegistrationCache,
-    fetchFromNotificationServiceImpl = fetchFromNotificationService,
+    registerWithNotificationServiceImpl = registerWithNotificationService,
     now = moment().toString(),
 ) => {
     let should: boolean
@@ -57,7 +49,7 @@ const maybeRegister = async (
 
     if (should) {
         // this will throw on non-200 so that we won't add registration info to the cache
-        await fetchFromNotificationServiceImpl({ token })
+        await registerWithNotificationServiceImpl({ token })
         await pushNotificationRegistrationCacheImpl.set({
             registrationDate: now,
             token,
@@ -105,56 +97,11 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
 
             if (key) {
                 try {
-                    const screenSize = await imageForScreenSize()
-
-                    await pushTracking(
-                        'pushScreenSize',
-                        screenSize,
-                        Feature.DOWNLOAD,
-                    )
-
-                    const issueSummaries = await getIssueSummary()
-
-                    await pushTracking(
-                        'pushIssueSummaries',
-                        JSON.stringify(issueSummaries),
-                        Feature.DOWNLOAD,
-                    )
-
-                    // Check to see if we can find the image summary for the one that is pushed
-                    const pushImageSummary = matchSummmaryToKey(
-                        issueSummaries,
-                        key,
-                    )
-
-                    await pushTracking(
-                        'pushImageSummary',
-                        JSON.stringify(pushImageSummary),
-                        Feature.DOWNLOAD,
-                    )
-
-                    await downloadAndUnzipIssue(
-                        apolloClient,
-                        pushImageSummary,
-                        screenSize,
-                    )
-
-                    await pushTracking(
-                        'pushDownloadComplete',
-                        'completed',
-                        Feature.DOWNLOAD,
-                    )
+                    await downloadViaNotification(key, apolloClient)
                     notificationTracking(notificationId, 'downloaded')
                 } catch (e) {
-                    await pushTracking(
-                        'pushDownloadError',
-                        JSON.stringify(e),
-                        Feature.DOWNLOAD,
-                    )
                     errorService.captureException(e)
                 } finally {
-                    // No matter what happens, always clear up old issues
-                    await clearOldIssues()
                     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)
                 }

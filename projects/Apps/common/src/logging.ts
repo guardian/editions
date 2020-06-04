@@ -17,6 +17,16 @@ export enum Feature {
     SIGN_IN = 'SIGN_IN',
 }
 
+export enum ReleaseChannel {
+    BETA = 'BETA',
+    RELEASE = 'RELEASE',
+}
+
+export enum OS {
+    IOS = 'ios',
+    ANDROID = 'android',
+}
+
 export interface MallardLogFormat {
     timestamp: Date
     level: Level
@@ -24,8 +34,8 @@ export interface MallardLogFormat {
     app: string
     version: string
     buildNumber: string
-    release_channel: 'BETA' | 'RELEASE'
-    os: 'android' | 'ios'
+    release_channel: ReleaseChannel
+    os: OS
     device: string
     networkStatus: NetInfoStateType
     deviceId: string
