@@ -89,9 +89,7 @@ export const ProgressIndicator = ({
     const circles = Array(windowSize)
         .fill('', 0)
         .map((e, index) =>
-            scrollInProgress && (showStarter && showEnd && index === 0)
-                ? 'hidden'
-                : scrollInProgress && (showEnd && index === windowSize - 1)
+            scrollInProgress && (showStarter && showEnd) && index === current
                 ? 'big'
                 : (showStarter && index === 0) ||
                   (showEnd && index === windowSize - 1)
