@@ -11,7 +11,6 @@ import {
     StyleProp,
     StyleSheet,
     View,
-    Text,
     ViewStyle,
 } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
@@ -152,8 +151,6 @@ const useScrollToFrontBehavior = (
     const findFrontIndex = (frontKey: string | null) =>
         frontWithCards.findIndex(front => front.key === frontKey)
 
-    console.log('using stf behaviour')
-
     // Helper to scroll to a particular Front index. When the front is not
     // specified we default to scrolling to the very top (ex. weather). This
     // happens for example when pressing an issue title twice, in which case we
@@ -167,7 +164,6 @@ const useScrollToFrontBehavior = (
             ref.current.scrollToOffset({ animated: false, offset: 0 })
             return
         }
-        console.log('Scrolling ooh yeah', scrollIndex)
 
         ref.current.scrollToIndex({
             animated: false,
@@ -302,20 +298,16 @@ const IssueFronts = ({
             data={frontWithCards}
             style={style}
             key={width}
-            renderItem={({ item: front }) => {
-                return front ? (
-                    <Front
-                        localIssueId={issue.localId}
-                        publishedIssueId={issue.publishedId}
-                        articleNavigator={frontSpecs}
-                        frontData={front}
-                        cards={front.cards}
-                        key={front.key}
-                    />
-                ) : (
-                    <Text>hi</Text>
-                )
-            }}
+            renderItem={({ item: front }) => (
+                <Front
+                    localIssueId={issue.localId}
+                    publishedIssueId={issue.publishedId}
+                    articleNavigator={frontSpecs}
+                    frontData={front}
+                    cards={front.cards}
+                    key={front.key}
+                />
+            )}
         />
     )
 }
@@ -386,8 +378,6 @@ const IssueScreenWithPath = React.memo(
         initialFrontKey: string | null
     }) => {
         const response = useIssueResponse(path)
-
-        console.log(path, response.name)
 
         return response({
             error: handleError,

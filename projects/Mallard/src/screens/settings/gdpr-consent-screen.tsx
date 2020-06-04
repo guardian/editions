@@ -112,7 +112,6 @@ const GdprConsent = ({
 
     useEffect(() => {
         fetchAndSetGdprData()
-        console.warn('sss')
     }, [updateFlag])
 
     const setConsentAndUpdate = (
