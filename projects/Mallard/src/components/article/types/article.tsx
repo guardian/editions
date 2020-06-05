@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
@@ -17,7 +17,7 @@ import {
     CreditedImage,
 } from '../../../../../Apps/common/src'
 import { navigateToLightbox } from 'src/navigation/helpers/base'
-import remoteConfig from '@react-native-firebase/remote-config'
+import { fetchLightboxSetting } from 'src/helpers/settings/debug'
 
 const styles = StyleSheet.create({
     block: {
@@ -132,6 +132,7 @@ const Article = ({
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
+    const [lightboxEnabled, setLightboxEnabled] = useState(false)
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
@@ -141,7 +142,11 @@ const Article = ({
 
     const [, { pillar }] = useArticle()
 
-    const lightboxEnabled = remoteConfig().getValue('lightbox_enabled').value
+    useEffect(() => {
+        fetchLightboxSetting().then(lightboxEnabled =>
+            setLightboxEnabled(lightboxEnabled),
+        )
+    })
 
     return (
         <Fader>
