@@ -13,11 +13,11 @@ import {
 } from 'src/components/article/progress-indicator'
 import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption'
 import { LightboxImage } from 'src/components/Lightbox/LightboxImage'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { palette } from '@guardian/pasteup/palette'
 import { NavigationScreenProp } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { LightboxNavigationProps } from 'src/navigation/helpers/base'
+import ImageZoom from 'react-native-image-pan-zoom'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -78,7 +78,7 @@ const LightboxScreen = ({
     const index = navigation.getParam('index', 0)
     const pillar = navigation.getParam('pillar', 'news')
     const pillarColors = getPillarColors(pillar)
-    const { width } = useDimensions()
+    const { width, height } = useDimensions()
     const [windowStart, setWindowsStart] = useState(0)
     const [currentIndex, setCurrentIndex] = useState(index)
 
@@ -165,13 +165,16 @@ const LightboxScreen = ({
                                     <View
                                         style={[{ width }, styles.imageWrapper]}
                                     >
-                                        <TouchableWithoutFeedback
-                                            onPress={() =>
-                                                focusOnImageComponent()
-                                            }
+                                        <ImageZoom
+                                            cropWidth={width}
+                                            cropHeight={height}
+                                            imageWidth={width}
+                                            imageHeight={height}
+                                            onClick={focusOnImageComponent}
+                                            minScale={1.0}
                                         >
                                             <LightboxImage image={item} />
-                                        </TouchableWithoutFeedback>
+                                        </ImageZoom>
                                         {captionVisible && item.caption && (
                                             <LightboxCaption
                                                 caption={item.caption}
