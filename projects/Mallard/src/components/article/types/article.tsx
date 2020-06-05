@@ -146,7 +146,7 @@ const Article = ({
         fetchLightboxSetting().then(lightboxEnabled =>
             setLightboxEnabled(lightboxEnabled),
         )
-    })
+    }, [])
 
     return (
         <Fader>

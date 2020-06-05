@@ -93,7 +93,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         fetchLightboxSetting().then(lightboxEnabled =>
             setLightboxEnabled(lightboxEnabled),
         )
-    })
+    }, [])
 
     const onToggleLightbox = () => {
         setLightboxEnabled(!lightboxEnabled)
