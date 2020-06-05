@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     },
 })
 
-type ProgressType = 'current' | 'small' | 'big' | 'hidden'
+type ProgressType = 'current' | 'small' | 'big'
 
 type ProgressIndicatorProps = {
     imageCount: number
@@ -22,7 +22,7 @@ type ProgressIndicatorProps = {
 }
 
 const progressStyle = (type: ProgressType) => {
-    const diameter = type === 'small' ? 5 : type === 'hidden' ? 3 : 10
+    const diameter = type === 'small' ? 5 : 10
     const colour =
         type === 'current' ? 'white' : themeColors(ArticleTheme.Dark).line
     return {
