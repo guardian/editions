@@ -8,8 +8,9 @@ import { defaultSettings } from './settings/defaults'
  * v2 - Move Braze from ESSENTIAL to PERSONALISED_ADS
  * v3 - Add Logging to PERFORMANCE
  * v4 - Add Apple in FUNCTIONALITY
+ * v5 - Add Firebase in ESSENTIAL
  */
-export const CURRENT_CONSENT_VERSION = 4
+export const CURRENT_CONSENT_VERSION = 5
 
 export interface GdprDefaultSettings {
     gdprAllowEssential: boolean

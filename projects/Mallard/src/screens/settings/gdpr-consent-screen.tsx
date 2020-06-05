@@ -50,7 +50,7 @@ type EssentialGdprSwitch = Omit<GdprSwitch, 'key'>
 
 const essentials: EssentialGdprSwitch = {
     name: 'Essential',
-    services: 'Ophan - Braze - YouTube Player',
+    services: 'Ophan - Braze - YouTube Player - Firebase',
     description:
         'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
 }
