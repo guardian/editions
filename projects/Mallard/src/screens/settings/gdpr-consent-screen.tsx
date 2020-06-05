@@ -50,9 +50,10 @@ type EssentialGdprSwitch = Omit<GdprSwitch, 'key'>
 
 const essentials: EssentialGdprSwitch = {
     name: 'Essential',
-    services: 'Ophan - Braze - YouTube Player - Firebase',
+    services:
+        'Ophan - Braze - YouTube Player - Firebase Cloud Messaging - Firebase Remote Config',
     description:
-        'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
+        'These are essential to provide you with services that you have requested. These services support the ability for you to watch videos, see service-related messages, download content automatically and receive new features without app releases.',
 }
 
 const setConsent = (
@@ -111,7 +112,7 @@ const GdprConsent = ({
         gdprAllowPerformance: {
             key: gdprAllowPerformanceKey,
             name: 'Performance',
-            services: 'Sentry - Logging',
+            services: 'Sentry - Logging - Crashlytics',
             description:
                 'Enabling these allow us to observe and measure how you use our services. We use this information to fix bugs more quickly so that users have a better experience. For example, we would be able to see the journey you have taken and where the error was encountered. Your data will only be stored in our servers for two weeks. If you disable this, we will not be able to observe and measure your use of our services, and we will have less information about their performance and details of any issues encountered.',
         },
