@@ -52,7 +52,7 @@ const essentials: EssentialGdprSwitch = {
     name: 'Essential',
     services: 'Ophan - Braze - YouTube Player - Firebase Cloud Messaging - Firebase Remote Config',
     description:
-        'These are essential to provide you with services that you have requested.These services support the ability for you to watch videos, see service-related messages, download content automatically and receive new features without app releases.',
+        'These are essential to provide you with services that you have requested. These services support the ability for you to watch videos, see service-related messages, download content automatically and receive new features without app releases.',
 }
 
 const setConsent = (
