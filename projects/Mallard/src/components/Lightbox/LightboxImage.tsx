@@ -1,7 +1,8 @@
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet, Dimensions } from 'react-native'
 import { Image as IImage } from '../../../../Apps/common/src'
 import { useImagePath } from 'src/hooks/use-image-paths'
+import ImageZoom from 'react-native-image-pan-zoom'
 
 const styles = StyleSheet.create({
     image: {
