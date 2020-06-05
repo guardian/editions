@@ -47,7 +47,9 @@ const legacyCASPasswordCache = createSettingsCacheIOS<string>(
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
  * between AsyncStorage and the keychain helper below
  */
-const createAsyncCache = <T extends object | string | number>(key: string) => ({
+const createAsyncCache = <T extends object | string | boolean | number>(
+    key: string,
+) => ({
     set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
     get: (): Promise<T | null> =>
         AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
@@ -69,6 +71,8 @@ const cacheClearCache = createAsyncCache<string>('cacheClear')
 const validAttemptCache = createAsyncCache<number>('validAttempt-cache')
 
 const loggingQueueCache = createAsyncCache<string>('loggingQueue')
+
+const lightboxSettingCache = createAsyncCache<boolean>('lightbox-enabled')
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -131,4 +135,5 @@ export {
     cacheClearCache,
     validAttemptCache,
     loggingQueueCache,
+    lightboxSettingCache,
 }

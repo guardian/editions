@@ -30,6 +30,10 @@ import { useNetInfo } from 'src/hooks/use-net-info'
 import { locale } from 'src/helpers/locale'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues'
+import {
+    fetchLightboxSetting,
+    setlightboxSetting,
+} from 'src/helpers/settings/debug'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -64,6 +68,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
     const [imageSize, setImageSize] = useState('fetching...')
+    const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const buildNumber = DeviceInfo.getBuildNumber()
 
     useEffect(() => {
@@ -83,6 +88,17 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             imageSize => imageSize && setImageSize(imageSize),
         )
     }, [])
+
+    useEffect(() => {
+        fetchLightboxSetting().then(lightboxEnabled =>
+            setLightboxEnabled(lightboxEnabled),
+        )
+    }, [])
+
+    const onToggleLightbox = () => {
+        setLightboxEnabled(!lightboxEnabled)
+        setlightboxSetting(!lightboxEnabled)
+    }
 
     const query = useQuery<{ [key: string]: unknown }>(
         gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
@@ -229,6 +245,17 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                             Clipboard.setString(FSPaths.issuesDir)
                             Alert.alert(FSPaths.issuesDir)
                         },
+                    },
+                    {
+                        key: 'Enable lightbox',
+                        title: 'Enable lightbox',
+                        onPress: onToggleNetInfoButton,
+                        proxy: (
+                            <Switch
+                                value={lightboxEnabled}
+                                onValueChange={onToggleLightbox}
+                            />
+                        ),
                     },
                     {
                         key: 'Display NetInfo Button',
