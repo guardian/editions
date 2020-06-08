@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 1,
         right: 0,
-        paddingTop: 10,
-        paddingRight: 10,
+        paddingTop: 20,
+        paddingRight: 20,
         top: 0,
     },
     progressWrapper: {
