@@ -124,98 +124,92 @@ const LightboxScreen = ({
     return (
         <View style={styles.background}>
             <StatusBar hidden={true} />
-            <SafeAreaView>
-                <View style={styles.lightboxPage}>
-                    <View style={styles.closeButton}>
-                        {closeButtonVisible && (
-                            <CloseModalButton
-                                onPress={() => {
-                                    navigation.goBack()
-                                }}
-                                bgColor={pillarColors.main}
-                                borderColor={
-                                    pillar === 'neutral'
-                                        ? palette.neutral[100]
-                                        : pillarColors.main
-                                }
-                            />
-                        )}
-                    </View>
-
-                    <View style={styles.imageWrapper}>
-                        <Animated.FlatList
-                            showsHorizontalScrollIndicator={false}
-                            showsVerticalScrollIndicator={false}
-                            scrollEventThrottle={1}
-                            maxToRenderPerBatch={1}
-                            windowSize={2}
-                            initialNumToRender={1}
-                            horizontal={true}
-                            initialScrollIndex={currentIndex}
-                            pagingEnabled
-                            keyExtractor={(item: CreditedImage) => item.path}
-                            key={width}
-                            data={images}
-                            onMomentumScrollEnd={handleScrollEndEvent}
-                            onMomentumScrollBegin={handleScrollStartEvent}
-                            getItemLayout={(_: never, index: number) => ({
-                                length: width,
-                                offset: width * index,
-                                index,
-                            })}
-                            renderItem={({
-                                item,
-                            }: {
-                                item: CreditedImage
-                                index: number
-                            }) => {
-                                return (
-                                    <View
-                                        style={[{ width }, styles.imageWrapper]}
-                                    >
-                                        <ImageZoom
-                                            cropWidth={width}
-                                            cropHeight={height}
-                                            imageWidth={width}
-                                            imageHeight={height}
-                                            onClick={focusOnImageComponent}
-                                            minScale={1.0}
-                                        >
-                                            <LightboxImage image={item} />
-                                        </ImageZoom>
-                                        {captionVisible && item.caption && (
-                                            <LightboxCaption
-                                                caption={item.caption}
-                                                pillarColor={
-                                                    pillar === 'neutral'
-                                                        ? palette.neutral[100]
-                                                        : pillarColors.bright //bright since always on a dark background
-                                                }
-                                                displayCredit={
-                                                    item.displayCredit
-                                                }
-                                                credit={item.credit}
-                                            />
-                                        )}
-                                    </View>
-                                )
+            <View style={styles.lightboxPage}>
+                <View style={styles.closeButton}>
+                    {closeButtonVisible && (
+                        <CloseModalButton
+                            onPress={() => {
+                                navigation.goBack()
                             }}
+                            bgColor={pillarColors.main}
+                            borderColor={
+                                pillar === 'neutral'
+                                    ? palette.neutral[100]
+                                    : pillarColors.main
+                            }
                         />
-                    </View>
-
-                    <View style={styles.progressWrapper}>
-                        {showProgressIndicator && (
-                            <ProgressIndicator
-                                currentIndex={currentIndex}
-                                imageCount={images.length}
-                                windowSize={numDots}
-                                windowStart={windowStart}
-                                scrollInProgress={scrollInProgress}
-                            />
-                        )}
-                    </View>
+                    )}
                 </View>
-            </SafeAreaView>
+
+                <View style={styles.imageWrapper}>
+                    <Animated.FlatList
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        scrollEventThrottle={1}
+                        maxToRenderPerBatch={1}
+                        windowSize={2}
+                        initialNumToRender={1}
+                        horizontal={true}
+                        initialScrollIndex={currentIndex}
+                        pagingEnabled
+                        keyExtractor={(item: CreditedImage) => item.path}
+                        key={width}
+                        data={images}
+                        onMomentumScrollEnd={handleScrollEndEvent}
+                        onMomentumScrollBegin={handleScrollStartEvent}
+                        getItemLayout={(_: never, index: number) => ({
+                            length: width,
+                            offset: width * index,
+                            index,
+                        })}
+                        renderItem={({
+                            item,
+                        }: {
+                            item: CreditedImage
+                            index: number
+                        }) => {
+                            return (
+                                <View style={[{ width }, styles.imageWrapper]}>
+                                    <ImageZoom
+                                        cropWidth={width}
+                                        cropHeight={height}
+                                        imageWidth={width}
+                                        imageHeight={height}
+                                        onClick={focusOnImageComponent}
+                                        minScale={1.0}
+                                    >
+                                        <LightboxImage image={item} />
+                                    </ImageZoom>
+                                    {captionVisible && item.caption && (
+                                        <LightboxCaption
+                                            caption={item.caption}
+                                            pillarColor={
+                                                pillar === 'neutral'
+                                                    ? palette.neutral[100]
+                                                    : pillarColors.bright //bright since always on a dark background
+                                            }
+                                            displayCredit={item.displayCredit}
+                                            credit={item.credit}
+                                        />
+                                    )}
+                                </View>
+                            )
+                        }}
+                    />
+                </View>
+
+                <View style={styles.progressWrapper}>
+                    {showProgressIndicator && (
+                        <ProgressIndicator
+                            currentIndex={currentIndex}
+                            imageCount={images.length}
+                            windowSize={numDots}
+                            windowStart={windowStart}
+                            scrollInProgress={scrollInProgress}
+                        />
+                    )}
+                </View>
+            </View>
         </View>
     )
 }
