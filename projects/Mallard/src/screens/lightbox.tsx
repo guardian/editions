@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, View, Animated, StyleSheet } from 'react-native'
+import { View, Animated, StyleSheet } from 'react-native'
 import { CreditedImage } from '../../../Apps/common/src'
 import { CloseModalButton } from 'src/components/Button/CloseModalButton'
 import { getPillarColors } from 'src/helpers/transform'
