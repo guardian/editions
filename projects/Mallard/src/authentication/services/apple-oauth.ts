@@ -3,7 +3,7 @@ import { authWithDeepRedirect } from '../deep-link-auth'
 import invariant from 'invariant'
 
 const appleRedirectURI =
-    'https://idapi.code.dev-theguardian.com/auth/apple/auth-redirect-editions'
+    'https://idapi.theguardian.com/auth/apple/auth-redirect-editions?redirect-for=editions'
 
 const appleDeepLinkRedirectURI =
     'theguardianeditions://auth/apple/auth-redirect'
