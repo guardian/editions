@@ -1,6 +1,6 @@
 import React from 'react'
 import { FlatList, View, Alert, Text } from 'react-native'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
 import {
@@ -50,9 +50,10 @@ type EssentialGdprSwitch = Omit<GdprSwitch, 'key'>
 
 const essentials: EssentialGdprSwitch = {
     name: 'Essential',
-    services: 'Ophan - Braze - YouTube Player',
+    services:
+        'Ophan - Braze - YouTube Player - Firebase Cloud Messaging - Firebase Remote Config',
     description:
-        'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
+        'These are essential to provide you with services that you have requested. These services support the ability for you to watch videos, see service-related messages, download content automatically and receive new features without app releases.',
 }
 
 const setConsent = (
@@ -111,16 +112,16 @@ const GdprConsent = ({
         gdprAllowPerformance: {
             key: gdprAllowPerformanceKey,
             name: 'Performance',
-            services: 'Sentry - Logging',
+            services: 'Sentry - Logging - Crashlytics',
             description:
-                'Enabling these allow us to observe and measure how you use our services. We use this information to fix bugs more quickly so that users have a better experience. For example, we would be able to see the journey you have taken and where the error was encountered. Your data will only be stored in our servers for two weeks. If you disable this, we will not be able to observe and measure your use of our services, and we will have less information about their performance and event details of issues encountered.',
+                'Enabling these allow us to observe and measure how you use our services. We use this information to fix bugs more quickly so that users have a better experience. For example, we would be able to see the journey you have taken and where the error was encountered. Your data will only be stored in our servers for two weeks. If you disable this, we will not be able to observe and measure your use of our services, and we will have less information about their performance and details of any issues encountered.',
         },
         gdprAllowFunctionality: {
             key: gdprAllowFunctionalityKey,
             name: 'Functionality',
-            services: 'Google - Facebook',
+            services: 'Apple - Google - Facebook',
             description:
-                'Enabling these allow us to provide you with a range of functionality and store related information. For example, you can use social media credentials such as your Google account to log into your Guardian account. If you disable this, some features of our services may not function.',
+                'Enabling these allow us to provide extra sign-in functionality. It enables us to offer alternative options for you to sign-in to your Guardian account using your Apple, Google, or Facebook credentials. If you disable this, you won’t be able to sign-in with the third-party services above.',
         },
     }
 
@@ -133,7 +134,8 @@ const GdprConsent = ({
     const onDismiss = () => {
         if (
             data.gdprAllowFunctionality != null &&
-            data.gdprAllowPerformance != null
+            data.gdprAllowPerformance != null &&
+            data.gdprConsentVersion === CURRENT_CONSENT_VERSION
         ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
@@ -214,7 +216,12 @@ const GdprConsent = ({
                                     setConsent(client, item.key, value)
                                     showToast(PREFS_SAVED_MSG)
                                 }}
-                                value={data[item.key]}
+                                value={
+                                    data.gdprConsentVersion !==
+                                    CURRENT_CONSENT_VERSION
+                                        ? null
+                                        : data[item.key]
+                                }
                             />
                         }
                     ></TallRow>

@@ -22,7 +22,7 @@ const StarsWrapper = ({ article }: { article: CAPIArticle }) => {
     if (article.type != 'article' || article.starRating == null) return null
     return (
         <View style={styles.starsAndSportScoreWrapper}>
-            <Stars type="smallItems" rating={article.starRating} />
+            <Stars position="inline" rating={article.starRating} />
         </View>
     )
 }

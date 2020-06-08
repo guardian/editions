@@ -4,7 +4,7 @@ import { useArticle } from 'src/hooks/use-article'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { color } from 'src/theme/color'
 import { CreditedImage } from '../../common'
-import { Button } from '../button/button'
+import { Button } from '../Button/Button'
 import { UiBodyCopy } from '../styled-text'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 
@@ -84,6 +84,8 @@ const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
             </ImageBackground>
             {image.credit && (
                 <Button
+                    accessibilityLabel="Image captions button"
+                    accessibilityHint="Tells you the image credits and description"
                     alt="Toggle credit"
                     icon={showCredit ? '' : ''}
                     onPress={toggleCredit}

@@ -14,7 +14,7 @@ import {
     NavigationRoute,
 } from 'react-navigation'
 import { IssueSummary } from 'src/common'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import {
     IssueRow,
     ISSUE_ROW_HEADER_HEIGHT,
@@ -77,10 +77,18 @@ const HomeScreenHeader = withNavigation(
         onSettings: () => void
     } & NavigationInjectedProps) => {
         const action = (
-            <Button icon={'\uE04F'} alt="Return to issue" onPress={onReturn} />
+            <Button
+                accessibilityLabel="Close button"
+                accessibilityHint="Returns to the edition"
+                icon={'\uE04F'}
+                alt="Return to edition"
+                onPress={onReturn}
+            />
         )
         const settings = (
             <Button
+                accessibilityLabel="Settings button"
+                accessibilityHint="Navigates to settings screen"
                 icon={'\uE040'}
                 alt="Settings"
                 onPress={() => {
@@ -92,7 +100,6 @@ const HomeScreenHeader = withNavigation(
         return (
             <IssuePickerHeader
                 leftAction={settings}
-                accessibilityHint={'Return to issue'}
                 onPress={onReturn}
                 action={action}
             />
@@ -205,6 +212,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
         <View style={styles.issueListFooter}>
             <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
+                    accessibilityLabel="Manage editions button"
+                    accessibilityHint="Navigates to manage editions screen"
                     appearance={ButtonAppearance.skeleton}
                     onPress={() => {
                         navigation.navigate({
@@ -218,6 +227,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
             {isUsingProdDevtools ? (
                 <GridRowSplit>
                     <Button
+                        accessibilityLabel="Go to the latest edition button"
+                        accessibilityHint="Navigates to the latest edition"
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
                             navigateToIssue({

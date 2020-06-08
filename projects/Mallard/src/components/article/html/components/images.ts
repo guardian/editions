@@ -9,8 +9,12 @@ import { CssProps, themeColors } from '../helpers/css'
 export const renderCaption = ({
     caption,
     credit,
-}: Pick<ImageElement, 'caption' | 'credit'>) =>
-    [caption, credit].filter(s => !!s).join(' ')
+    displayCredit,
+}: Pick<ImageElement, 'caption' | 'credit' | 'displayCredit'>) => {
+    return displayCredit === true
+        ? [caption, credit].filter(s => !!s).join(' ')
+        : caption
+}
 
 const breakoutCaption = (role: ImageElement['role']) => css`
     .image[data-role='${role}'] figcaption {
@@ -178,6 +182,7 @@ const ImageBase = ({
     alt,
     caption,
     credit,
+    displayCredit,
     role,
 }: {
     path: string
@@ -185,13 +190,19 @@ const ImageBase = ({
     alt?: string
     caption?: string
     credit?: string
+    displayCredit?: boolean
     role?: ImageElement['role']
 }) => {
-    const figcaption = renderCaption({ caption, credit })
-    // add onclick="openLightbox(${index})" to enable lightbox
+    const figcaption = renderCaption({ caption, credit, displayCredit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img src="${path}" alt="${alt}" id="img-${index}" />
+            <img
+                src="${path}"
+                onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
+                alt="${alt}"
+                id="img-${index}"
+            />
+
             ${figcaption &&
                 html`
                     <figcaption>

@@ -4,8 +4,8 @@ import {
     OnboardingCard,
     CardAppearance,
 } from 'src/components/onboarding/onboarding-card'
-import { ButtonAppearance } from 'src/components/button/button'
-import { ModalButton } from 'src/components/modal-button'
+import { ButtonAppearance } from 'src/components/Button/Button'
+import { ModalButton } from 'src/components/Button/ModalButton'
 import { LinkNav } from 'src/components/link'
 import {
     gdprSwitchSettings,
@@ -53,13 +53,11 @@ const OnboardingConsent = ({
 }) => {
     const query = useQuery<{ [key: string]: boolean | null }>(QUERY)
     if (query.loading) return null
-    const { data, client } = query
+    const { client } = query
 
     const enableNulls = () => {
         gdprSwitchSettings.map(sw => {
-            if (data[sw] === null) {
-                setGdprFlag(client, sw, true)
-            }
+            setGdprFlag(client, sw, true)
         })
         setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
     }

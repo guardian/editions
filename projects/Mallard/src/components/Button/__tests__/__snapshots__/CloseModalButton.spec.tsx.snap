@@ -1,0 +1,171 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CloseModalButton should display a CloseModalButton 1`] = `
+<View
+  accessibilityHint="Dismiss"
+  accessibilityRole="button"
+  accessible={true}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 10,
+      "left": 10,
+      "right": 10,
+      "top": 10,
+    }
+  }
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 999,
+          "height": 42,
+          "justifyContent": "center",
+          "paddingHorizontal": 21,
+        },
+        Object {
+          "backgroundColor": "#ffe500",
+        },
+        Object {
+          "alignItems": "center",
+          "aspectRatio": 1,
+          "justifyContent": "center",
+          "paddingHorizontal": 0,
+          "width": 42,
+        },
+        Array [
+          Object {
+            "backgroundColor": "transparent",
+            "borderColor": "#052962",
+            "borderWidth": 1,
+            "paddingHorizontal": 0,
+          },
+        ],
+      ]
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "fontFamily": "GuardianIcons-Regular",
+            "fontSize": 20,
+            "lineHeight": 20,
+          },
+          Array [
+            Object {
+              "color": "#121212",
+            },
+            Object {
+              "color": "#052962",
+            },
+          ],
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`CloseModalButton should display a CloseModalButton with a colour prop 1`] = `
+<View
+  accessibilityHint="Dismiss"
+  accessibilityRole="button"
+  accessible={true}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 10,
+      "left": 10,
+      "right": 10,
+      "top": 10,
+    }
+  }
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 999,
+          "height": 42,
+          "justifyContent": "center",
+          "paddingHorizontal": 21,
+        },
+        Object {
+          "backgroundColor": "#ffe500",
+        },
+        Object {
+          "alignItems": "center",
+          "aspectRatio": 1,
+          "justifyContent": "center",
+          "paddingHorizontal": 0,
+          "width": 42,
+        },
+        Array [
+          Object {
+            "backgroundColor": "#41A9E0",
+            "borderColor": "#41A9E0",
+            "borderWidth": 1,
+            "paddingHorizontal": 0,
+          },
+        ],
+      ]
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "fontFamily": "GuardianIcons-Regular",
+            "fontSize": 20,
+            "lineHeight": 20,
+          },
+          Array [
+            Object {
+              "color": "#121212",
+            },
+            Object {
+              "color": "white",
+            },
+          ],
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+</View>
+`;

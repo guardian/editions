@@ -137,6 +137,7 @@ const ArticleScreenWithProps = ({
                 {prefersFullScreen ? (
                     <>
                         <ArticleScreenBody
+                            navigation={navigation}
                             path={path}
                             width={width}
                             pillar={pillar}
@@ -147,6 +148,7 @@ const ArticleScreenWithProps = ({
                     </>
                 ) : (
                     <ArticleSlider
+                        navigation={navigation}
                         path={path}
                         articleNavigator={articleNavigator}
                     />

@@ -7,8 +7,11 @@ import { defaultSettings } from './settings/defaults'
  * v1 - The initial version that CMP was released with
  * v2 - Move Braze from ESSENTIAL to PERSONALISED_ADS
  * v3 - Add Logging to PERFORMANCE
+ * v4 - Add Apple in FUNCTIONALITY
+ * v5 - Add Firebase in ESSENTIAL
+ * v6 - Add Crashlytics in PERFORMANCE, update wording in ESSENTIAL
  */
-export const CURRENT_CONSENT_VERSION = 3
+export const CURRENT_CONSENT_VERSION = 6
 
 export interface GdprDefaultSettings {
     gdprAllowEssential: boolean

@@ -1,6 +1,6 @@
 import React from 'react'
 import { color } from 'src/theme/color'
-import { Button } from '../button/button'
+import { Button } from '../Button/Button'
 import { StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { palette } from '@guardian/pasteup/palette'

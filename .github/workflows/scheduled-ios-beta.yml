@@ -1,9 +1,9 @@
-name: ios-beta
+name: scheduled-ios-beta
 
 on:
-    push:
-        branches:
-            - master
+    schedule:
+        # * is a special character in YAML so you have to quote this string
+        - cron: '0 14 * * 1-5' # every day at 2pm
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -37,6 +37,7 @@ jobs:
               env:
                   ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
                   ID_API_URL: ${{ secrets.ID_API_URL }}
+                  LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
                   ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
                   MEMBERS_DATA_API_URL: ${{ secrets.MEMBERS_DATA_API_URL }}
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

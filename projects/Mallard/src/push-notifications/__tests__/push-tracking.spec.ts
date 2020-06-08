@@ -1,46 +1,55 @@
 import MockDate from 'mockdate'
 import { findLastXDaysPushTracking } from '../push-tracking'
+import { NetInfoStateType } from '@react-native-community/netinfo'
 
 const fixtures = [
     {
         time: '2020-01-04T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
     {
         time: '2020-01-03T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
     {
         time: '2020-01-02T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
     {
         time: '2020-01-01T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
     {
         time: '2019-12-31T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
     {
         time: '2019-12-30T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
     {
         time: '2019-12-29T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
     {
         time: '2019-12-28T12:43:01Z',
         id: 'unzipImages',
         value: 'complete',
+        networkStatus: NetInfoStateType.wifi,
     },
 ]
 

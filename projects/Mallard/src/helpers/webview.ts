@@ -14,6 +14,7 @@ export type WebViewPing =
     | {
           type: 'openLightbox'
           index: number
+          isMainImage: string
       }
 
 /*
@@ -216,15 +217,6 @@ const makeJavaScript = (topPadding: number) => html`
         document.addEventListener('scroll', debounce(onScroll), {
             passive: true,
         })
-
-        const openLightbox = index => {
-            window.ReactNativeWebView.postMessage(
-                JSON.stringify({
-                    type: 'openLightbox',
-                    index: index,
-                }),
-            )
-        }
     </script>
 `
 

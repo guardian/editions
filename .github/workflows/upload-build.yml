@@ -1,0 +1,59 @@
+name: Upload ios-beta
+
+on: deployment
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    # This workflow contains a single job called "build"
+    build:
+        # The type of runner that the job will run on
+        runs-on: macos-10.15
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '10.15'
+
+            - name: install mallard
+              run: |
+                  yarn
+                  yarn install-mallard
+            - name: validate Mallard project
+              run: |
+                  cd projects/Mallard
+                  yarn validate
+            - name: publish app
+              run: |
+                  cd projects/Mallard
+                  make beta-ios
+              env:
+                  ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
+                  ID_API_URL: ${{ secrets.ID_API_URL }}
+                  LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
+                  ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
+                  MEMBERS_DATA_API_URL: ${{ secrets.MEMBERS_DATA_API_URL }}
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  SENTRY_CLI_EXECUTABLE: ${{ secrets.SENTRY_CLI_EXECUTABLE }}
+                  SENTRY_DEFAULTS_ORG: ${{ secrets.SENTRY_DEFAULTS_ORG }}
+                  SENTRY_DEFAULTS_PROJECT: ${{ secrets.SENTRY_DEFAULTS_PROJECT }}
+                  SENTRY_DEFAULTS_URL: ${{ secrets.SENTRY_DEFAULTS_URL }}
+                  SENTRY_DSN_URL: ${{ secrets.SENTRY_DSN_URL }}
+                  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+                  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  ANDROID_RELEASE_STREAM: ${{ secrets.ANDROID_RELEASE_STREAM }}
+                  USE_SANDBOX_IAP: ' '
+                  FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+                  MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
+                  MATCH_STORAGE_MODE: git
+                  MATCH_KEYCHAIN_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+                  MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+                  # S3 credentials are not currently used but might be in future
+                  MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
+                  MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
+                  MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
+                  MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}

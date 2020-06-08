@@ -9,7 +9,7 @@ import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 import gql from 'graphql-tag'
-import { Button, ButtonAppearance } from './button/button'
+import { Button, ButtonAppearance } from './Button/Button'
 import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
@@ -217,6 +217,8 @@ const SetLocationButton = withNavigation(
 
         return (
             <Button
+                accessibilityLabel="Use location button"
+                accessibilityHint="Opens a device location consent screen"
                 onPress={onSetLocation}
                 appearance={ButtonAppearance.skeleton}
                 style={[

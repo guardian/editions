@@ -29,6 +29,8 @@
       android:appComponentFactory="androidx.core.app.CoreComponentFactory"
       >
 
+      <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+
     <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
     <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
         <intent-filter>

@@ -87,13 +87,15 @@ const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
 
 const ClipFromTop = ({ children, from, easing }: MaybePropTypes) => {
     /* android struggles animating masks sadface */
-    if (!supportsAnimatedClipView() || from == undefined || easing == undefined)
+    if (supportsAnimatedClipView() && from && easing) {
+        return (
+            <MaskClipFromTop from={from} easing={easing}>
+                {children}
+            </MaskClipFromTop>
+        )
+    } else {
         return <>{children}</>
-    return (
-        <MaskClipFromTop from={from} easing={easing}>
-            {children}
-        </MaskClipFromTop>
-    )
+    }
 }
 
 export { ClipFromTop }

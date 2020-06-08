@@ -69,7 +69,13 @@ const privacyPolicyHtml = html`
             <p>
                 some limited data from your social media profile (further
                 information on this is below) if you have signed in to
-                theguardian.com using your social media details; and
+                theguardian.com using your social media details;
+            </p>
+        </li>
+        <li>
+            <p>
+                your ID details, e.g, if you register through a third party
+                application, e.g. Apple ID; and
             </p>
         </li>
         <li><p>your photograph, if you add one to your profile page.</p></li>
@@ -80,6 +86,9 @@ const privacyPolicyHtml = html`
         <a href="https://www.theguardian.com/help/privacy-policy"
             >privacy policy</a
         >.
+    </p>
+    <p>
+        <em><strong>Using our app</strong></em>
     </p>
     <p>
         When you use this app, we may also use technology that is similar to
@@ -107,9 +116,6 @@ const privacyPolicyHtml = html`
         </li>
     </ul>
     <p>
-        <em><strong>Using our app</strong></em>
-    </p>
-    <p>
         The Daily uses information on the content you have viewed. A list of the
         articles that you have recently viewed is cached in the local storage on
         your mobile device. You can delete this reading history in the settings
@@ -117,6 +123,12 @@ const privacyPolicyHtml = html`
         information on bugs and crashes is also sent to us. You can choose to
         receive notifications on your mobile device via the app. You can manage
         these notifications in the settings of the app.
+    </p>
+    <p>
+        With your consent, we will use third party applications to enable us to
+        log and fix any errors you report more quickly; and to observe and
+        measure how you use our services. You can disable this feature or get
+        more information in your Privacy Settings at any time.
     </p>
     <h2><strong>How we collect personal data</strong></h2>
     <p>We collect personal data via :</p>

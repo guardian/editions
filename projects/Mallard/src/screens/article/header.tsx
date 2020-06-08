@@ -1,4 +1,4 @@
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
 import React from 'react'

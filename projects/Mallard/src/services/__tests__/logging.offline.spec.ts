@@ -1,4 +1,4 @@
-import { Level, loggingService } from '../logging'
+import { Level, Logging } from '../logging'
 import MockDate from 'mockdate'
 
 jest.mock('@react-native-community/netinfo', () => ({
@@ -12,6 +12,7 @@ MockDate.set('2019-08-21')
 describe('logging service - Offline', () => {
     describe('log', () => {
         it('should save queued logs when there is no internet connection', async () => {
+            const loggingService = new Logging()
             loggingService.getExternalInfo = jest.fn().mockReturnValue({
                 networkStatus: { type: 'wifi' },
                 userData: {
@@ -23,10 +24,10 @@ describe('logging service - Offline', () => {
                 casCode: 'QWERTYUIOP',
                 iapReceipt: true,
             })
-            loggingService.saveQueuedLogs = jest.fn()
+            loggingService.saveQueuedItems = jest.fn()
             loggingService.hasConsent = true
             await loggingService.log({ level: Level.INFO, message: 'test' })
-            expect(loggingService.saveQueuedLogs).toHaveBeenCalled()
+            expect(loggingService.saveQueuedItems).toHaveBeenCalled()
         })
     })
 })

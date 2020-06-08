@@ -14,6 +14,17 @@ export enum Feature {
     PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
     BACKGROUNG_DOWNLOAD = 'BACKGROUND_DOWNLOAD',
     CLEAR_ISSUES = 'CLEAR_ISSUES',
+    SIGN_IN = 'SIGN_IN',
+}
+
+export enum ReleaseChannel {
+    BETA = 'BETA',
+    RELEASE = 'RELEASE',
+}
+
+export enum OS {
+    IOS = 'ios',
+    ANDROID = 'android',
 }
 
 export interface MallardLogFormat {
@@ -23,8 +34,8 @@ export interface MallardLogFormat {
     app: string
     version: string
     buildNumber: string
-    release_channel: 'BETA' | 'RELEASE'
-    os: 'android' | 'ios'
+    release_channel: ReleaseChannel
+    os: OS
     device: string
     networkStatus: NetInfoStateType
     deviceId: string

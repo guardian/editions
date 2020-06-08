@@ -23,12 +23,6 @@ export class LoggingStack extends cdk.Stack {
             description: 'Stage',
         })
 
-        const apiKeyParameter = new cdk.CfnParameter(this, 'apiKey', {
-            type: 'String',
-            description: 'Shared secret for log endpoint.',
-            default: 'changeme',
-        })
-
         const loggingCertificateArn = new cdk.CfnParameter(
             this,
             'logging-certificate-arn',
@@ -41,6 +35,12 @@ export class LoggingStack extends cdk.Stack {
         const loggingHostName = new cdk.CfnParameter(this, 'logging-hostname', {
             type: 'String',
             description: 'Hostname for logging endpoint',
+        })
+
+        const maxLogSize = new cdk.CfnParameter(this, 'max-log-size', {
+            type: 'String',
+            description:
+                'Maximum size (in bytes) of log data from an individual request',
         })
 
         const loggingCertificate = acm.Certificate.fromCertificateArn(
@@ -58,8 +58,8 @@ export class LoggingStack extends cdk.Stack {
             const fn = new lambda.Function(this, `EditionsLogging`, {
                 functionName: `editions-logging-${stageParameter.valueAsString}`,
                 runtime: lambda.Runtime.NODEJS_10_X,
-                memorySize: 256,
-                timeout: Duration.seconds(10),
+                memorySize: 128,
+                timeout: Duration.seconds(5),
                 code: Code.bucket(
                     deployBucket,
                     `${stackParameter.valueAsString}/${stageParameter.valueAsString}/logging/logging.zip`,
@@ -69,7 +69,7 @@ export class LoggingStack extends cdk.Stack {
                     STAGE: stageParameter.valueAsString,
                     STACK: stackParameter.valueAsString,
                     APP: 'editions-logging',
-                    API_Key: apiKeyParameter.valueAsString,
+                    MAX_LOG_SIZE: maxLogSize.valueAsString,
                 },
             })
             Tag.add(fn, 'App', `editions-logging`)
@@ -96,8 +96,35 @@ export class LoggingStack extends cdk.Stack {
                 policy: new iam.PolicyDocument({
                     statements: [loggingApiPolicyStatement],
                 }),
+                defaultMethodOptions: {
+                    apiKeyRequired: false,
+                },
             },
         )
+
+        const usagePlan = new apigateway.UsagePlan(
+            this,
+            'editions-logging-usage-plan',
+            {
+                name: `editions-logging-usage-plan-${stageParameter.valueAsString}`,
+                apiStages: [
+                    {
+                        stage: loggingApi.deploymentStage,
+                        api: loggingApi,
+                    },
+                ],
+                // max of 5 million requests a day (100 log messages per user)
+                quota: {
+                    period: apigateway.Period.DAY,
+                    limit: 5000000,
+                },
+            },
+        )
+
+        const apiKey = new apigateway.ApiKey(this, `editions-logging-apikey`, {
+            apiKeyName: `editions-logging-${stageParameter.valueAsString}`,
+        })
+        usagePlan.addApiKey(apiKey)
 
         const loggingDomainName = new apigateway.DomainName(
             this,
@@ -109,7 +136,7 @@ export class LoggingStack extends cdk.Stack {
             },
         )
 
-        loggingDomainName.addBasePathMapping(loggingApi)
+        loggingDomainName.addBasePathMapping(loggingApi, { basePath: '' })
 
         new CfnOutput(this, 'Logging-Api-Target-Hostname', {
             description: 'hostname',
