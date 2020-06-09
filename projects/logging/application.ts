@@ -36,7 +36,7 @@ export const createApp = (): express.Application => {
 
     app.post(
         '/log/mallard',
-        express.json({ limit: '1mb' }),
+        express.json({ limit: '10mb' }),
         (req: Request, res: Response) => {
             if (req.body) {
                 const data = Array.isArray(req.body) ? req.body : [req.body]
