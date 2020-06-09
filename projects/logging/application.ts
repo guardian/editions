@@ -34,26 +34,28 @@ export const createApp = (): express.Application => {
         res.send('I am the editions logger')
     })
 
-    app.post('/log/mallard', express.json(), (req: Request, res: Response) => {
-        if (req.body) {
-            const data = Array.isArray(req.body) ? req.body : [req.body]
-            const dataSize = sizeOf(data)
-            if (dataSize < maxLogSize) {
-                processLog(data)
-                res.send('Log success')
+    app.post(
+        '/log/mallard',
+        express.json({ limit: '1mb  ' }),
+        (req: Request, res: Response) => {
+            if (req.body) {
+                const data = Array.isArray(req.body) ? req.body : [req.body]
+                const dataSize = sizeOf(data)
+                if (dataSize < maxLogSize) {
+                    processLog(data)
+                    res.send('Log success')
+                } else {
+                    logger.error(
+                        `Request body too large. Estimated size: ${dataSize}, max size: ${maxLogSize}.`,
+                    )
+                    res.send('Log skipped (too large)')
+                }
             } else {
-                logger.error(
-                    `Request body too large. Estimated size: ${dataSize}, max size: ${maxLogSize}`,
-                )
-                res.status(413).send(
-                    `Request body too large. Estimated size: ${dataSize} bytes`,
-                )
+                logger.info(`Missing request body`)
+                res.status(400).send('Missing request body')
             }
-        } else {
-            logger.info(`Missing request body`)
-            res.status(400).send('Missing request body')
-        }
-    })
+        },
+    )
 
     return app
 }
