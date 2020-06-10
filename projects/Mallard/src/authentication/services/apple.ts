@@ -2,6 +2,7 @@ import appleAuth, {
     AppleAuthRequestOperation,
     AppleAuthRequestScope,
     RNAppleAuth,
+    AppleAuthError,
 } from '@invertase/react-native-apple-authentication'
 
 import { AppleCreds } from 'src/authentication/authorizers/IdentityAuthorizer'
@@ -18,6 +19,21 @@ const mapCredentials = (
         givenName: givenName || '',
         familyName: familyName || '',
         idToken: identityToken || '',
+    }
+}
+
+export const getErrorString = (err: any): string | undefined => {
+    if (err.code) {
+        switch (err.code) {
+            case AppleAuthError.CANCELED:
+                return 'Apple sign in cancelled.'
+            case AppleAuthError.FAILED:
+                return 'Apple sign in failed, please try again.'
+            default:
+                return 'Something went wrong with sign in, please try again.'
+        }
+    } else {
+        return undefined
     }
 }
 
