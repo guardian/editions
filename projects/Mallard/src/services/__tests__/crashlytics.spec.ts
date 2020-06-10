@@ -6,11 +6,14 @@ jest.mock('@react-native-firebase/crashlytics', () => ({
 }))
 
 describe('crashlyticsService', () => {
-    let crashlytics = require('@react-native-firebase/crashlytics')
+    const crashlytics = require('@react-native-firebase/crashlytics')
     let crashlyticsService: CrashlyticsService
 
-    it('should send handled exception', () => {
+    beforeEach(() => {
         crashlyticsService = require('../crashlytics').crashlyticsService
+    })
+
+    it('should send handled exception', () => {
         crashlyticsService.captureException(new Error())
         expect(crashlytics.recordError).toBeCalled()
     })
