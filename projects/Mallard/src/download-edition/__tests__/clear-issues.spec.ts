@@ -1,9 +1,7 @@
 import MockDate from 'mockdate'
 import { issuesToDelete } from 'src/helpers/files'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: () => jest.fn().mockReturnValue('en_GB'),
-}))
+jest.mock('src/helpers/locale')
 
 describe('clear issues', () => {
     describe('issuesToDelete', () => {

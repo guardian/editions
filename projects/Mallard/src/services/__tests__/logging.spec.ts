@@ -3,9 +3,7 @@ import MockDate from 'mockdate'
 import { ReleaseChannel, OS } from '../../../../Apps/common/src/logging'
 import { NetInfoStateType } from '@react-native-community/netinfo'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: () => jest.fn().mockReturnValue('en_GB'),
-}))
+jest.mock('src/helpers/locale')
 
 jest.mock('@react-native-community/netinfo', () => ({
     fetch: jest.fn(() => Promise.resolve({ isConnected: true })),

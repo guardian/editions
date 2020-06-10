@@ -1,8 +1,6 @@
 import { renderCaption } from '../components/images'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: () => jest.fn().mockReturnValue('en_GB'),
-}))
+jest.mock('src/helpers/locale')
 
 describe('html', () => {
     describe('renderCaption', () => {

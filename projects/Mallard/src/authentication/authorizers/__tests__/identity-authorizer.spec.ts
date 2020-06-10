@@ -1,8 +1,6 @@
 import { getUserName, detectAuthType } from '../IdentityAuthorizer'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: () => jest.fn().mockReturnValue('en_GB'),
-}))
+jest.mock('src/helpers/locale')
 
 describe('IdentityAuthorizer', () => {
     describe('getUserName', () => {

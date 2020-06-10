@@ -1,9 +1,7 @@
 import { Level, Logging } from '../logging'
 import MockDate from 'mockdate'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: () => jest.fn().mockReturnValue('en_GB'),
-}))
+jest.mock('src/helpers/locale')
 
 jest.mock('@react-native-community/netinfo', () => ({
     fetch: jest.fn(() => Promise.resolve(false)),

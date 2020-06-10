@@ -2,9 +2,7 @@ import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { LightboxCaption } from '../LightboxCaption'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: () => jest.fn().mockReturnValue('en_GB'),
-}))
+jest.mock('src/helpers/locale')
 
 describe('LightboxCaption', () => {
     it('should show a LightboxCaption with a pillar colour', () => {
