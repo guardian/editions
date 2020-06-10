@@ -1,5 +1,7 @@
 import { loggingService, Level } from 'src/services/logging'
-import crashlytics from '@react-native-firebase/crashlytics'
+import crashlytics, {
+    FirebaseCrashlyticsTypes,
+} from '@react-native-firebase/crashlytics'
 import { gdprAllowPerformanceKey, getSetting } from 'src/helpers/settings'
 
 export interface CrashlyticsService {
@@ -8,10 +10,16 @@ export interface CrashlyticsService {
 }
 
 class CrashlyticsServiceImpl implements CrashlyticsService {
+    crashlytics: FirebaseCrashlyticsTypes.Module
+
+    constructor(crashlytics: FirebaseCrashlyticsTypes.Module) {
+        this.crashlytics = crashlytics
+    }
+
     async init() {
         const isEnabled = await this.enableCrashlytics()
         if (isEnabled) {
-            crashlytics().log('Crashlytics initialized')
+            this.crashlytics.log('Crashlytics initialized')
             console.log('Crashlytics initialized')
         } else {
             console.log('Crashlytics is Disabled')
@@ -22,14 +30,14 @@ class CrashlyticsServiceImpl implements CrashlyticsService {
     }
 
     private enableCrashlytics = async (): Promise<Boolean> => {
-        const defVal = crashlytics().isCrashlyticsCollectionEnabled
+        const defVal = this.crashlytics.isCrashlyticsCollectionEnabled
         console.log('Crashlytics Default:', defVal)
 
         const crashlyticsPermissionGranted: boolean =
             (await getSetting(gdprAllowPerformanceKey)) == true
         console.log('User Perform:', crashlyticsPermissionGranted)
 
-        await crashlytics().setCrashlyticsCollectionEnabled(
+        await this.crashlytics.setCrashlyticsCollectionEnabled(
             crashlyticsPermissionGranted,
         )
 
@@ -42,7 +50,7 @@ class CrashlyticsServiceImpl implements CrashlyticsService {
             message: 'App Data',
         })
 
-        crashlytics().setAttributes({
+        this.crashlytics.setAttributes({
             signedIn: String(data.signedIn),
             hasCasCode: String(data.casCode !== null || data.casCode !== ''),
             hasDigiSub: String(data.digitalSub),
@@ -51,8 +59,9 @@ class CrashlyticsServiceImpl implements CrashlyticsService {
     }
 
     captureException(err: Error): void {
-        crashlytics().recordError(err)
+        this.crashlytics.recordError(err)
     }
 }
 
-export const crashlyticsService = new CrashlyticsServiceImpl()
+const crashlyticsService = new CrashlyticsServiceImpl(crashlytics())
+export { crashlyticsService }

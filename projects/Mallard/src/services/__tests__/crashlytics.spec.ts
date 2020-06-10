@@ -1,19 +1,10 @@
-import { CrashlyticsService } from '../crashlytics'
-
-jest.mock('@react-native-firebase/crashlytics', () => ({
-    setCrashlyticsCollectionEnabled: jest.fn(() => {}),
-    recordError: jest.fn((err: Error) => {}),
-}))
+import { crashlyticsService } from '../crashlytics'
 
 describe('crashlyticsService', () => {
-    const crashlytics = require('@react-native-firebase/crashlytics')
-    let crashlyticsService: CrashlyticsService
-
-    beforeEach(() => {
-        crashlyticsService = require('../crashlytics').crashlyticsService
-    })
+    const crashlytics = crashlyticsService.crashlytics
 
     it('should send handled exception', () => {
+        // crashlyticsService = require('../crashlytics').crashlyticsService
         crashlyticsService.captureException(new Error())
         expect(crashlytics.recordError).toBeCalled()
     })
