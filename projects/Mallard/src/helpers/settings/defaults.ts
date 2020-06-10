@@ -79,7 +79,7 @@ const notificationTrackingDownloadedEndpoints = {
 
 export const senderId = {
     prod: '493559488652',
-    code: '43377569438',
+    code: '385815722272',
 }
 
 export const notificationTrackingUrl = (
