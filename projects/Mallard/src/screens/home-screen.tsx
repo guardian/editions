@@ -80,6 +80,7 @@ const HomeScreenHeader = withNavigation(
             <Button
                 accessibilityLabel="Close button"
                 accessibilityHint="Returns to the edition"
+                accessibilityRole="button"
                 icon={'\uE04F'}
                 alt="Return to edition"
                 onPress={onReturn}
@@ -88,7 +89,8 @@ const HomeScreenHeader = withNavigation(
         const settings = (
             <Button
                 accessibilityLabel="Settings button"
-                accessibilityHint="Navigates to settings screen"
+                accessibilityHint="Navigates to the settings screen"
+                accessibilityRole="button"
                 icon={'\uE040'}
                 alt="Settings"
                 onPress={() => {
@@ -212,8 +214,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
         <View style={styles.issueListFooter}>
             <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
-                    accessibilityLabel="Manage editions button"
-                    accessibilityHint="Navigates to manage editions screen"
+                    accessibilityLabel="Manage downloads button"
+                    accessibilityHint="Navigates to the manage downloads screen"
                     appearance={ButtonAppearance.skeleton}
                     onPress={() => {
                         navigation.navigate({
@@ -221,7 +223,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                         })
                     }}
                 >
-                    Manage editions
+                    Manage downloads
                 </Button>
             </GridRowSplit>
             {isUsingProdDevtools ? (

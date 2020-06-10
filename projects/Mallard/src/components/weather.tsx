@@ -218,7 +218,8 @@ const SetLocationButton = withNavigation(
         return (
             <Button
                 accessibilityLabel="Use location button"
-                accessibilityHint="Opens a device location consent screen"
+                accessibilityHint="Double tap to open a device location consent screen"
+                accessibilityRole="button"
                 onPress={onSetLocation}
                 appearance={ButtonAppearance.skeleton}
                 style={[

@@ -81,7 +81,7 @@ const AvailableEditionsButtons = ({
                 selected={isSelected(number)}
                 onPress={() => onPress(number)}
             >
-                {`${number} days`}
+                {`${number} editions`}
             </MultiButton>
         ))}
     </View>
@@ -130,7 +130,7 @@ const ManageEditionsScreen = () => {
                               },
                               {
                                   key: 'Available editions',
-                                  title: 'Available editions',
+                                  title: 'Available downloads',
                                   explainer: (
                                       <AvailableEditionsButtons
                                           numbers={[7, 14, 30]}
