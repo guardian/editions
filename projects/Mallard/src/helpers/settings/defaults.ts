@@ -1,6 +1,7 @@
-import { Settings } from '../settings'
+import remoteConfig from '@react-native-firebase/remote-config'
 import { Platform } from 'react-native'
 import { locale } from '../locale'
+import { Settings } from '../settings'
 
 /*
 Default settings.
@@ -111,10 +112,11 @@ export const notificationTrackingUrl = (
 
 const apiUrl = backends[0].value
 
-const edition = localeToEdition.has(locale)
-    ? localeToEdition.get(locale)
-    : editions.daily
-// const edition = editions.daily
+const defaultLocaleEnabled = remoteConfig().getValue('default_locale').value
+const edition =
+    defaultLocaleEnabled && localeToEdition.has(locale)
+        ? localeToEdition.get(locale)
+        : editions.daily
 
 const storeDetails = {
     ios: 'itms-apps://itunes.apple.com/app/id452707806',
