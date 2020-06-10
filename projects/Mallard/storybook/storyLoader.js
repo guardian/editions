@@ -6,6 +6,7 @@
 function loadStories() {
 	require('../src/components/Button/Button.stories');
 	require('../src/components/Lightbox/LightboxCaption.stories');
+	require('../src/components/SignInFailedModalCard.stories');
 	require('../src/components/Spinner/Spinner.stories');
 	require('../src/components/SportScore/SportScore.stories');
 	require('../src/components/Stars/Stars.stories');
@@ -15,6 +16,7 @@ function loadStories() {
 const stories = [
 	'../src/components/Button/Button.stories',
 	'../src/components/Lightbox/LightboxCaption.stories',
+	'../src/components/SignInFailedModalCard.stories',
 	'../src/components/Spinner/Spinner.stories',
 	'../src/components/SportScore/SportScore.stories',
 	'../src/components/Stars/Stars.stories',
