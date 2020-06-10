@@ -7,7 +7,7 @@ import {
 } from 'src/authentication/services/apple'
 import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
-import { SignInFailedModalCard } from 'src/components/sign-in-failed-modal-card'
+import { SignInFailedModalCard } from 'src/components/SignInFailedModalCard'
 import { routeNames } from 'src/navigation/routes'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { Login } from './log-in'

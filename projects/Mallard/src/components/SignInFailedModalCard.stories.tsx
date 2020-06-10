@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native'
 import { withKnobs } from '@storybook/addon-knobs'
-import { SignInFailedModalCard } from './sign-in-failed-modal-card'
+import { SignInFailedModalCard } from './SignInFailedModalCard'
 
 storiesOf('SignInFailedModalCard', module)
     .addDecorator(withKnobs)
