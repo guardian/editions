@@ -30,7 +30,7 @@ const failureModalText = (
     return isAppleRelayEmail
         ? {
               title: 'We are unable to verify your subscription',
-              bodyCopy: `As you have chosen not to share your email with us we are unable to detect your subscription. \n \nPlease try a different sign in method. You will need to use the same email address as your Digital subscription. Alternatively, use your subscriber ID.`,
+              bodyCopy: `We are unable to detect your subscription as it seems you chose not to share your email address with us. \n \nPlease try a different sign in method. You will need to use the same email address as your Digital subscription. Alternatively, use your subscriber ID.`,
               tryAgainText: 'Try alternative sign in method',
           }
         : {
