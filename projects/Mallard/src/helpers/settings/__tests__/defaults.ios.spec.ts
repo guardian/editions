@@ -1,5 +1,9 @@
 import { baseTests } from './defaults.base'
 
+jest.mock('src/helpers/locale', () => ({
+    locale: () => jest.fn().mockReturnValue('en_GB'),
+}))
+
 describe('defaults', () => {
     describe('notificationTrackingUrl', () => {
         baseTests({

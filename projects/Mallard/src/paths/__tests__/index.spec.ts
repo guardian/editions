@@ -8,14 +8,12 @@ jest.mock('rn-fetch-blob', () => ({
     },
 }))
 
+jest.mock('src/helpers/locale', () => ({
+    locale: () => jest.fn().mockReturnValue('en_GB'),
+}))
+
 describe('paths', () => {
     describe('FSPaths', () => {
-        it('should give correct context prefixed directory', () => {
-            expect(FSPaths.contentPrefixDir).toEqual(
-                'path/to/base/directory/issues/daily-edition',
-            )
-        })
-
         it('should give correct issues directory', () => {
             expect(FSPaths.issuesDir).toEqual('path/to/base/directory/issues')
         })

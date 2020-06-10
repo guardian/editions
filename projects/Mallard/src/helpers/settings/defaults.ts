@@ -1,5 +1,6 @@
 import { Settings } from '../settings'
 import { Platform } from 'react-native'
+import { locale } from '../locale'
 
 /*
 Default settings.
@@ -55,6 +56,11 @@ export const editions = {
     training: 'training-edition',
 }
 
+const localeToEdition = new Map<string, string>()
+localeToEdition.set('en_AU', editions.ausWeekly)
+localeToEdition.set('en_US', editions.usWeekly)
+localeToEdition.set('en_GB', editions.daily)
+
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
     code: 'https://notifications.code.dev-guardianapis.com/device/register',
@@ -105,18 +111,19 @@ export const notificationTrackingUrl = (
 
 const apiUrl = backends[0].value
 
-const edition = editions.daily
+const edition = localeToEdition.has(locale)
+    ? localeToEdition.get(locale)
+    : editions.daily
+// const edition = editions.daily
 
 const storeDetails = {
     ios: 'itms-apps://itunes.apple.com/app/id452707806',
     android: 'market://details?id=com.guardian.editions',
 }
 
-const contentPrefix = 'daily-edition'
-
 export const defaultSettings: Settings = {
     apiUrl,
-    edition,
+    edition: edition || editions.daily,
     isUsingProdDevtools: false,
     gdprAllowEssential: true, // essential defaults to true and not switchable
     gdprAllowPerformance: null,
@@ -131,7 +138,6 @@ export const defaultSettings: Settings = {
         : notificationServiceRegister.prod,
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
-    contentPrefix,
     issuesPath: `/issues`,
     storeDetails,
     senderId: __DEV__ ? senderId.code : senderId.prod,

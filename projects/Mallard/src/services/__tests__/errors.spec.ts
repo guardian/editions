@@ -11,6 +11,10 @@ jest.mock('@sentry/react-native', () => ({
     setTag: jest.fn(() => {}),
     setExtra: jest.fn(() => {}),
 }))
+jest.mock('src/helpers/locale', () => ({
+    locale: () => jest.fn().mockReturnValue('en_GB'),
+}))
+
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
 describe('errorService', () => {

@@ -2,6 +2,10 @@ import ApolloClient from 'apollo-client'
 import { DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import { downloadAndUnzipIssue } from '../download-and-unzip'
 
+jest.mock('src/helpers/locale', () => ({
+    locale: () => jest.fn().mockReturnValue('en_GB'),
+}))
+
 const createIssueSummary = (localId: string) => ({
     key: 'de/1-1-1',
     name: 'any',
