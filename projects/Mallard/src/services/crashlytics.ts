@@ -17,7 +17,15 @@ class CrashlyticsServiceImpl implements CrashlyticsService {
     }
 
     async init() {
-        const isEnabled = await this.enableCrashlytics()
+        const defVal = this.crashlytics.isCrashlyticsCollectionEnabled
+        console.log('Crashlytics is enabled:', defVal)
+
+        const isEnabled: boolean =
+            (await getSetting(gdprAllowPerformanceKey)) == true
+        console.log('Crashlytics user permission status:', isEnabled)
+
+        await this.crashlytics.setCrashlyticsCollectionEnabled(isEnabled)
+
         if (isEnabled) {
             this.crashlytics.log('Crashlytics initialized')
             console.log('Crashlytics initialized')
@@ -27,21 +35,6 @@ class CrashlyticsServiceImpl implements CrashlyticsService {
         }
 
         await this.sendBasicAttributes()
-    }
-
-    private enableCrashlytics = async (): Promise<Boolean> => {
-        const defVal = this.crashlytics.isCrashlyticsCollectionEnabled
-        console.log('Crashlytics Default:', defVal)
-
-        const crashlyticsPermissionGranted: boolean =
-            (await getSetting(gdprAllowPerformanceKey)) == true
-        console.log('User Perform:', crashlyticsPermissionGranted)
-
-        await this.crashlytics.setCrashlyticsCollectionEnabled(
-            crashlyticsPermissionGranted,
-        )
-
-        return crashlyticsPermissionGranted
     }
 
     private sendBasicAttributes = async () => {
