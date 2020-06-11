@@ -1,6 +1,10 @@
 import MockDate from 'mockdate'
 import { todayAsFolder, lastNDays, todayAsKey } from '../issues'
 
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
+
 describe('helpers/issues', () => {
     describe('todayAsFolder', () => {
         it('should return "today\'s" date in the correct format', () => {
@@ -25,9 +29,10 @@ describe('helpers/issues', () => {
     })
 
     describe('todayAsKey', () => {
-        it('should return a key in the correct format for "todays" date', () => {
+        it('should return a key in the correct format for "todays" date', async () => {
             MockDate.set('2019-08-21')
-            expect(todayAsKey()).toEqual('daily-edition/2019-08-21')
+            const funcToTest = await todayAsKey()
+            expect(funcToTest).toEqual('daily-edition/2019-08-21')
         })
     })
 })
