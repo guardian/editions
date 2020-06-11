@@ -55,9 +55,10 @@ export const getScaledFontCss = <F extends FontFamily>(
     level: FontSizes<F>,
 ) => {
     const font = getScaledFont(family, level)
+    const adjustment = Platform.OS == 'android' ? 0 : 0
     return css`
-        font-size: ${px(font.fontSize)};
-        line-height: ${px(font.lineHeight)};
+        font-size: ${px(font.fontSize + adjustment)};
+        line-height: ${px(font.lineHeight + adjustment)};
     `
 }
 
