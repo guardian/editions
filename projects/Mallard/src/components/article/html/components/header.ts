@@ -114,7 +114,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .header-container-line-wrap {
         z-index: 100;
-        ${breakSides}
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        margin: auto;
     }
     .header-bg {
         left: -50em;
@@ -738,6 +739,23 @@ const Header = ({
                 className: 'header-image header-image--immersive',
                 getImagePath,
             })}
+        ${!immersive &&
+            headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                className: 'header-image',
+                image: headerProps.image,
+                isGallery: isGallery,
+                preserveRatio: true,
+                children: headerProps.starRating
+                    ? Rating(headerProps)
+                    : headerProps.sportScore
+                    ? SportScore({
+                          sportScore: headerProps.sportScore,
+                      })
+                    : undefined,
+                getImagePath,
+            })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
@@ -748,23 +766,6 @@ const Header = ({
                         ? 'header-immersive-video'
                         : 'header'}
                 >
-                    ${!immersive &&
-                        headerProps.image &&
-                        publishedId &&
-                        MainMediaImage({
-                            className: 'header-image',
-                            image: headerProps.image,
-                            isGallery: isGallery,
-                            preserveRatio: true,
-                            children: headerProps.starRating
-                                ? Rating(headerProps)
-                                : headerProps.sportScore
-                                ? SportScore({
-                                      sportScore: headerProps.sportScore,
-                                  })
-                                : undefined,
-                            getImagePath,
-                        })}
                     ${headerProps.mainMedia &&
                         (headerProps.showMedia
                             ? renderMediaAtom(headerProps.mainMedia)
