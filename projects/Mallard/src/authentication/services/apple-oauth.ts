@@ -44,13 +44,7 @@ const appleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
 
             const params = qs.parse(url.split('?')[1])
 
-            invariant(
-                params.state === validatorString,
-                'Sign-in session expired, please try again',
-            )
-
             invariant(params['apple-sign-in-token'], 'Something went wrong')
-
             return params['apple-sign-in-token'] as string
         },
     )

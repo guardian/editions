@@ -163,9 +163,11 @@ const AuthSwitcherScreen = ({
                 handleAuthClick(
                     () =>
                         appleAuthWithDeepRedirect(validatorString).then(
-                            token => ({
-                                'apple-sign-in-token': token,
-                            }),
+                            token => {
+                                return {
+                                    'apple-sign-in-token': token,
+                                }
+                            },
                         ),
                     {
                         requiresFunctionalConsent: true,
