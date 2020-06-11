@@ -70,6 +70,7 @@ export class LoggingStack extends cdk.Stack {
                     STACK: stackParameter.valueAsString,
                     APP: 'editions-logging',
                     MAX_LOG_SIZE: maxLogSize.valueAsString,
+                    LOG_ENDPOINT_ENABLED: 'true',
                 },
             })
             Tag.add(fn, 'App', `editions-logging`)
