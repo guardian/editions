@@ -12,6 +12,7 @@ export const initialiseRemoteConfig = async () => {
         .then(() => remoteConfig().fetch(300))
         // activate() replaces the default config with what has been fetched
         .then(() => remoteConfig().activate())
+        .catch(error => console.log('Failed to fetch remote config', error))
 
     if (activated) {
         console.log('Remote config defaults set, fetched & activated!')
