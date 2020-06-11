@@ -1,6 +1,8 @@
 import { withConsent } from '../settings'
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 describe('settings', () => {
     describe('withConsent', () => {

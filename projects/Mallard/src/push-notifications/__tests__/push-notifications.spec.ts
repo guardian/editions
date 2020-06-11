@@ -5,7 +5,9 @@ import {
 } from 'src/test-helpers/test-helpers'
 import moment from 'moment'
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 const _today = moment()
 const today = () => _today.clone()

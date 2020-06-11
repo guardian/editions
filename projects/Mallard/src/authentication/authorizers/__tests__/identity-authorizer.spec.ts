@@ -1,10 +1,14 @@
 import { getUserName, detectAuthType } from '../IdentityAuthorizer'
+import { locale } from 'src/helpers/locale'
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 describe('IdentityAuthorizer', () => {
     describe('getUserName', () => {
         it('returns correct usernames for valid params', () => {
+            console.log(locale)
             expect(
                 getUserName('google', { 'google-access-token': 'blah' }),
             ).toBe('gu-editions::token::google')

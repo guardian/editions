@@ -2,7 +2,9 @@ import MockDate from 'mockdate'
 import { matchSummmaryToKey, issuesToDelete } from '../../helpers/files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 describe('helpers/files', () => {
     describe('matchSummmaryToKey', () => {

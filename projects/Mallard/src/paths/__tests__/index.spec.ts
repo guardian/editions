@@ -8,7 +8,9 @@ jest.mock('rn-fetch-blob', () => ({
     },
 }))
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 describe('paths', () => {
     describe('FSPaths', () => {

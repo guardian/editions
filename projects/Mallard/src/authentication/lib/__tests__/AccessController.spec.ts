@@ -3,7 +3,9 @@ import { AccessController } from '../AccessController'
 import { AnyAttempt } from '../Attempt'
 import { AuthResult, ValidResult, InvalidResult } from '../Result'
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 class AsyncStorage<T> {
     constructor(private data: T | null = null) {}

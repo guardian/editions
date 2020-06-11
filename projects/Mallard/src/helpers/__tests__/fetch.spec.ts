@@ -3,7 +3,9 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { defaultSettings } from '../settings/defaults'
 import { fetchCacheClear } from '../fetch'
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 describe('helpers/fetch', () => {
     describe('fetchCacheClear', () => {

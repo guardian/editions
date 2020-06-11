@@ -1,7 +1,9 @@
 import MockDate from 'mockdate'
 import { todayAsFolder, lastNDays, todayAsKey } from '../issues'
 
-jest.mock('src/helpers/locale')
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 describe('helpers/issues', () => {
     describe('todayAsFolder', () => {
