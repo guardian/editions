@@ -117,6 +117,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
     }
+    .header-container-line-wrap .line { 
+            margin-right: ${px(metrics.article.sides * -1)};
+    }
     .header-bg {
         left: -50em;
         right: -50em;
