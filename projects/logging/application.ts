@@ -34,28 +34,37 @@ export const createApp = (): express.Application => {
         res.send('I am the editions logger')
     })
 
-    app.post(
-        '/log/mallard',
-        express.json({ limit: '10mb' }),
-        (req: Request, res: Response) => {
-            if (req.body) {
-                const data = Array.isArray(req.body) ? req.body : [req.body]
-                const dataSize = sizeOf(data)
-                if (dataSize < maxLogSize) {
-                    processLog(data)
-                    res.send('Log success')
+    const logEndpointEnabled = process.env.LOG_ENDPOINT_ENABLED === 'true'
+    const logEndpoint = '/log/mallard'
+
+    if (logEndpointEnabled) {
+        app.post(
+            logEndpoint,
+            express.json({ limit: '10mb' }),
+            (req: Request, res: Response) => {
+                if (req.body) {
+                    const data = Array.isArray(req.body) ? req.body : [req.body]
+                    const dataSize = sizeOf(data)
+                    if (dataSize < maxLogSize) {
+                        processLog(data)
+                        res.send('Log success')
+                    } else {
+                        logger.error(
+                            `Request body too large. Estimated size: ${dataSize}, max size: ${maxLogSize}.`,
+                        )
+                        res.send('Log skipped (too large)')
+                    }
                 } else {
-                    logger.error(
-                        `Request body too large. Estimated size: ${dataSize}, max size: ${maxLogSize}.`,
-                    )
-                    res.send('Log skipped (too large)')
+                    logger.info(`Missing request body`)
+                    res.status(400).send('Missing request body')
                 }
-            } else {
-                logger.info(`Missing request body`)
-                res.status(400).send('Missing request body')
-            }
-        },
-    )
+            },
+        )
+    } else {
+        app.post(logEndpoint, (req: Request, res: Response) => {
+            res.send('Logging service disabled')
+        })
+    }
 
     return app
 }
