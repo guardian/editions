@@ -96,7 +96,7 @@ The information below will help us to better understand your query:
 Product: Daily App
 App Version: ${version} ${buildNumber}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
-Last Edition Viewed: ${edition}
+Current Edition: ${edition}
 Locale: ${locale}
 First app start: ${firstInstallTime}
 Last updated: ${lastUpdateTime}
