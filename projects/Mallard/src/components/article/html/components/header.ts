@@ -135,23 +135,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin: auto;
     }
 
-    .header-image--standard { 
-        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
-        margin: auto;
-
-    }
-
-    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-image--standard {
-            margin-right: ${px(
-                metrics.article.rightRail + metrics.article.sides,
-            )};
-            max-width: ${metrics.article.maxWidth -
-                (metrics.article.rightRail + metrics.article.sides)}px;
-
-        }
-    }
-
     .header-image > .rating, .sport-score {
         position: absolute;
         bottom:0;
@@ -795,15 +778,12 @@ const Header = ({
                 getImagePath,
             })}
         ${!immersive &&
+            displayWideImage &&
             headerProps.image &&
             publishedId &&
             MainMediaImage({
                 articleType: type,
-                className: `${
-                    displayWideImage
-                        ? 'header-image--wide'
-                        : 'header-image--standard'
-                }`,
+                className: 'header-image--wide',
                 image: headerProps.image,
                 isGallery: isGallery,
                 preserveRatio: true,
@@ -819,6 +799,25 @@ const Header = ({
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
+                ${!immersive &&
+                    !displayWideImage &&
+                    headerProps.image &&
+                    publishedId &&
+                    MainMediaImage({
+                        articleType: type,
+                        className: 'header-image--standard',
+                        image: headerProps.image,
+                        isGallery: isGallery,
+                        preserveRatio: true,
+                        children: headerProps.starRating
+                            ? Rating(headerProps)
+                            : headerProps.sportScore
+                            ? SportScore({
+                                  sportScore: headerProps.sportScore,
+                              })
+                            : undefined,
+                        getImagePath,
+                    })}
                 <header
                     class=${immersive &&
                     headerProps.mainMedia &&
