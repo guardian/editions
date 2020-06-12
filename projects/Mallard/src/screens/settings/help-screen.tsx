@@ -6,7 +6,10 @@ import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { Heading } from 'src/components/layout/ui/row'
-import { createSupportMailto } from 'src/helpers/diagnostics'
+import {
+    createSupportMailto,
+    copyDiagnosticInfo,
+} from 'src/helpers/diagnostics'
 import {
     ISSUE_EMAIL,
     SUBSCRIPTION_EMAIL,
@@ -59,6 +62,16 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                             client,
                             'Send feedback',
                             APPS_FEEDBACK_EMAIL,
+                            attempt,
+                        ),
+                    ]}
+                />
+                <Heading>Diagnostics</Heading>
+                <List
+                    data={[
+                        copyDiagnosticInfo(
+                            client,
+                            'Copy diagnostic information',
                             attempt,
                         ),
                     ]}

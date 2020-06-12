@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
-import { Linking, Platform } from 'react-native'
+import { Linking, Platform, Clipboard } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import RNFetchBlob from 'rn-fetch-blob'
 import { canViewEdition, getCASCode } from 'src/authentication/helpers'
@@ -170,6 +170,15 @@ const createMailtoHandler = (
         },
     ])
 
+const copyDiagnosticInfoToClipboard = (
+    client: ApolloClient<object>,
+    authAttempt: AnyAttempt<string>,
+) => async () => {
+    const diagnostics = await getDiagnosticInfo(client, authAttempt)
+    Clipboard.setString(diagnostics)
+    console.log('Diagnostic info copied to clipboard')
+}
+
 const createSupportMailto = (
     client: ApolloClient<object>,
     text: string,
@@ -182,4 +191,15 @@ const createSupportMailto = (
     onPress: createMailtoHandler(client, text, releaseURL, authAttempt),
 })
 
-export { createSupportMailto, createMailtoHandler }
+const copyDiagnosticInfo = (
+    client: ApolloClient<object>,
+    text: string,
+    authAttempt: AnyAttempt<string>,
+) => ({
+    key: text,
+    title: text,
+    linkWeight: 'regular' as const,
+    onPress: copyDiagnosticInfoToClipboard(client, authAttempt),
+})
+
+export { createSupportMailto, createMailtoHandler, copyDiagnosticInfo }
