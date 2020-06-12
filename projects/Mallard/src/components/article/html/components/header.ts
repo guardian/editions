@@ -113,12 +113,10 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         -webkit-user-drag: none;
     }
     .header-container-line-wrap {
+        ${breakSides}
         z-index: 100;
         max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
-    }
-    .header-container-line-wrap .line { 
-            margin-right: ${px(metrics.article.sides * -1)};
     }
     .header-bg {
         left: -50em;
@@ -129,7 +127,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         z-index: -1;
     }
     .header-image--wide {
-        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        max-width: ${px(metrics.article.maxWidth)};
         margin: auto;
     }
 
@@ -139,7 +137,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         left:0;
     }
     .header-image--immersive {
-        height: 70%;
+        height: 65%;
         width: 100%;
         object-fit: cover;
         display: block;
