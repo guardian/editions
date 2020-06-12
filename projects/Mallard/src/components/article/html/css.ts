@@ -156,6 +156,8 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
         margin: auto;
         position: relative;
         padding-top: ${px(metrics.vertical)};
+        padding-left:  ${px(metrics.vertical)};
+        padding-right:  ${px(metrics.vertical)};
     }
     .content-wrap .line {
         margin-right: ${px(metrics.article.sides * -1)};
