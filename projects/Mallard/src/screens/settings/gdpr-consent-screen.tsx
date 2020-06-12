@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, View, Alert, Text } from 'react-native'
+import { FlatList, View, Alert, Text, ScrollView } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
@@ -156,7 +156,7 @@ const GdprConsent = ({
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             {shouldShowDismissableHeader ? (
                 <LoginHeader onDismiss={onDismiss}>
                     {PRIVACY_SETTINGS_HEADER_TITLE}
@@ -164,82 +164,86 @@ const GdprConsent = ({
             ) : (
                 <></>
             )}
-            <TallRow
-                title={''}
-                explainer={
-                    <Text>
-                        Below you can manage your privacy settings for cookies
-                        and similar technologies for this service. These
-                        technologies are provided by us and by our third-party
-                        partners. To find out more, read our{' '}
-                        <LinkNav
-                            onPress={() =>
-                                navigation.navigate(routeNames.PrivacyPolicy)
-                            }
-                        >
-                            privacy policy
-                        </LinkNav>
-                        . If you disable a category, you may need to restart the
-                        app for your changes to fully take effect.
-                    </Text>
-                }
-                proxy={
-                    <Button
-                        appearance={ButtonAppearance.skeleton}
-                        onPress={() => onEnableAllAndContinue()}
-                    >
-                        {continueText}
-                    </Button>
-                }
-            ></TallRow>
-            <Separator></Separator>
-            <TallRow
-                title={essentials.name}
-                subtitle={essentials.services}
-                explainer={essentials.description}
-            ></TallRow>
-
-            <FlatList
-                ItemSeparatorComponent={Separator}
-                ListFooterComponent={Separator}
-                ListHeaderComponent={Separator}
-                data={Object.values(switches)}
-                keyExtractor={({ key }) => key}
-                renderItem={({ item }) => (
-                    <TallRow
-                        title={item.name}
-                        subtitle={item.services}
-                        explainer={item.description}
-                        proxy={
-                            <ThreeWaySwitch
-                                onValueChange={value => {
-                                    setConsent(client, item.key, value)
-                                    showToast(PREFS_SAVED_MSG)
-                                }}
-                                value={
-                                    data.gdprConsentVersion !==
-                                    CURRENT_CONSENT_VERSION
-                                        ? null
-                                        : data[item.key]
+            <ScrollView>
+                <TallRow
+                    title={''}
+                    explainer={
+                        <Text>
+                            Below you can manage your privacy settings for
+                            cookies and similar technologies for this service.
+                            These technologies are provided by us and by our
+                            third-party partners. To find out more, read our{' '}
+                            <LinkNav
+                                onPress={() =>
+                                    navigation.navigate(
+                                        routeNames.PrivacyPolicy,
+                                    )
                                 }
-                            />
-                        }
-                    ></TallRow>
-                )}
-            />
-            <Footer>
-                <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
-                    You can change the above settings any time by selecting
-                    Privacy Settings from the Settings menu.
-                </UiBodyCopy>
-            </Footer>
-            {__DEV__ ? (
+                            >
+                                privacy policy
+                            </LinkNav>
+                            . If you disable a category, you may need to restart
+                            the app for your changes to fully take effect.
+                        </Text>
+                    }
+                    proxy={
+                        <Button
+                            appearance={ButtonAppearance.skeleton}
+                            onPress={() => onEnableAllAndContinue()}
+                        >
+                            {continueText}
+                        </Button>
+                    }
+                ></TallRow>
+                <Separator></Separator>
+                <TallRow
+                    title={essentials.name}
+                    subtitle={essentials.services}
+                    explainer={essentials.description}
+                ></TallRow>
+
+                <FlatList
+                    ItemSeparatorComponent={Separator}
+                    ListFooterComponent={Separator}
+                    ListHeaderComponent={Separator}
+                    data={Object.values(switches)}
+                    keyExtractor={({ key }) => key}
+                    renderItem={({ item }) => (
+                        <TallRow
+                            title={item.name}
+                            subtitle={item.services}
+                            explainer={item.description}
+                            proxy={
+                                <ThreeWaySwitch
+                                    onValueChange={value => {
+                                        setConsent(client, item.key, value)
+                                        showToast(PREFS_SAVED_MSG)
+                                    }}
+                                    value={
+                                        data.gdprConsentVersion !==
+                                        CURRENT_CONSENT_VERSION
+                                            ? null
+                                            : data[item.key]
+                                    }
+                                />
+                            }
+                        ></TallRow>
+                    )}
+                />
                 <Footer>
-                    <Button onPress={resetAll.bind(undefined, client)}>
-                        Reset
-                    </Button>
+                    <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
+                        You can change the above settings any time by selecting
+                        Privacy Settings from the Settings menu.
+                    </UiBodyCopy>
                 </Footer>
-            ) : null}
+                {__DEV__ ? (
+                    <Footer>
+                        <Button onPress={resetAll.bind(undefined, client)}>
+                            Reset
+                        </Button>
+                    </Footer>
+                ) : null}
+            </ScrollView>
         </View>
     )
 }
@@ -259,13 +263,11 @@ const GdprConsentScreenForOnboarding = ({
     navigation,
 }: NavigationInjectedProps) => (
     <WithAppAppearance value={'settings'}>
-        <ScrollContainer>
-            <GdprConsent
-                shouldShowDismissableHeader={true}
-                continueText={'Enable all and continue'}
-                navigation={navigation}
-            ></GdprConsent>
-        </ScrollContainer>
+        <GdprConsent
+            shouldShowDismissableHeader={true}
+            continueText={'Enable all and continue'}
+            navigation={navigation}
+        ></GdprConsent>
     </WithAppAppearance>
 )
 

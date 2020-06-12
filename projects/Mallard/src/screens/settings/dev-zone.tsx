@@ -127,6 +127,15 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </Button>
                 <Button
                     onPress={() => {
+                        navigation.navigate(
+                            routeNames.onboarding.OnboardingConsent,
+                        )
+                    }}
+                >
+                    Show Startup Consent
+                </Button>
+                <Button
+                    onPress={() => {
                         // go back to the main to simulate a fresh app
                         Alert.alert(
                             'Delete all issue files',
