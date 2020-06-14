@@ -155,10 +155,16 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
         max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
         position: relative;
-        padding-left: ${px(metrics.article.sides)};
-        padding-right: ${px(metrics.article.sides)};
         padding-top: ${px(metrics.vertical)};
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .content-wrap {
+            padding-left: ${px(metrics.article.sides)};
+            padding-right: ${px(metrics.article.sides)};
+    
+        }
+    }
+
     ${quoteStyles({
         colors,
         theme,

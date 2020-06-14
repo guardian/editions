@@ -113,11 +113,18 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         -webkit-user-drag: none;
     }
     .header-container-line-wrap {
-        ${breakSides}
         z-index: 100;
         max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-container-line-wrap {
+            padding-left: ${px(metrics.article.sides)};
+            padding-right: ${px(metrics.article.sides)};
+        }
+    }
+            
+
     .header-bg {
         left: -50em;
         right: -50em;
