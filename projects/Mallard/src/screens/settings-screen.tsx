@@ -48,8 +48,7 @@ const MiscSettingsList = React.memo(
                 proxy: (
                     <Switch
                         accessible={true}
-                        accessibilityLabel="Switch button"
-                        accessibilityHint="Double tap to toggle setting"
+                        accessibilityLabel="Display weather."
                         accessibilityRole="switch"
                         value={props.isWeatherShown}
                         onValueChange={onChange}
@@ -100,11 +99,11 @@ const SignInButton = ({
             onPressSecondary={() => signOutIdentity()}
         />
     ) : (
-        <FullButton
-            text="Sign in"
-            onPress={() => navigation.navigate(routeNames.SignIn)}
-        />
-    )
+            <FullButton
+                text="Sign in"
+                onPress={() => navigation.navigate(routeNames.SignIn)}
+            />
+        )
 
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const query = useQuery<QueryData>(QUERY)
@@ -121,57 +120,57 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
 
     const versionClickHandler = identityData
         ? () => {
-              if (!isUsingProdDevtools && isStaffMember(identityData))
-                  setVersionClickedTimes(t => {
-                      if (t < 7) return t + 1
-                      Alert.alert(
-                          'Enable Developer Mode',
-                          'Are you sure?',
-                          [
-                              {
-                                  text: 'Enable',
-                                  style: 'destructive',
-                                  onPress: () => {
-                                      setIsUsingProdDevtools(client, true)
-                                  },
-                              },
-                              {
-                                  text: 'Cancel',
-                                  style: 'cancel',
-                                  onPress: () => {},
-                              },
-                          ],
-                          { cancelable: false },
-                      )
-                      return 0
-                  })
-          }
-        : () => {}
+            if (!isUsingProdDevtools && isStaffMember(identityData))
+                setVersionClickedTimes(t => {
+                    if (t < 7) return t + 1
+                    Alert.alert(
+                        'Enable Developer Mode',
+                        'Are you sure?',
+                        [
+                            {
+                                text: 'Enable',
+                                style: 'destructive',
+                                onPress: () => {
+                                    setIsUsingProdDevtools(client, true)
+                                },
+                            },
+                            {
+                                text: 'Cancel',
+                                style: 'cancel',
+                                onPress: () => { },
+                            },
+                        ],
+                        { cancelable: false },
+                    )
+                    return 0
+                })
+        }
+        : () => { }
 
     const rightChevronIcon = <RightChevron />
 
     const signInListItems = [
         ...(canAccess
             ? [
-                  {
-                      key: 'Subscription details',
-                      title: 'Subscription details',
-                      onPress: () => {
-                          navigation.navigate(routeNames.SubscriptionDetails)
-                      },
-                  },
-              ]
+                {
+                    key: 'Subscription details',
+                    title: 'Subscription details',
+                    onPress: () => {
+                        navigation.navigate(routeNames.SubscriptionDetails)
+                    },
+                },
+            ]
             : [
-                  {
-                      key: `I'm already subscribed`,
-                      title: `I'm already subscribed`,
-                      onPress: () => {
-                          navigation.navigate(routeNames.AlreadySubscribed)
-                      },
+                {
+                    key: `I'm already subscribed`,
+                    title: `I'm already subscribed`,
+                    onPress: () => {
+                        navigation.navigate(routeNames.AlreadySubscribed)
+                    },
 
-                      proxy: rightChevronIcon,
-                  },
-              ]),
+                    proxy: rightChevronIcon,
+                },
+            ]),
     ]
 
     return (
