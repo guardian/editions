@@ -4,6 +4,7 @@ import { storiesOf } from '@storybook/react-native'
 import { withKnobs, color } from '@storybook/addon-knobs'
 import { Quote } from './Quote'
 import { RightChevron } from './RightChevron'
+import { Newspaper } from './Newspaper'
 
 import { StyleSheet } from 'react-native'
 
@@ -30,6 +31,10 @@ storiesOf('Icons', module)
             <View style={styles.icon}>
                 <RightChevron />
                 <Text style={styles.label}>RightChevron</Text>
+            </View>
+            <View style={styles.icon}>
+                <Newspaper />
+                <Text style={styles.label}>Newspaper</Text>
             </View>
         </>
     ))

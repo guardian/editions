@@ -113,7 +113,6 @@ const ScreenHeader = withNavigation(
 
         return (
             <Header
-                accessibilityHint="More issues"
                 onPress={() => {
                     goToIssueList()
                 }}

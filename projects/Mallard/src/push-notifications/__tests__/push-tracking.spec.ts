@@ -2,6 +2,10 @@ import MockDate from 'mockdate'
 import { findLastXDaysPushTracking } from '../push-tracking'
 import { NetInfoStateType } from '@react-native-community/netinfo'
 
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
+
 const fixtures = [
     {
         time: '2020-01-04T12:43:01Z',

@@ -1,10 +1,8 @@
 import { renderCaption } from '../components/images'
 
-jest.mock('@react-native-firebase/remote-config', () => {
-    remoteConfig: jest.fn(() => ({
-        getValue: jest.fn(),
-    }))
-})
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
 
 describe('html', () => {
     describe('renderCaption', () => {

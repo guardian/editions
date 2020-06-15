@@ -1,6 +1,10 @@
 import MockDate from 'mockdate'
 import { issuesToDelete } from 'src/helpers/files'
 
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_GB',
+}))
+
 describe('clear issues', () => {
     describe('issuesToDelete', () => {
         MockDate.set('2019-08-21')

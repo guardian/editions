@@ -7,7 +7,7 @@ import { errorService } from 'src/services/errors'
 import { downloadAndUnzipIssue } from './download-and-unzip'
 
 const downloadTodaysIssue = async (client: ApolloClient<object>) => {
-    const todaysKey = todayAsKey()
+    const todaysKey = await todayAsKey()
     try {
         const issueSummaries = await getIssueSummary()
 

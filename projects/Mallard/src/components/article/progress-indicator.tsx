@@ -18,6 +18,7 @@ type ProgressIndicatorProps = {
     currentIndex: number
     windowStart: number
     windowSize: number
+    scrollInProgress: boolean
 }
 
 const progressStyle = (type: ProgressType) => {
@@ -80,6 +81,7 @@ export const ProgressIndicator = ({
     currentIndex,
     windowStart,
     windowSize,
+    scrollInProgress,
 }: ProgressIndicatorProps) => {
     const current = currentIndex - windowStart
     const showStarter = windowStart > 0
@@ -87,8 +89,10 @@ export const ProgressIndicator = ({
     const circles = Array(windowSize)
         .fill('', 0)
         .map((e, index) =>
-            (showStarter && index === 0) ||
-            (showEnd && index === windowSize - 1)
+            scrollInProgress && (showStarter && showEnd) && index === current
+                ? 'big'
+                : (showStarter && index === 0) ||
+                  (showEnd && index === windowSize - 1)
                 ? 'small'
                 : index === current
                 ? 'current'

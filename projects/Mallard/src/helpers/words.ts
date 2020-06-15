@@ -25,7 +25,7 @@ export const GENERIC_ERROR = `Sorry! This didn't work`
 export const GENERIC_AUTH_ERROR = `Something went wrong`
 export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at ${FEEDBACK_EMAIL} and tell us what happened?`
 export const NOT_CONNECTED = 'You are not connected to the internet'
-export const MANAGE_EDITIONS_TITLE = 'Manage Editions'
+export const MANAGE_EDITIONS_TITLE = 'Manage Downloads'
 export const WIFI_ONLY_DOWNLOAD = `You must be connected to wifi to download, you can change this under '${MANAGE_EDITIONS_TITLE}'`
 
 export const DIAGNOSTICS_TITLE = 'Found a bug?'

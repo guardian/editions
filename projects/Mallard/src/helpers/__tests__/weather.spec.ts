@@ -48,6 +48,10 @@ jest.mock('@react-native-community/geolocation', () => ({
         }),
 }))
 
+jest.mock('react-native-localize', () => ({
+    getTemperatureUnit: () => 'celsius',
+}))
+
 let now = 100000000
 Date.now = () => now
 
