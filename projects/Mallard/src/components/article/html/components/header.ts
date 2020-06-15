@@ -154,8 +154,13 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-image--immersive {
+            height: 80%;
+        }
+    }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        header-image--immersive {
+        .header-image--immersive {
             padding-top: 140%;
         }
     }
