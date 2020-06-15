@@ -21,6 +21,7 @@ import {
     DIAGNOSTICS_TITLE,
     IOS_BETA_EMAIL,
 } from './words'
+import { OnCompletionToast } from 'src/screens/settings/help-screen'
 
 const getGDPREntries = () =>
     Promise.all(
@@ -173,10 +174,11 @@ const createMailtoHandler = (
 const copyDiagnosticInfoToClipboard = (
     client: ApolloClient<object>,
     authAttempt: AnyAttempt<string>,
+    callback: OnCompletionToast,
 ) => async () => {
     const diagnostics = await getDiagnosticInfo(client, authAttempt)
     Clipboard.setString(diagnostics)
-    console.log('Diagnostic info copied to clipboard')
+    callback('Diagnostic info copied to clipboard')
 }
 
 const createSupportMailto = (
@@ -195,11 +197,12 @@ const copyDiagnosticInfo = (
     client: ApolloClient<object>,
     text: string,
     authAttempt: AnyAttempt<string>,
+    callback: OnCompletionToast,
 ) => ({
     key: text,
     title: text,
     linkWeight: 'regular' as const,
-    onPress: copyDiagnosticInfoToClipboard(client, authAttempt),
+    onPress: copyDiagnosticInfoToClipboard(client, authAttempt, callback),
 })
 
 export { createSupportMailto, createMailtoHandler, copyDiagnosticInfo }

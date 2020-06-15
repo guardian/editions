@@ -18,10 +18,21 @@ import {
 } from 'src/helpers/words'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { useApolloClient } from '@apollo/react-hooks'
+import { useToast } from 'src/hooks/use-toast'
+
+export interface OnCompletionToast {
+    (msg: string): void
+}
 
 const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
+    const { showToast } = useToast()
     const { attempt } = useContext(AccessContext)
     const client = useApolloClient()
+
+    const showToastCallback: OnCompletionToast = (msg: string) => {
+        showToast(msg)
+    }
+
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
@@ -73,6 +84,7 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                             client,
                             'Copy diagnostic information',
                             attempt,
+                            showToastCallback,
                         ),
                     ]}
                 />
