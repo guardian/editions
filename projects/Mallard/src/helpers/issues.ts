@@ -1,7 +1,7 @@
 import { Issue } from 'src/common'
 import { useMemo } from 'react'
-import { defaultSettings } from 'src/helpers/settings/defaults'
 import { londonTime } from './date'
+import { getSetting } from './settings'
 
 const months = [
     'January',
@@ -62,8 +62,10 @@ const dateToFolderConvert = (date: Date): string => {
 export const todayAsFolder = (): string =>
     dateToFolderConvert(londonTime().toDate())
 
-export const todayAsKey = (): string =>
-    `${defaultSettings.contentPrefix}/${todayAsFolder()}`
+export const todayAsKey = async (): Promise<string> => {
+    const edition = await getSetting('edition')
+    return `${edition}/${todayAsFolder()}`
+}
 
 export const lastNDays = (n: number): string[] => {
     return Array.from({ length: n }, (_, i) => {

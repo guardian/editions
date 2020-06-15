@@ -6,7 +6,7 @@ import { IssueSummary } from '../../../Apps/common/src'
 import { lastNDays } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
-import { defaultSettings } from './settings/defaults'
+import { defaultSettings, editions } from './settings/defaults'
 import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { withCache } from './fetch/cache'
@@ -36,9 +36,13 @@ export const ensureDirExists = (dir: string): Promise<void> =>
 /*
 We always try to prep the file system before accessing issuesDir
 */
-export const prepFileSystem = (): Promise<void> =>
+export const prepFileSystem = (): Promise<void[]> =>
     ensureDirExists(FSPaths.issuesDir).then(() =>
-        ensureDirExists(`${FSPaths.issuesDir}/daily-edition`),
+        Promise.all(
+            Object.values(editions).map(edition =>
+                ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
+            ),
+        ),
     )
 
 export const getJson = <T extends any>(path: string): Promise<T> =>
@@ -123,20 +127,22 @@ export type DLStatus =
 
 const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
 
-export const getLocalIssues = () =>
-    RNFetchBlob.fs
-        .ls(FSPaths.contentPrefixDir)
-        .then(files => files.map(withPathPrefix(defaultSettings.contentPrefix)))
+export const getLocalIssues = async () => {
+    const editionDirectory = await FSPaths.editionDir()
+    const edition = await getSetting('edition')
+    return RNFetchBlob.fs
+        .ls(editionDirectory)
+        .then(files => files.map(withPathPrefix(edition)))
+}
 
 export const issuesToDelete = async (files: string[]) => {
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
+    const edition = await getSetting('edition')
     const lastNumberOfDays = lastNDays(maxAvailableEditions)
     return files.filter(
         issue =>
-            !lastNumberOfDays
-                .map(withPathPrefix(defaultSettings.contentPrefix))
-                .includes(issue) &&
-            issue !== `${defaultSettings.contentPrefix}/issues`,
+            !lastNumberOfDays.map(withPathPrefix(edition)).includes(issue) &&
+            issue !== `${edition}/issues`,
     )
 }
 
@@ -150,9 +156,10 @@ export const matchSummmaryToKey = (
     return summaryMatch || null
 }
 
-export const readIssueSummary = async (): Promise<IssueSummary[]> =>
-    RNFetchBlob.fs
-        .readFile(FSPaths.contentPrefixDir + defaultSettings.issuesPath, 'utf8')
+export const readIssueSummary = async (): Promise<IssueSummary[]> => {
+    const editionDirectory = await FSPaths.editionDir()
+    return RNFetchBlob.fs
+        .readFile(editionDirectory + defaultSettings.issuesPath, 'utf8')
         .then(data => {
             try {
                 return JSON.parse(data)
@@ -167,10 +174,12 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> =>
         .catch(e => {
             throw e
         })
+}
 
 export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     const apiUrl = await getSetting('apiUrl')
     const edition = await getSetting('edition')
+    const editionDirectory = await FSPaths.editionDir()
 
     const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
 
@@ -183,7 +192,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 
         const issueSummaryString = JSON.stringify(issueSummary)
         await RNFetchBlob.fs.writeFile(
-            FSPaths.contentPrefixDir + defaultSettings.issuesPath,
+            editionDirectory + defaultSettings.issuesPath,
             issueSummaryString,
             'utf8',
         )
@@ -211,9 +220,8 @@ const cleanFileDisplay = (stat: {
 
 export const getFileList = async () => {
     const imageFolders: RNFetchBlobStat[] = []
-    const files = await RNFetchBlob.fs.lstat(
-        FSPaths.issuesDir + '/daily-edition',
-    )
+    const editionDirectory = await FSPaths.editionDir()
+    const files = await RNFetchBlob.fs.lstat(editionDirectory)
 
     const subfolders = await Promise.all(
         files.map(file =>
@@ -256,9 +264,7 @@ export const getFileList = async () => {
         value => Object.keys(value).length !== 0,
     )
 
-    const issuesFile = await RNFetchBlob.fs.stat(
-        FSPaths.issuesDir + '/daily-edition/issues',
-    )
+    const issuesFile = await RNFetchBlob.fs.stat(editionDirectory + '/issues')
 
     const cleanIssuesFile = [
         {

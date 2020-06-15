@@ -66,6 +66,13 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="fb528503751025697" />
         </intent-filter>
+        <!-- Debug / Live Apple oAuth URI scheme -->
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="theguardianeditions" />
+        </intent-filter>
         <!-- Debug Google oAuth URI scheme -->
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
@@ -82,7 +89,7 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-      
+
     </application>
 
 </manifest>

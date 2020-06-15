@@ -12,6 +12,7 @@ import {
 import RNFetchBlob from 'rn-fetch-blob'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { imagePath } from '../../../Apps/common/src'
+import { getSetting } from 'src/helpers/settings'
 
 export interface PathToIssue {
     localIssueId: Issue['localId']
@@ -36,10 +37,16 @@ const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
 const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
 const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`
+const editionDir = async () => {
+    const edition = await getSetting('edition')
+    return edition
+        ? `${issuesDir}/${edition}`
+        : `${issuesDir}/${defaultSettings.edition}`
+}
 
 export const FSPaths = {
     issuesDir,
-    contentPrefixDir: `${issuesDir}/${defaultSettings.contentPrefix}`,
+    editionDir,
     issueRoot,
     mediaRoot,
     image: (

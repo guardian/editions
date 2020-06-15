@@ -8,7 +8,7 @@ import { downloadAndUnzipIssue } from './download-and-unzip'
 import { crashlyticsService } from 'src/services/crashlytics'
 
 const downloadTodaysIssue = async (client: ApolloClient<object>) => {
-    const todaysKey = todayAsKey()
+    const todaysKey = await todayAsKey()
     try {
         const issueSummaries = await getIssueSummary()
 

@@ -7,6 +7,7 @@ import Geolocation, {
 import { resolveLocationPermissionStatus } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
 import gql from 'graphql-tag'
+import * as RNLocalize from 'react-native-localize'
 
 class CannotFetchError extends Error {}
 
@@ -128,8 +129,9 @@ const getWeather = async (
 ): Promise<Weather | null> => {
     try {
         const { accuLoc, isPrecise } = await getCurrentLocation()
+        const usesMetricTemp = RNLocalize.getTemperatureUnit() === 'celsius'
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
-            `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=true&language=en-gb`,
+            `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=${usesMetricTemp}&language=en-gb`,
         )
         return makeWeatherObject(accuLoc, isPrecise, forecasts)
     } catch (error) {

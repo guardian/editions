@@ -32,6 +32,16 @@
 				<string>fb528503751025697</string>
 			</array>
 		</dict>
+        <dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>theguardianeditions</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>theguardianeditions</string>
+			</array>
+		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>

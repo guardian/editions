@@ -76,6 +76,7 @@ const getDiagnosticInfo = async (
         fileList,
         imageSize,
         pushTracking,
+        edition,
     ] = await Promise.all([
         DeviceInfo.getFirstInstallTime(),
         DeviceInfo.getLastUpdateTime(),
@@ -84,6 +85,7 @@ const getDiagnosticInfo = async (
         getFileList(),
         imageForScreenSize(),
         getDiagnosticPushTracking(),
+        getSetting('edition'),
     ])
 
     return `
@@ -94,7 +96,7 @@ The information below will help us to better understand your query:
 Product: Daily App
 App Version: ${version} ${buildNumber}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
-App Edition: UK
+Current Edition: ${edition}
 Locale: ${locale}
 First app start: ${firstInstallTime}
 Last updated: ${lastUpdateTime}
