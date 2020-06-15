@@ -2976,7 +2976,7 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
-"@types/react-native-push-notification@^3.5.2":
+"@types/react-native-push-notification@^3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-3.0.9.tgz#d93f182aa40e773caccde85af6222f71e3288a74"
   integrity sha512-1JheyPe4kNFHJveoOfnhFskPccngfysQnckJ36uk8a4lylaMgyOxWObkWmy+PKCSCBfzY0ustFV13icTvXXotg==
