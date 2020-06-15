@@ -241,7 +241,7 @@ const GdprConsent = ({
                             proxy={
                                 <ThreeWaySwitch
                                     onValueChange={value => {
-                                        setConsent(item.key, value)
+                                        setConsentAndUpdate(item.key, value)
                                         showToast(PREFS_SAVED_MSG)
                                     }}
                                     value={
