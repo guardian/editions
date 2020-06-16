@@ -1,4 +1,4 @@
-name: scheduled-ios-beta
+name: validate-app
 
 on: push
 
