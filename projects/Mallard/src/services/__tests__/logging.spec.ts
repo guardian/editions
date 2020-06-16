@@ -87,6 +87,7 @@ describe('logging service', () => {
                 .mockReturnValue(externalInfoFixture)
             loggingService.clearItems = jest.fn()
             loggingService.postLog = jest.fn()
+            loggingService.enabled = true
             loggingService.hasConsent = true
             await loggingService.log({ level: Level.INFO, message: 'test' })
             expect(loggingService.postLog).toHaveBeenCalled()

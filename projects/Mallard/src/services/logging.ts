@@ -46,11 +46,14 @@ const cropMessage = (message: string, maxLength: number): string => {
 class Logging extends AsyncQueue {
     hasConsent: GdprSwitchSetting
     numberOfAttempts: number
+    enabled: boolean
 
     constructor() {
         super(loggingQueueCache)
         this.hasConsent = false
         this.numberOfAttempts = 0
+        this.enabled =
+            remoteConfig().getValue('remote_logging_enabled').value === true
     }
 
     init(apolloClient: ApolloClient<object>) {
@@ -168,10 +171,8 @@ class Logging extends AsyncQueue {
     }
 
     async log({ level, message, ...optionalFields }: LogParams) {
-        const loggingEnabled = remoteConfig().getValue('remote_logging_enabled')
-            .value
         try {
-            if (!this.hasConsent || !loggingEnabled) {
+            if (!this.enabled || !this.hasConsent) {
                 return
             }
 
