@@ -1,4 +1,5 @@
 import remoteConfig from '@react-native-firebase/remote-config'
+import { errorService } from './errors'
 
 // see https://rnfirebase.io/remote-config/usage for docs
 export const initialiseRemoteConfig = async () => {
@@ -12,7 +13,7 @@ export const initialiseRemoteConfig = async () => {
         .then(() => remoteConfig().fetch(300))
         // activate() replaces the default config with what has been fetched
         .then(() => remoteConfig().activate())
-        .catch(error => console.log('Failed to fetch remote config', error))
+        .catch(error => errorService.captureException(error))
 
     if (activated) {
         console.log('Remote config defaults set, fetched & activated!')
