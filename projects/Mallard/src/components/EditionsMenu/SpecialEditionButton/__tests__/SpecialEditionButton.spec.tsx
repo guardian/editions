@@ -1,8 +1,5 @@
 import React from 'react'
-import TestRenderer, {
-    ReactTestRendererJSON,
-    ReactTestRenderer,
-} from 'react-test-renderer'
+import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { SpecialEditionButton } from '../SpecialEditionButton'
 
 jest.mock('src/components/front/image-resource', () => ({
