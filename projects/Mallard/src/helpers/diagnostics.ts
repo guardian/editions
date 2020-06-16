@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
-import { Linking, Platform } from 'react-native'
+import { Linking, Platform, Clipboard } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import RNFetchBlob from 'rn-fetch-blob'
 import { canViewEdition, getCASCode } from 'src/authentication/helpers'
@@ -21,6 +21,7 @@ import {
     DIAGNOSTICS_TITLE,
     IOS_BETA_EMAIL,
 } from './words'
+import { OnCompletionToast } from 'src/screens/settings/help-screen'
 
 const getGDPREntries = () =>
     Promise.all(
@@ -170,6 +171,16 @@ const createMailtoHandler = (
         },
     ])
 
+const copyDiagnosticInfoToClipboard = (
+    client: ApolloClient<object>,
+    authAttempt: AnyAttempt<string>,
+    callback: OnCompletionToast,
+) => async () => {
+    const diagnostics = await getDiagnosticInfo(client, authAttempt)
+    Clipboard.setString(diagnostics)
+    callback('Diagnostic info copied to clipboard')
+}
+
 const createSupportMailto = (
     client: ApolloClient<object>,
     text: string,
@@ -182,4 +193,16 @@ const createSupportMailto = (
     onPress: createMailtoHandler(client, text, releaseURL, authAttempt),
 })
 
-export { createSupportMailto, createMailtoHandler }
+const copyDiagnosticInfo = (
+    client: ApolloClient<object>,
+    text: string,
+    authAttempt: AnyAttempt<string>,
+    callback: OnCompletionToast,
+) => ({
+    key: text,
+    title: text,
+    linkWeight: 'regular' as const,
+    onPress: copyDiagnosticInfoToClipboard(client, authAttempt, callback),
+})
+
+export { createSupportMailto, createMailtoHandler, copyDiagnosticInfo }

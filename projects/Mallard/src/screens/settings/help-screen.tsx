@@ -6,7 +6,10 @@ import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { Heading } from 'src/components/layout/ui/row'
-import { createSupportMailto } from 'src/helpers/diagnostics'
+import {
+    createSupportMailto,
+    copyDiagnosticInfo,
+} from 'src/helpers/diagnostics'
 import {
     ISSUE_EMAIL,
     SUBSCRIPTION_EMAIL,
@@ -15,10 +18,21 @@ import {
 } from 'src/helpers/words'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { useApolloClient } from '@apollo/react-hooks'
+import { useToast } from 'src/hooks/use-toast'
+
+export interface OnCompletionToast {
+    (msg: string): void
+}
 
 const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
+    const { showToast } = useToast()
     const { attempt } = useContext(AccessContext)
     const client = useApolloClient()
+
+    const showToastCallback: OnCompletionToast = (msg: string) => {
+        showToast(msg)
+    }
+
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
@@ -60,6 +74,17 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                             'Send feedback',
                             APPS_FEEDBACK_EMAIL,
                             attempt,
+                        ),
+                    ]}
+                />
+                <Heading>Diagnostics</Heading>
+                <List
+                    data={[
+                        copyDiagnosticInfo(
+                            client,
+                            'Copy diagnostic information',
+                            attempt,
+                            showToastCallback,
                         ),
                     ]}
                 />
