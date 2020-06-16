@@ -7,6 +7,8 @@ import { Settings, storeSetting, GdprSwitchSetting } from 'src/helpers/settings'
 import ApolloClient from 'apollo-client'
 import { SettingValues } from './resolvers'
 
+export const GDPR_CONSENT_VERSION = 'gdprConsentVersion'
+
 const setSetting = (
     name: keyof Settings,
     client: ApolloClient<object>,
@@ -40,5 +42,5 @@ export const setWifiOnlyDownloads = createSetter('wifiOnlyDownloads')
 export const setMaxAvailableEditions = createSetter('maxAvailableEditions')
 export const setApiUrl = createSetter('apiUrl')
 export const setEdition = createSetter('edition')
-export const setGdprConsentVersion = createSetter('gdprConsentVersion')
+export const setGdprConsentVersion = createSetter(GDPR_CONSENT_VERSION)
 export const setIsUsingProdDevtools = createSetter('isUsingProdDevtools')

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { FlatList, View, Alert, Text, ScrollView } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
@@ -14,8 +14,6 @@ import {
     CURRENT_CONSENT_VERSION,
     GdprBuckets,
     gdprSwitchSettings,
-    GdprSettings,
-    GdprDefaultSettings,
 } from 'src/helpers/settings'
 import {
     PREFS_SAVED_MSG,
@@ -29,16 +27,16 @@ import { routeNames } from 'src/navigation/routes'
 import {
     gdprAllowFunctionalityKey,
     gdprAllowPerformanceKey,
+    gdprConsentVersionKey,
 } from 'src/helpers/settings'
-import gql from 'graphql-tag'
-import { useQuery } from 'src/hooks/apollo'
-import { Settings } from 'src/helpers/settings'
-import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
-import {
-    setGdprConsentVersion,
-    setGdprFlag,
-} from 'src/helpers/settings/setters'
-import ApolloClient from 'apollo-client'
+import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters'
+import { storeSetting, getSetting } from 'src/helpers/settings'
+
+interface GdprConfig {
+    gdprAllowPerformance: ThreeWaySwitchValue
+    gdprAllowFunctionality: ThreeWaySwitchValue
+    gdprCurrentVersion: number | null
+}
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -56,44 +54,34 @@ const essentials: EssentialGdprSwitch = {
         'These are essential to provide you with services that you have requested. These services support the ability for you to watch videos, see service-related messages, download content automatically and receive new features without app releases.',
 }
 
-const setConsent = (
-    client: ApolloClient<object>,
+const setGDPRCurrentVersion = () => {
+    storeSetting(GDPR_CONSENT_VERSION, CURRENT_CONSENT_VERSION)
+}
+
+export const setConsent = (
     consentBucketKey: keyof GdprSwitchSettings,
     value: ThreeWaySwitchValue,
 ) => {
-    setGdprFlag(client, consentBucketKey, value)
+    storeSetting(consentBucketKey, value)
     GdprBuckets[consentBucketKey].forEach(key => {
-        setGdprFlag(client, key, value)
+        storeSetting(key, value)
     })
-    setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
+    setGDPRCurrentVersion()
 }
 
-const consentToAll = (client: ApolloClient<object>) => {
+const consentToAll = () => {
     gdprSwitchSettings.forEach(sw => {
-        setConsent(client, sw, true)
+        setConsent(sw, true)
     })
-    setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
+    setGDPRCurrentVersion()
 }
 
-const resetAll = (client: ApolloClient<object>) => {
+export const resetAll = () => {
     gdprSwitchSettings.forEach(sw => {
-        setConsent(client, sw, null)
+        setConsent(sw, null)
     })
-    setGdprConsentVersion(client, null)
+    setGDPRCurrentVersion()
 }
-
-const QUERY = gql`
-    {
-        isUsingProdDevtools @client
-        ${GDPR_SETTINGS_FRAGMENT}
-    }
-`
-
-type QueryData = {
-    isUsingProdDevtools: Settings['isUsingProdDevtools']
-} & GdprSettings &
-    GdprDefaultSettings &
-    GdprSwitchSettings
 
 const GdprConsent = ({
     shouldShowDismissableHeader = false,
@@ -104,9 +92,46 @@ const GdprConsent = ({
     continueText: string
 } & NavigationInjectedProps) => {
     const { showToast } = useToast()
-    const query = useQuery<QueryData>(QUERY)
-    if (query.loading) return null
-    const { client, data } = query
+
+    const [updateFlag, setDataUpdated] = useState(false)
+    const [gdprData, updateGdprData] = useState<GdprConfig>({
+        gdprAllowPerformance: null,
+        gdprAllowFunctionality: null,
+        gdprCurrentVersion: null,
+    })
+
+    const fetchAndSetGdprData = async () => {
+        const perfData = await getSetting(gdprAllowPerformanceKey)
+        const funcData = await getSetting(gdprAllowFunctionalityKey)
+        const currentVersion = await getSetting(gdprConsentVersionKey)
+        updateGdprData({
+            gdprAllowPerformance: perfData,
+            gdprAllowFunctionality: funcData,
+            gdprCurrentVersion: currentVersion,
+        })
+    }
+
+    useEffect(() => {
+        fetchAndSetGdprData()
+    }, [updateFlag])
+
+    const setConsentAndUpdate = (
+        consentBucketKey: keyof GdprSwitchSettings,
+        value: ThreeWaySwitchValue,
+    ) => {
+        setConsent(consentBucketKey, value)
+        setDataUpdated(!updateFlag) // force to re-render UI with updated value
+    }
+
+    const consentAllAndUpdate = () => {
+        consentToAll()
+        setDataUpdated(!updateFlag)
+    }
+
+    const resetAllAndUpdate = () => {
+        resetAll()
+        setDataUpdated(!updateFlag)
+    }
 
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
@@ -126,16 +151,16 @@ const GdprConsent = ({
     }
 
     const onEnableAllAndContinue = () => {
-        consentToAll(client)
+        consentAllAndUpdate()
         showToast(PREFS_SAVED_MSG)
         navigation.navigate('App')
     }
 
     const onDismiss = () => {
         if (
-            data.gdprAllowFunctionality != null &&
-            data.gdprAllowPerformance != null &&
-            data.gdprConsentVersion === CURRENT_CONSENT_VERSION
+            gdprData.gdprAllowFunctionality != null &&
+            gdprData.gdprAllowPerformance != null &&
+            gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION
         ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
@@ -216,14 +241,14 @@ const GdprConsent = ({
                             proxy={
                                 <ThreeWaySwitch
                                     onValueChange={value => {
-                                        setConsent(client, item.key, value)
+                                        setConsentAndUpdate(item.key, value)
                                         showToast(PREFS_SAVED_MSG)
                                     }}
                                     value={
-                                        data.gdprConsentVersion !==
+                                        gdprData.gdprCurrentVersion !==
                                         CURRENT_CONSENT_VERSION
                                             ? null
-                                            : data[item.key]
+                                            : gdprData[item.key]
                                     }
                                 />
                             }
@@ -238,7 +263,7 @@ const GdprConsent = ({
                 </Footer>
                 {__DEV__ ? (
                     <Footer>
-                        <Button onPress={resetAll.bind(undefined, client)}>
+                        <Button onPress={resetAllAndUpdate.bind(undefined)}>
                             Reset
                         </Button>
                     </Footer>
