@@ -23,6 +23,7 @@ import {
 } from '../../../Apps/common/src/logging'
 import { AsyncQueue } from '../helpers/async-queue-cache'
 import { errorService } from './errors'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 const { LOGGING_API_KEY } = Config
 const ATTEMPTS_THEN_CLEAR = 10
@@ -167,12 +168,15 @@ class Logging extends AsyncQueue {
     }
 
     async log({ level, message, ...optionalFields }: LogParams) {
-        // limit max length of message we post to logging service
-        const croppedMessage = cropMessage(message, 300)
+        const loggingEnabled = remoteConfig().getValue('remote_logging_enabled')
+            .value
         try {
-            if (!this.hasConsent) {
+            if (!this.hasConsent || !loggingEnabled) {
                 return
             }
+
+            // limit max length of message we post to logging service
+            const croppedMessage = cropMessage(message, 300)
 
             const currentLog = await this.baseLog({
                 level,

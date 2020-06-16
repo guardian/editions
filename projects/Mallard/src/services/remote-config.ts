@@ -6,10 +6,11 @@ export const initialiseRemoteConfig = async () => {
         .setDefaults({
             apple_sign_in: false,
             lightbox_enabled: false,
+            remote_logging_enabled: true,
         })
         // fetch config, cache for 5mins
         // NOTE: this cache persists when app is reloaded
-        .then(() => remoteConfig().fetch(300))
+        .then(() => remoteConfig().fetch(0))
         // activate() replaces the default config with what has been fetched
         .then(() => remoteConfig().activate())
 
