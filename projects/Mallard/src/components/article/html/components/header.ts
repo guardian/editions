@@ -114,8 +114,17 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .header-container-line-wrap {
         z-index: 100;
-        ${breakSides}
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        margin: auto;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-container-line-wrap {
+            padding-left: ${px(metrics.article.sides)};
+            padding-right: ${px(metrics.article.sides)};
+        }
+    }
+            
+
     .header-bg {
         left: -50em;
         right: -50em;
@@ -124,26 +133,34 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         position: absolute;
         z-index: -1;
     }
-    .header-image {
-        height: 10%;
-        width: 100%;
-        object-fit: cover;
-        display: block;
-        z-index: 99;
-        position: relative;
+    .header-image--wide {
+        max-width: ${px(metrics.article.maxWidth)};
+        margin: auto;
     }
+
     .header-image > .rating, .sport-score {
         position: absolute;
         bottom:0;
         left:0;
     }
-    .header-image.header-image--immersive {
+    .header-image--immersive {
+        height: 65%;
+        width: 100%;
+        object-fit: cover;
+        display: block;
+        z-index: 99;
+        position: relative;
         margin: 0 ${px(metrics.article.sides * -1)};
         width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-image--immersive {
+            height: 80%;
+        }
+    }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-image.header-image--immersive {
+        .header-image--immersive {
             padding-top: 140%;
         }
     }
@@ -285,6 +302,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         overflow: visible;
         height: auto;
     }
+
     .image-as-bg__img {
         width: 100%;
         z-index: 0;
@@ -368,6 +386,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='review'] .header-bg {
         background-color: ${colors.faded};
     }
+    .header-image[data-type='review'] .header-bg {
+        background-color: ${colors.faded};
+    }
     .header-container[data-type='review'] h1 {
         color: ${colors.dark};
         font-family: ${families.headline.bold};
@@ -387,6 +408,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='opinion'] .header-bg {
+        background-color: ${color.palette.opinion.faded};
+    }
+    .header-image[data-type='opinion'] .header-bg {
         background-color: ${color.palette.opinion.faded};
     }
     .header-container[data-type='opinion'] .header-kicker {
@@ -410,6 +434,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='analysis'] .header-bg {
+        background-color: ${color.palette.neutral[93]};
+    }
+    .header-image[data-type='analysis'] .header-bg {
         background-color: ${color.palette.neutral[93]};
     }
     .header-container[data-type='analysis'] .header-kicker {
@@ -452,6 +479,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='immersive'] .header-bg {
         background-color: ${color.palette.neutral[100]};
     }
+    .header-image[data-type='immersive'] .header-bg {
+        background-color: ${color.palette.neutral[100]};
+    }
     .header-container[data-type='immersive'] .header {
         background-color: ${color.palette.neutral[100]};
     }
@@ -473,6 +503,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
     .header-container[data-type='${ArticleType.Longread}'] .header-bg {
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-image[data-type='${ArticleType.Longread}'] .header-bg {
         background-color: ${color.palette.neutral[7]};
     }
     .header-container[data-type='${ArticleType.Longread}'] .header {
@@ -498,6 +531,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
     .header-container[data-type='${ArticleType.Obituary}'] .header-bg {
+        background-color: ${color.palette.neutral[20]};
+    }
+    .header-image[data-type='${ArticleType.Obituary}'] .header-bg {
         background-color: ${color.palette.neutral[20]};
     }
     .header-container[data-type='${ArticleType.Obituary}'] .header {
@@ -541,6 +577,7 @@ const Image = ({
 
 const MainMediaImage = ({
     image,
+    articleType,
     isGallery,
     className,
     children,
@@ -549,6 +586,7 @@ const MainMediaImage = ({
 }: {
     image: CreditedImage
     className?: string
+    articleType?: ArticleType
     isGallery?: boolean
     children?: string
     preserveRatio?: boolean
@@ -556,28 +594,35 @@ const MainMediaImage = ({
 }) => {
     const path = getImagePath(image)
     return html`
-        <div
-            class="image-as-bg ${className}"
-            data-preserve-ratio="${preserveRatio || 'false'}"
-            style="background-image: url(${path}); "
-            ${!isGallery &&
-                `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
-            data-open="false"
-        >
-            ${preserveRatio &&
-                html`
-                    <img class="image-as-bg__img" src="${path}" aria-hidden />
-                `}
-            <button
-                aria-hidden
-                onclick="event.stopPropagation(); this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+        <div class="header-image" data-type="${articleType}">
+            <div
+                class="image-as-bg ${className}"
+                data-preserve-ratio="${preserveRatio || 'false'}"
+                style="background-image: url(${path}); "
+                ${!isGallery &&
+                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
+                data-open="false"
             >
-                
-            </button>
-            <div class="image-as-bg-info">
-                ${image.caption} ${!image.displayCredit ? '' : image.credit}
+                ${preserveRatio &&
+                    html`
+                        <img
+                            class="image-as-bg__img"
+                            src="${path}"
+                            aria-hidden
+                        />
+                    `}
+                <button
+                    aria-hidden
+                    onclick="event.stopPropagation(); this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+                >
+                    
+                </button>
+                <div class="image-as-bg-info">
+                    ${image.caption} ${!image.displayCredit ? '' : image.credit}
+                </div>
+                ${children}
+                <div class="header-bg"></div>
             </div>
-            ${children}
         </div>
     `
 }
@@ -728,6 +773,8 @@ const Header = ({
     const immersive = isImmersive(type)
     const isGallery = type === ArticleType.Gallery
     const byLineText = getByLineText(headerType, headerProps)
+    const displayWideImage =
+        type === ArticleType.Article || type === ArticleType.Review
     return html`
         ${immersive &&
             headerProps.image &&
@@ -735,12 +782,50 @@ const Header = ({
             MainMediaImage({
                 image: headerProps.image,
                 isGallery: isGallery,
-                className: 'header-image header-image--immersive',
+                className: 'header-image--immersive',
+                getImagePath,
+            })}
+        ${!immersive &&
+            displayWideImage &&
+            headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                articleType: type,
+                className: 'header-image--wide',
+                image: headerProps.image,
+                isGallery: isGallery,
+                preserveRatio: true,
+                children: headerProps.starRating
+                    ? Rating(headerProps)
+                    : headerProps.sportScore
+                    ? SportScore({
+                          sportScore: headerProps.sportScore,
+                      })
+                    : undefined,
                 getImagePath,
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
+                ${!immersive &&
+                    !displayWideImage &&
+                    headerProps.image &&
+                    publishedId &&
+                    MainMediaImage({
+                        articleType: type,
+                        className: 'header-image--standard',
+                        image: headerProps.image,
+                        isGallery: isGallery,
+                        preserveRatio: true,
+                        children: headerProps.starRating
+                            ? Rating(headerProps)
+                            : headerProps.sportScore
+                            ? SportScore({
+                                  sportScore: headerProps.sportScore,
+                              })
+                            : undefined,
+                        getImagePath,
+                    })}
                 <header
                     class=${immersive &&
                     headerProps.mainMedia &&
@@ -748,23 +833,6 @@ const Header = ({
                         ? 'header-immersive-video'
                         : 'header'}
                 >
-                    ${!immersive &&
-                        headerProps.image &&
-                        publishedId &&
-                        MainMediaImage({
-                            className: 'header-image',
-                            image: headerProps.image,
-                            isGallery: isGallery,
-                            preserveRatio: true,
-                            children: headerProps.starRating
-                                ? Rating(headerProps)
-                                : headerProps.sportScore
-                                ? SportScore({
-                                      sportScore: headerProps.sportScore,
-                                  })
-                                : undefined,
-                            getImagePath,
-                        })}
                     ${headerProps.mainMedia &&
                         (headerProps.showMedia
                             ? renderMediaAtom(headerProps.mainMedia)

@@ -115,8 +115,6 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
 
     .app {
         padding: 0 ${metrics.article.sides} ${px(metrics.vertical)};
-        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
-        margin: auto;
         position: relative;
         animation-duration: .5s;
         animation-name: fade;
@@ -154,12 +152,19 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
       margin-top: ${px(metrics.vertical * 2.5)};
     }
     .content-wrap {
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        margin: auto;
         position: relative;
         padding-top: ${px(metrics.vertical)};
     }
-    .content-wrap .line {
-        margin-right: ${px(metrics.article.sides * -1)};
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .content-wrap {
+            padding-left: ${px(metrics.article.sides)};
+            padding-right: ${px(metrics.article.sides)};
+    
+        }
     }
+
     ${quoteStyles({
         colors,
         theme,
