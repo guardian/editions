@@ -34,29 +34,29 @@ const MultiButton = ({
     onPress: () => void
     selected?: boolean
 }) => (
-        <TouchableOpacity
-            style={{ flex: 1 }}
-            accessibilityRole="button"
-            onPress={onPress}
+    <TouchableOpacity
+        style={{ flex: 1 }}
+        accessibilityRole="button"
+        onPress={onPress}
+    >
+        <View
+            style={[
+                buttonStyles.background,
+                {
+                    backgroundColor: selected ? '#0077b3' : 'transparent',
+                    borderColor: selected ? 'transparent' : '#999',
+                },
+            ]}
         >
-            <View
-                style={[
-                    buttonStyles.background,
-                    {
-                        backgroundColor: selected ? '#0077b3' : 'transparent',
-                        borderColor: selected ? 'transparent' : '#999',
-                    },
-                ]}
+            <UiBodyCopy
+                weight="bold"
+                style={{ color: selected ? 'white' : 'black' }}
             >
-                <UiBodyCopy
-                    weight="bold"
-                    style={{ color: selected ? 'white' : 'black' }}
-                >
-                    {children}
-                </UiBodyCopy>
-            </View>
-        </TouchableOpacity>
-    )
+                {children}
+            </UiBodyCopy>
+        </View>
+    </TouchableOpacity>
+)
 
 const AvailableEditionsButtons = ({
     numbers,
@@ -67,25 +67,25 @@ const AvailableEditionsButtons = ({
     isSelected: (n: number) => boolean
     onPress: (n: number) => void
 }) => (
-        <View
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginHorizontal: -5,
-                paddingTop: 10,
-            }}
-        >
-            {numbers.map(number => (
-                <MultiButton
-                    key={number}
-                    selected={isSelected(number)}
-                    onPress={() => onPress(number)}
-                >
-                    {`${number} editions`}
-                </MultiButton>
-            ))}
-        </View>
-    )
+    <View
+        style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginHorizontal: -5,
+            paddingTop: 10,
+        }}
+    >
+        {numbers.map(number => (
+            <MultiButton
+                key={number}
+                selected={isSelected(number)}
+                onPress={() => onPress(number)}
+            >
+                {`${number} editions`}
+            </MultiButton>
+        ))}
+    </View>
+)
 
 const ManageEditionsScreen = () => {
     const { client, data, loading } = useQuery(gql`
@@ -102,59 +102,59 @@ const ManageEditionsScreen = () => {
                     ...(loading
                         ? []
                         : [
-                            {
-                                key: 'Wifi-only',
-                                title: 'Wifi-only',
-                                explainer:
-                                    'Editions will only be downloaded when wi-fi is available',
-                                proxy: (
-                                    <Switch
-                                        accessible={true}
-                                        accessibilityLabel="Wifi-only."
-                                        accessibilityRole="switch"
-                                        value={data.wifiOnlyDownloads}
-                                        onValueChange={val => {
-                                            setWifiOnlyDownloads(client, val)
-                                            sendComponentEvent({
-                                                componentType:
-                                                    ComponentType.appButton,
-                                                action: Action.click,
-                                                componentId:
-                                                    'manageEditionsWifiDownload',
-                                                value: val.toString(),
-                                            })
-                                        }}
-                                    />
-                                ),
-                            },
-                            {
-                                key: 'Available editions',
-                                title: 'Available downloads',
-                                explainer: (
-                                    <AvailableEditionsButtons
-                                        numbers={[7, 14, 30]}
-                                        isSelected={n =>
-                                            n === data.maxAvailableEditions
-                                        }
-                                        onPress={async n => {
-                                            await setMaxAvailableEditions(
-                                                client,
-                                                n,
-                                            )
-                                            getIssueSummary(false)
-                                            sendComponentEvent({
-                                                componentType:
-                                                    ComponentType.appButton,
-                                                action: Action.click,
-                                                componentId:
-                                                    'manageEditionsAvailableEditions',
-                                                value: n.toString(),
-                                            })
-                                        }}
-                                    />
-                                ),
-                            },
-                        ]),
+                              {
+                                  key: 'Wifi-only',
+                                  title: 'Wifi-only',
+                                  explainer:
+                                      'Editions will only be downloaded when wi-fi is available',
+                                  proxy: (
+                                      <Switch
+                                          accessible={true}
+                                          accessibilityLabel="Wifi-only."
+                                          accessibilityRole="switch"
+                                          value={data.wifiOnlyDownloads}
+                                          onValueChange={val => {
+                                              setWifiOnlyDownloads(client, val)
+                                              sendComponentEvent({
+                                                  componentType:
+                                                      ComponentType.appButton,
+                                                  action: Action.click,
+                                                  componentId:
+                                                      'manageEditionsWifiDownload',
+                                                  value: val.toString(),
+                                              })
+                                          }}
+                                      />
+                                  ),
+                              },
+                              {
+                                  key: 'Available editions',
+                                  title: 'Available downloads',
+                                  explainer: (
+                                      <AvailableEditionsButtons
+                                          numbers={[7, 14, 30]}
+                                          isSelected={n =>
+                                              n === data.maxAvailableEditions
+                                          }
+                                          onPress={async n => {
+                                              await setMaxAvailableEditions(
+                                                  client,
+                                                  n,
+                                              )
+                                              getIssueSummary(false)
+                                              sendComponentEvent({
+                                                  componentType:
+                                                      ComponentType.appButton,
+                                                  action: Action.click,
+                                                  componentId:
+                                                      'manageEditionsAvailableEditions',
+                                                  value: n.toString(),
+                                              })
+                                          }}
+                                      />
+                                  ),
+                              },
+                          ]),
                     {
                         key: 'Delete all downloads',
                         title: 'Delete all downloads',
