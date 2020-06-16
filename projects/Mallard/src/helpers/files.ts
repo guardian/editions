@@ -39,7 +39,6 @@ We always try to prep the file system before accessing issuesDir
 */
 export const prepFileSystem = async (): Promise<void> => {
     await ensureDirExists(FSPaths.issuesDir)
-    await ensureDirExists(`${FSPaths.issuesDir}/daily-edition`)
     await ensureDirExists(FSPaths.downloadRoot)
     await Promise.all(
         Object.values(editions).map(edition =>
@@ -244,7 +243,8 @@ const cleanFileDisplay = (stat: RNFS.ReadDirItem | RNFS.StatResult) => ({
 
 export const getFileList = async () => {
     const imageFolders: RNFS.ReadDirItem[] = []
-    const files = await RNFS.readDir(FSPaths.issuesDir + '/daily-edition')
+    const editionDirectory = await FSPaths.editionDir()
+    const files = await RNFS.readDir(editionDirectory)
 
     const subfolders = await Promise.all(
         files.map(file =>
@@ -285,9 +285,7 @@ export const getFileList = async () => {
         }),
     )
 
-    const issuesFile = await RNFS.stat(
-        FSPaths.issuesDir + '/daily-edition/issues',
-    )
+    const issuesFile = await RNFS.stat(editionDirectory + '/issues')
 
     const cleanIssuesFile = [
         {
