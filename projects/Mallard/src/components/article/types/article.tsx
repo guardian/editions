@@ -200,7 +200,10 @@ const Article = ({
                         // to avoid image duplication we don't add the main image of gallery articles to the array
                         if (article.type !== 'gallery' && article.image) {
                             lbCreditedImages.unshift(article.image)
-                            if (parsed.isMainImage === 'false') {
+                            if (
+                                parsed.isMainImage === 'false' &&
+                                lbCreditedImages.length > 1
+                            ) {
                                 index++
                             }
                         }

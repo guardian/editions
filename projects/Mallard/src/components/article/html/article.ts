@@ -42,6 +42,7 @@ const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
             id: 'image',
             role: 'immersive',
         },
+        index: 0, // allows us to open lightbox
         path,
     })
 }
