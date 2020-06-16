@@ -10,7 +10,7 @@ export const initialiseRemoteConfig = async () => {
         })
         // fetch config, cache for 5mins
         // NOTE: this cache persists when app is reloaded
-        .then(() => remoteConfig().fetch(0))
+        .then(() => remoteConfig().fetch(300))
         // activate() replaces the default config with what has been fetched
         .then(() => remoteConfig().activate())
 
