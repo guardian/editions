@@ -49,7 +49,15 @@ const removeTempFiles = () => {
                         files
                             .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
                             .map(f => dir + f)
-                            .map(RNFetchBlob.fs.unlink)
+                            .map(f => {
+                                // This seems to throw error when it tries to download
+                                // tmp files while it was being downloaded (possibly due to file
+                                // lock) and error thrown by the `unlink` does not automatically
+                                // propagate to the outer `catch` block, so throwing it manually
+                                RNFetchBlob.fs.unlink(f).catch(e => {
+                                    throw e
+                                })
+                            })
                     })
                     .catch(error => handleDeleteFailure(error, dir))
             }
