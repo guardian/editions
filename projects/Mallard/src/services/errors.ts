@@ -75,12 +75,6 @@ class ErrorServiceImpl implements ErrorService {
         } else if (this.hasConsent === true) {
             Sentry.captureException(err)
         }
-        // Also send to the logging service (where it manages its own consent and queue)
-        loggingService.log({
-            level: Level.ERROR,
-            message: 'captureException',
-            optionalFields: { error: err },
-        })
     }
 }
 
