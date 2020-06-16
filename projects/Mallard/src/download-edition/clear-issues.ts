@@ -16,6 +16,7 @@ import {
     getLocalIssues,
     issuesToDelete,
 } from 'src/helpers/files'
+import { crashlyticsService } from 'src/services/crashlytics'
 
 // for cleaning up temporary files when the user hits 'delete all downlods'
 // NOTE: these hard coded names may change when rn-fetch-blob is updated
@@ -36,6 +37,7 @@ const handleDeleteFailure = async (error: Error, dir: string) => {
         error,
     )
     errorService.captureException(error)
+    crashlyticsService.captureException(error)
 }
 
 const removeTempFiles = () => {
@@ -71,7 +73,10 @@ const removeTempFiles = () => {
 const deleteIssue = (localId: string): Promise<void> => {
     const promise = RNFetchBlob.fs
         .unlink(FSPaths.issueRoot(localId))
-        .catch(e => errorService.captureException(e))
+        .catch(e => {
+            errorService.captureException(e)
+            crashlyticsService.captureException(e)
+        })
     promise.then(() => localIssueListStore.remove(localId))
     return promise
 }
@@ -97,7 +102,10 @@ const clearOldIssues = async (): Promise<void> => {
         .then(() =>
             pushTracking('clearOldIssues', 'completed', Feature.CLEAR_ISSUES),
         )
-        .catch(e => errorService.captureException(e))
+        .catch(e => {
+            errorService.captureException(e)
+            crashlyticsService.captureException(e)
+        })
 }
 
 export { clearOldIssues, deleteIssueFiles }

@@ -16,6 +16,7 @@ import { validAttemptCache } from 'src/helpers/storage'
 import { cataResult, AuthResult, ValidResult, InvalidResult } from './Result'
 import { loggingService, Level, Feature } from 'src/services/logging'
 import { errorService } from 'src/services/errors'
+import { crashlyticsService } from 'src/services/crashlytics'
 
 type UpdateHandler<T> = (data: AnyAttempt<T>) => void
 
@@ -110,6 +111,7 @@ class Authorizer<
                 },
             })
         } catch (e) {
+            crashlyticsService.captureException(e)
             errorService.captureException(e)
             loggingService.log({
                 level: Level.ERROR,

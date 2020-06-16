@@ -11,6 +11,7 @@ import ApolloClient from 'apollo-client'
 import { DownloadBlockedStatus, NetInfo } from 'src/hooks/use-net-info'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import gql from 'graphql-tag'
+import { crashlyticsService } from 'src/services/crashlytics'
 
 type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> }
 const DOWNLOAD_BLOCKED_QUERY = gql`
@@ -153,6 +154,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             Feature.DOWNLOAD,
         )
         errorService.captureException(error)
+        crashlyticsService.captureException(error)
         updateListeners(localId, { type: 'failure', data: error })
         console.log('Download error: ', error)
     }
@@ -181,6 +183,9 @@ export const downloadAndUnzipIssue = async (
             Feature.DOWNLOAD,
         )
         errorService.captureException(
+            new Error('Download Blocked: Required signal not available'),
+        )
+        crashlyticsService.captureException(
             new Error('Download Blocked: Required signal not available'),
         )
         return

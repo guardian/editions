@@ -42,6 +42,7 @@ import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
 import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue'
 import { initialiseRemoteConfig } from './services/remote-config'
 import analytics from '@react-native-firebase/analytics'
+import { crashlyticsService } from './services/crashlytics'
 
 analytics().setAnalyticsCollectionEnabled(false)
 
@@ -157,6 +158,8 @@ export default class App extends React.Component<{}, {}> {
 
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
+
+        crashlyticsService.init()
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
