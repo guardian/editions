@@ -6,7 +6,7 @@ jest.mock('src/components/front/image-resource', () => ({
     ImageResource: () => 'ImageResource',
 }))
 
-const fixtures = {
+const props = {
     expiry: new Date(98, 1),
     image: {
         source: 'media',
@@ -44,18 +44,16 @@ Monthly`,
     },
 }
 
-export { fixtures }
-
 describe('SpecialEditionButton', () => {
     it('should display a default SpecialEditionButton with imported styling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <SpecialEditionButton {...fixtures} />,
+            <SpecialEditionButton {...props} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
     it('should display a selected SpecialEditionButton despite imported styling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <SpecialEditionButton selected {...fixtures} />,
+            <SpecialEditionButton selected {...props} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
