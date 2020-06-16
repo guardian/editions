@@ -4,8 +4,6 @@ import { isInBeta } from 'src/helpers/release-stream'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
 import { GdprSwitchSetting } from 'src/helpers/settings'
-import { loggingService } from './logging'
-import { Level } from '../../../Apps/common/src/logging'
 
 const { SENTRY_DSN_URL } = Config
 
