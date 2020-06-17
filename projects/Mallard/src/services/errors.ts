@@ -3,7 +3,15 @@ import Config from 'react-native-config'
 import { isInBeta } from 'src/helpers/release-stream'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
-import { GdprSwitchSetting } from 'src/helpers/settings'
+import {
+    GdprSwitchSetting,
+    getSetting,
+    gdprAllowPerformanceKey,
+} from 'src/helpers/settings'
+import crashlytics, {
+    FirebaseCrashlyticsTypes,
+} from '@react-native-firebase/crashlytics'
+import { loggingService, Level } from './logging'
 
 const { SENTRY_DSN_URL } = Config
 
@@ -15,17 +23,20 @@ export interface ErrorService {
     captureException(err: Error): void
 }
 
-class ErrorServiceImpl implements ErrorService {
+export class ErrorServiceImpl implements ErrorService {
     // Can be `null` or boolean. This is kinda confusing and easy to
     // handle improperly, but not easy to change it's already in prod.
     private hasConsent: GdprSwitchSetting
-    private hasConfigured: boolean
+    private hasSentryConfigured: boolean
     private pendingQueue: Error[]
+
+    crashlytics: FirebaseCrashlyticsTypes.Module
 
     constructor() {
         this.hasConsent = null
-        this.hasConfigured = false
+        this.hasSentryConfigured = false
         this.pendingQueue = []
+        this.crashlytics = crashlytics()
     }
 
     public init(apolloClient: ApolloClient<object>) {
@@ -42,9 +53,14 @@ class ErrorServiceImpl implements ErrorService {
 
     private handleConsentUpdate(hasConsent: GdprSwitchSetting) {
         this.hasConsent = hasConsent
+        this.initCrashlytics()
+        this.initSentry(hasConsent)
+    }
+
+    initSentry(hasConsent: GdprSwitchSetting) {
         if (hasConsent === false || hasConsent === null) return
 
-        if (!this.hasConfigured) {
+        if (!this.hasSentryConfigured) {
             // sampleRate helps keep our sentry costs down
             Sentry.init({ dsn: SENTRY_DSN_URL, sampleRate: 0.2 })
 
@@ -53,14 +69,50 @@ class ErrorServiceImpl implements ErrorService {
                 __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
             )
             Sentry.setExtra('react', true)
-            this.hasConfigured = true
+            this.hasSentryConfigured = true
         }
 
         while (this.pendingQueue.length > 0) {
             const err = this.pendingQueue.pop()
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Sentry.captureException(err!)
+            if (err) {
+                Sentry.captureException(err)
+                this.crashlytics.recordError(err)
+            }
         }
+    }
+
+    private async initCrashlytics() {
+        const defVal = this.crashlytics.isCrashlyticsCollectionEnabled
+        console.log('Crashlytics current status:', defVal)
+
+        const isEnabled: boolean =
+            (await getSetting(gdprAllowPerformanceKey)) == true
+        console.log('Crashlytics user permission:', isEnabled)
+
+        await this.crashlytics.setCrashlyticsCollectionEnabled(isEnabled)
+
+        if (isEnabled) {
+            this.crashlytics.log('Crashlytics initialized')
+            await this.sendBasicAttributes()
+            console.log('Crashlytics now initialized')
+        } else {
+            console.log('Crashlytics is now Disabled')
+            return
+        }
+    }
+
+    private sendBasicAttributes = async () => {
+        const data = await loggingService.basicLogInfo({
+            level: Level.INFO,
+            message: 'App Data',
+        })
+
+        this.crashlytics.setAttributes({
+            signedIn: String(data.signedIn),
+            hasCasCode: String(data.casCode !== null || data.casCode !== ''),
+            hasDigiSub: String(data.digitalSub),
+            networkStatus: data.networkStatus,
+        })
     }
 
     /**
@@ -72,6 +124,7 @@ class ErrorServiceImpl implements ErrorService {
             this.pendingQueue.push(err)
         } else if (this.hasConsent === true) {
             Sentry.captureException(err)
+            this.crashlytics.recordError(err)
         }
     }
 }

@@ -11,7 +11,6 @@ import { Feature } from 'src/services/logging'
 import { registerWithNotificationService } from './notification-service'
 import { notificationTracking } from './notification-tracking'
 import { downloadViaNotification } from 'src/download-edition/download-via-notification'
-import { crashlyticsService } from 'src/services/crashlytics'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -78,7 +77,6 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                     )
                     console.log(`Error registering for notifications: ${err}`)
                     errorService.captureException(err)
-                    crashlyticsService.captureException(err)
                 })
             }
         },
@@ -103,7 +101,6 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                     notificationTracking(notificationId, 'downloaded')
                 } catch (e) {
                     errorService.captureException(e)
-                    crashlyticsService.captureException(e)
                 } finally {
                     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)

@@ -9,7 +9,6 @@ import {
     getLocalIssues,
     issuesToDelete,
 } from 'src/helpers/files'
-import { crashlyticsService } from 'src/services/crashlytics'
 
 const clearDownloadsDirectory = async () => {
     try {
@@ -31,7 +30,6 @@ const clearDownloadsDirectory = async () => {
 const deleteIssue = (localId: string): Promise<void> => {
     const promise = RNFS.unlink(FSPaths.issueRoot(localId)).catch(e => {
         errorService.captureException(e)
-        crashlyticsService.captureException(e)
     })
     promise.then(() => localIssueListStore.remove(localId))
     return promise
@@ -55,7 +53,6 @@ const clearOldIssues = async (): Promise<void> => {
         )
         .catch(e => {
             errorService.captureException(e)
-            crashlyticsService.captureException(e)
         })
 }
 

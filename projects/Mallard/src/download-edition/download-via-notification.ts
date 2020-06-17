@@ -7,7 +7,6 @@ import { errorService } from 'src/services/errors'
 import { Feature } from '../../../Apps/common/src/logging'
 import { downloadAndUnzipIssue } from './download-and-unzip'
 import { clearOldIssues } from './clear-issues'
-import { crashlyticsService } from 'src/services/crashlytics'
 
 const downloadViaNotification = async (
     key: string,
@@ -49,7 +48,6 @@ const downloadViaNotification = async (
             Feature.DOWNLOAD,
         )
         errorService.captureException(e)
-        crashlyticsService.captureException(e)
         throw e
     } finally {
         // No matter what happens, always clear up old issues

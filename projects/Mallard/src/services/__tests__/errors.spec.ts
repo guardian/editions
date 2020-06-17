@@ -1,4 +1,4 @@
-import { ErrorService } from '../errors'
+import { ErrorServiceImpl } from '../errors'
 import gql from 'graphql-tag'
 import Observable from 'zen-observable'
 
@@ -18,7 +18,7 @@ jest.mock('src/helpers/locale', () => ({
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
 describe('errorService', () => {
-    let errorService: ErrorService
+    let errorService: ErrorServiceImpl
     let Sentry: any
     let apolloClient: any
     let setMockedConsent: (value: boolean) => void
@@ -150,5 +150,12 @@ describe('errorService', () => {
         await consentFetchPromise
 
         expect(Sentry.captureException).toHaveBeenCalledTimes(2)
+    })
+
+    it('should send handled exception to Crashlytics', () => {
+        // const crashlytics = errorService.crashlytics
+        errorService.captureException(new Error())
+        // TODO can't make it work right now
+        expect(errorService.crashlytics.recordError).toBeCalled()
     })
 })
