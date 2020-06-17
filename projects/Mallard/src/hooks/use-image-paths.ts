@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFS from 'react-native-fs'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
 import { Image, ImageSize, Issue, ImageUse } from '../../../Apps/common/src'
@@ -32,7 +32,7 @@ export const selectImagePath = async (
     )}`
 
     const fs = getFsPath(localIssueId, image, imageSize, use)
-    const fsExists = await RNFetchBlob.fs.exists(fs)
+    const fsExists = await RNFS.exists(fs)
 
     const fsUpdatedPath = Platform.OS === 'android' ? 'file:///' + fs : fs
     return fsExists ? fsUpdatedPath : api

@@ -1,5 +1,5 @@
 import { unzip } from 'react-native-zip-archive'
-import RNFetchBlob, { RNFetchBlobStat } from 'rn-fetch-blob'
+import RNFS from 'react-native-fs'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { IssueSummary } from '../../../Apps/common/src'
@@ -11,6 +11,7 @@ import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { withCache } from './fetch/cache'
 import { crashlyticsService } from 'src/services/crashlytics'
+import { updateListeners } from 'src/download-edition/download-and-unzip'
 
 interface BasicFile {
     filename: string
@@ -31,45 +32,72 @@ export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
 
 export const ensureDirExists = (dir: string): Promise<void> =>
-    RNFetchBlob.fs.mkdir(dir).catch(() => Promise.resolve())
+    RNFS.mkdir(dir).catch(() => Promise.resolve())
 
 /*
 We always try to prep the file system before accessing issuesDir
 */
-export const prepFileSystem = (): Promise<void[]> =>
-    ensureDirExists(FSPaths.issuesDir).then(() =>
-        Promise.all(
-            Object.values(editions).map(edition =>
-                ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
-            ),
+export const prepFileSystem = async (): Promise<void> => {
+    await ensureDirExists(FSPaths.issuesDir)
+    await ensureDirExists(FSPaths.downloadRoot)
+    await Promise.all(
+        Object.values(editions).map(edition =>
+            ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
         ),
     )
+}
 
 export const getJson = <T extends any>(path: string): Promise<T> =>
-    RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
+    RNFS.readFile(path, 'utf8').then(d => JSON.parse(d))
 
-export const downloadNamedIssueArchive = async (
-    localIssueId: Issue['localId'],
-    assetPath: string,
-) => {
+export const downloadNamedIssueArchive = async ({
+    localIssueId,
+    assetPath,
+    filename,
+    withProgress,
+}: {
+    localIssueId: Issue['localId']
+    assetPath: string
+    filename: string
+    withProgress: boolean
+}) => {
     const apiUrl = await getSetting('apiUrl')
     const zipUrl = `${apiUrl}${assetPath}`
-    const returnable = RNFetchBlob.config({
-        fileCache: true,
-        overwrite: true,
-        IOSBackgroundTask: true,
-    }).fetch('GET', zipUrl)
-    return {
-        promise: returnable.then(async res => {
-            // Ensure issue is removed from the cache on completion
-            const { clear } = withCache('issue')
-            clear(localIssueId)
-            await prepFileSystem()
-            await ensureDirExists(FSPaths.issueRoot(localIssueId))
-            return res
-        }),
-        cancel: returnable.cancel,
-        progress: returnable.progress,
+    const downloadFolderLocation = FSPaths.downloadIssueLocation(localIssueId)
+    await prepFileSystem()
+    await ensureDirExists(FSPaths.issueRoot(localIssueId))
+    await ensureDirExists(downloadFolderLocation)
+
+    try {
+        const returnable = RNFS.downloadFile({
+            fromUrl: zipUrl,
+            toFile: `${downloadFolderLocation}/${filename}`,
+            background: true,
+            begin: () => console.log('start download'),
+            progress: response => {
+                if (withProgress) {
+                    const percentage =
+                        (response.bytesWritten / response.contentLength) * 100
+                    updateListeners(localIssueId, {
+                        type: 'download',
+                        data: percentage,
+                    })
+                }
+            },
+            progressInterval: 1,
+        }).promise
+        return {
+            promise: returnable.then(async res => {
+                // Ensure issue is removed from the cache on completion
+                const { clear } = withCache('issue')
+                clear(localIssueId)
+                return res
+            }),
+        }
+    } catch (e) {
+        e.message = `downloadNamedIssueArchive failed: ${e.message}`
+        errorService.captureException(e)
+        throw e
     }
 }
 
@@ -78,7 +106,7 @@ export const unzipNamedIssueArchive = (zipFilePath: string) => {
 
     return unzip(zipFilePath, outputPath)
         .then(() => {
-            return RNFetchBlob.fs.unlink(zipFilePath)
+            return RNFS.unlink(zipFilePath)
         })
         .catch(e => {
             e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`
@@ -94,10 +122,10 @@ export const isIssueOnDevice = async (
     localIssueId: Issue['localId'],
 ): Promise<boolean> =>
     (await Promise.all([
-        RNFetchBlob.fs.exists(FSPaths.issue(localIssueId)),
-        RNFetchBlob.fs.exists(FSPaths.mediaRoot(localIssueId)),
-        RNFetchBlob.fs.exists(`${FSPaths.issueRoot(localIssueId)}/front`),
-        RNFetchBlob.fs.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
+        RNFS.exists(FSPaths.issue(localIssueId)),
+        RNFS.exists(FSPaths.mediaRoot(localIssueId)),
+        RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/front`),
+        RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
     ])).every(_ => _)
 
 /*
@@ -130,9 +158,9 @@ const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
 export const getLocalIssues = async () => {
     const editionDirectory = await FSPaths.editionDir()
     const edition = await getSetting('edition')
-    return RNFetchBlob.fs
-        .ls(editionDirectory)
-        .then(files => files.map(withPathPrefix(edition)))
+    return RNFS.readdir(editionDirectory).then(files =>
+        files.map(withPathPrefix(edition)),
+    )
 }
 
 export const issuesToDelete = async (files: string[]) => {
@@ -158,8 +186,7 @@ export const matchSummmaryToKey = (
 
 export const readIssueSummary = async (): Promise<IssueSummary[]> => {
     const editionDirectory = await FSPaths.editionDir()
-    return RNFetchBlob.fs
-        .readFile(editionDirectory + defaultSettings.issuesPath, 'utf8')
+    return RNFS.readFile(editionDirectory + defaultSettings.issuesPath, 'utf8')
         .then(data => {
             try {
                 return JSON.parse(data)
@@ -191,7 +218,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
         }
 
         const issueSummaryString = JSON.stringify(issueSummary)
-        await RNFetchBlob.fs.writeFile(
+        await RNFS.writeFile(
             editionDirectory + defaultSettings.issuesPath,
             issueSummaryString,
             'utf8',
@@ -208,29 +235,25 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     }
 }
 
-const cleanFileDisplay = (stat: {
-    path: string
-    lastModified: string
-    type: string
-}) => ({
+const cleanFileDisplay = (stat: RNFS.ReadDirItem | RNFS.StatResult) => ({
     path: stat.path.replace(FSPaths.issuesDir, ''),
-    lastModified: londonTime(Number(stat.lastModified)).format(),
-    type: stat.type,
+    lastModified: londonTime(Number(stat.mtime)).format(),
+    type: stat.isDirectory() ? 'directory' : 'file',
 })
 
 export const getFileList = async () => {
-    const imageFolders: RNFetchBlobStat[] = []
+    const imageFolders: RNFS.ReadDirItem[] = []
     const editionDirectory = await FSPaths.editionDir()
-    const files = await RNFetchBlob.fs.lstat(editionDirectory)
+    const files = await RNFS.readDir(editionDirectory)
 
     const subfolders = await Promise.all(
         files.map(file =>
-            file.type === 'directory'
-                ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
-                      [file.filename]: filestat.map(deepfile => {
+            file.isDirectory()
+                ? RNFS.readDir(file.path).then(filestat => ({
+                      [file.name]: filestat.map(deepfile => {
                           if (
-                              deepfile.filename === 'media' ||
-                              deepfile.filename === 'thumbs'
+                              deepfile.name === 'media' ||
+                              deepfile.name === 'thumbs'
                           ) {
                               imageFolders.push(deepfile)
                           }
@@ -241,30 +264,28 @@ export const getFileList = async () => {
         ),
     )
 
-    const imageSize = await imageForScreenSize()
-
-    // Grab one images from each image folder to confirm successful unzip
-    const imageFolderSearch = await Promise.all(
-        imageFolders.map(async (file: RNFetchBlobStat) => {
-            return await RNFetchBlob.fs
-                .lstat(
-                    file.filename === 'media'
-                        ? `${file.path}/${imageSize}/media`
-                        : `${file.path}/${imageSize}/thumb/media`,
-                )
-                .then(filestat =>
-                    filestat
-                        .map(deepfile => cleanFileDisplay(deepfile))
-                        .slice(0, 1),
-                )
-        }),
-    )
-
     const cleanSubfolders = subfolders.filter(
         value => Object.keys(value).length !== 0,
     )
 
-    const issuesFile = await RNFetchBlob.fs.stat(editionDirectory + '/issues')
+    const imageSize = await imageForScreenSize()
+
+    // Grab one images from each image folder to confirm successful unzip
+    const imageFolderSearch = await Promise.all(
+        imageFolders.map(async (file: RNFS.ReadDirItem) => {
+            return await RNFS.readDir(
+                file.name === 'media'
+                    ? `${file.path}/${imageSize}/media`
+                    : `${file.path}/${imageSize}/thumb/media`,
+            ).then(filestat =>
+                filestat
+                    .map(deepfile => cleanFileDisplay(deepfile))
+                    .slice(0, 1),
+            )
+        }),
+    )
+
+    const issuesFile = await RNFS.stat(editionDirectory + '/issues')
 
     const cleanIssuesFile = [
         {
