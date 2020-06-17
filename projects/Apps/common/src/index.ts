@@ -545,3 +545,18 @@ export interface SpecialEditionButtonStyles {
     expiry: TextFormatting
     image: { width: number; height: number }
 }
+
+interface Edtion {
+    title: string
+    subTitle: string
+    edition: string // @TODO: should be an ENUM that is tracked throughout the app
+}
+
+export interface RegionalEdition extends Edtion {}
+
+export interface SpecialEdition extends Edtion {
+    expiry: Date
+    devUri?: string
+    image: Image
+    style: SpecialEditionButtonStyles
+}
