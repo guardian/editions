@@ -42,6 +42,8 @@ const RegionButton = ({
 
     return (
         <TouchableWithoutFeedback
+            accessibilityRole="button"
+            accessibilityLabel={`${title} - Regional Edition Button`}
             onPressIn={() => setPressed(true)}
             onPressOut={() => setPressed(false)}
             onPress={onPress}
