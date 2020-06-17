@@ -2,7 +2,7 @@
 
 exports[`EditionsMenuButton should display a default EditionsMenuButton with correct styling 1`] = `
 <View
-  accessibilityHint="Editions Menu"
+  accessibilityLabel="Regions and specials editions menu"
   accessibilityRole="button"
   accessible={true}
   focusable={true}
@@ -356,7 +356,7 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
 
 exports[`EditionsMenuButton should display a selected EditionsMenuButton with correct styling 1`] = `
 <View
-  accessibilityHint="Editions Menu"
+  accessibilityLabel="Regions and specials editions menu"
   accessibilityRole="button"
   accessible={true}
   focusable={true}
