@@ -1,6 +1,6 @@
 import React from 'react'
 import { Newspaper } from 'src/components/icons/Newspaper'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet } from 'react-native'
 import { color } from 'src/theme/color'
 import { LeftChevron } from 'src/components/icons/LeftChevron'
 
