@@ -30,6 +30,7 @@ describe('logging service - Offline', () => {
             })
             loggingService.saveQueuedItems = jest.fn()
             loggingService.hasConsent = true
+            loggingService.enabled = true
             await loggingService.log({ level: Level.INFO, message: 'test' })
             expect(loggingService.saveQueuedItems).toHaveBeenCalled()
         })
