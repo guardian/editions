@@ -1,0 +1,271 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditionsMenu should display a default EditionsMenu with correct styling and default Regional Buttons 1`] = `
+<RCTScrollView>
+  <View>
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "paddingBottom": 38,
+          "paddingLeft": 96,
+          "paddingTop": 4,
+        }
+      }
+    >
+      <Text
+        style={
+          Array [
+            Object {
+              "flexShrink": 0,
+              "fontFamily": "GTGuardianTitlepiece-Bold",
+              "fontSize": 30,
+              "lineHeight": 33,
+            },
+            Object {
+              "fontSize": 24,
+              "lineHeight": 30,
+            },
+          ]
+        }
+      >
+        Regions
+      </Text>
+    </View>
+    <RCTScrollView
+      ItemSeparatorComponent={[Function]}
+      data={
+        Array [
+          Object {
+            "edition": "daily-edition",
+            "subTitle": "Published every day by 6am (GMT)",
+            "title": "The Daily",
+          },
+          Object {
+            "edition": "australian-edition",
+            "subTitle": "Published every Saturday by 6am (AEST)",
+            "title": "Australia Weekend",
+          },
+          Object {
+            "edition": "american-edition",
+            "subTitle": "Published every Saturday by 6am (EST)",
+            "title": "US Weekend",
+          },
+        ]
+      }
+      disableVirtualization={false}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={1}
+      onContentSizeChange={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      stickyHeaderIndices={Array []}
+      updateCellsBatchingPeriod={50}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={21}
+    >
+      <View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "backgroundColor": "#E5E5E5",
+                "paddingBottom": 32,
+                "paddingLeft": 104,
+                "paddingTop": 4,
+              }
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "flexShrink": 0,
+                    "fontFamily": "GTGuardianTitlepiece-Bold",
+                    "fontSize": 30,
+                    "lineHeight": 33,
+                  },
+                  Object {
+                    "color": "#052962",
+                    "fontSize": 20,
+                    "lineHeight": 24,
+                    "marginBottom": 5,
+                  },
+                ]
+              }
+            >
+              The Daily
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#121212",
+                  "fontFamily": "GuardianTextSans-Regular",
+                  "fontSize": 15,
+                  "lineHeight": 16,
+                }
+              }
+            >
+              Published every day by 6am (GMT)
+            </Text>
+          </View>
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "backgroundColor": "#E5E5E5",
+                "paddingBottom": 32,
+                "paddingLeft": 104,
+                "paddingTop": 4,
+              }
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "flexShrink": 0,
+                    "fontFamily": "GTGuardianTitlepiece-Bold",
+                    "fontSize": 30,
+                    "lineHeight": 33,
+                  },
+                  Object {
+                    "color": "#052962",
+                    "fontSize": 20,
+                    "lineHeight": 24,
+                    "marginBottom": 5,
+                  },
+                ]
+              }
+            >
+              Australia Weekend
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#121212",
+                  "fontFamily": "GuardianTextSans-Regular",
+                  "fontSize": 15,
+                  "lineHeight": 16,
+                }
+              }
+            >
+              Published every Saturday by 6am (AEST)
+            </Text>
+          </View>
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "backgroundColor": "#E5E5E5",
+                "paddingBottom": 32,
+                "paddingLeft": 104,
+                "paddingTop": 4,
+              }
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "flexShrink": 0,
+                    "fontFamily": "GTGuardianTitlepiece-Bold",
+                    "fontSize": 30,
+                    "lineHeight": 33,
+                  },
+                  Object {
+                    "color": "#052962",
+                    "fontSize": 20,
+                    "lineHeight": 24,
+                    "marginBottom": 5,
+                  },
+                ]
+              }
+            >
+              US Weekend
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#121212",
+                  "fontFamily": "GuardianTextSans-Regular",
+                  "fontSize": 15,
+                  "lineHeight": 16,
+                }
+              }
+            >
+              Published every Saturday by 6am (EST)
+            </Text>
+          </View>
+        </View>
+      </View>
+    </RCTScrollView>
+  </View>
+</RCTScrollView>
+`;
