@@ -2,6 +2,9 @@
 
 exports[`SpecialEditionButton should display a default SpecialEditionButton with imported styling 1`] = `
 <View
+  accessibilityLabel="Food
+Monthly - Special Edition Button"
+  accessibilityRole="button"
   accessible={true}
   focusable={true}
   onClick={[Function]}
@@ -79,6 +82,9 @@ Monthly
 
 exports[`SpecialEditionButton should display a selected SpecialEditionButton despite imported styling 1`] = `
 <View
+  accessibilityLabel="Food
+Monthly - Special Edition Button"
+  accessibilityRole="button"
   accessible={true}
   focusable={true}
   onClick={[Function]}

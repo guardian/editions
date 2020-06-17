@@ -32,6 +32,8 @@ const SpecialEditionButton = ({
 
     return (
         <TouchableWithoutFeedback
+            accessibilityRole="button"
+            accessibilityLabel={`${title} - Special Edition Button`}
             onPressIn={() => setPressed(true)}
             onPressOut={() => setPressed(false)}
             onPress={onPress}
