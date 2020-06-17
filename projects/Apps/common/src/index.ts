@@ -530,3 +530,18 @@ export interface Palette {
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
+
+export type TextFormatting = {
+    color: string
+    font: string
+    lineHeight: number
+    size: number
+}
+
+export interface SpecialEditionButtonStyles {
+    backgroundColor: string
+    title: TextFormatting
+    subTitle: TextFormatting
+    expiry: TextFormatting
+    image: { width: number; height: number }
+}
