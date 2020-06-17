@@ -24,7 +24,7 @@ const EditionsMenuButton = ({
 }) => (
     <TouchableOpacity
         accessibilityRole="button"
-        accessibilityHint="Editions Menu"
+        accessibilityLabel="Editions Menu Button"
         onPress={onPress}
         style={styles.button}
     >
