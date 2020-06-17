@@ -4,12 +4,12 @@ import remoteConfig, {
 
 // see https://rnfirebase.io/remote-config/usage for docs
 
-interface RemoteConfic {
+interface RemoteConfig {
     init(): void
     getBoolean(key: string): boolean
 }
 
-class RemoteConfigService implements RemoteConfic {
+class RemoteConfigService implements RemoteConfig {
     private initialized: boolean
 
     constructor() {
