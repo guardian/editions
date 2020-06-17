@@ -39,6 +39,7 @@ const RegionButton = ({
 }) => {
     const [pressed, setPressed] = useState(false)
     const defaultStyles = styles(selected || pressed)
+
     return (
         <TouchableWithoutFeedback
             onPressIn={() => setPressed(true)}
