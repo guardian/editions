@@ -15,9 +15,9 @@ import {
     AuthParams,
     AppleSignInTokenKey,
 } from 'src/authentication/authorizers/IdentityAuthorizer'
-import remoteConfig from '@react-native-firebase/remote-config'
 
 import { iosMajorVersion } from 'src/helpers/platform'
+import { remoteConfigService } from 'src/services/remote-config'
 
 const socialButtonStyles = StyleSheet.create({
     button: {
@@ -135,7 +135,7 @@ const Login = ({
         setShowAppleAuthWebView(true)
     }
 
-    const appleSignInEnabled = remoteConfig().getValue('apple_sign_in').value
+    const appleSignInEnabled = remoteConfigService.getBoolean('apple_sign_in')
 
     return (
         <LoginLayout
