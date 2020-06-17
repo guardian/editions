@@ -12,6 +12,8 @@ const { SENTRY_DSN_URL } = Config
 type QueryData = { gdprAllowPerformance: GdprSwitchSetting }
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
+const SENTRY_SAMPLE_RATE = 0.2
+
 export interface ErrorService {
     init(apolloClient: ApolloClient<object>): void
     captureException(err: Error): void
@@ -48,7 +50,7 @@ class ErrorServiceImpl implements ErrorService {
 
         if (!this.hasConfigured) {
             // sampleRate helps keep our sentry costs down
-            Sentry.init({ dsn: SENTRY_DSN_URL, sampleRate: 0.2 })
+            Sentry.init({ dsn: SENTRY_DSN_URL })
 
             Sentry.setTag(
                 'environment',
@@ -73,7 +75,11 @@ class ErrorServiceImpl implements ErrorService {
         if (this.hasConsent === null) {
             this.pendingQueue.push(err)
         } else if (this.hasConsent === true) {
-            Sentry.captureException(err)
+            // for some reason the sampleRate functionality requires extra permissions
+            // so let's do our sampling randomly
+            if (Math.random() < SENTRY_SAMPLE_RATE) {
+                Sentry.captureException(err)
+            }
         }
         // Also send to the logging service (where it manages its own consent and queue)
         loggingService.log({
