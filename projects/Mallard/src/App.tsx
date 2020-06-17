@@ -40,7 +40,7 @@ import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
 import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue'
-import { initialiseRemoteConfig } from './services/remote-config'
+import { remoteConfigService } from './services/remote-config'
 import analytics from '@react-native-firebase/analytics'
 import { crashlyticsService } from './services/crashlytics'
 import { clearDownloadsDirectory } from './download-edition/clear-issues'
@@ -158,8 +158,8 @@ export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
         weatherHider(apolloClient)
-        initialiseRemoteConfig()
-        clearDownloadsDirectory()
+        remoteConfigService.init()
+
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
 
