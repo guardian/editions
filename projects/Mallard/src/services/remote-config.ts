@@ -1,6 +1,4 @@
-import remoteConfig, {
-    FirebaseRemoteConfigTypes,
-} from '@react-native-firebase/remote-config'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 // see https://rnfirebase.io/remote-config/usage for docs
 
