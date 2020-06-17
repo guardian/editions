@@ -15,7 +15,7 @@ exports[`RegionButton should display a default RegionButton with correct styling
   onStartShouldSetResponder={[Function]}
   style={
     Object {
-      "backgroundColor": "#E5E5E5",
+      "backgroundColor": "#f6f6f6",
       "paddingBottom": 32,
       "paddingLeft": 104,
       "paddingTop": 4,
