@@ -49,7 +49,7 @@ Monthly`,
     },
 }
 
-storiesOf('SpecialEditionButton', module)
+storiesOf('EditionsMenu', module)
     .addDecorator(withKnobs)
     // This is useful to check the default style but breaks TS
     // .add('SpecialEditionButton - default', () => (
