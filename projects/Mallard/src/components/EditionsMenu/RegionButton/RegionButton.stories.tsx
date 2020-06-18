@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react-native'
 import { withKnobs } from '@storybook/addon-knobs'
 import { RegionButton } from './RegionButton'
 
-storiesOf('RegionButton', module)
+storiesOf('EditionsMenu', module)
     .addDecorator(withKnobs)
     .add('RegionButton - default', () => (
         <RegionButton

@@ -138,7 +138,13 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin: auto;
     }
 
-    .header-image > .rating, .sport-score {
+    .header-image--standard > .rating, .sport-score {
+        position: absolute;
+        bottom:0;
+        left:0;
+    }
+
+    .header-image--wide > .rating, .sport-score {
         position: absolute;
         bottom:0;
         left:0;
