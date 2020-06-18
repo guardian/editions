@@ -158,12 +158,12 @@ describe('errorService', () => {
 
         errorService.captureException(new Error())
 
-        let crashlytics = errorService.crashlytics
+        const crashlytics = errorService.crashlytics
         expect(
             crashlytics.setCrashlyticsCollectionEnabled,
         ).toHaveBeenCalledWith(false)
 
-        expect(errorService.crashlytics.recordError).not.toHaveBeenCalled()
+        expect(crashlytics.recordError).not.toHaveBeenCalled()
     })
 
     it('Crashlytics: should send exception to crashlytics', async () => {
