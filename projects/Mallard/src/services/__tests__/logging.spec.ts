@@ -1,7 +1,5 @@
 import { Logging, Level, cropMessage } from '../logging'
 import MockDate from 'mockdate'
-import { ReleaseChannel, OS } from '../../../../Apps/common/src/logging'
-import { NetInfoStateType } from '@react-native-community/netinfo'
 
 jest.mock('src/helpers/locale', () => ({
     locale: 'en_GB',
@@ -14,27 +12,6 @@ jest.mock('@react-native-community/netinfo', () => ({
     },
 }))
 MockDate.set('2019-08-21')
-
-const logFixture = [
-    {
-        timestamp: new Date(),
-        level: Level.INFO,
-        message: 'basic log',
-        app: 'com.guardian.gce',
-        version: '2.0',
-        buildNumber: '678',
-        release_channel: ReleaseChannel.BETA,
-        os: OS.IOS,
-        device: 'iPad4,1',
-        networkStatus: NetInfoStateType.wifi,
-        deviceId: '12345qwerty',
-        signedIn: true,
-        userId: null,
-        digitalSub: false,
-        casCode: null,
-        iAP: false,
-    },
-]
 
 const externalInfoFixture = {
     networkStatus: { type: 'wifi' },
