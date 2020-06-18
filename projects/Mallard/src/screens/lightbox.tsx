@@ -98,7 +98,7 @@ const LightboxScreen = ({
 
     const [scrollInProgress, setScrollInProgress] = useState(false)
 
-    const [imagePaths, setImagePaths] = useState([''])
+    const [imagePaths, setImagePaths] = useState(['']) //TODO: avoid source.uri empty string warning
 
     const { width, height } = useDimensions()
 
@@ -136,6 +136,7 @@ const LightboxScreen = ({
             },
         })
     }
+
     useEffect(() => {
         const getImagePathFromImage = async (image: Image) => {
             if (issueId && image) {
@@ -195,6 +196,7 @@ const LightboxScreen = ({
                         onMove={handleScrollStartEvent}
                         onChange={index => handleOnMoveEvent(index || 0)} // seems that first index is nil?
                         saveToLocalByLongPress={false}
+                        maxOverflow={width}
                         footerContainerStyle={{
                             position: 'absolute',
                             bottom: 0,
