@@ -152,6 +152,20 @@ describe('errorService', () => {
         expect(Sentry.captureException).toHaveBeenCalledTimes(2)
     })
 
+    it('Crashlytics: should default to not having consent', async () => {
+        errorService.init(apolloClient)
+        await Promise.resolve()
+
+        errorService.captureException(new Error())
+
+        let crashlytics = errorService.crashlytics
+        expect(
+            crashlytics.setCrashlyticsCollectionEnabled,
+        ).toHaveBeenCalledWith(false)
+
+        expect(errorService.crashlytics.recordError).not.toHaveBeenCalled()
+    })
+
     it('Crashlytics: should send exception to crashlytics', async () => {
         setMockedConsent(true)
         errorService.init(apolloClient)
