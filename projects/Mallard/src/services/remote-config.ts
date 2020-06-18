@@ -1,15 +1,27 @@
-import remoteConfig, {
-    FirebaseRemoteConfigTypes,
-} from '@react-native-firebase/remote-config'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 // see https://rnfirebase.io/remote-config/usage for docs
 
-interface RemoteConfic {
+export type RemoteStringValue = string | undefined
+
+interface RemoteConfig {
     init(): void
     getBoolean(key: string): boolean
+    getString(key: string): RemoteStringValue
 }
 
-class RemoteConfigService implements RemoteConfic {
+const defaultValus = {
+    apple_sign_in: false,
+    lightbox_enabled: false,
+}
+
+const configValues = {
+    // fetch config, cache for 5mins. This cache persists when app is reloaded
+    minimumFetchInterval: 300,
+    isDeveloperModeEnabled: __DEV__,
+}
+
+class RemoteConfigService implements RemoteConfig {
     private initialized: boolean
 
     constructor() {
@@ -22,24 +34,18 @@ class RemoteConfigService implements RemoteConfic {
 
     async init() {
         await remoteConfig()
-            .setDefaults({
-                apple_sign_in: false,
-                lightbox_enabled: false,
-            })
-            // fetch config, cache for 5mins
-            // NOTE: this cache persists when app is reloaded
-            .then(() => remoteConfig().fetch(300))
-            // activate() replaces the default config with what has been fetched
+            .setDefaults(defaultValus)
+            .then(() => remoteConfig().setConfigSettings(configValues))
             .then(() => {
-                remoteConfig().activate()
+                remoteConfig().fetchAndActivate()
                 this.setInitialized(true)
-                console.log('Remote config defaults set, fetched & activated!')
-                true
+                console.log('Remote config fetched & activated!')
+                if (__DEV__) console.log(remoteConfig().getAll())
             })
             .catch(() => {
                 this.setInitialized(false)
                 console.log(
-                    'Remote config not activated - using default or cached values.',
+                    'Remote config not activated - something went wrong',
                 )
             })
     }
@@ -50,6 +56,14 @@ class RemoteConfigService implements RemoteConfic {
         }
 
         return false
+    }
+
+    getString(key: string): RemoteStringValue {
+        if (this.initialized) {
+            return remoteConfig().getValue(key).value as string
+        }
+
+        return undefined
     }
 }
 

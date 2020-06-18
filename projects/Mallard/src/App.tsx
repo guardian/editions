@@ -159,12 +159,12 @@ export default class App extends React.Component<{}, {}> {
         SplashScreen.hide()
         weatherHider(apolloClient)
         remoteConfigService.init()
+        clearDownloadsDirectory()
 
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
 
         crashlyticsService.init()
-        clearDownloadsDirectory()
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
