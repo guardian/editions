@@ -20,11 +20,7 @@ const downloadViaNotification = async (
 
         const issueSummaries = await getIssueSummary()
 
-        await pushTracking(
-            'pushIssueSummaries',
-            JSON.stringify(issueSummaries),
-            Feature.DOWNLOAD,
-        )
+        await pushTracking('pushIssueSummaries', 'received', Feature.DOWNLOAD)
 
         // Check to see if we can find the image summary for the one that is pushed
         const pushImageSummary = matchSummmaryToKey(issueSummaries, key)

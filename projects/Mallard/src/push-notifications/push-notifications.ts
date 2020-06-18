@@ -90,11 +90,7 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                     ? notification.data.uniqueIdentifier
                     : notification.uniqueIdentifier
 
-            await pushTracking(
-                'notification',
-                JSON.stringify(notification),
-                Feature.DOWNLOAD,
-            )
+            await pushTracking('notification', key, Feature.DOWNLOAD)
             notificationTracking(notificationId, 'received')
 
             if (key) {
