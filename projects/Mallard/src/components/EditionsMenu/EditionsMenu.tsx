@@ -1,12 +1,10 @@
 import React from 'react'
-import { FlatList, ScrollView, View } from 'react-native'
+import { FlatList, ScrollView } from 'react-native'
 import { EditionsMenuHeader } from './Header/Header'
 import { RegionButton } from './RegionButton/RegionButton'
 import { SpecialEditionButton } from './SpecialEditionButton/SpecialEditionButton'
 import { editions } from 'src/helpers/settings/defaults'
-import {} from 'react-native-gesture-handler'
 import { RegionalEdition, SpecialEdition } from '../../../../Apps/common/src'
-import { color } from 'src/theme/color'
 import { ItemSeperator } from './ItemSeperator/ItemSeperator'
 
 const defaultRegionalEditions: RegionalEdition[] = [

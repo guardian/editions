@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native'
-import { withKnobs, text } from '@storybook/addon-knobs'
+import { withKnobs } from '@storybook/addon-knobs'
 import { EditionsMenu } from './EditionsMenu'
 
 const props = {
