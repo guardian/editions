@@ -164,6 +164,7 @@ export default class App extends React.Component<{}, {}> {
         shouldHavePushFailsafe(apolloClient)
 
         crashlyticsService.init()
+        clearDownloadsDirectory()
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
