@@ -52,8 +52,7 @@ class Logging extends AsyncQueue {
         super(loggingQueueCache)
         this.hasConsent = false
         this.numberOfAttempts = 0
-        this.enabled =
-            remoteConfig().getValue('remote_logging_enabled').value === true
+        this.enabled = remoteConfig().getValue('logging_enabled').value === true
     }
 
     init(apolloClient: ApolloClient<object>) {

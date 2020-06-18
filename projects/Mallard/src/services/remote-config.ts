@@ -10,9 +10,11 @@ interface RemoteConfig {
     getString(key: string): RemoteStringValue
 }
 
-const defaultValus = {
+const remoteConfigDefaults = {
     apple_sign_in: false,
     lightbox_enabled: false,
+    logging_enabled: true,
+    default_locale: true,
 }
 
 const configValues = {
@@ -32,9 +34,9 @@ class RemoteConfigService implements RemoteConfig {
         this.initialized = isInitialized
     }
 
-    async init() {
-        await remoteConfig()
-            .setDefaults(defaultValus)
+    init() {
+        remoteConfig()
+            .setDefaults(remoteConfigDefaults)
             .then(() => remoteConfig().setConfigSettings(configValues))
             .then(() => {
                 remoteConfig().fetchAndActivate()

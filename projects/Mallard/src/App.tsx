@@ -59,6 +59,7 @@ if (!__DEV__) {
     errorService.init(apolloClient)
 }
 loggingService.init(apolloClient)
+remoteConfigService.init()
 
 // --- SETUP OPERATIONS ---
 // useScreens is not a hook
@@ -158,7 +159,6 @@ export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
         weatherHider(apolloClient)
-        remoteConfigService.init()
         clearDownloadsDirectory()
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
