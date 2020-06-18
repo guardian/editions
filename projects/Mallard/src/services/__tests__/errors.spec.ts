@@ -152,10 +152,13 @@ describe('errorService', () => {
         expect(Sentry.captureException).toHaveBeenCalledTimes(2)
     })
 
-    it('should send handled exception to Crashlytics', () => {
-        // const crashlytics = errorService.crashlytics
+    it('Crashlytics: should send exception to crashlytics', async () => {
+        setMockedConsent(true)
+        errorService.init(apolloClient)
+        await consentFetchPromise
+
         errorService.captureException(new Error())
-        // TODO can't make it work right now
+
         expect(errorService.crashlytics.recordError).toBeCalled()
     })
 })

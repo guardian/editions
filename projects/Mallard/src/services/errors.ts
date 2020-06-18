@@ -3,11 +3,7 @@ import Config from 'react-native-config'
 import { isInBeta } from 'src/helpers/release-stream'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
-import {
-    GdprSwitchSetting,
-    getSetting,
-    gdprAllowPerformanceKey,
-} from 'src/helpers/settings'
+import { GdprSwitchSetting } from 'src/helpers/settings'
 import crashlytics, {
     FirebaseCrashlyticsTypes,
 } from '@react-native-firebase/crashlytics'
@@ -51,14 +47,18 @@ export class ErrorServiceImpl implements ErrorService {
         })
     }
 
-    private handleConsentUpdate(hasConsent: GdprSwitchSetting) {
-        this.hasConsent = hasConsent
-        this.initCrashlytics()
-        this.initSentry(hasConsent)
+    private async handleConsentUpdate(hasConsent: GdprSwitchSetting) {
+        this.hasConsent = hasConsent === true
+        console.log('setting consent: ', this.hasConsent)
+        this.initSentry(this.hasConsent)
+        await this.initCrashlytics(this.hasConsent)
     }
 
     initSentry(hasConsent: GdprSwitchSetting) {
-        if (hasConsent === false || hasConsent === null) return
+        if (hasConsent === false) {
+            console.log('Sentry initialized ignore, no user permission')
+            return
+        }
 
         if (!this.hasSentryConfigured) {
             // sampleRate helps keep our sentry costs down
@@ -70,6 +70,7 @@ export class ErrorServiceImpl implements ErrorService {
             )
             Sentry.setExtra('react', true)
             this.hasSentryConfigured = true
+            console.log('Sentry initialized')
         }
 
         while (this.pendingQueue.length > 0) {
@@ -81,23 +82,21 @@ export class ErrorServiceImpl implements ErrorService {
         }
     }
 
-    private async initCrashlytics() {
-        const defVal = this.crashlytics.isCrashlyticsCollectionEnabled
-        console.log('Crashlytics current status:', defVal)
+    private async initCrashlytics(hasConsent: boolean): Promise<void> {
+        console.log(
+            'Crashlytics current status:',
+            this.crashlytics.isCrashlyticsCollectionEnabled,
+        )
 
-        const isEnabled: boolean =
-            (await getSetting(gdprAllowPerformanceKey)) == true
-        console.log('Crashlytics user permission:', isEnabled)
+        console.log('Setting crashlytics with user permission:', hasConsent)
+        await this.crashlytics.setCrashlyticsCollectionEnabled(hasConsent)
 
-        await this.crashlytics.setCrashlyticsCollectionEnabled(isEnabled)
-
-        if (isEnabled) {
+        if (hasConsent) {
             this.crashlytics.log('Crashlytics initialized')
             await this.sendBasicAttributes()
             console.log('Crashlytics now initialized')
         } else {
             console.log('Crashlytics is now Disabled')
-            return
         }
     }
 
