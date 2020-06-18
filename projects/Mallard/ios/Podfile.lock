@@ -370,9 +370,9 @@ PODS:
     - React
   - RNScreens (2.0.0-alpha.34):
     - React
-  - RNSentry (1.3.9):
+  - RNSentry (1.4.5):
     - React
-    - Sentry (~> 4.4.0)
+    - Sentry (~> 5.1.4)
   - RNSVG (9.13.6):
     - React
   - RNZipArchive (5.0.1):
@@ -382,9 +382,9 @@ PODS:
   - RNZipArchive/Core (5.0.1):
     - React
     - SSZipArchive (= 2.2.2)
-  - Sentry (4.4.3):
-    - Sentry/Core (= 4.4.3)
-  - Sentry/Core (4.4.3)
+  - Sentry (5.1.4):
+    - Sentry/Core (= 5.1.4)
+  - Sentry/Core (5.1.4)
   - SSZipArchive (2.2.2)
   - Yoga (1.14.0)
 
@@ -659,10 +659,10 @@ SPEC CHECKSUMS:
   RNLocalize: b6df30cc25ae736d37874f9bce13351db2f56796
   RNPermissions: 9e437a90de84a5402ff689d4da233730b81556c2
   RNScreens: 9d8a2900cd4f967af70dbfed74b64f77fbb6600a
-  RNSentry: 9c9783b13fb5cba387fff55f085cc1da3854ce71
+  RNSentry: 0a70359ddacbfb9b1cbbb0971e54065b9f70ac57
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNZipArchive: 87111bb6130a38edd68c8d2059d46ac94d53ffe4
-  Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
+  Sentry: 74f2ad93a20a5567a1badaedf5b3f60b142ad082
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
