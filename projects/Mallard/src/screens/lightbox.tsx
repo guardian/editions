@@ -121,6 +121,20 @@ const LightboxScreen = ({
         setCloseButtonVisible(!closeButtonVisible)
     }
 
+    const lightboxImages = []
+    for (let i = 0; i < images.length; i++) {
+        lightboxImages.push({
+            url: imagePaths[i],
+            width: width,
+            height: height,
+            props: {
+                alignSelf: 'center',
+                height: '100%',
+                width: '100%',
+                resizeMode: 'contain',
+            },
+        })
+    }
     useEffect(() => {
         const getImagePathFromImage = async (image: Image) => {
             if (issueId && image) {
@@ -173,19 +187,7 @@ const LightboxScreen = ({
                 </View>
                 <View style={styles.imageWrapper}>
                     <ImageViewer
-                        imageUrls={imagePaths.map(imagePath => {
-                            return {
-                                url: imagePath,
-                                width: width,
-                                height: height,
-                                props: {
-                                    alignSelf: 'center',
-                                    height: '100%',
-                                    width: '100%',
-                                    resizeMode: 'contain',
-                                },
-                            }
-                        })}
+                        imageUrls={lightboxImages}
                         index={index}
                         renderIndicator={() => <View />} // empty indicator
                         onClick={focusOnImageComponent}
