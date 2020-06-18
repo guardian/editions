@@ -15,8 +15,11 @@ import { NavigationScreenProp } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { LightboxNavigationProps } from 'src/navigation/helpers/base'
 import ImageViewer from 'react-native-image-zoom-viewer'
-import { useImagePath } from 'src/hooks/use-image-paths'
-
+import { selectImagePath } from 'src/hooks/use-image-paths'
+import { useApiUrl } from 'src/hooks/use-settings'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
+import { Image } from 'src/common'
+import { useDimensions } from 'src/hooks/use-config-provider'
 const styles = StyleSheet.create({
     lightboxPage: {
         width: '100%',
@@ -36,7 +39,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     imageWrapper: {
+        alignSelf: 'center',
         height: '100%',
+        width: '100%',
+        resizeMode: 'contain',
     },
     captionWrapper: {
         position: 'absolute',
@@ -91,10 +97,13 @@ const LightboxScreen = ({
 
     const [scrollInProgress, setScrollInProgress] = useState(false)
 
+    const [imagePaths, setImagePaths] = useState([''])
+
+    const { width, height } = useDimensions()
+
     const handleScrollStartEvent = () => {
         setScrollInProgress(true)
     }
-
     const handleOnMoveEvent = (index: number) => {
         setCurrentIndex(index)
         setWindowsStart(
@@ -103,15 +112,37 @@ const LightboxScreen = ({
         setScrollInProgress(false)
     }
 
-    const imagePath1 = useImagePath(images[0])
-    const imagePath2 = useImagePath(images[1])
-    const imagePath3 = useImagePath(images[2])
+    const apiUrl = useApiUrl() || ''
+    const { issueId } = useIssueSummary()
 
     const focusOnImageComponent = () => {
         setCaptionVisible(!captionVisible)
         setDotsVisible(!dotsVisible)
         setCloseButtonVisible(!closeButtonVisible)
     }
+
+    useEffect(() => {
+        const getImagePathFromImage = async (image: Image) => {
+            if (issueId && image) {
+                const { localIssueId, publishedIssueId } = issueId
+                const imagePath = await selectImagePath(
+                    apiUrl,
+                    localIssueId,
+                    publishedIssueId,
+                    image,
+                    'full-size',
+                )
+                return imagePath
+            }
+            return ''
+        }
+        const fetchImagePaths = async () => {
+            return await Promise.all(
+                images.map(image => getImagePathFromImage(image)),
+            )
+        }
+        fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
+    }, [apiUrl, images, issueId, width, height])
 
     useEffect(() => {
         setCaptionVisible(true)
@@ -141,44 +172,66 @@ const LightboxScreen = ({
                     )}
                 </View>
                 <View style={styles.imageWrapper}>
-                    {imagePath1 && imagePath2 && imagePath3 && (
-                        <ImageViewer
-                            imageUrls={[
-                                { url: imagePath1 },
-                                { url: imagePath2 },
-                                { url: imagePath3 },
-                            ]}
-                            index={index}
-                            renderIndicator={() => <View />} // empty indicator
-                            onClick={focusOnImageComponent}
-                            onMove={handleScrollStartEvent}
-                            onChange={index => handleOnMoveEvent(index || 0)} // seems that first index is nil?
-                            saveToLocalByLongPress={false}
-                        />
-                    )}
-                    <View style={styles.progressWrapper}>
-                        {showProgressIndicator && (
-                            <ProgressIndicator
-                                currentIndex={currentIndex}
-                                imageCount={images.length}
-                                windowSize={numDots}
-                                windowStart={windowStart}
-                                scrollInProgress={scrollInProgress}
-                            />
-                        )}
-                    </View>
-                    {captionVisible && images[currentIndex].caption && (
-                        <LightboxCaption
-                            caption={images[currentIndex].caption}
-                            pillarColor={
-                                pillar === 'neutral'
-                                    ? palette.neutral[100]
-                                    : pillarColors.bright //bright since always on a dark background
+                    <ImageViewer
+                        imageUrls={imagePaths.map(imagePath => {
+                            return {
+                                url: imagePath,
+                                width: width,
+                                height: height,
+                                props: {
+                                    alignSelf: 'center',
+                                    height: '100%',
+                                    width: '100%',
+                                    resizeMode: 'contain',
+                                },
                             }
-                            displayCredit={images[currentIndex].displayCredit}
-                            credit={images[currentIndex].credit}
-                        />
-                    )}
+                        })}
+                        index={index}
+                        renderIndicator={() => <View />} // empty indicator
+                        onClick={focusOnImageComponent}
+                        onMove={handleScrollStartEvent}
+                        onChange={index => handleOnMoveEvent(index || 0)} // seems that first index is nil?
+                        saveToLocalByLongPress={false}
+                        footerContainerStyle={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width: '100%',
+                        }}
+                        renderFooter={() => (
+                            <View pointerEvents="none">
+                                <View style={styles.progressWrapper}>
+                                    {showProgressIndicator && (
+                                        <ProgressIndicator
+                                            currentIndex={currentIndex}
+                                            imageCount={images.length}
+                                            windowSize={numDots}
+                                            windowStart={windowStart}
+                                            scrollInProgress={scrollInProgress}
+                                        />
+                                    )}
+                                </View>
+                                {captionVisible &&
+                                    images[currentIndex].caption && (
+                                        <LightboxCaption
+                                            caption={
+                                                images[currentIndex].caption ||
+                                                ''
+                                            }
+                                            pillarColor={
+                                                pillar === 'neutral'
+                                                    ? palette.neutral[100]
+                                                    : pillarColors.bright //bright since always on a dark background
+                                            }
+                                            displayCredit={
+                                                images[currentIndex]
+                                                    .displayCredit
+                                            }
+                                            credit={images[currentIndex].credit}
+                                        />
+                                    )}
+                            </View>
+                        )}
+                    />
                 </View>
             </View>
         </View>

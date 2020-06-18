@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
         backgroundColor: themeColors(ArticleTheme.Dark).background,
         bottom: 0,
         width: '100%',
+        padding: 10,
     },
     captionText: {
         color: themeColors(ArticleTheme.Dark).text,
