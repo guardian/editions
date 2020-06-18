@@ -3,31 +3,9 @@ import { FlatList, ScrollView } from 'react-native'
 import { EditionsMenuHeader } from './Header/Header'
 import { RegionButton } from './RegionButton/RegionButton'
 import { SpecialEditionButton } from './SpecialEditionButton/SpecialEditionButton'
-import { editions } from 'src/helpers/settings/defaults'
-import {
-    Edition,
-    RegionalEdition,
-    SpecialEdition,
-} from '../../../../Apps/common/src'
+import { RegionalEdition, SpecialEdition } from '../../../../Apps/common/src'
+import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
 import { ItemSeperator } from './ItemSeperator/ItemSeperator'
-
-const defaultRegionalEditions: RegionalEdition[] = [
-    {
-        title: 'The Daily',
-        subTitle: 'Published every day by 6am (GMT)',
-        edition: editions.daily as Edition,
-    },
-    {
-        title: 'Australia Weekend',
-        subTitle: 'Published every Saturday by 6am (AEST)',
-        edition: editions.ausWeekly as Edition,
-    },
-    {
-        title: 'US Weekend',
-        subTitle: 'Published every Saturday by 6am (EST)',
-        edition: editions.usWeekly as Edition,
-    },
-]
 
 const EditionsMenu = ({
     regionalEdtions,

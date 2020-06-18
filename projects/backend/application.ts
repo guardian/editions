@@ -14,6 +14,7 @@ export interface EditionsBackendControllers {
     issueController: (req: Request, res: Response) => void
     frontController: (req: Request, res: Response) => void
     imageController: (req: Request, res: Response) => void
+    editionsController: (req: Request, res: Response) => void
 }
 
 export const createApp = (
@@ -39,6 +40,8 @@ export const createApp = (
     // this next line supports legacy clients and can be removed after beta
     // it should return the issues list for the daily-edition
     app.get('/issues', controllers.issuesSummaryController)
+
+    app.get('/editions', controllers.editionsController)
 
     app.get(
         '/' + issueSummaryPath(':edition'),
