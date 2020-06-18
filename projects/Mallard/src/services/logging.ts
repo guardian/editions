@@ -160,8 +160,11 @@ class Logging extends AsyncQueue {
             // Only attempt if we are connected, otherwise wait till next time
             if (isConnected) {
                 const logsToPost = await this.getQueuedItems()
-                await this.postLogToService(logsToPost)
-                await this.clearItems()
+
+                if (logsToPost.length > 1) {
+                    await this.postLogToService(logsToPost)
+                    await this.clearItems()
+                }
                 this.numberOfAttempts = 0
             }
         } catch (e) {
@@ -178,7 +181,7 @@ class Logging extends AsyncQueue {
 
     async log({ level, message, ...optionalFields }: LogParams) {
         try {
-            if (!this.enabled || !this.hasConsent) {
+            if (!this.hasConsent) {
                 return
             }
 
