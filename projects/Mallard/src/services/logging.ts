@@ -164,8 +164,8 @@ class Logging extends AsyncQueue {
                 if (logsToPost.length > 1) {
                     await this.postLogToService(logsToPost)
                     await this.clearItems()
+                    this.numberOfAttempts = 0
                 }
-                this.numberOfAttempts = 0
             }
         } catch (e) {
             if (this.numberOfAttempts >= ATTEMPTS_THEN_CLEAR) {

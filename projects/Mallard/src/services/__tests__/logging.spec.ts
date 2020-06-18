@@ -106,15 +106,34 @@ describe('logging service', () => {
                 expect(loggingService.numberOfAttempts).toEqual(1)
             }
         })
-        it('should reset the number of attempts on a successful post and clear the items in storage', async () => {
+        it('should reset the number of attempts on a successful post and clear the items in storage with more than 1 log', async () => {
             const loggingService = new Logging()
             loggingService.postLogToService = jest
                 .fn()
                 .mockReturnValue(Promise.resolve(true))
             loggingService.clearItems = jest.fn()
+            loggingService.getQueuedItems = jest
+                .fn()
+                .mockReturnValue([{ log: 'one' }, { log: 'two' }])
 
             await loggingService.postLogs()
+            expect(loggingService.postLogToService).toHaveBeenCalled()
             expect(loggingService.clearItems).toHaveBeenCalled()
+            expect(loggingService.numberOfAttempts).toEqual(0)
+        })
+        it('should not attempt to post if there is only 1 log in the queue', async () => {
+            const loggingService = new Logging()
+            loggingService.postLogToService = jest
+                .fn()
+                .mockReturnValue(Promise.resolve(true))
+            loggingService.clearItems = jest.fn()
+            loggingService.getQueuedItems = jest
+                .fn()
+                .mockReturnValue([{ log: 'one' }])
+
+            await loggingService.postLogs()
+            expect(loggingService.postLogToService).not.toHaveBeenCalled()
+            expect(loggingService.clearItems).not.toHaveBeenCalled()
             expect(loggingService.numberOfAttempts).toEqual(0)
         })
         it('should call clearLogs if the threshold is reached when there is an error', async () => {
