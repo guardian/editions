@@ -156,10 +156,14 @@ class Logging extends AsyncQueue {
 
     async postLogs() {
         try {
-            const logsToPost = await this.getQueuedItems()
-            await this.postLogToService(logsToPost)
-            await this.clearItems()
-            this.numberOfAttempts = 0
+            const { isConnected } = await NetInfo.fetch()
+            // Only attempt if we are connected, otherwise wait till next time
+            if (isConnected) {
+                const logsToPost = await this.getQueuedItems()
+                await this.postLogToService(logsToPost)
+                await this.clearItems()
+                this.numberOfAttempts = 0
+            }
         } catch (e) {
             if (this.numberOfAttempts >= ATTEMPTS_THEN_CLEAR) {
                 await this.clearItems()
