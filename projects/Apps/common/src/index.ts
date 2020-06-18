@@ -545,3 +545,19 @@ export interface SpecialEditionButtonStyles {
     expiry: TextFormatting
     image: { width: number; height: number }
 }
+
+export interface RegionalEdition {
+    title: string
+    subTitle: string
+    edition: Edition
+}
+
+export interface SpecialEdition {
+    edition: string
+    expiry: Date
+    devUri?: string
+    image: Image
+    style: SpecialEditionButtonStyles
+    subTitle: string
+    title: string
+}

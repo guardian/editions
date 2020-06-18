@@ -1,20 +1,31 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { TitlepieceText } from 'src/components/styled-text'
+import { color } from 'src/theme/color'
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 4,
-        paddingLeft: 96,
-        paddingBottom: 38,
         flex: 1,
+        marginBottom: 4,
+    },
+    shadowBox: {
+        backgroundColor: 'white',
+        paddingBottom: 38,
+        paddingLeft: 96,
+        paddingTop: 4,
+        shadowColor: color.palette.neutral[7],
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
     },
     text: { fontSize: 24, lineHeight: 30 },
 })
 
 const EditionsMenuHeader = ({ children }: { children: string }) => (
     <View style={styles.container}>
-        <TitlepieceText style={styles.text}>{children}</TitlepieceText>
+        <View style={styles.shadowBox}>
+            <TitlepieceText style={styles.text}>{children}</TitlepieceText>
+        </View>
     </View>
 )
 
