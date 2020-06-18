@@ -1,7 +1,8 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { EditionsMenu } from '../EditionsMenu'
 import { editions } from 'src/helpers/settings/defaults'
+import { Edition } from '../../../../../Apps/common/src'
+import { EditionsMenu } from '../EditionsMenu'
 
 jest.mock('src/components/front/image-resource', () => ({
     ImageResource: () => 'ImageResource',
@@ -15,17 +16,17 @@ const regionalEditions = [
     {
         title: 'The UK Daily Edition',
         subTitle: 'Published every day by 12am (GMT)',
-        edition: editions.daily,
+        edition: editions.daily as Edition,
     },
     {
         title: 'Australia Daily',
         subTitle: 'Published every day by 9:30am (AEST)',
-        edition: editions.ausWeekly,
+        edition: editions.ausWeekly as Edition,
     },
     {
         title: 'US and Cananda Weekend',
         subTitle: 'Published every Saturday by 8am (EST)',
-        edition: editions.usWeekly,
+        edition: editions.usWeekly as Edition,
     },
 ]
 

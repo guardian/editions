@@ -4,24 +4,28 @@ import { EditionsMenuHeader } from './Header/Header'
 import { RegionButton } from './RegionButton/RegionButton'
 import { SpecialEditionButton } from './SpecialEditionButton/SpecialEditionButton'
 import { editions } from 'src/helpers/settings/defaults'
-import { RegionalEdition, SpecialEdition } from '../../../../Apps/common/src'
+import {
+    Edition,
+    RegionalEdition,
+    SpecialEdition,
+} from '../../../../Apps/common/src'
 import { ItemSeperator } from './ItemSeperator/ItemSeperator'
 
 const defaultRegionalEditions: RegionalEdition[] = [
     {
         title: 'The Daily',
         subTitle: 'Published every day by 6am (GMT)',
-        edition: editions.daily,
+        edition: editions.daily as Edition,
     },
     {
         title: 'Australia Weekend',
         subTitle: 'Published every Saturday by 6am (AEST)',
-        edition: editions.ausWeekly,
+        edition: editions.ausWeekly as Edition,
     },
     {
         title: 'US Weekend',
         subTitle: 'Published every Saturday by 6am (EST)',
-        edition: editions.usWeekly,
+        edition: editions.usWeekly as Edition,
     },
 ]
 

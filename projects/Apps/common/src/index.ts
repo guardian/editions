@@ -546,17 +546,18 @@ export interface SpecialEditionButtonStyles {
     image: { width: number; height: number }
 }
 
-interface Edtion {
+export interface RegionalEdition {
     title: string
     subTitle: string
-    edition: string // @TODO: should be an ENUM that is tracked throughout the app
+    edition: Edition
 }
 
-export interface RegionalEdition extends Edtion {}
-
-export interface SpecialEdition extends Edtion {
+export interface SpecialEdition {
+    edition: string
     expiry: Date
     devUri?: string
     image: Image
     style: SpecialEditionButtonStyles
+    subTitle: string
+    title: string
 }
