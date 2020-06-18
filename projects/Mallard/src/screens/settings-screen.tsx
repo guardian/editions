@@ -88,7 +88,8 @@ const SignInButton = ({
     signOutIdentity: () => void
 }) =>
     username ? (
-        <DualButton
+        <DualButton 
+            accessibilityRole="button" 
             textPrimary={username}
             textSecondary="Sign out"
             onPressPrimary={() =>
@@ -100,6 +101,7 @@ const SignInButton = ({
         />
     ) : (
         <FullButton
+            accessibilityRole="button" 
             text="Sign in"
             onPress={() => navigation.navigate(routeNames.SignIn)}
         />
@@ -177,6 +179,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
                 <SignInButton
+                    accessibilityRole="button" 
                     navigation={navigation}
                     username={
                         identityData

@@ -23,6 +23,8 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
                 <List
+                    accessible={true} // risk of making the list items unaccessible, we need to try to find out
+                    accessibilityRole="button"
                     data={[
                         {
                             key: 'Frequently Asked Questions',
@@ -36,6 +38,8 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                 />
                 <Heading>Contact us</Heading>
                 <List
+                    accessible={true} // risk of making the list items unaccessible, we need to try to find out
+                    accessibilityRole="button"
                     data={[
                         createSupportMailto(
                             client,
