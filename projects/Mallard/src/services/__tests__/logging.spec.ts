@@ -80,35 +80,42 @@ describe('logging service', () => {
     })
 
     describe('log', () => {
-        it('should have a successful post log', async () => {
+        it('should have a successful stored a log', async () => {
             const loggingService = new Logging()
             loggingService.getExternalInfo = jest
                 .fn()
                 .mockReturnValue(externalInfoFixture)
-            loggingService.clearItems = jest.fn()
-            loggingService.postLog = jest.fn()
+            loggingService.upsertQueuedItems = jest.fn()
             loggingService.enabled = true
             loggingService.hasConsent = true
             await loggingService.log({ level: Level.INFO, message: 'test' })
-            expect(loggingService.postLog).toHaveBeenCalled()
-            expect(loggingService.clearItems).toHaveBeenCalled()
+            expect(loggingService.upsertQueuedItems).toHaveBeenCalled()
         })
-        it('should not post a log if there is no consent', async () => {
+        it('should not store a log if there is no consent', async () => {
             const loggingService = new Logging()
             loggingService.getExternalInfo = jest
                 .fn()
                 .mockReturnValue(externalInfoFixture)
-            loggingService.clearItems = jest.fn()
-            loggingService.postLog = jest.fn()
+            loggingService.upsertQueuedItems = jest.fn()
+            loggingService.enabled = false
 
             await loggingService.log({ level: Level.INFO, message: 'test' })
-            expect(loggingService.postLog).not.toHaveBeenCalled()
-            expect(loggingService.clearItems).not.toHaveBeenCalled()
+            expect(loggingService.upsertQueuedItems).not.toHaveBeenCalled()
+        })
+        it('should not store a log if logging is not enabled in remote config', async () => {
+            const loggingService = new Logging()
+            loggingService.getExternalInfo = jest
+                .fn()
+                .mockReturnValue(externalInfoFixture)
+            loggingService.upsertQueuedItems = jest.fn()
+
+            await loggingService.log({ level: Level.INFO, message: 'test' })
+            expect(loggingService.upsertQueuedItems).not.toHaveBeenCalled()
         })
     })
 
-    describe('postLog', () => {
-        it('should increase the number of attempts if postLog fails', async () => {
+    describe('postLogs', () => {
+        it('should increase the number of attempts if postLogs fails', async () => {
             const loggingService = new Logging()
             loggingService.postLogToService = jest
                 .fn()
@@ -117,17 +124,20 @@ describe('logging service', () => {
                 })
 
             try {
-                await loggingService.postLog(logFixture)
+                await loggingService.postLogs()
             } catch {
                 expect(loggingService.numberOfAttempts).toEqual(1)
             }
         })
-        it('should reset the number of attempts on a successful post', async () => {
+        it('should reset the number of attempts on a successful post and clear the items in storage', async () => {
             const loggingService = new Logging()
             loggingService.postLogToService = jest
                 .fn()
                 .mockReturnValue(Promise.resolve(true))
-            await loggingService.postLog(logFixture)
+            loggingService.clearItems = jest.fn()
+
+            await loggingService.postLogs()
+            expect(loggingService.clearItems).toHaveBeenCalled()
             expect(loggingService.numberOfAttempts).toEqual(0)
         })
         it('should call clearLogs if the threshold is reached when there is an error', async () => {
@@ -141,7 +151,7 @@ describe('logging service', () => {
             loggingService.clearItems = jest.fn()
 
             try {
-                await loggingService.postLog(logFixture)
+                await loggingService.postLogs()
             } catch {
                 expect(loggingService.numberOfAttempts).toEqual(0)
                 expect(loggingService.clearItems).toHaveBeenCalled()

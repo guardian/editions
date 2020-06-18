@@ -154,19 +154,21 @@ class Logging extends AsyncQueue {
         return response
     }
 
-    async postLog(log: object[]) {
+    async postLogs() {
         try {
-            await this.postLogToService(log)
+            const logsToPost = await this.getQueuedItems()
+            await this.postLogToService(logsToPost)
+            await this.clearItems()
             this.numberOfAttempts = 0
         } catch (e) {
             if (this.numberOfAttempts >= ATTEMPTS_THEN_CLEAR) {
                 await this.clearItems()
                 this.numberOfAttempts = 0
             } else {
-                await this.saveQueuedItems(log)
                 this.numberOfAttempts++
             }
-            throw new Error(e)
+            errorService.captureException(e)
+            return e
         }
     }
 
@@ -184,17 +186,8 @@ class Logging extends AsyncQueue {
                 message: croppedMessage,
                 ...optionalFields,
             })
-            const logsToPost = await this.queueItems([currentLog])
 
-            const { isConnected } = await NetInfo.fetch()
-            // Not connected, save the log queue
-            if (!isConnected) {
-                return this.saveQueuedItems(logsToPost)
-            }
-
-            const postLogToService = await this.postLog(logsToPost)
-            await this.clearItems()
-            return postLogToService
+            return this.upsertQueuedItems([currentLog])
         } catch (e) {
             errorService.captureException(e)
             return e

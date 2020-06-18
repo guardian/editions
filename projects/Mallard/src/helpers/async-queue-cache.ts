@@ -49,6 +49,16 @@ class AsyncQueue {
         }
     }
 
+    async upsertQueuedItems(item: object[]): Promise<void | Error> {
+        try {
+            const itemsToStore = await this.queueItems(item)
+            return this.saveQueuedItems(itemsToStore)
+        } catch (e) {
+            errorService.captureException(e)
+            throw new Error(e)
+        }
+    }
+
     async clearItems() {
         try {
             return await this.cache.reset()
