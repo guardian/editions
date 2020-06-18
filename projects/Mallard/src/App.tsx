@@ -160,7 +160,6 @@ export default class App extends React.Component<{}, {}> {
         weatherHider(apolloClient)
         remoteConfigService.init()
         clearDownloadsDirectory()
-
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
 

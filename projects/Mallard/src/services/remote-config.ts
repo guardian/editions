@@ -18,7 +18,7 @@ const defaultValus = {
 const configValues = {
     // fetch config, cache for 5mins. This cache persists when app is reloaded
     minimumFetchInterval: 300,
-    isDeveloperModeEnabled: __DEV__,
+    isDeveloperModeEnabled: __DEV__, // dev mode bypass caching and enable quick testing
 }
 
 class RemoteConfigService implements RemoteConfig {
