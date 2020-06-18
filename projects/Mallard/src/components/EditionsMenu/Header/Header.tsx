@@ -6,7 +6,7 @@ import { color } from 'src/theme/color'
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginBottom: 5,
+        marginBottom: 4,
     },
     shadowBox: {
         backgroundColor: 'white',
