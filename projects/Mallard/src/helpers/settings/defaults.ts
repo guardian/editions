@@ -1,7 +1,7 @@
-import remoteConfig from '@react-native-firebase/remote-config'
 import { Platform } from 'react-native'
 import { locale } from '../locale'
 import { Settings } from '../settings'
+import { remoteConfigService } from 'src/services/remote-config'
 
 /*
 Default settings.
@@ -112,7 +112,7 @@ export const notificationTrackingUrl = (
 
 const apiUrl = backends[0].value
 
-const defaultLocaleEnabled = remoteConfig().getValue('default_locale').value
+const defaultLocaleEnabled = remoteConfigService.getBoolean('default_locale')
 const edition =
     defaultLocaleEnabled && localeToEdition.has(locale)
         ? localeToEdition.get(locale)
