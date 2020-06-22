@@ -12,7 +12,7 @@
         "wifi-android": "ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
         "run-android": "yarn pre-run && adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && adb reverse tcp:3131 tcp:3131 && react-native run-android && yarn prestorybook",
         "run-ios": "yarn pre-run && yarn install-pods && yarn prestorybook && react-native run-ios",
-        "run-ipad": "yarn pre-run && yarn prestorybook && react-native run-ios --simulator=\"iPad Air 2\"",
+        "run-ipad": "yarn pre-run && yarn prestorybook && react-native run-ios --simulator=\"iPad Pro (12.9-inch) (3rd generation) (13.3)\"",
         "validate": "cd ../.. && make validate-mallard",
         "fix": "cd ../.. && make fix-mallard",
         "bundle-android": "yarn pre-bundle && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/generated/res/react/release",
