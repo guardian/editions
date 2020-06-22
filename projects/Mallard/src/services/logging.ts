@@ -27,6 +27,7 @@ import remoteConfig from '@react-native-firebase/remote-config'
 
 const { LOGGING_API_KEY } = Config
 const ATTEMPTS_THEN_CLEAR = 10
+const MAX_NUM_OF_LOGS = 30
 
 interface LogParams {
     level: Level
@@ -194,7 +195,7 @@ class Logging extends AsyncQueue {
                 ...optionalFields,
             })
 
-            return this.upsertQueuedItems([currentLog])
+            return this.upsertQueuedItems([currentLog], MAX_NUM_OF_LOGS)
         } catch (e) {
             errorService.captureException(e)
             return e

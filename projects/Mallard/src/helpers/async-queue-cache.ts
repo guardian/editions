@@ -49,9 +49,19 @@ class AsyncQueue {
         }
     }
 
-    async upsertQueuedItems(item: object[]): Promise<void | Error> {
+    async upsertQueuedItems(
+        item: object[],
+        maxNumber?: number,
+    ): Promise<void | Error> {
         try {
             const itemsToStore = await this.queueItems(item)
+
+            if (maxNumber && itemsToStore.length > maxNumber) {
+                const startIndex = itemsToStore.length - maxNumber - 1
+                const reducedItemsToStore = itemsToStore.slice(startIndex)
+                return this.saveQueuedItems(reducedItemsToStore)
+            }
+
             return this.saveQueuedItems(itemsToStore)
         } catch (e) {
             errorService.captureException(e)
