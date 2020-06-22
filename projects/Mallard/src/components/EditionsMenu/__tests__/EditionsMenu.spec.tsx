@@ -11,6 +11,33 @@ jest.mock('src/helpers/locale', () => ({
     locale: 'en_GB',
 }))
 
+jest.mock('@apollo/react-hooks', () => ({
+    useApolloClient: () => jest.fn(),
+    useQuery: () => ({ data: 'something' }),
+}))
+
+const mockNavigation = {
+    state: { params: {} },
+    dispatch: jest.fn(),
+    goBack: jest.fn(),
+    dismiss: jest.fn(),
+    navigate: jest.fn(),
+    openDrawer: jest.fn(),
+    closeDrawer: jest.fn(),
+    toggleDrawer: jest.fn(),
+    getParam: jest.fn(),
+    setParams: jest.fn(),
+    addListener: jest.fn(),
+    push: jest.fn(),
+    replace: jest.fn(),
+    pop: jest.fn(),
+    popToTop: jest.fn(),
+    isFocused: jest.fn(),
+    reset: jest.fn(),
+    isFirstRouteInParent: jest.fn(),
+    dangerouslyGetParent: jest.fn(),
+}
+
 const regionalEditions = [
     {
         title: 'The UK Daily Edition',
@@ -72,19 +99,25 @@ Monthly`,
 describe('EditionsMenu', () => {
     it('should display a default EditionsMenu with correct styling and default Regional Buttons', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <EditionsMenu />,
+            <EditionsMenu navigation={mockNavigation} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
     it('should display a EditionsMenu with correct styling and alternative Regional Buttons', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <EditionsMenu regionalEdtions={regionalEditions} />,
+            <EditionsMenu
+                navigation={mockNavigation}
+                regionalEdtions={regionalEditions}
+            />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
     it('should display a EditionsMenu with correct styling default Regional Buttons and a Special Edition Button', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <EditionsMenu specialEditions={specialEditions} />,
+            <EditionsMenu
+                navigation={mockNavigation}
+                specialEditions={specialEditions}
+            />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })

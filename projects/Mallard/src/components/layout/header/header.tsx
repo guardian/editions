@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
+import { EditionsMenuButton } from 'src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton'
 import { Highlight } from 'src/components/highlight'
 import { GridRowSplit, IssueTitle } from 'src/components/issue/issue-title'
 import { useInsets } from 'src/hooks/use-screen'
@@ -153,4 +154,17 @@ const IssuePickerHeader = (
     )
 }
 
-export { Header, IssuePickerHeader }
+const EditionsMenuScreenHeader = ({
+    leftActionPress,
+}: {
+    leftActionPress: () => void
+}) => (
+    <Header
+        leftAction={<EditionsMenuButton selected onPress={leftActionPress} />}
+        layout={'center'}
+    >
+        <IssueTitle title={`Editions`} />
+    </Header>
+)
+
+export { Header, IssuePickerHeader, EditionsMenuScreenHeader }

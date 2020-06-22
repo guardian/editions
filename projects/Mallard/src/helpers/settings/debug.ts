@@ -1,21 +1,41 @@
-import { lightboxSettingCache } from 'src/helpers/storage'
+import {
+    lightboxSettingCache,
+    enableEditionMenuCache,
+} from 'src/helpers/storage'
+import { AsyncCache } from 'src/authentication/lib/Authorizer'
 
-const setlightboxSetting = async (lightboxEnabled: boolean) => {
-    await lightboxSettingCache.set(lightboxEnabled)
+const setDebugSetting = async (toggle: boolean, cache: AsyncCache<boolean>) => {
+    await cache.set(toggle)
 }
 
-const fetchLightboxSetting = async (): Promise<boolean> => {
+const fetchDebugSetting = async (
+    cache: AsyncCache<boolean>,
+): Promise<boolean> => {
     try {
-        const lightboxEnabledStorage = await lightboxSettingCache.get()
+        const debugStorage = await cache.get()
 
-        if (lightboxEnabledStorage === null) {
-            setlightboxSetting(false)
+        if (debugStorage === null) {
+            setDebugSetting(false, cache)
             return false
         }
-        return lightboxEnabledStorage
+        return debugStorage
     } catch (e) {
         return false
     }
 }
 
-export { fetchLightboxSetting, setlightboxSetting }
+const fetchLightboxSetting = () => fetchDebugSetting(lightboxSettingCache)
+const setlightboxSetting = (toggle: boolean) =>
+    setDebugSetting(toggle, lightboxSettingCache)
+
+const fetchEditionMenuEnabledSetting = () =>
+    fetchDebugSetting(enableEditionMenuCache)
+const setEditionMenuEnabledSetting = (toggle: boolean) =>
+    setDebugSetting(toggle, enableEditionMenuCache)
+
+export {
+    fetchLightboxSetting,
+    setlightboxSetting,
+    fetchEditionMenuEnabledSetting,
+    setEditionMenuEnabledSetting,
+}

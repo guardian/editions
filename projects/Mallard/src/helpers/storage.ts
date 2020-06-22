@@ -74,6 +74,8 @@ const loggingQueueCache = createAsyncCache<string>('loggingQueue')
 
 const lightboxSettingCache = createAsyncCache<boolean>('lightbox-enabled')
 
+const enableEditionMenuCache = createAsyncCache<boolean>('edition-menu-enabled')
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -136,4 +138,5 @@ export {
     validAttemptCache,
     loggingQueueCache,
     lightboxSettingCache,
+    enableEditionMenuCache,
 }
