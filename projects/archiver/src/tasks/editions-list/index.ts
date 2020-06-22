@@ -3,11 +3,18 @@ import { upload, FIVE_SECONDS, getBucket } from '../../utils/s3'
 import { handleAndNotify } from '../../services/task-handler'
 import { getEditions } from '../../utils/backend-client'
 import { hasFailed } from '../../../../backend/utils/try'
-import { EditionsList } from '../../../../Apps/common/src'
+import {
+    EditionsList,
+    IssueSummary,
+    IssuePublicationIdentifier,
+} from '../../../../Apps/common/src'
 import { IndexTaskOutput } from '../indexer'
 
 type EditionsListTaskInput = IndexTaskOutput
-
+interface EditionsListOutput {
+    issuePublication: IssuePublicationIdentifier
+    editionsList: EditionsList
+}
 /**
  * This step uploads the editionsList (fetched from /editions endpoint) of the backend lambda
  * and uploads it to BOTH the proof and publish buckets. Strictly speaking this step does
@@ -16,41 +23,42 @@ type EditionsListTaskInput = IndexTaskOutput
  * remain up to date. There's no need to proof first as we would expect the visibility of a new edition to be
  * controlled by a launch date/feature switch rather than it's presence in the API.
  */
-export const handler: () => Handler<
+const proofBucket = getBucket('proof')
+const publishBucket = getBucket('publish')
+export const handler: Handler<
     EditionsListTaskInput,
-    EditionsList
-> = () => {
-    const proofBucket = getBucket('proof')
-    return handleAndNotify(
-        'editionsListUpdated',
-        async () => {
-            const editionsList = await getEditions()
+    EditionsListOutput
+> = handleAndNotify(
+    'editionsListUpdated',
+    async ({ issuePublication }) => {
+        const editionsList = await getEditions()
 
-            if (hasFailed(editionsList)) {
-                throw new Error('Failed to fetch editions list')
-            }
+        if (hasFailed(editionsList)) {
+            throw new Error('Failed to fetch editions list')
+        }
 
-            const publishBucket = getBucket('publish')
-            await upload(
-                'editions',
-                editionsList,
-                proofBucket,
-                'application/json',
-                FIVE_SECONDS,
-            )
+        await upload(
+            'editions',
+            editionsList,
+            proofBucket,
+            'application/json',
+            FIVE_SECONDS,
+        )
 
-            await upload(
-                'editions',
-                editionsList,
-                publishBucket,
-                'application/json',
-                FIVE_SECONDS,
-            )
+        await upload(
+            'editions',
+            editionsList,
+            publishBucket,
+            'application/json',
+            FIVE_SECONDS,
+        )
 
-            console.log('Uploaded new editions file')
+        console.log('Uploaded new editions file')
 
-            return editionsList
-        },
-        proofBucket,
-    )
-}
+        return {
+            editionsList,
+            issuePublication,
+        }
+    },
+    proofBucket,
+)
