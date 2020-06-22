@@ -1,7 +1,6 @@
 import { Handler } from 'aws-lambda'
 import { upload, FIVE_SECONDS, getBucket } from '../../utils/s3'
 import { handleAndNotify } from '../../services/task-handler'
-import { Status } from '../../services/status'
 import { getEditions } from '../../utils/backend-client'
 import { hasFailed } from '../../../../backend/utils/try'
 import { EditionsList } from '../../../../Apps/common/src'
@@ -9,21 +8,29 @@ import { IndexTaskOutput } from '../indexer'
 
 type EditionsListTaskInput = IndexTaskOutput
 
-export const handler: (
-    bucket: string,
-    statusOnSuccess: Status,
-) => Handler<EditionsListTaskInput, EditionsList> = (bucket, statusOnSuccess) =>
-    handleAndNotify(
-        statusOnSuccess,
+/**
+ * This step uploads the editionsList (fetched from /editions endpoint) of the backend lambda
+ * and uploads it to BOTH the proof and publish buckets. Strictly speaking this step does
+ * not need to be run every time an issue is published as editions will be added rarely, and independently
+ * of issue publication, but including the step here keeps everything in one place and ensures the list will
+ * remain up to date. There's no need to proof first as we would expect the visibility of a new edition to be
+ * controlled by a launch date/feature switch rather than it's presence in the API.
+ */
+export const handler: () => Handler<
+    EditionsListTaskInput,
+    EditionsList
+> = () => {
+    const proofBucket = getBucket('proof')
+    return handleAndNotify(
+        'editionsListUpdated',
         async () => {
-            const proofBucket = getBucket('proof')
-            const publishBucket = getBucket('publish')
             const editionsList = await getEditions()
 
             if (hasFailed(editionsList)) {
                 throw new Error('Failed to fetch editions list')
             }
 
+            const publishBucket = getBucket('publish')
             await upload(
                 'editions',
                 editionsList,
@@ -44,5 +51,6 @@ export const handler: (
 
             return editionsList
         },
-        getBucket(bucket),
+        proofBucket,
     )
+}

@@ -13,6 +13,7 @@ export const publishedStatuses = [
     'proofed', // index file generated in proof bucket
     'copied', // copied across to publish bucket
     'published', // index file generated in publish bucket
+    'editionsListUpdated', // editions list uploaded to proof and publish bucket
     'notified', // notification sent
 ] as const
 export const statuses = [
