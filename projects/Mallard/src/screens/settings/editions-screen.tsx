@@ -9,8 +9,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { setEdition } from 'src/helpers/settings/setters'
 import { List } from 'src/components/lists/list'
-import { editions } from 'src/helpers/settings/defaults'
 import { useEdition } from 'src/hooks/use-settings'
+import { editions } from '../../../../Apps/common/src'
 
 const styles = StyleSheet.create({
     textInputStyle: {

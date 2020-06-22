@@ -227,6 +227,14 @@ export const Editions = [
 
 export type Edition = typeof Editions[number]
 
+export const editions = {
+    daily: 'daily-edition' as Edition,
+    ausWeekly: 'australian-edition' as Edition,
+    usWeekly: 'american-edition' as Edition,
+    dummy: 'the-dummy-edition' as Edition,
+    training: 'training-edition' as Edition,
+}
+
 export const imageUseSizes: {
     [u in ImageUse]: { [k in ImageSize]: number }
 } = /*

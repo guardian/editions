@@ -5,6 +5,7 @@ import { Handler } from 'aws-lambda'
 import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController } from './controllers/fronts'
 import { imageController } from './controllers/image'
+import { editionsController } from './controllers/editions'
 import { createApp, EditionsBackendControllers } from './application'
 import { isPreview } from './preview'
 
@@ -13,6 +14,7 @@ const runtimeControllers: EditionsBackendControllers = {
     issueController,
     frontController,
     imageController,
+    editionsController,
 }
 
 const asPreview = isPreview

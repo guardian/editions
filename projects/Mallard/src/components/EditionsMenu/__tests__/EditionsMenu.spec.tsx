@@ -1,7 +1,6 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { editions } from 'src/helpers/settings/defaults'
-import { Edition } from '../../../../../Apps/common/src'
+import { Edition, editions } from '../../../../../Apps/common/src'
 import { EditionsMenu } from '../EditionsMenu'
 
 jest.mock('src/components/front/image-resource', () => ({
