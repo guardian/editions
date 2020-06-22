@@ -74,7 +74,6 @@ exports[`SportScore should show a SportScore with trailImage styling 1`] = `
         "paddingHorizontal": 4.666666666666667,
       },
       Object {
-        "backgroundColor": "white",
         "bottom": 0,
         "left": 0,
         "position": "absolute",
