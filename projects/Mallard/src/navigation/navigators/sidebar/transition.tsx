@@ -3,6 +3,7 @@ import { NavigationTransitionProps } from 'react-navigation'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { safeInterpolation } from 'src/helpers/math'
 import { sidebarWidth } from './positions'
+import { routeNames } from 'src/navigation/routes'
 
 export const mainLayerTransition = () => {
     return {
@@ -16,13 +17,17 @@ export const mainLayerTransition = () => {
 export const sidebarLayerTransition = (
     position: NavigationTransitionProps['position'],
     sceneIndex: number,
+    reverse?: boolean,
 ) => {
     const { width } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
 
+    const outputRange = isTablet ? sidebarWidth : width
+    const outputRangeCheckReverse = reverse ? -outputRange : outputRange
+
     const translateX = position.interpolate({
         inputRange: safeInterpolation([sceneIndex - 1, sceneIndex]),
-        outputRange: safeInterpolation([isTablet ? sidebarWidth : width, 0]),
+        outputRange: safeInterpolation([outputRangeCheckReverse, 0]),
     })
 
     return {
@@ -38,7 +43,13 @@ const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
     if (scene.route.routeName === '_') {
         return mainLayerTransition()
     }
-    return sidebarLayerTransition(sceneProps.position, sceneProps.scene.index)
+    const reverse =
+        scene.route.routeName === routeNames.EditionsMenu ? true : false
+    return sidebarLayerTransition(
+        sceneProps.position,
+        sceneProps.scene.index,
+        reverse,
+    )
 }
 
 export { screenInterpolator }

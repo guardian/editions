@@ -90,6 +90,12 @@ const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
     navigation.navigate(routeNames.IssueList, { from: navigation.state.params })
 }
 
+const navigateToEditionMenu = (navigation: NavigationScreenProp<{}>): void => {
+    navigation.navigate(routeNames.EditionsMenu, {
+        from: navigation.state.params,
+    })
+}
+
 export interface IssueNavigationProps {
     path?: PathToIssue
     issue?: Issue
@@ -149,4 +155,5 @@ export {
     navigateToIssue,
     navigateToSettings,
     navigateToLightbox,
+    navigateToEditionMenu,
 }
