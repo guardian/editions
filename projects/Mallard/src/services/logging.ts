@@ -23,7 +23,7 @@ import {
 } from '../../../Apps/common/src/logging'
 import { AsyncQueue } from '../helpers/async-queue-cache'
 import { errorService } from './errors'
-import remoteConfig from '@react-native-firebase/remote-config'
+import { remoteConfigService } from './remote-config'
 
 const { LOGGING_API_KEY } = Config
 const ATTEMPTS_THEN_CLEAR = 10
@@ -52,8 +52,7 @@ class Logging extends AsyncQueue {
         super(loggingQueueCache)
         this.hasConsent = false
         this.numberOfAttempts = 0
-        this.enabled =
-            remoteConfig().getValue('remote_logging_enabled').value === true
+        this.enabled = remoteConfigService.getBoolean('logging_enabled')
     }
 
     init(apolloClient: ApolloClient<object>) {

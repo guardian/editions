@@ -10,9 +10,9 @@ import { FormField } from 'src/hooks/use-form-field'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { EmailInput, PasswordInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
-import remoteConfig from '@react-native-firebase/remote-config'
 
 import { iosMajorVersion } from 'src/helpers/platform'
+import { remoteConfigService } from 'src/services/remote-config'
 
 const socialButtonStyles = StyleSheet.create({
     button: {
@@ -121,7 +121,7 @@ const Login = ({
         fn(value)
     }
 
-    const appleSignInEnabled = remoteConfig().getValue('apple_sign_in').value
+    const appleSignInEnabled = remoteConfigService.getBoolean('apple_sign_in')
 
     return (
         <LoginLayout
