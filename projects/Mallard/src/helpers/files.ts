@@ -2,15 +2,14 @@ import { unzip } from 'react-native-zip-archive'
 import RNFS from 'react-native-fs'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
-import { IssueSummary } from '../../../Apps/common/src'
+import { IssueSummary, editions } from '../../../Apps/common/src'
 import { lastNDays } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
-import { defaultSettings, editions } from './settings/defaults'
+import { defaultSettings } from './settings/defaults'
 import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { withCache } from './fetch/cache'
-import { crashlyticsService } from 'src/services/crashlytics'
 import { updateListeners } from 'src/download-edition/download-and-unzip'
 
 interface BasicFile {
@@ -111,7 +110,6 @@ export const unzipNamedIssueArchive = (zipFilePath: string) => {
         .catch(e => {
             e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`
             errorService.captureException(e)
-            crashlyticsService.captureException(e)
         })
 }
 
@@ -194,7 +192,6 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> => {
                 e.message = `readIssueSummary: ${e.message} - with: ${data}`
                 console.log(e.message)
                 errorService.captureException(e)
-                crashlyticsService.captureException(e)
                 throw e
             }
         })
@@ -229,7 +226,6 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     } catch (e) {
         e.message = `Failed to fetch valid issue summary: ${e.message}`
         errorService.captureException(e)
-        crashlyticsService.captureException(e)
         // Got a problem with the endpoint, return the last saved version
         return readIssueSummary()
     }

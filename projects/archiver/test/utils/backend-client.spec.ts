@@ -1,5 +1,4 @@
-import { attempt, Front, IssuePublicationIdentifier } from '../../common'
-import { Bucket } from '../../src/utils/s3'
+import { Front } from '../../common'
 
 const frontJson: any = {
     id: 'id1',

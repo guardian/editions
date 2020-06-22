@@ -5,7 +5,6 @@ import { matchSummmaryToKey, isIssueOnDevice } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { errorService } from 'src/services/errors'
 import { downloadAndUnzipIssue } from './download-and-unzip'
-import { crashlyticsService } from 'src/services/crashlytics'
 
 const downloadTodaysIssue = async (client: ApolloClient<object>) => {
     const todaysKey = await todayAsKey()
@@ -30,7 +29,6 @@ const downloadTodaysIssue = async (client: ApolloClient<object>) => {
     } catch (e) {
         e.message = `Unable to download todays issue: ${e.message}`
         errorService.captureException(e)
-        crashlyticsService.captureException(e)
         console.log(e.message)
     }
 }

@@ -1,39 +1,40 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import React, { useContext, ReactNode, useState, useEffect } from 'react'
+import gql from 'graphql-tag'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Alert, Clipboard, View } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
+import { Switch } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
+import { AccessContext } from 'src/authentication/AccessContext'
+import { isValid } from 'src/authentication/lib/Attempt'
+import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
+import { Button } from 'src/components/Button/Button'
 import { Footer, Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
-import { clearCache } from 'src/helpers/fetch/cache'
-import { routeNames } from 'src/navigation/routes'
-import { Button } from 'src/components/Button/Button'
-import { metrics } from 'src/theme/spacing'
-import { useToast } from 'src/hooks/use-toast'
-import { isInTestFlight, isInBeta } from 'src/helpers/release-stream'
-import { FSPaths } from 'src/paths'
-import { AccessContext } from 'src/authentication/AccessContext'
-import { isValid } from 'src/authentication/lib/Attempt'
-import DeviceInfo from 'react-native-device-info'
-import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
-import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
-import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
-import {
-    getPushTracking,
-    clearPushTracking,
-} from 'src/push-notifications/push-tracking'
-import { getFileList } from 'src/helpers/files'
-import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
-import { Switch } from 'react-native-gesture-handler'
-import { useNetInfo } from 'src/hooks/use-net-info'
-import { locale } from 'src/helpers/locale'
-import { imageForScreenSize } from 'src/helpers/screen'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues'
+import { clearCache } from 'src/helpers/fetch/cache'
+import { getFileList } from 'src/helpers/files'
+import { locale } from 'src/helpers/locale'
+import { isInBeta, isInTestFlight } from 'src/helpers/release-stream'
+import { imageForScreenSize } from 'src/helpers/screen'
 import {
     fetchLightboxSetting,
     setlightboxSetting,
 } from 'src/helpers/settings/debug'
+import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
+import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
+import { useQuery } from 'src/hooks/apollo'
+import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
+import { useNetInfo } from 'src/hooks/use-net-info'
+import { useToast } from 'src/hooks/use-toast'
+import { routeNames } from 'src/navigation/routes'
+import { FSPaths } from 'src/paths'
+import {
+    clearPushTracking,
+    getPushTracking,
+} from 'src/push-notifications/push-tracking'
+import { metrics } from 'src/theme/spacing'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -60,6 +61,10 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         isDevButtonShown: showNetInfoButton,
         setIsDevButtonShown: setShowNetInfoButton,
     } = useNetInfo()
+    const {
+        editionsMenuEnabled,
+        toggleEditionsMenuEnabled,
+    } = useEditionsMenuEnabled()
     const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
 
     const { attempt, signOutCAS } = useContext(AccessContext)
@@ -258,11 +263,22 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     {
                         key: 'Enable lightbox',
                         title: 'Enable lightbox',
-                        onPress: onToggleNetInfoButton,
+                        onPress: () => {},
                         proxy: (
                             <Switch
                                 value={lightboxEnabled}
                                 onValueChange={onToggleLightbox}
+                            />
+                        ),
+                    },
+                    {
+                        key: 'Enable edition menu',
+                        title: 'Enable edition menu',
+                        onPress: () => {},
+                        proxy: (
+                            <Switch
+                                value={editionsMenuEnabled}
+                                onValueChange={toggleEditionsMenuEnabled}
                             />
                         ),
                     },

@@ -3,6 +3,28 @@ import { storiesOf } from '@storybook/react-native'
 import { withKnobs } from '@storybook/addon-knobs'
 import { EditionsMenu } from './EditionsMenu'
 
+const mockNavigation = {
+    state: { params: {} },
+    dispatch: () => true,
+    goBack: () => true,
+    dismiss: () => true,
+    navigate: () => true,
+    openDrawer: () => true,
+    closeDrawer: () => true,
+    toggleDrawer: () => true,
+    getParam: () => true,
+    setParams: () => true,
+    addListener: () => ({ remove: () => {} }),
+    push: () => true,
+    replace: () => true,
+    pop: () => true,
+    popToTop: () => true,
+    isFocused: () => true,
+    reset: () => true,
+    isFirstRouteInParent: () => true,
+    dangerouslyGetParent: () => undefined,
+}
+
 const props = {
     specialEditions: [
         {
@@ -50,7 +72,9 @@ Monthly`,
 
 storiesOf('EditionsMenu', module)
     .addDecorator(withKnobs)
-    .add('EditionsMenu - default', () => <EditionsMenu />)
+    .add('EditionsMenu - default', () => (
+        <EditionsMenu navigation={mockNavigation} />
+    ))
     .add('EditionsMenu - with Special Edition', () => (
-        <EditionsMenu {...props} />
+        <EditionsMenu navigation={mockNavigation} {...props} />
     ))

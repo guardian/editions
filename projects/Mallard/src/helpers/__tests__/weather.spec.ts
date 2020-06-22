@@ -1,9 +1,9 @@
 const CITIES_URL =
-    'http://mobile-weather.guardianapis.com/locations/v1/cities/ipAddress?q=127.0.0.1&details=false'
+    'https://mobile-weather.guardianapis.com/locations/v1/cities/ipAddress?q=127.0.0.1&details=false'
 const FORECASTS_URL =
-    'http://mobile-weather.guardianapis.com/forecasts/v1/hourly/12hour/london.json?metric=true&language=en-gb'
+    'https://mobile-weather.guardianapis.com/forecasts/v1/hourly/12hour/london.json?metric=true&language=en-gb'
 const GEOLOC_URL =
-    'http://mobile-weather.guardianapis.com/locations/v1/cities/geoposition/search?q=12,34&details=false'
+    'https://mobile-weather.guardianapis.com/locations/v1/cities/geoposition/search?q=12,34&details=false'
 
 let forecasts = [{ DateTime: '0000' }]
 ;(global as any).fetch = jest.fn().mockImplementation(async (url: string) => {

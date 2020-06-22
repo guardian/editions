@@ -383,7 +383,7 @@ exports[`EditionsMenuButton should display a selected EditionsMenuButton with co
   <Text
     style={
       Object {
-        "color": "#121212",
+        "color": "#333333",
         "fontFamily": "GuardianIcons-Regular",
         "fontSize": 20,
         "lineHeight": 20,
