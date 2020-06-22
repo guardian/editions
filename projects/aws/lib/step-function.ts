@@ -77,6 +77,13 @@ export const archiverStepFunction = (
         lambdaParams,
     )
 
+    const editionsList = task(
+        scope,
+        'editionsList',
+        'Generate editions list',
+        lambdaParams,
+    )
+
     const notification = task(
         scope,
         'notification',
@@ -101,7 +108,8 @@ export const archiverStepFunction = (
 
     copier.task.next(indexerPublish.task)
 
-    indexerPublish.task.next(notification.task)
+    indexerPublish.task.next(editionsList.task)
+    editionsList.task.next(notification.task)
 
     notification.task.next(new sfn.Succeed(scope, 'successfully-archived'))
 
