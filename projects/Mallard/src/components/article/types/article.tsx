@@ -138,7 +138,7 @@ const Article = ({
     const ref = useRef<WebView | null>(null)
     const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const [imagePaths, setImagePaths] = useState([''])
-    const [lightboxImages, setLightboxImages] = useState([])
+    const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
