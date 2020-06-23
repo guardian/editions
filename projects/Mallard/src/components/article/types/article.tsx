@@ -138,6 +138,7 @@ const Article = ({
     const ref = useRef<WebView | null>(null)
     const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const [imagePaths, setImagePaths] = useState([''])
+    const [lightboxImages, setLightboxImages] = useState([])
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
@@ -161,6 +162,7 @@ const Article = ({
         if (article.type !== 'gallery' && article.image) {
             lbCreditedImages.unshift(article.image)
         }
+        setLightboxImages(lbCreditedImages)
         const getImagePathFromImage = async (image: Image) => {
             if (issueId && image) {
                 const { localIssueId, publishedIssueId } = issueId
@@ -229,20 +231,19 @@ const Article = ({
                         onIsAtTopChange(parsed.isAtTop)
                     }
                     if (lightboxEnabled && parsed.type === 'openLightbox') {
-                        const lbimages = getLightboxImages(article.elements)
-                        const lbCreditedImages = getCreditedImages(lbimages)
                         let index = parsed.index
                         // to avoid image duplication we don't add the main image of gallery articles to the array
-                        if (article.type !== 'gallery' && article.image) {
-                            lbCreditedImages.unshift(article.image)
-                            if (parsed.isMainImage === 'false') {
-                                index++
-                            }
+                        if (
+                            article.type !== 'gallery' &&
+                            article.image &&
+                            parsed.isMainImage === 'false'
+                        ) {
+                            index++
                         }
                         navigateToLightbox({
                             navigation,
                             navigationProps: {
-                                images: lbCreditedImages,
+                                images: lightboxImages,
                                 imagePaths: imagePaths,
                                 index,
                                 pillar,
