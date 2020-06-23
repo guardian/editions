@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { View, Animated, StyleSheet } from 'react-native'
-import { CreditedImage } from '../../../Apps/common/src'
+import { View, StyleSheet } from 'react-native'
 import { CloseModalButton } from 'src/components/Button/CloseModalButton'
 import { getPillarColors } from 'src/helpers/transform'
-import { useDimensions } from 'src/hooks/use-config-provider'
 import { themeColors } from 'src/components/article/html/helpers/css'
 import { ArticleTheme } from 'src/components/article/html/article'
+import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption'
 import {
     ProgressIndicator,
     getWindowStart,
     getNewWindowStart,
 } from 'src/components/article/progress-indicator'
-import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption'
-import { LightboxImage } from 'src/components/Lightbox/LightboxImage'
 import { palette } from '@guardian/pasteup/palette'
 import { NavigationScreenProp } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { LightboxNavigationProps } from 'src/navigation/helpers/base'
-import ImageZoom from 'react-native-image-pan-zoom'
-
+import { useDimensions } from 'src/hooks/use-config-provider'
+import ImageViewer from 'react-native-image-zoom-viewer'
 const styles = StyleSheet.create({
     lightboxPage: {
         width: '100%',
@@ -38,7 +35,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     imageWrapper: {
+        alignSelf: 'center',
         height: '100%',
+        width: '100%',
+        resizeMode: 'contain',
     },
     captionWrapper: {
         position: 'absolute',
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         paddingBottom: 20,
         width: '100%',
+        zIndex: 2,
     },
 })
 
@@ -74,11 +75,11 @@ const LightboxScreen = ({
 }: {
     navigation: NavigationScreenProp<{}, LightboxNavigationProps>
 }) => {
+    const imagePaths = navigation.getParam('imagePaths', [])
     const images = navigation.getParam('images', [])
     const index = navigation.getParam('index', 0)
     const pillar = navigation.getParam('pillar', 'news')
     const pillarColors = getPillarColors(pillar)
-    const { width, height } = useDimensions()
     const [windowStart, setWindowsStart] = useState(0)
     const [currentIndex, setCurrentIndex] = useState(index)
 
@@ -94,23 +95,36 @@ const LightboxScreen = ({
 
     const [scrollInProgress, setScrollInProgress] = useState(false)
 
-    const handleScrollEndEvent = (ev: any) => {
-        const newIndex = Math.ceil(ev.nativeEvent.contentOffset.x / width)
-        setCurrentIndex(newIndex)
-        setScrollInProgress(false)
-        setWindowsStart(
-            getNewWindowStart(newIndex, windowStart, images.length, numDots),
-        )
-    }
+    const { width } = useDimensions()
 
     const handleScrollStartEvent = () => {
         setScrollInProgress(true)
+    }
+    const handleOnMoveEvent = (index: number) => {
+        setCurrentIndex(index)
+        setWindowsStart(
+            getNewWindowStart(index, windowStart, images.length, numDots),
+        )
+        setScrollInProgress(false)
     }
 
     const focusOnImageComponent = () => {
         setCaptionVisible(!captionVisible)
         setDotsVisible(!dotsVisible)
         setCloseButtonVisible(!closeButtonVisible)
+    }
+
+    const lightboxImages = []
+    for (let i = 0; i < images.length; i++) {
+        lightboxImages.push({
+            url: imagePaths[i],
+            props: {
+                alignSelf: 'center',
+                height: '100%',
+                width: '100%',
+                resizeMode: 'contain',
+            },
+        })
     }
 
     useEffect(() => {
@@ -140,74 +154,56 @@ const LightboxScreen = ({
                         />
                     )}
                 </View>
-
                 <View style={styles.imageWrapper}>
-                    <Animated.FlatList
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                        scrollEventThrottle={1}
-                        maxToRenderPerBatch={1}
-                        windowSize={2}
-                        initialNumToRender={1}
-                        horizontal={true}
-                        initialScrollIndex={currentIndex}
-                        pagingEnabled
-                        keyExtractor={(item: CreditedImage) => item.path}
-                        key={width}
-                        data={images}
-                        onMomentumScrollEnd={handleScrollEndEvent}
-                        onMomentumScrollBegin={handleScrollStartEvent}
-                        getItemLayout={(_: never, index: number) => ({
-                            length: width,
-                            offset: width * index,
-                            index,
-                        })}
-                        renderItem={({
-                            item,
-                        }: {
-                            item: CreditedImage
-                            index: number
-                        }) => {
-                            return (
-                                <View style={[{ width }, styles.imageWrapper]}>
-                                    <ImageZoom
-                                        cropWidth={width}
-                                        cropHeight={height}
-                                        imageWidth={width}
-                                        imageHeight={height}
-                                        onClick={focusOnImageComponent}
-                                        minScale={1.0}
-                                    >
-                                        <LightboxImage image={item} />
-                                    </ImageZoom>
-                                    {captionVisible && item.caption && (
+                    <ImageViewer
+                        imageUrls={lightboxImages}
+                        index={index}
+                        renderIndicator={() => <View />} // empty indicator
+                        onClick={focusOnImageComponent}
+                        onMove={handleScrollStartEvent}
+                        onChange={index => handleOnMoveEvent(index || 0)} // seems that first index is nil?
+                        saveToLocalByLongPress={false}
+                        maxOverflow={width}
+                        footerContainerStyle={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width: '100%',
+                        }}
+                        renderFooter={() => (
+                            <View>
+                                <View style={styles.progressWrapper}>
+                                    {showProgressIndicator && (
+                                        <ProgressIndicator
+                                            currentIndex={currentIndex}
+                                            imageCount={images.length}
+                                            windowSize={numDots}
+                                            windowStart={windowStart}
+                                            scrollInProgress={scrollInProgress}
+                                        />
+                                    )}
+                                </View>
+                                {captionVisible &&
+                                    images[currentIndex].caption && (
                                         <LightboxCaption
-                                            caption={item.caption}
+                                            caption={
+                                                images[currentIndex].caption ||
+                                                ''
+                                            }
                                             pillarColor={
                                                 pillar === 'neutral'
                                                     ? palette.neutral[100]
                                                     : pillarColors.bright //bright since always on a dark background
                                             }
-                                            displayCredit={item.displayCredit}
-                                            credit={item.credit}
+                                            displayCredit={
+                                                images[currentIndex]
+                                                    .displayCredit
+                                            }
+                                            credit={images[currentIndex].credit}
                                         />
                                     )}
-                                </View>
-                            )
-                        }}
+                            </View>
+                        )}
                     />
-                </View>
-
-                <View style={styles.progressWrapper}>
-                    {showProgressIndicator && (
-                        <ProgressIndicator
-                            currentIndex={currentIndex}
-                            imageCount={images.length}
-                            windowSize={numDots}
-                            windowStart={windowStart}
-                            scrollInProgress={scrollInProgress}
-                        />
-                    )}
                 </View>
             </View>
         </View>

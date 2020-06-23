@@ -132,6 +132,7 @@ const navigateToSettings = (navigation: NavigationScreenProp<{}>): void => {
 
 export interface LightboxNavigationProps {
     images?: CreditedImage[]
+    imagePaths?: string[]
     index?: number
     pillar?: ArticlePillar
 }

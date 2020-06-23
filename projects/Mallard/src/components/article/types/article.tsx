@@ -18,6 +18,10 @@ import {
 } from '../../../../../Apps/common/src'
 import { navigateToLightbox } from 'src/navigation/helpers/base'
 import { fetchLightboxSetting } from 'src/helpers/settings/debug'
+import { selectImagePath } from 'src/hooks/use-image-paths'
+import { useApiUrl } from 'src/hooks/use-settings'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
+import { Image } from 'src/common'
 
 const styles = StyleSheet.create({
     block: {
@@ -133,6 +137,8 @@ const Article = ({
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
     const [lightboxEnabled, setLightboxEnabled] = useState(false)
+    const [imagePaths, setImagePaths] = useState([''])
+    const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
@@ -141,12 +147,44 @@ const Article = ({
     )
 
     const [, { pillar }] = useArticle()
+    const apiUrl = useApiUrl() || ''
+    const { issueId } = useIssueSummary()
 
     useEffect(() => {
         fetchLightboxSetting().then(lightboxEnabled =>
             setLightboxEnabled(lightboxEnabled),
         )
     }, [])
+
+    useEffect(() => {
+        const lbimages = getLightboxImages(article.elements)
+        const lbCreditedImages = getCreditedImages(lbimages)
+        // to avoid image duplication we don't add the main image of gallery articles to the array
+        if (article.type !== 'gallery' && article.image) {
+            lbCreditedImages.unshift(article.image)
+        }
+        setLightboxImages(lbCreditedImages)
+        const getImagePathFromImage = async (image: Image) => {
+            if (issueId && image) {
+                const { localIssueId, publishedIssueId } = issueId
+                const imagePath = await selectImagePath(
+                    apiUrl,
+                    localIssueId,
+                    publishedIssueId,
+                    image,
+                    'full-size',
+                )
+                return imagePath
+            }
+            return ''
+        }
+        const fetchImagePaths = async () => {
+            return await Promise.all(
+                lbCreditedImages.map(image => getImagePathFromImage(image)),
+            )
+        }
+        fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
+    }, [apiUrl, article.elements, issueId, article.image, article.type])
 
     return (
         <Fader>
@@ -194,23 +232,19 @@ const Article = ({
                         onIsAtTopChange(parsed.isAtTop)
                     }
                     if (lightboxEnabled && parsed.type === 'openLightbox') {
-                        const lbimages = getLightboxImages(article.elements)
-                        const lbCreditedImages = getCreditedImages(lbimages)
                         let index = parsed.index
-                        // to avoid image duplication we don't add the main image of gallery articles to the array
-                        if (article.type !== 'gallery' && article.image) {
-                            lbCreditedImages.unshift(article.image)
-                            if (
-                                parsed.isMainImage === 'false' &&
-                                lbCreditedImages.length > 1
-                            ) {
-                                index++
-                            }
+                        if (
+                            article.type !== 'gallery' &&
+                            article.image &&
+                            parsed.isMainImage === 'false'
+                        ) {
+                            index++
                         }
                         navigateToLightbox({
                             navigation,
                             navigationProps: {
-                                images: lbCreditedImages,
+                                images: lightboxImages,
+                                imagePaths: imagePaths,
                                 index,
                                 pillar,
                             },
