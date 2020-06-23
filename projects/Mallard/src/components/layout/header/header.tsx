@@ -90,7 +90,7 @@ const Header = ({
             {white && (
                 <StatusBar barStyle="dark-content" backgroundColor="#fff" />
             )}
-            <View style={[bg]}>
+            <View style={bg}>
                 {layout === 'issue' ? (
                     <GridRowSplit
                         proxy={
