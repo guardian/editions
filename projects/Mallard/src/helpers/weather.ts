@@ -49,7 +49,9 @@ export const getGeolocation = async (): Promise<GeolocationResponse> => {
 }
 
 const fetchFromWeatherApi = async <T>(path: string): Promise<T> => {
-    const res = await tryFetch(`http://mobile-weather.guardianapis.com/${path}`)
+    const res = await tryFetch(
+        `https://mobile-weather.guardianapis.com/${path}`,
+    )
     if (res.status >= 500) {
         throw new CannotFetchError('Server returned 500') // 500s don't return json
     }

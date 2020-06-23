@@ -1,32 +1,42 @@
+import gql from 'graphql-tag'
 import { useEffect } from 'react'
 import {
     createAppContainer,
     createStackNavigator,
     createSwitchNavigator,
     NavigationScreenProp,
-    StackViewTransitionConfigs,
     NavigationTransitionProps,
+    StackViewTransitionConfigs,
 } from 'react-navigation'
+import { CURRENT_CONSENT_VERSION } from 'src/helpers/settings'
+import { useQuery } from 'src/hooks/apollo'
+import { EditionsMenuScreen } from 'src/screens/editions-menu-screen'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
+import { LightboxScreen } from 'src/screens/lightbox'
 import { OnboardingConsentScreen } from 'src/screens/onboarding-screen'
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
-import { SubscriptionDetailsScreen } from 'src/screens/settings/subscription-details-screen'
 import { ApiScreen } from 'src/screens/settings/api-screen'
-import { EditionsScreen } from 'src/screens/settings/editions-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
+import { EditionsScreen } from 'src/screens/settings/editions-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
-import { LightboxScreen } from 'src/screens/lightbox'
 import {
     GdprConsentScreen,
     GdprConsentScreenForOnboarding,
 } from 'src/screens/settings/gdpr-consent-screen'
 import { HelpScreen } from 'src/screens/settings/help-screen'
 import {
+    ManageEditionScreenFromIssuePicker,
+    ManageEditionsScreen,
+} from 'src/screens/settings/manage-editions-screen'
+import {
     PrivacyPolicyScreen,
     PrivacyPolicyScreenForOnboarding,
 } from 'src/screens/settings/privacy-policy-screen'
+import { SubscriptionDetailsScreen } from 'src/screens/settings/subscription-details-screen'
 import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
+import StorybookScreen from 'src/screens/storybook-screen'
+import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
 import { color } from 'src/theme/color'
 import { ArticleScreen } from '../screens/article-screen'
 import { HomeScreen } from '../screens/home-screen'
@@ -38,15 +48,6 @@ import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createSidebarNavigator } from './navigators/sidebar'
 import { routeNames } from './routes'
-import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
-import {
-    ManageEditionsScreen,
-    ManageEditionScreenFromIssuePicker,
-} from 'src/screens/settings/manage-editions-screen'
-import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
-import StorybookScreen from 'src/screens/storybook-screen'
-import { CURRENT_CONSENT_VERSION } from 'src/helpers/settings'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -83,6 +84,7 @@ const dynamicModalTransition = (
 const AppStack = createModalNavigator(
     createSidebarNavigator(createArticleNavigator(IssueScreen, ArticleScreen), {
         [routeNames.IssueList]: HomeScreen,
+        [routeNames.EditionsMenu]: EditionsMenuScreen,
     }),
     {
         [routeNames.ManageEditions]: createHeaderStackNavigator({

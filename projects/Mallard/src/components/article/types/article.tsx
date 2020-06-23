@@ -159,6 +159,7 @@ const Article = ({
     useEffect(() => {
         const lbimages = getLightboxImages(article.elements)
         const lbCreditedImages = getCreditedImages(lbimages)
+        // to avoid image duplication we don't add the main image of gallery articles to the array
         if (article.type !== 'gallery' && article.image) {
             lbCreditedImages.unshift(article.image)
         }
@@ -232,7 +233,6 @@ const Article = ({
                     }
                     if (lightboxEnabled && parsed.type === 'openLightbox') {
                         let index = parsed.index
-                        // to avoid image duplication we don't add the main image of gallery articles to the array
                         if (
                             article.type !== 'gallery' &&
                             article.image &&

@@ -23,9 +23,11 @@ import {
 } from '../../../Apps/common/src/logging'
 import { AsyncQueue } from '../helpers/async-queue-cache'
 import { errorService } from './errors'
+import { remoteConfigService } from './remote-config'
 
 const { LOGGING_API_KEY } = Config
 const ATTEMPTS_THEN_CLEAR = 10
+const MAX_NUM_OF_LOGS = 30
 
 interface LogParams {
     level: Level
@@ -45,11 +47,13 @@ const cropMessage = (message: string, maxLength: number): string => {
 class Logging extends AsyncQueue {
     hasConsent: GdprSwitchSetting
     numberOfAttempts: number
+    enabled: boolean
 
     constructor() {
         super(loggingQueueCache)
         this.hasConsent = false
         this.numberOfAttempts = 0
+        this.enabled = remoteConfigService.getBoolean('logging_enabled')
     }
 
     init(apolloClient: ApolloClient<object>) {
@@ -150,50 +154,59 @@ class Logging extends AsyncQueue {
         return response
     }
 
-    async postLog(log: object[]) {
+    async postLogs() {
         try {
-            await this.postLogToService(log)
-            this.numberOfAttempts = 0
+            const { isConnected } = await NetInfo.fetch()
+            // Only attempt if we are connected, otherwise wait till next time
+            if (isConnected) {
+                const logsToPost = await this.getQueuedItems()
+
+                if (logsToPost.length > 1) {
+                    await this.postLogToService(logsToPost)
+                    await this.clearItems()
+                    this.numberOfAttempts = 0
+                }
+            }
         } catch (e) {
             if (this.numberOfAttempts >= ATTEMPTS_THEN_CLEAR) {
                 await this.clearItems()
                 this.numberOfAttempts = 0
             } else {
-                await this.saveQueuedItems(log)
                 this.numberOfAttempts++
             }
-            throw new Error(e)
+            errorService.captureException(e)
+            return e
         }
     }
 
     async log({ level, message, ...optionalFields }: LogParams) {
-        // limit max length of message we post to logging service
-        const croppedMessage = cropMessage(message, 300)
         try {
             if (!this.hasConsent) {
                 return
             }
+
+            // limit max length of message we post to logging service
+            const croppedMessage = cropMessage(message, 300)
 
             const currentLog = await this.baseLog({
                 level,
                 message: croppedMessage,
                 ...optionalFields,
             })
-            const logsToPost = await this.queueItems([currentLog])
 
-            const { isConnected } = await NetInfo.fetch()
-            // Not connected, save the log queue
-            if (!isConnected) {
-                return this.saveQueuedItems(logsToPost)
-            }
-
-            const postLogToService = await this.postLog(logsToPost)
-            await this.clearItems()
-            return postLogToService
+            return this.upsertQueuedItems([currentLog], MAX_NUM_OF_LOGS)
         } catch (e) {
             errorService.captureException(e)
             return e
         }
+    }
+
+    async basicLogInfo({
+        level,
+        message,
+        ...optionalFields
+    }: LogParams): Promise<MallardLogFormat> {
+        return await this.baseLog({ level, message, ...optionalFields })
     }
 }
 

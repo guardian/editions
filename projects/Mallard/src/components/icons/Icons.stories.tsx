@@ -1,12 +1,11 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import { color, withKnobs } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react-native'
-import { withKnobs, color } from '@storybook/addon-knobs'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { LeftChevron } from './LeftChevron'
+import { Newspaper } from './Newspaper'
 import { Quote } from './Quote'
 import { RightChevron } from './RightChevron'
-import { Newspaper } from './Newspaper'
-
-import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
     icon: {
@@ -27,6 +26,10 @@ storiesOf('Icons', module)
             <View style={styles.icon}>
                 <Quote fill={color('Colour', '#000000')} />
                 <Text style={styles.label}>Quote</Text>
+            </View>
+            <View style={styles.icon}>
+                <LeftChevron />
+                <Text style={styles.label}>LeftChevron</Text>
             </View>
             <View style={styles.icon}>
                 <RightChevron />

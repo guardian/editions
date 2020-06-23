@@ -227,6 +227,14 @@ export const Editions = [
 
 export type Edition = typeof Editions[number]
 
+export const editions = {
+    daily: 'daily-edition' as Edition,
+    ausWeekly: 'australian-edition' as Edition,
+    usWeekly: 'american-edition' as Edition,
+    dummy: 'the-dummy-edition' as Edition,
+    training: 'training-edition' as Edition,
+}
+
 export const imageUseSizes: {
     [u in ImageUse]: { [k in ImageSize]: number }
 } = /*
@@ -530,3 +538,34 @@ export interface Palette {
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
+
+export type TextFormatting = {
+    color: string
+    font: string
+    lineHeight: number
+    size: number
+}
+
+export interface SpecialEditionButtonStyles {
+    backgroundColor: string
+    title: TextFormatting
+    subTitle: TextFormatting
+    expiry: TextFormatting
+    image: { width: number; height: number }
+}
+
+export interface RegionalEdition {
+    title: string
+    subTitle: string
+    edition: Edition
+}
+
+export interface SpecialEdition {
+    edition: string
+    expiry: Date
+    devUri?: string
+    image: Image
+    style: SpecialEditionButtonStyles
+    subTitle: string
+    title: string
+}

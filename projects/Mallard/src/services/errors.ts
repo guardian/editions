@@ -4,8 +4,10 @@ import { isInBeta } from 'src/helpers/release-stream'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
 import { GdprSwitchSetting } from 'src/helpers/settings'
-import { loggingService } from './logging'
-import { Level } from '../../../Apps/common/src/logging'
+import crashlytics, {
+    FirebaseCrashlyticsTypes,
+} from '@react-native-firebase/crashlytics'
+import { loggingService, Level } from './logging'
 
 const { SENTRY_DSN_URL } = Config
 
@@ -17,17 +19,20 @@ export interface ErrorService {
     captureException(err: Error): void
 }
 
-class ErrorServiceImpl implements ErrorService {
+export class ErrorServiceImpl implements ErrorService {
     // Can be `null` or boolean. This is kinda confusing and easy to
     // handle improperly, but not easy to change it's already in prod.
     private hasConsent: GdprSwitchSetting
-    private hasConfigured: boolean
+    private hasSentryConfigured: boolean
     private pendingQueue: Error[]
+
+    crashlytics: FirebaseCrashlyticsTypes.Module
 
     constructor() {
         this.hasConsent = null
-        this.hasConfigured = false
+        this.hasSentryConfigured = false
         this.pendingQueue = []
+        this.crashlytics = crashlytics()
     }
 
     public init(apolloClient: ApolloClient<object>) {
@@ -42,11 +47,20 @@ class ErrorServiceImpl implements ErrorService {
         })
     }
 
-    private handleConsentUpdate(hasConsent: GdprSwitchSetting) {
-        this.hasConsent = hasConsent
-        if (hasConsent === false || hasConsent === null) return
+    private async handleConsentUpdate(hasConsent: GdprSwitchSetting) {
+        this.hasConsent = hasConsent === true
+        console.log('setting consent: ', this.hasConsent)
+        this.initSentry(this.hasConsent)
+        await this.initCrashlytics(this.hasConsent)
+    }
 
-        if (!this.hasConfigured) {
+    initSentry(hasConsent: GdprSwitchSetting) {
+        if (hasConsent === false) {
+            console.log('Sentry initialized ignore, no user permission')
+            return
+        }
+
+        if (!this.hasSentryConfigured) {
             // sampleRate helps keep our sentry costs down
             Sentry.init({ dsn: SENTRY_DSN_URL, sampleRate: 0.2 })
 
@@ -55,14 +69,49 @@ class ErrorServiceImpl implements ErrorService {
                 __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
             )
             Sentry.setExtra('react', true)
-            this.hasConfigured = true
+            this.hasSentryConfigured = true
+            console.log('Sentry initialized')
         }
 
         while (this.pendingQueue.length > 0) {
             const err = this.pendingQueue.pop()
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Sentry.captureException(err!)
+            if (err) {
+                Sentry.captureException(err)
+                this.crashlytics.recordError(err)
+            }
         }
+    }
+
+    private async initCrashlytics(hasConsent: boolean): Promise<void> {
+        console.log(
+            'Crashlytics current status:',
+            this.crashlytics.isCrashlyticsCollectionEnabled,
+        )
+
+        console.log('Setting crashlytics with user permission:', hasConsent)
+        await this.crashlytics.setCrashlyticsCollectionEnabled(hasConsent)
+
+        if (hasConsent) {
+            this.crashlytics.log('Crashlytics initialized')
+            await this.sendBasicAttributes()
+            console.log('Crashlytics now initialized')
+        } else {
+            console.log('Crashlytics is now Disabled')
+        }
+    }
+
+    private sendBasicAttributes = async () => {
+        const data = await loggingService.basicLogInfo({
+            level: Level.INFO,
+            message: 'App Data',
+        })
+
+        this.crashlytics.setAttributes({
+            signedIn: String(data.signedIn),
+            hasCasCode: String(data.casCode !== null || data.casCode !== ''),
+            hasDigiSub: String(data.digitalSub),
+            networkStatus: data.networkStatus,
+        })
     }
 
     /**
@@ -74,13 +123,8 @@ class ErrorServiceImpl implements ErrorService {
             this.pendingQueue.push(err)
         } else if (this.hasConsent === true) {
             Sentry.captureException(err)
+            this.crashlytics.recordError(err)
         }
-        // Also send to the logging service (where it manages its own consent and queue)
-        loggingService.log({
-            level: Level.ERROR,
-            message: 'captureException',
-            optionalFields: { error: err },
-        })
     }
 }
 

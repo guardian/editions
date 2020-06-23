@@ -1,11 +1,7 @@
 import { FSPaths } from '../'
 
-jest.mock('rn-fetch-blob', () => ({
-    fs: {
-        dirs: {
-            DocumentDir: 'path/to/base/directory',
-        },
-    },
+jest.mock('react-native-fs', () => ({
+    DocumentDirectoryPath: 'path/to/base/directory',
 }))
 
 jest.mock('src/helpers/locale', () => ({

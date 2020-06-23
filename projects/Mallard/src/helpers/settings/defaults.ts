@@ -1,7 +1,8 @@
-import remoteConfig from '@react-native-firebase/remote-config'
 import { Platform } from 'react-native'
 import { locale } from '../locale'
 import { Settings } from '../settings'
+import { remoteConfigService } from 'src/services/remote-config'
+import { editions } from '../../../../Apps/common/src/index'
 
 /*
 Default settings.
@@ -48,14 +49,6 @@ export const backends = [
     value: string
     preview: boolean
 }[]
-
-export const editions = {
-    daily: 'daily-edition',
-    ausWeekly: 'australian-edition',
-    usWeekly: 'american-edition',
-    dummy: 'the-dummy-edition',
-    training: 'training-edition',
-}
 
 const localeToEdition = new Map<string, string>()
 localeToEdition.set('en_AU', editions.ausWeekly)
@@ -112,7 +105,7 @@ export const notificationTrackingUrl = (
 
 const apiUrl = backends[0].value
 
-const defaultLocaleEnabled = remoteConfig().getValue('default_locale').value
+const defaultLocaleEnabled = remoteConfigService.getBoolean('default_locale')
 const edition =
     defaultLocaleEnabled && localeToEdition.has(locale)
         ? localeToEdition.get(locale)

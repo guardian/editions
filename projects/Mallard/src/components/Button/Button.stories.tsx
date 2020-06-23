@@ -31,4 +31,4 @@ storiesOf('Buttons', module)
         <ModalButton onPress={() => {}}>
             {text('Button Text', 'Sign In')}
         </ModalButton>
-    )) // WASSIS?!
+    ))

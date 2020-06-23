@@ -40,8 +40,10 @@ import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
 import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue'
-import { initialiseRemoteConfig } from './services/remote-config'
+import { remoteConfigService } from './services/remote-config'
 import analytics from '@react-native-firebase/analytics'
+import { clearDownloadsDirectory } from './download-edition/clear-issues'
+import { prepFileSystem } from './helpers/files'
 
 analytics().setAnalyticsCollectionEnabled(false)
 
@@ -56,11 +58,14 @@ if (!__DEV__) {
     errorService.init(apolloClient)
 }
 loggingService.init(apolloClient)
+remoteConfigService.init()
 
+// --- SETUP OPERATIONS ---
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
 Platform.OS === 'ios' && enableScreens()
 pushNotifcationRegistration(apolloClient)
+prepFileSystem()
 Platform.OS === 'android' && prepareAndDownloadTodaysIssue(apolloClient)
 
 const styles = StyleSheet.create({
@@ -153,14 +158,15 @@ export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
         weatherHider(apolloClient)
-        initialiseRemoteConfig()
-
+        clearDownloadsDirectory()
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
+        loggingService.postLogs()
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
                 prepareAndDownloadTodaysIssue(apolloClient)
+                loggingService.postLogs()
             }
         })
     }

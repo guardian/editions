@@ -7,7 +7,9 @@ import { families } from 'src/theme/typography'
 const styles = (selected: boolean) =>
     StyleSheet.create({
         container: {
-            backgroundColor: selected ? color.primary : '#E5E5E5',
+            backgroundColor: selected
+                ? color.primary
+                : color.palette.neutral[97],
             paddingBottom: 32,
             paddingLeft: 104,
             paddingTop: 4,
@@ -42,6 +44,8 @@ const RegionButton = ({
 
     return (
         <TouchableWithoutFeedback
+            accessibilityRole="button"
+            accessibilityLabel={`${title} - Regional Edition Button`}
             onPressIn={() => setPressed(true)}
             onPressOut={() => setPressed(false)}
             onPress={onPress}
