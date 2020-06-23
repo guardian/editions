@@ -89,11 +89,11 @@ const ArticleSlider = React.memo(
                     index: current,
                     animated: false,
                 })
-        }, [width]) // eslint-disable-line react-hooks/exhaustive-deps
+        }, [width, navigation.isFocused()]) // eslint-disable-line react-hooks/exhaustive-deps
 
         const { panResponder } = useDismissArticle()
 
-        const currentArticle = flattenedArticles[Math.floor(current)]
+        const currentArticle = flattenedArticles[Math.round(current)]
 
         const sliderSections = articleNavigator.reduce(
             (sectionsWithStartIndex, frontSpec) => {
@@ -255,7 +255,7 @@ const ArticleSlider = React.memo(
                                 const newPos =
                                     ev.nativeEvent.contentOffset.x / width
                                 const newIndex = clamp(
-                                    Math.ceil(newPos),
+                                    Math.round(newPos),
                                     0,
                                     flattenedArticles.length - 1,
                                 )
