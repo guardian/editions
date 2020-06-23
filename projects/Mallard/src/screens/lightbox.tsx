@@ -133,7 +133,7 @@ const LightboxScreen = ({
         setCloseButtonVisible(true)
         setCurrentIndex(index)
         setWindowsStart(getWindowStart(index, numDots, images.length))
-    }, [index, numDots, images.length, width])
+    }, [index, numDots, images.length])
 
     return (
         <View style={styles.background}>
