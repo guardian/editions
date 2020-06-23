@@ -554,6 +554,11 @@ export interface SpecialEditionButtonStyles {
     image: { width: number; height: number }
 }
 
+export interface EditionsList {
+    regionalEditions: RegionalEdition[]
+    specialEditions: SpecialEdition[]
+}
+
 export interface RegionalEdition {
     title: string
     subTitle: string
