@@ -77,7 +77,9 @@ const LightboxCaption = ({
     return (
         <View style={styles.captionWrapper}>
             <View style={styles.caption}>
-                <NativeArrow fill={pillarColor} direction={Direction.top} />
+                {caption.length > 1 && (
+                    <NativeArrow fill={pillarColor} direction={Direction.top} />
+                )}
                 <View style={styles.captionText}>
                     <HTMLView
                         value={'<caption>' + captionText() + '</caption>'}

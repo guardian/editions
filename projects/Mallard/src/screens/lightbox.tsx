@@ -182,25 +182,22 @@ const LightboxScreen = ({
                                         />
                                     )}
                                 </View>
-                                {captionVisible &&
-                                    images[currentIndex].caption && (
-                                        <LightboxCaption
-                                            caption={
-                                                images[currentIndex].caption ||
-                                                ''
-                                            }
-                                            pillarColor={
-                                                pillar === 'neutral'
-                                                    ? palette.neutral[100]
-                                                    : pillarColors.bright //bright since always on a dark background
-                                            }
-                                            displayCredit={
-                                                images[currentIndex]
-                                                    .displayCredit
-                                            }
-                                            credit={images[currentIndex].credit}
-                                        />
-                                    )}
+                                {captionVisible && (
+                                    <LightboxCaption
+                                        caption={
+                                            images[currentIndex].caption || ''
+                                        }
+                                        pillarColor={
+                                            pillar === 'neutral'
+                                                ? palette.neutral[100]
+                                                : pillarColors.bright //bright since always on a dark background
+                                        }
+                                        displayCredit={
+                                            images[currentIndex].displayCredit
+                                        }
+                                        credit={images[currentIndex].credit}
+                                    />
+                                )}
                             </View>
                         )}
                     />
