@@ -161,10 +161,12 @@ export default class App extends React.Component<{}, {}> {
         clearDownloadsDirectory()
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
+        loggingService.postLogs()
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
                 prepareAndDownloadTodaysIssue(apolloClient)
+                loggingService.postLogs()
             }
         })
     }

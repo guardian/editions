@@ -27,6 +27,7 @@ import { remoteConfigService } from './remote-config'
 
 const { LOGGING_API_KEY } = Config
 const ATTEMPTS_THEN_CLEAR = 10
+const MAX_NUM_OF_LOGS = 30
 
 interface LogParams {
     level: Level
@@ -153,25 +154,34 @@ class Logging extends AsyncQueue {
         return response
     }
 
-    async postLog(log: object[]) {
+    async postLogs() {
         try {
-            await this.postLogToService(log)
-            this.numberOfAttempts = 0
+            const { isConnected } = await NetInfo.fetch()
+            // Only attempt if we are connected, otherwise wait till next time
+            if (isConnected) {
+                const logsToPost = await this.getQueuedItems()
+
+                if (logsToPost.length > 1) {
+                    await this.postLogToService(logsToPost)
+                    await this.clearItems()
+                    this.numberOfAttempts = 0
+                }
+            }
         } catch (e) {
             if (this.numberOfAttempts >= ATTEMPTS_THEN_CLEAR) {
                 await this.clearItems()
                 this.numberOfAttempts = 0
             } else {
-                await this.saveQueuedItems(log)
                 this.numberOfAttempts++
             }
-            throw new Error(e)
+            errorService.captureException(e)
+            return e
         }
     }
 
     async log({ level, message, ...optionalFields }: LogParams) {
         try {
-            if (!this.enabled || !this.hasConsent) {
+            if (!this.hasConsent) {
                 return
             }
 
@@ -183,17 +193,8 @@ class Logging extends AsyncQueue {
                 message: croppedMessage,
                 ...optionalFields,
             })
-            const logsToPost = await this.queueItems([currentLog])
 
-            const { isConnected } = await NetInfo.fetch()
-            // Not connected, save the log queue
-            if (!isConnected) {
-                return this.saveQueuedItems(logsToPost)
-            }
-
-            const postLogToService = await this.postLog(logsToPost)
-            await this.clearItems()
-            return postLogToService
+            return this.upsertQueuedItems([currentLog], MAX_NUM_OF_LOGS)
         } catch (e) {
             errorService.captureException(e)
             return e

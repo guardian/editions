@@ -49,6 +49,36 @@ class AsyncQueue {
         }
     }
 
+    filterByMaxNumberAndSaveItems(itemsToStore: object[], maxNumber: number) {
+        if (itemsToStore.length > maxNumber) {
+            const startIndex = itemsToStore.length - maxNumber
+            return itemsToStore.slice(startIndex)
+        }
+        return itemsToStore
+    }
+
+    async upsertQueuedItems(
+        item: object[],
+        maxNumber?: number,
+    ): Promise<void | Error> {
+        try {
+            const itemsToStore = await this.queueItems(item)
+
+            if (maxNumber) {
+                const reducedItemsToStore = this.filterByMaxNumberAndSaveItems(
+                    itemsToStore,
+                    maxNumber,
+                )
+                return this.saveQueuedItems(reducedItemsToStore)
+            }
+
+            return this.saveQueuedItems(itemsToStore)
+        } catch (e) {
+            errorService.captureException(e)
+            throw new Error(e)
+        }
+    }
+
     async clearItems() {
         try {
             return await this.cache.reset()
