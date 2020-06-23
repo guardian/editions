@@ -9,6 +9,7 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
       "fontFamily": "GuardianTextEgyptian-Reg",
       "fontSize": 14,
       "opacity": 0.8,
+      "padding": 10,
       "position": "absolute",
       "width": "100%",
       "zIndex": 1,
