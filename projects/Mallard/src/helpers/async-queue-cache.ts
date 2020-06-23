@@ -49,6 +49,14 @@ class AsyncQueue {
         }
     }
 
+    filterByMaxNumberAndSaveItems(itemsToStore: object[], maxNumber: number) {
+        if (itemsToStore.length > maxNumber) {
+            const startIndex = itemsToStore.length - maxNumber
+            return itemsToStore.slice(startIndex)
+        }
+        return itemsToStore
+    }
+
     async upsertQueuedItems(
         item: object[],
         maxNumber?: number,
@@ -56,9 +64,11 @@ class AsyncQueue {
         try {
             const itemsToStore = await this.queueItems(item)
 
-            if (maxNumber && itemsToStore.length > maxNumber) {
-                const startIndex = itemsToStore.length - maxNumber - 1
-                const reducedItemsToStore = itemsToStore.slice(startIndex)
+            if (maxNumber) {
+                const reducedItemsToStore = this.filterByMaxNumberAndSaveItems(
+                    itemsToStore,
+                    maxNumber,
+                )
                 return this.saveQueuedItems(reducedItemsToStore)
             }
 
