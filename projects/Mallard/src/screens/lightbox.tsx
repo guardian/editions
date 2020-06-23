@@ -119,6 +119,7 @@ const LightboxScreen = ({
         lightboxImages.push({
             url: imagePaths[i],
             props: {
+                alignSelf: 'center',
                 height: '100%',
                 width: '100%',
                 resizeMode: 'contain',
@@ -132,7 +133,7 @@ const LightboxScreen = ({
         setCloseButtonVisible(true)
         setCurrentIndex(index)
         setWindowsStart(getWindowStart(index, numDots, images.length))
-    }, [index, numDots, images.length])
+    }, [index, numDots, images.length, width])
 
     return (
         <View style={styles.background}>

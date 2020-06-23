@@ -89,7 +89,7 @@ const ArticleSlider = React.memo(
                     index: current,
                     animated: false,
                 })
-        }, [width, navigation.isFocused()]) // eslint-disable-line react-hooks/exhaustive-deps
+        }, [width]) // eslint-disable-line react-hooks/exhaustive-deps
 
         const { panResponder } = useDismissArticle()
 
