@@ -14,12 +14,8 @@ import { palette } from '@guardian/pasteup/palette'
 import { NavigationScreenProp } from 'react-navigation'
 import { StatusBar } from 'react-native'
 import { LightboxNavigationProps } from 'src/navigation/helpers/base'
-import ImageViewer from 'react-native-image-zoom-viewer'
-import { selectImagePath } from 'src/hooks/use-image-paths'
-import { useApiUrl } from 'src/hooks/use-settings'
-import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import { Image } from 'src/common'
 import { useDimensions } from 'src/hooks/use-config-provider'
+import ImageViewer from 'react-native-image-zoom-viewer'
 const styles = StyleSheet.create({
     lightboxPage: {
         width: '100%',
@@ -79,6 +75,7 @@ const LightboxScreen = ({
 }: {
     navigation: NavigationScreenProp<{}, LightboxNavigationProps>
 }) => {
+    const imagePaths = navigation.getParam('imagePaths', [])
     const images = navigation.getParam('images', [])
     const index = navigation.getParam('index', 0)
     const pillar = navigation.getParam('pillar', 'news')
@@ -98,9 +95,7 @@ const LightboxScreen = ({
 
     const [scrollInProgress, setScrollInProgress] = useState(false)
 
-    const [imagePaths, setImagePaths] = useState(['']) //TODO: avoid source.uri empty string warning
-
-    const { width, height } = useDimensions()
+    const { width } = useDimensions()
 
     const handleScrollStartEvent = () => {
         setScrollInProgress(true)
@@ -113,9 +108,6 @@ const LightboxScreen = ({
         setScrollInProgress(false)
     }
 
-    const apiUrl = useApiUrl() || ''
-    const { issueId } = useIssueSummary()
-
     const focusOnImageComponent = () => {
         setCaptionVisible(!captionVisible)
         setDotsVisible(!dotsVisible)
@@ -126,39 +118,13 @@ const LightboxScreen = ({
     for (let i = 0; i < images.length; i++) {
         lightboxImages.push({
             url: imagePaths[i],
-            width: width,
-            height: height,
             props: {
-                alignSelf: 'center',
                 height: '100%',
                 width: '100%',
                 resizeMode: 'contain',
             },
         })
     }
-
-    useEffect(() => {
-        const getImagePathFromImage = async (image: Image) => {
-            if (issueId && image) {
-                const { localIssueId, publishedIssueId } = issueId
-                const imagePath = await selectImagePath(
-                    apiUrl,
-                    localIssueId,
-                    publishedIssueId,
-                    image,
-                    'full-size',
-                )
-                return imagePath
-            }
-            return ''
-        }
-        const fetchImagePaths = async () => {
-            return await Promise.all(
-                images.map(image => getImagePathFromImage(image)),
-            )
-        }
-        fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
-    }, [apiUrl, images, issueId, width, height])
 
     useEffect(() => {
         setCaptionVisible(true)
@@ -203,7 +169,7 @@ const LightboxScreen = ({
                             width: '100%',
                         }}
                         renderFooter={() => (
-                            <View pointerEvents="none">
+                            <View>
                                 <View style={styles.progressWrapper}>
                                     {showProgressIndicator && (
                                         <ProgressIndicator
