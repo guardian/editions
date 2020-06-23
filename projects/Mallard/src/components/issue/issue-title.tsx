@@ -24,6 +24,7 @@ const GridRowSplit = ({
     children,
     proxy,
     style,
+    restrictWidth,
 }: {
     children: ReactNode
     proxy?: ReactNode
@@ -39,6 +40,7 @@ const GridRowSplit = ({
             | 'height'
         >
     >
+    restrictWidth?: boolean
 }) => {
     const Inner = ({
         width,
@@ -63,7 +65,7 @@ const GridRowSplit = ({
                     <Inner
                         width={metrics.gridRowSplit.wide}
                         // -iOS12 and Android style to make the menu look palatable
-                        innerStyle={{ maxWidth: 360 }}
+                        innerStyle={restrictWidth ? { maxWidth: 360 } : {}}
                     />
                 ),
             }}

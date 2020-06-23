@@ -305,6 +305,7 @@ const IssueRowHeader = React.memo(
                         onGoToSettings={onGoToSettings}
                     />
                 }
+                restrictWidth
             >
                 <View style={styles.issueTitleWrap}>
                     <Highlight onPress={onPress}>
