@@ -4,7 +4,7 @@ import * as cdk from '@aws-cdk/core'
 import { Duration } from '@aws-cdk/core'
 import { StepFunctionProps, task } from './constructs'
 
-export const archiverStepFunction = (
+export const proofArchiverStepFunction = (
     scope: cdk.Construct,
     {
         stack,
@@ -15,12 +15,11 @@ export const archiverStepFunction = (
         backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
-        guNotifyServiceApiKey,
     }: StepFunctionProps,
 ) => {
     const frontsTopicRole = iam.Role.fromRoleArn(
         scope,
-        'fronts-topic-role',
+        'proof-fronts-topic-role',
         frontsTopicRoleArn,
     )
 
@@ -68,25 +67,6 @@ export const archiverStepFunction = (
         lambdaParams,
     )
 
-    const copier = task(scope, 'copier', 'Copy Issue', lambdaParams)
-
-    const indexerPublish = task(
-        scope,
-        'indexerPublish',
-        'Generate Index',
-        lambdaParams,
-    )
-
-    const notification = task(
-        scope,
-        'notification',
-        'Schedule device notification',
-        lambdaParams,
-        {
-            gu_notify_service_api_key: guNotifyServiceApiKey,
-        },
-    )
-
     issue.task.next(frontMap)
 
     frontMap.iterator(front.task)
@@ -97,23 +77,13 @@ export const archiverStepFunction = (
 
     zip.task.next(indexerProof.task)
 
-    indexerProof.task.next(copier.task)
+    indexerProof.task.next(new sfn.Succeed(scope, 'successfully-archived'))
 
-    copier.task.next(indexerPublish.task)
+    const stateMachine = new sfn.StateMachine(scope,'Archiver State Machine',{
+        stateMachineName: `Editions-Archiver-State-Machine-${stage}`,
+        definition: issue.task,
+        timeout: Duration.minutes(10),
+    })
 
-    indexerPublish.task.next(notification.task)
-
-    notification.task.next(new sfn.Succeed(scope, 'successfully-archived'))
-
-    const archiverStateMachine = new sfn.StateMachine(
-        scope,
-        'Archiver State Machine',
-        {
-            stateMachineName: `Editions-Archiver-State-Machine-${stage}`,
-            definition: issue.task,
-            timeout: Duration.minutes(10),
-        },
-    )
-
-    return archiverStateMachine
+    return stateMachine
 }

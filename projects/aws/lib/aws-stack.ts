@@ -6,10 +6,11 @@ import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
 import cloudfront = require('@aws-cdk/aws-cloudfront')
 import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
-
-import { archiverStepFunction } from './step-function'
 import acm = require('@aws-cdk/aws-certificatemanager')
 import { Effect } from '@aws-cdk/aws-iam'
+import { constructTriggeredStepFunction as constructProofStepFunction } from './proof-listener'
+import { constructTriggeredStepFunction as constructPublishStepFunction } from './publish-listener'
+
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props)
@@ -114,6 +115,15 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Name for published editions bucket',
+            },
+        )
+
+        const proofedEditionsBucketnameParameter = new cdk.CfnParameter(
+            this,
+            'proofed-editions-bucket-name-param',
+            {
+                type: 'String',
+                description: 'Name for proofed editions bucket',
             },
         )
 
@@ -302,84 +312,44 @@ export class EditionsStack extends cdk.Stack {
             publishedEditionsBucketnameParameter.valueAsString,
         )
 
-        //proof archiver step function
-        const proofArchiverStateMachine = archiverStepFunction(this, {
-            stack: stackParameter.valueAsString,
-            stage: stageParameter.valueAsString,
-            deployBucket,
-            proofBucket: proofArchive,
-            publishBucket: publishArchive,
-            backendURL,
-            frontsTopicArn: frontsTopicARN.valueAsString,
-            frontsTopicRoleArn: frontsTopicRoleARN.valueAsString,
-            guNotifyServiceApiKey: guNotifyServiceApiKeyParameter.valueAsString,
-        })
-
-        new CfnOutput(this, 'proof-archiver-state-machine-arn', {
-            description: 'ARN for proof archiver state machine',
-            exportName: `proof-archiver-state-machine-arn-${stageParameter.valueAsString}`,
-            value: proofArchiverStateMachine.stateMachineArn,
-        })
-
-        const proofArchiveS3EventListenerFunction = () => {
-            const fn = new lambda.Function(
-                this,
-                'EditionsProofArchiverS3EventListener',
-                {
-                    functionName: `editions-proof-archiver-s3-event-listener-${stageParameter.valueAsString}`,
-                    runtime: lambda.Runtime.NODEJS_10_X,
-                    timeout: Duration.minutes(5),
-                    memorySize: 256,
-                    code: Code.bucket(
-                        deployBucket,
-                        `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
-                    ),
-                    handler: 'index.invoke',
-                    environment: {
-                        stage: stageParameter.valueAsString,
-                        stateMachineARN:
-                            proofArchiverStateMachine.stateMachineArn,
-                        arn: frontsRoleARN.valueAsString,
-                    },
-                },
-            )
-            Tag.add(
-                fn,
-                'App',
-                `editions-proof-archiver-s3-event-listener-${stageParameter.valueAsString}`,
-            )
-            Tag.add(fn, 'Stage', stageParameter.valueAsString)
-            Tag.add(fn, 'Stack', stackParameter.valueAsString)
-            return fn
-        }
-
-        const proofArchiveS3EventListener = proofArchiveS3EventListenerFunction()
-
-        new CfnOutput(this, 'proof-archiver-s3-event-listener-arn', {
-            description: 'ARN for proof-archiver state machine trigger lambda',
-            exportName: `proof-archiver-s3-event-listener-arn-${stageParameter.valueAsString}`,
-            value: proofArchiveS3EventListener.functionArn,
-        })
-        new lambda.CfnPermission(
+        const proofedBucket = s3.Bucket.fromBucketName(
             this,
-            'PublishedEditionsProofArchiverS3EventListenerInvokePermission',
-            {
-                principal: 's3.amazonaws.com',
-                functionName: proofArchiveS3EventListener.functionName,
-                action: 'lambda:InvokeFunction',
-                sourceAccount: cmsFrontsAccountIdParameter.valueAsString,
-                sourceArn: publishedBucket.bucketArn,
-            },
+            'proofed-bucket',
+            proofedEditionsBucketnameParameter.valueAsString,
         )
 
-        proofArchiveS3EventListener.addToRolePolicy(
-            new iam.PolicyStatement({
-                actions: ['sts:AssumeRole'],
-                resources: [frontsAccess.roleArn],
-            }),
+        constructProofStepFunction(
+            this,
+            stackParameter.valueAsString,
+            stageParameter.valueAsString,
+            deployBucket,
+            proofArchive,
+            publishArchive,
+            backendURL,
+            frontsTopicARN.valueAsString,
+            frontsTopicRoleARN.valueAsString,
+            guNotifyServiceApiKeyParameter.valueAsString,
+            frontsRoleARN.valueAsString,
+            cmsFrontsAccountIdParameter.valueAsString,
+            proofedBucket,
+            frontsAccess.roleArn,
         )
-        proofArchiverStateMachine.grantStartExecution(
-            proofArchiveS3EventListener,
+
+        constructPublishStepFunction(
+            this,
+            stackParameter.valueAsString,
+            stageParameter.valueAsString,
+            deployBucket,
+            proofArchive,
+            publishArchive,
+            backendURL,
+            frontsTopicARN.valueAsString,
+            frontsTopicRoleARN.valueAsString,
+            guNotifyServiceApiKeyParameter.valueAsString,
+            frontsRoleARN.valueAsString,
+            cmsFrontsAccountIdParameter.valueAsString,
+            publishedBucket,
+            frontsAccess.roleArn,
         )
     }
 }
