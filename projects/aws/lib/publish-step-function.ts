@@ -2,7 +2,7 @@ import * as iam from '@aws-cdk/aws-iam'
 import * as sfn from '@aws-cdk/aws-stepfunctions'
 import * as cdk from '@aws-cdk/core'
 import { Duration } from '@aws-cdk/core'
-import { StepFunctionProps, task } from './constructs'
+import { PublishStepFunctionProps, publishTask } from './constructs'
 
 export const publishArchiverStepFunction = (
     scope: cdk.Construct,
@@ -15,7 +15,7 @@ export const publishArchiverStepFunction = (
         frontsTopicArn,
         frontsTopicRoleArn,
         guNotifyServiceApiKey,
-    }: StepFunctionProps,
+    }: PublishStepFunctionProps,
 ) => {
     const frontsTopicRole = iam.Role.fromRoleArn(
         scope,
@@ -33,16 +33,16 @@ export const publishArchiverStepFunction = (
         frontsTopicRole,
     }
 
-    const copier = task(scope, 'copier', 'Copy Issue', lambdaParams)
+    const copier = publishTask(scope, 'copier', 'Copy Issue', lambdaParams)
 
-    const indexerPublish = task(
+    const indexerPublish = publishTask(
         scope,
         'indexerPublish',
         'Generate Index',
         lambdaParams,
     )
 
-    const notification = task(
+    const notification = publishTask(
         scope,
         'notification',
         'Schedule device notification',

@@ -118,15 +118,6 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
-        const proofedEditionsBucketnameParameter = new cdk.CfnParameter(
-            this,
-            'proofed-editions-bucket-name-param',
-            {
-                type: 'String',
-                description: 'Name for proofed editions bucket',
-            },
-        )
-
         const deployBucket = s3.Bucket.fromBucketName(
             this,
             'editions-dist',
@@ -306,16 +297,12 @@ export class EditionsStack extends cdk.Stack {
             publishArchiveBucketParameter.valueAsString,
         )
 
+        // This is the bucket to which Fronts Tool writes the
+        // JSON which kicks off the proofing process
         const publishedBucket = s3.Bucket.fromBucketName(
             this,
             'published-bucket',
             publishedEditionsBucketnameParameter.valueAsString,
-        )
-
-        const proofedBucket = s3.Bucket.fromBucketName(
-            this,
-            'proofed-bucket',
-            proofedEditionsBucketnameParameter.valueAsString,
         )
 
         constructProofStepFunction(
@@ -331,7 +318,7 @@ export class EditionsStack extends cdk.Stack {
             guNotifyServiceApiKeyParameter.valueAsString,
             frontsRoleARN.valueAsString,
             cmsFrontsAccountIdParameter.valueAsString,
-            proofedBucket,
+            publishedBucket,
             frontsAccess.roleArn,
         )
 
@@ -346,10 +333,6 @@ export class EditionsStack extends cdk.Stack {
             frontsTopicARN.valueAsString,
             frontsTopicRoleARN.valueAsString,
             guNotifyServiceApiKeyParameter.valueAsString,
-            frontsRoleARN.valueAsString,
-            cmsFrontsAccountIdParameter.valueAsString,
-            publishedBucket,
-            frontsAccess.roleArn,
         )
     }
 }

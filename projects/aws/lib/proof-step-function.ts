@@ -2,7 +2,7 @@ import * as iam from '@aws-cdk/aws-iam'
 import * as sfn from '@aws-cdk/aws-stepfunctions'
 import * as cdk from '@aws-cdk/core'
 import { Duration } from '@aws-cdk/core'
-import { StepFunctionProps, task } from './constructs'
+import { ProofStepFunctionProps, proofTask } from './constructs'
 
 export const proofArchiverStepFunction = (
     scope: cdk.Construct,
@@ -15,7 +15,7 @@ export const proofArchiverStepFunction = (
         backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
-    }: StepFunctionProps,
+    }: ProofStepFunctionProps,
 ) => {
     const frontsTopicRole = iam.Role.fromRoleArn(
         scope,
@@ -33,7 +33,7 @@ export const proofArchiverStepFunction = (
         frontsTopicRole,
     }
     //Archiver step function
-    const issue = task(scope, 'issue', 'Fetch Issue', lambdaParams, {
+    const issue = proofTask(scope, 'issue', 'Fetch Issue', lambdaParams, {
         backend: backendURL,
     })
 
@@ -46,7 +46,7 @@ export const proofArchiverStepFunction = (
         resultPath: 'DISCARD', //This makes the output from this be replaced with the input
     })
 
-    const front = task(
+    const front = proofTask(
         scope,
         'front',
         'Fetch front and images',
@@ -56,11 +56,11 @@ export const proofArchiverStepFunction = (
         },
     )
 
-    const upload = task(scope, 'upload', 'Upload Issue', lambdaParams)
+    const upload = proofTask(scope, 'upload', 'Upload Issue', lambdaParams)
 
-    const zip = task(scope, 'zip', 'Make issue bundle', lambdaParams)
+    const zip = proofTask(scope, 'zip', 'Make issue bundle', lambdaParams)
 
-    const indexerProof = task(
+    const indexerProof = proofTask(
         scope,
         'indexerProof',
         'Generate Index',
