@@ -113,7 +113,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -180,7 +180,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -247,7 +247,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -405,7 +405,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -472,7 +472,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -539,7 +539,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -891,7 +891,7 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -958,7 +958,7 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }
@@ -1025,7 +1025,7 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
               Object {
                 "backgroundColor": "#f6f6f6",
                 "paddingBottom": 32,
-                "paddingLeft": 104,
+                "paddingLeft": 96,
                 "paddingTop": 4,
               }
             }

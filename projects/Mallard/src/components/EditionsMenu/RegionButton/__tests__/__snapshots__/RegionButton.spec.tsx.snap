@@ -17,7 +17,7 @@ exports[`RegionButton should display a default RegionButton with correct styling
     Object {
       "backgroundColor": "#f6f6f6",
       "paddingBottom": 32,
-      "paddingLeft": 104,
+      "paddingLeft": 96,
       "paddingTop": 4,
     }
   }
@@ -74,7 +74,7 @@ exports[`RegionButton should display a selected RegionButton with correct stylin
     Object {
       "backgroundColor": "#052962",
       "paddingBottom": 32,
-      "paddingLeft": 104,
+      "paddingLeft": 96,
       "paddingTop": 4,
     }
   }
