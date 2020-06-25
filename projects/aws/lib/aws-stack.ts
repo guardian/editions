@@ -8,8 +8,7 @@ import cloudfront = require('@aws-cdk/aws-cloudfront')
 import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
 import acm = require('@aws-cdk/aws-certificatemanager')
 import { Effect } from '@aws-cdk/aws-iam'
-import { constructTriggeredStepFunction as constructProofStepFunction } from './proof-listener'
-import { constructTriggeredStepFunction as constructPublishStepFunction } from './publish-listener'
+import { constructTriggeredStepFunction } from './listener'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -305,24 +304,7 @@ export class EditionsStack extends cdk.Stack {
             publishedEditionsBucketnameParameter.valueAsString,
         )
 
-        constructProofStepFunction(
-            this,
-            stackParameter.valueAsString,
-            stageParameter.valueAsString,
-            deployBucket,
-            proofArchive,
-            publishArchive,
-            backendURL,
-            frontsTopicARN.valueAsString,
-            frontsTopicRoleARN.valueAsString,
-            guNotifyServiceApiKeyParameter.valueAsString,
-            frontsRoleARN.valueAsString,
-            cmsFrontsAccountIdParameter.valueAsString,
-            publishedBucket,
-            frontsAccess.roleArn,
-        )
-
-        constructPublishStepFunction(
+        constructTriggeredStepFunction(
             this,
             stackParameter.valueAsString,
             stageParameter.valueAsString,

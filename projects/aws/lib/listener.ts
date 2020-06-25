@@ -3,6 +3,7 @@ import { Code } from '@aws-cdk/aws-lambda'
 import lambda = require('@aws-cdk/aws-lambda')
 import { IBucket } from '@aws-cdk/aws-s3'
 import { proofArchiverStepFunction } from './proof-step-function'
+import { publishArchiverStepFunction } from './publish-step-function'
 import iam = require('@aws-cdk/aws-iam')
 
 export const s3EventListenerFunction = (
@@ -11,7 +12,8 @@ export const s3EventListenerFunction = (
     stack: string,
     stage: string,
     deployBucket: IBucket,
-    stateMachineArn: string,
+    proofStateMachineArn: string,
+    publishStateMachineArn: string,
     frontsRoleARN: string,
 ) => {
     const fn = new lambda.Function(
@@ -29,7 +31,8 @@ export const s3EventListenerFunction = (
             handler: 'index.invoke',
             environment: {
                 stage: stage,
-                stateMachineARN: stateMachineArn,
+                proofStateMachineARN: proofStateMachineArn,
+                publishStateMachineARN: publishStateMachineArn,
                 arn: frontsRoleARN,
             },
         },
@@ -56,7 +59,6 @@ export const constructTriggeredStepFunction = (
     publishedBucket: IBucket,
     frontsAccessArn: string,
 ) => {
-    //proof archiver step function
     const proofArchiverStateMachine = proofArchiverStepFunction(scope, {
         stack: stack,
         stage: stage,
@@ -75,20 +77,39 @@ export const constructTriggeredStepFunction = (
         value: proofArchiverStateMachine.stateMachineArn,
     })
 
-    const proofArchiveS3EventListener = s3EventListenerFunction(
+    const publishArchiverStateMachine = publishArchiverStepFunction(scope, {
+        stack: stack,
+        stage: stage,
+        deployBucket,
+        proofBucket: proofArchive,
+        publishBucket: publishArchive,
+        backendURL,
+        frontsTopicArn: frontsTopicARN,
+        frontsTopicRoleArn: frontsTopicRoleARN,
+        guNotifyServiceApiKey: guNotifyServiceApiKeyParameter,
+    })
+
+    new CfnOutput(scope, 'publish-archiver-state-machine-arn', {
+        description: 'ARN for publish archiver state machine',
+        exportName: `publish-archiver-state-machine-arn-${stage}`,
+        value: publishArchiverStateMachine.stateMachineArn,
+    })
+
+    const archiveS3EventListener = s3EventListenerFunction(
         scope,
         'editions-proof-archiver-s3-event-listener',
         stack,
         stage,
         deployBucket,
         proofArchiverStateMachine.stateMachineArn,
+        publishArchiverStateMachine.stateMachineArn,
         frontsRoleARN,
     )
 
-    new CfnOutput(scope, 'proof-archiver-s3-event-listener-arn', {
+    new CfnOutput(scope, 'archiver-s3-event-listener-arn', {
         description: 'ARN for proof-archiver state machine trigger lambda',
         exportName: `proof-archiver-s3-event-listener-arn-${stage}`,
-        value: proofArchiveS3EventListener.functionArn,
+        value: archiveS3EventListener.functionArn,
     })
 
     new lambda.CfnPermission(
@@ -96,18 +117,19 @@ export const constructTriggeredStepFunction = (
         'PublishedEditionsProofArchiverS3EventListenerInvokePermission',
         {
             principal: 's3.amazonaws.com',
-            functionName: proofArchiveS3EventListener.functionName,
+            functionName: archiveS3EventListener.functionName,
             action: 'lambda:InvokeFunction',
             sourceAccount: cmsFrontsAccountIdParameter,
             sourceArn: publishedBucket.bucketArn,
         },
     )
 
-    proofArchiveS3EventListener.addToRolePolicy(
+    archiveS3EventListener.addToRolePolicy(
         new iam.PolicyStatement({
             actions: ['sts:AssumeRole'],
             resources: [frontsAccessArn],
         }),
     )
-    proofArchiverStateMachine.grantStartExecution(proofArchiveS3EventListener)
+    proofArchiverStateMachine.grantStartExecution(archiveS3EventListener)
+    publishArchiverStateMachine.grantStartExecution(archiveS3EventListener)
 }
