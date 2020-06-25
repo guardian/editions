@@ -333,6 +333,10 @@ export class EditionsStack extends cdk.Stack {
             frontsTopicARN.valueAsString,
             frontsTopicRoleARN.valueAsString,
             guNotifyServiceApiKeyParameter.valueAsString,
+            frontsRoleARN.valueAsString,
+            cmsFrontsAccountIdParameter.valueAsString,
+            publishedBucket,
+            frontsAccess.roleArn,
         )
     }
 }
