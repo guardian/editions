@@ -25,7 +25,7 @@ describe('state machine invoker', () => {
     ]
 
     it('should handle (new records arrived) event when state machine invocation succeed', async () => {
-        const invokeStateMachineAllwaysSuccess = async (
+        const invokeStateMachineAlwaysSuccess = async (
             issuePublication: IssuePublicationIdentifier,
         ) => {
             return issuePublication
@@ -55,7 +55,7 @@ describe('state machine invoker', () => {
     })
 
     it('should thorw error when no state machine invocation were made', async () => {
-        const invokeStateMachineAllwaysFails = async (
+        const invokeStateMachineAlwaysFails = async (
             issuePublication: IssuePublicationIdentifier,
         ) => {
             return withFailureMessage(
