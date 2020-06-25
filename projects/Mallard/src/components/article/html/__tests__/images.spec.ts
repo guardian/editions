@@ -1,9 +1,5 @@
 import { renderCaption } from '../components/images'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 describe('html', () => {
     describe('renderCaption', () => {
         it('renders just the caption when the credit is undefined', () => {

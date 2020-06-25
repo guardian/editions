@@ -7,10 +7,6 @@ jest.mock('src/components/front/image-resource', () => ({
     ImageResource: () => 'ImageResource',
 }))
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 jest.mock('@apollo/react-hooks', () => ({
     useApolloClient: () => jest.fn(),
     useQuery: () => ({ data: 'something' }),
