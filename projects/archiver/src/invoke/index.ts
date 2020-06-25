@@ -9,6 +9,7 @@ import {
     hasSucceeded,
     withFailureMessage,
     IssuePublicationIdentifier,
+    IssuePublicationActionIdentifier,
 } from '../../common'
 import { IssueParams } from '../tasks/issue'
 import { fetchfromCMSFrontsS3, GetS3ObjParams } from '../utils/s3'
@@ -73,16 +74,16 @@ export const internalHandler = async (
     dependencies: InvokerDependencies,
 ) => {
     const maybeIssuesPromises: Promise<
-        Attempt<IssuePublicationIdentifier>
+        Attempt<IssuePublicationActionIdentifier>
     >[] = Records.map(async r => {
         return await parseRecord(r, dependencies.s3fetch)
     })
 
     const maybeIssues: Attempt<
-        IssuePublicationIdentifier
+        IssuePublicationActionIdentifier
     >[] = await Promise.all(maybeIssuesPromises)
 
-    const issues: IssuePublicationIdentifier[] = maybeIssues.filter(
+    const issues: IssuePublicationActionIdentifier[] = maybeIssues.filter(
         hasSucceeded,
     )
 
