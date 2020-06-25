@@ -102,6 +102,8 @@ def enableProguardInReleaseBuilds = false
 //For legacy reason we are adding current build number (14001358) from Play Store
 def appVersionCode = 14001358 + buildNumber()
 
+println("##teamcity[setParameter name='VERSION_CODE' value='${appVersionCode}']")
+
 /**
  * The preferred build flavor of JavaScriptCore.
  *
