@@ -7,7 +7,7 @@ import { Header } from 'src/components/layout/header/header'
 export const BasicArticleHeader = withNavigation(
     ({ navigation }: NavigationInjectedProps) => (
         <Header
-            white
+            theme="light"
             leftAction={
                 <Button
                     appearance={ButtonAppearance.skeleton}
@@ -16,7 +16,7 @@ export const BasicArticleHeader = withNavigation(
                     onPress={() => navigation.goBack(null)}
                 ></Button>
             }
-            layout={'center'}
+            layout="center"
         >
             {null}
         </Header>

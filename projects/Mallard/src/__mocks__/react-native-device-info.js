@@ -7,4 +7,5 @@ export default {
     getVersion: jest.fn().mockReturnValue('3.1'),
     getBuildNumber: jest.fn().mockReturnValue('666'),
     getDeviceId: jest.fn().mockReturnValue('iPad4,1'),
+    isTablet: jest.fn(),
 }

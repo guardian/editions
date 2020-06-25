@@ -6,6 +6,7 @@ import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 
 const splitStyles = StyleSheet.create({
     container: {
@@ -90,6 +91,7 @@ export interface IssueTitleProps {
     title: string
     subtitle?: string
     style?: StyleProp<ViewStyle>
+    overwriteStyles?: SpecialEditionHeaderStyles
 }
 
 const appearances: {
@@ -118,17 +120,34 @@ const IssueTitle = React.memo(
         title,
         subtitle,
         appearance = IssueTitleAppearance.default,
+        overwriteStyles,
         style,
     }: IssueTitleProps & { appearance?: IssueTitleAppearance }) => (
         <View style={style}>
             <IssueTitleText
-                style={[styles.text, appearances[appearance].title]}
+                style={[
+                    styles.text,
+                    appearances[appearance].title,
+                    overwriteStyles && overwriteStyles.textColorPrimary
+                        ? {
+                              color: overwriteStyles.textColorPrimary,
+                          }
+                        : {},
+                ]}
             >
                 {title}
             </IssueTitleText>
             {!!subtitle && (
                 <IssueTitleText
-                    style={[styles.text, appearances[appearance].subtitle]}
+                    style={[
+                        styles.text,
+                        appearances[appearance].subtitle,
+                        overwriteStyles && overwriteStyles.textColorSecondary
+                            ? {
+                                  color: overwriteStyles.textColorSecondary,
+                              }
+                            : {},
+                    ]}
                 >
                     {subtitle}
                 </IssueTitleText>
