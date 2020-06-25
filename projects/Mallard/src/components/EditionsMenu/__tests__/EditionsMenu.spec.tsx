@@ -67,7 +67,7 @@ const specialEditions = [
         title: `Food
 Monthly`,
         subTitle: 'Store cupboard special: 20 quick and easy lockdown suppers',
-        style: {
+        buttonStyle: {
             backgroundColor: '#FEEEF7',
             expiry: {
                 color: '#7D0068',

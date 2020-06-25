@@ -53,12 +53,12 @@ const EditionsMenu = ({
                         data={specialEditions}
                         renderItem={({
                             item: {
+                                buttonStyle,
                                 devUri,
                                 edition,
                                 expiry,
                                 image,
                                 title,
-                                style,
                                 subTitle,
                             },
                         }: {
@@ -74,7 +74,7 @@ const EditionsMenu = ({
                                         navigation.navigate(routeNames.Issue)
                                     }}
                                     title={title}
-                                    style={style}
+                                    style={buttonStyle}
                                     subTitle={subTitle}
                                 />
                             )
