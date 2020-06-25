@@ -48,9 +48,13 @@ const findReleaseForCommit = (commit, releases) => {
 const patchReleaseName = (name, os, appStoreId) =>
     `${name}--${os}-${appStoreId}`
 
-const updateRelease = async (commitSha, message, branch, appStoreId, os) => {
+const updateRelease = async (commitSha, branch, appStoreId, os) => {
     const releases = await get('releases')
     const matchingRelease = findReleaseForCommit(commitSha, releases)
+
+    const appStoreName = os === 'ios' ? 'Apple app store' : 'Google Play store'
+    const releaseMessage = `Released to ${appStoreName}, version ${appStoreId}. Built from branch ${branch}.`
+    console.log('Updating github release tags ')
 
     if (matchingRelease) {
         console.log(
@@ -63,14 +67,17 @@ const updateRelease = async (commitSha, message, branch, appStoreId, os) => {
         )
         const releaseUpdateResult = await patch(
             `releases/${matchingRelease.id}`,
-            { name: patchedName },
+            {
+                name: patchedName,
+                body: `${matchingRelease.body} \n${releaseMessage}`,
+            },
         )
         console.log(
             `Updated release, new name: ${patchedName}, view it here: ${releaseUpdateResult.html_url}`,
         )
     } else {
         console.log(
-            `Creating release with tag name ${commitSha}, message ${message}, branch ${branch}`,
+            `Creating release with tag name ${commitSha}, branch ${branch}`,
         )
         const releaseName = patchReleaseName(branch, os, appStoreId)
         const release = await post('releases', {
@@ -78,19 +85,19 @@ const updateRelease = async (commitSha, message, branch, appStoreId, os) => {
             prerelease: true,
             target_commitish: branch,
             name: releaseName,
+            body: releaseMessage,
         })
         console.log(`Created release, view it here: ${release.html_url}`)
     }
 }
 const params = {
     sha: 2,
-    message: 3,
-    branch: 4,
-    appStoreId: 5,
-    os: 6,
+    branch: 3,
+    appStoreId: 4,
+    os: 5,
 }
 
-if (process.argv.length < Object.keys(params).length) {
+if (process.argv.length - 1 < Object.keys(params).length) {
     console.log(
         `Usage: node ${process.argv[1]} <${Object.keys(params).join('> <')}>`,
     )
