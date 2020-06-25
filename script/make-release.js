@@ -46,26 +46,33 @@ const findReleaseForCommit = (commit, releases) => {
 }
 
 const patchReleaseName = (name, os, appStoreId) =>
-    name.includes(`-${os}-`) ? name : `${name}--${os}-${appStoreId}`
+    `${name}--${os}-${appStoreId}`
 
 const updateRelease = async (commitSha, message, branch, appStoreId, os) => {
     const releases = await get('releases')
     const matchingRelease = findReleaseForCommit(commitSha, releases)
 
     if (matchingRelease) {
-        console.log('release exists, patching release name')
+        console.log(
+            `Release exists (${matchingRelease.html_url}), patching release name`,
+        )
+        const patchedName = patchReleaseName(
+            matchingRelease.name,
+            os,
+            appStoreId,
+        )
         const releaseUpdateResult = await patch(
             `releases/${matchingRelease.id}`,
-            { name: patchReleaseName(matchingRelease.name, os, appStoreId) },
+            { name: patchedName },
         )
         console.log(
-            `Updated release, view it here: ${releaseUpdateResult.html_url}`,
+            `Updated release, new name: ${patchedName}, view it here: ${releaseUpdateResult.html_url}`,
         )
     } else {
         console.log(
             `Creating release with tag name ${commitSha}, message ${message}, branch ${branch}`,
         )
-        const releaseName = `${branch}--${os}-${appStoreId}`
+        const releaseName = patchReleaseName(branch, os, appStoreId)
         const release = await post('releases', {
             tag_name: tagNameFromSha(commitSha),
             prerelease: true,
