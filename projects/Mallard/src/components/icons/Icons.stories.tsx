@@ -2,6 +2,7 @@ import { color, withKnobs } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react-native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { Editions } from './Editions'
 import { LeftChevron } from './LeftChevron'
 import { Newspaper } from './Newspaper'
 import { Quote } from './Quote'
@@ -16,6 +17,7 @@ const styles = StyleSheet.create({
     },
     label: {
         paddingLeft: 20,
+        alignSelf: 'center',
     },
 })
 
@@ -38,6 +40,10 @@ storiesOf('Icons', module)
             <View style={styles.icon}>
                 <Newspaper />
                 <Text style={styles.label}>Newspaper</Text>
+            </View>
+            <View style={styles.icon}>
+                <Editions />
+                <Text style={styles.label}>Editions</Text>
             </View>
         </>
     ))
