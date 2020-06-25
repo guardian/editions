@@ -11,7 +11,7 @@ const styles = (selected: boolean) =>
                 ? color.primary
                 : color.palette.neutral[97],
             paddingBottom: 32,
-            paddingLeft: 104,
+            paddingLeft: 96,
             paddingTop: 4,
         },
         title: {
