@@ -32,7 +32,8 @@ describe('state machine invoker', () => {
         }
 
         const testDependencies: InvokerDependencies = {
-            stateMachineInvoke: invokeStateMachineAllwaysSuccess,
+            proofStateMachineInvoke: invokeStateMachineAlwaysSuccess,
+            publishStateMachineInvoke: invokeStateMachineAlwaysSuccess,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             s3fetch: (params: GetS3ObjParams) => {
                 return Promise.resolve(objectsContentsInput)
@@ -65,7 +66,8 @@ describe('state machine invoker', () => {
         }
 
         const testDependencies: InvokerDependencies = {
-            stateMachineInvoke: invokeStateMachineAllwaysFails,
+            proofStateMachineInvoke: invokeStateMachineAlwaysFails,
+            publishStateMachineInvoke: invokeStateMachineAlwaysFails,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             s3fetch: (params: GetS3ObjParams) => {
                 return Promise.resolve(objectsContentsInput)
