@@ -629,13 +629,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
       data={
         Array [
           Object {
-            "edition": "",
-            "expiry": 1998-02-01T00:00:00.000Z,
-            "image": Object {
-              "path": "/path/to/image",
-              "source": "media",
-            },
-            "style": Object {
+            "buttonStyle": Object {
               "backgroundColor": "#FEEEF7",
               "expiry": Object {
                 "color": "#7D0068",
@@ -659,6 +653,12 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
                 "lineHeight": 34,
                 "size": 34,
               },
+            },
+            "edition": "",
+            "expiry": 1998-02-01T00:00:00.000Z,
+            "image": Object {
+              "path": "/path/to/image",
+              "source": "media",
             },
             "subTitle": "Store cupboard special: 20 quick and easy lockdown suppers",
             "title": "Food

@@ -554,6 +554,12 @@ export interface SpecialEditionButtonStyles {
     image: { width: number; height: number }
 }
 
+export interface SpecialEditionHeaderStyles {
+    backgroundColor: string
+    textColorPrimary?: string
+    textColorSecondary?: string
+}
+
 export interface EditionsList {
     regionalEditions: RegionalEdition[]
     specialEditions: SpecialEdition[]
@@ -566,11 +572,12 @@ export interface RegionalEdition {
 }
 
 export interface SpecialEdition {
+    buttonStyle: SpecialEditionButtonStyles
+    devUri?: string
     edition: string
     expiry: Date
-    devUri?: string
+    headerStyle?: SpecialEditionHeaderStyles
     image: Image
-    style: SpecialEditionButtonStyles
     subTitle: string
     title: string
 }
