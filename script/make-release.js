@@ -48,6 +48,11 @@ const findReleaseForCommit = (commit, releases) => {
 const patchReleaseName = (name, os, appStoreId) =>
     `${name}--${os}-${appStoreId}`
 
+const cleanBranch = branch => {
+    const split = branch.split('/')
+    return split[split.length - 1]
+}
+
 const updateRelease = async (commitSha, branch, appStoreId, os) => {
     const releases = await get('releases')
     const matchingRelease = findReleaseForCommit(commitSha, releases)
@@ -105,8 +110,7 @@ if (process.argv.length - 1 < Object.keys(params).length) {
 } else {
     updateRelease(
         process.argv[params.sha],
-        process.argv[params.message],
-        process.argv[params.branch],
+        cleanBranch(process.argv[params.branch]),
         process.argv[params.appStoreId],
         process.argv[params.os],
     )

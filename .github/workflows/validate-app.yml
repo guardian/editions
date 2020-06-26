@@ -23,6 +23,7 @@ jobs:
             - name: publish release to github
               run: |
                   cd script
+                  echo ${{ steps.install_mallard.outputs.BUILD_NUMBER }}
                   node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.install_mallard.outputs.BUILD_NUMBER }} ios
               env:
                  REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
