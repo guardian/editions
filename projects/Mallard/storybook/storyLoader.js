@@ -11,6 +11,7 @@ function loadStories() {
 	require('../src/components/EditionsMenu/RegionButton/RegionButton.stories');
 	require('../src/components/EditionsMenu/SpecialEditionButton/SpecialEditionButton.stories');
 	require('../src/components/Lightbox/LightboxCaption.stories');
+	require('../src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader.stories');
 	require('../src/components/ScreenHeader/ScreenHeader.stories');
 	require('../src/components/SignInFailedModalCard.stories');
 	require('../src/components/Spinner/Spinner.stories');
@@ -27,6 +28,7 @@ const stories = [
 	'../src/components/EditionsMenu/RegionButton/RegionButton.stories',
 	'../src/components/EditionsMenu/SpecialEditionButton/SpecialEditionButton.stories',
 	'../src/components/Lightbox/LightboxCaption.stories',
+	'../src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader.stories',
 	'../src/components/ScreenHeader/ScreenHeader.stories',
 	'../src/components/SignInFailedModalCard.stories',
 	'../src/components/Spinner/Spinner.stories',

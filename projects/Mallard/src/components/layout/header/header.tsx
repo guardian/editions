@@ -150,20 +150,6 @@ const Header = ({
     )
 }
 
-const IssuePickerHeader = (
-    headerProps: Omit<HeaderProps, 'children'> & TouchableHeaderProps,
-) => {
-    return (
-        <Header {...headerProps}>
-            <IssueTitle
-                {...headerProps}
-                title={`Recent`}
-                subtitle={`Editions`}
-            />
-        </Header>
-    )
-}
-
 const EditionsMenuScreenHeader = ({
     leftActionPress,
 }: {
@@ -177,4 +163,4 @@ const EditionsMenuScreenHeader = ({
     </Header>
 )
 
-export { Header, IssuePickerHeader, EditionsMenuScreenHeader }
+export { Header, EditionsMenuScreenHeader }

@@ -23,7 +23,6 @@ import {
 } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { IssuePickerHeader } from 'src/components/layout/header/header'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { Spinner } from 'src/components/Spinner/Spinner'
 import {
@@ -48,6 +47,8 @@ import { useIssueResponse } from 'src/hooks/use-issue'
 import { IssueWithFronts } from '../../../Apps/common/src'
 import { PathToIssue } from 'src/paths'
 import { Loaded } from 'src/helpers/Loaded'
+import { ScreenHeader } from 'src/components/ScreenHeader/ScreenHeader'
+import { IssuePickerHeader } from 'src/components/ScreenHeader/IssuePickerHeader/IssuePickerHeader'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -67,47 +68,6 @@ const styles = StyleSheet.create({
         height: '100%',
     },
 })
-
-const HomeScreenHeader = withNavigation(
-    ({
-        navigation,
-        onReturn,
-    }: {
-        onReturn: () => void
-        onSettings: () => void
-    } & NavigationInjectedProps) => {
-        const action = (
-            <Button
-                accessibilityLabel="Close button"
-                accessibilityHint="Returns to the edition"
-                accessibilityRole="button"
-                icon={'\uE04F'}
-                alt="Return to edition"
-                onPress={onReturn}
-            />
-        )
-        const settings = (
-            <Button
-                accessibilityLabel="Settings button"
-                accessibilityHint="Navigates to the settings screen"
-                accessibilityRole="button"
-                icon={'\uE040'}
-                alt="Settings"
-                onPress={() => {
-                    navigateToSettings(navigation)
-                }}
-                appearance={ButtonAppearance.skeleton}
-            />
-        )
-        return (
-            <IssuePickerHeader
-                leftAction={settings}
-                onPress={onReturn}
-                action={action}
-            />
-        )
-    },
-)
 
 const IssueRowContainer = React.memo(
     ({
@@ -485,18 +445,7 @@ export const HomeScreen = ({
     const { issueSummary, error, setIssueId } = useIssueSummary()
     return (
         <WithAppAppearance value={'tertiary'}>
-            <HomeScreenHeader
-                onSettings={() => {
-                    navigation.navigate('Settings')
-                }}
-                onReturn={() => {
-                    navigateToIssue({
-                        navigation,
-                        navigationProps: {},
-                        setIssueId,
-                    })
-                }}
-            />
+            <IssuePickerHeader />
             {issueSummary ? (
                 <IssueListFetchContainer />
             ) : error ? (
