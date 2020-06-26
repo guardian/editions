@@ -117,7 +117,13 @@ export const publishTask = (
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
-    const lambda = publishTaskLambda(scope, name, lambdaParams, environment, overrides)
+    const lambda = publishTaskLambda(
+        scope,
+        name,
+        lambdaParams,
+        environment,
+        overrides,
+    )
 
     const task = new sfn.Task(scope, [name, desc].join(': '), {
         task: new tasks.InvokeFunction(lambda),
@@ -127,7 +133,6 @@ export const publishTask = (
     }
     return { lambda, task }
 }
-
 
 export const proofTaskLambda = (
     scope: cdk.Construct,
@@ -194,7 +199,13 @@ export const proofTask = (
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
-    const lambda = proofTaskLambda(scope, name, lambdaParams, environment, overrides)
+    const lambda = proofTaskLambda(
+        scope,
+        name,
+        lambdaParams,
+        environment,
+        overrides,
+    )
 
     const task = new sfn.Task(scope, [name, desc].join(': '), {
         task: new tasks.InvokeFunction(lambda),

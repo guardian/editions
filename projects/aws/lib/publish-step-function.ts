@@ -56,13 +56,19 @@ export const publishArchiverStepFunction = (
 
     indexerPublish.task.next(notification.task)
 
-    notification.task.next(new sfn.Succeed(scope, 'publish-successfully-archived'))
+    notification.task.next(
+        new sfn.Succeed(scope, 'publish-successfully-archived'),
+    )
 
-    const stateMachine = new sfn.StateMachine(scope, 'Archiver Publish State Machine',{
-        stateMachineName: `Editions-Archiver-State-Machine-${stage}`,
-        definition: copier.task,
-        timeout: Duration.minutes(10),
-    })
+    const stateMachine = new sfn.StateMachine(
+        scope,
+        'Archiver Publish State Machine',
+        {
+            stateMachineName: `Editions-Archiver-State-Machine-${stage}`,
+            definition: copier.task,
+            timeout: Duration.minutes(10),
+        },
+    )
 
     return stateMachine
 }
