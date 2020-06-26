@@ -23,6 +23,7 @@ jobs:
             - name: publish release to github
               run: |
                   cd script
+                  printenv
                   echo ${{ steps.install_mallard.outputs }}
                   echo ${{ steps.install_mallard.outputs.buildnumber }}
                   node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.install_mallard.outputs.buildnumber }} ios
