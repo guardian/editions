@@ -10,6 +10,7 @@ install: $(patsubst %, projects/%/node_modules, $(PROJECTS)) node_modules
 projects/%/node_modules: projects/%/yarn.lock
 	@echo "\n👟 Installing $*\n"
 	@echo "::set-output name=BUILD_NUMBER::1"
+	@echo "new echo in make "
 	cd $(dir $@) && ${YARN} ${YARNFLAGS}
 node_modules: yarn.lock
 	@echo "\n👟 Installing project tools\n"
