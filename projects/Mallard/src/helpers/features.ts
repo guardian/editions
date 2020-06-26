@@ -1,5 +1,9 @@
 import { Platform } from 'react-native'
 
+export const supportsAnimation = () =>
+    (Platform.OS === 'ios' && parseInt(String(Platform.Version), 10) >= 12) ||
+    Platform.OS === 'android'
+
 export const supportsTransparentCards = () => Platform.OS === 'ios'
 
 export const supportsAnimatedClipView = () => Platform.OS === 'ios'

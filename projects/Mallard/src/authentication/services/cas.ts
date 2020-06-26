@@ -1,14 +1,7 @@
 import DeviceInfo from 'react-native-device-info'
 import { AuthResult, fromResponse } from '../lib/Result'
 import { CAS_ENDPOINT_URL } from 'src/constants'
-
-export interface CASExpiry {
-    content: string
-    expiryDate: string
-    expiryType: string
-    provider: string
-    subscriptionCode: string
-}
+import { CASExpiry } from '../../../../Apps/common/src/cas-expiry'
 
 const fetchCASSubscription = async (
     subscriberID: string,

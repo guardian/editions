@@ -20,10 +20,11 @@ import identity, {
 } from './authorizers/IdentityAuthorizer'
 import cas from './authorizers/CASAuthorizer'
 import iap from './authorizers/IAPAuthorizer'
-import { CASExpiry } from './services/cas'
+import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { ReceiptIOS } from './services/iap'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { validAttemptCache } from 'src/helpers/storage'
 
 type AttemptType = 'iap' | 'cas' | 'identity'
 
@@ -60,11 +61,14 @@ const AccessContext = createContext({
     signOutCAS: () => {},
 })
 
-const controller = new AccessController({
-    identity,
-    cas,
-    iap,
-})
+const controller = new AccessController(
+    {
+        identity,
+        cas,
+        iap,
+    },
+    validAttemptCache,
+)
 
 const authCAS = cas.runAuth.bind(cas)
 const authIAP = iap.runAuth.bind(iap)
@@ -105,11 +109,14 @@ const AccessProvider = ({
         const unsubIAP = controller.authorizerMap.iap.subscribe(setIAPAuth)
         client
             .watchQuery({
-                query: gql('{ netInfo @client { isConnected @client } }'),
+                query: gql(
+                    '{ netInfo @client { isConnected @client, isPoorConnection @client } }',
+                ),
             })
             .subscribe(res => {
                 controller.handleConnectionStatusChanged(
                     res.data.netInfo.isConnected,
+                    res.data.netInfo.isPoorConnection,
                 )
             })
         return () => {

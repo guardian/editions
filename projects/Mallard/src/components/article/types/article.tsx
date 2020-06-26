@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
@@ -6,15 +6,22 @@ import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
 import { WebviewWithArticle } from './article/webview'
-import {
-    Article as ArticleT,
-    PictureArticle,
-    Content,
-    GalleryArticle,
-} from 'src/common'
+import { Article as ArticleT, PictureArticle, GalleryArticle } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
-import { IssueOrigin } from '../../../../../Apps/common/src'
+import { NavigationScreenProp } from 'react-navigation'
+import {
+    IssueOrigin,
+    BlockElement,
+    ImageElement,
+    CreditedImage,
+} from '../../../../../Apps/common/src'
+import { navigateToLightbox } from 'src/navigation/helpers/base'
+import { fetchLightboxSetting } from 'src/helpers/settings/debug'
+import { selectImagePath } from 'src/hooks/use-image-paths'
+import { useApiUrl } from 'src/hooks/use-settings'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
+import { Image } from 'src/common'
 
 const styles = StyleSheet.create({
     block: {
@@ -40,14 +47,6 @@ const styles = StyleSheet.create({
     },
 })
 
-export enum ArticleTheme {
-    Default = 'default',
-    Dark = 'dark',
-}
-
-const usesDarkTheme = (type: Content['type']) =>
-    ['picture', 'gallery'].includes(type)
-
 export type HeaderControlInnerProps = {
     /**
      * Called when the user scrolled up or down sufficiently that we want to
@@ -72,6 +71,28 @@ export type HeaderControlProps = HeaderControlInnerProps & {
      * the article.
      */
     onIsAtTopChange: (isAtTop: boolean) => void
+}
+export const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
+    const images: ImageElement[] = elements.filter(
+        (e: BlockElement): e is ImageElement => e.id === 'image',
+    )
+    return images
+}
+
+export const getCreditedImages = (
+    elements: ImageElement[],
+): CreditedImage[] => {
+    const creditedImages: CreditedImage[] = elements.map(e => {
+        return {
+            source: e.src.source,
+            path: e.src.path,
+            role: e.src.role,
+            credit: e.credit,
+            caption: e.caption,
+            displayCredit: e.displayCredit,
+        }
+    })
+    return creditedImages
 }
 
 /**
@@ -99,6 +120,7 @@ const useUpdateWebviewVariable = (
 }
 
 const Article = ({
+    navigation,
     article,
     path,
     onShouldShowHeaderChange,
@@ -107,16 +129,16 @@ const Article = ({
     onIsAtTopChange,
     origin,
 }: {
+    navigation: NavigationScreenProp<{}>
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
     origin: IssueOrigin
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
-
-    const theme = usesDarkTheme(article.type)
-        ? ArticleTheme.Dark
-        : ArticleTheme.Default
+    const [lightboxEnabled, setLightboxEnabled] = useState(false)
+    const [imagePaths, setImagePaths] = useState([''])
+    const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
@@ -124,13 +146,52 @@ const Article = ({
         shouldShowHeader,
     )
 
+    const [, { pillar }] = useArticle()
+    const apiUrl = useApiUrl() || ''
+    const { issueId } = useIssueSummary()
+
+    useEffect(() => {
+        fetchLightboxSetting().then(lightboxEnabled =>
+            setLightboxEnabled(lightboxEnabled),
+        )
+    }, [])
+
+    useEffect(() => {
+        const lbimages = getLightboxImages(article.elements)
+        const lbCreditedImages = getCreditedImages(lbimages)
+        // to avoid image duplication we don't add the main image of gallery articles to the array
+        if (article.type !== 'gallery' && article.image) {
+            lbCreditedImages.unshift(article.image)
+        }
+        setLightboxImages(lbCreditedImages)
+        const getImagePathFromImage = async (image: Image) => {
+            if (issueId && image) {
+                const { localIssueId, publishedIssueId } = issueId
+                const imagePath = await selectImagePath(
+                    apiUrl,
+                    localIssueId,
+                    publishedIssueId,
+                    image,
+                    'full-size',
+                )
+                return imagePath
+            }
+            return ''
+        }
+        const fetchImagePaths = async () => {
+            return await Promise.all(
+                lbCreditedImages.map(image => getImagePathFromImage(image)),
+            )
+        }
+        fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
+    }, [apiUrl, article.elements, issueId, article.image, article.type])
+
     return (
         <Fader>
             <WebviewWithArticle
                 type={type}
                 article={article}
                 path={path}
-                theme={theme}
                 scrollEnabled={true}
                 useWebKit={false}
                 style={[styles.webview]}
@@ -143,7 +204,24 @@ const Article = ({
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
                         if (article.webUrl == null) return
-                        Share.share({ message: article.webUrl })
+                        if (Platform.OS === 'ios') {
+                            Share.share({
+                                url: article.webUrl,
+                                message: article.headline,
+                            })
+                        } else {
+                            Share.share(
+                                {
+                                    title: article.headline,
+                                    url: article.webUrl,
+                                    // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
+                                    message: article.webUrl,
+                                },
+                                {
+                                    subject: article.headline,
+                                },
+                            )
+                        }
                         return
                     }
                     if (parsed.type === 'shouldShowHeaderChange') {
@@ -152,6 +230,25 @@ const Article = ({
                     }
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
+                    }
+                    if (lightboxEnabled && parsed.type === 'openLightbox') {
+                        let index = parsed.index
+                        if (
+                            article.type !== 'gallery' &&
+                            article.image &&
+                            parsed.isMainImage === 'false'
+                        ) {
+                            index++
+                        }
+                        navigateToLightbox({
+                            navigation,
+                            navigationProps: {
+                                images: lightboxImages,
+                                imagePaths: imagePaths,
+                                index,
+                                pillar,
+                            },
+                        })
                     }
                 }}
             />

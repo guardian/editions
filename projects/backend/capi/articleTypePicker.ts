@@ -1,5 +1,5 @@
 import { IContent } from '@guardian/capi-ts/dist/Content'
-import { ArticleType } from '../../Apps/common/src/index'
+import { ArticleType, HeaderType } from '../../Apps/common/src/index'
 import { TagType } from '@guardian/capi-ts'
 
 const doesTagExist = (article: IContent, tagId: string): boolean => {
@@ -17,8 +17,10 @@ const articleTypePicker = (article: IContent): ArticleType => {
     const isTypePresent = (tagType: TagType): boolean =>
         doesTypeExist(article, tagType)
 
+    // NOTE: most interviews are also immersive - see switch statement below
     const isImmersive: boolean =
         (article.fields && article.fields.displayHint === 'immersive') || false
+
     const isLongRead: boolean = isTagPresent(
         'theguardian/journal/the-long-read',
     )
@@ -43,7 +45,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'news':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
@@ -55,7 +57,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'sport':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isMatchResult) return ArticleType.MatchResult
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
@@ -69,10 +71,10 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'journal':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
+                else if (isLetter) return ArticleType.Letter
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
-                else if (isLetter) return ArticleType.Letter
                 else if (isEditorial) return ArticleType.Article
                 else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article
@@ -82,7 +84,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isImmersive) return ArticleType.Immersive
                 else if (isReview) return ArticleType.Review
                 else if (isRecipe) return ArticleType.Recipe
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isGallery) return ArticleType.Gallery
                 else if (isLetter) return ArticleType.Letter
@@ -103,7 +105,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 if (isReview) return ArticleType.Review
                 else if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
@@ -120,4 +122,33 @@ const articleTypePicker = (article: IContent): ArticleType => {
     }
 }
 
-export { articleTypePicker }
+const headerTypePicker = (article: IContent): HeaderType => {
+    const isTagPresent = (tagId: string): boolean =>
+        doesTagExist(article, tagId)
+
+    const isCorrection: boolean = isTagPresent(
+        'theguardian/series/correctionsandclarifications',
+    )
+    const isBirthday: boolean = isTagPresent('news/birthdays')
+    const isSoundAndVision: boolean = isTagPresent(
+        'tv-and-radio/series/the-10-best-tv-shows-in-the-uk-this-week',
+    )
+    const articleType = articleTypePicker(article)
+    if (
+        articleType === ArticleType.Letter ||
+        isCorrection ||
+        isBirthday ||
+        isSoundAndVision
+    ) {
+        return HeaderType.NoByline
+    } else if (
+        articleType === ArticleType.Opinion ||
+        articleType === ArticleType.Analysis
+    ) {
+        return HeaderType.LargeByline
+    } else {
+        return HeaderType.RegularByline
+    }
+}
+
+export { articleTypePicker, headerTypePicker }

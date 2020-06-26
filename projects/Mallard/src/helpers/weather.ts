@@ -7,6 +7,7 @@ import Geolocation, {
 import { resolveLocationPermissionStatus } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
 import gql from 'graphql-tag'
+import * as RNLocalize from 'react-native-localize'
 
 class CannotFetchError extends Error {}
 
@@ -48,7 +49,9 @@ export const getGeolocation = async (): Promise<GeolocationResponse> => {
 }
 
 const fetchFromWeatherApi = async <T>(path: string): Promise<T> => {
-    const res = await tryFetch(`http://mobile-weather.guardianapis.com/${path}`)
+    const res = await tryFetch(
+        `https://mobile-weather.guardianapis.com/${path}`,
+    )
     if (res.status >= 500) {
         throw new CannotFetchError('Server returned 500') // 500s don't return json
     }
@@ -128,8 +131,9 @@ const getWeather = async (
 ): Promise<Weather | null> => {
     try {
         const { accuLoc, isPrecise } = await getCurrentLocation()
+        const usesMetricTemp = RNLocalize.getTemperatureUnit() === 'celsius'
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
-            `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=true&language=en-gb`,
+            `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=${usesMetricTemp}&language=en-gb`,
         )
         return makeWeatherObject(accuLoc, isPrecise, forecasts)
     } catch (error) {

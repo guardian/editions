@@ -3,9 +3,9 @@ import { StyleSheet, View, KeyboardAvoidingView } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { useInsets } from 'src/hooks/use-screen'
-import { CloseModalButton } from '../button/close-modal-button'
+import { CloseModalButton } from '../Button/CloseModalButton'
 import { TitlepieceText, UiBodyCopy } from '../styled-text'
-import { Spinner } from '../spinner'
+import { Spinner } from '../Spinner/Spinner'
 
 const loginHeaderStyles = StyleSheet.create({
     wrapper: {

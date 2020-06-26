@@ -10,19 +10,31 @@ describe('html', () => {
             ).toBe('caption')
         })
 
-        it('renders just the credit when the caption is undefined', () => {
-            expect(
-                renderCaption({
-                    credit: 'credit',
-                }),
-            ).toBe('credit')
-        })
-
-        it('renders both the caption and credit in that order when both are defined', () => {
+        it('renders just the caption when displayCredit is false', () => {
             expect(
                 renderCaption({
                     caption: 'caption',
                     credit: 'credit',
+                    displayCredit: false,
+                }),
+            ).toBe('caption')
+        })
+
+        it('renders just the caption when displayCredit is undefined', () => {
+            expect(
+                renderCaption({
+                    caption: 'caption',
+                    credit: 'credit',
+                }),
+            ).toBe('caption')
+        })
+
+        it('renders both the caption and credit in that order when both are defined and displayCredit is true', () => {
+            expect(
+                renderCaption({
+                    caption: 'caption',
+                    credit: 'credit',
+                    displayCredit: true,
                 }),
             ).toBe('caption credit')
         })

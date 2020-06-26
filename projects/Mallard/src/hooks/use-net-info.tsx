@@ -35,6 +35,7 @@ const QUERY = gql`
             type @client
             isConnected @client
             details @client
+            isPoorConnection @client
             isForcedOffline @client
             downloadBlocked @client
             setIsForcedOffline @client
@@ -57,6 +58,7 @@ export type NetInfo = CommonState & {
     type: NetInfoStateType
     isConnected: boolean
     details: unknown
+    isPoorConnection: boolean
     downloadBlocked: DownloadBlockedStatus
 }
 
@@ -79,6 +81,7 @@ const FORCED_OFFLINE_NETINFO: NetInfoState = {
     type: NetInfoStateType.none,
     isConnected: false,
     details: null,
+    isInternetReachable: false,
 }
 
 /**
@@ -91,12 +94,18 @@ const assembleNetInfo = (state: InternalState): NetInfo => {
     const netInfo = state.isForcedOffline
         ? FORCED_OFFLINE_NETINFO
         : state.netInfo
-    const { type, isConnected, details } = netInfo
+    const { type, isConnected, details, isInternetReachable } = netInfo
+    const isPoorConnection =
+        netInfo.type === 'cellular'
+            ? netInfo.details.cellularGeneration === '2g'
+            : false
+    const internetUnreachable = isInternetReachable === false
     return {
         __typename,
         type,
-        isConnected,
+        isConnected: isConnected && !internetUnreachable,
         details,
+        isPoorConnection,
         isForcedOffline: state.isForcedOffline,
         downloadBlocked: getDownloadBlockedStatus(
             netInfo,
@@ -220,6 +229,7 @@ const useNetInfo = (() => {
         type: NetInfoStateType.unknown,
         isConnected: false,
         details: null,
+        isPoorConnection: false,
         isForcedOffline: false,
         downloadBlocked: DownloadBlockedStatus.NotBlocked,
         setIsForcedOffline: () => {},

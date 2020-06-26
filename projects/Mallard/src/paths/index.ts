@@ -9,9 +9,10 @@ import {
     Image,
     ImageUse,
 } from 'src/common'
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFS from 'react-native-fs'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { imagePath } from '../../../Apps/common/src'
+import { getSetting } from 'src/helpers/settings'
 
 export interface PathToIssue {
     localIssueId: Issue['localId']
@@ -32,14 +33,20 @@ export const APIPaths = {
     image: imagePath,
 }
 
-const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
+const issuesDir = `${RNFS.DocumentDirectoryPath}/issues`
 
 const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
 const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`
+const editionDir = async () => {
+    const edition = await getSetting('edition')
+    return edition
+        ? `${issuesDir}/${edition}`
+        : `${issuesDir}/${defaultSettings.edition}`
+}
 
 export const FSPaths = {
     issuesDir,
-    contentPrefixDir: `${issuesDir}/${defaultSettings.contentPrefix}`,
+    editionDir,
     issueRoot,
     mediaRoot,
     image: (
@@ -53,4 +60,7 @@ export const FSPaths = {
     issue: (localIssueId: string) => `${issueRoot(localIssueId)}/issue`,
     front: (localIssueId: string, frontId: string) =>
         `${issueRoot(localIssueId)}/front/${frontId}`,
+    downloadRoot: `${issuesDir}/download`,
+    downloadIssueLocation: (localIssueId: string) =>
+        `${issuesDir}/download/${localIssueId}`,
 }

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Alert, StyleSheet, Text, Switch } from 'react-native'
+import { Alert, Text, Switch, Linking } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationRoute,
@@ -11,8 +11,6 @@ import { Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
-import { color } from 'src/theme/color'
-import { getFont } from 'src/theme/typography'
 import { DevZone } from './settings/dev-zone'
 import { isStaffMember } from 'src/authentication/helpers'
 import {
@@ -29,6 +27,8 @@ import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 import { NavigationScreenProp } from 'react-navigation'
+import { FullButton } from 'src/components/lists/FullButton'
+import { DualButton } from 'src/components/lists/DualButton'
 
 const MiscSettingsList = React.memo(
     (props: {
@@ -45,9 +45,11 @@ const MiscSettingsList = React.memo(
             {
                 key: 'isWeatherShown',
                 title: 'Display weather',
-                onPress: onChange,
                 proxy: (
                     <Switch
+                        accessible={true}
+                        accessibilityLabel="Display weather."
+                        accessibilityRole="switch"
                         value={props.isWeatherShown}
                         onValueChange={onChange}
                     />
@@ -55,7 +57,7 @@ const MiscSettingsList = React.memo(
             },
             {
                 key: 'manageEditions',
-                title: 'Manage editions',
+                title: 'Manage downloads',
                 onPress: () =>
                     props.navigation.navigate(
                         routeNames.ManageEditionsSettings,
@@ -76,18 +78,39 @@ const QUERY = gql`
     }
 `
 
+const SignInButton = ({
+    username,
+    navigation,
+    signOutIdentity,
+}: {
+    username?: string
+    navigation: NavigationScreenProp<NavigationRoute>
+    signOutIdentity: () => void
+}) =>
+    username ? (
+        <DualButton
+            textPrimary={username}
+            textSecondary="Sign out"
+            onPressPrimary={() =>
+                Linking.openURL(
+                    'https://manage.theguardian.com/account-settings',
+                ).catch(() => signOutIdentity())
+            }
+            onPressSecondary={() => signOutIdentity()}
+        />
+    ) : (
+        <FullButton
+            text="Sign in"
+            onPress={() => navigation.navigate(routeNames.SignIn)}
+        />
+    )
+
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const query = useQuery<QueryData>(QUERY)
     const identityData = useIdentity()
     const canAccess = useAccess()
     const [, setVersionClickedTimes] = useState(0)
     const { signOutIdentity } = useContext(AccessContext)
-    const styles = StyleSheet.create({
-        signOut: {
-            color: color.ui.supportBlue,
-            ...getFont('sans', 1),
-        },
-    })
 
     const versionNumber = DeviceInfo.getVersion()
 
@@ -127,27 +150,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const rightChevronIcon = <RightChevron />
 
     const signInListItems = [
-        ...(identityData
-            ? [
-                  {
-                      key: `Sign out`,
-                      title: identityData.userDetails.publicFields.displayName,
-                      onPress: async () => {
-                          await signOutIdentity()
-                      },
-                      proxy: <Text style={styles.signOut}>Sign out</Text>,
-                  },
-              ]
-            : [
-                  {
-                      key: `Sign in`,
-                      title: `Sign in`,
-                      onPress: () => {
-                          navigation.navigate(routeNames.SignIn)
-                      },
-                      proxy: rightChevronIcon,
-                  },
-              ]),
         ...(canAccess
             ? [
                   {
@@ -174,6 +176,15 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
+                <SignInButton
+                    navigation={navigation}
+                    username={
+                        identityData
+                            ? identityData.userDetails.primaryEmailAddress
+                            : undefined
+                    }
+                    signOutIdentity={signOutIdentity}
+                />
                 <List data={signInListItems} />
                 <Heading>{``}</Heading>
                 <MiscSettingsList

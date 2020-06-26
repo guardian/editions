@@ -102,6 +102,7 @@ describe('use-net-info', () => {
                 isForcedOffline: false,
                 setIsDevButtonShown: expect.any(Function),
                 setIsForcedOffline: expect.any(Function),
+                isPoorConnection: false,
             })
         })
 
@@ -122,6 +123,7 @@ describe('use-net-info', () => {
                 isForcedOffline: false,
                 setIsDevButtonShown: expect.any(Function),
                 setIsForcedOffline: expect.any(Function),
+                isPoorConnection: false,
             })
         })
 
@@ -169,6 +171,7 @@ describe('use-net-info', () => {
                 isForcedOffline: true,
                 setIsDevButtonShown: expect.any(Function),
                 setIsForcedOffline: expect.any(Function),
+                isPoorConnection: false,
             })
         })
     })

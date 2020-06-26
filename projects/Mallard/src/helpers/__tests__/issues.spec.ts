@@ -25,9 +25,10 @@ describe('helpers/issues', () => {
     })
 
     describe('todayAsKey', () => {
-        it('should return a key in the correct format for "todays" date', () => {
+        it('should return a key in the correct format for "todays" date', async () => {
             MockDate.set('2019-08-21')
-            expect(todayAsKey()).toEqual('daily-edition/2019-08-21')
+            const funcToTest = await todayAsKey()
+            expect(funcToTest).toEqual('daily-edition/2019-08-21')
         })
     })
 })

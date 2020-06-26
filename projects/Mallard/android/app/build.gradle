@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: "io.fabric"
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 import com.android.build.OutputFile
@@ -98,7 +99,8 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
-def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
+//For legacy reason we are adding current build number (14001358) from Play Store
+def appVersionCode = 14001358 + buildNumber()
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -137,8 +139,8 @@ android {
         applicationId "com.guardian.editions"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode vcode
-        versionName "1.0." + buildNumber()
+        versionCode appVersionCode
+        versionName appVersionName()
     }
     splits {
         abi {
@@ -158,6 +160,10 @@ android {
                 keyPassword EDITIONS_RELEASE_UPLOAD_KEY_PASSWORD
             }
         }
+    }
+
+    dexOptions {
+       javaMaxHeapSize "8g"
     }
 
     buildTypes {
@@ -197,13 +203,32 @@ def buildNumber() {
     return System.getenv("BUILD_NUMBER")?.toInteger() ?: 1
 }
 
+def appVersionName() {
+    def majorVersion = 2 // On updating this number make sure to update seedNumber in minAppVersion()
+    return majorVersion + "." + minorAppVersion() + "." + buildNumber()
+}
+
+def minorAppVersion() {
+    // Update the minor version after every 2nd build.
+    // Update seedNumber if major number changes that will be equal to the
+    // TeamCity build number (currently it is 7)
+    // The app version will increment like this:
+    // 2.0.7
+    // 2.0.8
+    // 2.1.9
+    def seedNumber = 7
+    int diff = (buildNumber() - seedNumber) / 2
+    return Math.max(0, diff)
+}
+
 dependencies {
     implementation project(':@sentry_react-native')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     // These should be auto linked. TODO: TEST THIS
-    implementation "com.google.firebase:firebase-core:17.0.1"
     implementation "com.google.firebase:firebase-messaging:19.0.1"
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     implementation project(":ophan")
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermes-engine/android/";

@@ -1,9 +1,12 @@
 import React, { useState, useContext } from 'react'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
+import { getErrorString } from 'src/authentication/services/apple'
+import { appleAuthWithDeepRedirect } from 'src/authentication/services/apple-oauth'
+import { appleNativeAuth } from 'src/authentication/services/apple'
 import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
-import { SignInFailedModalCard } from 'src/components/sign-in-failed-modal-card'
+import { SignInFailedModalCard } from 'src/components/SignInFailedModalCard'
 import { routeNames } from 'src/navigation/routes'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { Login } from './log-in'
@@ -87,6 +90,9 @@ const AuthSwitcherScreen = ({
                                                 routeNames.SignIn,
                                             )
                                         }
+                                        onFaqPress={() =>
+                                            navigation.navigate(routeNames.FAQ)
+                                        }
                                         close={close}
                                     />
                                 ))
@@ -97,14 +103,14 @@ const AuthSwitcherScreen = ({
                             }
                             navigation.goBack()
                         } else {
+                            attempt.reason && setError(attempt.reason)
                             // push this into the catch logic below
                             throw attempt.reason
                         }
                     } catch (e) {
+                        const appleErrorString = getErrorString(e)
+                        appleErrorString && setError(appleErrorString)
                         setIsLoading(false)
-                        setError(
-                            typeof e === 'string' ? e : 'Something went wrong',
-                        )
                     }
                 },
                 deny: async () => {
@@ -152,6 +158,28 @@ const AuthSwitcherScreen = ({
                         ),
                     { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
+            }
+            onAppleOAuthPress={() => {
+                handleAuthClick(
+                    () =>
+                        appleAuthWithDeepRedirect(validatorString).then(
+                            token => {
+                                return {
+                                    'apple-sign-in-token': token,
+                                }
+                            },
+                        ),
+                    {
+                        requiresFunctionalConsent: true,
+                        signInName: 'AppleOauth',
+                    },
+                )
+            }}
+            onApplePress={() =>
+                handleAuthClick(() => appleNativeAuth(validatorString), {
+                    requiresFunctionalConsent: true,
+                    signInName: 'Apple',
+                })
             }
             onSubmit={() =>
                 handleAuthClick(

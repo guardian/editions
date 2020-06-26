@@ -2,12 +2,12 @@ import { html, makeHtml } from 'src/helpers/webview'
 import {
     ArticlePillar,
     ArticleType,
+    HeaderType,
     BlockElement,
     CAPIArticle,
     ImageSize,
     Issue,
 } from '../../../common'
-import { ArticleTheme } from '../types/article'
 import { Header, ArticleHeaderProps } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
@@ -15,8 +15,9 @@ import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { GetImagePath } from 'src/hooks/use-image-paths'
-import { Image as TImage } from '../../../../../Apps/common/src'
+import { Image as TImage, Content } from '../../../../../Apps/common/src'
 import { getPillarColors } from 'src/helpers/transform'
+import { getLightboxImages } from '../types/article'
 
 interface ArticleContentProps {
     showMedia: boolean
@@ -24,6 +25,14 @@ interface ArticleContentProps {
     imageSize: ImageSize
     getImagePath: GetImagePath
 }
+
+export enum ArticleTheme {
+    Default = 'default',
+    Dark = 'dark',
+}
+
+const usesDarkTheme = (type: Content['type']) =>
+    ['picture', 'gallery'].includes(type)
 
 const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
     const path = getImagePath(image)
@@ -33,6 +42,7 @@ const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
             id: 'image',
             role: 'immersive',
         },
+        index: 0, // allows us to open lightbox
         path,
     })
 }
@@ -41,6 +51,7 @@ const renderArticleContent = (
     elements: BlockElement[],
     { showMedia, publishedId, getImagePath }: ArticleContentProps,
 ) => {
+    const imagePaths = getLightboxImages(elements).map(i => i.src.path)
     return elements
         .map(el => {
             switch (el.id) {
@@ -57,10 +68,12 @@ const renderArticleContent = (
                     return showMedia ? renderMediaAtom(el) : ''
                 case 'image': {
                     const path = getImagePath(el.src)
+                    const index = imagePaths.findIndex(e => e === el.src.path)
                     return publishedId
                         ? Image({
                               imageElement: el,
                               path,
+                              index,
                           })
                         : ''
                 }
@@ -88,7 +101,6 @@ export const renderArticle = (
         article,
         imageSize,
         type,
-        theme,
         getImagePath,
     }: {
         pillar: ArticlePillar
@@ -97,16 +109,17 @@ export const renderArticle = (
         type: ArticleType
         showWebHeader: boolean
         headerProps?: ArticleHeaderProps & { type: ArticleType }
-        theme: ArticleTheme
     } & ArticleContentProps,
 ) => {
     let content, header
+    const headerType = article.headerType || HeaderType.RegularByline
     const canBeShared = article.webUrl != null
     switch (article.type) {
         case 'picture':
             header = Header({
                 publishedId,
                 type: ArticleType.Gallery,
+                headerType: HeaderType.RegularByline,
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
@@ -122,9 +135,11 @@ export const renderArticle = (
             header = Header({
                 publishedId,
                 type: ArticleType.Gallery,
+                headerType: HeaderType.RegularByline,
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
+                standfirst: article.standfirst,
                 image: article.image,
                 showMedia,
                 canBeShared,
@@ -141,6 +156,7 @@ export const renderArticle = (
             header = Header({
                 ...article,
                 type,
+                headerType,
                 publishedId,
                 showMedia,
                 canBeShared,
@@ -154,6 +170,10 @@ export const renderArticle = (
             })
             break
     }
+
+    const theme: ArticleTheme = usesDarkTheme(article.type)
+        ? ArticleTheme.Dark
+        : ArticleTheme.Default
 
     const styles = makeCss(
         {

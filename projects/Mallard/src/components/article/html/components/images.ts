@@ -9,8 +9,12 @@ import { CssProps, themeColors } from '../helpers/css'
 export const renderCaption = ({
     caption,
     credit,
-}: Pick<ImageElement, 'caption' | 'credit'>) =>
-    [caption, credit].filter(s => !!s).join(' ')
+    displayCredit,
+}: Pick<ImageElement, 'caption' | 'credit' | 'displayCredit'>) => {
+    return displayCredit === true
+        ? [caption, credit].filter(s => !!s).join(' ')
+        : caption
+}
 
 const breakoutCaption = (role: ImageElement['role']) => css`
     .image[data-role='${role}'] figcaption {
@@ -58,7 +62,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
             position: relative;
         }
         .image figcaption svg path {
-            fill: ${colors.main};
+            fill: ${theme === 'dark' ? colors.bright : colors.main};
         }
 
         /* Tablet captions */
@@ -174,21 +178,31 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
 
 const ImageBase = ({
     path,
+    index,
     alt,
     caption,
     credit,
+    displayCredit,
     role,
 }: {
     path: string
+    index?: number
     alt?: string
     caption?: string
     credit?: string
+    displayCredit?: boolean
     role?: ImageElement['role']
 }) => {
-    const figcaption = renderCaption({ caption, credit })
+    const figcaption = renderCaption({ caption, credit, displayCredit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img src="${path}" alt="${alt}" />
+            <img
+                src="${path}"
+                onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
+                alt="${alt}"
+                id="img-${index}"
+            />
+
             ${figcaption &&
                 html`
                     <figcaption>
@@ -202,12 +216,14 @@ const ImageBase = ({
 const Image = ({
     imageElement,
     path,
+    index,
 }: {
     imageElement: ImageElement
     path: string | undefined
+    index?: number | undefined
 }) => {
     if (path) {
-        return ImageBase({ path, ...imageElement })
+        return ImageBase({ path, index, ...imageElement })
     }
     return null
 }

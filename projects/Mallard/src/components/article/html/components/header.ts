@@ -1,4 +1,4 @@
-import { ArticleType, Image as ImageT, Issue } from 'src/common'
+import { ArticleType, HeaderType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { GetImagePath } from 'src/hooks/use-image-paths'
 import { Breakpoints } from 'src/theme/breakpoints'
@@ -71,6 +71,10 @@ const outieHeader = (type: ArticleType) => css`
     ${outieKicker(type)}
 `
 
+const shareButtonColor = ({ colors, theme }: CssProps) => {
+    return theme === 'dark' ? color.palette.neutral[100] : colors.main
+}
+
 export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     /* prevent clicks on byline links */
@@ -78,7 +82,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         pointer-events: none;
     }
 
-    .header:after {
+    .header:after, .header-immersive-video:after {
         background-image: repeating-linear-gradient(
             to bottom,
             ${color.dimLine},
@@ -95,12 +99,12 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin: 0;
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header:after {
+        .header:after, .header-immersive-video:after {
             margin-right: ${px(metrics.article.sides * -1)};
         }
     }
     .header {
-        padding-top: ${px(metrics.vertical)};
+        padding-top: ${px(metrics.vertical / 2)};
     }
     .header-container-line-wrap,
     .header-container {
@@ -110,8 +114,17 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .header-container-line-wrap {
         z-index: 100;
-        ${breakSides}
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        margin: auto;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-container-line-wrap {
+            padding-left: ${px(metrics.article.sides)};
+            padding-right: ${px(metrics.article.sides)};
+        }
+    }
+            
+
     .header-bg {
         left: -50em;
         right: -50em;
@@ -120,26 +133,40 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         position: absolute;
         z-index: -1;
     }
-    .header-image {
-        height: 10%;
+    .header-image--wide {
+        max-width: ${px(metrics.article.maxWidth)};
+        margin: auto;
+    }
+
+    .header-image--standard > .rating, .sport-score {
+        position: absolute;
+        bottom:0;
+        left:0;
+    }
+
+    .header-image--wide > .rating, .sport-score {
+        position: absolute;
+        bottom:0;
+        left:0;
+    }
+    .header-image--immersive {
+        height: 65%;
         width: 100%;
         object-fit: cover;
         display: block;
         z-index: 99;
         position: relative;
-    }
-    .header-image > .rating, .sport-score {
-        position: absolute;
-        bottom:0;
-        left:0;
-    }
-    .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sides * -1)};
         width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-image--immersive {
+            height: 80%;
+        }
+    }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-image.header-image--immersive {
+        .header-image--immersive {
             padding-top: 140%;
         }
     }
@@ -153,7 +180,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
-    .header h1 {
+    .header h1, .header-immersive-video h1 {
         font-size: 30px;
         font-family: ${families.headline.regular};
         font-weight: 400;
@@ -175,9 +202,14 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         fill: ${colors.main};
     }
 
-    .header-standfirst {
+    .header-standfirst-color {
         font-weight: 600;
         color: ${colors.main};
+    }
+
+    .header-standfirst { 
+        font-weight: 600; 
+        color: ${color.palette.neutral[46]};
     }
 
     .header-byline {
@@ -201,7 +233,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         font-weight: 600;
         color: ${colors.main};
     }
-    
+
     .header-top-byline > a {
         font-style: normal !important;
         text-decoration: none;
@@ -223,16 +255,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
     }
 
-    .header-top p {
+    .header-top p, .header-immersive-video p {
         font-family: ${families.headline.medium};
         letter-spacing: 0.2px;
         line-height: 1.1875em;
         margin-bottom: 0.875em;
         font-size: 18px;
     }
-
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-top p {
+        .header-top p, .header-immersive-video p {
             font-size: 18px;
         }
     }
@@ -277,6 +308,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         overflow: visible;
         height: auto;
     }
+
     .image-as-bg__img {
         width: 100%;
         z-index: 0;
@@ -310,13 +342,19 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         background-color: ${colors.main};
         color: ${color.textOverDarkBackground};
         border:none;
-        width: ${metrics.fronts.sliderRadius * 2}px;
-        height: ${metrics.fronts.sliderRadius * 2}px;
+        width: ${metrics.fronts.circleButtonDiameter}px;
+        height: ${metrics.fronts.circleButtonDiameter}px;
         display: block;
         line-height: .9;
         text-align: center;
         font-size: 1.2em;
         border-radius: 100%;
+    }
+
+    button:focus {
+        outline: 0;
+        outline-style:none;
+        outline-width:0;
     }
 
     .share-touch-zone {
@@ -330,17 +368,17 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .share-button {
         display: flex;
-        width:  ${metrics.fronts.sliderRadius * 2}px;
-        height: ${metrics.fronts.sliderRadius * 2}px;
-        border: 1px solid ${colors.main};
-        color: ${colors.main};
+        width:  ${metrics.fronts.circleButtonDiameter}px;
+        height: ${metrics.fronts.circleButtonDiameter}px;
+        border: 1px solid ${shareButtonColor({ theme, colors })};;
+        color: ${shareButtonColor({ theme, colors })};
         border-radius: 100%;
         align-items: center;
         justify-content: center;
     }
     .share-icon {
         padding-bottom: .1em;
-        color: ${colors.main};
+        color: ${shareButtonColor({ theme, colors })};
     }
 
     .clearfix {
@@ -352,6 +390,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='review'] .header-bg {
+        background-color: ${colors.faded};
+    }
+    .header-image[data-type='review'] .header-bg {
         background-color: ${colors.faded};
     }
     .header-container[data-type='review'] h1 {
@@ -375,6 +416,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='opinion'] .header-bg {
         background-color: ${color.palette.opinion.faded};
     }
+    .header-image[data-type='opinion'] .header-bg {
+        background-color: ${color.palette.opinion.faded};
+    }
     .header-container[data-type='opinion'] .header-kicker {
         display: none;
     }
@@ -396,6 +440,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='analysis'] .header-bg {
+        background-color: ${color.palette.neutral[93]};
+    }
+    .header-image[data-type='analysis'] .header-bg {
         background-color: ${color.palette.neutral[93]};
     }
     .header-container[data-type='analysis'] .header-kicker {
@@ -438,12 +485,16 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='immersive'] .header-bg {
         background-color: ${color.palette.neutral[100]};
     }
+    .header-image[data-type='immersive'] .header-bg {
+        background-color: ${color.palette.neutral[100]};
+    }
     .header-container[data-type='immersive'] .header {
         background-color: ${color.palette.neutral[100]};
     }
     .header-container[data-type='immersive'] .header-kicker {
         display: none;
     }
+
     .header-container[data-type='immersive'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
         color: ${colors.dark};
@@ -458,6 +509,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
     .header-container[data-type='${ArticleType.Longread}'] .header-bg {
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-image[data-type='${ArticleType.Longread}'] .header-bg {
         background-color: ${color.palette.neutral[7]};
     }
     .header-container[data-type='${ArticleType.Longread}'] .header {
@@ -483,6 +537,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
     .header-container[data-type='${ArticleType.Obituary}'] .header-bg {
+        background-color: ${color.palette.neutral[20]};
+    }
+    .header-image[data-type='${ArticleType.Obituary}'] .header-bg {
         background-color: ${color.palette.neutral[20]};
     }
     .header-container[data-type='${ArticleType.Obituary}'] .header {
@@ -526,6 +583,8 @@ const Image = ({
 
 const MainMediaImage = ({
     image,
+    articleType,
+    isGallery,
     className,
     children,
     preserveRatio,
@@ -533,33 +592,43 @@ const MainMediaImage = ({
 }: {
     image: CreditedImage
     className?: string
+    articleType?: ArticleType
+    isGallery?: boolean
     children?: string
     preserveRatio?: boolean
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
-
     return html`
-        <div
-            class="image-as-bg ${className}"
-            data-preserve-ratio="${preserveRatio || 'false'}"
-            style="background-image: url(${path}); "
-            data-open="false"
-        >
-            ${preserveRatio &&
-                html`
-                    <img class="image-as-bg__img" src="${path}" aria-hidden />
-                `}
-            <button
-                aria-hidden
-                onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+        <div class="header-image" data-type="${articleType}">
+            <div
+                class="image-as-bg ${className}"
+                data-preserve-ratio="${preserveRatio || 'false'}"
+                style="background-image: url(${path}); "
+                ${!isGallery &&
+                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
+                data-open="false"
             >
-                
-            </button>
-            <div class="image-as-bg-info">
-                ${image.caption} ${!image.displayCredit ? '' : image.credit}
+                ${preserveRatio &&
+                    html`
+                        <img
+                            class="image-as-bg__img"
+                            src="${path}"
+                            aria-hidden
+                        />
+                    `}
+                <button
+                    aria-hidden
+                    onclick="event.stopPropagation(); this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+                >
+                    
+                </button>
+                <div class="image-as-bg-info">
+                    ${image.caption} ${!image.displayCredit ? '' : image.credit}
+                </div>
+                ${children}
+                <div class="header-bg"></div>
             </div>
-            ${children}
         </div>
     `
 }
@@ -570,31 +639,110 @@ const isImmersive = (type: ArticleType) =>
     type === ArticleType.Obituary ||
     type === ArticleType.Gallery
 
-const hasLargeByline = (type: ArticleType) =>
-    type === ArticleType.Opinion || type === ArticleType.Analysis
-
-const Header = ({
-    publishedId,
-    type,
-    getImagePath,
-    ...headerProps
-}: {
-    showMedia: boolean
-    publishedId: Issue['publishedId'] | null
-    type: ArticleType
-    canBeShared: boolean
-    getImagePath: GetImagePath
-} & ArticleHeaderProps) => {
-    const immersive = isImmersive(type)
-    const largeByline = hasLargeByline(type)
+const getStandFirst = (
+    articleHeaderType: HeaderType,
+    type: ArticleType,
+    headerProps: ArticleHeaderProps,
+    publishedId: Issue['publishedId'] | null,
+    getImagePath: GetImagePath,
+): string => {
     const cutout =
         type === ArticleType.Opinion &&
         headerProps.bylineImages &&
         headerProps.bylineImages.cutout
-    const shareButton = !headerProps.canBeShared
+    if (articleHeaderType === HeaderType.LargeByline) {
+        return html`
+            <section class="header-top">
+                <div class="${cutout && `header-opinion-flex`}">
+                    <h1>
+                        ${type === ArticleType.Opinion && Quotes()}
+                        <span class="header-top-headline"
+                            >${headerProps.headline}
+                        </span>
+                        <span class="header-top-byline"
+                            >${headerProps.bylineHtml}
+                        </span>
+                    </h1>
+                    ${publishedId &&
+                        cutout &&
+                        html`
+                            <div>
+                                ${Image({
+                                    image: cutout,
+                                    getImagePath,
+                                })}
+                            </div>
+                        `}
+                </div>
+            </section>
+        `
+    } else {
+        return html`
+            <section class="header-top">
+                <h1>
+                    ${headerProps.headline}
+                </h1>
+                ${articleHeaderType === HeaderType.RegularByline &&
+                    headerProps.standfirst &&
+                    `<p>
+                        ${headerProps.standfirst}
+                      </p>`}
+            </section>
+        `
+    }
+}
+
+const getHeaderClassForType = (headerType: HeaderType): string => {
+    switch (headerType) {
+        case HeaderType.NoByline:
+            return html`
+                header-byline header-standfirst
+            `
+        case HeaderType.LargeByline:
+            return html`
+                header-byline header-standfirst-color
+            `
+        case HeaderType.RegularByline:
+            return html`
+                header-byline header-byline-italic
+            `
+    }
+}
+
+const getByLineText = (
+    headerType: HeaderType,
+    headerProps: ArticleHeaderProps,
+): string | undefined => {
+    const byLineText =
+        headerType === HeaderType.NoByline ||
+        headerType === HeaderType.LargeByline
+            ? headerProps.standfirst
+            : headerProps.bylineHtml
+    return byLineText
+}
+
+const hasByLine = (
+    byLineText: string | undefined,
+    canBeShared: boolean,
+): boolean => {
+    if (byLineText || canBeShared) {
+        return true
+    }
+    return false
+}
+
+const getByLine = (
+    headerType: HeaderType,
+    canBeShared: boolean,
+    headerProps: ArticleHeaderProps,
+): string => {
+    const headerClass = getHeaderClassForType(headerType)
+    const bylineText = getByLineText(headerType, headerProps)
+    const shareButton = !canBeShared
         ? ''
         : html`
               <button
+                  name="Share button"
                   class="share-touch-zone"
                   onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
               >
@@ -605,36 +753,92 @@ const Header = ({
                   </div>
               </button>
           `
+    return html`
+        <aside class="${headerClass}">
+            ${shareButton}
+            <span style="pointer-events: none">${bylineText}</span>
+            <div class="clearfix"></div>
+        </aside>
+    `
+}
 
+const Header = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    const immersive = isImmersive(type)
+    const isGallery = type === ArticleType.Gallery
+    const byLineText = getByLineText(headerType, headerProps)
+    const displayWideImage =
+        type === ArticleType.Article || type === ArticleType.Review
     return html`
         ${immersive &&
             headerProps.image &&
             publishedId &&
             MainMediaImage({
                 image: headerProps.image,
-                className: 'header-image header-image--immersive',
+                isGallery: isGallery,
+                className: 'header-image--immersive',
+                getImagePath,
+            })}
+        ${!immersive &&
+            displayWideImage &&
+            headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                articleType: type,
+                className: 'header-image--wide',
+                image: headerProps.image,
+                isGallery: isGallery,
+                preserveRatio: true,
+                children: headerProps.starRating
+                    ? Rating(headerProps)
+                    : headerProps.sportScore
+                    ? SportScore({
+                          sportScore: headerProps.sportScore,
+                      })
+                    : undefined,
                 getImagePath,
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
-                <header class="header">
-                    ${!immersive &&
-                        headerProps.image &&
-                        publishedId &&
-                        MainMediaImage({
-                            className: 'header-image',
-                            image: headerProps.image,
-                            preserveRatio: true,
-                            children: headerProps.starRating
-                                ? Rating(headerProps)
-                                : headerProps.sportScore
-                                ? SportScore({
-                                      sportScore: headerProps.sportScore,
-                                  })
-                                : undefined,
-                            getImagePath,
-                        })}
+                ${!immersive &&
+                    !displayWideImage &&
+                    headerProps.image &&
+                    publishedId &&
+                    MainMediaImage({
+                        articleType: type,
+                        className: 'header-image--standard',
+                        image: headerProps.image,
+                        isGallery: isGallery,
+                        preserveRatio: true,
+                        children: headerProps.starRating
+                            ? Rating(headerProps)
+                            : headerProps.sportScore
+                            ? SportScore({
+                                  sportScore: headerProps.sportScore,
+                              })
+                            : undefined,
+                        getImagePath,
+                    })}
+                <header
+                    class=${immersive &&
+                    headerProps.mainMedia &&
+                    headerProps.showMedia
+                        ? 'header-immersive-video'
+                        : 'header'}
+                >
                     ${headerProps.mainMedia &&
                         (headerProps.showMedia
                             ? renderMediaAtom(headerProps.mainMedia)
@@ -645,60 +849,20 @@ const Header = ({
                                 >${headerProps.kicker}</span
                             >
                         `}
-                    ${largeByline
-                        ? html`
-                              <section class="header-top">
-                                  <div
-                                      class="${cutout && `header-opinion-flex`}"
-                                  >
-                                      <h1>
-                                          ${type === ArticleType.Opinion &&
-                                              Quotes()}
-                                          <span class="header-top-headline"
-                                              >${headerProps.headline}</span
-                                          >
-                                          <span class="header-top-byline"
-                                              >${headerProps.bylineHtml}</span
-                                          >
-                                      </h1>
-                                      ${publishedId &&
-                                          cutout &&
-                                          html`
-                                              <div>
-                                                  ${Image({
-                                                      image: cutout,
-                                                      getImagePath,
-                                                  })}
-                                              </div>
-                                          `}
-                                  </div>
-                              </section>
-                          `
-                        : html`
-                              <section class="header-top">
-                                  <h1>
-                                      ${headerProps.headline}
-                                  </h1>
-                                  <p>${headerProps.standfirst}</p>
-                              </section>
-                          `}
+                    ${getStandFirst(
+                        headerType,
+                        type,
+                        headerProps,
+                        publishedId,
+                        getImagePath,
+                    )}
                 </header>
-
-                ${largeByline
-                    ? html`
-                          <aside class="header-byline header-standfirst">
-                              ${shareButton}
-                              <span>${headerProps.standfirst}</span>
-                              <div class="clearfix"></div>
-                          </aside>
-                      `
-                    : html`
-                          <aside class="header-byline header-byline-italic">
-                              ${shareButton}
-                              <span>${headerProps.bylineHtml}</span>
-                              <div class="clearfix"></div>
-                          </aside>
-                      `}
+                ${hasByLine(byLineText, headerProps.canBeShared) &&
+                    getByLine(
+                        headerType,
+                        headerProps.canBeShared,
+                        headerProps as ArticleHeaderProps,
+                    )}
                 <div class="header-bg"></div>
             </div>
         </div>

@@ -4,6 +4,7 @@ export const routeNames = {
     IssueList: 'IssueList',
     Settings: 'Settings',
     Endpoints: 'Endpoints',
+    Edition: 'Edition',
     GdprConsent: 'GdprConsent',
     PrivacyPolicy: 'PrivacyPolicy',
     TermsAndConditions: 'TermsAndConditions',
@@ -17,10 +18,13 @@ export const routeNames = {
     SignIn: 'SignIn',
     CasSignIn: 'CasSignIn',
     WeatherGeolocationConsent: 'WeatherGeolocationConsent',
+    Lightbox: 'Lightbox',
     onboarding: {
         OnboardingStart: 'OnboardingStart',
         OnboardingConsent: 'OnboardingConsent',
         OnboardingConsentInline: 'OnboardingConsentInline',
         PrivacyPolicyInline: 'PrivacyPolicyInline',
     },
+    Storybook: 'Storybook',
+    EditionsMenu: 'EditionsMenu',
 }

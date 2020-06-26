@@ -5,11 +5,10 @@ import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
-import { CasExpiry } from 'src/services/content-auth-service'
+import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { ReceiptIOS } from 'src/authentication/services/iap'
-import { PushNotificationRegistration } from 'src/helpers/push-notifications'
+import { PushNotificationRegistration } from 'src/push-notifications/push-notifications'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
-
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
@@ -48,14 +47,16 @@ const legacyCASPasswordCache = createSettingsCacheIOS<string>(
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
  * between AsyncStorage and the keychain helper below
  */
-const createAsyncCache = <T extends object | string>(key: string) => ({
+const createAsyncCache = <T extends object | string | boolean | number>(
+    key: string,
+) => ({
     set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
     get: (): Promise<T | null> =>
         AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
     reset: (): Promise<void> => AsyncStorage.removeItem(key),
 })
 
-const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
+const casDataCache = createAsyncCache<CASExpiry>('cas-data-cache')
 
 const userDataCache = createAsyncCache<IdentityAuthData>('user-data-cache')
 
@@ -66,6 +67,14 @@ const pushNotificationRegistrationCache = createAsyncCache<
 >('push-notification-registration-cache')
 
 const cacheClearCache = createAsyncCache<string>('cacheClear')
+
+const validAttemptCache = createAsyncCache<number>('validAttempt-cache')
+
+const loggingQueueCache = createAsyncCache<string>('loggingQueue')
+
+const lightboxSettingCache = createAsyncCache<boolean>('lightbox-enabled')
+
+const enableEditionMenuCache = createAsyncCache<boolean>('edition-menu-enabled')
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -126,4 +135,8 @@ export {
     legacyCASPasswordCache,
     iapReceiptCache,
     cacheClearCache,
+    validAttemptCache,
+    loggingQueueCache,
+    lightboxSettingCache,
+    enableEditionMenuCache,
 }

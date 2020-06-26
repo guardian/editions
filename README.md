@@ -10,7 +10,7 @@ Once nvm is installed run `nvm use`.
 
 Run `make install`, this will install the dependencies for all sub-projects.
 
-You will need `frontend` and `cmsFronts` credentials loaded.
+You will need `frontend` and `cmsFronts` credentials loaded. (NOTE: At present, if you have [default] credentials set in ~/.aws/credentials) the app won't build - best to delete these before continuing)
 
 ## App setup
 
@@ -63,6 +63,12 @@ This contains `common` which is the code shared between app and backends and `cr
 ### backend, archiver and aws
 
 These are deployed using [riffraff](https://riffraff.gutools.co.uk) as `editions`.
+
+## Uploading iOS internal beta to testflight
+
+1. Create a GitHub personal access token (you will need to select the "repo" scope)
+2. Set your personal access token as an environment variable: export GITHUB_TOKEN="secret".
+3. Execute `editions/script/upload-build.sh` to upload a build from master
 
 ## Complete Process Flow
 

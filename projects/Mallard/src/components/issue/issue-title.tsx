@@ -6,12 +6,14 @@ import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 
 const splitStyles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         width: '100%',
+        alignSelf: 'flex-end',
     },
     inner: {
         flexDirection: 'row',
@@ -23,6 +25,7 @@ const GridRowSplit = ({
     children,
     proxy,
     style,
+    restrictWidth,
 }: {
     children: ReactNode
     proxy?: ReactNode
@@ -38,9 +41,16 @@ const GridRowSplit = ({
             | 'height'
         >
     >
+    restrictWidth?: boolean
 }) => {
-    const Inner = ({ width }: { width: number }) => (
-        <View style={[splitStyles.container, style]}>
+    const Inner = ({
+        width,
+        innerStyle,
+    }: {
+        width: number
+        innerStyle?: ViewStyle
+    }) => (
+        <View style={[splitStyles.container, style, innerStyle]}>
             {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
             <View style={[splitStyles.inner, { width }]}>{children}</View>
         </View>
@@ -53,7 +63,11 @@ const GridRowSplit = ({
                     <Inner width={metrics.gridRowSplit.narrow(width)} />
                 ),
                 [Breakpoints.tabletVertical]: () => (
-                    <Inner width={metrics.gridRowSplit.wide} />
+                    <Inner
+                        width={metrics.gridRowSplit.wide}
+                        // -iOS12 and Android style to make the menu look palatable
+                        innerStyle={restrictWidth ? { maxWidth: 360 } : {}}
+                    />
                 ),
             }}
         </WithBreakpoints>
@@ -77,6 +91,7 @@ export interface IssueTitleProps {
     title: string
     subtitle?: string
     style?: StyleProp<ViewStyle>
+    overwriteStyles?: SpecialEditionHeaderStyles
 }
 
 const appearances: {
@@ -105,17 +120,34 @@ const IssueTitle = React.memo(
         title,
         subtitle,
         appearance = IssueTitleAppearance.default,
+        overwriteStyles,
         style,
     }: IssueTitleProps & { appearance?: IssueTitleAppearance }) => (
         <View style={style}>
             <IssueTitleText
-                style={[styles.text, appearances[appearance].title]}
+                style={[
+                    styles.text,
+                    appearances[appearance].title,
+                    overwriteStyles && overwriteStyles.textColorPrimary
+                        ? {
+                              color: overwriteStyles.textColorPrimary,
+                          }
+                        : {},
+                ]}
             >
                 {title}
             </IssueTitleText>
             {!!subtitle && (
                 <IssueTitleText
-                    style={[styles.text, appearances[appearance].subtitle]}
+                    style={[
+                        styles.text,
+                        appearances[appearance].subtitle,
+                        overwriteStyles && overwriteStyles.textColorSecondary
+                            ? {
+                                  color: overwriteStyles.textColorSecondary,
+                              }
+                            : {},
+                    ]}
                 >
                     {subtitle}
                 </IssueTitleText>

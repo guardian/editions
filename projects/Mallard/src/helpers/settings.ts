@@ -6,8 +6,12 @@ import { defaultSettings } from './settings/defaults'
  *
  * v1 - The initial version that CMP was released with
  * v2 - Move Braze from ESSENTIAL to PERSONALISED_ADS
+ * v3 - Add Logging to PERFORMANCE
+ * v4 - Add Apple in FUNCTIONALITY
+ * v5 - Add Firebase in ESSENTIAL
+ * v6 - Add Crashlytics in PERFORMANCE, update wording in ESSENTIAL
  */
-export const CURRENT_CONSENT_VERSION = 2
+export const CURRENT_CONSENT_VERSION = 6
 
 export interface GdprDefaultSettings {
     gdprAllowEssential: boolean
@@ -22,6 +26,8 @@ export interface GdprSwitchSettings {
     gdprAllowFunctionality: GdprSwitchSetting
 }
 
+export const SETTINGS_KEY_PREFIX = '@Setting_'
+
 export const gdprAllowEssentialKey = 'gdprAllowEssential'
 export const gdprAllowPerformanceKey = 'gdprAllowPerformance'
 export const gdprAllowFunctionalityKey = 'gdprAllowFunctionality'
@@ -32,6 +38,7 @@ export type GDPRBucketKeys =
     | 'gdprAllowEssential'
     | 'gdprAllowPerformance'
     | 'gdprAllowFunctionality'
+    | 'gdprConsentVersion'
 type GDPRBucket = { [K in GDPRBucketKeys]: (keyof GdprSettings)[] }
 
 export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
@@ -43,6 +50,7 @@ export const GdprBuckets: GDPRBucket = {
     gdprAllowEssential: ['gdprAllowOphan'],
     gdprAllowPerformance: ['gdprAllowSentry'],
     gdprAllowFunctionality: ['gdprAllowGoogleLogin', 'gdprAllowFacebookLogin'],
+    gdprConsentVersion: ['gdprConsentVersion'],
 }
 
 export interface GdprSettings {
@@ -58,17 +66,18 @@ export interface GdprSettings {
 
 export interface DevSettings {
     apiUrl: string
+    edition: string
     isUsingProdDevtools: boolean
     notificationServiceRegister: string
     cacheClearUrl: string
     deprecationWarningUrl: string
-    contentPrefix: string
     storeDetails: {
         ios: string
         android: string
     }
     issuesPath: string
     senderId: string
+    logging: string
 }
 
 interface UserSettings {
@@ -106,7 +115,7 @@ const unsanitize = (value: string): UnsanitizedSetting => {
 export const getSetting = <S extends keyof Settings>(
     setting: S,
 ): Promise<Settings[S]> =>
-    AsyncStorage.getItem('@Setting_' + setting).then(item => {
+    AsyncStorage.getItem(SETTINGS_KEY_PREFIX + setting).then(item => {
         if (!item) {
             return defaultSettings[setting]
         }
@@ -116,7 +125,7 @@ export const getSetting = <S extends keyof Settings>(
 export const storeSetting = (
     setting: keyof Settings,
     value: UnsanitizedSetting,
-) => AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
+) => AsyncStorage.setItem(SETTINGS_KEY_PREFIX + setting, sanitize(value))
 
 export type GdprSwitch = keyof GdprSwitchSettings
 

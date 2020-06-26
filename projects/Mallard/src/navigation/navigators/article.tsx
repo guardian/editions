@@ -8,9 +8,12 @@ import {
     NavigationTransitionProps,
 } from 'react-navigation'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
-import { supportsTransparentCards } from 'src/helpers/features'
+import {
+    supportsTransparentCards,
+    supportsAnimation,
+} from 'src/helpers/features'
 import { getScreenPositionOfItem } from 'src/navigation/navigators/article/positions'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-config-provider'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from '../../components/layout/slide-card/index'
@@ -81,6 +84,7 @@ const styles = StyleSheet.create({
     },
     basicCard: { backgroundColor: color.background, overflow: 'hidden' },
 })
+
 const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
@@ -195,9 +199,10 @@ const createArticleNavigator = (
             front,
             () => animatedValue,
         ),
-        [routeNames.Article]: supportsTransparentCards()
-            ? wrapInSlideCard(article, () => animatedValue)
-            : wrapInBasicCard(article, () => new Animated.Value(1)),
+        [routeNames.Article]:
+            !supportsAnimation() || !supportsTransparentCards()
+                ? wrapInBasicCard(article, () => new Animated.Value(1))
+                : wrapInSlideCard(article, () => animatedValue),
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
@@ -211,13 +216,24 @@ const createArticleNavigator = (
         }
     }
 
+    if (!supportsAnimation()) {
+        return createStackNavigator(navigation, {
+            initialRouteName: routeNames.Issue,
+            defaultNavigationOptions: {
+                gesturesEnabled: false,
+            },
+            headerMode: 'none',
+            mode: 'modal',
+        })
+    }
+
     return createStackNavigator(navigation, {
         initialRouteName: routeNames.Issue,
         defaultNavigationOptions: {
             gesturesEnabled: false,
         },
         headerMode: 'none',
-        ...(supportsTransparentCards()
+        ...(supportsTransparentCards() && supportsAnimation()
             ? {
                   mode: 'modal',
                   transparentCard: true,

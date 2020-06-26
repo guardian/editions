@@ -4,7 +4,6 @@ import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { Article, PictureArticle, GalleryArticle, ImageSize } from 'src/common'
 import { renderArticle } from '../../html/article'
-import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
@@ -12,6 +11,7 @@ import { useQuery } from 'src/hooks/apollo'
 import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`
@@ -26,7 +26,6 @@ const WebviewWithArticle = ({
     path,
     type,
     _ref,
-    theme,
     topPadding,
     origin,
     ...webViewProps
@@ -34,7 +33,6 @@ const WebviewWithArticle = ({
     article: Article | PictureArticle | GalleryArticle
     path: PathToArticle
     type: ArticleType
-    theme: ArticleTheme
     _ref?: (ref: WebView) => void
     topPadding: number
     origin: IssueOrigin
@@ -52,6 +50,8 @@ const WebviewWithArticle = ({
 
     // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()
+
+    const largeDeviceMemory = useLargeDeviceMemory()
 
     const res = useQuery<QueryValue>(QUERY)
     // Hold off rendering until we have all the necessary data.
@@ -78,7 +78,6 @@ const WebviewWithArticle = ({
         article,
         type,
         imageSize,
-        theme,
         showWebHeader: true,
         showMedia: isConnected,
         publishedId: publishedIssueId || null,
@@ -89,6 +88,7 @@ const WebviewWithArticle = ({
     return (
         <WebView
             {...webViewProps}
+            bounces={largeDeviceMemory ? true : false}
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{

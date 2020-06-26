@@ -8,6 +8,7 @@ import {
     Connectivity,
     hasRun,
 } from './Attempt'
+import { Feature, loggingService, Level } from 'src/services/logging'
 
 type UpdateHandler<S> = (attempt: AnyAttempt<S>) => void
 
@@ -19,15 +20,22 @@ type AuthName<I extends {}> = {
     [K in keyof I]: I[K] extends Authorizer<infer S, any, any, any> ? S : never
 }[keyof I]
 
+const ONE_MONTH = 30 * 1000 * 60 * 60 * 24
+
 class AccessController<I extends AuthMap, S extends AuthName<I>> {
+    private validAttemptCache: AsyncCache<number>
     private attempt: AnyAttempt<S> = NotRun
     private fetchingConnectivities: Set<Connectivity> = new Set()
     private subscribers: UpdateHandler<S>[] = []
 
-    constructor(readonly authorizerMap: I) {
+    constructor(
+        readonly authorizerMap: I,
+        validAttemptCache: AsyncCache<number>,
+    ) {
         this.authorizers.forEach(auth =>
             auth.subscribe(this.reconcileAttempts.bind(this)),
         )
+        this.validAttemptCache = validAttemptCache
     }
 
     public subscribe(fn: UpdateHandler<S>) {
@@ -54,14 +62,43 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
-    public handleConnectionStatusChanged(isConnected: boolean) {
+    /**
+     * to avoid re-authorising the user more than needed we will use a cached
+     * auth result if a valid attempt has been made within the last month
+     */
+    private async isPreviousAuthValid() {
+        const cachedValidAttempt = await this.validAttemptCache.get()
+        return cachedValidAttempt && Date.now() - cachedValidAttempt < ONE_MONTH
+    }
+
+    private logReAuthentication = (expectedConnection: string) => {
+        const feature = Feature.SIGN_IN
+        loggingService.log({
+            level: Level.INFO,
+            message: `Previous cached auth expired - re-authenticating user`,
+            optionalFields: { expectedConnection, feature },
+        })
+    }
+
+    public async handleConnectionStatusChanged(
+        isConnected: boolean,
+        isPoorConnection = false,
+    ) {
+        const hasConnection = isConnected && !isPoorConnection
+        const isPreviousAuthValid = await this.isPreviousAuthValid()
+        if (isPreviousAuthValid) {
+            return this.runCachedAuth('offline')
+        }
         if (!this.hasAuthRun) {
-            if (isConnected) {
+            if (hasConnection) {
+                this.logReAuthentication('online')
                 return this.runCachedAuth('online')
             } else {
+                this.logReAuthentication('offline')
                 return this.runCachedAuth('offline')
             }
-        } else if (!this.isAuthOnline && isConnected) {
+        } else if (!this.isAuthOnline && hasConnection) {
+            this.logReAuthentication('online')
             return this.runCachedAuth('online')
         }
     }
@@ -99,6 +136,18 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
             if (isValid(attempt)) {
                 break
             }
+        }
+        // when we get a valid attempt we want to store this (only for new valid attempts)
+        const isPreviousAuthValid = await this.isPreviousAuthValid()
+        if (isValid(attempt) && !isPreviousAuthValid) {
+            const feature = Feature.SIGN_IN
+            loggingService.log({
+                level: Level.INFO,
+                message:
+                    'Updating authentication cache with valid attempt date',
+                optionalFields: { feature },
+            })
+            this.validAttemptCache.set(attempt.time)
         }
         this.updateAttempt(attempt)
     }

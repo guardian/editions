@@ -11,6 +11,11 @@ export type WebViewPing =
     | {
           type: 'share'
       }
+    | {
+          type: 'openLightbox'
+          index: number
+          isMainImage: string
+      }
 
 /*
 this tricks vs code into thinking
@@ -50,9 +55,10 @@ export const getScaledFontCss = <F extends FontFamily>(
     level: FontSizes<F>,
 ) => {
     const font = getScaledFont(family, level)
+    const adjustment = Platform.OS == 'android' ? 2 : 0
     return css`
-        font-size: ${px(font.fontSize)};
-        line-height: ${px(font.lineHeight)};
+        font-size: ${px(font.fontSize + adjustment)};
+        line-height: ${px(font.lineHeight + adjustment)};
     `
 }
 
@@ -72,7 +78,7 @@ export const generateAssetsFontCss = ({
     extension?: string
 }) => {
     const fileName = Platform.select({
-        ios: `file:///assets/fonts/${fontFamily}.${extension}`,
+        ios: `${fontFamily}.${extension}`,
         android: `file:///android_asset/fonts/${fontFamily}.${extension}`,
     })
 

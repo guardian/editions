@@ -5,6 +5,7 @@ exports[`Quote should display a Quote icon in SVG 1`] = `
   bbHeight={21}
   bbWidth={37}
   fill="none"
+  focusable={false}
   height={21}
   style={
     Array [
@@ -25,7 +26,9 @@ exports[`Quote should display a Quote icon in SVG 1`] = `
           },
         ],
       },
-      null,
+      Object {
+        "opacity": 1,
+      },
       Object {
         "flex": 0,
         "height": 21,

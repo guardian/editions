@@ -9,12 +9,13 @@ import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 import gql from 'graphql-tag'
-import { Button, ButtonAppearance } from './button/button'
+import { Button, ButtonAppearance } from './Button/Button'
 import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
 import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
+import DeviceInfo from 'react-native-device-info'
 
 type Weather = {
     locationName: string
@@ -37,8 +38,8 @@ export const WEATHER_QUERY = gql`
 
 const narrowSpace = String.fromCharCode(8201)
 
-export const WEATHER_HEIGHT = 78
-export const EMPTY_WEATHER_HEIGHT = 16
+export const WEATHER_HEIGHT = DeviceInfo.isTablet() ? 45 : 65
+export const EMPTY_WEATHER_HEIGHT = 8
 
 const styles = StyleSheet.create({
     shownWeather: {
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row-reverse',
         width: 'auto',
-        marginBottom: 24,
+        marginBottom: 5,
     },
     forecastItem: {
         borderStyle: 'solid',
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
         borderLeftColor: color.line,
     },
     forecastItemNarrow: {
-        height: 64,
+        height: WEATHER_HEIGHT - 1,
         width: 45,
         paddingTop: 2,
         paddingLeft: 4,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: metrics.horizontal * 0.5,
         paddingRight: metrics.horizontal,
-        paddingVertical: metrics.vertical,
+        paddingVertical: metrics.vertical / 2,
     },
     forecastText: {
         display: 'flex',
@@ -216,6 +217,9 @@ const SetLocationButton = withNavigation(
 
         return (
             <Button
+                accessibilityLabel="Use location button"
+                accessibilityHint="Double tap to open a device location consent screen"
+                accessibilityRole="button"
                 onPress={onSetLocation}
                 appearance={ButtonAppearance.skeleton}
                 style={[

@@ -1,7 +1,7 @@
 import React, { ReactNode, FunctionComponent } from 'react'
 import { ScaledSize } from 'react-native'
 import { getClosestBreakpoint, BreakpointList } from 'src/theme/breakpoints'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-config-provider'
 
 const WithBreakpoints: FunctionComponent<{
     children: BreakpointList<(d: ScaledSize) => ReactNode>

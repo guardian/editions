@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ItemSeperator should display a default ItemSeperator with correct styling used for RegionButton seperation 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#121212",
+      "height": 1,
+    }
+  }
+/>
+`;

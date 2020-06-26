@@ -1,14 +1,7 @@
-import React, { useState } from 'react'
-import {
-    Image,
-    ImageProps,
-    ImageStyle,
-    StyleProp,
-    View,
-    PixelRatio,
-} from 'react-native'
+import React from 'react'
+import { Image, ImageProps, ImageStyle, StyleProp, View } from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
-import { useImagePath, useScaledImage } from 'src/hooks/use-image-paths'
+import { useImagePath } from 'src/hooks/use-image-paths'
 import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
 
 /**
@@ -17,68 +10,37 @@ import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
  * Bascially it will try to go to the filesystem and if it fails will
  * go to the API
  *
- * This had been implemented using RNFetchBlob.fs.exists, but it's just as slow
- * as this implementation for API calls and seems slower for cache hits
  */
 type ImageResourceProps = {
     image: IImage
     use: ImageUse
     style?: StyleProp<ImageStyle>
     setAspectRatio?: boolean
+    devUri?: string
 } & Omit<ImageProps, 'source'>
-
-const ScaledImageResource = ({
-    imagePath,
-    style,
-    width,
-    ...props
-}: {
-    width: number
-    imagePath: string
-    style?: StyleProp<ImageStyle>
-}) => {
-    const uri = useScaledImage(imagePath, width)
-    return (
-        <Image
-            resizeMethod={'resize'}
-            {...props}
-            style={style}
-            source={{ uri }}
-        />
-    )
-}
 
 const ImageResource = ({
     image,
     style,
     setAspectRatio = false,
     use,
+    devUri,
     ...props
 }: ImageResourceProps) => {
-    const [width, setWidth] = useState<number | null>(null)
     const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
 
-    return width && imagePath ? (
-        <ScaledImageResource
-            key={imagePath} // an attempt to fix https://github.com/facebook/react-native/issues/9195
-            width={width}
-            imagePath={imagePath}
-            style={styles}
+    return imagePath || devUri ? (
+        <Image
+            key={imagePath}
+            resizeMethod={'resize'}
             {...props}
-        ></ScaledImageResource>
+            style={[styles, style]}
+            source={{ uri: devUri || imagePath }}
+        />
     ) : (
-        <View
-            style={styles}
-            onLayout={ev => {
-                setWidth(
-                    PixelRatio.getPixelSizeForLayoutSize(
-                        ev.nativeEvent.layout.width,
-                    ),
-                )
-            }}
-        ></View>
+        <View style={styles}></View>
     )
 }
 

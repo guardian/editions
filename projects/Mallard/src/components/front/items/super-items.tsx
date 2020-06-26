@@ -1,11 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { BylineCutout } from './helpers/opinion'
-import Quote from 'src/components/icons/Quote'
+import { Quote } from 'src/components/icons/Quote'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
-import { getItemRectanglePerc, toPercentage } from '../helpers/helpers'
 import {
     ItemTappable,
     PropTypes,
@@ -17,20 +16,13 @@ import { metrics } from 'src/theme/spacing'
 import { useIsOpinionCard } from './helpers/types'
 import { PageLayoutSizes } from '../../../common'
 import { TrailImageView } from './trail-image-view'
+import { getImageHeight } from './helpers/sizes'
 
 /*
 SUPERHERO IMAGE ITEM
 Text below image. To use in news & sport supers
 */
 const superHeroImageStyles = StyleSheet.create({
-    image: {
-        height: toPercentage(
-            getItemRectanglePerc(
-                { width: 2, height: 4, top: 0, left: 0 },
-                PageLayoutSizes.mobile,
-            ).height,
-        ),
-    },
     textBlock: {
         ...tappablePadding,
     },
@@ -48,7 +40,7 @@ const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             <TrailImageView
                 article={article}
-                style={superHeroImageStyles.image}
+                style={{ height: getImageHeight(size) }}
             />
             <TextBlock
                 byline={article.byline}
@@ -83,7 +75,7 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             <TrailImageView
                 article={article}
-                style={superHeroImageStyles.image}
+                style={{ height: getImageHeight(size) }}
             />
             <TextBlock
                 byline={article.byline}
@@ -125,20 +117,23 @@ const opinionStyles = StyleSheet.create({
         height: '66.66666%',
     },
     titleText: {
-        ...getFont('headline', 1.5, 'light'),
+        ...getFont('headline', 2.5, 'light'),
         paddingTop: metrics.vertical / 2,
         color: color.text,
     },
     trailText: {
-        ...getFont('headline', 0.75, 'light'),
+        ...getFont('headline', 1.25, 'light'),
         color: color.textOverDarkBackground,
+    },
+    trailTextMobile: {
+        ...getFont('headline', 1, 'light'),
     },
     trailTextPadding: {
         paddingRight: '40%',
     },
     bylineText: {
-        ...getFont('headline', 1.5),
-        fontFamily: getFont('titlepiece', 1.5).fontFamily,
+        ...getFont('headline', 2.5),
+        fontFamily: getFont('titlepiece', 2).fontFamily,
         color: color.textOverDarkBackground,
     },
     cutout: {
@@ -196,6 +191,8 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                 <Text
                     style={[
                         opinionStyles.trailText,
+                        tappableProps.size.layout === PageLayoutSizes.mobile &&
+                            opinionStyles.trailTextMobile,
                         article.bylineImages &&
                             article.bylineImages.cutout &&
                             opinionStyles.trailTextPadding,

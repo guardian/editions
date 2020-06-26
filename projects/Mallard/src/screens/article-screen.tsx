@@ -6,7 +6,7 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { getAppearancePillar } from 'src/hooks/use-article'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-config-provider'
 import {
     ArticleNavigationProps,
     getArticleNavigationProps,
@@ -133,11 +133,11 @@ const ArticleScreenWithProps = ({
                 ref={r => {
                     if (r) viewRef.current = r
                 }}
-                removeClippedSubviews
             >
                 {prefersFullScreen ? (
                     <>
                         <ArticleScreenBody
+                            navigation={navigation}
                             path={path}
                             width={width}
                             pillar={pillar}
@@ -148,6 +148,7 @@ const ArticleScreenWithProps = ({
                     </>
                 ) : (
                     <ArticleSlider
+                        navigation={navigation}
                         path={path}
                         articleNavigator={articleNavigator}
                     />

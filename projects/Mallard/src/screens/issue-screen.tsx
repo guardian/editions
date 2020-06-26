@@ -1,77 +1,73 @@
+import gql from 'graphql-tag'
 import React, {
+    MutableRefObject,
     ReactElement,
+    useEffect,
     useMemo,
     useRef,
-    useEffect,
-    MutableRefObject,
 } from 'react'
 import {
-    Animated,
-    Image,
     FlatList,
+    Image,
     StyleProp,
     StyleSheet,
     View,
     ViewStyle,
 } from 'react-native'
-import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
-import { Button } from 'src/components/button/button'
+import { ReloadButton } from 'src/components/Button/ReloadButton'
 import { Front } from 'src/components/front'
-import { IssueTitle } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { Header } from 'src/components/layout/header/header'
 import { Container } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
-import { ReloadButton } from 'src/components/reloadButton'
-import { Spinner } from 'src/components/spinner'
+import { Spinner } from 'src/components/Spinner/Spinner'
 import {
-    WeatherWidget,
-    WeatherQueryData,
-    WEATHER_QUERY as FULL_WEATHER_QUERY,
     EMPTY_WEATHER_HEIGHT,
-    WEATHER_HEIGHT,
     getValidWeatherData,
+    WeatherQueryData,
+    WeatherWidget,
+    WEATHER_HEIGHT,
+    WEATHER_QUERY as FULL_WEATHER_QUERY,
 } from 'src/components/weather'
-import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { useIssueDate } from 'src/helpers/issues'
+import {
+    FlatCard,
+    flattenCollectionsToCards,
+    flattenFlatCardsToFront,
+} from 'src/helpers/transform'
 import {
     CONNECTION_FAILED_AUTO_RETRY,
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
+import { useQuery } from 'src/hooks/apollo'
+import {
+    useDimensions,
+    useLargeDeviceMemory,
+} from 'src/hooks/use-config-provider'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import {
     issueSummaryToLatestPath,
     useIssueSummary,
 } from 'src/hooks/use-issue-summary'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useNavPositionChange } from 'src/hooks/use-nav-position'
 import { useIsPreview } from 'src/hooks/use-settings'
-import { navigateToIssueList } from 'src/navigation/helpers/base'
-import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 import { PathToIssue } from 'src/paths'
+import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
-import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
-import { IssueWithFronts, Front as TFront } from '../../../Apps/common/src'
-import {
-    flattenCollectionsToCards,
-    flattenFlatCardsToFront,
-    FlatCard,
-} from 'src/helpers/transform'
+import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
-import { useNavPositionChange } from 'src/hooks/use-nav-position'
+import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
+import { ScreenHeader } from '../components/ScreenHeader/ScreenHeader'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
-        height: 16,
+        height: EMPTY_WEATHER_HEIGHT,
     },
     illustrationImage: {
         width: '100%',
@@ -100,51 +96,6 @@ const useIsWeatherActuallyShown = () => {
     )
     return getValidWeatherData(weatherResult) != null
 }
-
-const ScreenHeader = withNavigation(
-    ({
-        issue,
-        navigation,
-    }: { issue?: IssueWithFronts } & NavigationInjectedProps) => {
-        const position = useNavigatorPosition()
-        const { date, weekday } = useIssueDate(issue)
-
-        const goToIssueList = () => {
-            navigateToIssueList(navigation)
-        }
-
-        return (
-            <Header
-                accessibilityHint="More issues"
-                onPress={() => {
-                    goToIssueList()
-                }}
-                action={
-                    <Button
-                        icon={'\uE04A'}
-                        alt="More issues"
-                        onPress={() => {
-                            goToIssueList()
-                        }}
-                    />
-                }
-            >
-                <Animated.View
-                    style={
-                        supportsTransparentCards() && {
-                            opacity: position.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [1, 0],
-                            }),
-                        }
-                    }
-                >
-                    <IssueTitle title={weekday} subtitle={date} />
-                </Animated.View>
-            </Header>
-        )
-    },
-)
 
 type FrontWithCards = (TFront & { cards: FlatCard[] })[]
 
@@ -274,6 +225,12 @@ const IssueFronts = ({
 
     useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref)
     const isWeatherActuallyShown = useIsWeatherActuallyShown()
+    const largeDeviceMemory = useLargeDeviceMemory()
+    const flatListOptimisationProps = !largeDeviceMemory && {
+        initialNumToRender: 2,
+        windowSize: 1,
+        maxToRenderPerBatch: 1,
+    }
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
@@ -283,9 +240,7 @@ const IssueFronts = ({
             ListHeaderComponent={ListHeaderComponent}
             // These three props are responsible for the majority of
             // performance improvements
-            initialNumToRender={2}
-            windowSize={2}
-            maxToRenderPerBatch={2}
+            {...flatListOptimisationProps}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
             ListFooterComponent={() => (
@@ -301,9 +256,9 @@ const IssueFronts = ({
                 </>
             )}
             getItemLayout={(_: any, index: number) => ({
-                length: card.height + metrics.fronts.sliderRadius * 2,
+                length: card.height + SLIDER_FRONT_HEIGHT,
                 offset:
-                    (card.height + metrics.fronts.sliderRadius * 2) * index +
+                    (card.height + SLIDER_FRONT_HEIGHT) * index +
                     (isWeatherActuallyShown
                         ? WEATHER_HEIGHT
                         : EMPTY_WEATHER_HEIGHT),

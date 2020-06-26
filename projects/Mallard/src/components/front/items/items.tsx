@@ -104,6 +104,7 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     image={cardImage}
                     setAspectRatio
                     use="full-size"
+                    accessibilityLabel={article.headline}
                 />
             </View>
             <HeadlineCardText style={[splashImageStyles.hidden]}>

@@ -6,7 +6,7 @@ import React, {
     useMemo,
     Dispatch,
 } from 'react'
-import { View, FlatList, StyleSheet } from 'react-native'
+import { View, FlatList, StyleSheet, Platform } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
@@ -14,7 +14,7 @@ import {
     NavigationRoute,
 } from 'react-navigation'
 import { IssueSummary } from 'src/common'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import {
     IssueRow,
     ISSUE_ROW_HEADER_HEIGHT,
@@ -25,7 +25,7 @@ import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { IssuePickerHeader } from 'src/components/layout/header/header'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { Spinner } from 'src/components/spinner'
+import { Spinner } from 'src/components/Spinner/Spinner'
 import {
     CONNECTION_FAILED_AUTO_RETRY,
     CONNECTION_FAILED_ERROR,
@@ -77,10 +77,20 @@ const HomeScreenHeader = withNavigation(
         onSettings: () => void
     } & NavigationInjectedProps) => {
         const action = (
-            <Button icon={'\uE04F'} alt="Return to issue" onPress={onReturn} />
+            <Button
+                accessibilityLabel="Close button"
+                accessibilityHint="Returns to the edition"
+                accessibilityRole="button"
+                icon={'\uE04F'}
+                alt="Return to edition"
+                onPress={onReturn}
+            />
         )
         const settings = (
             <Button
+                accessibilityLabel="Settings button"
+                accessibilityHint="Navigates to the settings screen"
+                accessibilityRole="button"
                 icon={'\uE040'}
                 alt="Settings"
                 onPress={() => {
@@ -92,7 +102,6 @@ const HomeScreenHeader = withNavigation(
         return (
             <IssuePickerHeader
                 leftAction={settings}
-                accessibilityHint={'Return to issue'}
                 onPress={onReturn}
                 action={action}
             />
@@ -120,19 +129,29 @@ const IssueRowContainer = React.memo(
         const setNavPosition = useSetNavPosition()
 
         const navToIssue = useCallback(
-            (initialFrontKey: string | null) =>
-                navigateToIssue({
-                    navigation,
-                    navigationProps: {
-                        path: {
-                            localIssueId: localId,
-                            publishedIssueId: publishedId,
+            (initialFrontKey: string | null) => {
+                // Are we within the same edition? If so no need to navigate
+                if (
+                    issueId &&
+                    issueId.localIssueId === localId &&
+                    issueId.publishedIssueId === publishedId
+                ) {
+                    navigation.goBack()
+                } else {
+                    navigateToIssue({
+                        navigation,
+                        navigationProps: {
+                            path: {
+                                localIssueId: localId,
+                                publishedIssueId: publishedId,
+                            },
+                            initialFrontKey,
                         },
-                        initialFrontKey,
-                    },
-                    setIssueId,
-                }),
-            [navigation, setIssueId, localId, publishedId],
+                        setIssueId,
+                    })
+                }
+            },
+            [navigation, setIssueId, localId, publishedId, issueId],
         )
 
         const onPress = useCallback(() => {
@@ -195,6 +214,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
         <View style={styles.issueListFooter}>
             <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
+                    accessibilityLabel="Manage downloads button"
+                    accessibilityHint="Navigates to the manage downloads screen"
                     appearance={ButtonAppearance.skeleton}
                     onPress={() => {
                         navigation.navigate({
@@ -202,12 +223,14 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                         })
                     }}
                 >
-                    Manage editions
+                    Manage downloads
                 </Button>
             </GridRowSplit>
             {isUsingProdDevtools ? (
                 <GridRowSplit>
                     <Button
+                        accessibilityLabel="Go to the latest edition button"
+                        accessibilityHint="Navigates to the latest edition"
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
                             navigateToIssue({
@@ -403,7 +426,11 @@ const IssueListFetchContainer = () => {
     const data = useIssueSummary()
     const issueSummary = data.issueSummary || NO_ISSUES
     const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID)
-    const [isShown, setIsShown] = useState(false)
+    const [isShown, setIsShown] = useState(
+        // on iOS there is bug that causes wrong rendering of the scroll bar
+        // if this is enabled. See below description of this mechanism.
+        Platform.select({ android: false, default: true }),
+    )
 
     useEffect(() => {
         // Adding a tiny delay before doing full rendering means that the

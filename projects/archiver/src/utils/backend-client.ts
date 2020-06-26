@@ -8,6 +8,7 @@ import {
     ImageSize,
     imagePath,
     ImageUse,
+    EditionsList,
 } from '../../common'
 import {
     attempt,
@@ -42,7 +43,6 @@ export const getFront = async (
             maybeFront,
             `Failed to download front ${front} from ${publishedId}`,
         )
-    console.log(`got front: ${JSON.stringify(maybeFront)}`)
     return maybeFront
 }
 
@@ -61,5 +61,26 @@ export const getImageUse = async (
 
     if (hasFailed(maybeResponse)) return [path, maybeResponse]
 
-    return [path, await maybeResponse.buffer()]
+    // Throw away query string before storing the image so that the client
+    // doesn't need to care about it.
+    const pathWithoutQueryString = path.split('?')[0]
+
+    return [pathWithoutQueryString, await maybeResponse.buffer()]
+}
+
+export const getEditions = async (): Promise<Attempt<EditionsList>> => {
+    const path = `${URL}editions`
+    console.log(`Attempt to get editions list from path: ${path}`)
+    const response = await fetch(path)
+    const maybeEditionsList = await attempt(response.json() as Promise<
+        EditionsList
+    >)
+    console.log(`Got response: ${JSON.stringify(maybeEditionsList)}`)
+    if (hasFailed(maybeEditionsList)) {
+        return withFailureMessage(
+            maybeEditionsList,
+            `Failed to download editions list from ${path}`,
+        )
+    }
+    return maybeEditionsList
 }

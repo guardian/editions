@@ -1,30 +1,40 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import React, { useContext, ReactNode, useState, useEffect } from 'react'
+import gql from 'graphql-tag'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Alert, Clipboard, View } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
+import { Switch } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
+import { AccessContext } from 'src/authentication/AccessContext'
+import { isValid } from 'src/authentication/lib/Attempt'
+import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
+import { Button } from 'src/components/Button/Button'
 import { Footer, Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { routeNames } from 'src/navigation/routes'
-import { Button } from 'src/components/button/button'
-import { metrics } from 'src/theme/spacing'
-import { useToast } from 'src/hooks/use-toast'
-import { isInTestFlight, isInBeta } from 'src/helpers/release-stream'
-import { FSPaths } from 'src/paths'
-import { AccessContext } from 'src/authentication/AccessContext'
-import { isValid } from 'src/authentication/lib/Attempt'
-import DeviceInfo from 'react-native-device-info'
+import { getFileList } from 'src/helpers/files'
+import { locale } from 'src/helpers/locale'
+import { isInBeta, isInTestFlight } from 'src/helpers/release-stream'
+import { imageForScreenSize } from 'src/helpers/screen'
+import {
+    fetchLightboxSetting,
+    setlightboxSetting,
+} from 'src/helpers/settings/debug'
 import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
-import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
-import { getFileList } from 'src/helpers/files'
-import { deleteIssueFiles } from 'src/helpers/files'
-import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
-import { Switch } from 'react-native-gesture-handler'
+import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
 import { useNetInfo } from 'src/hooks/use-net-info'
+import { useToast } from 'src/hooks/use-toast'
+import { routeNames } from 'src/navigation/routes'
+import { FSPaths } from 'src/paths'
+import {
+    clearPushTracking,
+    getPushTracking,
+} from 'src/push-notifications/push-tracking'
+import { metrics } from 'src/theme/spacing'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -51,6 +61,10 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         isDevButtonShown: showNetInfoButton,
         setIsDevButtonShown: setShowNetInfoButton,
     } = useNetInfo()
+    const {
+        editionsMenuEnabled,
+        toggleEditionsMenuEnabled,
+    } = useEditionsMenuEnabled()
     const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
 
     const { attempt, signOutCAS } = useContext(AccessContext)
@@ -58,6 +72,8 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
+    const [imageSize, setImageSize] = useState('fetching...')
+    const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const buildNumber = DeviceInfo.getBuildNumber()
 
     useEffect(() => {
@@ -72,13 +88,31 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         })
     }, [])
 
+    useEffect(() => {
+        imageForScreenSize().then(
+            imageSize => imageSize && setImageSize(imageSize),
+        )
+    }, [])
+
+    useEffect(() => {
+        fetchLightboxSetting().then(lightboxEnabled =>
+            setLightboxEnabled(lightboxEnabled),
+        )
+    }, [])
+
+    const onToggleLightbox = () => {
+        setLightboxEnabled(!lightboxEnabled)
+        setlightboxSetting(!lightboxEnabled)
+    }
+
     const query = useQuery<{ [key: string]: unknown }>(
         gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
     )
     if (query.loading) return null
     const { data, client } = query
-    const { apiUrl } = data
-    if (typeof apiUrl !== 'string') throw new Error('expected string')
+    const { apiUrl, edition } = data
+    if (typeof apiUrl !== 'string' || typeof edition !== 'string')
+        throw new Error('expected string')
 
     return (
         <>
@@ -89,6 +123,22 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </UiBodyCopy>
             </Footer>
             <ButtonList>
+                <Button
+                    onPress={() => {
+                        navigation.navigate(routeNames.Storybook)
+                    }}
+                >
+                    Storybook
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigation.navigate(
+                            routeNames.onboarding.OnboardingConsent,
+                        )
+                    }}
+                >
+                    Show Startup Consent
+                </Button>
                 <Button
                     onPress={() => {
                         // go back to the main to simulate a fresh app
@@ -166,6 +216,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         },
                     },
                     {
+                        key: 'Editions',
+                        title: 'Editions',
+                        explainer: edition,
+                        onPress: () => {
+                            navigation.navigate(routeNames.Edition)
+                        },
+                    },
+                    {
                         key: 'Hide this menu',
                         title: 'Hide this menu',
                         explainer: 'Tap the version 7 times to bring it back',
@@ -184,6 +242,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         explainer: buildNumber,
                     },
                     {
+                        key: 'Locale',
+                        title: 'Device locale',
+                        explainer: locale,
+                    },
+                    {
                         key: 'Reports as in test flight',
                         title: 'Reports as in test flight',
                         explainer: isInTestFlight().toString(),
@@ -198,6 +261,28 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         },
                     },
                     {
+                        key: 'Enable lightbox',
+                        title: 'Enable lightbox',
+                        onPress: () => {},
+                        proxy: (
+                            <Switch
+                                value={lightboxEnabled}
+                                onValueChange={onToggleLightbox}
+                            />
+                        ),
+                    },
+                    {
+                        key: 'Enable edition menu',
+                        title: 'Enable edition menu',
+                        onPress: () => {},
+                        proxy: (
+                            <Switch
+                                value={editionsMenuEnabled}
+                                onValueChange={toggleEditionsMenuEnabled}
+                            />
+                        ),
+                    },
+                    {
                         key: 'Display NetInfo Button',
                         title: 'Display NetInfo Button',
                         onPress: onToggleNetInfoButton,
@@ -207,6 +292,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                                 onValueChange={onToggleNetInfoButton}
                             />
                         ),
+                    },
+                    {
+                        key: 'Image Size used for Editions',
+                        title: 'Image Size used for Editions',
+                        explainer: imageSize,
                     },
                     {
                         key: 'Files in Issues',

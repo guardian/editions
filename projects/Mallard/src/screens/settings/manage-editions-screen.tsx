@@ -4,7 +4,6 @@ import React from 'react'
 import { Alert, Switch, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
-import { deleteIssueFiles } from 'src/helpers/files'
 import {
     setMaxAvailableEditions,
     setWifiOnlyDownloads,
@@ -13,6 +12,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { MANAGE_EDITIONS_TITLE } from 'src/helpers/words'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
 const buttonStyles = StyleSheet.create({
     background: {
@@ -81,7 +81,7 @@ const AvailableEditionsButtons = ({
                 selected={isSelected(number)}
                 onPress={() => onPress(number)}
             >
-                {`${number} days`}
+                {`${number} editions`}
             </MultiButton>
         ))}
     </View>
@@ -109,6 +109,9 @@ const ManageEditionsScreen = () => {
                                       'Editions will only be downloaded when wi-fi is available',
                                   proxy: (
                                       <Switch
+                                          accessible={true}
+                                          accessibilityLabel="Wifi-only."
+                                          accessibilityRole="switch"
                                           value={data.wifiOnlyDownloads}
                                           onValueChange={val => {
                                               setWifiOnlyDownloads(client, val)
@@ -126,7 +129,7 @@ const ManageEditionsScreen = () => {
                               },
                               {
                                   key: 'Available editions',
-                                  title: 'Available editions',
+                                  title: 'Available downloads',
                                   explainer: (
                                       <AvailableEditionsButtons
                                           numbers={[7, 14, 30]}

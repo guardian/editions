@@ -1,11 +1,11 @@
 import React from 'react'
 import { StyleProp, StyleSheet, View } from 'react-native'
 import { CAPIArticle, ImageUse } from 'src/common'
-import { Stars } from 'src/components/stars/stars'
+import { Stars } from 'src/components/Stars/Stars'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { ImageResource } from '../image-resource'
-import { SportScore } from 'src/components/sportscore/sportscore'
+import { SportScore } from 'src/components/SportScore/SportScore'
 import { ArticleType } from '../../../../../Apps/common/src'
 
 const trailImageViewStyles = StyleSheet.create({
@@ -62,10 +62,7 @@ export const TrailImageView = ({
                     image={image}
                     use={use}
                 />
-                <Stars
-                    style={trailImageViewStyles.rating}
-                    rating={starRating}
-                />
+                <Stars position="bottomLeft" rating={starRating} />
             </View>
         )
     } else if (sportScore) {
@@ -76,10 +73,7 @@ export const TrailImageView = ({
                     image={image}
                     use={use}
                 />
-                <SportScore
-                    style={trailImageViewStyles.rating}
-                    sportScore={sportScore}
-                />
+                <SportScore type="trailImage" sportScore={sportScore} />
             </View>
         )
     } else {

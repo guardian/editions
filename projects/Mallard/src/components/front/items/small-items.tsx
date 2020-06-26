@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native'
 import { ItemTappable, PropTypes } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
 import { SuperHeroImageItem } from './super-items'
-import { Stars } from 'src/components/stars/stars'
-import { SportScore } from 'src/components/sportscore/sportscore'
+import { Stars } from 'src/components/Stars/Stars'
+import { SportScore } from 'src/components/SportScore/SportScore'
 import { View } from 'react-native'
 import { CAPIArticle } from 'src/common'
 
@@ -22,10 +22,7 @@ const StarsWrapper = ({ article }: { article: CAPIArticle }) => {
     if (article.type != 'article' || article.starRating == null) return null
     return (
         <View style={styles.starsAndSportScoreWrapper}>
-            <Stars
-                style={styles.starsAndSportScore}
-                rating={article.starRating}
-            />
+            <Stars position="inline" rating={article.starRating} />
         </View>
     )
 }
@@ -34,10 +31,7 @@ const SportsWrapper = ({ article }: { article: CAPIArticle }) => {
     if (article.type != 'article' || article.sportScore == null) return null
     return (
         <View style={styles.starsAndSportScoreWrapper}>
-            <SportScore
-                style={styles.starsAndSportScore}
-                sportScore={article.sportScore}
-            />
+            <SportScore type="smallItems" sportScore={article.sportScore} />
         </View>
     )
 }
