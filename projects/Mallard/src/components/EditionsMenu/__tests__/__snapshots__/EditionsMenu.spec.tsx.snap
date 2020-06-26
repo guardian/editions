@@ -347,19 +347,19 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
           Object {
             "edition": "daily-edition",
             "subTitle": "Published every morning
-By 6am (GMT)",
+by 6am (GMT)",
             "title": "The Daily",
           },
           Object {
             "edition": "australian-edition",
             "subTitle": "Published every Saturday morning 
-By 6am (AEST)",
+by 6am (AEST)",
             "title": "Australia Weekend",
           },
           Object {
             "edition": "american-edition",
             "subTitle": "Published every Saturday morning 
-By 6am (EST)",
+by 6am (EST)",
             "title": "US Weekend",
           },
         ]
@@ -444,7 +444,7 @@ By 6am (EST)",
               }
             >
               Published every morning
-By 6am (GMT)
+by 6am (GMT)
             </Text>
           </View>
           <View
@@ -512,7 +512,7 @@ By 6am (GMT)
               }
             >
               Published every Saturday morning 
-By 6am (AEST)
+by 6am (AEST)
             </Text>
           </View>
           <View
@@ -580,7 +580,7 @@ By 6am (AEST)
               }
             >
               Published every Saturday morning 
-By 6am (EST)
+by 6am (EST)
             </Text>
           </View>
         </View>
@@ -839,19 +839,19 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
           Object {
             "edition": "daily-edition",
             "subTitle": "Published every morning
-By 6am (GMT)",
+by 6am (GMT)",
             "title": "The Daily",
           },
           Object {
             "edition": "australian-edition",
             "subTitle": "Published every Saturday morning 
-By 6am (AEST)",
+by 6am (AEST)",
             "title": "Australia Weekend",
           },
           Object {
             "edition": "american-edition",
             "subTitle": "Published every Saturday morning 
-By 6am (EST)",
+by 6am (EST)",
             "title": "US Weekend",
           },
         ]
@@ -936,7 +936,7 @@ By 6am (EST)",
               }
             >
               Published every morning
-By 6am (GMT)
+by 6am (GMT)
             </Text>
           </View>
           <View
@@ -1004,7 +1004,7 @@ By 6am (GMT)
               }
             >
               Published every Saturday morning 
-By 6am (AEST)
+by 6am (AEST)
             </Text>
           </View>
           <View
@@ -1072,7 +1072,7 @@ By 6am (AEST)
               }
             >
               Published every Saturday morning 
-By 6am (EST)
+by 6am (EST)
             </Text>
           </View>
         </View>
