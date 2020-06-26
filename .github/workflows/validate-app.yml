@@ -19,9 +19,6 @@ jobs:
 
             - name: install mallard
               run: make install
-              outputs:
-                  BUILD_NUMBER:
-                      description: 'The testflight build number'
 
             - name: validate Mallard project
               run: |
