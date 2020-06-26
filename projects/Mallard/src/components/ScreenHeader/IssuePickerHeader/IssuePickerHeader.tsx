@@ -1,11 +1,17 @@
 import React from 'react'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
+import { SpecialEditionHeaderStyles } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { navigateToSettings } from 'src/navigation/helpers/base'
 import { ScreenHeader } from '../ScreenHeader'
 
 const IssuePickerHeader = withNavigation(
-    ({ navigation }: NavigationInjectedProps) => {
+    ({
+        headerStyles,
+        navigation,
+    }: {
+        headerStyles?: SpecialEditionHeaderStyles
+    } & NavigationInjectedProps) => {
         const action = (
             <Button
                 accessibilityLabel="Close button"
@@ -36,6 +42,7 @@ const IssuePickerHeader = withNavigation(
                 rightAction={action}
                 title="Recent"
                 subTitle="Editions"
+                headerStyles={headerStyles}
             />
         )
     },

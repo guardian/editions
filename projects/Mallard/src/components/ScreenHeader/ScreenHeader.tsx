@@ -1,7 +1,6 @@
 import React from 'react'
-import { withNavigation } from 'react-navigation'
+import { SpecialEditionHeaderStyles } from 'src/common'
 import { Header } from 'src/components/layout/header/header'
-import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 import { IssueTitle } from '../issue/issue-title'
 
 export const ScreenHeader = ({
