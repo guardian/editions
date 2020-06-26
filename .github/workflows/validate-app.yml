@@ -19,6 +19,14 @@ jobs:
 
             - name: install mallard
               run: make install
+              outputs:
+                  BUILD_NUMBER:
+                      description: 'The testflight build number'
+
+            - name: validate Mallard project
+              run: |
+                  cd script
+                  node make-release.js ${{ github.sha }} ${{ github.ref }} ${{steps.install_mallard.outputs.BUILD_NUMBER }} ios
 
             - name: validate Mallard project
               run: make PROJECT=Mallard validate
