@@ -23,7 +23,7 @@ const styles = (selected: boolean) =>
         subTitle: {
             fontFamily: families.sans.regular,
             fontSize: 15,
-            lineHeight: 16,
+            lineHeight: 18,
             color: selected ? 'white' : color.text,
         },
     })
