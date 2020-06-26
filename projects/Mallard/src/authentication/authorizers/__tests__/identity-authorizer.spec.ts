@@ -1,10 +1,6 @@
 import { getUserName, detectAuthType } from '../IdentityAuthorizer'
 import { locale } from 'src/helpers/locale'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 describe('IdentityAuthorizer', () => {
     describe('getUserName', () => {
         it('returns correct usernames for valid params', () => {

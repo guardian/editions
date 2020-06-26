@@ -4,10 +4,6 @@ jest.mock('react-native-fs', () => ({
     DocumentDirectoryPath: 'path/to/base/directory',
 }))
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 describe('paths', () => {
     describe('FSPaths', () => {
         it('should give correct issues directory', () => {

@@ -1,9 +1,5 @@
 import { AsyncQueue } from '../async-queue-cache'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 jest.mock('src/services/errors', () => ({
     captureException: jest.fn(),
 }))

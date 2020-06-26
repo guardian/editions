@@ -12,10 +12,6 @@ const getperf = async () =>
 const getfunc = async () =>
     await AsyncStorage.getItem(SETTINGS_KEY_PREFIX + gdprAllowFunctionalityKey)
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 describe('gdpr-consent', () => {
     describe('setConsent', () => {
         it('should set consent values in AsyncStorage', async () => {
