@@ -20,10 +20,10 @@ jobs:
             - name: install mallard
               run: make install
 
-            - name: validate Mallard project
+            - name: publish release to github
               run: |
                   cd script
-                  node make-release.js ${{ github.sha }} ${{ github.ref }} ${{steps.install_mallard.outputs.BUILD_NUMBER }} ios
+                  node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.install_mallard.outputs.BUILD_NUMBER }} ios
 
             - name: validate Mallard project
               run: make PROJECT=Mallard validate

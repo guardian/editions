@@ -6,7 +6,7 @@ const tagNameFromSha = sha => sha.slice(0, 8)
 
 const headers = {
     'Content-Type': 'application/json',
-    Authorization: `token ${process.env.GITHUB_TOKEN}`,
+    Authorization: `token ${process.env.REPO_GITHUB_TOKEN}`,
 }
 
 const doFetch = async (url, params) => {
