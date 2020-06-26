@@ -29,8 +29,8 @@ jobs:
               env:
                  REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
 
-            - name: validate Mallard project
-              run: make PROJECT=Mallard validate
+            # - name: validate Mallard project
+            #   run: make PROJECT=Mallard validate
 
-            - name: test Mallard project
-              run: make PROJECT=Mallard test
+            # - name: test Mallard project
+            #   run: make PROJECT=Mallard test

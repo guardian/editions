@@ -106,10 +106,11 @@ const params = {
 }
 
 if (process.argv.length - 2 < Object.keys(params).length) {
+    console.error('Invalid arguments to release script')
     console.log(
         `Usage: node ${process.argv[1]} <${Object.keys(params).join('> <')}>`,
     )
-    process.exit()
+    process.exit(1)
 } else {
     updateRelease(
         process.argv[params.sha],
