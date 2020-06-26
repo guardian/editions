@@ -269,7 +269,8 @@ export interface IssuePublicationIdentifier extends IssueIdentifier {
     version: string
 }
 
-export interface IssuePublicationActionIdentifier extends IssuePublicationIdentifier {
+export interface IssuePublicationActionIdentifier
+    extends IssuePublicationIdentifier {
     action: string
 }
 
