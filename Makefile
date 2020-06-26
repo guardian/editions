@@ -11,7 +11,7 @@ projects/%/node_modules: projects/%/yarn.lock
 	@echo "\n👟 Installing $*\n"
 	@echo "::set-output name=buildnumber::1"
 	@echo "new echo in make "
-	cd $(dir $@) && ${YARN} ${YARNFLAGS}
+	# cd $(dir $@) && ${YARN} ${YARNFLAGS}
 node_modules: yarn.lock
 	@echo "\n👟 Installing project tools\n"
 	${YARN} ${YARNFLAGS}

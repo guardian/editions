@@ -18,7 +18,7 @@ jobs:
                   node-version: '10.15'
 
             - name: install mallard
-              run: make install-backend
+              run: make install
 
             - name: publish release to github
               run: |
