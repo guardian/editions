@@ -1,4 +1,8 @@
-import { Attempt, failure, IssuePublicationActionIdentifier } from '../../common'
+import {
+    Attempt,
+    failure,
+    IssuePublicationActionIdentifier,
+} from '../../common'
 import { GetS3ObjParams } from '../utils/s3'
 import { Record } from '.'
 

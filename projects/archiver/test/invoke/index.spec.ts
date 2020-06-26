@@ -43,7 +43,7 @@ describe('state machine invoker', () => {
         const actual = await internalHandler(recordsInput, testDependencies)
 
         const issueExpected = {
-            action: "proof",
+            action: 'proof',
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',

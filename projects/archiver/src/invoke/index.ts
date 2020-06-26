@@ -94,11 +94,15 @@ export const internalHandler = async (
 
     const runs = await Promise.all(
         issues.map(issuePublication => {
-            if (issuePublication.action === "proof")
-                return dependencies.proofStateMachineInvoke(issuePublication as IssuePublicationIdentifier)
+            if (issuePublication.action === 'proof')
+                return dependencies.proofStateMachineInvoke(
+                    issuePublication as IssuePublicationIdentifier,
+                )
             else
-                return dependencies.publishStateMachineInvoke(issuePublication as IssuePublicationIdentifier);
-        })
+                return dependencies.publishStateMachineInvoke(
+                    issuePublication as IssuePublicationIdentifier,
+                )
+        }),
     )
 
     const succesfulInvocations = runs

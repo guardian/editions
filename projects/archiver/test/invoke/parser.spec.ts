@@ -9,7 +9,7 @@ describe('parseRecord', () => {
         const actual = parseRecordInternal(obejctsContents)
 
         expect(actual).toStrictEqual({
-            action: "proof",
+            action: 'proof',
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
@@ -23,7 +23,7 @@ describe('parseRecord', () => {
         const actual = parseRecordInternal(obejctsContents)
 
         expect(actual).toStrictEqual({
-            action: "proof",
+            action: 'proof',
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
