@@ -48,7 +48,7 @@ exports[`RegionButton should display a default RegionButton with correct styling
         "color": "#121212",
         "fontFamily": "GuardianTextSans-Regular",
         "fontSize": 15,
-        "lineHeight": 16,
+        "lineHeight": 18,
       }
     }
   >
@@ -105,7 +105,7 @@ exports[`RegionButton should display a selected RegionButton with correct stylin
         "color": "white",
         "fontFamily": "GuardianTextSans-Regular",
         "fontSize": 15,
-        "lineHeight": 16,
+        "lineHeight": 18,
       }
     }
   >

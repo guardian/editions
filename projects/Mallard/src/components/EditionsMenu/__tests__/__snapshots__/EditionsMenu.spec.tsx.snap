@@ -144,7 +144,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
@@ -211,7 +211,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
@@ -278,7 +278,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
@@ -346,17 +346,20 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
         Array [
           Object {
             "edition": "daily-edition",
-            "subTitle": "Published every day by 6am (GMT)",
+            "subTitle": "Published every morning
+By 6am (GMT)",
             "title": "The Daily",
           },
           Object {
             "edition": "australian-edition",
-            "subTitle": "Published every Saturday by 6am (AEST)",
+            "subTitle": "Published every Saturday morning 
+By 6am (AEST)",
             "title": "Australia Weekend",
           },
           Object {
             "edition": "american-edition",
-            "subTitle": "Published every Saturday by 6am (EST)",
+            "subTitle": "Published every Saturday morning 
+By 6am (EST)",
             "title": "US Weekend",
           },
         ]
@@ -436,11 +439,12 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
-              Published every day by 6am (GMT)
+              Published every morning
+By 6am (GMT)
             </Text>
           </View>
           <View
@@ -503,11 +507,12 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
-              Published every Saturday by 6am (AEST)
+              Published every Saturday morning 
+By 6am (AEST)
             </Text>
           </View>
           <View
@@ -570,11 +575,12 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
-              Published every Saturday by 6am (EST)
+              Published every Saturday morning 
+By 6am (EST)
             </Text>
           </View>
         </View>
@@ -832,17 +838,20 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
         Array [
           Object {
             "edition": "daily-edition",
-            "subTitle": "Published every day by 6am (GMT)",
+            "subTitle": "Published every morning
+By 6am (GMT)",
             "title": "The Daily",
           },
           Object {
             "edition": "australian-edition",
-            "subTitle": "Published every Saturday by 6am (AEST)",
+            "subTitle": "Published every Saturday morning 
+By 6am (AEST)",
             "title": "Australia Weekend",
           },
           Object {
             "edition": "american-edition",
-            "subTitle": "Published every Saturday by 6am (EST)",
+            "subTitle": "Published every Saturday morning 
+By 6am (EST)",
             "title": "US Weekend",
           },
         ]
@@ -922,11 +931,12 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
-              Published every day by 6am (GMT)
+              Published every morning
+By 6am (GMT)
             </Text>
           </View>
           <View
@@ -989,11 +999,12 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
-              Published every Saturday by 6am (AEST)
+              Published every Saturday morning 
+By 6am (AEST)
             </Text>
           </View>
           <View
@@ -1056,11 +1067,12 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
                   "color": "#121212",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 15,
-                  "lineHeight": 16,
+                  "lineHeight": 18,
                 }
               }
             >
-              Published every Saturday by 6am (EST)
+              Published every Saturday morning 
+By 6am (EST)
             </Text>
           </View>
         </View>
