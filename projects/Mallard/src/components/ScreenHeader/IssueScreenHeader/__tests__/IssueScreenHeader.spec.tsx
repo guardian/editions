@@ -3,10 +3,6 @@ import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { IssueScreenHeader } from '../IssueScreenHeader'
 import { IssueOrigin } from '../../../../../../Apps/common/src'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 jest.mock('react-navigation', () => ({
     withNavigation: (child: any) => child,
 }))

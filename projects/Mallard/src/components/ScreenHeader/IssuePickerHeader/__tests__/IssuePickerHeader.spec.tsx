@@ -2,10 +2,6 @@ import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { IssuePickerHeader } from '../IssuePickerHeader'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 jest.mock('react-navigation', () => ({
     withNavigation: (child: any) => child,
 }))
