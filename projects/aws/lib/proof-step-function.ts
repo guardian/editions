@@ -80,7 +80,7 @@ export const proofArchiverStepFunction = (
     indexerProof.task.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const stateMachine = new sfn.StateMachine(scope, 'Archiver State Machine', {
-        stateMachineName: `Editions-Archiver-State-Machine-${stage}`,
+        stateMachineName: `Editions-Archiver-Proof-State-Machine-${stage}`,
         definition: issue.task,
         timeout: Duration.minutes(10),
     })
