@@ -50,6 +50,7 @@ platform :ios do
       xcodeproj: "ios/Mallard.xcodeproj",
       build_number: latest_testflight_build_number.to_i + 1
     )
+    puts("::set-output name=buildnumber::" + latest_testflight_build_number.to_i + 1)
     build_app(
       scheme: "Mallard",
       workspace: "ios/Mallard.xcworkspace",

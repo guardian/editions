@@ -6,7 +6,7 @@ const tagNameFromSha = sha => sha.slice(0, 8)
 
 const headers = {
     'Content-Type': 'application/json',
-    Authorization: `token ${process.env.GITHUB_TOKEN}`,
+    Authorization: `token ${process.env.REPO_GITHUB_TOKEN}`,
 }
 
 const doFetch = async (url, params) => {
@@ -48,13 +48,20 @@ const findReleaseForCommit = (commit, releases) => {
 const patchReleaseName = (name, os, appStoreId) =>
     `${name}--${os}-${appStoreId}`
 
+const cleanBranch = branch => {
+    const split = branch.split('/')
+    return split[split.length - 1]
+}
+
 const updateRelease = async (commitSha, branch, appStoreId, os) => {
+    console.log(
+        `Updating github release tags with sha: ${commitSha} branch: ${branch} appStoreId: ${appStoreId} os: ${os}`,
+    )
     const releases = await get('releases')
     const matchingRelease = findReleaseForCommit(commitSha, releases)
 
     const appStoreName = os === 'ios' ? 'Apple app store' : 'Google Play store'
     const releaseMessage = `Released to ${appStoreName}, version ${appStoreId}. Built from branch ${branch}.`
-    console.log('Updating github release tags ')
 
     if (matchingRelease) {
         console.log(
@@ -90,6 +97,7 @@ const updateRelease = async (commitSha, branch, appStoreId, os) => {
         console.log(`Created release, view it here: ${release.html_url}`)
     }
 }
+
 const params = {
     sha: 2,
     branch: 3,
@@ -97,16 +105,16 @@ const params = {
     os: 5,
 }
 
-if (process.argv.length - 1 < Object.keys(params).length) {
+if (process.argv.length - 2 < Object.keys(params).length) {
+    console.error('Invalid arguments to release script')
     console.log(
         `Usage: node ${process.argv[1]} <${Object.keys(params).join('> <')}>`,
     )
-    process.exit()
+    process.exit(1)
 } else {
     updateRelease(
         process.argv[params.sha],
-        process.argv[params.message],
-        process.argv[params.branch],
+        cleanBranch(process.argv[params.branch]),
         process.argv[params.appStoreId],
         process.argv[params.os],
     )
