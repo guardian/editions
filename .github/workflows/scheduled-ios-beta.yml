@@ -34,9 +34,6 @@ jobs:
               run: |
                   cd projects/Mallard
                   make beta-ios
-              outputs:
-                  BUILD_NUMBER:
-                      description: 'The testflight build number'
 
               env:
                   ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}

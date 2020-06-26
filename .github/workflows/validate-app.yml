@@ -18,15 +18,16 @@ jobs:
                   node-version: '10.15'
 
             - name: install mallard
-              run: make install
-              outputs:
-                  BUILD_NUMBER:
-                      description: 'The testflight build number'
+              run: make install-backend
 
-            - name: validate Mallard project
+            - name: publish release to github
               run: |
                   cd script
-                  node make-release.js ${{ github.sha }} ${{ github.ref }} ${{steps.install_mallard.outputs.BUILD_NUMBER }} ios
+                  echo ${{ steps.install_mallard.outputs }}
+                  echo ${{ steps.install_mallard.outputs.buildnumber }}
+                  node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.install_mallard.outputs.buildnumber }} ios
+              env:
+                 REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
 
             - name: validate Mallard project
               run: make PROJECT=Mallard validate
