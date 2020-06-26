@@ -9,7 +9,7 @@ PROJECTS = $(filter-out $(EXCLUDE),$(patsubst projects/%, %, $(patsubst %/packag
 install: $(patsubst %, projects/%/node_modules, $(PROJECTS)) node_modules
 projects/%/node_modules: projects/%/yarn.lock
 	@echo "\n👟 Installing $*\n"
-	@echo "::set-output name=BUILD_NUMBER::1"
+	@echo "::set-output name=buildnumber::1"
 	@echo "new echo in make "
 	cd $(dir $@) && ${YARN} ${YARNFLAGS}
 node_modules: yarn.lock
