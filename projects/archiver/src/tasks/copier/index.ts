@@ -16,12 +16,14 @@ const outputBucket = getBucket('publish')
 
 export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
     'copied',
-    async ({ issuePublication, issue }) => {
+    async ({ issuePublication }) => {
         console.log(`Copying all files from ${inputBucket} to ${outputBucket}`)
+
+        const key = `${issuePublication.edition}/${issuePublication.issueDate}/${issuePublication.version}/`
         const copyPromises = await recursiveCopy(
             inputBucket,
             outputBucket,
-            issue.key + '/' + issuePublication.version + '/',
+            key,
         )
 
         if (copyPromises.filter(hasFailed).length)
@@ -30,7 +32,7 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         const zipCopyPromises = await recursiveCopy(
             inputBucket,
             outputBucket,
-            'zips/' + issue.key + '/' + issuePublication.version + '/',
+            'zips/' + key,
         )
 
         if (zipCopyPromises.filter(hasFailed).length)
