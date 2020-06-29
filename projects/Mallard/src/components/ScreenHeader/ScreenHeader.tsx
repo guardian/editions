@@ -24,12 +24,12 @@ export const ScreenHeader = ({
         leftAction={leftAction}
         headerStyles={headerStyles}
     >
-        {title && (
+        {title ? (
             <IssueTitle
                 title={title}
                 subtitle={subTitle}
                 overwriteStyles={headerStyles}
             />
-        )}
+        ) : null}
     </Header>
 )
