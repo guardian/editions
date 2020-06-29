@@ -20,11 +20,7 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         console.log(`Copying all files from ${inputBucket} to ${outputBucket}`)
 
         const key = `${issuePublication.edition}/${issuePublication.issueDate}/${issuePublication.version}/`
-        const copyPromises = await recursiveCopy(
-            inputBucket,
-            outputBucket,
-            key,
-        )
+        const copyPromises = await recursiveCopy(inputBucket, outputBucket, key)
 
         if (copyPromises.filter(hasFailed).length)
             throw new Error('Failed to copy some objects')
