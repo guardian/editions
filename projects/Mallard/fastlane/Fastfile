@@ -54,7 +54,6 @@ platform :ios do
     ENV["FASTLANE_DISABLE_OUTPUT_FORMAT"] = "true"
     ENV["FASTLANE_HIDE_TIMESTAMP"] = "true"
     puts("::set-output name=buildnumber::#{latest_testflight_build_number.to_i + 1}")
-    sh("echo", "::set-output name=buildnumber::#{latest_testflight_build_number.to_i + 1}")
     ENV["FASTLANE_DISABLE_OUTPUT_FORMAT"] = "false"
     ENV["FASTLANE_HIDE_TIMESTAMP"] = "false"
     puts("all finished")
