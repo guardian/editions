@@ -37,7 +37,6 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         return {
             issuePublication,
             message: 'Issue copied successfully',
-            issue,
         }
     },
     outputBucket,
