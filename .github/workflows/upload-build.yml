@@ -21,10 +21,10 @@ jobs:
               run: |
                   yarn
                   yarn install-mallard
-            - name: validate Mallard project
-              run: |
-                  cd projects/Mallard
-                  yarn validate
+            # - name: validate Mallard project
+            #   run: |
+            #       cd projects/Mallard
+            #       yarn validate
             - name: publish app
               id: publish_app
               run: |
