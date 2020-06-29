@@ -7,7 +7,7 @@ export const LOCAL_JSON_INVALID_RESPONSE_VALIDATION =
     'Failed to parse local data'
 
 export const APP_DISPLAY_NAME = 'Daily Edition'
-export const FEEDBACK_EMAIL = 'editions.product@theguardian.com'
+export const FEEDBACK_EMAIL = 'daily.feedback@theguardian.com'
 export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies'
 export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy'
 export const IOS_BETA_EMAIL = 'daily.ios.beta@theguardian.com'
