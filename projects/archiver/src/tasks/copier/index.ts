@@ -3,7 +3,9 @@ import { handleAndNotify } from '../../services/task-handler'
 import { IssueTaskOutput } from '../issue'
 import { IndexTaskOutput } from '../indexer'
 import { getBucket, recursiveCopy } from '../../utils/s3'
-import { hasFailed } from '../../../../backend/utils/try'
+import { attempt, hasFailed } from '../../../../backend/utils/try'
+import { getPublishedId } from '../../utils/path-builder'
+import { getIssue } from '../../utils/backend-client'
 
 type CopyTaskInput = IndexTaskOutput
 export type CopyTaskOutput = Pick<
@@ -34,8 +36,14 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         if (zipCopyPromises.filter(hasFailed).length)
             throw new Error('Failed to copy some zips')
 
+        const publishedId = getPublishedId(issuePublication)
+        const issue = await attempt(getIssue(publishedId))
+        if (hasFailed(issue))
+            throw new Error('Failed to find issue after copying')
+
         return {
             issuePublication,
+            issue,
             message: 'Issue copied successfully',
         }
     },
