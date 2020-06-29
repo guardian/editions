@@ -5,7 +5,6 @@ import { getEditions } from '../../utils/backend-client'
 import { hasFailed } from '../../../../backend/utils/try'
 import {
     EditionsList,
-    IssueSummary,
     IssuePublicationIdentifier,
 } from '../../../../Apps/common/src'
 import { IndexTaskOutput } from '../indexer'
