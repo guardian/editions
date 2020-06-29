@@ -121,8 +121,6 @@ const Login = ({
         fn(value)
     }
 
-    const appleSignInEnabled = remoteConfigService.getBoolean('apple_sign_in')
-
     return (
         <LoginLayout
             title={title}
@@ -145,7 +143,7 @@ const Login = ({
                         >
                             Continue with Google
                         </SocialButton>
-                        {appleSignInEnabled && iosMajorVersion >= 13 && (
+                        {iosMajorVersion >= 13 && (
                             <SocialButton
                                 onPress={onApplePress}
                                 iconRequire={require('src/assets/images/apple.png')}
@@ -154,7 +152,7 @@ const Login = ({
                             </SocialButton>
                         )}
 
-                        {appleSignInEnabled && iosMajorVersion < 13 && (
+                        {iosMajorVersion < 13 && (
                             <SocialButton
                                 onPress={onAppleOAuthPress}
                                 iconRequire={require('src/assets/images/apple.png')}
