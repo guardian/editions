@@ -12,7 +12,6 @@ import { EmailInput, PasswordInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
 
 import { iosMajorVersion } from 'src/helpers/platform'
-import { remoteConfigService } from 'src/services/remote-config'
 
 const socialButtonStyles = StyleSheet.create({
     button: {
