@@ -569,6 +569,10 @@ export interface RegionalEdition {
     title: string
     subTitle: string
     edition: Edition
+    header: {
+        title: string
+        subTitle?: string
+    }
 }
 
 export interface SpecialEdition {
