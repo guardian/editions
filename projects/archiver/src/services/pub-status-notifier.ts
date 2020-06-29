@@ -55,11 +55,17 @@ export const createPublishEvent = (
         case 'assembled':
         case 'bundled':
         case 'editionsListUpdated':
-        case 'proofed':
             return {
                 ...identifier,
                 status: 'Processing',
                 message: `Publication stage: ${status}`,
+                timestamp,
+            }
+        case 'proofed':
+            return {
+                ...identifier,
+                status: 'Proofed',
+                message: `Ready for proofing on-device`,
                 timestamp,
             }
         case 'published':
