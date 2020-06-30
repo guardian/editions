@@ -1,53 +1,50 @@
 import React, {
-    useCallback,
-    useState,
-    useEffect,
-    useRef,
-    useMemo,
     Dispatch,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
 } from 'react'
-import { View, FlatList, StyleSheet, Platform } from 'react-native'
+import { FlatList, Platform, StyleSheet, View } from 'react-native'
 import {
     NavigationInjectedProps,
+    NavigationParams,
+    NavigationRoute,
     NavigationScreenProp,
     withNavigation,
-    NavigationRoute,
 } from 'react-navigation'
 import { IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import {
     IssueRow,
-    ISSUE_ROW_HEADER_HEIGHT,
-    ISSUE_FRONT_ROW_HEIGHT,
     ISSUE_FRONT_ERROR_HEIGHT,
+    ISSUE_FRONT_ROW_HEIGHT,
+    ISSUE_ROW_HEADER_HEIGHT,
 } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { IssuePickerHeader } from 'src/components/layout/header/header'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { Separator } from 'src/components/layout/ui/row'
+import { IssuePickerHeader } from 'src/components/ScreenHeader/IssuePickerHeader/IssuePickerHeader'
 import { Spinner } from 'src/components/Spinner/Spinner'
+import { Loaded } from 'src/helpers/Loaded'
 import {
     CONNECTION_FAILED_AUTO_RETRY,
     CONNECTION_FAILED_ERROR,
 } from 'src/helpers/words'
-import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import {
-    navigateToIssue,
-    navigateToSettings,
-} from 'src/navigation/helpers/base'
-import { WithAppAppearance } from 'src/theme/appearance'
-import { metrics } from 'src/theme/spacing'
-import { ApiState } from './settings/api-screen'
-import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
-import { routeNames } from 'src/navigation/routes'
-import { useSetNavPosition } from 'src/hooks/use-nav-position'
-import { NavigationParams } from 'react-navigation'
-import { Separator } from 'src/components/layout/ui/row'
-import { color } from 'src/theme/color'
 import { useIssueResponse } from 'src/hooks/use-issue'
-import { IssueWithFronts } from '../../../Apps/common/src'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
+import { useSetNavPosition } from 'src/hooks/use-nav-position'
+import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
+import { navigateToIssue } from 'src/navigation/helpers/base'
+import { routeNames } from 'src/navigation/routes'
 import { PathToIssue } from 'src/paths'
-import { Loaded } from 'src/helpers/Loaded'
+import { WithAppAppearance } from 'src/theme/appearance'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { IssueWithFronts } from '../../../Apps/common/src'
+import { ApiState } from './settings/api-screen'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -67,47 +64,6 @@ const styles = StyleSheet.create({
         height: '100%',
     },
 })
-
-const HomeScreenHeader = withNavigation(
-    ({
-        navigation,
-        onReturn,
-    }: {
-        onReturn: () => void
-        onSettings: () => void
-    } & NavigationInjectedProps) => {
-        const action = (
-            <Button
-                accessibilityLabel="Close button"
-                accessibilityHint="Returns to the edition"
-                accessibilityRole="button"
-                icon={'\uE04F'}
-                alt="Return to edition"
-                onPress={onReturn}
-            />
-        )
-        const settings = (
-            <Button
-                accessibilityLabel="Settings button"
-                accessibilityHint="Navigates to the settings screen"
-                accessibilityRole="button"
-                icon={'\uE040'}
-                alt="Settings"
-                onPress={() => {
-                    navigateToSettings(navigation)
-                }}
-                appearance={ButtonAppearance.skeleton}
-            />
-        )
-        return (
-            <IssuePickerHeader
-                leftAction={settings}
-                onPress={onReturn}
-                action={action}
-            />
-        )
-    },
-)
 
 const IssueRowContainer = React.memo(
     ({
@@ -477,26 +433,11 @@ const IssueListFetchContainer = () => {
     })
 }
 
-export const HomeScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
-    const { issueSummary, error, setIssueId } = useIssueSummary()
+export const HomeScreen = () => {
+    const { issueSummary, error } = useIssueSummary()
     return (
         <WithAppAppearance value={'tertiary'}>
-            <HomeScreenHeader
-                onSettings={() => {
-                    navigation.navigate('Settings')
-                }}
-                onReturn={() => {
-                    navigateToIssue({
-                        navigation,
-                        navigationProps: {},
-                        setIssueId,
-                    })
-                }}
-            />
+            <IssuePickerHeader />
             {issueSummary ? (
                 <IssueListFetchContainer />
             ) : error ? (
