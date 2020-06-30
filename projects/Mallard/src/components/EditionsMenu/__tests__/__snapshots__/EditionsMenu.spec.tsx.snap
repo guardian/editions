@@ -54,16 +54,27 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
         Array [
           Object {
             "edition": "daily-edition",
+            "header": Object {
+              "title": "The Daily",
+            },
             "subTitle": "Published every day by 12am (GMT)",
             "title": "The UK Daily Edition",
           },
           Object {
             "edition": "australian-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "Austraila",
+            },
             "subTitle": "Published every day by 9:30am (AEST)",
             "title": "Australia Daily",
           },
           Object {
             "edition": "american-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "US",
+            },
             "subTitle": "Published every Saturday by 8am (EST)",
             "title": "US and Cananda Weekend",
           },
@@ -346,21 +357,32 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
         Array [
           Object {
             "edition": "daily-edition",
+            "header": Object {
+              "title": "The Daily",
+            },
             "subTitle": "Published every morning
 by 6am (GMT)",
             "title": "The Daily",
           },
           Object {
             "edition": "australian-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "Australia",
+            },
             "subTitle": "Published every Saturday morning 
 by 6am (AEST)",
-            "title": "Australia Weekend",
+            "title": "Australia Weekender",
           },
           Object {
             "edition": "american-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "US",
+            },
             "subTitle": "Published every Saturday morning 
 by 6am (EST)",
-            "title": "US Weekend",
+            "title": "US Weekender",
           },
         ]
       }
@@ -461,7 +483,7 @@ by 6am (GMT)
           style={null}
         >
           <View
-            accessibilityLabel="Australia Weekend - Regional Edition Button"
+            accessibilityLabel="Australia Weekender - Regional Edition Button"
             accessibilityRole="button"
             accessible={true}
             focusable={true}
@@ -499,7 +521,7 @@ by 6am (GMT)
                 ]
               }
             >
-              Australia Weekend
+              Australia Weekender
             </Text>
             <Text
               style={
@@ -529,7 +551,7 @@ by 6am (AEST)
           style={null}
         >
           <View
-            accessibilityLabel="US Weekend - Regional Edition Button"
+            accessibilityLabel="US Weekender - Regional Edition Button"
             accessibilityRole="button"
             accessible={true}
             focusable={true}
@@ -567,7 +589,7 @@ by 6am (AEST)
                 ]
               }
             >
-              US Weekend
+              US Weekender
             </Text>
             <Text
               style={
@@ -838,21 +860,32 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
         Array [
           Object {
             "edition": "daily-edition",
+            "header": Object {
+              "title": "The Daily",
+            },
             "subTitle": "Published every morning
 by 6am (GMT)",
             "title": "The Daily",
           },
           Object {
             "edition": "australian-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "Australia",
+            },
             "subTitle": "Published every Saturday morning 
 by 6am (AEST)",
-            "title": "Australia Weekend",
+            "title": "Australia Weekender",
           },
           Object {
             "edition": "american-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "US",
+            },
             "subTitle": "Published every Saturday morning 
 by 6am (EST)",
-            "title": "US Weekend",
+            "title": "US Weekender",
           },
         ]
       }
@@ -953,7 +986,7 @@ by 6am (GMT)
           style={null}
         >
           <View
-            accessibilityLabel="Australia Weekend - Regional Edition Button"
+            accessibilityLabel="Australia Weekender - Regional Edition Button"
             accessibilityRole="button"
             accessible={true}
             focusable={true}
@@ -991,7 +1024,7 @@ by 6am (GMT)
                 ]
               }
             >
-              Australia Weekend
+              Australia Weekender
             </Text>
             <Text
               style={
@@ -1021,7 +1054,7 @@ by 6am (AEST)
           style={null}
         >
           <View
-            accessibilityLabel="US Weekend - Regional Edition Button"
+            accessibilityLabel="US Weekender - Regional Edition Button"
             accessibilityRole="button"
             accessible={true}
             focusable={true}
@@ -1059,7 +1092,7 @@ by 6am (AEST)
                 ]
               }
             >
-              US Weekend
+              US Weekender
             </Text>
             <Text
               style={

@@ -39,16 +39,27 @@ const regionalEditions = [
         title: 'The UK Daily Edition',
         subTitle: 'Published every day by 12am (GMT)',
         edition: editions.daily as Edition,
+        header: {
+            title: 'The Daily',
+        },
     },
     {
         title: 'Australia Daily',
         subTitle: 'Published every day by 9:30am (AEST)',
         edition: editions.ausWeekly as Edition,
+        header: {
+            title: 'Austraila',
+            subTitle: 'Weekender',
+        },
     },
     {
         title: 'US and Cananda Weekend',
         subTitle: 'Published every Saturday by 8am (EST)',
         edition: editions.usWeekly as Edition,
+        header: {
+            title: 'US',
+            subTitle: 'Weekender',
+        },
     },
 ]
 

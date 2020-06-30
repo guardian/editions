@@ -72,6 +72,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
             Dimensions.removeEventListener('change', listener)
         }
     }, [])
+
     useEffect(() => {
         fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
             setEditionsMenuEnabled(editionsMenuToggle)
