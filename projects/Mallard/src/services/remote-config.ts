@@ -6,16 +6,21 @@ export type RemoteStringValue = string | undefined
 
 interface RemoteConfig {
     init(): void
-    getBoolean(key: string): boolean
-    getString(key: string): RemoteStringValue
+    getBoolean(key: RemoteConfigProperty): boolean
+    getString(key: RemoteConfigProperty): RemoteStringValue
 }
 
 const remoteConfigDefaults = {
-    apple_sign_in: false,
-    lightbox_enabled: false,
     logging_enabled: true,
     default_locale: true,
 }
+
+export const RemoteConfigProperties = [
+    'logging_enabled',
+    'default_locale',
+] as const
+
+export type RemoteConfigProperty = typeof RemoteConfigProperties[number]
 
 const configValues = {
     // fetch config, cache for 5mins. This cache persists when app is reloaded
@@ -52,7 +57,7 @@ class RemoteConfigService implements RemoteConfig {
             })
     }
 
-    getBoolean(key: string): boolean {
+    getBoolean(key: RemoteConfigProperty): boolean {
         if (this.initialized) {
             return remoteConfig().getValue(key).value as boolean
         }
@@ -60,7 +65,7 @@ class RemoteConfigService implements RemoteConfig {
         return false
     }
 
-    getString(key: string): RemoteStringValue {
+    getString(key: RemoteConfigProperty): RemoteStringValue {
         if (this.initialized) {
             return remoteConfig().getValue(key).value as string
         }
