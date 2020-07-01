@@ -9,13 +9,20 @@ jest.mock('react-navigation', () => ({
 describe('IssuePickerHeader', () => {
     it('should match the default style', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <IssuePickerHeader />,
+            <IssuePickerHeader title="The Daily" />,
+        ).toJSON()
+        expect(component).toMatchSnapshot()
+    })
+    it('should match the default style with a subTitle', () => {
+        const component: ReactTestRendererJSON | null = TestRenderer.create(
+            <IssuePickerHeader title="Recent" subTitle="Editions" />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
     it('should match the altered style by the prop headerStyles', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
             <IssuePickerHeader
+                title="The Daily"
                 headerStyles={{
                     backgroundColor: '#7D0068',
                     textColorPrimary: '#007ABC',

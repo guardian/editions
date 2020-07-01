@@ -437,7 +437,7 @@ export const HomeScreen = () => {
     const { issueSummary, error } = useIssueSummary()
     return (
         <WithAppAppearance value={'tertiary'}>
-            <IssuePickerHeader />
+            <IssuePickerHeader title="Recent" subTitle="Editions" />
             {issueSummary ? (
                 <IssueListFetchContainer />
             ) : error ? (
