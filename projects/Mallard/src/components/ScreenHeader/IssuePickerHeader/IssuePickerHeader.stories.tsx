@@ -1,4 +1,4 @@
-import { color, withKnobs, text } from '@storybook/addon-knobs'
+import { color, withKnobs } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react-native'
 import React from 'react'
 import { IssuePickerHeader } from './IssuePickerHeader'
