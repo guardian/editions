@@ -12,6 +12,7 @@ export const publishArchiverStepFunction = (
         deployBucket,
         proofBucket,
         publishBucket,
+        backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
         guNotifyServiceApiKey,
@@ -33,13 +34,25 @@ export const publishArchiverStepFunction = (
         frontsTopicRole,
     }
 
-    const copier = publishTask(scope, 'copier', 'Copy Issue', lambdaParams)
+    const environment = {
+        backend: backendURL,
+        gu_notify_service_api_key: guNotifyServiceApiKey,
+    }
+
+    const copier = publishTask(
+        scope,
+        'copier',
+        'Copy Issue',
+        lambdaParams,
+        environment,
+    )
 
     const indexerPublish = publishTask(
         scope,
         'indexerPublish',
         'Generate Index',
         lambdaParams,
+        environment,
     )
 
     const notification = publishTask(
@@ -47,9 +60,7 @@ export const publishArchiverStepFunction = (
         'notification',
         'Schedule device notification',
         lambdaParams,
-        {
-            gu_notify_service_api_key: guNotifyServiceApiKey,
-        },
+        environment,
     )
 
     copier.task.next(indexerPublish.task)
