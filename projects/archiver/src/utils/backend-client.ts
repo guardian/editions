@@ -24,6 +24,7 @@ export const URL =
 
 export const getIssue = async (publishedId: string) => {
     const path = `${URL}${issuePath(publishedId)}`
+    console.log(`Attempt to get Issue from path: ${path}`)
     const response = await fetch(path)
     const json = await response.json()
     return json as Issue
