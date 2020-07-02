@@ -1,7 +1,7 @@
 import { Issue } from 'src/common'
 import { useMemo } from 'react'
 import { londonTime } from './date'
-import { getSetting } from './settings'
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 
 const months = [
     'January',
@@ -63,7 +63,7 @@ export const todayAsFolder = (): string =>
     dateToFolderConvert(londonTime().toDate())
 
 export const todayAsKey = async (): Promise<string> => {
-    const edition = await getSetting('edition')
+    const edition = await getSelectedEditionSlug()
     return `${edition}/${todayAsFolder()}`
 }
 

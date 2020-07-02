@@ -45,6 +45,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { IssueWithFronts } from '../../../Apps/common/src'
 import { ApiState } from './settings/api-screen'
+import { useEditions } from 'src/hooks/use-edition-provider'
+import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -435,9 +437,24 @@ const IssueListFetchContainer = () => {
 
 export const HomeScreen = () => {
     const { issueSummary, error } = useIssueSummary()
+    const {
+        selectedEdition: {
+            header: { title, subTitle },
+        },
+    } = useEditions()
+    const { editionsMenuEnabled } = useEditionsMenuEnabled()
+
+    // TODO: Can be removed once Editions goes live
+    const IssuePickerWithFlag = () =>
+        editionsMenuEnabled ? (
+            <IssuePickerHeader title={title} subTitle={subTitle} />
+        ) : (
+            <IssuePickerHeader title="Recent" subTitle="Editions" />
+        )
+
     return (
         <WithAppAppearance value={'tertiary'}>
-            <IssuePickerHeader title="Recent" subTitle="Editions" />
+            <IssuePickerWithFlag />
             {issueSummary ? (
                 <IssueListFetchContainer />
             ) : error ? (

@@ -35,6 +35,7 @@ import {
     getPushTracking,
 } from 'src/push-notifications/push-tracking'
 import { metrics } from 'src/theme/spacing'
+import { useEditions } from 'src/hooks/use-edition-provider'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -66,6 +67,9 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         toggleEditionsMenuEnabled,
     } = useEditionsMenuEnabled()
     const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
+    const {
+        selectedEdition: { edition },
+    } = useEditions()
 
     const { attempt, signOutCAS } = useContext(AccessContext)
     const { showToast } = useToast()
@@ -110,9 +114,8 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     )
     if (query.loading) return null
     const { data, client } = query
-    const { apiUrl, edition } = data
-    if (typeof apiUrl !== 'string' || typeof edition !== 'string')
-        throw new Error('expected string')
+    const { apiUrl } = data
+    if (typeof apiUrl !== 'string') throw new Error('expected string')
 
     return (
         <>

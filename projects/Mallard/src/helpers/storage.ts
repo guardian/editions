@@ -9,6 +9,8 @@ import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 import { PushNotificationRegistration } from 'src/push-notifications/push-notifications'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
+import { RegionalEdition, SpecialEdition } from '../../../Apps/common/src'
+
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
@@ -76,6 +78,12 @@ const lightboxSettingCache = createAsyncCache<boolean>('lightbox-enabled')
 
 const enableEditionMenuCache = createAsyncCache<boolean>('edition-menu-enabled')
 
+const selectedEditionCache = createAsyncCache<RegionalEdition | SpecialEdition>(
+    'selectedEdition',
+)
+
+const defaultEditionCache = createAsyncCache<RegionalEdition>('defaultEdition')
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -139,4 +147,6 @@ export {
     loggingQueueCache,
     lightboxSettingCache,
     enableEditionMenuCache,
+    selectedEditionCache,
+    defaultEditionCache,
 }

@@ -71,6 +71,7 @@ export interface DevSettings {
     notificationServiceRegister: string
     cacheClearUrl: string
     deprecationWarningUrl: string
+    editionsUrl: string
     storeDetails: {
         ios: string
         android: string

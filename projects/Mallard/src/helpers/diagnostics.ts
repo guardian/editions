@@ -22,6 +22,7 @@ import {
     IOS_BETA_EMAIL,
 } from './words'
 import { OnCompletionToast } from 'src/screens/settings/help-screen'
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 
 const getGDPREntries = () =>
     Promise.all(
@@ -86,7 +87,7 @@ const getDiagnosticInfo = async (
         getFileList(),
         imageForScreenSize(),
         getDiagnosticPushTracking(),
-        getSetting('edition'),
+        getSelectedEditionSlug(),
     ])
 
     return `

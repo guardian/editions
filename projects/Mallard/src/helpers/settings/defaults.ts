@@ -133,6 +133,7 @@ export const defaultSettings: Settings = {
         : notificationServiceRegister.prod,
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
+    editionsUrl: apiUrl + 'editions',
     issuesPath: `/issues`,
     storeDetails,
     senderId: __DEV__ ? senderId.code : senderId.prod,

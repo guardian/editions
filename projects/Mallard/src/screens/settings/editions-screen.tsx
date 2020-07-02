@@ -1,16 +1,12 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
 import { NavigationScreenProp } from 'react-navigation'
-import { useApolloClient } from '@apollo/react-hooks'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Heading } from 'src/components/layout/ui/row'
+import { List } from 'src/components/lists/list'
+import { useEditions } from 'src/hooks/use-edition-provider'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { setEdition } from 'src/helpers/settings/setters'
-import { List } from 'src/components/lists/list'
-import { useEdition } from 'src/hooks/use-settings'
-import { editions } from '../../../../Apps/common/src'
 
 const styles = StyleSheet.create({
     textInputStyle: {
@@ -27,29 +23,23 @@ const EditionsScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const client = useApolloClient()
-    const edition = useEdition()
+    const { editions, storeSelectedEdition } = useEditions()
+
+    const consolidatedEditions = [
+        ...editions.regionalEditions,
+        ...editions.specialEditions,
+    ]
 
     return (
         <ScrollContainer>
-            <Heading>Selected edition</Heading>
-            <TextInput
-                style={styles.textInputStyle}
-                onChangeText={value => {
-                    if (value) {
-                        setEdition(client, value)
-                    }
-                }}
-                value={edition || ''}
-            />
             <Heading>Presets</Heading>
             <List
-                data={Object.values(editions).map(editionSlug => ({
-                    title: editionSlug,
-                    key: editionSlug,
-                    data: { editionSlug },
+                data={consolidatedEditions.map(edition => ({
+                    title: edition.title,
+                    key: edition.title,
+                    data: consolidatedEditions,
                     onPress: () => {
-                        setEdition(client, editionSlug)
+                        storeSelectedEdition(edition, 'TrainingEdition')
                         navigation.goBack()
                     },
                 }))}
