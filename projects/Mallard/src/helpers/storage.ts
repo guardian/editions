@@ -72,8 +72,6 @@ const validAttemptCache = createAsyncCache<number>('validAttempt-cache')
 
 const loggingQueueCache = createAsyncCache<string>('loggingQueue')
 
-const lightboxSettingCache = createAsyncCache<boolean>('lightbox-enabled')
-
 const enableEditionMenuCache = createAsyncCache<boolean>('edition-menu-enabled')
 
 /**
@@ -137,6 +135,5 @@ export {
     cacheClearCache,
     validAttemptCache,
     loggingQueueCache,
-    lightboxSettingCache,
     enableEditionMenuCache,
 }
