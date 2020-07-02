@@ -11,6 +11,8 @@ import { errorService } from 'src/services/errors'
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
 import NetInfo from '@react-native-community/netinfo'
 import { AppState, AppStateStatus } from 'react-native'
+import { remoteConfigService } from 'src/services/remote-config'
+import { locale } from 'src/helpers/locale'
 
 interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
@@ -41,6 +43,11 @@ const DEFAULT_EDITIONS_LIST = {
 
 const BASE_EDITION = defaultRegionalEditions[0]
 
+const localeToEdition = new Map<string, RegionalEdition>()
+localeToEdition.set('en_AU', defaultRegionalEditions[1])
+localeToEdition.set('en_US', defaultRegionalEditions[2])
+localeToEdition.set('en_GB', defaultRegionalEditions[0])
+
 const defaultState: EditionState = {
     editionsList: DEFAULT_EDITIONS_LIST,
     selectedEdition: BASE_EDITION, // the current chosen edition
@@ -65,7 +72,7 @@ export const getDefaultEdition = async () => await defaultEditionCache.get()
 
 const fetchEditions = async () => {
     try {
-        const response = await fetch(defaultSettings.editionsUrl + 'ksdjfh')
+        const response = await fetch(defaultSettings.editionsUrl)
         if (response.status !== 200) {
             throw new Error(
                 `Bad response from Editions URL - status: ${response.status}`,
@@ -86,7 +93,6 @@ const getEditions = async () => {
         if (isConnected) {
             // Grab editions list from the endpoint
             const editionsList = await fetchEditions()
-            console.log(editionsList)
             if (editionsList) {
                 // Successful? Store in the cache and return
                 await editionsListCache.set(editionsList)
@@ -94,7 +100,6 @@ const getEditions = async () => {
             }
             // Unsuccessful, try getting it from our local storage
             const cachedEditionsList = await editionsListCache.get()
-            console.log(cachedEditionsList)
             if (cachedEditionsList) {
                 return cachedEditionsList
             }
@@ -136,6 +141,21 @@ export const EditionProvider = ({
                 setDefaultEdition(dE)
                 setSelectedEdition(dE)
                 selectedEditionCache.set(dE)
+            } else {
+                const defaultLocaleEnabled = remoteConfigService.getBoolean(
+                    'default_locale',
+                )
+                if (defaultLocaleEnabled) {
+                    if (localeToEdition.has(locale)) {
+                        const dE = localeToEdition.get(locale)
+                        if (dE) {
+                            setDefaultEdition(dE)
+                            setSelectedEdition(dE)
+                            selectedEditionCache.set(dE)
+                            defaultEditionCache.set(dE)
+                        }
+                    }
+                }
             }
         })
     }, [])

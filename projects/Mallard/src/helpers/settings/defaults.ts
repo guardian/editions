@@ -1,8 +1,5 @@
 import { Platform } from 'react-native'
-import { locale } from '../locale'
 import { Settings } from '../settings'
-import { remoteConfigService } from 'src/services/remote-config'
-import { editions } from '../../../../Apps/common/src/index'
 
 /*
 Default settings.
@@ -49,11 +46,6 @@ export const backends = [
     value: string
     preview: boolean
 }[]
-
-const localeToEdition = new Map<string, string>()
-localeToEdition.set('en_AU', editions.ausWeekly)
-localeToEdition.set('en_US', editions.usWeekly)
-localeToEdition.set('en_GB', editions.daily)
 
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
@@ -105,12 +97,6 @@ export const notificationTrackingUrl = (
 
 const apiUrl = backends[0].value
 
-const defaultLocaleEnabled = remoteConfigService.getBoolean('default_locale')
-const edition =
-    defaultLocaleEnabled && localeToEdition.has(locale)
-        ? localeToEdition.get(locale)
-        : editions.daily
-
 const storeDetails = {
     ios: 'itms-apps://itunes.apple.com/app/id452707806',
     android: 'market://details?id=com.guardian.editions',
@@ -118,7 +104,6 @@ const storeDetails = {
 
 export const defaultSettings: Settings = {
     apiUrl,
-    edition: edition || editions.daily,
     isUsingProdDevtools: false,
     gdprAllowEssential: true, // essential defaults to true and not switchable
     gdprAllowPerformance: null,

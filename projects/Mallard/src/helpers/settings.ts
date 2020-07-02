@@ -66,7 +66,6 @@ export interface GdprSettings {
 
 export interface DevSettings {
     apiUrl: string
-    edition: string
     isUsingProdDevtools: boolean
     notificationServiceRegister: string
     cacheClearUrl: string

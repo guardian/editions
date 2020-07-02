@@ -10,7 +10,6 @@ import {
     ImageUse,
 } from 'src/common'
 import RNFS from 'react-native-fs'
-import { defaultSettings } from 'src/helpers/settings/defaults'
 import { imagePath } from '../../../Apps/common/src'
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 
@@ -39,9 +38,7 @@ const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
 const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`
 const editionDir = async () => {
     const edition = await getSelectedEditionSlug()
-    return edition
-        ? `${issuesDir}/${edition}`
-        : `${issuesDir}/${defaultSettings.edition}`
+    return `${issuesDir}/${edition}`
 }
 
 export const FSPaths = {
