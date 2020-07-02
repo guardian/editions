@@ -164,6 +164,7 @@ const LightboxScreen = ({
                         onChange={index => handleOnMoveEvent(index || 0)} // seems that first index is nil?
                         saveToLocalByLongPress={false}
                         maxOverflow={width}
+                        enablePreload={true}
                         footerContainerStyle={{
                             position: 'absolute',
                             bottom: 0,
