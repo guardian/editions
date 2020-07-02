@@ -17,7 +17,6 @@ import {
     CreditedImage,
 } from '../../../../../Apps/common/src'
 import { navigateToLightbox } from 'src/navigation/helpers/base'
-import { fetchLightboxSetting } from 'src/helpers/settings/debug'
 import { selectImagePath } from 'src/hooks/use-image-paths'
 import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
@@ -136,7 +135,6 @@ const Article = ({
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
-    const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
@@ -149,12 +147,6 @@ const Article = ({
     const [, { pillar }] = useArticle()
     const apiUrl = useApiUrl() || ''
     const { issueId } = useIssueSummary()
-
-    useEffect(() => {
-        fetchLightboxSetting().then(lightboxEnabled =>
-            setLightboxEnabled(lightboxEnabled),
-        )
-    }, [])
 
     useEffect(() => {
         const lbimages = getLightboxImages(article.elements)
@@ -231,7 +223,7 @@ const Article = ({
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
                     }
-                    if (lightboxEnabled && parsed.type === 'openLightbox') {
+                    if (parsed.type === 'openLightbox') {
                         let index = parsed.index
                         if (
                             article.type !== 'gallery' &&
