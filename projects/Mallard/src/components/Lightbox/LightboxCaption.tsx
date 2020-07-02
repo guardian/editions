@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     captionText: {
         color: themeColors(ArticleTheme.Dark).text,
         paddingLeft: 2,
+        paddingRight: 13,
         paddingBottom: 50,
     },
     caption: {
