@@ -1,5 +1,5 @@
 import { pickClosestBreakpoint, Breakpoints } from './breakpoints'
-import { Dimensions } from 'react-native'
+import { Dimensions, PixelRatio } from 'react-native'
 import { BreakpointList } from 'src/theme/breakpoints'
 
 export const families = {
@@ -83,8 +83,8 @@ const scale = {
     text: {
         0.9: {
             [Breakpoints.smallPhone]: {
-                fontSize: 15,
-                lineHeight: 17,
+                fontSize: 14,
+                lineHeight: 15,
             },
             [Breakpoints.phone]: {
                 fontSize: 15,
@@ -198,8 +198,8 @@ const scale = {
         },
         1.5: {
             [Breakpoints.smallPhone]: {
-                fontSize: 24,
-                lineHeight: 26,
+                fontSize: 20,
+                lineHeight: 22,
             },
             [Breakpoints.phone]: {
                 fontSize: 24,
@@ -371,5 +371,17 @@ export const getFont = <F extends FontFamily>(
     return {
         fontFamily: families[family][weight],
         ...applyScale(fontAtLevel),
+    }
+}
+
+export const getScaledFont = <F extends FontFamily>(
+    family: F,
+    level: FontSizes<F>,
+) => {
+    const font = getFont(family, level)
+    return {
+        ...font,
+        lineHeight: font.lineHeight * PixelRatio.getFontScale(),
+        fontSize: font.fontSize * PixelRatio.getFontScale(),
     }
 }

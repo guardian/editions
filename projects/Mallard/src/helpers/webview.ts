@@ -1,6 +1,6 @@
-import { Platform, PixelRatio } from 'react-native'
+import { Platform } from 'react-native'
 import { bundles } from 'src/html-bundle-info.json'
-import { getFont, FontSizes, FontFamily } from 'src/theme/typography'
+import { getScaledFont, FontSizes, FontFamily } from 'src/theme/typography'
 
 export type WebViewPing =
     | {
@@ -37,18 +37,6 @@ export const css = passthrough
 export const html = passthrough
 
 export const px = (value: string | number) => `${value}px`
-
-export const getScaledFont = <F extends FontFamily>(
-    family: F,
-    level: FontSizes<F>,
-) => {
-    const font = getFont(family, level)
-    return {
-        ...font,
-        lineHeight: font.lineHeight * PixelRatio.getFontScale(),
-        fontSize: font.fontSize * PixelRatio.getFontScale(),
-    }
-}
 
 export const getScaledFontCss = <F extends FontFamily>(
     family: F,

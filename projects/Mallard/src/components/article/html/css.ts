@@ -1,12 +1,11 @@
 import {
     css,
     generateAssetsFontCss,
-    getScaledFont,
     getScaledFontCss,
     px,
 } from 'src/helpers/webview'
 import { metrics } from 'src/theme/spacing'
-import { families } from 'src/theme/typography'
+import { families, getScaledFont } from 'src/theme/typography'
 import { headerStyles } from './components/header'
 import { imageStyles } from './components/images'
 import { lineStyles } from './components/line'
@@ -161,7 +160,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
         .content-wrap {
             padding-left: ${px(metrics.article.sides)};
             padding-right: ${px(metrics.article.sides)};
-    
+
         }
     }
 
