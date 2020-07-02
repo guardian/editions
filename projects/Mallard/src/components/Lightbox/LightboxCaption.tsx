@@ -52,6 +52,9 @@ const captionStyleSheet = (pillarColor: string) => {
             textDecorationLine: 'underline',
             textDecorationColor: pillarColor,
         },
+        em: {
+            fontFamily: families.sans.regularItalic,
+        },
     })
 }
 

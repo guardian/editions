@@ -32,7 +32,7 @@
 				<string>fb528503751025697</string>
 			</array>
 		</dict>
-        <dict>
+		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
@@ -109,6 +109,7 @@
 		<string>GuardianWeatherIcons-Regular.ttf</string>
 		<string>guardianIcons_1.12.otf</string>
 		<string>GTGuardianDaily-Regular.otf</string>
+		<string>GuardianTextSans-RegularIt.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
