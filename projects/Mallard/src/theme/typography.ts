@@ -8,6 +8,7 @@ export const families = {
     },
     sans: {
         regular: 'GuardianTextSans-Regular',
+        regularItalic: 'GuardianTextSans-RegularIt',
         bold: 'GuardianTextSans-Bold',
     },
     text: {

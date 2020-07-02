@@ -32,6 +32,7 @@
 		A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC323167BB400505524 /* ReleaseStream.m */; };
 		AF8876CCFAB04FDDA8588A9E /* GTGuardianDaily-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */; };
 		BB77E8F846CDE9D32C493592 /* libPods-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2885A2F6E37B4C44D653BBC3 /* libPods-MallardTests.a */; };
+		C232E2BBBE624C1DB73FF340 /* GuardianTextSans-RegularIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B43BC33E44074221B5FE51A9 /* GuardianTextSans-RegularIt.ttf */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
 		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -76,7 +77,6 @@
 		C54937A822B149BB00B1D9A2 /* GuardianTextSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C73DD286DF1C4408BBB2D277 /* GuardianTextSans-Bold.ttf */; };
 		C54937A922B149BB00B1D9A2 /* GuardianTextSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32B3CC9963BA4216B98F3053 /* GuardianTextSans-BoldItalic.ttf */; };
 		C54937AA22B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */; };
-		C54937AB22B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */; };
 		C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9D5A81177BD4E53AE3E6D4C /* SpaceMono-Regular copy.ttf */; };
 		C555A75222848D6C002DF16C /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = C555A72822848D6C002DF16C /* Icon-1024.png */; };
 		E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */; };
@@ -148,8 +148,8 @@
 		4F62AA2D23198E500052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = "../ophan/build/fat-framework/debug/ophan.framework"; sourceTree = "<group>"; };
 		4F62AA3123198F8B0052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = "../ophan/build/fat-framework/debug/ophan.framework"; sourceTree = "<group>"; };
 		4F62AA35231E8D660052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/universalFramework/ophan.framework; sourceTree = "<group>"; };
-		5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-RegularItalic.ttf"; path = "../src/assets/fonts/GuardianTextSans-RegularItalic.ttf"; sourceTree = "<group>"; };
 		574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-Regular.ttf"; path = "../src/assets/fonts/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; };
+		5AB25EB224ADE6200074CF93 /* GuardianTextSans-RegularIt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextSans-RegularIt.ttf"; path = "../src/assets/fonts/GuardianTextSans-RegularIt.ttf"; sourceTree = "<group>"; };
 		5DA07BFB0DCC824DF7C94988 /* Pods-Mallard-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		633BB1AFE255417982D19DF7 /* GHGuardianHeadline-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Regular.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Regular.ttf"; sourceTree = "<group>"; };
 		661D742028FAF03E3532CEC8 /* Pods-Mallard-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -173,6 +173,7 @@
 		A13D0DC12316783B00505524 /* ReleaseStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseStream.swift; sourceTree = "<group>"; };
 		A13D0DC323167BB400505524 /* ReleaseStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReleaseStream.m; sourceTree = "<group>"; };
 		A39C010E18C6F1DE033568D2 /* Pods-MallardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MallardTests.release.xcconfig"; path = "Target Support Files/Pods-MallardTests/Pods-MallardTests.release.xcconfig"; sourceTree = "<group>"; };
+		B43BC33E44074221B5FE51A9 /* GuardianTextSans-RegularIt.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-RegularIt.ttf"; path = "../src/assets/fonts/GuardianTextSans-RegularIt.ttf"; sourceTree = "<group>"; };
 		B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
 		B76AB9897804B121CD7C2A6A /* Pods-Mallard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.debug.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.debug.xcconfig"; sourceTree = "<group>"; };
 		BAD660688DF776E1FA0A2130 /* libPods-Mallard-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -290,12 +291,13 @@
 				C73DD286DF1C4408BBB2D277 /* GuardianTextSans-Bold.ttf */,
 				32B3CC9963BA4216B98F3053 /* GuardianTextSans-BoldItalic.ttf */,
 				574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */,
-				5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */,
+				5AB25EB224ADE6200074CF93 /* GuardianTextSans-RegularIt.ttf */,
 				E9D5A81177BD4E53AE3E6D4C /* SpaceMono-Regular copy.ttf */,
 				79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */,
 				1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */,
 				CEC9D18600B14CC098C48387 /* guardianIcons_1.12.otf */,
 				390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */,
+				B43BC33E44074221B5FE51A9 /* GuardianTextSans-RegularIt.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -601,7 +603,7 @@
 				C54937A922B149BB00B1D9A2 /* GuardianTextSans-BoldItalic.ttf in Resources */,
 				C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */,
 				C54937AA22B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */,
-				C54937AB22B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */,
+				C232E2BBBE624C1DB73FF340 /* GuardianTextSans-RegularIt.ttf in Resources */,
 				C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C555A75222848D6C002DF16C /* Icon-1024.png in Resources */,

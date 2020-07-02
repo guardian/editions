@@ -236,7 +236,9 @@ const Article = ({
                         if (
                             article.type !== 'gallery' &&
                             article.image &&
-                            parsed.isMainImage === 'false'
+                            parsed.isMainImage === 'false' &&
+                            lightboxImages &&
+                            lightboxImages.length > 1
                         ) {
                             index++
                         }
