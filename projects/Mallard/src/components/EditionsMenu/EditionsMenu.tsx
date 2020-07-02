@@ -1,34 +1,34 @@
 import React from 'react'
 import { FlatList, ScrollView } from 'react-native'
+import {
+    RegionalEdition,
+    SpecialEdition,
+    Edition,
+} from '../../../../Apps/common/src'
+import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
 import { EditionsMenuHeader } from './Header/Header'
+import { ItemSeperator } from './ItemSeperator/ItemSeperator'
 import { RegionButton } from './RegionButton/RegionButton'
 import { SpecialEditionButton } from './SpecialEditionButton/SpecialEditionButton'
-import { RegionalEdition, SpecialEdition } from '../../../../Apps/common/src'
-import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
-import { ItemSeperator } from './ItemSeperator/ItemSeperator'
-import { NavigationScreenProp } from 'react-navigation'
-import { useApolloClient } from '@apollo/react-hooks'
-import { setEdition } from 'src/helpers/settings/setters'
-import { routeNames } from 'src/navigation/routes'
-import { useEdition } from 'src/hooks/use-settings'
 
 const EditionsMenu = ({
-    navigation,
-    regionalEdtions,
+    navigationPress,
+    regionalEditions,
+    selectedEdition,
     specialEditions,
+    storeSelectedEdition,
 }: {
-    navigation: NavigationScreenProp<{}>
-    regionalEdtions?: RegionalEdition[]
+    navigationPress: () => void
+    regionalEditions?: RegionalEdition[]
+    selectedEdition: Edition
     specialEditions?: SpecialEdition[]
+    storeSelectedEdition: (edition: Edition) => void
 }) => {
-    const client = useApolloClient()
-    const selectedEdition = useEdition()
-
     return (
         <ScrollView>
             <EditionsMenuHeader>Regions</EditionsMenuHeader>
             <FlatList
-                data={regionalEdtions || defaultRegionalEditions}
+                data={regionalEditions || defaultRegionalEditions}
                 renderItem={({ item }: { item: RegionalEdition }) => {
                     return (
                         <RegionButton
@@ -36,8 +36,8 @@ const EditionsMenu = ({
                                 selectedEdition === item.edition ? true : false
                             }
                             onPress={() => {
-                                setEdition(client, item.edition)
-                                navigation.navigate(routeNames.Issue)
+                                storeSelectedEdition(item.edition)
+                                navigationPress()
                             }}
                             title={item.title}
                             subTitle={item.subTitle}
@@ -46,13 +46,13 @@ const EditionsMenu = ({
                 }}
                 ItemSeparatorComponent={() => <ItemSeperator />}
             />
-            {specialEditions && (
+            {specialEditions && specialEditions.length > 0 && (
                 <>
                     <EditionsMenuHeader>Special Editions</EditionsMenuHeader>
                     <FlatList
                         data={specialEditions}
-                        renderItem={({
-                            item: {
+                        renderItem={({ item }: { item: SpecialEdition }) => {
+                            const {
                                 buttonStyle,
                                 devUri,
                                 edition,
@@ -60,20 +60,22 @@ const EditionsMenu = ({
                                 image,
                                 title,
                                 subTitle,
-                            },
-                        }: {
-                            item: SpecialEdition
-                        }) => {
+                            } = item
                             return (
                                 <SpecialEditionButton
                                     devUri={devUri}
                                     expiry={expiry}
                                     image={image}
                                     onPress={() => {
-                                        setEdition(client, edition)
-                                        navigation.navigate(routeNames.Issue)
+                                        storeSelectedEdition(edition)
+                                        navigationPress()
                                     }}
                                     title={title}
+                                    selected={
+                                        selectedEdition === edition
+                                            ? true
+                                            : false
+                                    }
                                     style={buttonStyle}
                                     subTitle={subTitle}
                                 />

@@ -578,7 +578,7 @@ export interface RegionalEdition {
 export interface SpecialEdition {
     buttonStyle: SpecialEditionButtonStyles
     devUri?: string
-    edition: string
+    edition: Edition
     expiry: Date
     headerStyle?: SpecialEditionHeaderStyles
     image: Image

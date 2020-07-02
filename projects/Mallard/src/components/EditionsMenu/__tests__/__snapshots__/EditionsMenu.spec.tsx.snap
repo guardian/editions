@@ -3,51 +3,7 @@
 exports[`EditionsMenu should display a EditionsMenu with correct styling and alternative Regional Buttons 1`] = `
 <RCTScrollView>
   <View>
-    <View
-      style={
-        Object {
-          "flex": 1,
-          "marginBottom": 4,
-        }
-      }
-    >
-      <View
-        style={
-          Object {
-            "backgroundColor": "white",
-            "paddingBottom": 38,
-            "paddingLeft": 96,
-            "paddingTop": 4,
-            "shadowColor": "#121212",
-            "shadowOffset": Object {
-              "height": 4,
-              "width": 0,
-            },
-            "shadowOpacity": 0.1,
-            "shadowRadius": 4,
-          }
-        }
-      >
-        <Text
-          style={
-            Array [
-              Object {
-                "flexShrink": 0,
-                "fontFamily": "GTGuardianTitlepiece-Bold",
-                "fontSize": 30,
-                "lineHeight": 33,
-              },
-              Object {
-                "fontSize": 24,
-                "lineHeight": 30,
-              },
-            ]
-          }
-        >
-          Regions
-        </Text>
-      </View>
-    </View>
+    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
       data={
@@ -108,60 +64,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="The UK Daily Edition - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              The UK Daily Edition
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every day by 12am (GMT)
-            </Text>
-          </View>
+          RegionButton
           <View
             style={
               Object {
@@ -175,60 +78,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="Australia Daily - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              Australia Daily
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every day by 9:30am (AEST)
-            </Text>
-          </View>
+          RegionButton
           <View
             style={
               Object {
@@ -242,60 +92,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="US and Cananda Weekend - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              US and Cananda Weekend
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every Saturday by 8am (EST)
-            </Text>
-          </View>
+          RegionButton
         </View>
       </View>
     </RCTScrollView>
@@ -306,51 +103,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
 exports[`EditionsMenu should display a EditionsMenu with correct styling default Regional Buttons and a Special Edition Button 1`] = `
 <RCTScrollView>
   <View>
-    <View
-      style={
-        Object {
-          "flex": 1,
-          "marginBottom": 4,
-        }
-      }
-    >
-      <View
-        style={
-          Object {
-            "backgroundColor": "white",
-            "paddingBottom": 38,
-            "paddingLeft": 96,
-            "paddingTop": 4,
-            "shadowColor": "#121212",
-            "shadowOffset": Object {
-              "height": 4,
-              "width": 0,
-            },
-            "shadowOpacity": 0.1,
-            "shadowRadius": 4,
-          }
-        }
-      >
-        <Text
-          style={
-            Array [
-              Object {
-                "flexShrink": 0,
-                "fontFamily": "GTGuardianTitlepiece-Bold",
-                "fontSize": 30,
-                "lineHeight": 33,
-              },
-              Object {
-                "fontSize": 24,
-                "lineHeight": 30,
-              },
-            ]
-          }
-        >
-          Regions
-        </Text>
-      </View>
-    </View>
+    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
       data={
@@ -414,61 +167,7 @@ by 6am (EST)",
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="The Daily - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              The Daily
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every morning
-by 6am (GMT)
-            </Text>
-          </View>
+          RegionButton
           <View
             style={
               Object {
@@ -482,61 +181,7 @@ by 6am (GMT)
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="Australia Weekender - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              Australia Weekender
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every Saturday morning 
-by 6am (AEST)
-            </Text>
-          </View>
+          RegionButton
           <View
             style={
               Object {
@@ -550,109 +195,11 @@ by 6am (AEST)
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="US Weekender - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              US Weekender
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every Saturday morning 
-by 6am (EST)
-            </Text>
-          </View>
+          RegionButton
         </View>
       </View>
     </RCTScrollView>
-    <View
-      style={
-        Object {
-          "flex": 1,
-          "marginBottom": 4,
-        }
-      }
-    >
-      <View
-        style={
-          Object {
-            "backgroundColor": "white",
-            "paddingBottom": 38,
-            "paddingLeft": 96,
-            "paddingTop": 4,
-            "shadowColor": "#121212",
-            "shadowOffset": Object {
-              "height": 4,
-              "width": 0,
-            },
-            "shadowOpacity": 0.1,
-            "shadowRadius": 4,
-          }
-        }
-      >
-        <Text
-          style={
-            Array [
-              Object {
-                "flexShrink": 0,
-                "fontFamily": "GTGuardianTitlepiece-Bold",
-                "fontSize": 30,
-                "lineHeight": 33,
-              },
-              Object {
-                "fontSize": 24,
-                "lineHeight": 30,
-              },
-            ]
-          }
-        >
-          Special Editions
-        </Text>
-      </View>
-    </View>
+    EditionsMenuHeader
     <RCTScrollView
       data={
         Array [
@@ -682,8 +229,12 @@ by 6am (EST)
                 "size": 34,
               },
             },
-            "edition": "",
+            "edition": "daily-edition",
             "expiry": 1998-02-01T00:00:00.000Z,
+            "header": Object {
+              "subTitle": "Monthly",
+              "title": "Food",
+            },
             "image": Object {
               "path": "/path/to/image",
               "source": "media",
@@ -722,83 +273,7 @@ Monthly",
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="Food
-Monthly - Special Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#FEEEF7",
-                "flexDirection": "row",
-                "paddingTop": 12,
-              }
-            }
-          >
-            ImageResource
-            <View
-              style={
-                Object {
-                  "flexShrink": 1,
-                  "paddingBottom": 15,
-                  "paddingLeft": 10,
-                }
-              }
-            >
-              <Text
-                style={
-                  Object {
-                    "color": "#121212",
-                    "flexWrap": "wrap",
-                    "fontFamily": "GHGuardianHeadline-Regular",
-                    "fontSize": 34,
-                    "lineHeight": 34,
-                  }
-                }
-              >
-                Food
-Monthly
-              </Text>
-              <Text
-                style={
-                  Object {
-                    "color": "#7D0068",
-                    "flexWrap": "wrap",
-                    "fontFamily": "GuardianTextSans-Bold",
-                    "fontSize": 17,
-                    "lineHeight": 20,
-                    "marginTop": 10,
-                  }
-                }
-              >
-                Store cupboard special: 20 quick and easy lockdown suppers
-              </Text>
-              <Text
-                style={
-                  Object {
-                    "color": "#7D0068",
-                    "flexWrap": "wrap",
-                    "fontFamily": "GuardianTextSans-Regular",
-                    "fontSize": 15,
-                    "lineHeight": 16,
-                    "marginTop": 8,
-                  }
-                }
-              >
-                Available until
-                 
-                2/1/1998
-              </Text>
-            </View>
-          </View>
+          SpecialEditionButton
         </View>
       </View>
     </RCTScrollView>
@@ -809,51 +284,7 @@ Monthly
 exports[`EditionsMenu should display a default EditionsMenu with correct styling and default Regional Buttons 1`] = `
 <RCTScrollView>
   <View>
-    <View
-      style={
-        Object {
-          "flex": 1,
-          "marginBottom": 4,
-        }
-      }
-    >
-      <View
-        style={
-          Object {
-            "backgroundColor": "white",
-            "paddingBottom": 38,
-            "paddingLeft": 96,
-            "paddingTop": 4,
-            "shadowColor": "#121212",
-            "shadowOffset": Object {
-              "height": 4,
-              "width": 0,
-            },
-            "shadowOpacity": 0.1,
-            "shadowRadius": 4,
-          }
-        }
-      >
-        <Text
-          style={
-            Array [
-              Object {
-                "flexShrink": 0,
-                "fontFamily": "GTGuardianTitlepiece-Bold",
-                "fontSize": 30,
-                "lineHeight": 33,
-              },
-              Object {
-                "fontSize": 24,
-                "lineHeight": 30,
-              },
-            ]
-          }
-        >
-          Regions
-        </Text>
-      </View>
-    </View>
+    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
       data={
@@ -917,61 +348,7 @@ by 6am (EST)",
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="The Daily - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              The Daily
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every morning
-by 6am (GMT)
-            </Text>
-          </View>
+          RegionButton
           <View
             style={
               Object {
@@ -985,61 +362,7 @@ by 6am (GMT)
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="Australia Weekender - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              Australia Weekender
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every Saturday morning 
-by 6am (AEST)
-            </Text>
-          </View>
+          RegionButton
           <View
             style={
               Object {
@@ -1053,61 +376,7 @@ by 6am (AEST)
           onLayout={[Function]}
           style={null}
         >
-          <View
-            accessibilityLabel="US Weekender - Regional Edition Button"
-            accessibilityRole="button"
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Object {
-                "backgroundColor": "#f6f6f6",
-                "paddingBottom": 32,
-                "paddingLeft": 96,
-                "paddingTop": 4,
-              }
-            }
-          >
-            <Text
-              style={
-                Array [
-                  Object {
-                    "flexShrink": 0,
-                    "fontFamily": "GTGuardianTitlepiece-Bold",
-                    "fontSize": 30,
-                    "lineHeight": 33,
-                  },
-                  Object {
-                    "color": "#052962",
-                    "fontSize": 20,
-                    "lineHeight": 24,
-                    "marginBottom": 5,
-                  },
-                ]
-              }
-            >
-              US Weekender
-            </Text>
-            <Text
-              style={
-                Object {
-                  "color": "#121212",
-                  "fontFamily": "GuardianTextSans-Regular",
-                  "fontSize": 15,
-                  "lineHeight": 18,
-                }
-              }
-            >
-              Published every Saturday morning 
-by 6am (EST)
-            </Text>
-          </View>
+          RegionButton
         </View>
       </View>
     </RCTScrollView>
