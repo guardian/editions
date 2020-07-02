@@ -26,6 +26,7 @@ jobs:
                   cd projects/Mallard
                   yarn validate
             - name: publish app
+              id: publish_app
               run: |
                   cd projects/Mallard
                   make beta-ios
@@ -57,3 +58,10 @@ jobs:
                   MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
                   MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
                   MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
+
+            - name: publish release to github
+              run: |
+                  cd script
+                  node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.publish_app.outputs.buildnumber }} ios
+              env:
+                  REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}

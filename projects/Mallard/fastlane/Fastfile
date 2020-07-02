@@ -50,6 +50,14 @@ platform :ios do
       xcodeproj: "ios/Mallard.xcodeproj",
       build_number: latest_testflight_build_number.to_i + 1
     )
+
+    ENV["FASTLANE_DISABLE_OUTPUT_FORMAT"] = "true"
+    ENV["FASTLANE_HIDE_TIMESTAMP"] = "true"
+    puts("::set-output name=buildnumber::#{latest_testflight_build_number.to_i + 1}")
+    ENV["FASTLANE_DISABLE_OUTPUT_FORMAT"] = "false"
+    ENV["FASTLANE_HIDE_TIMESTAMP"] = "false"
+
+
     build_app(
       scheme: "Mallard",
       workspace: "ios/Mallard.xcworkspace",
@@ -61,6 +69,7 @@ platform :ios do
     upload_to_testflight(
         distribute_external: true,
         notify_external_testers: true,
+        skip_waiting_for_build_processing: true,
         changelog: "Thanks for testing the app! We've made some improvements",
         groups: ["GNM"],
         demo_account_required: false,
