@@ -1,10 +1,6 @@
 import React from 'react'
 import { FlatList, ScrollView } from 'react-native'
-import {
-    RegionalEdition,
-    SpecialEdition,
-    Edition,
-} from '../../../../Apps/common/src'
+import { RegionalEdition, SpecialEdition, Edition } from 'src/common'
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
 import { EditionsMenuHeader } from './Header/Header'
 import { ItemSeperator } from './ItemSeperator/ItemSeperator'
