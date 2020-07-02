@@ -195,6 +195,7 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
           "color": "#ffffff",
           "paddingBottom": 50,
           "paddingLeft": 2,
+          "paddingRight": 13,
         }
       }
     >
