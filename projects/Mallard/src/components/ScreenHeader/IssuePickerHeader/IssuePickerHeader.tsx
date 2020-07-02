@@ -9,8 +9,12 @@ const IssuePickerHeader = withNavigation(
     ({
         headerStyles,
         navigation,
+        subTitle,
+        title,
     }: {
         headerStyles?: SpecialEditionHeaderStyles
+        subTitle?: string
+        title: string
     } & NavigationInjectedProps) => {
         const action = (
             <Button
@@ -40,8 +44,8 @@ const IssuePickerHeader = withNavigation(
                 leftAction={settings}
                 onPress={() => navigation.goBack()}
                 rightAction={action}
-                title="Recent"
-                subTitle="Editions"
+                title={title}
+                subTitle={subTitle}
                 headerStyles={headerStyles}
             />
         )

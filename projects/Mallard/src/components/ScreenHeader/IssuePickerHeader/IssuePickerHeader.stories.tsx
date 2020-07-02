@@ -5,9 +5,16 @@ import { IssuePickerHeader } from './IssuePickerHeader'
 
 storiesOf('IssuePickerHeader', module)
     .addDecorator(withKnobs)
-    .add('Default', () => <IssuePickerHeader />)
+    .add('Default', () => (
+        <IssuePickerHeader title="Recent" subTitle="Editions" />
+    ))
+    .add('With Different Title and SubTitle', () => (
+        <IssuePickerHeader title="Australia" subTitle="Weekender" />
+    ))
     .add('With Header Styles', () => (
         <IssuePickerHeader
+            title="Food"
+            subTitle="Monthly"
             headerStyles={{
                 backgroundColor: color('Background Colour', '#7D0068'),
                 textColorPrimary: color('Text Colour Primary', '#007ABC'),
