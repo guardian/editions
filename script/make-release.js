@@ -10,7 +10,9 @@ const headers = {
 }
 
 const doFetch = async (url, params) => {
-    const resp = await fetch(url, params)
+    const resp = await fetch(url, params).catch(e => {
+        console.error(`request to ${url} failed`, e), process.exit(1)
+    })
     if (resp.status >= 200 && resp.status < 300) {
         return resp.json()
     } else {
@@ -45,29 +47,26 @@ const findReleaseForCommit = (commit, releases) => {
     return releases.find(r => r.tag_name == tagNameFromSha(commit))
 }
 
-const patchReleaseName = (name, os, appStoreId) =>
-    `${name}--${os}-${appStoreId}`
+const makeReleaseName = (name, os, appStoreId) => `${name}--${os}:${appStoreId}`
 
-const cleanBranch = branch => {
-    const split = branch.split('/')
-    return split[split.length - 1]
-}
+const cleanBranch = branch => branch.replace('refs/heads/', '')
 
 const updateRelease = async (commitSha, branch, appStoreId, os) => {
     console.log(
         `Updating github release tags with sha: ${commitSha} branch: ${branch} appStoreId: ${appStoreId} os: ${os}`,
     )
+    const shortBranch = cleanBranch(branch)
     const releases = await get('releases')
     const matchingRelease = findReleaseForCommit(commitSha, releases)
 
-    const appStoreName = os === 'ios' ? 'Apple app store' : 'Google Play store'
+    const appStoreName = os === 'ios' ? 'Apple App Store' : 'Google Play Store'
     const releaseMessage = `Released to ${appStoreName}, version ${appStoreId}. Built from branch ${branch}.`
 
     if (matchingRelease) {
         console.log(
             `Release exists (${matchingRelease.html_url}), patching release name`,
         )
-        const patchedName = patchReleaseName(
+        const patchedName = makeReleaseName(
             matchingRelease.name,
             os,
             appStoreId,
@@ -84,9 +83,9 @@ const updateRelease = async (commitSha, branch, appStoreId, os) => {
         )
     } else {
         console.log(
-            `Creating release with tag name ${commitSha}, branch ${branch}`,
+            `Creating release with tag name ${commitSha}, branch ${shortBranch}`,
         )
-        const releaseName = patchReleaseName(branch, os, appStoreId)
+        const releaseName = makeReleaseName(shortBranch, os, appStoreId)
         const release = await post('releases', {
             tag_name: tagNameFromSha(commitSha),
             prerelease: true,
@@ -114,7 +113,7 @@ if (process.argv.length - 2 < Object.keys(params).length) {
 } else {
     updateRelease(
         process.argv[params.sha],
-        cleanBranch(process.argv[params.branch]),
+        process.argv[params.branch],
         process.argv[params.appStoreId],
         process.argv[params.os],
     )
