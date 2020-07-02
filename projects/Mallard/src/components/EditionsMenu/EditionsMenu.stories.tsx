@@ -2,33 +2,12 @@ import React from 'react'
 import { storiesOf } from '@storybook/react-native'
 import { withKnobs } from '@storybook/addon-knobs'
 import { EditionsMenu } from './EditionsMenu'
-
-const mockNavigation = {
-    state: { params: {} },
-    dispatch: () => true,
-    goBack: () => true,
-    dismiss: () => true,
-    navigate: () => true,
-    openDrawer: () => true,
-    closeDrawer: () => true,
-    toggleDrawer: () => true,
-    getParam: () => true,
-    setParams: () => true,
-    addListener: () => ({ remove: () => {} }),
-    push: () => true,
-    replace: () => true,
-    pop: () => true,
-    popToTop: () => true,
-    isFocused: () => true,
-    reset: () => true,
-    isFirstRouteInParent: () => true,
-    dangerouslyGetParent: () => undefined,
-}
+import { editions, Edition } from 'src/common'
 
 const props = {
     specialEditions: [
         {
-            edition: '',
+            edition: 'daily-edition' as Edition,
             expiry: new Date(98, 1),
             devUri:
                 'https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png',
@@ -36,11 +15,15 @@ const props = {
                 source: 'media',
                 path: '/path/to/image',
             },
+            header: {
+                title: `Food
+Monthly`,
+            },
             title: `Food
 Monthly`,
             subTitle:
                 'Store cupboard special: 20 quick and easy lockdown suppers',
-            style: {
+            buttonStyle: {
                 backgroundColor: '#FEEEF7',
                 expiry: {
                     color: '#7D0068',
@@ -73,8 +56,17 @@ Monthly`,
 storiesOf('EditionsMenu', module)
     .addDecorator(withKnobs)
     .add('EditionsMenu - default', () => (
-        <EditionsMenu navigation={mockNavigation} />
+        <EditionsMenu
+            navigationPress={() => {}}
+            selectedEdition={editions.daily}
+            storeSelectedEdition={() => {}}
+        />
     ))
     .add('EditionsMenu - with Special Edition', () => (
-        <EditionsMenu navigation={mockNavigation} {...props} />
+        <EditionsMenu
+            navigationPress={() => {}}
+            selectedEdition={editions.daily}
+            storeSelectedEdition={() => {}}
+            {...props}
+        />
     ))

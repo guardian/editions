@@ -81,8 +81,7 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
             }
         },
         onNotification: async (notification: any) => {
-            const key =
-                Platform.OS === 'ios' ? notification.data.key : notification.key
+            const key = notification.data.key
             const notificationId =
                 Platform.OS === 'ios'
                     ? notification.data.uniqueIdentifier

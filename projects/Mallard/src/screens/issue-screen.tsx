@@ -14,15 +14,10 @@ import {
     View,
     ViewStyle,
 } from 'react-native'
-import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
-import { IssueMenuButton } from 'src/components/Button/IssueMenuButton'
 import { ReloadButton } from 'src/components/Button/ReloadButton'
-import { EditionsMenuButton } from 'src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton'
 import { Front } from 'src/components/front'
-import { IssueTitle } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { Header } from 'src/components/layout/header/header'
 import { Container } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
@@ -37,7 +32,6 @@ import {
     WEATHER_QUERY as FULL_WEATHER_QUERY,
 } from 'src/components/weather'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { useIssueDate } from 'src/helpers/issues'
 import {
     FlatCard,
     flattenCollectionsToCards,
@@ -52,7 +46,6 @@ import {
 import { useQuery } from 'src/hooks/apollo'
 import {
     useDimensions,
-    useEditionsMenuEnabled,
     useLargeDeviceMemory,
 } from 'src/hooks/use-config-provider'
 import { useIssueResponse } from 'src/hooks/use-issue'
@@ -62,10 +55,6 @@ import {
 } from 'src/hooks/use-issue-summary'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
 import { useIsPreview } from 'src/hooks/use-settings'
-import {
-    navigateToEditionMenu,
-    navigateToIssueList,
-} from 'src/navigation/helpers/base'
 import { PathToIssue } from 'src/paths'
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 import { sendPageViewEvent } from 'src/services/ophan'
@@ -74,6 +63,7 @@ import { metrics } from 'src/theme/spacing'
 import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
+import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -106,42 +96,6 @@ const useIsWeatherActuallyShown = () => {
     )
     return getValidWeatherData(weatherResult) != null
 }
-
-const ScreenHeader = withNavigation(
-    ({
-        issue,
-        navigation,
-    }: { issue?: IssueWithFronts } & NavigationInjectedProps) => {
-        const { date, weekday } = useIssueDate(issue)
-        const { editionsMenuEnabled } = useEditionsMenuEnabled()
-
-        const goToIssueList = () => {
-            navigateToIssueList(navigation)
-        }
-
-        const goToEditionsMenu = () => {
-            navigateToEditionMenu(navigation)
-        }
-
-        return (
-            <Header
-                onPress={() => {
-                    goToIssueList()
-                }}
-                action={<IssueMenuButton onPress={goToIssueList} />}
-                leftAction={
-                    editionsMenuEnabled && (
-                        <EditionsMenuButton onPress={goToEditionsMenu} />
-                    )
-                }
-            >
-                <View>
-                    <IssueTitle title={weekday} subtitle={date} />
-                </View>
-            </Header>
-        )
-    },
-)
 
 type FrontWithCards = (TFront & { cards: FlatCard[] })[]
 
@@ -339,7 +293,7 @@ const handleError = (
     { retry }: { retry: () => void },
 ) => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
 
         <FlexErrorMessage
             debugMessage={message}
@@ -352,7 +306,7 @@ const handleError = (
 
 const handlePending = () => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
         <FlexCenter>
             <Spinner />
         </FlexCenter>
@@ -361,7 +315,7 @@ const handlePending = () => (
 
 const handleIssueScreenError = (error: string) => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
         <FlexErrorMessage
             debugMessage={error}
             title={CONNECTION_FAILED_ERROR}
@@ -410,7 +364,7 @@ const IssueScreenWithPath = React.memo(
                                 retry()
                             }}
                         />
-                        <ScreenHeader issue={issue} />
+                        <IssueScreenHeader issue={issue} />
 
                         <WithBreakpoints>
                             {{

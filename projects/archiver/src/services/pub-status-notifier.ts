@@ -54,6 +54,7 @@ export const createPublishEvent = (
         case 'started':
         case 'assembled':
         case 'bundled':
+        case 'editionsListUpdated':
         case 'proofed':
             return {
                 ...identifier,

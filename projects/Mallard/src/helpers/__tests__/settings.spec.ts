@@ -1,9 +1,5 @@
 import { withConsent } from '../settings'
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
 describe('settings', () => {
     describe('withConsent', () => {
         it('runs deny when the relevant setting is not there', async () => {

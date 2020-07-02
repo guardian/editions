@@ -1,19 +1,22 @@
 import React from 'react'
-import { Newspaper } from 'src/components/icons/Newspaper'
+import { Editions } from 'src/components/icons/Editions'
 import { TouchableOpacity, StyleSheet } from 'react-native'
 import { color } from 'src/theme/color'
 import { LeftChevron } from 'src/components/icons/LeftChevron'
 
-const styles = StyleSheet.create({
-    button: {
-        alignItems: 'center',
-        backgroundColor: color.palette.sport.pastel,
-        borderRadius: 24,
-        justifyContent: 'center',
-        height: 42,
-        width: 42,
-    },
-})
+const styles = (selected: boolean) =>
+    StyleSheet.create({
+        button: {
+            alignItems: 'center',
+            backgroundColor: selected
+                ? color.palette.sport.pastel
+                : 'transparent',
+            borderRadius: 24,
+            justifyContent: 'center',
+            height: 42,
+            width: 42,
+        },
+    })
 
 const EditionsMenuButton = ({
     onPress,
@@ -26,9 +29,9 @@ const EditionsMenuButton = ({
         accessibilityRole="button"
         accessibilityLabel="Regions and specials editions menu"
         onPress={onPress}
-        style={styles.button}
+        style={styles(selected).button}
     >
-        {selected ? <LeftChevron /> : <Newspaper />}
+        {selected ? <LeftChevron /> : <Editions />}
     </TouchableOpacity>
 )
 

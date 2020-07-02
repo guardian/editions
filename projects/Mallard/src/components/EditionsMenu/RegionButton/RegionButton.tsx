@@ -11,7 +11,7 @@ const styles = (selected: boolean) =>
                 ? color.primary
                 : color.palette.neutral[97],
             paddingBottom: 32,
-            paddingLeft: 104,
+            paddingLeft: 96,
             paddingTop: 4,
         },
         title: {
@@ -23,7 +23,7 @@ const styles = (selected: boolean) =>
         subTitle: {
             fontFamily: families.sans.regular,
             fontSize: 15,
-            lineHeight: 16,
+            lineHeight: 18,
             color: selected ? 'white' : color.text,
         },
     })

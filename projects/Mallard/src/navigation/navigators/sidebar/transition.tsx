@@ -22,12 +22,20 @@ export const sidebarLayerTransition = (
     const { width } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
 
-    const outputRange = isTablet ? sidebarWidth : width
-    const outputRangeCheckReverse = reverse ? -outputRange : outputRange
+    const outputRangeStart =
+        isTablet && reverse ? width : isTablet ? sidebarWidth : width
+    const outputRangeStartCheckReverse = reverse
+        ? -outputRangeStart
+        : outputRangeStart
+
+    const outputRangeEnd = isTablet && reverse ? -(width - sidebarWidth) : 0
 
     const translateX = position.interpolate({
         inputRange: safeInterpolation([sceneIndex - 1, sceneIndex]),
-        outputRange: safeInterpolation([outputRangeCheckReverse, 0]),
+        outputRange: safeInterpolation([
+            outputRangeStartCheckReverse,
+            outputRangeEnd,
+        ]),
     })
 
     return {

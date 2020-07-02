@@ -66,7 +66,6 @@ remoteConfigService.init()
 Platform.OS === 'ios' && enableScreens()
 pushNotifcationRegistration(apolloClient)
 prepFileSystem()
-Platform.OS === 'android' && prepareAndDownloadTodaysIssue(apolloClient)
 
 const styles = StyleSheet.create({
     appContainer: {

@@ -77,6 +77,16 @@ export const archiverStepFunction = (
         lambdaParams,
     )
 
+    const editionsList = task(
+        scope,
+        'editionsList',
+        'Generate editions list',
+        lambdaParams,
+        {
+            backend: backendURL,
+        },
+    )
+
     const notification = task(
         scope,
         'notification',
@@ -103,7 +113,9 @@ export const archiverStepFunction = (
 
     indexerPublish.task.next(notification.task)
 
-    notification.task.next(new sfn.Succeed(scope, 'successfully-archived'))
+    notification.task.next(editionsList.task)
+
+    editionsList.task.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const archiverStateMachine = new sfn.StateMachine(
         scope,

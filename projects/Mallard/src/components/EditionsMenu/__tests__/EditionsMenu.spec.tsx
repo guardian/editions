@@ -1,64 +1,55 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { Edition, editions } from '../../../../../Apps/common/src'
+import { Edition, editions } from 'src/common'
 import { EditionsMenu } from '../EditionsMenu'
 
-jest.mock('src/components/front/image-resource', () => ({
-    ImageResource: () => 'ImageResource',
+jest.mock('src/components/EditionsMenu/RegionButton/RegionButton', () => ({
+    RegionButton: () => 'RegionButton',
 }))
 
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
+jest.mock(
+    'src/components/EditionsMenu/SpecialEditionButton/SpecialEditionButton',
+    () => ({
+        SpecialEditionButton: () => 'SpecialEditionButton',
+    }),
+)
 
-jest.mock('@apollo/react-hooks', () => ({
-    useApolloClient: () => jest.fn(),
-    useQuery: () => ({ data: 'something' }),
+jest.mock('src/components/EditionsMenu/Header/Header', () => ({
+    EditionsMenuHeader: () => 'EditionsMenuHeader',
 }))
-
-const mockNavigation = {
-    state: { params: {} },
-    dispatch: jest.fn(),
-    goBack: jest.fn(),
-    dismiss: jest.fn(),
-    navigate: jest.fn(),
-    openDrawer: jest.fn(),
-    closeDrawer: jest.fn(),
-    toggleDrawer: jest.fn(),
-    getParam: jest.fn(),
-    setParams: jest.fn(),
-    addListener: jest.fn(),
-    push: jest.fn(),
-    replace: jest.fn(),
-    pop: jest.fn(),
-    popToTop: jest.fn(),
-    isFocused: jest.fn(),
-    reset: jest.fn(),
-    isFirstRouteInParent: jest.fn(),
-    dangerouslyGetParent: jest.fn(),
-}
 
 const regionalEditions = [
     {
         title: 'The UK Daily Edition',
         subTitle: 'Published every day by 12am (GMT)',
         edition: editions.daily as Edition,
+        header: {
+            title: 'The Daily',
+        },
     },
     {
         title: 'Australia Daily',
         subTitle: 'Published every day by 9:30am (AEST)',
         edition: editions.ausWeekly as Edition,
+        header: {
+            title: 'Austraila',
+            subTitle: 'Weekender',
+        },
     },
     {
         title: 'US and Cananda Weekend',
         subTitle: 'Published every Saturday by 8am (EST)',
         edition: editions.usWeekly as Edition,
+        header: {
+            title: 'US',
+            subTitle: 'Weekender',
+        },
     },
 ]
 
 const specialEditions = [
     {
-        edition: '',
+        edition: 'daily-edition' as Edition,
         expiry: new Date(98, 1),
         image: {
             source: 'media',
@@ -67,7 +58,11 @@ const specialEditions = [
         title: `Food
 Monthly`,
         subTitle: 'Store cupboard special: 20 quick and easy lockdown suppers',
-        style: {
+        header: {
+            title: 'Food',
+            subTitle: 'Monthly',
+        },
+        buttonStyle: {
             backgroundColor: '#FEEEF7',
             expiry: {
                 color: '#7D0068',
@@ -96,28 +91,28 @@ Monthly`,
     },
 ]
 
+const props = {
+    navigationPress: () => {},
+    selectedEdition: editions.daily,
+    storeSelectedEdition: () => {},
+}
+
 describe('EditionsMenu', () => {
     it('should display a default EditionsMenu with correct styling and default Regional Buttons', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <EditionsMenu navigation={mockNavigation} />,
+            <EditionsMenu {...props} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
     it('should display a EditionsMenu with correct styling and alternative Regional Buttons', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <EditionsMenu
-                navigation={mockNavigation}
-                regionalEdtions={regionalEditions}
-            />,
+            <EditionsMenu {...props} regionalEditions={regionalEditions} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
     it('should display a EditionsMenu with correct styling default Regional Buttons and a Special Edition Button', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <EditionsMenu
-                navigation={mockNavigation}
-                specialEditions={specialEditions}
-            />,
+            <EditionsMenu {...props} specialEditions={specialEditions} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
