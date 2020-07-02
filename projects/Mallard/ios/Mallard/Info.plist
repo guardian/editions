@@ -99,7 +99,7 @@
 		<string>GuardianTextSans-Bold.ttf</string>
 		<string>GuardianTextSans-BoldItalic.ttf</string>
 		<string>GuardianTextSans-Regular.ttf</string>
-		<string>GuardianTextSans-RegularItalic.ttf</string>
+		<string>GuardianTextSans-RegularIt.ttf</string>
 		<string>GTGuardianTitlepiece-Bold.ttf</string>
 		<string>SpaceMono-Regular.ttf</string>
 		<string>GuardianTextEgyptian-Reg.ttf</string>
@@ -109,7 +109,6 @@
 		<string>GuardianWeatherIcons-Regular.ttf</string>
 		<string>guardianIcons_1.12.otf</string>
 		<string>GTGuardianDaily-Regular.otf</string>
-		<string>GuardianTextSans-RegularIt.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
