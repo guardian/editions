@@ -5,8 +5,7 @@
 import { ApolloProvider } from '@apollo/react-hooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
-import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native'
-import { enableScreens } from 'react-native-screens'
+import { AppState, StatusBar, StyleSheet, View } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationState } from 'react-navigation'
 import { NavPositionProvider } from 'src/hooks/use-nav-position'
@@ -61,9 +60,6 @@ loggingService.init(apolloClient)
 remoteConfigService.init()
 
 // --- SETUP OPERATIONS ---
-// useScreens is not a hook
-// eslint-disable-next-line react-hooks/rules-of-hooks
-Platform.OS === 'ios' && enableScreens()
 pushNotifcationRegistration(apolloClient)
 prepFileSystem()
 

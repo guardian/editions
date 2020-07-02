@@ -11107,13 +11107,6 @@ react-native-safe-area-view@^0.14.1:
   dependencies:
     debounce "^1.2.0"
 
-react-native-screens@^2.0.0-alpha.34:
-  version "2.0.0-alpha.34"
-  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.0.0-alpha.34.tgz#41c689f81a5272fd6fbd00155b6ec254dae60b52"
-  integrity sha512-O5h8S9rc25QCfWZ9NA6tBn7Wr6a3GsswI+MdtAbwpjXOkQ6ShN8mK/ROzN4Ls2HipWMVSi/1Mz6iuVhNlayJWw==
-  dependencies:
-    debounce "^1.2.0"
-
 react-native-splash-screen@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"

@@ -13,8 +13,6 @@ import {
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
-const createNativeStackNavigator = require('react-native-screens/createNativeStackNavigator')
-    .default
 import { ariaHidden } from 'src/helpers/a11y'
 import { supportsAnimation } from 'src/helpers/features'
 import { safeInterpolation } from 'src/helpers/math'
@@ -135,18 +133,6 @@ export const createSidebarNavigator = (
                 () => animatedValue,
             )
         }
-    }
-
-    // -iOS12 only use Native navigator
-    if (!supportsAnimation()) {
-        return createNativeStackNavigator(navigation, {
-            initialRouteName: '_',
-            defaultNavigationOptions: {
-                gesturesEnabled: false,
-            },
-            headerMode: 'none',
-            mode: 'card',
-        })
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
