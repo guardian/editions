@@ -25,7 +25,7 @@ export const EditionsMenuScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const {
-        editions: { regionalEditions, specialEditions },
+        editionsList: { regionalEditions, specialEditions },
         selectedEdition,
         storeSelectedEdition,
     } = useEditions()

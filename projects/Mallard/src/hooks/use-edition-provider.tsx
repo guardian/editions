@@ -1,19 +1,16 @@
-// If above failts to fetch from asyncStorage to intially publish it
-// If nothing exists use daily-edition
-
-// Combine the two as mentioned above
-// Save edition endpoint to file storage
-// Access file storage in the event that there is no wifi(?) signal
-
-// Seperate is to update the edition usage througout the app to use these functions.
-
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { RegionalEdition, SpecialEdition } from 'src/common'
 import { eventEmitter } from 'src/helpers/event-emitter'
 import { defaultSettings } from 'src/helpers/settings/defaults'
-import { defaultEditionCache, selectedEditionCache } from 'src/helpers/storage'
+import {
+    defaultEditionCache,
+    selectedEditionCache,
+    editionsListCache,
+} from 'src/helpers/storage'
 import { errorService } from 'src/services/errors'
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
+import NetInfo from '@react-native-community/netinfo'
+import { AppState, AppStateStatus } from 'react-native'
 
 interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
@@ -21,7 +18,7 @@ interface EditionsEndpoint {
 }
 
 interface EditionState {
-    editions: EditionsEndpoint
+    editionsList: EditionsEndpoint
     selectedEdition: RegionalEdition | SpecialEdition
     defaultEdition: RegionalEdition
     storeSelectedEdition: (
@@ -33,21 +30,23 @@ interface EditionState {
 export interface StoreSelectedEditionFunc {
     (
         chosenEdition: RegionalEdition | SpecialEdition,
-        type: 'RegionalEdition' | 'SpecialEdition',
+        type: 'RegionalEdition' | 'SpecialEdition' | 'TrainingEdition',
     ): void
 }
 
-const defaultState: EditionState = {
-    editions: {
-        regionalEditions: defaultRegionalEditions,
-        specialEditions: [],
-    }, // list of all editions
-    selectedEdition: defaultRegionalEditions[0], // the current chosen edition
-    defaultEdition: defaultRegionalEditions[0], // the edition to show on app start
-    storeSelectedEdition: () => {},
+const DEFAULT_EDITIONS_LIST = {
+    regionalEditions: defaultRegionalEditions,
+    specialEditions: [],
 }
 
 const BASE_EDITION = defaultRegionalEditions[0]
+
+const defaultState: EditionState = {
+    editionsList: DEFAULT_EDITIONS_LIST,
+    selectedEdition: BASE_EDITION, // the current chosen edition
+    defaultEdition: BASE_EDITION, // the edition to show on app start
+    storeSelectedEdition: () => {},
+}
 
 const EditionContext = createContext(defaultState)
 
@@ -65,10 +64,8 @@ export const getSelectedEditionSlug = async () => {
 export const getDefaultEdition = async () => await defaultEditionCache.get()
 
 const fetchEditions = async () => {
-    // Need to check network state and then read from file storage
-
     try {
-        const response = await fetch(defaultSettings.editionsUrl)
+        const response = await fetch(defaultSettings.editionsUrl + 'ksdjfh')
         if (response.status !== 200) {
             throw new Error(
                 `Bad response from Editions URL - status: ${response.status}`,
@@ -82,14 +79,40 @@ const fetchEditions = async () => {
     }
 }
 
-// Function required to store endpoint to file storage
+const getEditions = async () => {
+    try {
+        const { isConnected } = await NetInfo.fetch()
+        // We are connected
+        if (isConnected) {
+            // Grab editions list from the endpoint
+            const editionsList = await fetchEditions()
+            console.log(editionsList)
+            if (editionsList) {
+                // Successful? Store in the cache and return
+                await editionsListCache.set(editionsList)
+                return editionsList
+            }
+            // Unsuccessful, try getting it from our local storage
+            const cachedEditionsList = await editionsListCache.get()
+            console.log(cachedEditionsList)
+            if (cachedEditionsList) {
+                return cachedEditionsList
+            }
+            // Not in local storage either?
+            throw new Error('Unable to Get Editions')
+        }
+    } catch (e) {
+        errorService.captureException(e)
+        return DEFAULT_EDITIONS_LIST
+    }
+}
 
 export const EditionProvider = ({
     children,
 }: {
     children: React.ReactNode
 }) => {
-    const [editions, setEditions] = useState<EditionsEndpoint>({
+    const [editionsList, setEditionsList] = useState<EditionsEndpoint>({
         regionalEditions: defaultRegionalEditions,
         specialEditions: [],
     })
@@ -124,7 +147,7 @@ export const EditionProvider = ({
      * editions that are set in the initial state
      */
     useEffect(() => {
-        fetchEditions().then(ed => ed && setEditions(ed))
+        getEditions().then(ed => ed && setEditionsList(ed))
     }, [])
 
     /**
@@ -144,10 +167,25 @@ export const EditionProvider = ({
         eventEmitter.emit('editionUpdate')
     }
 
+    /**
+     * On App State change to foreground, we want to check for a new editionsList
+     */
+    useEffect(() => {
+        const appChangeEventHandler = async (appState: AppStateStatus) =>
+            appState === 'active' &&
+            getEditions().then(ed => ed && setEditionsList(ed))
+
+        AppState.addEventListener('change', appChangeEventHandler)
+
+        return () => {
+            AppState.removeEventListener('change', appChangeEventHandler)
+        }
+    })
+
     return (
         <EditionContext.Provider
             value={{
-                editions,
+                editionsList,
                 selectedEdition,
                 defaultEdition,
                 storeSelectedEdition,

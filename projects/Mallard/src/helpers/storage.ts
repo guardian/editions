@@ -84,6 +84,11 @@ const selectedEditionCache = createAsyncCache<RegionalEdition | SpecialEdition>(
 
 const defaultEditionCache = createAsyncCache<RegionalEdition>('defaultEdition')
 
+const editionsListCache = createAsyncCache<{
+    regionalEditions: RegionalEdition[]
+    specialEditions: SpecialEdition[]
+}>('editionsList')
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -149,4 +154,5 @@ export {
     enableEditionMenuCache,
     selectedEditionCache,
     defaultEditionCache,
+    editionsListCache,
 }

@@ -23,11 +23,11 @@ const EditionsScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { editions, storeSelectedEdition } = useEditions()
+    const { editionsList, storeSelectedEdition } = useEditions()
 
     const consolidatedEditions = [
-        ...editions.regionalEditions,
-        ...editions.specialEditions,
+        ...editionsList.regionalEditions,
+        ...editionsList.specialEditions,
     ]
 
     return (
