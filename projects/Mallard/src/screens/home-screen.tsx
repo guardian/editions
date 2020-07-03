@@ -78,7 +78,7 @@ const HomeScreenHeader = withNavigation(
     } & NavigationInjectedProps) => {
         const action = (
             <Button
-                accessibilityLabel="Close button"
+                accessibilityLabel="Close"
                 accessibilityHint="Returns to the edition"
                 accessibilityRole="button"
                 icon={'\uE04F'}
@@ -88,7 +88,7 @@ const HomeScreenHeader = withNavigation(
         )
         const settings = (
             <Button
-                accessibilityLabel="Settings button"
+                accessibilityLabel="Settings"
                 accessibilityHint="Navigates to the settings screen"
                 accessibilityRole="button"
                 icon={'\uE040'}
@@ -231,6 +231,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                     <Button
                         accessibilityLabel="Go to the latest edition button"
                         accessibilityHint="Navigates to the latest edition"
+                        accessibilityRole="button"
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
                             navigateToIssue({
