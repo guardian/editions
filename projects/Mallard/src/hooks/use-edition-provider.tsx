@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    Dispatch,
+} from 'react'
 import { RegionalEdition, SpecialEdition } from 'src/common'
 import { eventEmitter } from 'src/helpers/event-emitter'
 import { defaultSettings } from 'src/helpers/settings/defaults'
@@ -62,7 +68,14 @@ export const getSelectedEditionSlug = async () => {
     return edition ? edition.edition : BASE_EDITION.edition
 }
 
-export const getDefaultEdition = async () => await defaultEditionCache.get()
+// Exported for testing, only use internally to maintain local and async state
+export const getDefaultEdition = async () => {
+    try {
+        return await defaultEditionCache.get()
+    } catch {
+        return null
+    }
+}
 
 export const fetchEditions = async () => {
     try {
@@ -113,6 +126,55 @@ export const getEditions = async () => {
     }
 }
 
+const setEdition = async (
+    edition: RegionalEdition,
+    setDefaultEdition: Dispatch<RegionalEdition>,
+    setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
+) => {
+    setDefaultEdition(edition)
+    setSelectedEdition(edition)
+    await selectedEditionCache.set(edition)
+    await defaultEditionCache.set(edition)
+}
+
+export const defaultEditionDecider = async (
+    setDefaultEdition: Dispatch<RegionalEdition>,
+    setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
+): Promise<void> => {
+    const dE = await getDefaultEdition()
+    if (dE) {
+        setDefaultEdition(dE)
+        setSelectedEdition(dE)
+        await selectedEditionCache.set(dE)
+    } else {
+        const defaultLocaleEnabled = remoteConfigService.getBoolean(
+            'default_locale',
+        )
+        // Feature flag on?
+        if (defaultLocaleEnabled) {
+            // Get the correct edition for the locale
+            const dE = await localeToEdition.get(locale)
+            // Here as it "can" be undefined, but previous branch says not
+            if (dE) {
+                await setEdition(dE, setDefaultEdition, setSelectedEdition)
+            } else {
+                await setEdition(
+                    BASE_EDITION,
+                    setDefaultEdition,
+                    setSelectedEdition,
+                )
+            }
+        } else {
+            // FF is off, so set to the default
+            await setEdition(
+                BASE_EDITION,
+                setDefaultEdition,
+                setSelectedEdition,
+            )
+        }
+    }
+}
+
 export const EditionProvider = ({
     children,
 }: {
@@ -137,28 +199,7 @@ export const EditionProvider = ({
      * also set this as the selected edition
      */
     useEffect(() => {
-        getDefaultEdition().then(dE => {
-            if (dE) {
-                setDefaultEdition(dE)
-                setSelectedEdition(dE)
-                selectedEditionCache.set(dE)
-            } else {
-                const defaultLocaleEnabled = remoteConfigService.getBoolean(
-                    'default_locale',
-                )
-                if (defaultLocaleEnabled) {
-                    if (localeToEdition.has(locale)) {
-                        const dE = localeToEdition.get(locale)
-                        if (dE) {
-                            setDefaultEdition(dE)
-                            setSelectedEdition(dE)
-                            selectedEditionCache.set(dE)
-                            defaultEditionCache.set(dE)
-                        }
-                    }
-                }
-            }
-        })
+        defaultEditionDecider(setDefaultEdition, setSelectedEdition)
     }, [])
 
     /**

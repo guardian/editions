@@ -1,14 +1,5 @@
-import fetchMock from 'fetch-mock'
-import { defaultSettings } from 'src/helpers/settings/defaults'
-import { selectedEditionCache, editionsListCache } from 'src/helpers/storage'
-import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
-import {
-    BASE_EDITION,
-    DEFAULT_EDITIONS_LIST,
-    fetchEditions,
-    getEditions,
-    getSelectedEditionSlug,
-} from '../use-edition-provider'
+import { editionsListCache } from 'src/helpers/storage'
+import { DEFAULT_EDITIONS_LIST, getEditions } from '../use-edition-provider'
 
 jest.mock('@react-native-community/netinfo', () => ({
     fetch: jest.fn(() => Promise.resolve({ isConnected: false })),
