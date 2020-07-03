@@ -5,11 +5,12 @@ import { Status } from './status'
 import { Moment } from 'moment'
 
 export type ToolStatus =
-    | 'Processing'
+    | 'Proofing'
+    | 'Proofed'
+    | 'Publishing'
     | 'Published'
     | 'Failed'
-    | 'Copied'
-    | 'Proofed'
+    | 'Processing'
 
 export interface PublishEvent {
     edition: Edition
@@ -59,12 +60,10 @@ export const createPublishEvent = (
         case 'started':
         case 'assembled':
         case 'bundled':
-        case 'copied':
-        case 'editionsListUpdated':
             return {
                 ...identifier,
-                status: 'Processing',
-                message: `Publication stage: ${status}`,
+                status: 'Proofing',
+                message: `Proof stage: ${status}`,
                 timestamp,
             }
         case 'proofed':
@@ -74,10 +73,17 @@ export const createPublishEvent = (
                 message: `Ready for proofing on-device`,
                 timestamp,
             }
+        case 'copied':
+            return {
+                ...identifier,
+                status: 'Publishing',
+                message: `Publication stage: ${status}`,
+                timestamp,
+            }
         case 'published':
             return {
                 ...identifier,
-                status: 'Processing',
+                status: 'Published',
                 message: `Publication stage: ${status}`,
                 timestamp,
             }
@@ -86,6 +92,13 @@ export const createPublishEvent = (
                 ...identifier,
                 status: 'Published',
                 message: 'Publication processing complete',
+                timestamp,
+            }
+        case 'editionsListUpdated':
+            return {
+                ...identifier,
+                status: 'Processing',
+                message: `Publication stage: ${status}`,
                 timestamp,
             }
         case 'errored':
