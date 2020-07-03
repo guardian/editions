@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Text, Switch, Linking } from 'react-native'
+import { Alert, Text, Switch, Linking, AccessibilityRole } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationRoute,
@@ -82,15 +82,19 @@ const SignInButton = ({
     username,
     navigation,
     signOutIdentity,
+    accessible = true,
+    accessibilityRole = 'button',
 }: {
     username?: string
     navigation: NavigationScreenProp<NavigationRoute>
     signOutIdentity: () => void
+    accessible: boolean
+    accessibilityRole: AccessibilityRole
 }) =>
     username ? (
         <DualButton
-            accessible={true}
-            accessibilityRole="button"
+            accessible={accessible}
+            accessibilityRole={accessibilityRole}
             textPrimary={username}
             textSecondary="Sign out"
             onPressPrimary={() =>
@@ -103,7 +107,7 @@ const SignInButton = ({
     ) : (
         <FullButton
             accessible={true}
-            accessibilityRole="button"
+            accessibilityRole={accessibilityRole}
             text="Sign in"
             onPress={() => navigation.navigate(routeNames.SignIn)}
         />
