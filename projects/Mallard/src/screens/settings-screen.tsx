@@ -197,6 +197,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 />
                 <Heading>{``}</Heading>
                 <List
+                    accessible={true}
+                    accessibilityRole="button"
                     data={[
                         {
                             key: 'Privacy settings',
@@ -228,6 +230,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 />
                 <Heading>{``}</Heading>
                 <List
+                    accessible={true}
+                    accessibilityRole="button"
                     data={[
                         {
                             key: 'Help',
