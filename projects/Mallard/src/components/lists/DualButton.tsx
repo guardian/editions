@@ -1,21 +1,30 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, AccessibilityRole } from 'react-native'
 import { Highlight } from '../highlight'
 import { UiBodyCopy } from '../styled-text'
 import { styles } from './styles'
+import { boolean } from '@storybook/addon-knobs'
 
 const DualButton = ({
     textPrimary,
     textSecondary,
     onPressPrimary,
     onPressSecondary,
+    accessible = true,
+    accessibilityRole = 'none',
 }: {
     textPrimary: string
     textSecondary: string
     onPressPrimary: () => void
     onPressSecondary: () => void
+    accessible: boolean
+    accessibilityRole: AccessibilityRole
 }) => (
-    <View style={styles.buttonContainer}>
+    <View
+        style={styles.buttonContainer}
+        accessible={accessible}
+        accessibilityRole={accessibilityRole}
+    >
         <Highlight
             style={[styles.button, styles.buttonPrimary]}
             onPress={onPressPrimary}
