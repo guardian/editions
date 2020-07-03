@@ -142,6 +142,7 @@ export const defaultEditionDecider = async (
     setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
 ): Promise<void> => {
     const dE = await getDefaultEdition()
+    console.log(dE)
     if (dE) {
         setDefaultEdition(dE)
         setSelectedEdition(dE)
@@ -153,7 +154,7 @@ export const defaultEditionDecider = async (
         // Feature flag on?
         if (defaultLocaleEnabled) {
             // Get the correct edition for the locale
-            const dE = await localeToEdition.get(locale)
+            const dE = localeToEdition.get(locale)
             // Here as it "can" be undefined, but previous branch says not
             if (dE) {
                 await setEdition(dE, setDefaultEdition, setSelectedEdition)
