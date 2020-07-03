@@ -142,7 +142,6 @@ export const defaultEditionDecider = async (
     setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
 ): Promise<void> => {
     const dE = await getDefaultEdition()
-    console.log(dE)
     if (dE) {
         setDefaultEdition(dE)
         setSelectedEdition(dE)
