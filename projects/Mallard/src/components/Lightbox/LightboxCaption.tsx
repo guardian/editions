@@ -73,7 +73,7 @@ const LightboxCaption = ({
     const captionStyles = captionStyleSheet(pillarColor)
     const captionText = () => {
         if (displayCredit === true && credit) {
-            return caption + '<br>' + credit
+            return caption + '&nbsp' + credit
         } else {
             return caption
         }
