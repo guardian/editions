@@ -36,12 +36,12 @@ export interface StoreSelectedEditionFunc {
     ): void
 }
 
-const DEFAULT_EDITIONS_LIST = {
+export const DEFAULT_EDITIONS_LIST = {
     regionalEditions: defaultRegionalEditions,
     specialEditions: [],
 }
 
-const BASE_EDITION = defaultRegionalEditions[0]
+export const BASE_EDITION = defaultRegionalEditions[0]
 
 const localeToEdition = new Map<string, RegionalEdition>()
 localeToEdition.set('en_AU', defaultRegionalEditions[1])
@@ -58,19 +58,13 @@ const defaultState: EditionState = {
 const EditionContext = createContext(defaultState)
 
 export const getSelectedEditionSlug = async () => {
-    try {
-        const edition = await selectedEditionCache.get()
-        return edition ? edition.edition : BASE_EDITION.edition
-    } catch {
-        // This needs a better tactic inorder to match the default???
-        return BASE_EDITION.edition
-    }
+    const edition = await selectedEditionCache.get()
+    return edition ? edition.edition : BASE_EDITION.edition
 }
 
-// Need to consider remote config here and how this will work...
 export const getDefaultEdition = async () => await defaultEditionCache.get()
 
-const fetchEditions = async () => {
+export const fetchEditions = async () => {
     try {
         const response = await fetch(defaultSettings.editionsUrl)
         if (response.status !== 200) {
@@ -86,7 +80,7 @@ const fetchEditions = async () => {
     }
 }
 
-const getEditions = async () => {
+export const getEditions = async () => {
     try {
         const { isConnected } = await NetInfo.fetch()
         // We are connected
@@ -106,6 +100,13 @@ const getEditions = async () => {
             // Not in local storage either?
             throw new Error('Unable to Get Editions')
         }
+        // Not connected? Try local storage
+        const cachedEditionsList = await editionsListCache.get()
+        if (cachedEditionsList) {
+            return cachedEditionsList
+        }
+        // Not in local storage either?
+        throw new Error('Unable to Get Editions')
     } catch (e) {
         errorService.captureException(e)
         return DEFAULT_EDITIONS_LIST
@@ -177,7 +178,6 @@ export const EditionProvider = ({
         chosenEdition,
         type,
     ) => {
-        // What happens if async storage setting fails??
         await selectedEditionCache.set(chosenEdition)
         setSelectedEdition(chosenEdition)
         if (type === 'RegionalEdition') {

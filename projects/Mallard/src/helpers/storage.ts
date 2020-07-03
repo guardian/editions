@@ -1,15 +1,15 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import { Settings, Platform } from 'react-native'
+import { Platform, Settings } from 'react-native'
 import * as Keychain from 'react-native-keychain'
+import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
+import { ReceiptIOS } from 'src/authentication/services/iap'
+import { RegionalEdition, SpecialEdition } from 'src/common'
 import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
-import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
-import { ReceiptIOS } from 'src/authentication/services/iap'
 import { PushNotificationRegistration } from 'src/push-notifications/push-notifications'
-import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
-import { RegionalEdition, SpecialEdition } from '../../../Apps/common/src'
+import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app

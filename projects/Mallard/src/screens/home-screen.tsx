@@ -444,7 +444,7 @@ export const HomeScreen = () => {
     } = useEditions()
     const { editionsMenuEnabled } = useEditionsMenuEnabled()
 
-    // TODO: Can be removed once Editions goes live
+    // @TODO: Can be removed once Editions goes live
     const IssuePickerWithFlag = () =>
         editionsMenuEnabled ? (
             <IssuePickerHeader title={title} subTitle={subTitle} />
