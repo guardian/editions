@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     captionText: {
         color: themeColors(ArticleTheme.Dark).text,
         paddingLeft: 2,
+        paddingRight: 13,
         paddingBottom: 50,
     },
     caption: {
@@ -52,6 +53,9 @@ const captionStyleSheet = (pillarColor: string) => {
             textDecorationLine: 'underline',
             textDecorationColor: pillarColor,
         },
+        em: {
+            fontFamily: families.sans.regularItalic,
+        },
     })
 }
 
@@ -69,7 +73,7 @@ const LightboxCaption = ({
     const captionStyles = captionStyleSheet(pillarColor)
     const captionText = () => {
         if (displayCredit === true && credit) {
-            return caption + '<br>' + credit
+            return caption + '&nbsp' + credit
         } else {
             return caption
         }
@@ -77,7 +81,9 @@ const LightboxCaption = ({
     return (
         <View style={styles.captionWrapper}>
             <View style={styles.caption}>
-                <NativeArrow fill={pillarColor} direction={Direction.top} />
+                {caption.length > 1 && (
+                    <NativeArrow fill={pillarColor} direction={Direction.top} />
+                )}
                 <View style={styles.captionText}>
                     <HTMLView
                         value={'<caption>' + captionText() + '</caption>'}

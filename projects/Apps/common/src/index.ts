@@ -574,12 +574,16 @@ export interface RegionalEdition {
     title: string
     subTitle: string
     edition: Edition
+    header: {
+        title: string
+        subTitle?: string
+    }
 }
 
 export interface SpecialEdition {
     buttonStyle: SpecialEditionButtonStyles
     devUri?: string
-    edition: string
+    edition: Edition
     expiry: Date
     headerStyle?: SpecialEditionHeaderStyles
     image: Image

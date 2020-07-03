@@ -63,7 +63,7 @@ import { metrics } from 'src/theme/spacing'
 import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { ScreenHeader } from '../components/ScreenHeader/ScreenHeader'
+import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -293,7 +293,7 @@ const handleError = (
     { retry }: { retry: () => void },
 ) => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
 
         <FlexErrorMessage
             debugMessage={message}
@@ -306,7 +306,7 @@ const handleError = (
 
 const handlePending = () => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
         <FlexCenter>
             <Spinner />
         </FlexCenter>
@@ -315,7 +315,7 @@ const handlePending = () => (
 
 const handleIssueScreenError = (error: string) => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
         <FlexErrorMessage
             debugMessage={error}
             title={CONNECTION_FAILED_ERROR}
@@ -364,7 +364,7 @@ const IssueScreenWithPath = React.memo(
                                 retry()
                             }}
                         />
-                        <ScreenHeader issue={issue} />
+                        <IssueScreenHeader issue={issue} />
 
                         <WithBreakpoints>
                             {{

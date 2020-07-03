@@ -1,43 +1,69 @@
 import React from 'react'
-import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { ScreenHeader } from '../ScreenHeader'
-import { IssueOrigin } from '../../../../../Apps/common/src'
-
-jest.mock('src/helpers/locale', () => ({
-    locale: 'en_GB',
-}))
-
-jest.mock('react-navigation', () => ({
-    withNavigation: (child: any) => child,
-}))
-
-const issue = {
-    name: 'Daily Edition',
-    date: '2020-06-25',
-    key: 'daily-edition/2020-06-25',
-    publishedId: 'daily-edition/2020-06-25/2020-06-25T00:58:19.4Z',
-    localId: 'daily-edition/2020-06-25',
-    fronts: [],
-    origin: 'api' as IssueOrigin,
-}
+import { props } from '../fixtures'
+import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 
 describe('ScreenHeader', () => {
-    it('should match the default style', () => {
+    it('should show a default version', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <ScreenHeader issue={issue} />,
+            <ScreenHeader title={props.title} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
-    it('should match the altered style by the prop headerStyles', () => {
+    it('should show a version with title', () => {
+        const component: ReactTestRendererJSON | null = TestRenderer.create(
+            <ScreenHeader title={props.title} subTitle={props.subTitle} />,
+        ).toJSON()
+        expect(component).toMatchSnapshot()
+    })
+    it('should show a version with title and subTitle', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
             <ScreenHeader
-                issue={issue}
-                headerStyles={{
-                    backgroundColor: '#7D0068',
-                    textColorPrimary: '#007ABC',
-                    textColorSecondary: '#F3C100',
-                }}
+                title={props.title}
+                subTitle={props.subTitle}
+                rightAction={props.rightAction}
             />,
+        ).toJSON()
+        expect(component).toMatchSnapshot()
+    })
+    it('should show a version with title, subTitle and rightAction', () => {
+        const component: ReactTestRendererJSON | null = TestRenderer.create(
+            <ScreenHeader />,
+        ).toJSON()
+        expect(component).toMatchSnapshot()
+    })
+    it('should show a version with title, subTitle, rightAction and leftAction', () => {
+        const component: ReactTestRendererJSON | null = TestRenderer.create(
+            <ScreenHeader
+                title={props.title}
+                subTitle={props.subTitle}
+                rightAction={props.rightAction}
+                leftAction={props.leftAction}
+            />,
+        ).toJSON()
+        expect(component).toMatchSnapshot()
+    })
+    it('should show a version with title, subTitle, rightAction, leftAction and pressable title', () => {
+        const component: ReactTestRendererJSON | null = TestRenderer.create(
+            <ScreenHeader
+                title={props.title}
+                subTitle={props.subTitle}
+                rightAction={props.rightAction}
+                leftAction={props.leftAction}
+                onPress={props.onPress}
+            />,
+        ).toJSON()
+        expect(component).toMatchSnapshot()
+    })
+    it('should show a version with title, subTitle, rightAction, leftAction, pressable title and header styles', () => {
+        const component: ReactTestRendererJSON | null = TestRenderer.create(
+            <ScreenHeader {...props} />,
+        ).toJSON()
+        expect(component).toMatchSnapshot()
+    })
+    it('should show a default version when a subTitle is provided but no title', () => {
+        const component: ReactTestRendererJSON | null = TestRenderer.create(
+            <ScreenHeader subTitle={props.subTitle} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })

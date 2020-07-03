@@ -6,17 +6,28 @@ export const defaultRegionalEditions: RegionalEdition[] = [
         subTitle: `Published every morning
 by 6am (GMT)`,
         edition: editions.daily,
+        header: {
+            title: 'The Daily',
+        },
     },
     {
-        title: 'Australia Weekend',
+        title: 'Australia Weekender',
         subTitle: `Published every Saturday morning 
 by 6am (AEST)`,
         edition: editions.ausWeekly,
+        header: {
+            title: 'Australia',
+            subTitle: 'Weekender',
+        },
     },
     {
-        title: 'US Weekend',
+        title: 'US Weekender',
         subTitle: `Published every Saturday morning 
 by 6am (EST)`,
         edition: editions.usWeekly,
+        header: {
+            title: 'US',
+            subTitle: 'Weekender',
+        },
     },
 ]
