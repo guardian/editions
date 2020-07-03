@@ -9,7 +9,7 @@ import { ListObjectsV2Output } from 'aws-sdk/clients/s3'
 
 const createCMSFrontsS3Client = () => {
     const roleArn = process.env.arn
-    console.log(`Creating S3 client with role arn: $roleArn`)
+    console.log(`Creating S3 client with role arn: ${roleArn}`)
     const options: ChainableTemporaryCredentials.ChainableTemporaryCredentialsOptions = {
         params: {
             RoleArn: roleArn as string,
