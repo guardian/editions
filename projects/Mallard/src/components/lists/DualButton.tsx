@@ -3,7 +3,6 @@ import { Text, View, AccessibilityRole } from 'react-native'
 import { Highlight } from '../highlight'
 import { UiBodyCopy } from '../styled-text'
 import { styles } from './styles'
-import { boolean } from '@storybook/addon-knobs'
 
 const DualButton = ({
     textPrimary,
