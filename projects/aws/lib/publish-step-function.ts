@@ -77,7 +77,9 @@ export const publishArchiverStepFunction = (
 
     notification.task.next(editionsList.task)
 
-    editionsList.task.next(new sfn.Succeed(scope, 'publish-successfully-archived'))
+    editionsList.task.next(
+        new sfn.Succeed(scope, 'publish-successfully-archived'),
+    )
 
     const stateMachine = new sfn.StateMachine(
         scope,
