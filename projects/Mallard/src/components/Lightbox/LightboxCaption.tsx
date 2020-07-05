@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Platform } from 'react-native'
 import { ArticleTheme } from 'src/components/article/html/article'
 import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow'
 import { themeColors } from 'src/components/article/html/helpers/css'
@@ -10,7 +10,6 @@ import HTMLView from 'react-native-htmlview'
 const styles = StyleSheet.create({
     captionWrapper: {
         fontFamily: families.text.regular,
-        fontSize: 14,
         position: 'absolute',
         zIndex: 1,
         opacity: 0.8,
@@ -23,13 +22,13 @@ const styles = StyleSheet.create({
         color: themeColors(ArticleTheme.Dark).text,
         paddingLeft: 2,
         paddingRight: 13,
-        paddingBottom: 50,
     },
     caption: {
         display: 'flex',
+        flex: 1,
         flexDirection: 'row',
-        paddingTop: 5,
         paddingHorizontal: 10,
+        paddingBottom: 50,
     },
 })
 
@@ -38,6 +37,7 @@ const captionStyleSheet = (pillarColor: string) => {
         caption: {
             fontFamily: families.sans.regular,
             color: themeColors(ArticleTheme.Dark).text,
+            fontSize: Platform.OS === 'android' ? 16 : 14,
         },
         b: {
             fontFamily: families.sans.bold,
@@ -73,7 +73,7 @@ const LightboxCaption = ({
     const captionStyles = captionStyleSheet(pillarColor)
     const captionText = () => {
         if (displayCredit === true && credit) {
-            return caption + '&nbsp' + credit
+            return caption + ' ' + credit
         } else {
             return caption
         }
@@ -82,7 +82,11 @@ const LightboxCaption = ({
         <View style={styles.captionWrapper}>
             <View style={styles.caption}>
                 {caption.length > 1 && (
-                    <NativeArrow fill={pillarColor} direction={Direction.top} />
+                    <NativeArrow
+                        fill={pillarColor}
+                        direction={Direction.top}
+                        marginTop={Platform.OS === 'android' ? 8 : 4}
+                    />
                 )}
                 <View style={styles.captionText}>
                     <HTMLView
