@@ -1,11 +1,19 @@
-import React from 'react'
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import {
+    StyleSheet,
+    View,
+    KeyboardAvoidingView,
+    Keyboard,
+    Dimensions,
+    Platform,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { useInsets } from 'src/hooks/use-screen'
 import { CloseModalButton } from '../Button/CloseModalButton'
 import { TitlepieceText, UiBodyCopy } from '../styled-text'
 import { Spinner } from '../Spinner/Spinner'
+import DeviceInfo from 'react-native-device-info'
 
 const loginHeaderStyles = StyleSheet.create({
     wrapper: {
@@ -91,30 +99,58 @@ const LoginLayout = ({
     title: string
     errorMessage: string | null
     onDismiss: () => void
-}) => (
-    <View style={loginLayoutStyles.wrapper}>
-        <KeyboardAvoidingView
-            style={loginLayoutStyles.keyboardAvoider}
-            behavior="padding"
-        >
-            <View style={loginLayoutStyles.inner}>
-                <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
-                <View style={loginLayoutStyles.inputsContainer}>
-                    {errorMessage && (
-                        <UiBodyCopy style={loginLayoutStyles.error}>
-                            {errorMessage}
-                        </UiBodyCopy>
-                    )}
-                    {children}
+}) => {
+    const [avoidKeyboard, setAvoidKeyboard] = useState(true)
+
+    const toggleAvoidKeyboard = (e: any) => {
+        console.log(Dimensions.get('window').width, e.endCoordinates.width)
+        // e.endCoordinates.width > 0 &&
+        e.endCoordinates.width !== Dimensions.get('window').width
+            ? setAvoidKeyboard(false)
+            : setAvoidKeyboard(true)
+    }
+
+    // the 'floating keyboard' on ios13 causes problems for KeyboardAvoidingView
+    // see: https://stackoverflow.com/questions/59871352/is-is-possible-on-ipad-os-to-detect-if-the-keyboard-is-in-floating-mode
+    // here we detect the floating keyboard using the keyboard width in order to disable the view
+    useEffect(() => {
+        if (Platform.OS === 'ios' && DeviceInfo.isTablet()) {
+            const listener = Keyboard.addListener(
+                'keyboardDidChangeFrame',
+                toggleAvoidKeyboard,
+            )
+            return () => {
+                listener.remove()
+            }
+        }
+    }, [])
+
+    return (
+        <View style={loginLayoutStyles.wrapper}>
+            <KeyboardAvoidingView
+                style={loginLayoutStyles.keyboardAvoider}
+                behavior="padding"
+                enabled={avoidKeyboard}
+            >
+                <View style={loginLayoutStyles.inner}>
+                    <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
+                    <View style={loginLayoutStyles.inputsContainer}>
+                        {errorMessage && (
+                            <UiBodyCopy style={loginLayoutStyles.error}>
+                                {errorMessage}
+                            </UiBodyCopy>
+                        )}
+                        {children}
+                    </View>
                 </View>
-            </View>
-            {isLoading && (
-                <View style={loginLayoutStyles.spinnerContainer}>
-                    <Spinner />
-                </View>
-            )}
-        </KeyboardAvoidingView>
-    </View>
-)
+                {isLoading && (
+                    <View style={loginLayoutStyles.spinnerContainer}>
+                        <Spinner />
+                    </View>
+                )}
+            </KeyboardAvoidingView>
+        </View>
+    )
+}
 
 export { LoginLayout, LoginHeader }
