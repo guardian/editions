@@ -585,6 +585,10 @@ export interface SpecialEdition {
     devUri?: string
     edition: Edition
     expiry: Date
+    header: {
+        title: string
+        subTitle?: string
+    }
     headerStyle?: SpecialEditionHeaderStyles
     image: Image
     subTitle: string

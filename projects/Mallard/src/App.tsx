@@ -43,6 +43,7 @@ import { remoteConfigService } from './services/remote-config'
 import analytics from '@react-native-firebase/analytics'
 import { clearDownloadsDirectory } from './download-edition/clear-issues'
 import { prepFileSystem } from './helpers/files'
+import { EditionProvider } from './hooks/use-edition-provider'
 
 analytics().setAnalyticsCollectionEnabled(false)
 
@@ -137,6 +138,7 @@ const WithProviders = nestProviders(
     ToastProvider,
     NavPositionProvider,
     ConfigProvider,
+    EditionProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>

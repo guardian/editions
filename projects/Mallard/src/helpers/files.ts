@@ -11,6 +11,7 @@ import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { withCache } from './fetch/cache'
 import { updateListeners } from 'src/download-edition/download-and-unzip'
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 
 interface BasicFile {
     filename: string
@@ -155,7 +156,7 @@ const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
 
 export const getLocalIssues = async () => {
     const editionDirectory = await FSPaths.editionDir()
-    const edition = await getSetting('edition')
+    const edition = await getSelectedEditionSlug()
     return RNFS.readdir(editionDirectory).then(files =>
         files.map(withPathPrefix(edition)),
     )
@@ -163,7 +164,7 @@ export const getLocalIssues = async () => {
 
 export const issuesToDelete = async (files: string[]) => {
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
-    const edition = await getSetting('edition')
+    const edition = await getSelectedEditionSlug()
     const lastNumberOfDays = lastNDays(maxAvailableEditions)
     return files.filter(
         issue =>
@@ -202,7 +203,7 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> => {
 
 export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     const apiUrl = await getSetting('apiUrl')
-    const edition = await getSetting('edition')
+    const edition = await getSelectedEditionSlug()
     const editionDirectory = await FSPaths.editionDir()
 
     const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
