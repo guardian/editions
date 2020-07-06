@@ -1,5 +1,5 @@
 import { AccuWeatherLocation, Forecast } from 'src/common'
-import { AppState } from 'react-native'
+import { AppState, Platform } from 'react-native'
 import ApolloClient from 'apollo-client'
 import Geolocation, {
     GeolocationResponse,
@@ -8,6 +8,7 @@ import { resolveLocationPermissionStatus } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
 import gql from 'graphql-tag'
 import * as RNLocalize from 'react-native-localize'
+import { locale } from './locale'
 
 class CannotFetchError extends Error {}
 
@@ -121,6 +122,13 @@ const makeWeatherObject = (
     lastUpdated: Date.now(),
 })
 
+const shouldUseMetric = (): boolean => {
+    return Platform.select({
+        ios: RNLocalize.getTemperatureUnit() === 'celsius',
+        android: locale === 'en_US' ? false : true,
+    })
+}
+
 /**
  * We augment the return object with `__typename` fields to that Apollo can
  * "reconcile" the value when we update the cache later. If the weather is
@@ -131,9 +139,10 @@ const getWeather = async (
 ): Promise<Weather | null> => {
     try {
         const { accuLoc, isPrecise } = await getCurrentLocation()
-        const usesMetricTemp = RNLocalize.getTemperatureUnit() === 'celsius'
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
-            `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=${usesMetricTemp}&language=en-gb`,
+            `forecasts/v1/hourly/12hour/${
+                accuLoc.Key
+            }.json?metric=${shouldUseMetric()}&language=en-gb`,
         )
         return makeWeatherObject(accuLoc, isPrecise, forecasts)
     } catch (error) {
