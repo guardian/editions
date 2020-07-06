@@ -85,7 +85,7 @@ const LightboxCaption = ({
                     <NativeArrow
                         fill={pillarColor}
                         direction={Direction.top}
-                        marginTop={Platform.OS === 'android' ? 8 : 4}
+                        marginTop={Platform.OS === 'android' ? 10 : 4}
                     />
                 )}
                 <View style={styles.captionText}>
