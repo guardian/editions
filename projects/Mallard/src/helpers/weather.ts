@@ -138,11 +138,7 @@ const getWeather = async (
     fallback: Weather | null,
 ): Promise<Weather | null> => {
     try {
-        console.log('LOCALE:', locale)
-        console.log('METRIC:', shouldUseMetric())
-        console.log('RNMetric:', RNLocalize.getTemperatureUnit())
         const { accuLoc, isPrecise } = await getCurrentLocation()
-        const usesMetricTemp = RNLocalize.getTemperatureUnit() === 'celsius'
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
             `forecasts/v1/hourly/12hour/${
                 accuLoc.Key
