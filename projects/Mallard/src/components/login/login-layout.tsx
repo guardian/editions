@@ -103,8 +103,6 @@ const LoginLayout = ({
     const [avoidKeyboard, setAvoidKeyboard] = useState(true)
 
     const toggleAvoidKeyboard = (e: any) => {
-        console.log(Dimensions.get('window').width, e.endCoordinates.width)
-        // e.endCoordinates.width > 0 &&
         e.endCoordinates.width !== Dimensions.get('window').width
             ? setAvoidKeyboard(false)
             : setAvoidKeyboard(true)
