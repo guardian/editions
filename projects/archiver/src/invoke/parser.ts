@@ -1,4 +1,8 @@
-import { Attempt, failure, IssuePublicationIdentifier } from '../../common'
+import {
+    Attempt,
+    failure,
+    IssuePublicationActionIdentifier,
+} from '../../common'
 import { GetS3ObjParams } from '../utils/s3'
 import { Record } from '.'
 
@@ -14,7 +18,7 @@ const isValidJSON = (s: string): boolean => {
 export const parseRecordInternal = (
     objContent: string,
     loc = '',
-): Attempt<IssuePublicationIdentifier> => {
+): Attempt<IssuePublicationActionIdentifier> => {
     if (!isValidJSON(objContent)) {
         return failure({
             error: new Error(),
@@ -22,11 +26,12 @@ export const parseRecordInternal = (
         })
     }
 
-    const { edition, version, issueDate } = JSON.parse(
+    const { action, edition, version, issueDate } = JSON.parse(
         objContent,
-    ) as IssuePublicationIdentifier
+    ) as IssuePublicationActionIdentifier
 
     if (
+        action === undefined ||
         edition === undefined ||
         version === undefined ||
         issueDate === undefined
@@ -34,17 +39,17 @@ export const parseRecordInternal = (
         return failure({
             error: new Error(),
             messages: [
-                `⚠️ ${loc} json file with issue details did not contained requiered fileds: (edition, version, issueDate)`,
+                `⚠️ ${loc} json file with issue details did not contained required fileds: (edition, version, issueDate)`,
             ],
         })
     }
-    return { edition, version, issueDate }
+    return { action, edition, version, issueDate }
 }
 
 export const parseRecord = async (
     record: Record,
     s3fetch: (params: GetS3ObjParams) => Promise<string>,
-): Promise<Attempt<IssuePublicationIdentifier>> => {
+): Promise<Attempt<IssuePublicationActionIdentifier>> => {
     console.log('Starting to parse record')
     const bucket = record.s3.bucket.name
     const key = decodeURIComponent(record.s3.object.key)

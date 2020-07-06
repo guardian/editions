@@ -8,10 +8,11 @@ import { oc } from 'ts-optchain'
 import { ListObjectsV2Output } from 'aws-sdk/clients/s3'
 
 const createCMSFrontsS3Client = () => {
-    console.log(`Creating S3 client with role arn: ${process.env.arn}`)
+    const roleArn = process.env.arn
+    console.log(`Creating S3 client with role arn: ${roleArn}`)
     const options: ChainableTemporaryCredentials.ChainableTemporaryCredentialsOptions = {
         params: {
-            RoleArn: process.env.arn as string,
+            RoleArn: roleArn as string,
             RoleSessionName: 'front-assume-role-access',
         },
         stsConfig: {},
@@ -23,7 +24,7 @@ const createCMSFrontsS3Client = () => {
 
     return new S3({
         region: 'eu-west-1',
-        credentials: process.env.arn ? cmsFrontsTmpCreds : iniFileCreds,
+        credentials: roleArn ? cmsFrontsTmpCreds : iniFileCreds,
     })
 }
 

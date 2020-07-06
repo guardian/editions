@@ -8,14 +8,16 @@ export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
     updated: Date
 }
 
+// prettier-ignore
 export const publishedStatuses = [
-    'bundled', // zip files built and uploaded
-    'proofed', // index file generated in proof bucket
-    'copied', // copied across to publish bucket
-    'published', // index file generated in publish bucket
-    'editionsListUpdated', // editions list uploaded to proof and publish bucket
-    'notified', // notification sent
+    'bundled',              // zip files built and uploaded
+    'proofed',              // index file generated in proof bucket
+    'copied',               // copied across to publish bucket
+    'published',            // index file generated in publish bucket
+    'editionsListUpdated',  // editions list uploaded to proof or publish bucket
+    'notified',             // notification sent
 ] as const
+
 export const statuses = [
     ...publishedStatuses,
     'started', // started the process of building

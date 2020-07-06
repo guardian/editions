@@ -269,6 +269,11 @@ export interface IssuePublicationIdentifier extends IssueIdentifier {
     version: string
 }
 
+export interface IssuePublicationActionIdentifier
+    extends IssuePublicationIdentifier {
+    action: string
+}
+
 export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string

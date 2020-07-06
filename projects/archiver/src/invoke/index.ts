@@ -9,6 +9,7 @@ import {
     hasSucceeded,
     withFailureMessage,
     IssuePublicationIdentifier,
+    IssuePublicationActionIdentifier,
 } from '../../common'
 import { IssueParams } from '../tasks/issue'
 import { fetchfromCMSFrontsS3, GetS3ObjParams } from '../utils/s3'
@@ -62,7 +63,10 @@ const getRuntimeInvokeStateMachineFunction = (stateMachineArn: string) => {
 }
 
 export interface InvokerDependencies {
-    stateMachineInvoke: (
+    proofStateMachineInvoke: (
+        issuePub: IssuePublicationIdentifier,
+    ) => Promise<IssuePublicationIdentifier | Failure>
+    publishStateMachineInvoke: (
         issuePub: IssuePublicationIdentifier,
     ) => Promise<IssuePublicationIdentifier | Failure>
     s3fetch: (params: GetS3ObjParams) => Promise<string>
@@ -73,25 +77,32 @@ export const internalHandler = async (
     dependencies: InvokerDependencies,
 ) => {
     const maybeIssuesPromises: Promise<
-        Attempt<IssuePublicationIdentifier>
+        Attempt<IssuePublicationActionIdentifier>
     >[] = Records.map(async r => {
         return await parseRecord(r, dependencies.s3fetch)
     })
 
     const maybeIssues: Attempt<
-        IssuePublicationIdentifier
+        IssuePublicationActionIdentifier
     >[] = await Promise.all(maybeIssuesPromises)
 
-    const issues: IssuePublicationIdentifier[] = maybeIssues.filter(
+    const issues: IssuePublicationActionIdentifier[] = maybeIssues.filter(
         hasSucceeded,
     )
 
     console.log('Found following issues:', JSON.stringify(issues))
 
     const runs = await Promise.all(
-        issues.map(issuePublication =>
-            dependencies.stateMachineInvoke(issuePublication),
-        ),
+        issues.map(issuePublication => {
+            if (issuePublication.action === 'proof')
+                return dependencies.proofStateMachineInvoke(
+                    issuePublication as IssuePublicationIdentifier,
+                )
+            else
+                return dependencies.publishStateMachineInvoke(
+                    issuePublication as IssuePublicationIdentifier,
+                )
+        }),
     )
 
     const succesfulInvocations = runs
@@ -110,20 +121,29 @@ export const handler: Handler<
     },
     (string | Failure)[]
 > = async ({ Records }) => {
-    const stateMachineArnEnv = 'stateMachineARN'
-    const stateMachineArn = process.env[stateMachineArnEnv]
+    const proofStateMachineArnEnv = 'proofStateMachineARN'
+    const proofStateMachineArn = process.env[proofStateMachineArnEnv]
+    const publishStateMachineArnEnv = 'publishStateMachineARN'
+    const publishStateMachineArn = process.env[publishStateMachineArnEnv]
 
-    if (stateMachineArn == null) {
-        throw new Error('No State Machine ARN configured')
+    if (proofStateMachineArn == null) {
+        throw new Error('No Proof State Machine ARN configured')
     }
+    if (publishStateMachineArn == null) {
+        throw new Error('No Publish State Machine ARN configured')
+    }
+
     console.log(
-        `Attempting to invoke ${stateMachineArn} after receiving records:`,
+        `Attempting to invoke Proof/Publish State Machines after receiving records:`,
         Records,
     )
 
     const runtimeDependencies: InvokerDependencies = {
-        stateMachineInvoke: getRuntimeInvokeStateMachineFunction(
-            stateMachineArn,
+        proofStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
+            proofStateMachineArn,
+        ),
+        publishStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
+            publishStateMachineArn,
         ),
         s3fetch: fetchfromCMSFrontsS3,
     }
