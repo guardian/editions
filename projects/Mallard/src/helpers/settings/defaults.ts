@@ -14,7 +14,7 @@ export const backends = [
     {
         title: 'PROD proofed',
         value: 'https://editions-proof-prod.s3-eu-west-1.amazonaws.com/',
-        preview: false,
+        preview: true,
     },
     {
         title: 'PROD preview',
@@ -29,7 +29,7 @@ export const backends = [
     {
         title: 'CODE proofed',
         value: 'https://editions-proof-code.s3-eu-west-1.amazonaws.com/',
-        preview: false,
+        preview: true,
     },
     {
         title: 'CODE preview',
