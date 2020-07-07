@@ -5,16 +5,18 @@ import { Direction } from '../../../../../../../Apps/common/src'
 export const NativeArrow = ({
     fill,
     direction,
+    marginTop = 4,
 }: {
     fill: string
     direction: Direction
+    marginTop?: number
 }) => (
     <Svg
         width={11}
         height={9}
         viewBox="0 0 11 9"
         fill="none"
-        style={{ marginTop: 4 }}
+        style={{ marginTop: marginTop }}
         rotation={direction}
     >
         <G opacity="1.0">
