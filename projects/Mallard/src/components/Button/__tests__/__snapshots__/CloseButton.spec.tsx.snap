@@ -1,8 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CloseModalButton should display a CloseModalButton 1`] = `
+exports[`CloseButton should display a CloseButton with an alternative appearance 1`] = `
 <View
-  accessibilityHint="Dismiss"
+  accessibilityHint="Accessibility Hint"
+  accessibilityLabel="Accessibility Label"
   accessibilityRole="button"
   accessible={true}
   focusable={true}
@@ -39,7 +40,7 @@ exports[`CloseModalButton should display a CloseModalButton 1`] = `
           "paddingHorizontal": 21,
         },
         Object {
-          "backgroundColor": "#ffe500",
+          "backgroundColor": "#41A9E0",
         },
         Object {
           "alignItems": "center",
@@ -48,14 +49,7 @@ exports[`CloseModalButton should display a CloseModalButton 1`] = `
           "paddingHorizontal": 0,
           "width": 42,
         },
-        Array [
-          Object {
-            "backgroundColor": "transparent",
-            "borderColor": "#052962",
-            "borderWidth": 1,
-            "paddingHorizontal": 0,
-          },
-        ],
+        undefined,
       ]
     }
   >
@@ -70,11 +64,9 @@ exports[`CloseModalButton should display a CloseModalButton 1`] = `
           },
           Array [
             Object {
-              "color": "#121212",
+              "color": "white",
             },
-            Object {
-              "color": "#052962",
-            },
+            undefined,
           ],
         ]
       }
@@ -85,9 +77,10 @@ exports[`CloseModalButton should display a CloseModalButton 1`] = `
 </View>
 `;
 
-exports[`CloseModalButton should display a CloseModalButton with a colour prop 1`] = `
+exports[`CloseButton should display a default CloseButton 1`] = `
 <View
-  accessibilityHint="Dismiss"
+  accessibilityHint="Accessibility Hint"
+  accessibilityLabel="Accessibility Label"
   accessibilityRole="button"
   accessible={true}
   focusable={true}
@@ -133,14 +126,7 @@ exports[`CloseModalButton should display a CloseModalButton with a colour prop 1
           "paddingHorizontal": 0,
           "width": 42,
         },
-        Array [
-          Object {
-            "backgroundColor": "#41A9E0",
-            "borderColor": "#41A9E0",
-            "borderWidth": 1,
-            "paddingHorizontal": 0,
-          },
-        ],
+        undefined,
       ]
     }
   >
@@ -157,9 +143,7 @@ exports[`CloseModalButton should display a CloseModalButton with a colour prop 1
             Object {
               "color": "#121212",
             },
-            Object {
-              "color": "white",
-            },
+            undefined,
           ],
         ]
       }
