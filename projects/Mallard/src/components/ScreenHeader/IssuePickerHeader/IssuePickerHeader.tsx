@@ -4,6 +4,7 @@ import { SpecialEditionHeaderStyles } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { navigateToSettings } from 'src/navigation/helpers/base'
 import { ScreenHeader } from '../ScreenHeader'
+import { CloseButton } from 'src/components/Button/CloseButton'
 
 const IssuePickerHeader = withNavigation(
     ({
@@ -17,12 +18,9 @@ const IssuePickerHeader = withNavigation(
         title: string
     } & NavigationInjectedProps) => {
         const action = (
-            <Button
+            <CloseButton
                 accessibilityLabel="Close button"
                 accessibilityHint="Returns to the edition"
-                accessibilityRole="button"
-                icon={'\uE04F'}
-                alt="Return to edition"
                 onPress={() => navigation.goBack()}
             />
         )
