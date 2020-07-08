@@ -36,7 +36,7 @@ export interface MallardLogFormat {
     buildNumber: string
     release_channel: ReleaseChannel
     selectedEdition: string
-    defaultEdition: string
+    defaultEdition: string | null
     os: OS
     device: string
     networkStatus: NetInfoStateType
