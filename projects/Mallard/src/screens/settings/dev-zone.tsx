@@ -36,6 +36,7 @@ import {
 } from 'src/push-notifications/push-tracking'
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
+import { pushRegisteredTokens } from 'src/helpers/storage'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -79,6 +80,13 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [imageSize, setImageSize] = useState('fetching...')
     const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const buildNumber = DeviceInfo.getBuildNumber()
+    const [pushTokens, setPushTokens] = useState('fetching...')
+
+    useEffect(() => {
+        pushRegisteredTokens.get().then(tokens => {
+            setPushTokens(JSON.stringify(tokens, null, 2))
+        })
+    })
 
     useEffect(() => {
         getFileList().then(fileList => {
@@ -300,6 +308,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Image Size used for Editions',
                         title: 'Image Size used for Editions',
                         explainer: imageSize,
+                    },
+                    {
+                        key: 'Push Tokens',
+                        title: 'Registered push tokens',
+                        explainer: pushTokens,
                     },
                     {
                         key: 'Files in Issues',

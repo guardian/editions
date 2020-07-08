@@ -2,6 +2,11 @@ import { Platform } from 'react-native'
 import { notificationEdition } from 'src/helpers/settings/defaults'
 import { getSetting } from 'src/helpers/settings'
 
+export interface PushToken {
+    name: string
+    type: string
+}
+
 const registerWithNotificationService = async (deviceToken: {
     token: string
 }) => {

@@ -10,6 +10,7 @@ import {
 } from 'src/constants'
 import { PushNotificationRegistration } from 'src/push-notifications/push-notifications'
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
+import { PushToken } from 'src/push-notifications/notification-service'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -89,6 +90,10 @@ const editionsListCache = createAsyncCache<{
     specialEditions: SpecialEdition[]
 }>('editionsList')
 
+const pushRegisteredTokens = createAsyncCache<PushToken[]>(
+    'push-registered-tokens',
+)
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -155,4 +160,5 @@ export {
     selectedEditionCache,
     defaultEditionCache,
     editionsListCache,
+    pushRegisteredTokens,
 }

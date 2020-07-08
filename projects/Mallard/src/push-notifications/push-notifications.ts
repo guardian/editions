@@ -1,7 +1,10 @@
 import moment, { MomentInput } from 'moment'
 import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
-import { pushNotificationRegistrationCache } from '../helpers/storage'
+import {
+    pushNotificationRegistrationCache,
+    pushRegisteredTokens,
+} from '../helpers/storage'
 import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
@@ -49,7 +52,9 @@ const maybeRegister = async (
 
     if (should) {
         // this will throw on non-200 so that we won't add registration info to the cache
-        await registerWithNotificationServiceImpl({ token })
+        const response = await registerWithNotificationServiceImpl({ token })
+        pushRegisteredTokens.set(response['topics'])
+
         await pushNotificationRegistrationCacheImpl.set({
             registrationDate: now,
             token,

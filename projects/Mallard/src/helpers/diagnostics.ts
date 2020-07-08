@@ -14,7 +14,7 @@ import { locale } from './locale'
 import { getDiagnosticPushTracking } from '../push-notifications/push-tracking'
 import { isInBeta } from './release-stream'
 import { imageForScreenSize } from './screen'
-import { iapReceiptCache, userDataCache } from './storage'
+import { iapReceiptCache, userDataCache, pushRegisteredTokens } from './storage'
 import {
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
@@ -79,6 +79,7 @@ const getDiagnosticInfo = async (
         imageSize,
         pushTracking,
         edition,
+        registeredPushTokens,
     ] = await Promise.all([
         DeviceInfo.getFirstInstallTime(),
         DeviceInfo.getLastUpdateTime(),
@@ -88,6 +89,7 @@ const getDiagnosticInfo = async (
         imageForScreenSize(),
         getDiagnosticPushTracking(),
         getSelectedEditionSlug(),
+        pushRegisteredTokens.get(),
     ])
 
     return `
@@ -122,6 +124,9 @@ Digital Pack subscription: ${idData && canViewEdition(idData)}
 Apple IAP Transaction Details: ${receiptData &&
         `\n${JSON.stringify(receiptData, null, 2)}`}
 Subscriber ID: ${casCode}
+
+-Registered Push Tokens-
+${JSON.stringify(registeredPushTokens)}
 
 -Push Downloads-
 ${pushTracking && JSON.stringify(pushTracking, null, 2)}
