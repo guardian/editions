@@ -38,8 +38,8 @@ const deleteIssue = (localId: string): Promise<void> => {
 const deleteIssueFiles = async (): Promise<void> => {
     await RNFS.unlink(FSPaths.issuesDir)
     localIssueListStore.reset()
-    await clearDownloadsDirectory()
     await prepFileSystem()
+    await clearDownloadsDirectory()
 }
 
 const clearOldIssues = async (): Promise<void> => {
