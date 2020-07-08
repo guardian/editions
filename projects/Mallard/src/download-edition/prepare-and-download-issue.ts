@@ -4,11 +4,12 @@ import { prepFileSystem } from '../helpers/files'
 import { cleanPushTrackingByDays } from '../push-notifications/push-tracking'
 import { largeDeviceMemory } from 'src/hooks/use-config-provider'
 import { downloadTodaysIssue } from 'src/download-edition/download-todays-issue'
-import { clearOldIssues } from './clear-issues'
+import { clearOldIssues, clearDownloadsDirectory } from './clear-issues'
 
 const prepareAndDownloadTodaysIssue = async (client: ApolloClient<object>) => {
     await prepFileSystem()
     await clearOldIssues()
+    await clearDownloadsDirectory()
     await cleanPushTrackingByDays()
     const weOk = await fetchCacheClear()
     if (weOk) {
