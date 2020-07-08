@@ -7,6 +7,7 @@ import { ReloadButton } from './ReloadButton'
 import { ModalButton } from './ModalButton'
 import { ButtonAppearance } from './Button'
 import { CloseButton } from './CloseButton'
+import { SettingsButton } from './SettingsButton'
 
 storiesOf('Buttons', module)
     .addDecorator(withKnobs)
@@ -39,4 +40,7 @@ storiesOf('Buttons', module)
         <ModalButton onPress={() => {}}>
             {text('Button Text', 'Sign In')}
         </ModalButton>
+    ))
+    .add('SettingsButton - default', () => (
+        <SettingsButton onPress={() => {}} />
     ))
