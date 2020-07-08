@@ -225,10 +225,13 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
         // The above saves it locally, if successful we return it
         return issueSummary
     } catch (e) {
-        e.message = `Failed to fetch valid issue summary: ${e.message}`
-        errorService.captureException(e)
+        const issueSummary = await readIssueSummary()
+        if (!issueSummary) {
+            e.message = `Failed to fetch valid issue summary and empty cache: ${e.message}`
+            errorService.captureException(e)
+        }
         // Got a problem with the endpoint, return the last saved version
-        return readIssueSummary()
+        return issueSummary
     }
 }
 
