@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { CloseModalButton } from 'src/components/Button/CloseModalButton'
+import { CloseButton } from 'src/components/Button/CloseButton'
 import { getPillarColors } from 'src/helpers/transform'
 import { themeColors } from 'src/components/article/html/helpers/css'
 import { ArticleTheme } from 'src/components/article/html/article'
@@ -16,6 +16,7 @@ import { StatusBar } from 'react-native'
 import { LightboxNavigationProps } from 'src/navigation/helpers/base'
 import { useDimensions } from 'src/hooks/use-config-provider'
 import ImageViewer from 'react-native-image-zoom-viewer'
+import { ButtonAppearance } from 'src/components/Button/Button'
 const styles = StyleSheet.create({
     lightboxPage: {
         width: '100%',
@@ -141,16 +142,14 @@ const LightboxScreen = ({
             <View style={styles.lightboxPage}>
                 <View style={styles.closeButton}>
                     {closeButtonVisible && (
-                        <CloseModalButton
+                        <CloseButton
                             onPress={() => {
                                 navigation.goBack()
                             }}
-                            bgColor={pillarColors.main}
-                            borderColor={
-                                pillar === 'neutral'
-                                    ? palette.neutral[100]
-                                    : pillarColors.main
-                            }
+                            accessibilityLabel="Close Image Gallery"
+                            accessibilityHint="This will close the Image Gallery which is currently open"
+                            appearance={ButtonAppearance.pillar}
+                            pillar={pillar}
                         />
                     )}
                 </View>

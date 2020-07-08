@@ -10,10 +10,11 @@ import {
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { useInsets } from 'src/hooks/use-screen'
-import { CloseModalButton } from '../Button/CloseModalButton'
-import { TitlepieceText, UiBodyCopy } from '../styled-text'
+import { CloseButton } from '../Button/CloseButton'
 import { Spinner } from '../Spinner/Spinner'
 import DeviceInfo from 'react-native-device-info'
+import { TitlepieceText, UiBodyCopy } from '../styled-text'
+import { ButtonAppearance } from '../Button/Button'
 
 const loginHeaderStyles = StyleSheet.create({
     wrapper: {
@@ -47,7 +48,12 @@ const LoginHeader = ({
             ]}
         >
             <View style={loginHeaderStyles.actionRow}>
-                <CloseModalButton onPress={onDismiss} />
+                <CloseButton
+                    onPress={onDismiss}
+                    accessibilityHint="Closes the login screen"
+                    accessibilityLabel="Close the login screen"
+                    appearance={ButtonAppearance.skeletonBlue}
+                />
             </View>
             <View>
                 <TitlepieceText style={loginHeaderStyles.title}>

@@ -1,27 +1,35 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native'
-import { withKnobs, color, text } from '@storybook/addon-knobs'
+import { withKnobs, text } from '@storybook/addon-knobs'
 import { IssueMenuButton } from './IssueMenuButton'
-import { CloseModalButton } from './CloseModalButton'
 import { BugButton } from './BugButton'
 import { ReloadButton } from './ReloadButton'
 import { ModalButton } from './ModalButton'
+import { ButtonAppearance } from './Button'
+import { CloseButton } from './CloseButton'
 
 storiesOf('Buttons', module)
     .addDecorator(withKnobs)
     .add('IssueMenuButton - default', () => (
         <IssueMenuButton onPress={() => {}} />
     ))
-    .add('CloseModalButton - default', () => (
-        <CloseModalButton onPress={() => {}} />
-    ))
-    .add('CloseModalButton - with colour', () => {
-        const colorPicker = color('colour', '#41A9E0')
+    .add('CloseButton - default', () => {
         return (
-            <CloseModalButton
+            <CloseButton
                 onPress={() => {}}
-                bgColor={colorPicker}
-                borderColor={colorPicker}
+                appearance={ButtonAppearance.default}
+                accessibilityHint="Accesibility Hint"
+                accessibilityLabel="Accesibility Label"
+            />
+        )
+    })
+    .add('CloseButton - with appearance', () => {
+        return (
+            <CloseButton
+                onPress={() => {}}
+                appearance={ButtonAppearance.modal}
+                accessibilityHint="Accesibility Hint"
+                accessibilityLabel="Accesibility Label"
             />
         )
     })

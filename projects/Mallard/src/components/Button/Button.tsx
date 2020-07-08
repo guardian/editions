@@ -14,6 +14,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { AppAppearanceStyles, useAppAppearance } from 'src/theme/appearance'
 import { getFont } from 'src/theme/typography'
+import { ArticlePillar } from 'src/common'
+import { getPillarColors } from 'src/helpers/transform'
 
 export enum ButtonAppearance {
     default,
@@ -25,6 +27,8 @@ export enum ButtonAppearance {
     skeletonActive,
     light,
     dark,
+    modal,
+    pillar,
 }
 
 const height = metrics.buttonHeight
@@ -57,62 +61,85 @@ interface ButtonAppearanceStyles {
 
 const getButtonAppearance = (
     appAppearance: AppAppearanceStyles,
+    pillar: ArticlePillar | null,
 ): {
     [key in ButtonAppearance]: ButtonAppearanceStyles
-} => ({
-    [ButtonAppearance.default]: StyleSheet.create({
-        background: { backgroundColor: color.palette.highlight.main },
-        text: { color: color.palette.neutral[7] },
-    }),
-    [ButtonAppearance.skeleton]: StyleSheet.create({
-        background: {
-            backgroundColor: undefined,
-            borderWidth: 1,
-            borderColor: appAppearance.color,
-        },
-        text: { color: appAppearance.color },
-    }),
-    [ButtonAppearance.skeletonBlue]: StyleSheet.create({
-        background: {
-            backgroundColor: undefined,
-            borderWidth: 1,
-            borderColor: color.primary,
-        },
-        text: { color: color.primary },
-    }),
-    [ButtonAppearance.skeletonActive]: StyleSheet.create({
-        background: {
-            backgroundColor: appAppearance.color,
-            borderWidth: 1,
-            borderColor: appAppearance.color,
-        },
-        text: { color: appAppearance.cardBackgroundColor },
-    }),
-    [ButtonAppearance.skeletonLight]: StyleSheet.create({
-        background: {
-            backgroundColor: undefined,
-            borderWidth: 1,
-            borderColor: color.palette.neutral[100],
-        },
-        text: { color: color.palette.neutral[100] },
-    }),
-    [ButtonAppearance.light]: StyleSheet.create({
-        background: { backgroundColor: color.palette.neutral[100] },
-        text: { color: color.primary },
-    }),
-    [ButtonAppearance.dark]: StyleSheet.create({
-        background: { backgroundColor: color.primary },
-        text: { color: color.palette.neutral[100] },
-    }),
-    [ButtonAppearance.tomato]: StyleSheet.create({
-        background: { backgroundColor: color.ui.tomato },
-        text: { color: color.palette.neutral[100] },
-    }),
-    [ButtonAppearance.apricot]: StyleSheet.create({
-        background: { backgroundColor: color.ui.apricot },
-        text: { color: color.palette.neutral[100] },
-    }),
-})
+} => {
+    const pillarColors = pillar ? getPillarColors(pillar) : null
+    return {
+        [ButtonAppearance.default]: StyleSheet.create({
+            background: { backgroundColor: color.palette.highlight.main },
+            text: { color: color.palette.neutral[7] },
+        }),
+        [ButtonAppearance.skeleton]: StyleSheet.create({
+            background: {
+                backgroundColor: undefined,
+                borderWidth: 1,
+                borderColor: appAppearance.color,
+            },
+            text: { color: appAppearance.color },
+        }),
+        [ButtonAppearance.skeletonBlue]: StyleSheet.create({
+            background: {
+                backgroundColor: undefined,
+                borderWidth: 1,
+                borderColor: color.primary,
+            },
+            text: { color: color.primary },
+        }),
+        [ButtonAppearance.skeletonActive]: StyleSheet.create({
+            background: {
+                backgroundColor: appAppearance.color,
+                borderWidth: 1,
+                borderColor: appAppearance.color,
+            },
+            text: { color: appAppearance.cardBackgroundColor },
+        }),
+        [ButtonAppearance.skeletonLight]: StyleSheet.create({
+            background: {
+                backgroundColor: undefined,
+                borderWidth: 1,
+                borderColor: color.palette.neutral[100],
+            },
+            text: { color: color.palette.neutral[100] },
+        }),
+        [ButtonAppearance.light]: StyleSheet.create({
+            background: { backgroundColor: color.palette.neutral[100] },
+            text: { color: color.primary },
+        }),
+        [ButtonAppearance.dark]: StyleSheet.create({
+            background: { backgroundColor: color.primary },
+            text: { color: color.palette.neutral[100] },
+        }),
+        [ButtonAppearance.tomato]: StyleSheet.create({
+            background: { backgroundColor: color.ui.tomato },
+            text: { color: color.palette.neutral[100] },
+        }),
+        [ButtonAppearance.apricot]: StyleSheet.create({
+            background: { backgroundColor: color.ui.apricot },
+            text: { color: color.palette.neutral[100] },
+        }),
+        // Waiting on the correct colour references
+        [ButtonAppearance.modal]: StyleSheet.create({
+            background: { backgroundColor: '#41A9E0' },
+            text: { color: 'white' },
+        }),
+        [ButtonAppearance.pillar]: StyleSheet.create({
+            background: {
+                backgroundColor: pillarColors
+                    ? pillarColors.main
+                    : color.palette.brand.main,
+                borderColor:
+                    pillar === 'neutral'
+                        ? color.palette.neutral[100]
+                        : pillarColors
+                        ? pillarColors.main
+                        : color.palette.brand.main,
+            },
+            text: { color: 'white' },
+        }),
+    }
+}
 
 const iconStyles = StyleSheet.create({
     root: {
@@ -140,6 +167,7 @@ const Button = ({
     center,
     appearance,
     iconPosition = 'left',
+    pillar,
     ...innards
 }: {
     style?: StyleProp<ViewStyle>
@@ -149,15 +177,17 @@ const Button = ({
     alt?: string
     iconPosition?: 'left' | 'right'
     appearance: ButtonAppearance
+    pillar?: ArticlePillar | null
 } & (
     | { children: string }
     | { children: string; icon: string | React.ReactNode }
     | { alt: string; icon: string | React.ReactNode }) &
     TouchableOpacityProps) => {
     const appStyles = useAppAppearance()
-    const defaultButtonStyles = useMemo(() => getButtonAppearance(appStyles), [
-        appStyles,
-    ])[appearance]
+    const defaultButtonStyles = useMemo(
+        () => getButtonAppearance(appStyles, pillar || null),
+        [appStyles, pillar],
+    )[appearance]
 
     const icon =
         'icon' in innards &&
