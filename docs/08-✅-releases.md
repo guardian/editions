@@ -42,7 +42,7 @@ We take a slightly different approach to iOS. Due to not being able to determine
 
 We build the APK using `android-beta-deploy`. This will release a build to google play to the 'internal beta' group for internal testing by the team. It is then manually promoted within the Google Play console to our external beta testers.
 
-As with iOS, releases to the play store can be tracked in [github releases](https://github.com/guardian/editions/releases).
+As with iOS, releases to the play store can be tracked in [github releases](https://github.com/guardian/editions/releases) - each time the teamcity build is run a new github release is created including the play store version code of that release.
 
 #### Release
 
