@@ -86,7 +86,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         pushRegisteredTokens.get().then(tokens => {
             setPushTokens(JSON.stringify(tokens, null, 2))
         })
-    })
+    }, [])
 
     useEffect(() => {
         getFileList().then(fileList => {
