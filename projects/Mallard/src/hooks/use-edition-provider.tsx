@@ -77,6 +77,11 @@ export const getDefaultEdition = async () => {
     }
 }
 
+export const getDefaultEditionTile = async () => {
+    const defaultEdition = await getDefaultEdition()
+    return defaultEdition ? defaultEdition : null
+}
+
 export const fetchEditions = async () => {
     try {
         const response = await fetch(defaultSettings.editionsUrl)

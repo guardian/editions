@@ -24,6 +24,10 @@ import {
 import { AsyncQueue } from '../helpers/async-queue-cache'
 import { errorService } from './errors'
 import { remoteConfigService } from './remote-config'
+import {
+    getSelectedEditionSlug,
+    getDefaultEditionTitle,
+} from 'src/hooks/use-edition-provider'
 
 const { LOGGING_API_KEY } = Config
 const ATTEMPTS_THEN_CLEAR = 10
@@ -110,6 +114,8 @@ class Logging extends AsyncQueue {
                 userData.membershipData.contentAccess.digitalPack) ||
             false
         const iAP = iapReceipt ? true : false
+        const selectedEdition = await getSelectedEditionSlug()
+        const defaultEdition = await getDefaultEditionTitle()
 
         return {
             app: DeviceInfo.getBundleId(),
@@ -120,6 +126,8 @@ class Logging extends AsyncQueue {
             networkStatus: networkStatus
                 ? networkStatus.type
                 : NetInfoStateType.unknown,
+            selectedEdition: selectedEdition,
+            defaultEdition: defaultEdition,
             release_channel: isInBeta()
                 ? ReleaseChannel.BETA
                 : ReleaseChannel.RELEASE,
