@@ -26,7 +26,7 @@ import { errorService } from './errors'
 import { remoteConfigService } from './remote-config'
 import {
     getSelectedEditionSlug,
-    getDefaultEditionTitle,
+    getDefaultEditionSlug,
 } from 'src/hooks/use-edition-provider'
 
 const { LOGGING_API_KEY } = Config
@@ -115,7 +115,7 @@ class Logging extends AsyncQueue {
             false
         const iAP = iapReceipt ? true : false
         const selectedEdition = await getSelectedEditionSlug()
-        const defaultEdition = await getDefaultEditionTitle()
+        const defaultEdition = await getDefaultEditionSlug()
 
         return {
             app: DeviceInfo.getBundleId(),

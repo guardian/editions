@@ -77,9 +77,9 @@ export const getDefaultEdition = async () => {
     }
 }
 
-export const getDefaultEditionTitle = async () => {
+export const getDefaultEditionSlug = async () => {
     const defaultEdition = await getDefaultEdition()
-    return defaultEdition ? defaultEdition.title : null
+    return defaultEdition ? defaultEdition.edition : null
 }
 
 export const fetchEditions = async () => {
