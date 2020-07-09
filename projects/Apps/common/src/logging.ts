@@ -1,6 +1,7 @@
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { NetInfoStateType } from '@react-native-community/netinfo'
 import { User } from '@sentry/react-native'
+import { Edition } from '../../../Apps/common/src/index'
 
 export enum Level {
     INFO = 'INFO',
@@ -35,8 +36,8 @@ export interface MallardLogFormat {
     version: string
     buildNumber: string
     release_channel: ReleaseChannel
-    selectedEdition: string
-    defaultEdition: string | null
+    selectedEdition: Edition
+    defaultEdition: Edition | null
     os: OS
     device: string
     networkStatus: NetInfoStateType
