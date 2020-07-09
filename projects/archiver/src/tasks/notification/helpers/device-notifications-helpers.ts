@@ -39,9 +39,10 @@ const createScheduleNotificationEndpoint = (
  **/
 export const createScheduleTime = (
     issueDate: string,
-    offset: number = 3): string => {
+    offset = 3,
+): string => {
     const issueDateAsDate: Date = parse(issueDate, 'yyyy-MM-dd', new Date())
-    const notificationDate:Date = addHours(issueDateAsDate, offset)
+    const notificationDate: Date = addHours(issueDateAsDate, offset)
     return format(notificationDate, "yyyy-MM-dd'T'HH:mm:ss'Z'")
 }
 
