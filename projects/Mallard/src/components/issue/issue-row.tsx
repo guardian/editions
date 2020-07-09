@@ -144,8 +144,8 @@ const IssueButton = ({
             }
             case DownloadBlockedStatus.WifiOnly: {
                 Alert.alert('Unable to download', WIFI_ONLY_DOWNLOAD, [
-                    { text: 'Manage editions', onPress: onGoToSettings },
-                    { text: 'Ok' },
+                    { text: 'Manage downloads', onPress: onGoToSettings },
+                    { text: 'OK' },
                 ])
                 return
             }
