@@ -3,7 +3,7 @@ import uuid from 'uuidv4'
 import { IssueNotificationData } from './device-notifications'
 import { RequestInit, RequestInfo } from 'node-fetch'
 import parse from 'date-fns/parse'
-import { format, addHours } from 'date-fns';
+import { format, addHours } from 'date-fns'
 
 type EditionNotificationTypes = 'editions'
 
@@ -37,10 +37,12 @@ const createScheduleNotificationEndpoint = (
  * This will (obviously) work only for Daily Editions in UK
  * In the future we will need to make it more generic (for US and Australia)
  **/
-export const createScheduleTime = (issueDate: string, offset: number = 3): string => {
-    const issueDateAsDate: Date = parse(issueDate, 'yyyy-MM-dd', new Date());
-    const notificationDate:Date = addHours(issueDateAsDate, offset);
-    return format(notificationDate, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+export const createScheduleTime = (
+    issueDate: string,
+    offset: number = 3): string => {
+    const issueDateAsDate: Date = parse(issueDate, 'yyyy-MM-dd', new Date())
+    const notificationDate:Date = addHours(issueDateAsDate, offset)
+    return format(notificationDate, "yyyy-MM-dd'T'HH:mm:ss'Z'")
 }
 
 export const shouldSchedule = (scheduleTime: string, now: Date): boolean => {
