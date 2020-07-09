@@ -12,7 +12,7 @@ interface RemoteConfig {
 
 const remoteConfigDefaults = {
     logging_enabled: true,
-    default_locale: true,
+    default_locale: false,
 }
 
 export const RemoteConfigProperties = [
