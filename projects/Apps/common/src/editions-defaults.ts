@@ -3,8 +3,7 @@ import { RegionalEdition, editions } from './index'
 export const defaultRegionalEditions: RegionalEdition[] = [
     {
         title: 'The Daily',
-        subTitle: `Published every morning
-by 6am (GMT)`,
+        subTitle: `Published from London every morning by 6 am (GMT)`,
         edition: editions.daily,
         header: {
             title: 'The Daily',
@@ -12,22 +11,20 @@ by 6am (GMT)`,
     },
     {
         title: 'Australia Weekender',
-        subTitle: `Published every Saturday morning 
-by 6am (AEST)`,
+        subTitle: `Published from Sydney every Saturday by 6 am (AEST)`,
         edition: editions.ausWeekly,
         header: {
             title: 'Australia',
-            subTitle: 'Weekender',
+            subTitle: 'Weekend',
         },
     },
     {
         title: 'US Weekender',
-        subTitle: `Published every Saturday morning 
-by 6am (EST)`,
+        subTitle: `Published from New York every Saturday by 6 am (EST)`,
         edition: editions.usWeekly,
         header: {
             title: 'US',
-            subTitle: 'Weekender',
+            subTitle: 'Weekend',
         },
     },
 ]
