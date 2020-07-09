@@ -37,8 +37,7 @@ const createScheduleNotificationEndpoint = (
  * This will (obviously) work only for Daily Editions in UK
  * In the future we will need to make it more generic (for US and Australia)
  **/
-export const createScheduleTime = (
-    issueDate: string, offset = 3): string => {
+export const createScheduleTime = (issueDate: string, offset = 3): string => {
     const issueDateAsDate: Date = parse(issueDate, 'yyyy-MM-dd', new Date())
     const notificationDate: Date = addHours(issueDateAsDate, offset)
     return format(notificationDate, "yyyy-MM-dd'T'HH:mm:ss'Z'")
