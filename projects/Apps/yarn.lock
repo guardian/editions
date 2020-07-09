@@ -1022,10 +1022,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@guardian/react-crossword@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-0.2.1.tgz#1e04d0712f3ccecd970f93fed0e02baa61ef18c5"
-  integrity sha512-pxvSzAjmXq4JZic5fbn6foFO41dAAPeplwk72GLmTHEJ9DJkNeISQcEh7eVcS5eyiIpaPyzzdyrEbHNbxuHutQ==
+"@guardian/react-crossword@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-0.2.2.tgz#d309662d4a2ac428b052d2b86b7fa7172df5026f"
+  integrity sha512-OC80Ee3ei844PC5wz4JcoK4QfTDn00FnpTWMwjaSlsLwz9iij/G4gLdQ2sh48yY6qDlIqY2v09MXEx3+R+Jqjw==
   dependencies:
     bean "~1.0.14"
     bonzo "~2.0.0"
