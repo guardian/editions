@@ -69,28 +69,23 @@ export const getCardAppearanceInfoAndOverrides = (
 
 const defaultLayout = (
     cover: FrontCardAppearanceShort = 1,
-    visual = false,
 ): FrontCardsForArticleCount => {
-    const threeStories: FrontCardAppearanceShort = visual
-        ? FrontCardAppearance.threeStoryPageWithSidekick
-        : 3
-
     return {
         0: [],
         1: [cover],
         2: [cover, 1],
         3: [cover, 2],
-        4: [cover, threeStories],
+        4: [cover, 3],
         5: [cover, 4],
         6: [cover, 5],
         7: [cover, 2, 4],
-        8: [cover, threeStories, 4],
-        9: [cover, threeStories, 5],
+        8: [cover, 3, 4],
+        9: [cover, 3, 5],
         10: [cover, 4, 5],
         11: [cover, 2, 3, 5],
         12: [cover, 2, 4, 5],
-        13: [cover, threeStories, 4, 5],
-        14: [cover, threeStories, 4, 6],
+        13: [cover, 3, 4, 5],
+        14: [cover, 3, 4, 6],
         15: [cover, 2, 3, 4, 5],
         16: [cover, 2, 3, 4, 6],
         17: [cover, 2, 3, 5, 6],
@@ -98,32 +93,27 @@ const defaultLayout = (
         19: [cover, 2, 4, 5, 6],
         20: [cover, 2, 4, 1, 5, 6],
         21: [cover, 2, 3, 4, 5, 6],
-        22: [cover, threeStories, 4, 3, 5, 6],
-        23: [cover, threeStories, 4, 5, 4, 6],
-        24: [cover, threeStories, 5, 4, 5, 6],
+        22: [cover, 3, 4, 3, 5, 6],
+        23: [cover, 3, 4, 5, 4, 6],
+        24: [cover, 3, 5, 4, 5, 6],
         25: [cover, 5, 4, 5, 4, 6],
     }
 }
 
 const thirdPageCoverLayout = (
     cover: FrontCardAppearanceShort = 1,
-    visual = false,
 ): FrontCardsForArticleCount => {
-    const threeStories: FrontCardAppearanceShort = visual
-        ? FrontCardAppearance.threeStoryPageWithSidekick
-        : 3
-
     return {
         0: [],
         1: [cover],
         2: [cover, 1],
         3: [cover, 2],
-        4: [cover, threeStories],
+        4: [cover, 3],
         5: [cover, 4],
         6: [cover, 5],
         7: [cover, 2, cover, 3],
-        8: [cover, threeStories, cover, 3],
-        9: [cover, threeStories, cover, 4],
+        8: [cover, 3, cover, 3],
+        9: [cover, 3, cover, 4],
         10: [cover, 4, cover, 4],
         11: [cover, 2, cover, 2, 5],
         12: [cover, 2, cover, 3, 5],
@@ -133,12 +123,12 @@ const thirdPageCoverLayout = (
         16: [cover, 2, cover, 2, 4, 6],
         17: [cover, 2, cover, 2, 5, 6],
         18: [cover, 2, cover, 3, 5, 6],
-        19: [cover, threeStories, cover, 3, 5, 6],
-        20: [cover, threeStories, cover, 3, 1, 5, 6],
+        19: [cover, 3, cover, 3, 5, 6],
+        20: [cover, 3, cover, 3, 1, 5, 6],
         21: [cover, 2, cover, 2, 4, 5, 6],
-        22: [cover, threeStories, cover, 3, 3, 5, 6],
-        23: [cover, threeStories, cover, 3, 5, 4, 6],
-        24: [cover, threeStories, cover, 4, 4, 5, 6],
+        22: [cover, 3, cover, 3, 3, 5, 6],
+        23: [cover, 3, cover, 3, 5, 4, 6],
+        24: [cover, 3, cover, 4, 4, 5, 6],
         25: [cover, 5, cover, 3, 5, 4, 6],
     }
 }
@@ -223,12 +213,12 @@ export const getCardsForFront = (
 
         case 'Life':
         case 'Culture':
-            return thirdPageCoverLayout(FrontCardAppearance.splashPage, true)
+            return thirdPageCoverLayout(FrontCardAppearance.splashPage)
         case 'Sport':
-            return defaultLayout(1, true)
+            return defaultLayout(1)
         case 'Journal':
             return defaultLayout(1)
         default:
-            return defaultLayout(FrontCardAppearance.splashPage, true)
+            return defaultLayout(FrontCardAppearance.splashPage)
     }
 }
