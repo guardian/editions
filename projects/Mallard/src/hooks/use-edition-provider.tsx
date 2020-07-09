@@ -77,6 +77,11 @@ export const getDefaultEdition = async () => {
     }
 }
 
+export const getDefaultEditionSlug = async () => {
+    const defaultEdition = await getDefaultEdition()
+    return defaultEdition ? defaultEdition.edition : null
+}
+
 export const fetchEditions = async () => {
     try {
         const response = await fetch(defaultSettings.editionsUrl)
