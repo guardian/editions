@@ -35,6 +35,10 @@ local.properties
 android/app/bin
 .project
 
+# to allow local android prod build we need to keep them out of git 
+android/app/gradle.properties
+android/app/src/main/assets/index.android.bundle
+
 # Visual Studio Code
 #
 # .vscode/
