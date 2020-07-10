@@ -16,7 +16,6 @@ import {
     sendAppScreenEvent,
     setUserId,
 } from 'src/services/ophan'
-import { createApolloClient } from './apollo'
 import { AccessProvider } from './authentication/AccessContext'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
@@ -43,14 +42,9 @@ import { remoteConfigService } from './services/remote-config'
 import analytics from '@react-native-firebase/analytics'
 import { prepFileSystem } from './helpers/files'
 import { EditionProvider } from './hooks/use-edition-provider'
+import { apolloClient } from './services/apollo-singleton'
 
 analytics().setAnalyticsCollectionEnabled(false)
-
-/**
- * Only one global Apollo client. As such, any update done from any component
- * will cause dependent views to refresh and keep up-to-date.
- */
-const apolloClient = createApolloClient()
 
 // Log Intitialisation
 if (!__DEV__) {
@@ -60,7 +54,7 @@ loggingService.init(apolloClient)
 remoteConfigService.init()
 
 // --- SETUP OPERATIONS ---
-pushNotifcationRegistration(apolloClient)
+pushNotifcationRegistration()
 prepFileSystem()
 
 const styles = StyleSheet.create({

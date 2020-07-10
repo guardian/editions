@@ -1,29 +1,24 @@
 import { Platform } from 'react-native'
-import { notificationEdition } from 'src/helpers/settings/defaults'
 import { getSetting } from 'src/helpers/settings'
+import { notificationEdition } from 'src/helpers/settings/defaults'
 
 export interface PushToken {
-    name: string
-    type: string
+    name: 'uk' | 'us' | 'au'
+    type: 'editions'
 }
 
-const registerWithNotificationService = async (deviceToken: {
-    token: string
-}) => {
+const registerWithNotificationService = async (
+    token: string,
+    topics: PushToken[],
+) => {
     const registerDeviceUrl = await getSetting('notificationServiceRegister')
-    const { token } = deviceToken
     const options = {
         deviceToken: token,
         platform:
             Platform.OS === 'ios'
                 ? notificationEdition.ios
                 : notificationEdition.android,
-        topics: [
-            {
-                name: 'uk',
-                type: 'editions',
-            },
-        ],
+        topics,
     }
     return fetch(registerDeviceUrl as string, {
         method: 'post',
