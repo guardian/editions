@@ -2,8 +2,6 @@ import moment from 'moment'
 import uuid from 'uuidv4'
 import { IssueNotificationData } from './device-notifications'
 import { RequestInit, RequestInfo } from 'node-fetch'
-import parse from 'date-fns/parse'
-import { format, addHours } from 'date-fns'
 
 type EditionNotificationTypes = 'editions'
 
@@ -38,9 +36,10 @@ const createScheduleNotificationEndpoint = (
  * In the future we will need to make it more generic (for US and Australia)
  **/
 export const createScheduleTime = (issueDate: string, offset = 3): string => {
-    const issueDateAsDate: Date = parse(issueDate, 'yyyy-MM-dd', new Date())
-    const notificationDate: Date = addHours(issueDateAsDate, offset)
-    return format(notificationDate, "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    const issueDateAsDate = moment.utc(issueDate, 'YYYY-MM-DD')
+    moment.locale('utc');
+    const notificationDate = issueDateAsDate.add(offset, 'hours');
+    return notificationDate.format('YYYY-MM-DDTHH:mm:ssZ')
 }
 
 export const shouldSchedule = (scheduleTime: string, now: Date): boolean => {
