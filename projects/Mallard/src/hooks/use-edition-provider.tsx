@@ -20,7 +20,6 @@ import { AppState, AppStateStatus } from 'react-native'
 import { remoteConfigService } from 'src/services/remote-config'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/push-notifications/push-notifications'
-import { apolloClient } from 'src/services/apollo-singleton'
 
 interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
@@ -142,7 +141,7 @@ const setEdition = async (
     setSelectedEdition(edition)
     await selectedEditionCache.set(edition)
     await defaultEditionCache.set(edition)
-    pushNotifcationRegistration(apolloClient)
+    pushNotifcationRegistration()
 }
 
 export const defaultEditionDecider = async (
@@ -154,7 +153,7 @@ export const defaultEditionDecider = async (
         setDefaultEdition(dE)
         setSelectedEdition(dE)
         await selectedEditionCache.set(dE)
-        pushNotifcationRegistration(apolloClient)
+        pushNotifcationRegistration()
     } else {
         const defaultLocaleEnabled = remoteConfigService.getBoolean(
             'default_locale',
@@ -233,7 +232,7 @@ export const EditionProvider = ({
         if (type === 'RegionalEdition') {
             await defaultEditionCache.set(chosenEdition as RegionalEdition)
             setDefaultEdition(chosenEdition as RegionalEdition)
-            pushNotifcationRegistration(apolloClient)
+            pushNotifcationRegistration()
         }
         eventEmitter.emit('editionUpdate')
     }
