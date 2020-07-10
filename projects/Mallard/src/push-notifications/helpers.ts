@@ -39,14 +39,15 @@ const getTopicName = async (): Promise<PushToken[]> => {
 
 const shouldReRegister = (
     newToken: string,
-    registration: PushNotificationRegistration,
+    registration: PushNotificationRegistration | null,
     now: MomentInput,
-    currentTopics: PushToken[],
+    currentTopics: PushToken[] | null,
     newTopics: PushToken[],
 ): boolean => {
-    const exceedTime =
-        moment(now).diff(moment(registration.registrationDate), 'days') > 14
-    const differentToken = newToken !== registration.token
+    const exceedTime = registration
+        ? moment(now).diff(moment(registration.registrationDate), 'days') > 14
+        : true
+    const differentToken = registration ? newToken !== registration.token : true
     const unmatchedTopics = currentTopics !== newTopics
     return exceedTime || differentToken || unmatchedTopics
 }
@@ -73,10 +74,7 @@ const maybeRegister = async (
         const currentTopics = await pushRegisteredTokens.get()
         const cached = await pushNotificationRegistrationCacheImpl.get()
         // do the topic check in shouldReRegister
-        should =
-            !cached ||
-            !currentTopics ||
-            shouldReRegister(token, cached, now, currentTopics, newTopics)
+        should = shouldReRegister(token, cached, now, currentTopics, newTopics)
     } catch {
         // in the unlikely event we have an error here, then re-register any way
         should = true
