@@ -11,22 +11,59 @@ import { errorService } from 'src/services/errors'
 import { pushTracking } from './push-tracking'
 import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'
-import { registerWithNotificationService } from './notification-service'
+import {
+    registerWithNotificationService,
+    PushToken,
+} from './notification-service'
 import { notificationTracking } from './notification-tracking'
 import { downloadViaNotification } from 'src/download-edition/download-via-notification'
+import { RegionalEdition } from '../../../Apps/common/src'
+import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
+import { getDefaultEditionSlug } from 'src/hooks/use-edition-provider'
 
 export interface PushNotificationRegistration {
     registrationDate: string
     token: string
 }
 
+const BASE_PUSH_TOKEN = [{ name: 'uk', type: 'editions' }] as PushToken[]
+const topicToEdition = new Map<RegionalEdition['edition'], PushToken[]>()
+topicToEdition.set(defaultRegionalEditions[1].edition, [
+    {
+        name: 'au',
+        type: 'editions',
+    },
+])
+topicToEdition.set(defaultRegionalEditions[2].edition, [
+    {
+        name: 'us',
+        type: 'editions',
+    },
+])
+topicToEdition.set(defaultRegionalEditions[0].edition, BASE_PUSH_TOKEN)
+
+const getTopicName = async (): Promise<PushToken[]> => {
+    const defaultSlug = await getDefaultEditionSlug()
+    if (defaultSlug) {
+        const chosenTopic = topicToEdition.get(defaultSlug)
+        return chosenTopic || BASE_PUSH_TOKEN
+    }
+    return BASE_PUSH_TOKEN
+}
+
 const shouldReRegister = (
     newToken: string,
     registration: PushNotificationRegistration,
     now: MomentInput,
-): boolean =>
-    moment(now).diff(moment(registration.registrationDate), 'days') > 14 ||
-    newToken !== registration.token
+    currentTopics: PushToken[],
+    newTopics: PushToken[],
+): boolean => {
+    const exceedTime =
+        moment(now).diff(moment(registration.registrationDate), 'days') > 14
+    const differentToken = newToken !== registration.token
+    const unmatchedTopics = currentTopics !== newTopics
+    return exceedTime || differentToken || unmatchedTopics
+}
 
 /**
  * will register / re-register if it should
@@ -41,10 +78,19 @@ const maybeRegister = async (
     now = moment().toString(),
 ) => {
     let should: boolean
+    const newTopics = await getTopicName()
+    if (!newTopics) {
+        return false
+    }
 
     try {
+        const currentTopics = await pushRegisteredTokens.get()
         const cached = await pushNotificationRegistrationCacheImpl.get()
-        should = !cached || shouldReRegister(token, cached, now)
+        // do the topic check in shouldReRegister
+        should =
+            !cached ||
+            !currentTopics ||
+            shouldReRegister(token, cached, now, currentTopics, newTopics)
     } catch {
         // in the unlikely event we have an error here, then re-register any way
         should = true
@@ -52,7 +98,10 @@ const maybeRegister = async (
 
     if (should) {
         // this will throw on non-200 so that we won't add registration info to the cache
-        const response = await registerWithNotificationServiceImpl({ token })
+        const response = await registerWithNotificationServiceImpl(
+            token,
+            newTopics,
+        )
         pushRegisteredTokens.set(response['topics'])
 
         await pushNotificationRegistrationCacheImpl.set({

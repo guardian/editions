@@ -43,14 +43,9 @@ import { remoteConfigService } from './services/remote-config'
 import analytics from '@react-native-firebase/analytics'
 import { prepFileSystem } from './helpers/files'
 import { EditionProvider } from './hooks/use-edition-provider'
+import { apolloClient } from './services/apollo-singleton'
 
 analytics().setAnalyticsCollectionEnabled(false)
-
-/**
- * Only one global Apollo client. As such, any update done from any component
- * will cause dependent views to refresh and keep up-to-date.
- */
-const apolloClient = createApolloClient()
 
 // Log Intitialisation
 if (!__DEV__) {
