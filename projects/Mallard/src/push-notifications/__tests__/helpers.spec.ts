@@ -1,8 +1,4 @@
-import { maybeRegister, shouldReRegister, getTopicName } from '../helpers'
-import {
-    getMockAsyncCache,
-    getMockPromise,
-} from 'src/test-helpers/test-helpers'
+import { shouldReRegister } from '../helpers'
 import moment from 'moment'
 import { PushToken } from '../notification-service'
 

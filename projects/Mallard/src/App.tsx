@@ -16,7 +16,6 @@ import {
     sendAppScreenEvent,
     setUserId,
 } from 'src/services/ophan'
-import { createApolloClient } from './apollo'
 import { AccessProvider } from './authentication/AccessContext'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
@@ -55,7 +54,7 @@ loggingService.init(apolloClient)
 remoteConfigService.init()
 
 // --- SETUP OPERATIONS ---
-pushNotifcationRegistration(apolloClient)
+pushNotifcationRegistration()
 prepFileSystem()
 
 const styles = StyleSheet.create({
