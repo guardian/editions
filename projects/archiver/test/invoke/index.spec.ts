@@ -48,7 +48,6 @@ describe('state machine invoker', () => {
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
             notificationUTCOffset: 1,
-
         }
         const expected = [
             `✅ Invocation of ${JSON.stringify(issueExpected)} succeeded.`,

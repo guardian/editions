@@ -13,7 +13,7 @@ describe('parseRecord', () => {
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
-            notificationUTCOffset: 1
+            notificationUTCOffset: 1,
         })
     })
 
@@ -28,7 +28,7 @@ describe('parseRecord', () => {
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
-            notificationUTCOffset: 1
+            notificationUTCOffset: 1,
         })
     })
 
