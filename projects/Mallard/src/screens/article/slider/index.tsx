@@ -85,7 +85,7 @@ const ArticleSlider = React.memo(
 
         useEffect(() => {
             flatListRef.current &&
-                flatListRef.current._component.scrollToIndex({
+                flatListRef.current.scrollToIndex({
                     index: current,
                     animated: false,
                 })
@@ -139,7 +139,7 @@ const ArticleSlider = React.memo(
         const scroller = (index: number) => {
             if (Platform.OS === 'ios') {
                 if (flatListRef && flatListRef.current) {
-                    flatListRef.current._component.scrollToIndex({
+                    flatListRef.current.scrollToIndex({
                         index,
                         animated: true,
                     })

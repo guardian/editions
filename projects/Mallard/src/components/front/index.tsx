@@ -122,7 +122,7 @@ export const Front = React.memo(
             cards.length > 0 &&
                 flatListRef &&
                 flatListRef.current &&
-                flatListRef.current._component.scrollToIndex({
+                flatListRef.current.scrollToIndex({
                     animated: false,
                     index: 0,
                 })
@@ -150,7 +150,6 @@ export const Front = React.memo(
                     showsHorizontalScrollIndicator={false}
                     // These three props are responsible for the majority of
                     // performance improvements
-                    initialNumToRender={2}
                     {...flatListOptimisationProps}
                     showsVerticalScrollIndicator={false}
                     scrollEventThrottle={1}

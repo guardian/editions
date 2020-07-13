@@ -31,7 +31,7 @@
 		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
 		A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC323167BB400505524 /* ReleaseStream.m */; };
 		AF8876CCFAB04FDDA8588A9E /* GTGuardianDaily-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */; };
-		BB77E8F846CDE9D32C493592 /* libPods-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2885A2F6E37B4C44D653BBC3 /* libPods-MallardTests.a */; };
+		B4541B6FAE9657B22ABBA905 /* libPods-Mallard-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0055BBB6CB26F3E7D5D28A08 /* libPods-Mallard-MallardTests.a */; };
 		C232E2BBBE624C1DB73FF340 /* GuardianTextSans-RegularIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B43BC33E44074221B5FE51A9 /* GuardianTextSans-RegularIt.ttf */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
 		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -115,6 +115,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0055BBB6CB26F3E7D5D28A08 /* libPods-Mallard-MallardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-MallardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* MallardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MallardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -135,7 +136,6 @@
 		1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-BlackItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-BlackItalic.ttf"; sourceTree = "<group>"; };
 		20EAB36C2768498C8DA8BFE4 /* GuardianTextEgyptian-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-Bold.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-Bold.ttf"; sourceTree = "<group>"; };
 		274228DDF01142578ACE0F48 /* GHGuardianHeadline-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Medium.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Medium.ttf"; sourceTree = "<group>"; };
-		2885A2F6E37B4C44D653BBC3 /* libPods-MallardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MallardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Bold.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Bold.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Mallard-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mallard-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Mallard-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mallard-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +157,7 @@
 		78F4F0CCE3DEAAA92756A4D3 /* Pods-MallardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MallardTests.debug.xcconfig"; path = "Target Support Files/Pods-MallardTests/Pods-MallardTests.debug.xcconfig"; sourceTree = "<group>"; };
 		79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianIcons-Regular.otf"; path = "../src/assets/fonts/GuardianIcons-Regular.otf"; sourceTree = "<group>"; };
 		7FE20416D3D243E5A4320927 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		865E0703B6D14CAA70E06AD3 /* Pods-Mallard-MallardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-MallardTests.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests.debug.xcconfig"; sourceTree = "<group>"; };
 		896089CD248679CF00DCBF7D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		90A50D1828ED405BB7AD9145 /* GuardianTextEgyptian-Reg.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-Reg.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-Reg.ttf"; sourceTree = "<group>"; };
 		92C66C5662CA467DB9BDFDCB /* GHGuardianHeadline-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-MediumItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-MediumItalic.ttf"; sourceTree = "<group>"; };
@@ -177,6 +178,7 @@
 		B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
 		B76AB9897804B121CD7C2A6A /* Pods-Mallard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.debug.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.debug.xcconfig"; sourceTree = "<group>"; };
 		BAD660688DF776E1FA0A2130 /* libPods-Mallard-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC016445DFC1E2C538CA2F54 /* Pods-Mallard-MallardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-MallardTests.release.xcconfig"; path = "Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests.release.xcconfig"; sourceTree = "<group>"; };
 		C51056C222D60C1700ED3078 /* crosswords.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = crosswords.bundle; path = ../html/crosswords.bundle; sourceTree = "<group>"; };
 		C521D66822CF6FAA00F493D5 /* Mallard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Mallard.entitlements; path = Mallard/Mallard.entitlements; sourceTree = "<group>"; };
 		C521D6EF22CF763C00F493D5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -197,7 +199,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB77E8F846CDE9D32C493592 /* libPods-MallardTests.a in Frameworks */,
+				B4541B6FAE9657B22ABBA905 /* libPods-Mallard-MallardTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +318,7 @@
 				CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */,
 				BAD660688DF776E1FA0A2130 /* libPods-Mallard-tvOS.a */,
 				11C512E12ECC343D6E33F7A1 /* libPods-Mallard-tvOSTests.a */,
-				2885A2F6E37B4C44D653BBC3 /* libPods-MallardTests.a */,
+				0055BBB6CB26F3E7D5D28A08 /* libPods-Mallard-MallardTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -332,6 +334,8 @@
 				5DA07BFB0DCC824DF7C94988 /* Pods-Mallard-tvOSTests.release.xcconfig */,
 				78F4F0CCE3DEAAA92756A4D3 /* Pods-MallardTests.debug.xcconfig */,
 				A39C010E18C6F1DE033568D2 /* Pods-MallardTests.release.xcconfig */,
+				865E0703B6D14CAA70E06AD3 /* Pods-Mallard-MallardTests.debug.xcconfig */,
+				BC016445DFC1E2C538CA2F54 /* Pods-Mallard-MallardTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -487,7 +491,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1130;
-				ORGANIZATIONNAME = Facebook;
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
@@ -662,7 +666,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MallardTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Mallard-MallardTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -860,7 +864,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 78F4F0CCE3DEAAA92756A4D3 /* Pods-MallardTests.debug.xcconfig */;
+			baseConfigurationReference = 865E0703B6D14CAA70E06AD3 /* Pods-Mallard-MallardTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -883,7 +887,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A39C010E18C6F1DE033568D2 /* Pods-MallardTests.release.xcconfig */;
+			baseConfigurationReference = BC016445DFC1E2C538CA2F54 /* Pods-Mallard-MallardTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -914,6 +918,17 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 998P9U5NGJ;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1",
+					"$(inherited)",
+					"PB_FIELD_32BIT=1",
+					"PB_NO_PACKED_STRUCTS=1",
+					"PB_ENABLE_MALLOC=1",
+					"FB_SONARKIT_ENABLED=1\n\nFB_SONARKIT_ENABLED=1\n\nFB_SONARKIT_ENABLED=1\n\nFB_SONARKIT_ENABLED=1\n\nFB_SONARKIT_ENABLED=1",
+				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mallard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;

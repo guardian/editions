@@ -17,7 +17,9 @@ import com.android.build.OutputFile
  *   // the name of the generated asset file containing your JS bundle
  *   bundleAssetName: "index.android.bundle",
  *
- *   // the entry file for bundle generation
+ *   // the entry file for bundle generation. If none specified and
+ *   // "index.android.js" exists, it will be used. Otherwise "index.js" is
+ *   // default. Can be overridden with ENTRY_FILE environment variable.
  *   entryFile: "index.android.js",
  *
 *   // https://facebook.github.io/react-native/docs/performance#enable-the-ram-format
@@ -78,7 +80,6 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
 ]
 
@@ -198,6 +199,11 @@ android {
         pickFirst 'META-INF/kotlinx-coroutines-core.kotlin_module'
         pickFirst 'META-INF/ktor-http-cio.kotlin_module'
         pickFirst 'META-INF/ktor-client-core.kotlin_module'
+
+        pickFirst "lib/armeabi-v7a/libc++_shared.so"
+        pickFirst "lib/arm64-v8a/libc++_shared.so"
+        pickFirst "lib/x86/libc++_shared.so"
+        pickFirst "lib/x86_64/libc++_shared.so"
     }
 }
 
@@ -224,14 +230,27 @@ def minorAppVersion() {
 }
 
 dependencies {
-    implementation project(':@sentry_react-native')
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    //noinspection GradleDynamicVersion
+    implementation project(':@sentry_react-native')
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(":ophan")
+
     // These should be auto linked. TODO: TEST THIS
     implementation "com.google.firebase:firebase-messaging:19.0.1"
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-    implementation project(":ophan")
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+      exclude group:'com.facebook.fbjni'
+    }
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+    }
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+    }
+
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermes-engine/android/";
       debugImplementation files(hermesPath + "hermes-debug.aar")
