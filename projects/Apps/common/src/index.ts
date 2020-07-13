@@ -568,9 +568,20 @@ export interface SpecialEditionHeaderStyles {
 export interface EditionsList {
     regionalEditions: RegionalEdition[]
     specialEditions: SpecialEdition[]
+    trainingEditions: TrainingEdition[]
 }
 
 export interface RegionalEdition {
+    title: string
+    subTitle: string
+    edition: Edition
+    header: {
+        title: string
+        subTitle?: string
+    }
+}
+
+export interface TrainingEdition {
     title: string
     subTitle: string
     edition: Edition
