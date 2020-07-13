@@ -1,71 +1,21 @@
-import moment, { MomentInput } from 'moment'
+import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
-import {
-    pushNotificationRegistrationCache,
-    pushRegisteredTokens,
-} from '../helpers/storage'
-import PushNotificationIOS from '@react-native-community/push-notification-ios'
-import { defaultSettings } from 'src/helpers/settings/defaults'
-import { errorService } from 'src/services/errors'
-import { pushTracking } from './push-tracking'
-import ApolloClient from 'apollo-client'
-import { Feature } from 'src/services/logging'
-import { registerWithNotificationService } from './notification-service'
-import { notificationTracking } from './notification-tracking'
 import { downloadViaNotification } from 'src/download-edition/download-via-notification'
+import { defaultSettings } from 'src/helpers/settings/defaults'
+import { apolloClient } from 'src/services/apollo-singleton'
+import { errorService } from 'src/services/errors'
+import { Feature } from 'src/services/logging'
+import { maybeRegister } from './helpers'
+import { notificationTracking } from './notification-tracking'
+import { pushTracking } from './push-tracking'
 
 export interface PushNotificationRegistration {
     registrationDate: string
     token: string
 }
 
-const shouldReRegister = (
-    newToken: string,
-    registration: PushNotificationRegistration,
-    now: MomentInput,
-): boolean =>
-    moment(now).diff(moment(registration.registrationDate), 'days') > 14 ||
-    newToken !== registration.token
-
-/**
- * will register / re-register if it should
- * will return whether it did register
- * will throw if anything major went wrong
- * */
-const maybeRegister = async (
-    token: string,
-    // mocks for testing
-    pushNotificationRegistrationCacheImpl = pushNotificationRegistrationCache,
-    registerWithNotificationServiceImpl = registerWithNotificationService,
-    now = moment().toString(),
-) => {
-    let should: boolean
-
-    try {
-        const cached = await pushNotificationRegistrationCacheImpl.get()
-        should = !cached || shouldReRegister(token, cached, now)
-    } catch {
-        // in the unlikely event we have an error here, then re-register any way
-        should = true
-    }
-
-    if (should) {
-        // this will throw on non-200 so that we won't add registration info to the cache
-        const response = await registerWithNotificationServiceImpl({ token })
-        pushRegisteredTokens.set(response['topics'])
-
-        await pushNotificationRegistrationCacheImpl.set({
-            registrationDate: now,
-            token,
-        })
-        return true
-    }
-
-    return false
-}
-
-const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
+const pushNotifcationRegistration = () => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
             pushTracking(
@@ -122,8 +72,4 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
     )
 }
 
-export {
-    pushNotifcationRegistration,
-    /** exports for testing */
-    maybeRegister,
-}
+export { pushNotifcationRegistration }

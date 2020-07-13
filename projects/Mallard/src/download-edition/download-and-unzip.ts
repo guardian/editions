@@ -180,9 +180,6 @@ export const downloadAndUnzipIssue = async (
             DownloadBlockedStatus[downloadBlocked],
             Feature.DOWNLOAD,
         )
-        errorService.captureException(
-            new Error('Download Blocked: Required signal not available'),
-        )
         return
     }
 
