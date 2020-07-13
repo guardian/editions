@@ -26,7 +26,7 @@ export const parseRecordInternal = (
         })
     }
 
-    const { action, edition, version, issueDate } = JSON.parse(
+    const { action, edition, version, issueDate, notificationUTCOffset } = JSON.parse(
         objContent,
     ) as IssuePublicationActionIdentifier
 
@@ -34,16 +34,17 @@ export const parseRecordInternal = (
         action === undefined ||
         edition === undefined ||
         version === undefined ||
-        issueDate === undefined
+        issueDate === undefined ||
+        notificationUTCOffset === undefined
     ) {
         return failure({
             error: new Error(),
             messages: [
-                `⚠️ ${loc} json file with issue details did not contained required fileds: (edition, version, issueDate)`,
+                `⚠️ ${loc} json file with issue details did not contained required values: (action, edition, version, issueDate, notificationUTCOffset)`,
             ],
         })
     }
-    return { action, edition, version, issueDate }
+    return { action, edition, version, issueDate, notificationUTCOffset }
 }
 
 export const parseRecord = async (
