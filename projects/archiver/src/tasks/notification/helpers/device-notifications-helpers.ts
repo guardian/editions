@@ -37,7 +37,7 @@ const createScheduleNotificationEndpoint = (
  **/
 export const createScheduleTime = (issueDate: string, offset = 3): string => {
     const issueDateAsDate = moment.utc(issueDate, 'YYYY-MM-DD')
-    moment.locale('utc')
+    issueDateAsDate.locale('utc')
     const notificationDate = issueDateAsDate.add(offset, 'hours')
     return notificationDate.format('YYYY-MM-DDTHH:mm:ssZ')
 }
