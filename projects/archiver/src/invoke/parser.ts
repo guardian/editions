@@ -26,11 +26,11 @@ export const parseRecordInternal = (
         })
     }
 
-    const { 
-        action, 
-        edition, 
-        version, 
-        issueDate, 
+    const {
+        action,
+        edition,
+        version,
+        issueDate,
         notificationUTCOffset,
     } = JSON.parse(objContent) as IssuePublicationActionIdentifier
 
