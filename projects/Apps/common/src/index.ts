@@ -267,12 +267,12 @@ export interface IssueIdentifier {
 
 export interface IssuePublicationIdentifier extends IssueIdentifier {
     version: string
-    notificationUTCOffset: number
 }
 
 export interface IssuePublicationActionIdentifier
     extends IssuePublicationIdentifier {
     action: string
+    notificationUTCOffset: number
 }
 
 export interface IssueSummary extends WithKey, IssueCompositeKey {
