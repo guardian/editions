@@ -75,7 +75,10 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
         return 'skipped'
     }
 
-    const scheduleTime = createScheduleTime(issueData.issueDate, issueData.notificationUTCOffset)
+    const scheduleTime = createScheduleTime(
+        issueData.issueDate,
+        issueData.notificationUTCOffset,
+    )
 
     if (!shouldSchedule(scheduleTime, now)) {
         console.log(
