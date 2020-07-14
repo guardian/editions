@@ -94,6 +94,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.6.2",
+        "@babel/helper-validator-identifier": "^7.10.4",
         "@babel/runtime": "^7.6.2",
         "@storybook/addon-knobs": "^5.3.18",
         "@storybook/addon-ondevice-knobs": "^5.3.18",
