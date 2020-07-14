@@ -267,6 +267,7 @@ export interface IssueIdentifier {
 
 export interface IssuePublicationIdentifier extends IssueIdentifier {
     version: string
+    notificationUTCOffset: number
 }
 
 export interface IssuePublicationActionIdentifier

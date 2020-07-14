@@ -12,6 +12,7 @@ export interface IssueNotificationData {
     name: string
     issueDate: string
     edition: Edition
+    notificationUTCOffset: number
 }
 
 export interface ScheduleDeviceNotificationAPIResponse {
@@ -74,7 +75,7 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
         return 'skipped'
     }
 
-    const scheduleTime = createScheduleTime(issueData.issueDate)
+    const scheduleTime = createScheduleTime(issueData.issueDate, issueData.notificationUTCOffset)
 
     if (!shouldSchedule(scheduleTime, now)) {
         console.log(
