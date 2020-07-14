@@ -20,7 +20,10 @@ const buttonStyles = StyleSheet.create({
         borderRadius: 3,
         flex: 1,
         marginHorizontal: 5,
-        padding: 8,
+        paddingLeft: 8,
+        paddingRight: 8,
+        paddingTop: 10,
+        paddingBottom: 10,
         alignItems: 'center',
     },
 })
