@@ -73,13 +73,6 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
         issueData.notificationUTCOffset,
     )
 
-    if (edition != 'daily-edition') {
-        console.log(
-            `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the edition is not eligible for Device Notification`,
-        )
-        return 'skipped'
-    }
-
     if (!shouldSchedule(scheduleTime, now)) {
         console.log(
             `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the schedule time is in the past`,
