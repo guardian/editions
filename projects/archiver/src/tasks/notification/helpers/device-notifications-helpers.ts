@@ -31,15 +31,12 @@ const createScheduleNotificationEndpoint = (
 
 /**
  * TODO
- * +3 hours from issue date is defaulted in.
- * This will (obviously) work only for Daily Editions in UK
+ * it will work now only for Daily Editions in UK
  * In the future we will need to make it more generic (for US and Australia)
  **/
-export const createScheduleTime = (issueDate: string, offset = 3): string => {
-    const issueDateAsDate = moment.utc(issueDate, 'YYYY-MM-DD')
-    issueDateAsDate.locale('utc')
-    const notificationDate = issueDateAsDate.add(offset, 'hours')
-    return notificationDate.format('YYYY-MM-DDTHH:mm:ssZ')
+export const createScheduleTime = (issueDate: string): string => {
+    const THREE_AT_NIGHT = 'T03:00:00Z'
+    return `${issueDate}${THREE_AT_NIGHT}`
 }
 
 export const shouldSchedule = (scheduleTime: string, now: Date): boolean => {

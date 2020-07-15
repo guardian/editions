@@ -52,26 +52,6 @@ in separate terminal
 $ yarn run wifi-android
 ```
 
-### Android PROD build locally
-
-Make sure you have these two files in in android/app folder:
-`editions-release.keystore`
-`gradle.properties`
-
-You can download them from S3 (frontend)
-
-First run:
-
-```bash
-yarn local-bundle-android
-```
-
-And then run:
-
-```bash
-cd android && ./gradlew clean installRelease
-```
-
 ### iOS
 
 ```bash
