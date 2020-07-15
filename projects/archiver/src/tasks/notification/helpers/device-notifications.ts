@@ -68,21 +68,21 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
 ): Promise<NotificationStatus> => {
     const { edition } = issueData
 
-    if (edition != 'daily-edition') {
-        console.log(
-            `skipping schedule Device Notification because the ${edition} edition is not eligible for Device Notification`,
-        )
-        return 'skipped'
-    }
-
     const scheduleTime = createScheduleTime(
         issueData.issueDate,
         issueData.notificationUTCOffset,
     )
 
+    if (edition != 'daily-edition') {
+        console.log(
+            `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the edition is not eligible for Device Notification`,
+        )
+        return 'skipped'
+    }
+
     if (!shouldSchedule(scheduleTime, now)) {
         console.log(
-            `skipping schedule Device Notification because the (scheduleTime: ${scheduleTime}) is in the past`,
+            `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the schedule time is in the past`,
         )
         return 'skipped'
     }
