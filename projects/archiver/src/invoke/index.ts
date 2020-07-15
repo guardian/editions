@@ -26,7 +26,7 @@ const sf = new StepFunctions({
 
 const getRuntimeInvokeStateMachineFunction = (stateMachineArn: string) => {
     return async (
-        issuePublication: IssuePublicationIdentifier,
+        issuePublication: IssuePublicationActionIdentifier,
     ): Promise<IssuePublicationIdentifier | Failure> => {
         const invoke: IssueParams = {
             issuePublication,
@@ -64,10 +64,10 @@ const getRuntimeInvokeStateMachineFunction = (stateMachineArn: string) => {
 
 export interface InvokerDependencies {
     proofStateMachineInvoke: (
-        issuePub: IssuePublicationIdentifier,
+        issuePub: IssuePublicationActionIdentifier,
     ) => Promise<IssuePublicationIdentifier | Failure>
     publishStateMachineInvoke: (
-        issuePub: IssuePublicationIdentifier,
+        issuePub: IssuePublicationActionIdentifier,
     ) => Promise<IssuePublicationIdentifier | Failure>
     s3fetch: (params: GetS3ObjParams) => Promise<string>
 }
@@ -93,14 +93,14 @@ export const internalHandler = async (
     console.log('Found following issues:', JSON.stringify(issues))
 
     const runs = await Promise.all(
-        issues.map(issuePublication => {
-            if (issuePublication.action === 'proof')
+        issues.map(issuePublicationAction => {
+            if (issuePublicationAction.action === 'proof')
                 return dependencies.proofStateMachineInvoke(
-                    issuePublication as IssuePublicationIdentifier,
+                    issuePublicationAction as IssuePublicationActionIdentifier,
                 )
             else
                 return dependencies.publishStateMachineInvoke(
-                    issuePublication as IssuePublicationIdentifier,
+                    issuePublicationAction as IssuePublicationActionIdentifier,
                 )
         }),
     )
