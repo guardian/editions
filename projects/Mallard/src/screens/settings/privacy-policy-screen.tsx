@@ -13,11 +13,10 @@ const privacyPolicyHtml = html`
         and transfer your personal data when you use the services provided by
         the Daily. This is separate to how we collect and use your personal data
         on theguardian.com, which is explained in this
-        <a href="https://www.theguardian.com/help/privacy-policy"
-            >privacy policy</a
-        >. Sometimes this app may contain links to third party sites. These
-        sites have their own privacy policies. If you follow a link to a third
-        party, you should read the privacy policy shown on their site.
+        <strong>gu.com/p/2fycd</strong> privacy policy. Sometimes this app may
+        contain links to third party sites. These sites have their own privacy
+        policies. If you follow a link to a third party, you should read the
+        privacy policy shown on their site.
     </p>
     <p>
         This privacy policy covers our use of your personal data. Personal data
@@ -82,10 +81,7 @@ const privacyPolicyHtml = html`
     </ul>
     <p>
         For more information about how we use your data on theguardian.com,
-        please see this
-        <a href="https://www.theguardian.com/help/privacy-policy"
-            >privacy policy</a
-        >.
+        please see this <strong>gu.com/p/2fycd</strong> privacy policy.
     </p>
     <p>
         <em><strong>Using our app</strong></em>
@@ -189,10 +185,7 @@ const privacyPolicyHtml = html`
             <p>
                 For security and fraud prevention, and to ensure that our app is
                 safe and secure and used in line with our
-                <a
-                    href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
-                    >terms of use</a
-                >.
+                <strong>gu.com/p/4vgfy</strong> terms of use.
             </p>
         </li>
         <li><p>To comply with applicable laws and regulations.</p></li>
@@ -288,8 +281,7 @@ const privacyPolicyHtml = html`
         advertising more relevant. Sometimes we use data about your interests or
         demographics that third parties have collected from you online to add to
         these groups. Please refer to our cookies policy for more information on
-        how we use
-        <a href="https://www.theguardian.com/info/cookies">cookies</a>.
+        how we use cookies <strong>gu.com/p/2j9cm</strong>.
     </p>
     <h2><strong>Using children’s personal data</strong></h2>
     <p>
