@@ -39,7 +39,13 @@ export const createScheduleTime = (issueDate: string, offset = 3): string => {
     const issueDateAsDate = moment.utc(issueDate, 'YYYY-MM-DD')
     issueDateAsDate.locale('utc')
     const notificationDate = issueDateAsDate.add(offset, 'hours')
-    return notificationDate.format('YYYY-MM-DDTHH:mm:ssZ')
+    const notificationDateAsString = notificationDate.format(
+        'YYYY-MM-DDTHH:mm:ssZ',
+    )
+    console.log(
+        `Calculated notification time: ${issueDate} + ${offset} gives ${notificationDateAsString}`,
+    )
+    return notificationDateAsString
 }
 
 export const shouldSchedule = (scheduleTime: string, now: Date): boolean => {
