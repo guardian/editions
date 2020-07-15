@@ -12,10 +12,11 @@ const privacyPolicyHtml = html`
         explains how we (Guardian News &amp; Media Limited) collect, use, share
         and transfer your personal data when you use the services provided by
         the Daily. This is separate to how we collect and use your personal data
-        on theguardian.com, which is explained in this <strong>gu.com/p/2fycd</strong> privacy policy. 
-        Sometimes this app may contain links to third party sites. These
-        sites have their own privacy policies. If you follow a link to a third
-        party, you should read the privacy policy shown on their site.
+        on theguardian.com, which is explained in this
+        <strong>gu.com/p/2fycd</strong> privacy policy. Sometimes this app may
+        contain links to third party sites. These sites have their own privacy
+        policies. If you follow a link to a third party, you should read the
+        privacy policy shown on their site.
     </p>
     <p>
         This privacy policy covers our use of your personal data. Personal data
@@ -183,7 +184,8 @@ const privacyPolicyHtml = html`
         <li>
             <p>
                 For security and fraud prevention, and to ensure that our app is
-                safe and secure and used in line with our <strong>gu.com/p/4vgfy</strong> terms of use.
+                safe and secure and used in line with our
+                <strong>gu.com/p/4vgfy</strong> terms of use.
             </p>
         </li>
         <li><p>To comply with applicable laws and regulations.</p></li>
