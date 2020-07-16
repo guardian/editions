@@ -15,14 +15,20 @@ export const useIssueWithResponse = <T>(
     deps: unknown[] = [],
 ) => withResponse<T>(useCachedOrPromise<T>(getter, deps))
 
-export const useIssueResponse = (issue: {
-    localIssueId: Issue['localId']
-    publishedIssueId: Issue['publishedId']
-}) =>
-    useIssueWithResponse(
-        fetchIssue(issue.localIssueId, issue.publishedIssueId),
+export const useIssueResponse = (
+    issue: {
+        localIssueId: Issue['localId']
+        publishedIssueId: Issue['publishedId']
+    },
+    forceAPIFetch = false,
+) => {
+    console.log('responding')
+    console.log(issue.localIssueId, issue.publishedIssueId)
+    return useIssueWithResponse(
+        fetchIssue(issue.localIssueId, issue.publishedIssueId, forceAPIFetch),
         [issue],
     )
+}
 
 export const getArticleResponse = ({
     article,
