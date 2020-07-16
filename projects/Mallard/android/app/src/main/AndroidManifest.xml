@@ -87,6 +87,17 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="com.googleusercontent.apps.774465807556-cjat38acttpl7md4nfc4pfediouh7v97" />
         </intent-filter>
+        <!-- Content deep link -->
+        <intent-filter android:autoVerify="true">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <!-- Accepts URIs that begin with "https://editions.theguardian.com” -->
+            <data android:scheme="https"
+                android:host="editions.theguardian.com"
+                android:pathPrefix="/edition" />
+        </intent-filter>
+        
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
