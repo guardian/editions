@@ -94,8 +94,7 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <!-- Accepts URIs that begin with "https://editions.theguardian.com” -->
             <data android:scheme="https"
-                android:host="editions.theguardian.com"
-                android:pathPrefix="/edition" />
+                android:host="editions.theguardian.com" />
         </intent-filter>
         
       </activity>
