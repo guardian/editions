@@ -10,10 +10,12 @@ import {
     withFailureMessage,
     IssuePublicationIdentifier,
     IssuePublicationActionIdentifier,
+    EditionListPublicationAction,
 } from '../../common'
 import { IssueParams } from '../tasks/issue'
 import { fetchfromCMSFrontsS3, GetS3ObjParams } from '../utils/s3'
-import { parseRecord } from './parser'
+import { parseIssueActionRecord, parseEditionListActionRecord } from './parser'
+import { failure } from '../../../backend/utils/try'
 
 export interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
@@ -109,31 +111,42 @@ const invokePublishProof = async (
     const maybeIssuesPromises: Promise<
         Attempt<IssuePublicationActionIdentifier>
     >[] = Records.map(async r => {
-        return await parseRecord(r, dependencies.s3fetch)
+        return await parseIssueActionRecord(r, dependencies.s3fetch)
     })
 
     const maybeIssues: Attempt<
         IssuePublicationActionIdentifier
     >[] = await Promise.all(maybeIssuesPromises)
 
+    // explicitly ignore all files that didn't parse,
     const issues: IssuePublicationActionIdentifier[] = maybeIssues.filter(
         hasSucceeded,
     )
 
     console.log('Found following issues:', JSON.stringify(issues))
 
-    const runs = await Promise.all(
+    return await Promise.all(
         issues.map(issuePublicationAction => {
             if (issuePublicationAction.action === 'proof')
                 return dependencies.proofStateMachineInvoke(
                     issuePublicationAction as IssuePublicationActionIdentifier,
                 )
-            else
+            else if (issuePublicationAction.action === 'publish')
                 return dependencies.publishStateMachineInvoke(
                     issuePublicationAction as IssuePublicationActionIdentifier,
                 )
+            else
+                return fail(`Unknown action ${issuePublicationAction.action}`)
         }),
     )
+
+}
+
+export const internalHandler = async (
+    Records: Record[],
+    dependencies: InvokerDependencies,
+) => {
+    const runs = await invokePublishProof(Records, dependencies)
 
     const succesfulInvocations = runs
         .filter(hasSucceeded)

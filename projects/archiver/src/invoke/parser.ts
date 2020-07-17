@@ -16,7 +16,7 @@ const isValidJSON = (s: string): boolean => {
     return true
 }
 
-export const parseRecordInternal = (
+export const parseIssueActionRecordInternal = (
     objContent: string,
     loc = '',
 ): Attempt<IssuePublicationActionIdentifier> => {
@@ -95,6 +95,12 @@ export const parseIssueActionRecord = async (
     record: Record,
     s3fetch: (params: GetS3ObjParams) => Promise<string>,
 ): Promise<Attempt<IssuePublicationActionIdentifier>> => {
+    const { objContent, loc } = await fetchFromS3(record, s3fetch)
+
+    return parseIssueActionRecordInternal(objContent, loc)
+}
+
+async function fetchFromS3(record: Record, s3fetch: (params: GetS3ObjParams) => Promise<string>) {
     console.log('Starting to parse record')
     const bucket = record.s3.bucket.name
     const key = decodeURIComponent(record.s3.object.key)
@@ -104,6 +110,6 @@ export const parseIssueActionRecord = async (
     const loc = `s3://${bucket}/${key}`
 
     console.log(`got object content from ${loc} location:`, objContent)
-
-    return parseRecordInternal(objContent, loc)
+    return { objContent, loc }
 }
+
