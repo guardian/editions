@@ -5,7 +5,7 @@ export interface Failure {
     messages?: string[]
 }
 
-export const fail = (message: string):Failure => {
+export const fail = (message: string): Failure => {
     return {
         __failure: true,
         error: {},

@@ -15,7 +15,6 @@ import {
 import { IssueParams } from '../tasks/issue'
 import { fetchfromCMSFrontsS3, GetS3ObjParams } from '../utils/s3'
 import { parseIssueActionRecord, parseEditionListActionRecord } from './parser'
-import { failure } from '../../../backend/utils/try'
 
 export interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
@@ -97,7 +96,7 @@ const invokeEditionList = async (
 
     return await Promise.all(
         editionLists.map(
-            editionList => {
+            () => {
                 fail(`No backend address to PUT edition list to yet - TODO`)
             }
         )
