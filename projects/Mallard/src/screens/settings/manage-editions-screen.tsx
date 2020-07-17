@@ -84,7 +84,7 @@ const AvailableEditionsButtons = ({
                 selected={isSelected(number)}
                 onPress={() => onPress(number)}
             >
-                {`${number} editions`}
+                {`${number} issues`}
             </MultiButton>
         ))}
     </View>
@@ -162,7 +162,7 @@ const ManageEditionsScreen = () => {
                         key: 'Delete all downloads',
                         title: 'Delete all downloads',
                         explainer:
-                            'All downloaded editions will be deleted from your device but will still be available to download',
+                            'All downloaded issues will be deleted from your device but will still be available to download',
                         onPress: () => {
                             Alert.alert(
                                 'Are you sure you want to delete all downloads?',
