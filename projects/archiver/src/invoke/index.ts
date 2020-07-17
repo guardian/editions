@@ -72,7 +72,37 @@ export interface InvokerDependencies {
     s3fetch: (params: GetS3ObjParams) => Promise<string>
 }
 
-export const internalHandler = async (
+const invokeEditionList = async (
+    Records: Record[],
+    dependencies: InvokerDependencies,
+) => {
+    const maybeEditionListPromises: Promise<
+        Attempt<EditionListPublicationAction>
+    >[] = Records.map(async r => {
+        return await parseEditionListActionRecord(r, dependencies.s3fetch)
+    })
+
+    const maybeEditionLists: Attempt<
+        EditionListPublicationAction
+    >[] = await Promise.all(maybeEditionListPromises)
+
+    // explicitly ignore all files that didn't parse,
+    const editionLists: EditionListPublicationAction[] = maybeEditionLists.filter(
+        hasSucceeded,
+    )
+
+    console.log('Found following edition lists:', JSON.stringify(editionLists))
+
+    return await Promise.all(
+        editionLists.map(
+            editionList => {
+                fail(`No backend address to PUT edition list to yet - TODO`)
+            }
+        )
+    )
+}
+
+const invokePublishProof = async (
     Records: Record[],
     dependencies: InvokerDependencies,
 ) => {
