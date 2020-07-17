@@ -49,6 +49,8 @@ describe('parseRecord', () => {
 
     it('should fail if JSON was malformed', async () => {
         const obejctsContents = '{"'
-        expect(hasFailed(parseIssueActionRecordInternal(obejctsContents))).toBe(true)
+        expect(hasFailed(parseIssueActionRecordInternal(obejctsContents))).toBe(
+            true,
+        )
     })
 })

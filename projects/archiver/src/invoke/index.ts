@@ -5,6 +5,7 @@ import {
     Attempt,
     attempt,
     Failure,
+    failFast,
     hasFailed,
     hasSucceeded,
     withFailureMessage,
@@ -57,7 +58,7 @@ const getRuntimeInvokeStateMachineFunction = (stateMachineArn: string) => {
         console.log(
             `Invocation of step function for ${JSON.stringify(
                 issuePublication,
-            )} succesful`,
+            )} successful`,
         )
         return issuePublication
     }
@@ -96,8 +97,10 @@ const invokeEditionList = async (
 
     return await Promise.all(
         editionLists.map(() => {
-            fail(`No backend address to PUT edition list to yet - TODO`)
-        })
+            return failFast(
+                `No backend address to PUT edition list to yet - TODO`,
+            )
+        }),
     )
 }
 
@@ -144,15 +147,29 @@ export const internalHandler = async (
     const issueRuns = await invokePublishProof(Records, dependencies)
     const editionsListRuns = await invokeEditionList(Records, dependencies)
 
-    const invocations = issueRuns.concat(editionsListRuns)
-    const succesfulInvocations = invocations
+    const successfulIssueInvocations = issueRuns
         .filter(hasSucceeded)
         .map(issue => `✅ Invocation of ${JSON.stringify(issue)} succeeded.`)
+
+    const successfulEditionListInvocations = editionsListRuns
+        .filter(hasSucceeded)
+        .map(() => `✅ Invocation of edition list succeeded.`)
+
+    const invocations = issueRuns.concat(editionsListRuns)
     const failedInvocations = invocations.filter(hasFailed)
     console.error(JSON.stringify([...failedInvocations]))
-    if (succesfulInvocations.length < 1)
+
+    if (
+        successfulIssueInvocations.length == 0 &&
+        successfulEditionListInvocations.length == 0
+    )
         throw new Error('No invocations were made.')
-    return [...succesfulInvocations, ...failedInvocations]
+
+    return [
+        ...successfulIssueInvocations,
+        ...successfulEditionListInvocations,
+        ...failedInvocations,
+    ]
 }
 
 export const handler: Handler<

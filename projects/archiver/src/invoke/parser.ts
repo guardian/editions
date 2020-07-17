@@ -79,7 +79,7 @@ export const parseEditionListActionRecordInternal = (
 }
 
 async function fetchFromS3(
-    record: Record, 
+    record: Record,
     s3fetch: (params: GetS3ObjParams) => Promise<string>,
 ) {
     console.log('Starting to parse record')
@@ -100,7 +100,6 @@ export const parseEditionListActionRecord = async (
 ): Promise<Attempt<EditionListPublicationAction>> => {
     const { objContent, loc } = await fetchFromS3(record, s3fetch)
     return parseEditionListActionRecordInternal(objContent, loc)
-
 }
 
 export const parseIssueActionRecord = async (
