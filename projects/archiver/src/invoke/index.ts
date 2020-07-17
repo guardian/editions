@@ -95,11 +95,9 @@ const invokeEditionList = async (
     console.log('Found following edition lists:', JSON.stringify(editionLists))
 
     return await Promise.all(
-        editionLists.map(
-            () => {
-                fail(`No backend address to PUT edition list to yet - TODO`)
-            }
-        )
+        editionLists.map(() => {
+            fail(`No backend address to PUT edition list to yet - TODO`)
+        })
     )
 }
 
@@ -134,11 +132,9 @@ const invokePublishProof = async (
                 return dependencies.publishStateMachineInvoke(
                     issuePublicationAction as IssuePublicationActionIdentifier,
                 )
-            else
-                return fail(`Unknown action ${issuePublicationAction.action}`)
+            else return fail(`Unknown action ${issuePublicationAction.action}`)
         }),
     )
-
 }
 
 export const internalHandler = async (

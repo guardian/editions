@@ -63,15 +63,11 @@ export const parseEditionListActionRecordInternal = (
         })
     }
 
-    const {
-        action,
-        content,
-    } = JSON.parse(objContent) as EditionListPublicationAction
+    const { action, content } = JSON.parse(
+        objContent,
+    ) as EditionListPublicationAction
 
-    if (
-        action === undefined ||
-        content === undefined
-    ) {
+    if (action === undefined || content === undefined) {
         return failure({
             error: new Error(),
             messages: [
@@ -80,6 +76,22 @@ export const parseEditionListActionRecordInternal = (
         })
     }
     return { action, content }
+}
+
+async function fetchFromS3(
+    record: Record, 
+    s3fetch: (params: GetS3ObjParams) => Promise<string>,
+) {
+    console.log('Starting to parse record')
+    const bucket = record.s3.bucket.name
+    const key = decodeURIComponent(record.s3.object.key)
+
+    const objContent = await s3fetch({ Bucket: bucket, Key: key })
+
+    const loc = `s3://${bucket}/${key}`
+
+    console.log(`got object content from ${loc} location:`, objContent)
+    return { objContent, loc }
 }
 
 export const parseEditionListActionRecord = async (
@@ -99,17 +111,3 @@ export const parseIssueActionRecord = async (
 
     return parseIssueActionRecordInternal(objContent, loc)
 }
-
-async function fetchFromS3(record: Record, s3fetch: (params: GetS3ObjParams) => Promise<string>) {
-    console.log('Starting to parse record')
-    const bucket = record.s3.bucket.name
-    const key = decodeURIComponent(record.s3.object.key)
-
-    const objContent = await s3fetch({ Bucket: bucket, Key: key })
-
-    const loc = `s3://${bucket}/${key}`
-
-    console.log(`got object content from ${loc} location:`, objContent)
-    return { objContent, loc }
-}
-
