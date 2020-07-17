@@ -145,12 +145,14 @@ export const internalHandler = async (
     Records: Record[],
     dependencies: InvokerDependencies,
 ) => {
-    const runs = await invokePublishProof(Records, dependencies)
+    const issueRuns = await invokePublishProof(Records, dependencies)
+    const editionsListRuns = await invokeEditionList(Records, dependencies)
 
-    const succesfulInvocations = runs
+    const invocations = issueRuns.concat(editionsListRuns)
+    const succesfulInvocations = invocations
         .filter(hasSucceeded)
         .map(issue => `✅ Invocation of ${JSON.stringify(issue)} succeeded.`)
-    const failedInvocations = runs.filter(hasFailed)
+    const failedInvocations = invocations.filter(hasFailed)
     console.error(JSON.stringify([...failedInvocations]))
     if (succesfulInvocations.length < 1)
         throw new Error('No invocations were made.')
