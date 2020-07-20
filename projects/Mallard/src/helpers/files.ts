@@ -163,11 +163,13 @@ export const getLocalIssues = async () => {
 
 export const getEdtionIssuesCount = async () => {
     const editionDirList = await FSPaths.edtionDirList()
+    const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
     let result: string[] = []
     for (let i = 0; i < editionDirList.length; i++) {
         const dir = editionDirList[i]
-        const count = (await RNFS.readdir(dir)).length
-        result.push(`${dir.split('/').pop()}: ${count} issues`)
+        const files = await RNFS.readdir(dir)
+        const issueFiles = files.filter(file => file.match(regex) != null)
+        result.push(`${dir.split('/').pop()}: ${issueFiles.length} issues`)
     }
     return result
 }
