@@ -84,7 +84,7 @@ const AvailableEditionsButtons = ({
                 selected={isSelected(number)}
                 onPress={() => onPress(number)}
             >
-                {`${number} editions`}
+                {`${number} issues`}
             </MultiButton>
         ))}
     </View>
@@ -109,7 +109,7 @@ const ManageEditionsScreen = () => {
                                   key: 'Wifi-only',
                                   title: 'Wifi-only',
                                   explainer:
-                                      'Editions will only be downloaded when wi-fi is available',
+                                      'Issues will only be downloaded when Wi-Fi is available',
                                   proxy: (
                                       <Switch
                                           accessible={true}
@@ -162,7 +162,7 @@ const ManageEditionsScreen = () => {
                         key: 'Delete all downloads',
                         title: 'Delete all downloads',
                         explainer:
-                            'All downloaded editions will be deleted from your device but will still be available to download',
+                            'All downloaded issues will be deleted from your device but will still be available to download',
                         onPress: () => {
                             Alert.alert(
                                 'Are you sure you want to delete all downloads?',
