@@ -109,7 +109,7 @@ const ManageEditionsScreen = () => {
                                   key: 'Wifi-only',
                                   title: 'Wifi-only',
                                   explainer:
-                                      'Editions will only be downloaded when wi-fi is available',
+                                      'Issues will only be downloaded when Wi-Fi is available',
                                   proxy: (
                                       <Switch
                                           accessible={true}
