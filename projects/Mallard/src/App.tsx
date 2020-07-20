@@ -33,7 +33,6 @@ import {
     ConfigProvider,
     largeDeviceMemory,
 } from 'src/hooks/use-config-provider'
-import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
