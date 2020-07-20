@@ -64,6 +64,8 @@ import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
+import { weatherHider } from 'src/helpers/weather-hider'
+import { apolloClient } from 'src/services/apollo-singleton'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -348,6 +350,7 @@ const IssueScreenWithPath = React.memo(
         initialFrontKey: string | null
     }) => {
         const response = useIssueResponse(path)
+        weatherHider(apolloClient)
 
         return response({
             error: handleError,
