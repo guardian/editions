@@ -34,7 +34,7 @@ export const getArticleResponse = ({
     publishedIssueId,
     front,
 }: PathToArticle) =>
-    chain(fetchIssue(localIssueId, publishedIssueId), issue => {
+    chain(fetchIssue(localIssueId, publishedIssueId, false), issue => {
         const maybeFront = issue.fronts.find(f => f.key === front)
         if (!maybeFront) throw ERR_404_REMOTE
 
