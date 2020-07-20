@@ -164,13 +164,34 @@ export const getLocalIssues = async () => {
 
 export const issuesToDelete = async (files: string[]) => {
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
-    const edition = await getSelectedEditionSlug()
-    const lastNumberOfDays = lastNDays(maxAvailableEditions)
-    return files.filter(
-        issue =>
-            !lastNumberOfDays.map(withPathPrefix(edition)).includes(issue) &&
-            issue !== `${edition}/issues`,
-    )
+    const totalIssues = files.length
+
+    if (totalIssues <= maxAvailableEditions) {
+        console.log(
+            `No Issues to delete: downloaded issues are ${files.length} and max number is ${maxAvailableEditions}`,
+        )
+        return []
+    }
+
+    // sort in descending order so we can loop through it and keep the latest issues
+    files.sort().reverse()
+
+    let deleteList: string[] = []
+    let keepIssues = 0
+    const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
+
+    for (let i = 0; i < totalIssues; i++) {
+        const isAnIssue = files[i].match(regex) != null
+        if (isAnIssue && keepIssues < maxAvailableEditions) {
+            keepIssues++
+            continue
+        }
+
+        const canDelete = !files[i].endsWith('/issues')
+        if (canDelete) deleteList.push(files[i])
+    }
+
+    return deleteList
 }
 
 export const matchSummmaryToKey = (

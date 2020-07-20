@@ -1,5 +1,4 @@
-import MockDate from 'mockdate'
-import { matchSummmaryToKey, issuesToDelete } from '../../helpers/files'
+import { matchSummmaryToKey } from '../../helpers/files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
 
 describe('helpers/files', () => {
@@ -18,21 +17,71 @@ describe('helpers/files', () => {
     })
 
     describe('issuesToDelete', () => {
-        MockDate.set('2019-08-21')
-        it('should return items outside of the 7 days that dont follow the issue naming, or the issue index', async () => {
+        beforeEach(() => {
+            jest.resetModules()
+        })
+
+        it('should return items outside of the 7 latest issues', async () => {
+            jest.mock('src/helpers/settings', () => ({
+                getSetting: (maxAvailableEditions: string) => 7,
+            }))
+            const { issuesToDelete } = require('../../helpers/files')
+
             const files = [
                 'daily-edition/issues',
                 'some-random-file',
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-14',
+                'daily-edition/2020-07-14',
+                'daily-edition/2020-07-15',
+                'daily-edition/2020-07-16',
+                'daily-edition/2020-07-17',
+                'daily-edition/2020-07-18',
+                'daily-edition/2020-07-19',
+                'daily-edition/2020-07-20',
+            ]
+
+            expect(await issuesToDelete(files)).toEqual([
+                'some-random-file',
+                'daily-edition/2019-08-15',
+                'daily-edition/2019-08-14',
+            ])
+        })
+
+        it('should return items outside of the 3 latest issues', async () => {
+            jest.mock('src/helpers/settings', () => ({
+                getSetting: (maxAvailableEditions: string) => 3,
+            }))
+            const { issuesToDelete } = require('../../helpers/files')
+
+            const files = [
+                'daily-edition/issues',
+                'some-random-file',
+                'daily-edition/2019-08-15',
+                'daily-edition/2019-08-14',
+                'daily-edition/2020-07-14',
+                'daily-edition/2020-07-15',
+                'daily-edition/2020-07-16',
+                'daily-edition/2020-07-17',
+                'daily-edition/2020-07-18',
+                'daily-edition/2020-07-19',
             ]
             expect(await issuesToDelete(files)).toEqual([
                 'some-random-file',
+                'daily-edition/2020-07-16',
+                'daily-edition/2020-07-15',
+                'daily-edition/2020-07-14',
+                'daily-edition/2019-08-15',
                 'daily-edition/2019-08-14',
             ])
         })
 
         it("should return an empty array if there isn't any to delete", async () => {
+            jest.mock('src/helpers/settings', () => ({
+                getSetting: (maxAvailableEditions: string) => 3,
+            }))
+            const { issuesToDelete } = require('../../helpers/files')
+
             const files = [
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-16',
