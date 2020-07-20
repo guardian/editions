@@ -868,5 +868,4 @@ const Header = ({
         </div>
     `
 }
-
-export { Header }
+export { Header, getStandFirst }
