@@ -20,6 +20,8 @@ import { AppState, AppStateStatus } from 'react-native'
 import { remoteConfigService } from 'src/services/remote-config'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/push-notifications/push-notifications'
+import { weatherHider } from 'src/helpers/weather-hider'
+import { apolloClient } from 'src/services/apollo-singleton'
 
 interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
@@ -141,6 +143,7 @@ const setEdition = async (
     setSelectedEdition(edition)
     await selectedEditionCache.set(edition)
     await defaultEditionCache.set(edition)
+    weatherHider(apolloClient)
     pushNotifcationRegistration()
 }
 

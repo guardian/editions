@@ -147,7 +147,6 @@ const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
-        weatherHider(apolloClient)
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
         loggingService.postLogs()
