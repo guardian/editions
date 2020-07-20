@@ -3,7 +3,6 @@ import RNFS from 'react-native-fs'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { IssueSummary, editions } from '../../../Apps/common/src'
-import { lastNDays } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
@@ -160,6 +159,17 @@ export const getLocalIssues = async () => {
     return RNFS.readdir(editionDirectory).then(files =>
         files.map(withPathPrefix(edition)),
     )
+}
+
+export const getEdtionIssuesCount = async () => {
+    const editionDirList = await FSPaths.edtionDirList()
+    let result: string[] = []
+    for (let i = 0; i < editionDirList.length; i++) {
+        const dir = editionDirList[i]
+        const count = (await RNFS.readdir(dir)).length
+        result.push(`${dir.split('/').pop()}: ${count} issues`)
+    }
+    return result
 }
 
 export const issuesToDelete = async (files: string[]) => {

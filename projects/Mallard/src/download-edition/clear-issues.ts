@@ -8,6 +8,7 @@ import {
     prepFileSystem,
     getLocalIssues,
     issuesToDelete,
+    getEdtionIssueCount,
 } from 'src/helpers/files'
 
 const clearDownloadsDirectory = async () => {

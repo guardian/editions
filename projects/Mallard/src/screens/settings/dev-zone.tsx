@@ -14,7 +14,7 @@ import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { getFileList } from 'src/helpers/files'
+import { getFileList, getEdtionIssuesCount } from 'src/helpers/files'
 import { locale } from 'src/helpers/locale'
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream'
 import { imageForScreenSize } from 'src/helpers/screen'
@@ -81,6 +81,13 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const buildNumber = DeviceInfo.getBuildNumber()
     const [pushTokens, setPushTokens] = useState('fetching...')
+    const [downloadedIssues, setDownloadedIssues] = useState('fetching...')
+
+    useEffect(() => {
+        getEdtionIssuesCount().then(stats => {
+            setDownloadedIssues(stats.join('\n'))
+        })
+    }, [])
 
     useEffect(() => {
         pushRegisteredTokens.get().then(tokens => {
@@ -313,6 +320,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Push Tokens',
                         title: 'Registered push tokens',
                         explainer: pushTokens,
+                    },
+                    {
+                        key: 'All Downloaded Issues',
+                        title: 'All Downloaded Issues',
+                        explainer: downloadedIssues,
                     },
                     {
                         key: 'Files in Issues',
