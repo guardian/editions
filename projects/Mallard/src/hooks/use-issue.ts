@@ -22,8 +22,6 @@ export const useIssueResponse = (
     },
     forceAPIFetch = false,
 ) => {
-    console.log('responding')
-    console.log(issue.localIssueId, issue.publishedIssueId)
     return useIssueWithResponse(
         fetchIssue(issue.localIssueId, issue.publishedIssueId, forceAPIFetch),
         [issue],
