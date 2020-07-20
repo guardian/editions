@@ -25,7 +25,7 @@ export const issueController = (req: Request, res: Response) => {
         req.params.version,
         isPreviewStage,
     )
-    const edition = req.params.edition
+    const edition = getEditionOrFallback(req.params.edition)
     const issue: IssuePublicationIdentifier = {
         issueDate,
         version,
@@ -121,7 +121,9 @@ export const getIssuesSummary = async (
 
 export const issuesSummaryController = (req: Request, res: Response) => {
     const issueEdition = req.params.edition
-    const pageSize = req.query.pageSize && parseInt(req.query.pageSize, 10)
+    const pageSize =
+        (req.query.pageSize && parseInt(req.query.pageSize.toString(), 10)) ||
+        undefined
     getIssuesSummary(issueEdition, isPreviewStage, pageSize)
         .then(data => {
             if (hasFailed(data)) {

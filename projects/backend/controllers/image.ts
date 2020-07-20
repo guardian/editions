@@ -1,7 +1,16 @@
 import { Request, Response } from 'express'
-import { imageSizes, ImageUse, imageUses } from '../../Apps/common/src/index'
+import {
+    imageSizes,
+    ImageUse,
+    imageUses,
+    ImageSize,
+} from '../../Apps/common/src/index'
 import { Image, ImageRole, imageRoles } from '../common'
 import { getImageURL } from '../image'
+
+const getSize = (size: string | undefined): ImageSize | undefined => {
+    return imageSizes.find(_ => _ == size)
+}
 
 const getUse = (use: string | undefined): ImageUse | undefined => {
     const imageUse = imageUses.find(_ => _ == use)
@@ -19,20 +28,21 @@ const getUse = (use: string | undefined): ImageUse | undefined => {
  */
 export const imageController = (req: Request, res: Response) => {
     const source = req.params.source
-    const size = req.params.size
+    const size = getSize(req.params.size)
     const lastPathParam: string = req.params[0]
     const use = getUse(req.params.use) || 'full-size'
     const role: ImageRole =
         imageRoles.find(r => r === req.query.role) || 'inline'
     const img: Image = { source, path: lastPathParam, role }
 
-    if (!imageSizes.includes(size)) {
+    if (!size) {
         res.status(500)
         res.send('Invalid size')
+    } else {
+        const redirect = getImageURL(img, size, use)
+        console.log(
+            `Getting image redirect for ${source} ${size} ${lastPathParam} role : ${role} redirect: ${redirect}`,
+        )
+        res.redirect(redirect)
     }
-    const redirect = getImageURL(img, size, use)
-    console.log(
-        `Getting image redirect for ${source} ${size} ${lastPathParam} role : ${role} redirect: ${redirect}`,
-    )
-    res.redirect(redirect)
 }

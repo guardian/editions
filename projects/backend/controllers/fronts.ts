@@ -4,7 +4,7 @@ import { getFront } from '../fronts'
 import { hasFailed } from '../utils/try'
 import { isPreview } from '../preview'
 import { IssuePublicationIdentifier } from '../common'
-import { decodeVersionOrPreview } from '../utils/issue'
+import { decodeVersionOrPreview, getEditionOrFallback } from '../utils/issue'
 
 export const frontController = (req: Request, res: Response) => {
     const frontId: string = req.params[0]
@@ -13,7 +13,7 @@ export const frontController = (req: Request, res: Response) => {
         req.params.version,
         isPreview,
     )
-    const edition = req.params.edition
+    const edition = getEditionOrFallback(req.params.edition)
     const [date, updater] = lastModified()
     console.log(`Request for ${req.url} fetching front ${frontId}`)
     const issue: IssuePublicationIdentifier = {
