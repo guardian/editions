@@ -164,7 +164,7 @@ export const getLocalIssues = async () => {
 export const getEdtionIssuesCount = async () => {
     const editionDirList = await FSPaths.edtionDirList()
     const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
-    let result: string[] = []
+    const result: string[] = []
     for (let i = 0; i < editionDirList.length; i++) {
         const dir = editionDirList[i]
         const files = await RNFS.readdir(dir)
@@ -188,7 +188,7 @@ export const issuesToDelete = async (files: string[]) => {
     // sort in descending order so we can loop through it and keep the latest issues
     files.sort().reverse()
 
-    let deleteList: string[] = []
+    const deleteList: string[] = []
     let keepIssues = 0
     const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
 
