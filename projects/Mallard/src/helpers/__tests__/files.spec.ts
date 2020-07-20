@@ -23,7 +23,7 @@ describe('helpers/files', () => {
 
         it('should return items outside of the 7 latest issues', async () => {
             jest.mock('src/helpers/settings', () => ({
-                getSetting: (maxAvailableEditions: string) => 7,
+                getSetting: () => 7,
             }))
             const { issuesToDelete } = require('../../helpers/files')
 
@@ -50,7 +50,7 @@ describe('helpers/files', () => {
 
         it('should return items outside of the 3 latest issues', async () => {
             jest.mock('src/helpers/settings', () => ({
-                getSetting: (maxAvailableEditions: string) => 3,
+                getSetting: () => 3,
             }))
             const { issuesToDelete } = require('../../helpers/files')
 
@@ -78,7 +78,7 @@ describe('helpers/files', () => {
 
         it("should return an empty array if there isn't any to delete", async () => {
             jest.mock('src/helpers/settings', () => ({
-                getSetting: (maxAvailableEditions: string) => 3,
+                getSetting: () => 3,
             }))
             const { issuesToDelete } = require('../../helpers/files')
 
