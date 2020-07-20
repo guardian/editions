@@ -8,19 +8,20 @@ It should also be a useful reference point for non-developers looking to see wha
 
 This is a front - it's the whole thing from left to right. The name of the front is always visible. A subtitle may also be visible depending what `Collection` is visible.
 
-![example front](./images/example-front.jpeg)
+<img src="https://github.com/guardian/editions/raw/master/docs/images/example-front.jpeg" width="400" alt="cover card with whitespace">
 
 ## Collections
 
 A collection is a subsection within a Front. It might have it's own `subtitle` - see below.
 
-![collection with subtitle](./images/collection-with-subtitle.jpeg)
+
+<img src="https://github.com/guardian/editions/raw/master/docs/images/collection-with-subtitle.jpeg" width="400" alt="cover card with whitespace">
 
 ## Cards
 
 Cards may have from 1 to 5 stories on them. 'Cover Cards' contain an image covering the full card, and are made in the [editions card builder](https://github.com/guardian/editions-card-builder)
 
-![example cover card](./images/cover-card.jpeg)
+<img src="https://github.com/guardian/editions/raw/master/docs/images/cover-card.jpeg" width="400" alt="cover card with whitespace">
 
 ## Layout/Sizing
 
@@ -30,15 +31,15 @@ There is some flexibility in card height currently - it will vary based on the a
 
 Most cards will 'expand' to fill the space available to them so you won't see white space at the bottom (since something will be stuck to the bottom, e.g. trail text), with the exception of cover cards, as we don't crop or distort images, so if the cover card image isn't tall enough then we'll get a border at the bottom.
 
-![cover card with whitespace](./images/cover-card-whitespace.jpeg)
+<img src="https://github.com/guardian/editions/raw/master/docs/images/cover-card-whitespace.jpeg" width="400" alt="cover card with whitespace">
 
 ### Images
 
 Images on fronts normally take up the full width of the container they are in[1]. The height is set to a percentage of the height of the container they are in. These percentages are currently determined by logic in a file called [sizes.ts](https://github.com/guardian/editions/blob/master/projects/Mallard/src/components/front/items/helpers/sizes.ts).
 
 [1] Except for this image which is 100% height but only 50% width!
-![width constrained image](./images/width-constrained-image)
 
+<img src="https://github.com/guardian/editions/raw/master/docs/images/width-constrained-image.jpeg" width="400" alt="width constrained image">
 ### Text
 
 Text is a bit more complex! Currently headline font sizes are determined in the `getFontSize` function in [text-block.ts](https://github.com/guardian/editions/blob/e9f0a1f8d301f8a0011111432c96a0a6b3725519/projects/Mallard/src/components/front/items/helpers/text-block.tsx#L38). The trail text font size (confusingly) lives in a file called [standfirst.tsx](https://github.com/guardian/editions/blob/master/projects/Mallard/src/components/front/items/helpers/standfirst.tsx#L8). The decimal numbers you see in these files correspond to values set in [typography.ts](https://github.com/guardian/editions/blob/master/projects/Mallard/src/theme/typography.ts)
