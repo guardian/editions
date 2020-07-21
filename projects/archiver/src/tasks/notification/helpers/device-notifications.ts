@@ -73,6 +73,15 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
         issueData.notificationUTCOffset,
     )
 
+    const stage: string = process.env.stage || 'code'
+
+    if (edition != 'daily-edition' && stage.toLowerCase() == 'prod') {
+        console.log(
+            `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the stage is prod and the edition is not eligible for Device Notification`,
+        )
+        return 'skipped'
+    }
+
     if (!shouldSchedule(scheduleTime, now)) {
         console.log(
             `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the schedule time is in the past`,
