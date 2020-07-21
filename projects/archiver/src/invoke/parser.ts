@@ -33,6 +33,7 @@ export const parseIssueActionRecordInternal = (
         version,
         issueDate,
         notificationUTCOffset,
+        topic,
     } = JSON.parse(objContent) as IssuePublicationActionIdentifier
 
     if (
@@ -40,16 +41,17 @@ export const parseIssueActionRecordInternal = (
         edition === undefined ||
         version === undefined ||
         issueDate === undefined ||
-        notificationUTCOffset === undefined
+        notificationUTCOffset === undefined ||
+        topic === undefined
     ) {
         return failure({
             error: new Error(),
             messages: [
-                `⚠️ ${loc} json file with issue details did not contained required values: (action, edition, version, issueDate, notificationUTCOffset)`,
+                `⚠️ ${loc} json file with issue details did not contained required values: (action, edition, version, issueDate, notificationUTCOffset, topic)`,
             ],
         })
     }
-    return { action, edition, version, issueDate, notificationUTCOffset }
+    return { action, edition, version, issueDate, notificationUTCOffset, topic }
 }
 
 const parseEditionListActionRecordInternal = (
