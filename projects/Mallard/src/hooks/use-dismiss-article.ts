@@ -35,12 +35,15 @@ export const useDismissArticle = () => {
                     return false
                 },
                 onStartShouldSetPanResponder: () => false,
-                onPanResponderMove: Animated.event([
-                    null,
-                    {
-                        dy: scrollY,
-                    },
-                ]),
+                onPanResponderMove: Animated.event(
+                    [
+                        null,
+                        {
+                            dy: scrollY,
+                        },
+                    ],
+                    { useNativeDriver: false },
+                ),
                 onPanResponderEnd: (ev, gestureState) => {
                     if (gestureState.dy > 50) {
                         onDismiss()
