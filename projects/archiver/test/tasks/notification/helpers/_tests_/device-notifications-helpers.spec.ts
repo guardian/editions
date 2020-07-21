@@ -14,6 +14,7 @@ describe('prepareScheduleDeviceNotificationRequest', () => {
             edition: 'daily-edition',
             issueDate: '2019-09-18',
             notificationUTCOffset: 1,
+            topic: 'uk',
         }
 
         const apiCfg = {
