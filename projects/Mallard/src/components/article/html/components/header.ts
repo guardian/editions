@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { ArticleType, HeaderType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { GetImagePath } from 'src/hooks/use-image-paths'
@@ -6,18 +7,17 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import {
-    CreditedImage,
     Article,
+    CreditedImage,
     MediaAtomElement,
 } from '../../../../../../Apps/common/src'
 import { CssProps, themeColors } from '../helpers/css'
 import { breakSides } from '../helpers/layout'
-import { Quotes } from './icon/quotes'
+import { getHeadline } from './headline'
 import { Line } from './line'
+import { renderMediaAtom } from './media-atoms'
 import { Rating } from './rating'
 import { SportScore } from './sport-score'
-import { renderMediaAtom } from './media-atoms'
-import { Platform } from 'react-native'
 
 export interface ArticleHeaderProps {
     headline: string
@@ -654,15 +654,7 @@ const getStandFirst = (
         return html`
             <section class="header-top">
                 <div class="${cutout && `header-opinion-flex`}">
-                    <h1>
-                        ${type === ArticleType.Opinion && Quotes()}
-                        <span class="header-top-headline"
-                            >${headerProps.headline}
-                        </span>
-                        <span class="header-top-byline"
-                            >${headerProps.bylineHtml}
-                        </span>
-                    </h1>
+                    ${getHeadline(articleHeaderType, type, headerProps)}
                     ${publishedId &&
                         cutout &&
                         html`
@@ -679,9 +671,7 @@ const getStandFirst = (
     } else {
         return html`
             <section class="header-top">
-                <h1>
-                    ${headerProps.headline}
-                </h1>
+                ${getHeadline(articleHeaderType, type, headerProps)}
                 ${articleHeaderType === HeaderType.RegularByline &&
                     headerProps.standfirst &&
                     `<p>

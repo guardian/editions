@@ -4,15 +4,17 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
 "
             <section class=\\"header-top\\">
                 <div class=\\"\\">
-                    <h1>
-                        <Quotes />
-                        <span class=\\"header-top-headline\\"
-                            >Test Headline
-                        </span>
-                        <span class=\\"header-top-byline\\"
-                            ><p>Test Byline</p>
-                        </span>
-                    </h1>
+                    
+            <h1>
+                <Quotes />
+                <span class=\\"header-top-headline\\"
+                    >Test Headline
+                </span>
+                <span class=\\"header-top-byline\\"
+                    ><p>Test Byline</p>
+                </span>
+            </h1>
+        
                     
                 </div>
             </section>
@@ -23,15 +25,17 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
 "
             <section class=\\"header-top\\">
                 <div class=\\"header-opinion-flex\\">
-                    <h1>
-                        <Quotes />
-                        <span class=\\"header-top-headline\\"
-                            >Test Headline
-                        </span>
-                        <span class=\\"header-top-byline\\"
-                            ><p>Test Byline</p>
-                        </span>
-                    </h1>
+                    
+            <h1>
+                <Quotes />
+                <span class=\\"header-top-headline\\"
+                    >Test Headline
+                </span>
+                <span class=\\"header-top-byline\\"
+                    ><p>Test Byline</p>
+                </span>
+            </h1>
+        
                     
                             <div>
                                 
@@ -48,15 +52,17 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
 "
             <section class=\\"header-top\\">
                 <div class=\\"header-opinion-flex\\">
-                    <h1>
-                        <Quotes />
-                        <span class=\\"header-top-headline\\"
-                            >Test Headline
-                        </span>
-                        <span class=\\"header-top-byline\\"
-                            ><p>Test Byline</p>
-                        </span>
-                    </h1>
+                    
+            <h1>
+                <Quotes />
+                <span class=\\"header-top-headline\\"
+                    >Test Headline
+                </span>
+                <span class=\\"header-top-byline\\"
+                    ><p>Test Byline</p>
+                </span>
+            </h1>
+        
                     
                 </div>
             </section>
@@ -67,15 +73,17 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
 "
             <section class=\\"header-top\\">
                 <div class=\\"\\">
-                    <h1>
-                        
-                        <span class=\\"header-top-headline\\"
-                            >Test Headline
-                        </span>
-                        <span class=\\"header-top-byline\\"
-                            ><p>Test Byline</p>
-                        </span>
-                    </h1>
+                    
+            <h1>
+                
+                <span class=\\"header-top-headline\\"
+                    >Test Headline
+                </span>
+                <span class=\\"header-top-byline\\"
+                    ><p>Test Byline</p>
+                </span>
+            </h1>
+        
                     
                 </div>
             </section>
@@ -85,9 +93,11 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
 exports[`article html Header getStandFirst should display NoByline Header Type, show only the headline 1`] = `
 "
             <section class=\\"header-top\\">
-                <h1>
-                    Test Headline
-                </h1>
+                
+            <h1>
+                Test Headline
+            </h1>
+        
                 
             </section>
         "
@@ -96,9 +106,11 @@ exports[`article html Header getStandFirst should display NoByline Header Type, 
 exports[`article html Header getStandFirst should display RegularByline Header Type, show a standfirst with the headline 1`] = `
 "
             <section class=\\"header-top\\">
-                <h1>
-                    Test Headline
-                </h1>
+                
+            <h1>
+                Test Headline
+            </h1>
+        
                 <p>
                         Test Standfirst
                       </p>
