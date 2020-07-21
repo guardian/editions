@@ -24,7 +24,12 @@ export const handler: Handler<
     async ({ issuePublication, issue }) => {
         const stage: string = process.env.stage || 'code'
 
-        const { issueDate, edition, notificationUTCOffset, topic } = issuePublication
+        const {
+            issueDate,
+            edition,
+            notificationUTCOffset,
+            topic,
+        } = issuePublication
         const { key, name } = issue
 
         const guNotificationServiceDomain =
