@@ -275,6 +275,11 @@ export interface IssuePublicationActionIdentifier
     notificationUTCOffset: number
 }
 
+export interface EditionListPublicationAction {
+    action: string
+    content: object
+}
+
 export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string
