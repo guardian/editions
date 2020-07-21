@@ -52,7 +52,7 @@ export const parseIssueActionRecordInternal = (
     return { action, edition, version, issueDate, notificationUTCOffset }
 }
 
-export const parseEditionListActionRecordInternal = (
+const parseEditionListActionRecordInternal = (
     objContent: string,
     loc = '',
 ): Attempt<EditionListPublicationAction> => {
