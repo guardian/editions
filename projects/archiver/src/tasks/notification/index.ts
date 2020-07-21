@@ -29,7 +29,7 @@ export const handler: Handler<
             edition,
             notificationUTCOffset,
             topic,
-        src/invoke/parser.ts} = issuePublication
+        } = issuePublication
         const { key, name } = issue
 
         const guNotificationServiceDomain =
