@@ -42,6 +42,8 @@ import analytics from '@react-native-firebase/analytics'
 import { prepFileSystem } from './helpers/files'
 import { EditionProvider } from './hooks/use-edition-provider'
 import { apolloClient } from './services/apollo-singleton'
+import { eventEmitter } from 'src/helpers/event-emitter'
+import { weatherHider } from 'src/helpers/weather-hider'
 
 analytics().setAnalyticsCollectionEnabled(false)
 
@@ -156,6 +158,12 @@ export default class App extends React.Component<{}, {}> {
                 loggingService.postLogs()
             }
         })
+
+        {
+            eventEmitter.on('editionCachesSet', () => {
+                weatherHider(apolloClient)
+            })
+        }
     }
 
     async componentDidCatch(e: Error) {
