@@ -25,6 +25,7 @@ describe('scheduleDeviceNotificationIfEligibleInternal', () => {
         edition: 'daily-edition',
         issueDate: '2019-09-18',
         notificationUTCOffset: 1,
+        topic: 'uk',
     }
 
     const dayBeforeIssue = new Date('2019-09-17')
