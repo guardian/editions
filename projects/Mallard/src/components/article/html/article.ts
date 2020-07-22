@@ -180,7 +180,7 @@ export const renderArticle = (
             colors: getPillarColors(pillar),
             theme,
         },
-        article.type,
+        type,
     )
     const body = html`
         ${showWebHeader && article && header}

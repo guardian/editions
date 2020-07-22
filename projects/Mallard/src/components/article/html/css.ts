@@ -15,6 +15,7 @@ import { sportScoreStyles } from './components/sport-score'
 import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
+import { ArticleType } from '../../../../../Apps/common/src'
 
 const makeFontsCss = () => css`
     /* text */
@@ -72,7 +73,7 @@ const makeFontsCss = () => css`
     })}
 `
 
-const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
+const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     ${makeFontsCss()}
 
     :root {
@@ -144,12 +145,33 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
       line-height: 1.4;
       margin-bottom: 15px;
     }
+
     .app h2 {
-      font-size: ${px(getScaledFont('headline', 1).lineHeight)};
-      line-height: ${px(getScaledFont('headline', 1).lineHeight * 1.1)};
-      margin-bottom: ${px(metrics.vertical)};
-      margin-top: ${px(metrics.vertical * 2.5)};
+        font-size: ${contentType === 'immersive' ? '28px' : '24px'};
+        line-height: ${px(getScaledFont('headline', 1.25).lineHeight * 1.1)};  
+        color: ${
+            contentType === ArticleType.Immersive ? '#000000' : colors.main
+        };
+        font-family: ${
+            contentType === ArticleType.Immersive
+                ? families.headline.light
+                : families.text.bold
+        };
     }
+
+
+    .app h2 > strong { 
+        color: ${
+            contentType === ArticleType.Immersive ? colors.main : '#000000'
+        };
+        font-family: ${
+            contentType === ArticleType.Immersive
+                ? families.headline.bold
+                : families.text.bold
+        };
+      }
+
+    
     .content-wrap {
         max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
