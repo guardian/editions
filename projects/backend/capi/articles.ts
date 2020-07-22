@@ -28,6 +28,11 @@ import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
 import { articleTypePicker, headerTypePicker } from './articleTypePicker'
 import { getImages } from './articleImgPicker'
+import { RequestSigner } from 'aws4'
+import {
+    SharedIniFileCredentials,
+    ChainableTemporaryCredentials,
+} from 'aws-sdk'
 
 type NotInCAPI =
     | 'key'
@@ -283,25 +288,73 @@ const parseArticleResult = async (
     }
 }
 
-const capiApiKey = process.env.CAPI_KEY
+type CAPIEndpoint = 'preview' | 'printsent' | 'live'
 
-const printsent = (paths: string[]) =>
-    `${process.env.psurl}?ids=${paths.join(
-        ',',
-    )}&format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+/**
+ * To access the capi Preview endpoint we need to sign requests (as it is a private api gateway endpoint)
+ * This function generates the necessary headers.
+ * @param endpoint
+ */
+export function sign(endpoint: string) {
+    const url = new URL(endpoint)
+    const credentials = process.env.capiAccessArn
+        ? new ChainableTemporaryCredentials({
+              params: {
+                  RoleArn: process.env.capiAccessArn as string,
+                  RoleSessionName: 'capi-assume-role-access',
+              },
+          })
+        : new SharedIniFileCredentials({ profile: 'capi' })
 
-const search = (paths: string[]) =>
-    `https://content.guardianapis.com/search?ids=${paths.join(
-        ',',
-    )}&format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+    const opts = {
+        region: 'eu-west-1',
+        service: 'execute-api',
+        host: url.hostname,
+        path: url.pathname + url.search,
+    }
+
+    const { headers } = new RequestSigner(opts, credentials).sign()
+
+    return headers
+}
+
+const getEndpoint = (capi: CAPIEndpoint, paths: string[]): string => {
+    const queryString = `?ids=${paths.join(',')}&api-key=${
+        process.env.CAPI_KEY
+    }&format=thrift&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100}`
+
+    switch (capi) {
+        case 'printsent':
+            return `${process.env.psurl}${queryString}`
+        case 'live':
+            return `https://content.guardianapis.com/search${queryString}`
+        case 'preview':
+            return `${process.env.capiPreviewUrl}/search${queryString}`
+        default:
+            return ''
+    }
+}
+
+const getPreviewHeaders = (endpoint: string) => {
+    return {
+        Accept: 'application/json',
+        ...sign(endpoint),
+    }
+}
+
+const removeUnscheduledDraftContent = (content: IContent[]): IContent[] => {
+    return content.filter(c => c.fields && c.fields.scheduledPublicationDate)
+}
 
 export const getArticles = async (
     ids: number[],
-    capi: 'printsent' | 'search',
+    capi: CAPIEndpoint,
 ): Promise<{ [key: string]: CAPIContent }> => {
     const paths = ids.map(_ => `internal-code/page/${_}`)
     const isFromPrint = capi === 'printsent'
-    const endpoint = capi === 'printsent' ? printsent(paths) : search(paths)
+    const endpoint = getEndpoint(capi, paths)
+    const headers = capi === 'preview' ? getPreviewHeaders(endpoint) : {}
+
     if (endpoint.length > 1000) {
         console.warn(
             `Unusually long CAPI request of ${endpoint.length}, splitting`,
@@ -325,7 +378,7 @@ export const getArticles = async (
     }
     console.log('Making CAPI query', endpoint)
     console.log('Debug link:', endpoint.replace(/thrift/g, 'json'))
-    const resp = await attempt(fetch(endpoint))
+    const resp = await attempt(fetch(endpoint, { headers }))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
     const buffer = await resp.arrayBuffer()
 
@@ -335,8 +388,12 @@ export const getArticles = async (
     const input = new CompactProtocol(receiver)
     const data = SearchResponseCodec.decode(input)
     const results: IContent[] = data.results
+    const filteredResults =
+        capi === 'preview' ? removeUnscheduledDraftContent(results) : results
     const articlePromises = await Promise.all(
-        results.map(result => attempt(parseArticleResult(result, isFromPrint))),
+        filteredResults.map(result =>
+            attempt(parseArticleResult(result, isFromPrint)),
+        ),
     )
 
     //If we fail to get an article in a collection we just ignore it and move on.
