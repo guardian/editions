@@ -33,7 +33,6 @@ import {
     ConfigProvider,
     largeDeviceMemory,
 } from 'src/hooks/use-config-provider'
-import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
@@ -43,6 +42,8 @@ import analytics from '@react-native-firebase/analytics'
 import { prepFileSystem } from './helpers/files'
 import { EditionProvider } from './hooks/use-edition-provider'
 import { apolloClient } from './services/apollo-singleton'
+import { eventEmitter } from 'src/helpers/event-emitter'
+import { weatherHider } from 'src/helpers/weather-hider'
 
 analytics().setAnalyticsCollectionEnabled(false)
 
@@ -147,7 +148,6 @@ const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
-        weatherHider(apolloClient)
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
         loggingService.postLogs()
@@ -158,6 +158,12 @@ export default class App extends React.Component<{}, {}> {
                 loggingService.postLogs()
             }
         })
+
+        {
+            eventEmitter.on('editionCachesSet', () => {
+                weatherHider(apolloClient)
+            })
+        }
     }
 
     async componentDidCatch(e: Error) {
