@@ -63,7 +63,10 @@ platform :ios do
       workspace: "ios/Mallard.xcworkspace",
       xcargs: "-allowProvisioningUpdates",
       export_options: {
-        exportOptionsPlist: "exports-plists/release.plist"
+        exportOptionsPlist: "exports-plists/release.plist",
+        provisioningProfiles: {
+            "uk.co.guardian.gce" => "match AppStore uk.co.guardian.gce"
+        }
       }
     )
     upload_to_testflight(
