@@ -12,6 +12,7 @@ export interface IssueNotificationData {
     name: string
     issueDate: string
     edition: Edition
+    topic: string
     notificationUTCOffset: number
 }
 
