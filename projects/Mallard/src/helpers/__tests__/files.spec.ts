@@ -25,7 +25,7 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 7,
             }))
-            const { issuesToDelete } = require('../../helpers/files')
+            const { issuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/issues',
@@ -52,7 +52,7 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
-            const { issuesToDelete } = require('../../helpers/files')
+            const { issuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/issues',
@@ -80,7 +80,7 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
-            const { issuesToDelete } = require('../../helpers/files')
+            const { issuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/2019-08-15',
