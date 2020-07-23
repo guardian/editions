@@ -18,6 +18,7 @@ import { Line } from './line'
 import { renderMediaAtom } from './media-atoms'
 import { Rating } from './rating'
 import { SportScore } from './sport-score'
+import { getByLineText } from './helpers/getBylineText'
 
 export interface ArticleHeaderProps {
     headline: string
@@ -697,18 +698,6 @@ const getHeaderClassForType = (headerType: HeaderType): string => {
                 header-byline header-byline-italic
             `
     }
-}
-
-const getByLineText = (
-    headerType: HeaderType,
-    headerProps: ArticleHeaderProps,
-): string | undefined => {
-    const byLineText =
-        headerType === HeaderType.NoByline ||
-        headerType === HeaderType.LargeByline
-            ? headerProps.standfirst
-            : headerProps.bylineHtml
-    return byLineText
 }
 
 const hasByLine = (
