@@ -214,10 +214,9 @@ export const getCardsForFront = (
         case 'Life':
         case 'Culture':
             return thirdPageCoverLayout(FrontCardAppearance.splashPage)
-        case 'Sport':
-            return defaultLayout(1)
         case 'Journal':
             return defaultLayout(1)
+        case 'Sport':
         default:
             return defaultLayout(FrontCardAppearance.splashPage)
     }
