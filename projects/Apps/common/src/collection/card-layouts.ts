@@ -200,9 +200,7 @@ export const getCardsForFront = (
 ): FrontCardsForArticleCount => {
     switch (frontName) {
         case 'National':
-            return denseLayout()
         case 'World':
-            return denseLayout()
         case 'Financial':
             return denseLayout()
         case 'Crosswords':
@@ -215,7 +213,6 @@ export const getCardsForFront = (
         case 'Culture':
             return thirdPageCoverLayout(FrontCardAppearance.splashPage)
         case 'Journal':
-            return defaultLayout(1)
         case 'Sport':
         default:
             return defaultLayout(FrontCardAppearance.splashPage)
