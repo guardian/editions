@@ -321,11 +321,11 @@ export function sign(endpoint: string) {
 const getEndpoint = (capi: CAPIEndpoint, paths: string[]): string => {
     const queryString = `?ids=${paths.join(',')}&api-key=${
         process.env.CAPI_KEY
-    }&format=thrift&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100}`
+    }&format=thrift&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&page-size=100`
 
     switch (capi) {
         case 'printsent':
-            return `${process.env.psurl}${queryString}`
+            return `${process.env.psurl}/search${queryString}`
         case 'live':
             return `https://content.guardianapis.com/search${queryString}`
         case 'preview':
@@ -342,8 +342,22 @@ const getPreviewHeaders = (endpoint: string) => {
     }
 }
 
+const isScheduledSoon = (dateiso8601: string): boolean => {
+    const date = new Date(dateiso8601)
+    const SOON_DAYS = 30
+    const oneMonthAway = new Date(
+        new Date().setDate(date.getDate() + SOON_DAYS),
+    )
+    return date < oneMonthAway
+}
+
 const removeUnscheduledDraftContent = (content: IContent[]): IContent[] => {
-    return content.filter(c => c.fields && c.fields.scheduledPublicationDate)
+    return content.filter(
+        c =>
+            c.fields &&
+            c.fields.scheduledPublicationDate &&
+            isScheduledSoon(c.fields.scheduledPublicationDate.iso8601),
+    )
 }
 
 export const getArticles = async (
@@ -380,6 +394,8 @@ export const getArticles = async (
     console.log('Debug link:', endpoint.replace(/thrift/g, 'json'))
     const resp = await attempt(fetch(endpoint, { headers }))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
+    if (resp.status != 200)
+        console.warn(`Non 200 status code: ${resp.status} ${resp.statusText}`)
     const buffer = await resp.arrayBuffer()
 
     const receiver: BufferedTransport = BufferedTransport.receiver(

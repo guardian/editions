@@ -246,11 +246,12 @@ export const parseCollection = async (
         attempt(getArticles(ids, 'preview')),
     ])
 
-    if (hasFailed(capiPrintArticles))
+    if (hasFailed(capiPrintArticles)) {
         return withFailureMessage(
             capiPrintArticles,
             'Could not connect to capi print sent',
         )
+    }
     if (hasFailed(capiSearchArticles))
         return withFailureMessage(
             capiSearchArticles,
