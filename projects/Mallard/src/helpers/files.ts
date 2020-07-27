@@ -26,6 +26,8 @@ interface IssueFile extends BasicFile {
     type: 'issue'
 }
 
+const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
+
 export type File = OtherFile | IssueFile
 export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
@@ -162,8 +164,7 @@ export const getLocalIssues = async () => {
 }
 
 export const getEdtionIssuesCount = async () => {
-    const editionDirList = await FSPaths.edtionDirList()
-    const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
+    const editionDirList = await FSPaths.edtionsDirList()
     const result: string[] = []
     for (let i = 0; i < editionDirList.length; i++) {
         const dir = editionDirList[i]
@@ -190,7 +191,6 @@ export const issuesToDelete = async (files: string[]) => {
 
     const deleteList: string[] = []
     let keepIssues = 0
-    const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
 
     for (let i = 0; i < totalIssues; i++) {
         const isAnIssue = files[i].match(regex) != null

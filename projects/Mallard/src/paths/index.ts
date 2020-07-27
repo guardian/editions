@@ -50,7 +50,7 @@ const edtionsDirList = async (): Promise<string[]> => {
 export const FSPaths = {
     issuesDir,
     editionDir,
-    edtionDirList: edtionsDirList,
+    edtionsDirList,
     issueRoot,
     mediaRoot,
     image: (
