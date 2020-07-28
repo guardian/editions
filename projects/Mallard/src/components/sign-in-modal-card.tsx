@@ -61,7 +61,7 @@ const SignInModalCard = ({
         explainerTitle="Not subscribed yet?"
         explainerSubtitle={
             Platform.OS === 'ios'
-                ? 'Get the Daily with a digital subscription from The Guardian website.'
+                ? 'Get access with a digital subscription from The Guardian website.'
                 : 'Read the Daily with a digital subscription from The Guardian.'
         }
         bottomExplainerContent={
