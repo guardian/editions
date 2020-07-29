@@ -24,6 +24,8 @@ describe('scheduleDeviceNotificationIfEligibleInternal', () => {
         name: 'Daily Edition',
         edition: 'daily-edition',
         issueDate: '2019-09-18',
+        notificationUTCOffset: 1,
+        topic: 'uk',
     }
 
     const dayBeforeIssue = new Date('2019-09-17')
@@ -40,7 +42,7 @@ describe('scheduleDeviceNotificationIfEligibleInternal', () => {
         expect(actual).toBe('scheduled')
     })
 
-    it('skip request if edition was not daily-edition', async () => {
+    it('do not skip request if edition was not daily-edition', async () => {
         const issueWithTrainingEdition = Object.assign(issueFromDailyEdition, {
             edition: 'training-edition',
         })
@@ -50,7 +52,7 @@ describe('scheduleDeviceNotificationIfEligibleInternal', () => {
             dayBeforeIssue,
             testDependencies,
         )
-        expect(actual).toBe('skipped')
+        expect(actual).not.toBe('skipped')
     })
 
     it('skip request if edition was daily-edition but in the past', async () => {

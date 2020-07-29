@@ -31,12 +31,21 @@ const createScheduleNotificationEndpoint = (
 
 /**
  * TODO
- * it will work now only for Daily Editions in UK
+ * +3 hours from issue date is defaulted in.
+ * This will (obviously) work only for Daily Editions in UK
  * In the future we will need to make it more generic (for US and Australia)
  **/
-export const createScheduleTime = (issueDate: string): string => {
-    const THREE_AT_NIGHT = 'T03:00:00Z'
-    return `${issueDate}${THREE_AT_NIGHT}`
+export const createScheduleTime = (issueDate: string, offset = 3): string => {
+    const issueDateAsDate = moment.utc(issueDate, 'YYYY-MM-DD')
+    issueDateAsDate.locale('utc')
+    const notificationDate = issueDateAsDate.add(offset, 'hours')
+    const notificationDateAsString = notificationDate.format(
+        'YYYY-MM-DDTHH:mm:ssZ',
+    )
+    console.log(
+        `Calculated notification time: ${issueDate} + ${offset} gives ${notificationDateAsString}`,
+    )
+    return notificationDateAsString
 }
 
 export const shouldSchedule = (scheduleTime: string, now: Date): boolean => {
@@ -57,7 +66,7 @@ export const prepareScheduleDeviceNotificationRequest = (
 ): { reqEndpoint: RequestInfo; reqBody: RequestInit } => {
     const { domain, apiKey } = cfg
 
-    const { key, name, issueDate } = issueData
+    const { key, name, issueDate, topic } = issueData
 
     /**
      * TODO
@@ -67,7 +76,7 @@ export const prepareScheduleDeviceNotificationRequest = (
     const payload: ScheduleDeviceNotificationPayload = {
         id: uuid.fromString(key),
         type: 'editions',
-        topic: [{ type: 'editions', name: 'uk' }],
+        topic: [{ type: 'editions', name: topic }],
         key,
         name,
         date: issueDate,

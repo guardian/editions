@@ -18,10 +18,6 @@ import { getFileList } from 'src/helpers/files'
 import { locale } from 'src/helpers/locale'
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream'
 import { imageForScreenSize } from 'src/helpers/screen'
-import {
-    fetchLightboxSetting,
-    setlightboxSetting,
-} from 'src/helpers/settings/debug'
 import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
@@ -78,7 +74,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
     const [imageSize, setImageSize] = useState('fetching...')
-    const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const buildNumber = DeviceInfo.getBuildNumber()
     const [pushTokens, setPushTokens] = useState('fetching...')
 
@@ -105,17 +100,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             imageSize => imageSize && setImageSize(imageSize),
         )
     }, [])
-
-    useEffect(() => {
-        fetchLightboxSetting().then(lightboxEnabled =>
-            setLightboxEnabled(lightboxEnabled),
-        )
-    }, [])
-
-    const onToggleLightbox = () => {
-        setLightboxEnabled(!lightboxEnabled)
-        setlightboxSetting(!lightboxEnabled)
-    }
 
     const query = useQuery<{ [key: string]: unknown }>(
         gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
@@ -270,17 +254,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                             Clipboard.setString(FSPaths.issuesDir)
                             Alert.alert(FSPaths.issuesDir)
                         },
-                    },
-                    {
-                        key: 'Enable lightbox',
-                        title: 'Enable lightbox',
-                        onPress: () => {},
-                        proxy: (
-                            <Switch
-                                value={lightboxEnabled}
-                                onValueChange={onToggleLightbox}
-                            />
-                        ),
                     },
                     {
                         key: 'Enable edition menu',

@@ -934,7 +934,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				KOTLIN_BUILD_TYPE = DEBUG;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 6.5;
+				MARKETING_VERSION = 6.6;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = GuardianDaily;
@@ -965,11 +965,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				KOTLIN_BUILD_TYPE = RELEASE;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 6.5;
+				MARKETING_VERSION = 6.6;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = GuardianDaily;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore uk.co.guardian.gce 1586248549";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore uk.co.guardian.gce";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mallard-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -17,11 +17,11 @@ import {
     CreditedImage,
 } from '../../../../../Apps/common/src'
 import { navigateToLightbox } from 'src/navigation/helpers/base'
-import { fetchLightboxSetting } from 'src/helpers/settings/debug'
 import { selectImagePath } from 'src/hooks/use-image-paths'
 import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Image } from 'src/common'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 const styles = StyleSheet.create({
     block: {
@@ -136,7 +136,6 @@ const Article = ({
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
-    const [lightboxEnabled, setLightboxEnabled] = useState(false)
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
@@ -145,16 +144,11 @@ const Article = ({
         'shouldShowHeader',
         shouldShowHeader,
     )
+    const lightboxEnabled = remoteConfig().getValue('lightbox_enabled').value
 
     const [, { pillar }] = useArticle()
     const apiUrl = useApiUrl() || ''
     const { issueId } = useIssueSummary()
-
-    useEffect(() => {
-        fetchLightboxSetting().then(lightboxEnabled =>
-            setLightboxEnabled(lightboxEnabled),
-        )
-    }, [])
 
     useEffect(() => {
         const lbimages = getLightboxImages(article.elements)
