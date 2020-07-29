@@ -32,7 +32,7 @@ const Toast = ({ title, subtitle }: ToastProps) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const [position] = useState(() => new Animated.Value(0))
     useEffect(() => {
-        Animated.spring(position, { toValue: 1 }).start()
+        Animated.spring(position, { toValue: 1, useNativeDriver: true }).start()
     }, [position])
     return (
         <Animated.View
