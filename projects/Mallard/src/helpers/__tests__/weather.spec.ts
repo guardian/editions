@@ -27,27 +27,6 @@ let forecasts = [{ DateTime: '0000' }]
     throw new Error(`unknown url`)
 })
 
-jest.mock('react-native-permissions', () => {
-    return {
-        RESULTS: { GRANTED: 1, DENIED: 2 },
-        PERMISSIONS: {
-            IOS: { LOCATION_WHEN_IN_USE: 1 },
-            ANDROID: { ACCESS_FINE_LOCATION: 1 },
-        },
-        check: jest.fn().mockResolvedValue(2),
-    }
-})
-
-jest.mock('@react-native-community/geolocation', () => ({
-    setRNConfiguration: () => {},
-    getCurrentPosition: (resolve: any) =>
-        Promise.resolve().then(() => {
-            resolve({
-                coords: { latitude: 12, longitude: 34 },
-            })
-        }),
-}))
-
 jest.mock('react-native-localize', () => ({
     getTemperatureUnit: () => 'celsius',
 }))

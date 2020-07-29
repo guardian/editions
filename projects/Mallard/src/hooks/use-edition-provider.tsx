@@ -141,6 +141,7 @@ const setEdition = async (
     setSelectedEdition(edition)
     await selectedEditionCache.set(edition)
     await defaultEditionCache.set(edition)
+    eventEmitter.emit('editionCachesSet')
     pushNotifcationRegistration()
 }
 

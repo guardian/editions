@@ -66,7 +66,7 @@ export const prepareScheduleDeviceNotificationRequest = (
 ): { reqEndpoint: RequestInfo; reqBody: RequestInit } => {
     const { domain, apiKey } = cfg
 
-    const { key, name, issueDate } = issueData
+    const { key, name, issueDate, topic } = issueData
 
     /**
      * TODO
@@ -76,7 +76,7 @@ export const prepareScheduleDeviceNotificationRequest = (
     const payload: ScheduleDeviceNotificationPayload = {
         id: uuid.fromString(key),
         type: 'editions',
-        topic: [{ type: 'editions', name: 'uk' }],
+        topic: [{ type: 'editions', name: topic }],
         key,
         name,
         date: issueDate,
