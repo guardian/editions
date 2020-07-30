@@ -89,3 +89,16 @@ export const SUB_NOT_FOUND_EXPLAINER_SUBTITLE = `${Platform.select({
 })}`
 export const SUB_NOT_FOUND_SIGN_IN = 'Sign in to activate'
 export const SUB_NOT_FOUND_SUBSCRIBER_ID_BUTTON = 'Activate with subscriber ID'
+
+// Already Subscribed
+export const ALREADY_SUBSCRIBED_SIGN_IN_TITLE = 'Sign in to activate'
+export const ALREADY_SUBSCRIBED_SUBSCRIBER_ID_TITLE =
+    'Activate with subscriber ID'
+export const ALREADY_SUBSCRIBED_RESTORE_IAP_TITLE =
+    'Restore App Store subscription'
+export const ALREADY_SUBSCRIBED_RESTORE_ERROR_TITLE = 'Verification error'
+export const ALREADY_SUBSCRIBED_RESTORE_ERROR_SUBTITLE =
+    'There was a problem whilst verifying your subscription'
+export const ALREADY_SUBSCRIBED_RESTORE_MISSING_TITLE = 'Subscription not found'
+export const ALREADY_SUBSCRIBED_RESTORE_MISSING_SUBTITLE =
+    'We were unable to find a subscription associated with your Apple ID'
