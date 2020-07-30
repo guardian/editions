@@ -71,14 +71,15 @@ export const APPLE_RELAY_RETRY = 'Try alternative sign in method'
 
 export const SIGN_IN_FAILED_TITLE = 'Subscription not found'
 export const CUSTOMER_HELP_EMAIL = 'customer.help@theguardian.com'
+export const SIGN_IN_FAILED_BODY = `We were unable to find a subscription associated with %email%. Try signing in with a different email or contact us at ${CUSTOMER_HELP_EMAIL}`
 export const SIGN_IN_FAILED_RETRY = 'Try a different email'
 
-//Sub found modal
+// Sub found modal
 export const SUB_FOUND_TITLE = 'Subscription found'
 export const SUB_FOUND_SUBTITLE =
     'Enjoy the Guardian and thank you for your support'
 
-//Sub not found modal
+// Sub not found modal
 export const SUB_NOT_FOUND_TITLE = 'Already a subscriber?'
 export const SUB_NOT_FOUND_EXPLAINER = 'Not subscribed yet?'
 export const SUB_NOT_FOUND_EXPLAINER_SUBTITLE = `${Platform.select({

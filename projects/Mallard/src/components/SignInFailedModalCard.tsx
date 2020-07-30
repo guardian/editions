@@ -9,7 +9,6 @@ import {
     APPLE_RELAY_BODY,
     APPLE_RELAY_RETRY,
     SIGN_IN_FAILED_TITLE,
-    CUSTOMER_HELP_EMAIL,
     SIGN_IN_FAILED_BODY,
     SIGN_IN_FAILED_RETRY,
 } from 'src/helpers/words'
@@ -42,7 +41,7 @@ const failureModalText = (
           }
         : {
               title: SIGN_IN_FAILED_TITLE,
-              bodyCopy: `We were unable to find a subscription associated with ${email}. Try signing in with a different email or contact us at ${CUSTOMER_HELP_EMAIL}`,
+              bodyCopy: SIGN_IN_FAILED_BODY.replace('%email%', email),
               tryAgainText: SIGN_IN_FAILED_RETRY,
           }
 }
