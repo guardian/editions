@@ -5,6 +5,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
+import { ArticleType } from '../../../../../../Apps/common/src'
 
 export const renderCaption = ({
     caption,
@@ -171,7 +172,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
             }
         }
     `
-    return contentType !== 'gallery'
+    return contentType !== ArticleType.Gallery
         ? defaultStyles + galleryStyles
         : defaultStyles
 }
