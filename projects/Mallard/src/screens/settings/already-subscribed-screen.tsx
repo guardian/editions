@@ -31,9 +31,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             ? [
                                   {
                                       key: 'Sign in to activate',
-                                      title:
-                                      Copy.alreadySubscribed
-                                              .signInTitle,
+                                      title: Copy.alreadySubscribed.signInTitle,
                                       onPress: () => {
                                           navigation.navigate(routeNames.SignIn)
                                       },
@@ -43,7 +41,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                   {
                                       key: 'Activate with subscriber ID',
                                       title:
-                                      Copy.alreadySubscribed
+                                          Copy.alreadySubscribed
                                               .subscriberIdTitle,
                                       onPress: () => {
                                           navigation.navigate(
@@ -66,8 +64,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                 {
                                     key: 'Restore App Store subscription',
                                     title:
-                                    Copy.alreadySubscribed
-                                            .restoreIapTitle,
+                                        Copy.alreadySubscribed.restoreIapTitle,
                                     onPress: async () => {
                                         const {
                                             accessAttempt,
@@ -82,13 +79,11 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                             open(close => (
                                                 <MissingIAPModalCard
                                                     title={
-                                                        Copy
-                                                            .alreadySubscribed
+                                                        Copy.alreadySubscribed
                                                             .restoreErrorTitle
                                                     }
                                                     subtitle={
-                                                        Copy
-                                                            .alreadySubscribed
+                                                        Copy.alreadySubscribed
                                                             .restoreErrorSubtitle
                                                     }
                                                     close={close}
@@ -99,13 +94,11 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                             open(close => (
                                                 <MissingIAPModalCard
                                                     title={
-                                                        Copy
-                                                            .alreadySubscribed
+                                                        Copy.alreadySubscribed
                                                             .restoreMissingTitle
                                                     }
                                                     subtitle={
-                                                        Copy
-                                                            .alreadySubscribed
+                                                        Copy.alreadySubscribed
                                                             .restoreMissingSubtitle
                                                     }
                                                     close={close}
