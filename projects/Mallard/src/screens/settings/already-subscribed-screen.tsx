@@ -12,15 +12,7 @@ import { useModal } from 'src/components/modal'
 import { isValid, isError } from 'src/authentication/lib/Attempt'
 import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
-import {
-    ALREADY_SUBSCRIBED_SIGN_IN_TITLE,
-    ALREADY_SUBSCRIBED_SUBSCRIBER_ID_TITLE,
-    ALREADY_SUBSCRIBED_RESTORE_IAP_TITLE,
-    ALREADY_SUBSCRIBED_RESTORE_ERROR_TITLE,
-    ALREADY_SUBSCRIBED_RESTORE_ERROR_SUBTITLE,
-    ALREADY_SUBSCRIBED_RESTORE_MISSING_TITLE,
-    ALREADY_SUBSCRIBED_RESTORE_MISSING_SUBTITLE,
-} from 'src/helpers/words'
+import { Copy } from 'src/helpers/words'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
@@ -39,7 +31,9 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             ? [
                                   {
                                       key: 'Sign in to activate',
-                                      title: ALREADY_SUBSCRIBED_SIGN_IN_TITLE,
+                                      title:
+                                      Copy.alreadySubscribed
+                                              .signInTitle,
                                       onPress: () => {
                                           navigation.navigate(routeNames.SignIn)
                                       },
@@ -48,7 +42,9 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                   },
                                   {
                                       key: 'Activate with subscriber ID',
-                                      title: ALREADY_SUBSCRIBED_SUBSCRIBER_ID_TITLE,
+                                      title:
+                                      Copy.alreadySubscribed
+                                              .subscriberIdTitle,
                                       onPress: () => {
                                           navigation.navigate(
                                               routeNames.CasSignIn,
@@ -69,7 +65,9 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             data={[
                                 {
                                     key: 'Restore App Store subscription',
-                                    title: ALREADY_SUBSCRIBED_RESTORE_IAP_TITLE,
+                                    title:
+                                    Copy.alreadySubscribed
+                                            .restoreIapTitle,
                                     onPress: async () => {
                                         const {
                                             accessAttempt,
@@ -84,10 +82,14 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                             open(close => (
                                                 <MissingIAPModalCard
                                                     title={
-                                                        ALREADY_SUBSCRIBED_RESTORE_ERROR_TITLE
+                                                        Copy
+                                                            .alreadySubscribed
+                                                            .restoreErrorTitle
                                                     }
                                                     subtitle={
-                                                        ALREADY_SUBSCRIBED_RESTORE_ERROR_SUBTITLE
+                                                        Copy
+                                                            .alreadySubscribed
+                                                            .restoreErrorSubtitle
                                                     }
                                                     close={close}
                                                     onTryAgain={authIAP}
@@ -97,10 +99,14 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                             open(close => (
                                                 <MissingIAPModalCard
                                                     title={
-                                                        ALREADY_SUBSCRIBED_RESTORE_MISSING_TITLE
+                                                        Copy
+                                                            .alreadySubscribed
+                                                            .restoreMissingTitle
                                                     }
                                                     subtitle={
-                                                        ALREADY_SUBSCRIBED_RESTORE_MISSING_SUBTITLE
+                                                        Copy
+                                                            .alreadySubscribed
+                                                            .restoreMissingSubtitle
                                                     }
                                                     close={close}
                                                     onTryAgain={authIAP}

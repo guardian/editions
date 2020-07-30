@@ -1,13 +1,7 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { ModalButton } from './Button/ModalButton'
-import {
-    SUB_NOT_FOUND_EXPLAINER_SUBTITLE,
-    SUB_NOT_FOUND_TITLE,
-    SUB_NOT_FOUND_EXPLAINER,
-    SUB_NOT_FOUND_SUBSCRIBER_ID_BUTTON,
-    SUB_NOT_FOUND_SIGN_IN,
-} from 'src/helpers/words'
+import { Copy } from 'src/helpers/words'
 
 const SubNotFoundModalCard = ({
     close,
@@ -21,15 +15,15 @@ const SubNotFoundModalCard = ({
     onDismiss: () => void
 }) => (
     <OnboardingCard
-        title={SUB_NOT_FOUND_TITLE}
+        title={Copy.subNotFound.title}
         appearance={CardAppearance.blue}
         size="small"
-        explainerTitle={SUB_NOT_FOUND_EXPLAINER}
+        explainerTitle={Copy.subNotFound.explainer}
         onDismissThisCard={() => {
             close()
             onDismiss()
         }}
-        explainerSubtitle={SUB_NOT_FOUND_EXPLAINER_SUBTITLE}
+        explainerSubtitle={Copy.subNotFound.explainerSubtitle}
         bottomContent={
             <>
                 <ModalButton
@@ -38,7 +32,7 @@ const SubNotFoundModalCard = ({
                         onLoginPress()
                     }}
                 >
-                    {SUB_NOT_FOUND_SIGN_IN}
+                    {Copy.subNotFound.signIn}
                 </ModalButton>
                 <ModalButton
                     onPress={() => {
@@ -46,7 +40,7 @@ const SubNotFoundModalCard = ({
                         onOpenCASLogin()
                     }}
                 >
-                    {SUB_NOT_FOUND_SUBSCRIBER_ID_BUTTON}
+                    {Copy.subNotFound.subscriberButton}
                 </ModalButton>
             </>
         }

@@ -4,14 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import { ModalButton } from './Button/ModalButton'
 import { UiBodyCopy } from './styled-text'
 import { metrics } from 'src/theme/spacing'
-import {
-    APPLE_RELAY_TITLE,
-    APPLE_RELAY_BODY,
-    APPLE_RELAY_RETRY,
-    SIGN_IN_FAILED_TITLE,
-    SIGN_IN_FAILED_BODY,
-    SIGN_IN_FAILED_RETRY,
-} from 'src/helpers/words'
+import { Copy } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     bottomContentContainer: {
@@ -35,14 +28,14 @@ const failureModalText = (
 ): FailureModalText => {
     return isAppleRelayEmail
         ? {
-              title: APPLE_RELAY_TITLE,
-              bodyCopy: APPLE_RELAY_BODY,
-              tryAgainText: APPLE_RELAY_RETRY,
+              title: Copy.failedSignIn.appleRelayTitle,
+              bodyCopy: Copy.failedSignIn.appleRelayBody,
+              tryAgainText: Copy.failedSignIn.appleRelayRetry,
           }
         : {
-              title: SIGN_IN_FAILED_TITLE,
-              bodyCopy: SIGN_IN_FAILED_BODY.replace('%email%', email),
-              tryAgainText: SIGN_IN_FAILED_RETRY,
+              title: Copy.failedSignIn.title,
+              bodyCopy: Copy.failedSignIn.body.replace('%email%', email),
+              tryAgainText: Copy.failedSignIn.retryButtonTitle,
           }
 }
 

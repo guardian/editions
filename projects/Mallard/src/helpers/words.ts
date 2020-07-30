@@ -51,54 +51,70 @@ export const PRIVACY_SETTINGS_HEADER_TITLE = 'Privacy Settings'
 export const PRIVACY_POLICY_HEADER_TITLE = 'Privacy Policy'
 export const REFRESH_BUTTON_TEXT = 'Refresh'
 export const DOWNLOAD_ISSUE_MESSAGE_OFFLINE = `You're currently offline. You can download it when you go online`
+export const CUSTOMER_HELP_EMAIL = 'customer.help@theguardian.com'
 
 // Sign in modal
-export const ONBOARDING_TITLE = 'Already a subscriber?'
-export const ONBOARDING_SUBTITLE =
-    'Sign in with your subscriber details to continue'
-export const EXPLAINER_TITLE = 'Not subscribed yet?'
-export const EXPLAINER_SUBTITLE = `${Platform.select({
-    ios: 'Get the Daily with a digital subscription from The Guardian website.',
+const SignIn = {
+    title: 'Already a subscriber?',
+    subtitle: 'Sign in with your subscriber details to continue',
+    explainerTitle: 'Not subscribed yet?',
+    explainerSubtitle: `${Platform.select({
+        ios:
+            'Get the Daily with a digital subscription from The Guardian website.',
 
-    android: 'Read the Daily with a digital subscription from The Guardian.',
-})}`
-export const FREE_TRIAL = 'Start your free 14 day trial'
+        android:
+            'Read the Daily with a digital subscription from The Guardian.',
+    })}`,
+    freeTrial: 'Start your free 14 day trial',
+}
 
 // Failed sign in modal
-export const APPLE_RELAY_TITLE = 'We are unable to verify your subscription'
-export const APPLE_RELAY_BODY = `We are unable to detect your subscription as it seems you chose not to share your email address with us. \n \nPlease try a different sign in method. You will need to use the same email address as your Digital subscription. Alternatively, use your subscriber ID.`
-export const APPLE_RELAY_RETRY = 'Try alternative sign in method'
-
-export const SIGN_IN_FAILED_TITLE = 'Subscription not found'
-export const CUSTOMER_HELP_EMAIL = 'customer.help@theguardian.com'
-export const SIGN_IN_FAILED_BODY = `We were unable to find a subscription associated with %email%. Try signing in with a different email or contact us at ${CUSTOMER_HELP_EMAIL}`
-export const SIGN_IN_FAILED_RETRY = 'Try a different email'
+const FailedSignIn = {
+    appleRelayTitle: 'We are unable to verify your subscription',
+    appleRelayBody: `We are unable to detect your subscription as it seems you chose not to share your email address with us. \n \nPlease try a different sign in method. You will need to use the same email address as your Digital subscription. Alternatively, use your subscriber ID.`,
+    appleRelayRetry: 'Try alternative sign in method',
+    title: 'Subscription not found',
+    body: `We were unable to find a subscription associated with %email%. Try signing in with a different email or contact us at ${CUSTOMER_HELP_EMAIL}`,
+    retryButtonTitle: 'Try a different email',
+}
 
 // Sub found modal
-export const SUB_FOUND_TITLE = 'Subscription found'
-export const SUB_FOUND_SUBTITLE =
-    'Enjoy the Guardian and thank you for your support'
+const SubFound = {
+    title: 'Subscription found',
+    subtitle: 'Enjoy the Guardian and thank you for your support',
+}
 
 // Sub not found modal
-export const SUB_NOT_FOUND_TITLE = 'Already a subscriber?'
-export const SUB_NOT_FOUND_EXPLAINER = 'Not subscribed yet?'
-export const SUB_NOT_FOUND_EXPLAINER_SUBTITLE = `${Platform.select({
-    ios: 'To get a free trial with our digital subscription, visit our website',
+const SubNotFound = {
+    title: 'Already a subscriber?',
+    explainer: 'Not subscribed yet?',
+    explainerSubtitle: `${Platform.select({
+        ios:
+            'To get a free trial with our digital subscription, visit our website',
 
-    android: 'Get a free trial with our digital subscription',
-})}`
-export const SUB_NOT_FOUND_SIGN_IN = 'Sign in to activate'
-export const SUB_NOT_FOUND_SUBSCRIBER_ID_BUTTON = 'Activate with subscriber ID'
+        android: 'Get a free trial with our digital subscription',
+    })}`,
+    signIn: 'Sign in to activate',
+    subscriberButton: 'Activate with subscriber ID',
+}
 
 // Already Subscribed
-export const ALREADY_SUBSCRIBED_SIGN_IN_TITLE = 'Sign in to activate'
-export const ALREADY_SUBSCRIBED_SUBSCRIBER_ID_TITLE =
-    'Activate with subscriber ID'
-export const ALREADY_SUBSCRIBED_RESTORE_IAP_TITLE =
-    'Restore App Store subscription'
-export const ALREADY_SUBSCRIBED_RESTORE_ERROR_TITLE = 'Verification error'
-export const ALREADY_SUBSCRIBED_RESTORE_ERROR_SUBTITLE =
-    'There was a problem whilst verifying your subscription'
-export const ALREADY_SUBSCRIBED_RESTORE_MISSING_TITLE = 'Subscription not found'
-export const ALREADY_SUBSCRIBED_RESTORE_MISSING_SUBTITLE =
-    'We were unable to find a subscription associated with your Apple ID'
+const AlreadySubscribed = {
+    signInTitle: 'Sign in to activate',
+    subscriberIdTitle: 'Activate with subscriber ID',
+    restoreIapTitle: 'Restore App Store subscription',
+    restoreErrorTitle: 'Verification error',
+    restoreErrorSubtitle:
+        'There was a problem whilst verifying your subscription',
+    restoreMissingTitle: 'Subscription not found',
+    restoreMissingSubtitle:
+        'We were unable to find a subscription associated with your Apple ID',
+}
+
+export const Copy = {
+    signIn: SignIn,
+    failedSignIn: FailedSignIn,
+    subFound: SubFound,
+    subNotFound: SubNotFound,
+    alreadySubscribed: AlreadySubscribed,
+}
