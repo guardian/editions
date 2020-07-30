@@ -6,13 +6,7 @@ import { Link } from './link'
 import { ButtonAppearance } from './Button/Button'
 import { getFont } from 'src/theme/typography'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
-import {
-    ONBOARDING_TITLE,
-    ONBOARDING_SUBTITLE,
-    EXPLAINER_TITLE,
-    EXPLAINER_SUBTITLE,
-    FREE_TRIAL,
-} from 'src/helpers/words'
+import { Copy } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     bottomContentContainer: {
@@ -36,8 +30,8 @@ const SignInModalCard = ({
 }) => (
     <OnboardingCard
         onDismissThisCard={onDismiss}
-        title={ONBOARDING_TITLE}
-        subtitle={ONBOARDING_SUBTITLE}
+        title={Copy.signIn.title}
+        subtitle={Copy.signIn.subtitle}
         appearance={CardAppearance.blue}
         size="medium"
         bottomContent={
@@ -65,8 +59,8 @@ const SignInModalCard = ({
                 </View>
             </>
         }
-        explainerTitle={EXPLAINER_TITLE}
-        explainerSubtitle={EXPLAINER_SUBTITLE}
+        explainerTitle={Copy.signIn.explainerTitle}
+        explainerSubtitle={Copy.signIn.explainerSubtitle}
         bottomExplainerContent={
             <>
                 {/* Added only for Android - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
@@ -79,7 +73,7 @@ const SignInModalCard = ({
                         }}
                         buttonAppearance={ButtonAppearance.dark}
                     >
-                        {FREE_TRIAL}
+                        {Copy.signIn.freeTrial}
                     </ModalButton>
                 ) : null}
                 {/* Being hidden temporarily - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
