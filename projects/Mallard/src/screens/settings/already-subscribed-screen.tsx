@@ -39,9 +39,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             ? [
                                   {
                                       key: 'Sign in to activate',
-                                      title: {
-                                          ALREADY_SUBSCRIBED_SIGN_IN_TITLE,
-                                      },
+                                      title: ALREADY_SUBSCRIBED_SIGN_IN_TITLE,
                                       onPress: () => {
                                           navigation.navigate(routeNames.SignIn)
                                       },
@@ -50,9 +48,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                   },
                                   {
                                       key: 'Activate with subscriber ID',
-                                      title: {
-                                          ALREADY_SUBSCRIBED_SUBSCRIBER_ID_TITLE,
-                                      },
+                                      title: ALREADY_SUBSCRIBED_SUBSCRIBER_ID_TITLE,
                                       onPress: () => {
                                           navigation.navigate(
                                               routeNames.CasSignIn,
