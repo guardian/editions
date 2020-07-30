@@ -4,6 +4,15 @@ import { View, StyleSheet } from 'react-native'
 import { ModalButton } from './Button/ModalButton'
 import { UiBodyCopy } from './styled-text'
 import { metrics } from 'src/theme/spacing'
+import {
+    APPLE_RELAY_TITLE,
+    APPLE_RELAY_BODY,
+    APPLE_RELAY_RETRY,
+    SIGN_IN_FAILED_TITLE,
+    CUSTOMER_HELP_EMAIL,
+    SIGN_IN_FAILED_BODY,
+    SIGN_IN_FAILED_RETRY,
+} from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     bottomContentContainer: {
@@ -14,8 +23,6 @@ const styles = StyleSheet.create({
         marginTop: metrics.vertical * 2,
     },
 })
-
-const CUSTOMER_HELP_EMAIL = 'customer.help@theguardian.com'
 
 interface FailureModalText {
     title: string
@@ -29,14 +36,14 @@ const failureModalText = (
 ): FailureModalText => {
     return isAppleRelayEmail
         ? {
-              title: 'We are unable to verify your subscription',
-              bodyCopy: `We are unable to detect your subscription as it seems you chose not to share your email address with us. \n \nPlease try a different sign in method. You will need to use the same email address as your Digital subscription. Alternatively, use your subscriber ID.`,
-              tryAgainText: 'Try alternative sign in method',
+              title: APPLE_RELAY_TITLE,
+              bodyCopy: APPLE_RELAY_BODY,
+              tryAgainText: APPLE_RELAY_RETRY,
           }
         : {
-              title: 'Subscription not found',
+              title: SIGN_IN_FAILED_TITLE,
               bodyCopy: `We were unable to find a subscription associated with ${email}. Try signing in with a different email or contact us at ${CUSTOMER_HELP_EMAIL}`,
-              tryAgainText: 'Try a different email',
+              tryAgainText: SIGN_IN_FAILED_RETRY,
           }
 }
 

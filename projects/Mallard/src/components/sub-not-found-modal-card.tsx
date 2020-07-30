@@ -2,6 +2,13 @@ import React from 'react'
 import { Platform } from 'react-native'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { ModalButton } from './Button/ModalButton'
+import {
+    SUB_NOT_FOUND_EXPLAINER_SUBTITLE,
+    SUB_NOT_FOUND_TITLE,
+    SUB_NOT_FOUND_EXPLAINER,
+    SUB_NOT_FOUND_SUBSCRIBER_ID_BUTTON,
+    SUB_NOT_FOUND_SIGN_IN,
+} from 'src/helpers/words'
 
 const SubNotFoundModalCard = ({
     close,
@@ -15,19 +22,15 @@ const SubNotFoundModalCard = ({
     onDismiss: () => void
 }) => (
     <OnboardingCard
-        title="Already a subscriber?"
+        title={SUB_NOT_FOUND_TITLE}
         appearance={CardAppearance.blue}
         size="small"
-        explainerTitle="Not subscribed yet?"
+        explainerTitle={SUB_NOT_FOUND_EXPLAINER}
         onDismissThisCard={() => {
             close()
             onDismiss()
         }}
-        explainerSubtitle={
-            Platform.OS === 'ios'
-                ? 'To get a free trial with our digital subscription, visit our website'
-                : 'Get a free trial with our digital subscription'
-        }
+        explainerSubtitle={SUB_NOT_FOUND_EXPLAINER_SUBTITLE}
         bottomContent={
             <>
                 <ModalButton
@@ -36,7 +39,7 @@ const SubNotFoundModalCard = ({
                         onLoginPress()
                     }}
                 >
-                    Sign in to activate
+                    {SUB_NOT_FOUND_SIGN_IN}
                 </ModalButton>
                 <ModalButton
                     onPress={() => {
@@ -44,7 +47,7 @@ const SubNotFoundModalCard = ({
                         onOpenCASLogin()
                     }}
                 >
-                    Activate with subscriber ID
+                    {SUB_NOT_FOUND_SUBSCRIBER_ID_BUTTON}
                 </ModalButton>
             </>
         }
