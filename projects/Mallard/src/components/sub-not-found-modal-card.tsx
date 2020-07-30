@@ -1,5 +1,4 @@
 import React from 'react'
-import { Platform } from 'react-native'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { ModalButton } from './Button/ModalButton'
 import {

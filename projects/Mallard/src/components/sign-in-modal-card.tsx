@@ -11,7 +11,7 @@ import {
     ONBOARDING_SUBTITLE,
     EXPLAINER_TITLE,
     EXPLAINER_SUBTITLE,
-    FREE_TRIAL
+    FREE_TRIAL,
 } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
