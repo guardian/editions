@@ -147,7 +147,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     }
     
     .app h2 {
-        font-size: ${contentType === 'immersive' ? '28px' : '24px'};
+        font-size: ${contentType === 'immersive' ? '24px' : '20px'};
         color: ${
             contentType === ArticleType.Immersive ? '#000000' : colors.main
         };
@@ -168,6 +168,13 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
                 : families.text.bold
         };
       }
+
+      @media (min-width: ${px(Breakpoints.phone)}) {
+        .app h2 {
+            font-size: ${contentType === 'immersive' ? '28px' : '24px'};
+
+        }
+    }
 
     
     .content-wrap {
