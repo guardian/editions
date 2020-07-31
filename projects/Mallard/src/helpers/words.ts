@@ -159,6 +159,14 @@ export const IssueListFooter = {
     goToLatestButton: 'Go to latest',
 }
 
+export const SubscriptionDetails = {
+    heading: 'Paper + digital subscription',
+    emailAddress: 'Email Address',
+    userId: 'User ID',
+    subscriptionType: 'Subscription type',
+    expiryDate: 'Expiry date',
+    subscriptionPrefix: 'Subscription prefix',
+}
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
@@ -170,4 +178,5 @@ export const Copy = {
     manageDownloads: ManageDownloads,
     homeScreen: HomeScreen,
     issueListFooter: IssueListFooter,
+    subscriptionDetails: SubscriptionDetails,
 }
