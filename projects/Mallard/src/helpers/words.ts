@@ -167,6 +167,23 @@ export const SubscriptionDetails = {
     expiryDate: 'Expiry date',
     subscriptionPrefix: 'Subscription prefix',
 }
+
+export const Weather = {
+    useLocation: 'Use location',
+    disabledLocationAlertTitle: 'Location services',
+    disabledLocationAlertExplainer:
+        'Location services are disabled in the device ' +
+        'settings. Enable them to see location-based ' +
+        'weather.',
+    locationPermissionTitle: 'Location permission',
+    locationPermissionExplainer:
+        'Location permission is blocked in the device ' +
+        'settings. Allow the app to access location to ' +
+        'see location-based weather.',
+    acceptLocationButton: 'Ok, show me the weather',
+    cancelButton: 'No thanks',
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
@@ -178,5 +195,6 @@ export const Copy = {
     manageDownloads: ManageDownloads,
     homeScreen: HomeScreen,
     issueListFooter: IssueListFooter,
+    weather: Weather,
     subscriptionDetails: SubscriptionDetails,
 }
