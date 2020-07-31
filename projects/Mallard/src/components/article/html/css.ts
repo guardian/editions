@@ -148,6 +148,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     
     .app h2 {
         font-size: ${contentType === 'immersive' ? '24px' : '20px'};
+        line-height: ${contentType === 'immersive' ? '24px' : '20px'};
         color: ${
             contentType === ArticleType.Immersive ? '#000000' : colors.main
         };
@@ -172,6 +173,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
       @media (min-width: ${px(Breakpoints.phone)}) {
         .app h2 {
             font-size: ${contentType === 'immersive' ? '28px' : '24px'};
+            line-height: ${contentType === 'immersive' ? '28px' : '24px'};
 
         }
     }
