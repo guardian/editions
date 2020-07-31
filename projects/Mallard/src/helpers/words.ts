@@ -135,6 +135,20 @@ export const Settings = {
     version: 'Version',
 }
 
+export const ManageDownloads = {
+    wifiOnlyTitle: 'Wifi-only',
+    wifiOnlyExplainer: 'Issues will only be downloaded when Wi-Fi is available',
+    availableDownloads: 'Available downloads',
+    deleteDownloadsTitle: 'Delete all downloads',
+    deleteDownloadsExplainer:
+        'All downloaded issues will be deleted from your device but will still be available to download',
+    deleteDownloadsAlertTitle: 'Are you sure you want to delete all downloads?',
+    deleteDownloadsAlertSubtitle:
+        'You will still be able to access them and download them again',
+    cancel: 'Cancel',
+    delete: 'Delete',
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
@@ -143,4 +157,5 @@ export const Copy = {
     alreadySubscribed: AlreadySubscribed,
     consentOnboarding: ConsentOnboarding,
     settings: Settings,
+    manageDownloads: ManageDownloads,
 }
