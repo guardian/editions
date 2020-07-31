@@ -133,7 +133,8 @@ const ManageEditionsScreen = () => {
                               },
                               {
                                   key: 'Available editions',
-                                  title: Copy.manageDownloads.availableDownloads,
+                                  title:
+                                      Copy.manageDownloads.availableDownloads,
                                   explainer: (
                                       <AvailableEditionsButtons
                                           numbers={[7, 14, 30]}
@@ -167,14 +168,18 @@ const ManageEditionsScreen = () => {
                         onPress: () => {
                             Alert.alert(
                                 Copy.manageDownloads.deleteDownloadsAlertTitle,
-                                Copy.manageDownloads.deleteDownloadsAlertSubtitle,
+                                Copy.manageDownloads
+                                    .deleteDownloadsAlertSubtitle,
                                 [
                                     {
                                         text: Copy.manageDownloads.delete,
                                         style: 'destructive',
                                         onPress: deleteIssueFiles,
                                     },
-                                    { text: Copy.manageDownloads.cancel, style: 'cancel' },
+                                    {
+                                        text: Copy.manageDownloads.cancel,
+                                        style: 'cancel',
+                                    },
                                 ],
                                 { cancelable: false },
                             )
