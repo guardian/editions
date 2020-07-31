@@ -111,10 +111,19 @@ const AlreadySubscribed = {
         'We were unable to find a subscription associated with your Apple ID',
 }
 
+// Consent Onboarding
+export const ConsentOnboarding = {
+    title: 'We care about your privacy',
+    explainerTitle: 'This app is free of ads',
+    optionsButton: 'My options',
+    okayButton: "I'm okay with that",
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
     subFound: SubFound,
     subNotFound: SubNotFound,
     alreadySubscribed: AlreadySubscribed,
+    consentOnboarding: ConsentOnboarding,
 }
