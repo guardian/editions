@@ -119,6 +119,22 @@ export const ConsentOnboarding = {
     okayButton: "I'm okay with that",
 }
 
+export const Settings = {
+    subscriptionDetails: 'Subscription details',
+    alreadySubscribed: "I'm already subscribed",
+    signIn: 'Sign in',
+    signOut: 'Sign out',
+    displayWeather: 'Display weather',
+    manageDownloads: 'Manage downloads',
+    signInTitle: "I'm already subscribed",
+    privacySettings: 'Privacy settings',
+    privacyPolicy: 'Privacy policy',
+    termsAndConditions: 'Terms and conditions',
+    help: 'Help',
+    credits: 'Credits',
+    version: 'Version',
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
@@ -126,4 +142,5 @@ export const Copy = {
     subNotFound: SubNotFound,
     alreadySubscribed: AlreadySubscribed,
     consentOnboarding: ConsentOnboarding,
+    settings: Settings,
 }
