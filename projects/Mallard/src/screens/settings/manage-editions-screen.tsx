@@ -13,6 +13,7 @@ import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { MANAGE_EDITIONS_TITLE } from 'src/helpers/words'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues'
+import { Copy } from 'src/helpers/words'
 
 const buttonStyles = StyleSheet.create({
     background: {
@@ -107,9 +108,9 @@ const ManageEditionsScreen = () => {
                         : [
                               {
                                   key: 'Wifi-only',
-                                  title: 'Wifi-only',
+                                  title: Copy.manageDownloads.wifiOnlyTitle,
                                   explainer:
-                                      'Issues will only be downloaded when Wi-Fi is available',
+                                      Copy.manageDownloads.wifiOnlyExplainer,
                                   proxy: (
                                       <Switch
                                           accessible={true}
@@ -132,7 +133,7 @@ const ManageEditionsScreen = () => {
                               },
                               {
                                   key: 'Available editions',
-                                  title: 'Available downloads',
+                                  title: Copy.manageDownloads.availableDownloads,
                                   explainer: (
                                       <AvailableEditionsButtons
                                           numbers={[7, 14, 30]}
@@ -160,20 +161,20 @@ const ManageEditionsScreen = () => {
                           ]),
                     {
                         key: 'Delete all downloads',
-                        title: 'Delete all downloads',
+                        title: Copy.manageDownloads.deleteDownloadsTitle,
                         explainer:
-                            'All downloaded issues will be deleted from your device but will still be available to download',
+                            Copy.manageDownloads.deleteDownloadsExplainer,
                         onPress: () => {
                             Alert.alert(
-                                'Are you sure you want to delete all downloads?',
-                                'You will still be able to access them and download them again',
+                                Copy.manageDownloads.deleteDownloadsAlertTitle,
+                                Copy.manageDownloads.deleteDownloadsAlertSubtitle,
                                 [
                                     {
-                                        text: 'Delete',
+                                        text: Copy.manageDownloads.delete,
                                         style: 'destructive',
                                         onPress: deleteIssueFiles,
                                     },
-                                    { text: 'Cancel', style: 'cancel' },
+                                    { text: Copy.manageDownloads.cancel, style: 'cancel' },
                                 ],
                                 { cancelable: false },
                             )
