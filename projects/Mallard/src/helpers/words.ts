@@ -154,6 +154,11 @@ export const HomeScreen = {
     issuePickerTitleSubtitle: 'Editions',
 }
 
+export const IssueListFooter = {
+    manageDownloads: 'Manage downloads',
+    goToLatestButton: 'Go to latest',
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
@@ -164,4 +169,5 @@ export const Copy = {
     settings: Settings,
     manageDownloads: ManageDownloads,
     homeScreen: HomeScreen,
+    issueListFooter: IssueListFooter,
 }

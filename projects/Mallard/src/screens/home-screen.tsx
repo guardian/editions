@@ -182,7 +182,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                         })
                     }}
                 >
-                    Manage downloads
+                    {Copy.issueListFooter.manageDownloads}
                 </Button>
             </GridRowSplit>
             {isUsingProdDevtools ? (
@@ -201,7 +201,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                             })
                         }}
                     >
-                        Go to latest
+                        {Copy.issueListFooter.goToLatestButton}
                     </Button>
                 </GridRowSplit>
             ) : null}
