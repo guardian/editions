@@ -47,6 +47,7 @@ import { IssueWithFronts } from '../../../Apps/common/src'
 import { ApiState } from './settings/api-screen'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
+import { Copy } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -449,7 +450,10 @@ export const HomeScreen = () => {
         editionsMenuEnabled ? (
             <IssuePickerHeader title={title} subTitle={subTitle} />
         ) : (
-            <IssuePickerHeader title="Recent" subTitle="Editions" />
+            <IssuePickerHeader
+                title={Copy.homeScreen.issuePickerTitle}
+                subTitle={Copy.homeScreen.issuePickerTitleSubtitle}
+            />
         )
 
     return (

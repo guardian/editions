@@ -149,6 +149,11 @@ export const ManageDownloads = {
     delete: 'Delete',
 }
 
+export const HomeScreen = {
+    issuePickerTitle: 'Recent',
+    issuePickerTitleSubtitle: 'Editions',
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
@@ -158,4 +163,5 @@ export const Copy = {
     consentOnboarding: ConsentOnboarding,
     settings: Settings,
     manageDownloads: ManageDownloads,
+    homeScreen: HomeScreen,
 }
