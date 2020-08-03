@@ -82,7 +82,7 @@ const getIAPType = (iapData: ReceiptIOS) =>
 
 const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
     <>
-        <Heading>Guardian Daily / App Store</Heading>
+        <Heading>{Copy.subscriptionDetails.iapHeading}</Heading>
         <List
             data={[
                 keyValueItem('Subscription type', getIAPType(iapData)),
@@ -93,7 +93,9 @@ const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
     </>
 )
 
-const LoggedOutDetails = () => <Heading>Not logged in</Heading>
+const LoggedOutDetails = () => (
+    <Heading>{Copy.subscriptionDetails.loggedOutHeading}</Heading>
+)
 
 const SubscriptionDetailsScreen = () => {
     const { identityData, iapData, casData, attempt } = useContext(
@@ -127,7 +129,7 @@ const SubscriptionDetailsScreen = () => {
 }
 
 SubscriptionDetailsScreen.navigationOptions = {
-    title: <Text style={{ fontSize: 20 }}>Subscription Details</Text>,
+title: <Text style={{ fontSize: 20 }}>{Copy.subscriptionDetails.title}</Text>,
 }
 
 export { SubscriptionDetailsScreen }

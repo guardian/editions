@@ -15,6 +15,7 @@ import { getFont } from 'src/theme/typography'
 import { TitlepieceText } from '../components/styled-text'
 import { useNetInfo } from '../hooks/use-net-info'
 import { defaultSettings } from 'src/helpers/settings/defaults'
+import { Copy } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     container: {
@@ -73,7 +74,7 @@ const DeprecateVersionModal = () => {
                         accessibilityRole="header"
                         style={[getFont('titlepiece', 2), styles.title]}
                     >
-                        This version of the Daily app is no longer supported
+                        {Copy.deprecateModal.title}
                     </TitlepieceText>
                     <TitlepieceText
                         style={[getFont('titlepiece', 1.5), styles.subTitle]}
