@@ -129,7 +129,9 @@ const SubscriptionDetailsScreen = () => {
 }
 
 SubscriptionDetailsScreen.navigationOptions = {
-title: <Text style={{ fontSize: 20 }}>{Copy.subscriptionDetails.title}</Text>,
+    title: (
+        <Text style={{ fontSize: 20 }}>{Copy.subscriptionDetails.title}</Text>
+    ),
 }
 
 export { SubscriptionDetailsScreen }
