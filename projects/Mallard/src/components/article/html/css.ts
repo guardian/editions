@@ -149,6 +149,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     .app h2 {
         font-size: ${contentType === 'immersive' ? '24px' : '20px'};
         line-height: ${contentType === 'immersive' ? '24px' : '20px'};
+        font-weight: ${contentType === 'immersive' ? 'normal' : 'bold'};
         color: ${
             contentType === ArticleType.Immersive ? '#000000' : colors.main
         };
@@ -163,6 +164,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
         color: ${
             contentType === ArticleType.Immersive ? colors.main : '#000000'
         };
+        font-weight: 'bold';
         font-family: ${
             contentType === ArticleType.Immersive
                 ? families.headline.bold
