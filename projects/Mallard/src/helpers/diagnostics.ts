@@ -18,7 +18,6 @@ import { iapReceiptCache, userDataCache, pushRegisteredTokens } from './storage'
 import {
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
-    DIAGNOSTICS_TITLE,
     IOS_BETA_EMAIL,
 } from './words'
 import { OnCompletionToast } from 'src/screens/settings/help-screen'
@@ -70,6 +69,9 @@ const getDiagnosticInfo = async (
     const version = DeviceInfo.getVersion()
     const deviceId = DeviceInfo.getDeviceId()
 
+    const bytesToMb = (bytes: number) =>
+        Math.floor(bytes / 1024 / 1024).toLocaleString('en')
+
     const [
         firstInstallTime,
         lastUpdateTime,
@@ -114,8 +116,8 @@ Privacy settings: ${gdprEntries
         .map(([key, value]) => `${key}:${value}`)
         .join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
-Total Disk Space: ${totalDiskCapacity}
-Available Disk Spce: ${freeDiskStorage}
+Total Disk Space (Mb): ${bytesToMb(totalDiskCapacity)}
+Available Disk Spce (Mb): ${bytesToMb(freeDiskStorage)}
 Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
 
 -User / Supporter Info-
@@ -162,8 +164,9 @@ const createMailtoHandler = (
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
+    dialogTitle = '',
 ) => () =>
-    runActionSheet(DIAGNOSTICS_TITLE, DIAGNOSTICS_REQUEST, [
+    runActionSheet(dialogTitle, DIAGNOSTICS_REQUEST, [
         {
             text: 'Include',
             onPress: async () => {
@@ -192,11 +195,18 @@ const createSupportMailto = (
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
+    dialogTitle = '',
 ) => ({
     key: text,
     title: text,
     linkWeight: 'regular' as const,
-    onPress: createMailtoHandler(client, text, releaseURL, authAttempt),
+    onPress: createMailtoHandler(
+        client,
+        text,
+        releaseURL,
+        authAttempt,
+        dialogTitle,
+    ),
 })
 
 const copyDiagnosticInfo = (
