@@ -120,7 +120,6 @@ const AlreadySubscribed = {
     title: 'Subscription Activation',
     subscriptionHeading: 'Guardian digital subscription/Digital + Print',
     appHeadingDaily: 'Daily Edition',
-    appHeadingEditions: 'Guardian Editions',
     signInTitle: 'Sign in to activate',
     subscriberIdTitle: 'Activate with subscriber ID',
     restoreIapTitle: 'Restore App Store subscription',

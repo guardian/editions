@@ -13,20 +13,13 @@ import { isValid, isError } from 'src/authentication/lib/Attempt'
 import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { Copy } from 'src/helpers/words'
-import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
     const { authIAP } = useContext(AccessContext)
     const { open } = useModal()
-    const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
     const rightChevronIcon = <RightChevron />
 
-    useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
-    }, [])
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
@@ -65,9 +58,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                     <>
                         <Heading>{``}</Heading>
                         <Heading>
-                            {editionsMenuEnabled
-                                ? Copy.alreadySubscribed.appHeadingEditions
-                                : Copy.alreadySubscribed.appHeadingDaily}
+                            {Copy.alreadySubscribed.appHeadingDaily}
                         </Heading>
                         <List
                             data={[
