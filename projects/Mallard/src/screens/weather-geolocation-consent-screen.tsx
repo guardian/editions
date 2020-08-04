@@ -81,11 +81,11 @@ const WeatherGeolocationConsentScreen = ({
     return (
         <>
             <DefaultInfoTextWebview
-                html={
-                    editionsMenuEnabled
+                html={html`
+                    ${editionsMenuEnabled
                         ? Copy.weatherConsentHtml.contentEditions
-                        : Copy.weatherConsentHtml.contentDaily
-                }
+                        : Copy.weatherConsentHtml.contentDaily}
+                `}
             />
             <View style={styles.buttons}>
                 <Button
