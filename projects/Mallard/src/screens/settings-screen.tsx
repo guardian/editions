@@ -29,6 +29,7 @@ import ApolloClient from 'apollo-client'
 import { NavigationScreenProp } from 'react-navigation'
 import { FullButton } from 'src/components/lists/FullButton'
 import { DualButton } from 'src/components/lists/DualButton'
+import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
 
 const MiscSettingsList = React.memo(
     (props: {
@@ -118,9 +119,14 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const identityData = useIdentity()
     const canAccess = useAccess()
     const [, setVersionClickedTimes] = useState(0)
-    const { signOutIdentity } = useContext(AccessContext)
+    const { signOutIdentity, iapData } = useContext(AccessContext)
 
     const versionNumber = DeviceInfo.getVersion()
+    const isLoggedInWithIdentity = !!(identityData
+        ? identityData.userDetails.primaryEmailAddress
+        : undefined)
+
+    const canDisplayBetaButton = !!!iapData && isLoggedInWithIdentity
 
     if (query.loading) return null
     const { client } = query
@@ -260,6 +266,9 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                     ]}
                 />
+
+                {canDisplayBetaButton && <BetaButtonOption />}
+
                 {isUsingProdDevtools && <DevZone />}
             </ScrollContainer>
         </WithAppAppearance>
