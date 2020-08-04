@@ -57,19 +57,8 @@ const SignIn = {
     title: 'Already a subscriber?',
     subtitle: 'Sign in with your subscriber details to continue',
     explainerTitle: 'Not subscribed yet?',
-    explainerSubtitleEditions: `${Platform.select({
-        ios:
-            'Get the Editions app with a digital subscription from The Guardian website.',
-        android:
-            'Read the Editions app with a digital subscription from The Guardian.',
-    })}`,
-    explianerSubtitleDaily: `${Platform.select({
-        ios:
-            'Get the Daily with a digital subscription from The Guardian website.',
-
-        android:
-            'Read the Daily with a digital subscription from The Guardian.',
-    })}`,
+    explainerSubtitle:
+        'Get access with a digital subscription from The Guardian website.',
     freeTrial: 'Start your free 14 day trial',
 }
 

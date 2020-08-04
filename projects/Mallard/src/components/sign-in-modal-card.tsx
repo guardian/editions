@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { View, Platform, Linking, StyleSheet } from 'react-native'
 import { ModalButton } from './Button/ModalButton'
@@ -7,7 +7,6 @@ import { ButtonAppearance } from './Button/Button'
 import { getFont } from 'src/theme/typography'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { Copy } from 'src/helpers/words'
-import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
 
 const styles = StyleSheet.create({
     bottomContentContainer: {
@@ -29,12 +28,6 @@ const SignInModalCard = ({
     onLoginPress: () => void
     onDismiss: () => void
 }) => {
-    const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
-    useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
-    }, [])
     return (
         <OnboardingCard
             onDismissThisCard={onDismiss}
@@ -68,11 +61,7 @@ const SignInModalCard = ({
                 </>
             }
             explainerTitle={Copy.signIn.explainerTitle}
-            explainerSubtitle={
-                editionsMenuEnabled
-                    ? Copy.signIn.explainerSubtitleEditions
-                    : Copy.signIn.explianerSubtitleDaily
-            }
+            explainerSubtitle={Copy.signIn.explainerSubtitle}
             bottomExplainerContent={
                 <>
                     {/* Added only for Android - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
