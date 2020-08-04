@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { List } from 'src/components/lists/list'
 import { Heading } from 'src/components/layout/ui/row'
 import { NavigationInjectedProps } from 'react-navigation'
