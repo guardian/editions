@@ -18,7 +18,6 @@ import { iapReceiptCache, userDataCache, pushRegisteredTokens } from './storage'
 import {
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
-    DIAGNOSTICS_TITLE,
     IOS_BETA_EMAIL,
 } from './words'
 import { OnCompletionToast } from 'src/screens/settings/help-screen'
@@ -162,8 +161,9 @@ const createMailtoHandler = (
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
+    dialogTitle = '',
 ) => () =>
-    runActionSheet(DIAGNOSTICS_TITLE, DIAGNOSTICS_REQUEST, [
+    runActionSheet(dialogTitle, DIAGNOSTICS_REQUEST, [
         {
             text: 'Include',
             onPress: async () => {
@@ -192,11 +192,18 @@ const createSupportMailto = (
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
+    dialogTitle = '',
 ) => ({
     key: text,
     title: text,
     linkWeight: 'regular' as const,
-    onPress: createMailtoHandler(client, text, releaseURL, authAttempt),
+    onPress: createMailtoHandler(
+        client,
+        text,
+        releaseURL,
+        authAttempt,
+        dialogTitle,
+    ),
 })
 
 const copyDiagnosticInfo = (

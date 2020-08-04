@@ -15,6 +15,7 @@ import {
     SUBSCRIPTION_EMAIL,
     READERS_EMAIL,
     APPS_FEEDBACK_EMAIL,
+    DIAGNOSTICS_TITLE,
 } from 'src/helpers/words'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -56,6 +57,7 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                             'Report an issue',
                             ISSUE_EMAIL,
                             attempt,
+                            DIAGNOSTICS_TITLE,
                         ),
                         createSupportMailto(
                             client,
