@@ -209,7 +209,8 @@ export const Weather = {
 }
 
 export const DeprecateModal = {
-    title: 'This version of the Daily app is no longer supported',
+    titleEditions: 'This version of the Editions app is no longer supported',
+    titleDaily: 'This version of the Daily app is no longer supported',
     subtitle: 'Please go to the %storeLink% to update to the latest version',
 }
 
