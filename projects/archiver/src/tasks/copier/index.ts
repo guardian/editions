@@ -6,6 +6,8 @@ import { getBucket, recursiveCopy } from '../../utils/s3'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import { getPublishedId } from '../../utils/path-builder'
 import { getIssue } from '../../utils/backend-client'
+import { sleep } from '../../utils/sleep'
+import { ServerlessApplicationRepository } from 'aws-sdk'
 
 type CopyTaskInput = IndexTaskOutput
 export type CopyTaskOutput = Pick<
@@ -20,6 +22,7 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
     'copied',
     async ({ issuePublication }) => {
         console.log(`Copying all files from ${inputBucket} to ${outputBucket}`)
+        await sleep(1000)
 
         const key = `${issuePublication.edition}/${issuePublication.issueDate}/${issuePublication.version}/`
         const copyPromises = await recursiveCopy(key, inputBucket, outputBucket)

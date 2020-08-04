@@ -11,6 +11,7 @@ import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
 import { thumbsDir } from '../../../../Apps/common/src'
 import { getBucket } from '../../utils/s3'
+import { sleep } from '../../utils/sleep'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput
@@ -20,9 +21,11 @@ const bucket = getBucket('proof')
 export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
     'bundled',
     async ({ issuePublication, issue }) => {
+        console.log(`Compressing issue ${issue.name}, ${issue.date}`)
+        await sleep(1000)
+
         const { issueDate, version } = issuePublication
         const { publishedId } = issue
-        console.log('Compressing')
         await zip(
             `${publishedId}/data`,
             [issuePath(publishedId), frontPath(publishedId, '')],
