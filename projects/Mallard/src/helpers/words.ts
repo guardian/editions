@@ -6,7 +6,6 @@ export const REQUEST_INVALID_RESPONSE_VALIDATION = 'Failed to parse data'
 export const LOCAL_JSON_INVALID_RESPONSE_VALIDATION =
     'Failed to parse local data'
 
-export const APP_DISPLAY_NAME = 'Daily Edition'
 export const FEEDBACK_EMAIL = 'daily.feedback@theguardian.com'
 export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies'
 export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy'
@@ -120,7 +119,8 @@ const AuthSwitcherScreen = {
 const AlreadySubscribed = {
     title: 'Subscription Activation',
     subscriptionHeading: 'Guardian digital subscription/Digital + Print',
-    appHeading: 'Daily Edition',
+    appHeadingDaily: 'Daily Edition',
+    appHeadingEditions: 'Guardian Editions',
     signInTitle: 'Sign in to activate',
     subscriberIdTitle: 'Activate with subscriber ID',
     restoreIapTitle: 'Restore App Store subscription',
