@@ -123,11 +123,91 @@ const AlreadySubscribed = {
         'We were unable to find a subscription associated with your Apple ID',
 }
 
+// Consent Onboarding
+export const ConsentOnboarding = {
+    title: 'We care about your privacy',
+    explainerTitle: 'This app is free of ads',
+    optionsButton: 'My options',
+    okayButton: "I'm okay with that",
+}
+
+export const Settings = {
+    subscriptionDetails: 'Subscription details',
+    alreadySubscribed: "I'm already subscribed",
+    signIn: 'Sign in',
+    signOut: 'Sign out',
+    displayWeather: 'Display weather',
+    manageDownloads: 'Manage downloads',
+    signInTitle: "I'm already subscribed",
+    privacySettings: 'Privacy settings',
+    privacyPolicy: 'Privacy policy',
+    termsAndConditions: 'Terms and conditions',
+    help: 'Help',
+    credits: 'Credits',
+    version: 'Version',
+}
+
+export const ManageDownloads = {
+    wifiOnlyTitle: 'Wifi-only',
+    wifiOnlyExplainer: 'Issues will only be downloaded when Wi-Fi is available',
+    availableDownloads: 'Available downloads',
+    deleteDownloadsTitle: 'Delete all downloads',
+    deleteDownloadsExplainer:
+        'All downloaded issues will be deleted from your device but will still be available to download',
+    deleteDownloadsAlertTitle: 'Are you sure you want to delete all downloads?',
+    deleteDownloadsAlertSubtitle:
+        'You will still be able to access them and download them again',
+    cancel: 'Cancel',
+    delete: 'Delete',
+}
+
+export const HomeScreen = {
+    issuePickerTitle: 'Recent',
+    issuePickerTitleSubtitle: 'Editions',
+}
+
+export const IssueListFooter = {
+    manageDownloads: 'Manage downloads',
+    goToLatestButton: 'Go to latest',
+}
+
+export const SubscriptionDetails = {
+    heading: 'Paper + digital subscription',
+    emailAddress: 'Email Address',
+    userId: 'User ID',
+    subscriptionType: 'Subscription type',
+    expiryDate: 'Expiry date',
+    subscriptionPrefix: 'Subscription prefix',
+}
+
+export const Weather = {
+    useLocation: 'Use location',
+    disabledLocationAlertTitle: 'Location services',
+    disabledLocationAlertExplainer:
+        'Location services are disabled in the device ' +
+        'settings. Enable them to see location-based ' +
+        'weather.',
+    locationPermissionTitle: 'Location permission',
+    locationPermissionExplainer:
+        'Location permission is blocked in the device ' +
+        'settings. Allow the app to access location to ' +
+        'see location-based weather.',
+    acceptLocationButton: 'Ok, show me the weather',
+    cancelButton: 'No thanks',
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
     subFound: SubFound,
     subNotFound: SubNotFound,
     alreadySubscribed: AlreadySubscribed,
+    consentOnboarding: ConsentOnboarding,
+    settings: Settings,
+    manageDownloads: ManageDownloads,
+    homeScreen: HomeScreen,
+    issueListFooter: IssueListFooter,
+    weather: Weather,
+    subscriptionDetails: SubscriptionDetails,
     authSwitcherScreen: AuthSwitcherScreen,
 }

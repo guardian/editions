@@ -9,6 +9,7 @@ import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthori
 import { CASExpiry } from '../../../../Apps/common/src/cas-expiry'
 import { Heading } from 'src/components/layout/ui/row'
 import { ReceiptIOS } from 'src/authentication/services/iap'
+import { Copy } from 'src/helpers/words'
 
 const keyValueItem = (key: string, value: string) =>
     ({
@@ -24,14 +25,17 @@ const IdentityDetails = ({
     identityData: IdentityAuthData
 }) => (
     <>
-        <Heading>Paper + digital subscription</Heading>
+        <Heading>{Copy.subscriptionDetails.heading}</Heading>
         <List
             data={[
                 keyValueItem(
-                    'Email Address',
+                    Copy.subscriptionDetails.emailAddress,
                     identityData.userDetails.primaryEmailAddress,
                 ),
-                keyValueItem('User ID', identityData.membershipData.userId),
+                keyValueItem(
+                    Copy.subscriptionDetails.userId,
+                    identityData.membershipData.userId,
+                ),
             ]}
         />
     </>
@@ -46,12 +50,21 @@ const getCASType = (casData: CASExpiry) =>
 
 const CASDetails = ({ casData }: { casData: CASExpiry }) => (
     <>
-        <Heading>Paper + digital subscription</Heading>
+        <Heading>{Copy.subscriptionDetails.heading}</Heading>
         <List
             data={[
-                keyValueItem('Subscription type', getCASType(casData)),
-                keyValueItem('Expiry date', casData.expiryDate),
-                keyValueItem('Subscription prefix', casData.provider),
+                keyValueItem(
+                    Copy.subscriptionDetails.subscriptionType,
+                    getCASType(casData),
+                ),
+                keyValueItem(
+                    Copy.subscriptionDetails.expiryDate,
+                    casData.expiryDate,
+                ),
+                keyValueItem(
+                    Copy.subscriptionDetails.subscriptionPrefix,
+                    casData.provider,
+                ),
             ]}
         />
     </>
