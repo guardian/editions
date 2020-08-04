@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Alert, Platform, Linking } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview'
@@ -11,10 +11,7 @@ import { requestLocationPermission } from 'src/helpers/location-permission'
 import { RESULTS } from 'react-native-permissions'
 import { getGeolocation } from 'src/helpers/weather'
 import { Copy } from 'src/helpers/words'
-
-const content = html`
-    ${Copy.weatherConsentHtml.content}
-`
+import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
 
 const styles = StyleSheet.create({
     button: {
@@ -37,6 +34,7 @@ const showIsDisabledAlert = () => {
 const WeatherGeolocationConsentScreen = ({
     navigation,
 }: NavigationInjectedProps) => {
+    const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
     const apolloClient = useApolloClient()
     const onConsentPress = async () => {
         const result = await requestLocationPermission(apolloClient)
@@ -74,9 +72,21 @@ const WeatherGeolocationConsentScreen = ({
         navigation.dismiss()
     }
 
+    useEffect(() => {
+        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
+            setEditionsMenuEnabled(editionsMenuToggle)
+        })
+    }, [])
+
     return (
         <>
-            <DefaultInfoTextWebview html={content} />
+            <DefaultInfoTextWebview
+                html={
+                    editionsMenuEnabled
+                        ? Copy.weatherConsentHtml.contentEditions
+                        : Copy.weatherConsentHtml.contentDaily
+                }
+            />
             <View style={styles.buttons}>
                 <Button
                     appearance={ButtonAppearance.skeletonBlue}

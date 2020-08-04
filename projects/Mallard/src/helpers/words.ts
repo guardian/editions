@@ -215,7 +215,7 @@ export const DeprecateModal = {
 }
 
 export const WeatherConsentHtml = {
-    content: `<h2>Location-based weather</h2>
+    contentDaily: `<h2>Location-based weather</h2>
     <p>
         This is a 3rd party service provided by AccuWeather. It works by taking
         your location coordinates and bringing the weather to you.
@@ -243,6 +243,35 @@ export const WeatherConsentHtml = {
             <a href="https://www.accuweather.com/en/privacy"> privacy policy</a>
         </p>
     </ul>
+`,
+    contentEditions: `<h2>Location-based weather</h2>
+<p>
+    This is a 3rd party service provided by AccuWeather. It works by taking
+    your location coordinates and bringing the weather to you.
+</p>
+<ul>
+    <li>
+        The Editions app only collects your geolocation and Accuweather uses it
+        for getting your weather forecast
+    </li>
+    <li>
+        Your geolocation is not used for advertising or any other purposes
+    </li>
+    <li>
+        Your geolocation is not linked to other identifiers such as your
+        name or email address
+    </li>
+    <li>
+        You can switch the weather feature on/off at any time on the app
+        Settings
+    </li>
+    </ul>
+    <p>
+        For more information about how Accuweather uses your location,
+        please check their
+        <a href="https://www.accuweather.com/en/privacy"> privacy policy</a>
+    </p>
+</ul>
 `,
 }
 
