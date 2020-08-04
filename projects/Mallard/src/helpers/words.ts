@@ -57,8 +57,13 @@ const SignIn = {
     title: 'Already a subscriber?',
     subtitle: 'Sign in with your subscriber details to continue',
     explainerTitle: 'Not subscribed yet?',
-    explainerSubtitle:
-        'Get access with a digital subscription from The Guardian website.',
+    explainerSubtitle: `${Platform.select({
+        ios:
+            'Get access with a digital subscription from The Guardian website.',
+
+        android:
+            'Get access with a digital subscription from The Guardian website',
+    })}`,
     freeTrial: 'Start your free 14 day trial',
 }
 
