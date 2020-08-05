@@ -194,5 +194,5 @@ export const renderArticle = (
             </main>
         </div>
     `
-    return makeHtml({ styles, body, topPadding })
+    return makeHtml({ styles, body, topPadding, type })
 }

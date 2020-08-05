@@ -642,7 +642,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin-bottom: 0em !important;
         padding: 0 10px 18px 10px;
     }
-    .app {
+    .app[data-type='${ArticleType.Interview}'] {
         padding: 0 !important;
     }
 
@@ -683,7 +683,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
 
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .content-wrap main {
+        .app[data-type='${ArticleType.Interview}'] .content-wrap main {
             padding-left: 10px;
             padding-right: 10px;
         }

@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
+import { ArticleType } from 'src/common'
 import { bundles } from 'src/html-bundle-info.json'
-import { getScaledFont, FontSizes, FontFamily } from 'src/theme/typography'
+import { FontFamily, FontSizes, getScaledFont } from 'src/theme/typography'
 
 export type WebViewPing =
     | {
@@ -214,10 +215,12 @@ export const makeHtml = ({
     styles,
     body,
     topPadding = 0,
+    type,
 }: {
     styles: string
     body: string
     topPadding?: number
+    type: ArticleType
 }) => html`
     <html>
         <head>
@@ -230,7 +233,7 @@ export const makeHtml = ({
             />
         </head>
         <body style="padding-top:${px(topPadding)}">
-            <div id="app" class="app">
+            <div id="app" class="app" data-type="${type}">
                 ${body}
             </div>
             ${makeJavaScript(topPadding)}
