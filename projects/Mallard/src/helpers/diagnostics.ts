@@ -70,6 +70,9 @@ const getDiagnosticInfo = async (
     const version = DeviceInfo.getVersion()
     const deviceId = DeviceInfo.getDeviceId()
 
+    const bytesToMb = (bytes: number) =>
+        Math.floor(bytes / 1024 / 1024).toLocaleString('en')
+
     const [
         firstInstallTime,
         lastUpdateTime,
@@ -114,8 +117,8 @@ Privacy settings: ${gdprEntries
         .map(([key, value]) => `${key}:${value}`)
         .join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
-Total Disk Space: ${totalDiskCapacity}
-Available Disk Spce: ${freeDiskStorage}
+Total Disk Space (Mb): ${bytesToMb(totalDiskCapacity)}
+Available Disk Spce (Mb): ${bytesToMb(freeDiskStorage)}
 Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
 
 -User / Supporter Info-
