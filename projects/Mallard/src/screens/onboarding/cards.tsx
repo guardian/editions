@@ -18,6 +18,7 @@ import {
 } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
+import { Copy } from 'src/helpers/words'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
     <View
@@ -66,8 +67,8 @@ const OnboardingConsent = ({
         <Aligner>
             <OnboardingCard
                 appearance={CardAppearance.blue}
-                title="We care about your privacy"
-                explainerTitle="This app is free of ads"
+                title={Copy.consentOnboarding.title}
+                explainerTitle={Copy.consentOnboarding.explainerTitle}
                 bottomExplainerContent={
                     <>
                         <View style={styles.consentButtonContainer}>
@@ -80,7 +81,7 @@ const OnboardingConsent = ({
                                         ButtonAppearance.skeletonBlue
                                     }
                                 >
-                                    My options
+                                    {Copy.consentOnboarding.optionsButton}
                                 </ModalButton>
                             </View>
                             <View>
@@ -91,7 +92,7 @@ const OnboardingConsent = ({
                                     }}
                                     buttonAppearance={ButtonAppearance.dark}
                                 >
-                                    {`I'm okay with that`}
+                                    {Copy.consentOnboarding.okayButton}
                                 </ModalButton>
                             </View>
                         </View>

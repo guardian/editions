@@ -1,13 +1,15 @@
 import { ArticleHeaderProps } from '../header'
-import { HeaderType } from 'src/common'
+import { ArticleType, HeaderType } from 'src/common'
 
 const getByLineText = (
     headerType: HeaderType,
     headerProps: ArticleHeaderProps,
+    articleType?: ArticleType,
 ): string | undefined => {
     const byLineText =
-        headerType === HeaderType.NoByline ||
-        headerType === HeaderType.LargeByline
+        articleType !== ArticleType.Interview &&
+        (headerType === HeaderType.NoByline ||
+            headerType === HeaderType.LargeByline)
             ? headerProps.standfirst
             : headerProps.bylineHtml
     if (!byLineText) return undefined

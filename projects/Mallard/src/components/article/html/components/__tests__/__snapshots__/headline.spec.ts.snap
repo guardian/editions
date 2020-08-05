@@ -11,13 +11,14 @@ exports[`getHeadline should display a headline on its own 1`] = `
 exports[`getHeadline should display a headline with only the byline 1`] = `
 "
             <h1>
-                
                 <span class=\\"header-top-headline\\"
                     >Test Headline
                 </span>
-                <span class=\\"header-top-byline\\"
-                    ><p>Test Byline</p>
-                </span>
+                
+                        <span class=\\"header-top-byline\\"
+                            ><p>Test Byline</p>
+                        </span>
+                    
             </h1>
         "
 `;
@@ -25,13 +26,14 @@ exports[`getHeadline should display a headline with only the byline 1`] = `
 exports[`getHeadline should display a headline with the byline and quotes 1`] = `
 "
             <h1>
-                <Quotes />
                 <span class=\\"header-top-headline\\"
-                    >Test Headline
+                    ><Quotes />Test Headline
                 </span>
-                <span class=\\"header-top-byline\\"
-                    ><p>Test Byline</p>
-                </span>
+                
+                        <span class=\\"header-top-byline\\"
+                            ><p>Test Byline</p>
+                        </span>
+                    
             </h1>
         "
 `;

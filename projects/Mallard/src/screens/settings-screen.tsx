@@ -30,6 +30,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { FullButton } from 'src/components/lists/FullButton'
 import { DualButton } from 'src/components/lists/DualButton'
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
+import { Copy } from 'src/helpers/words'
 
 const MiscSettingsList = React.memo(
     (props: {
@@ -45,7 +46,7 @@ const MiscSettingsList = React.memo(
         const items = [
             {
                 key: 'isWeatherShown',
-                title: 'Display weather',
+                title: Copy.settings.displayWeather,
                 proxy: (
                     <Switch
                         accessible={true}
@@ -58,7 +59,7 @@ const MiscSettingsList = React.memo(
             },
             {
                 key: 'manageEditions',
-                title: 'Manage downloads',
+                title: Copy.settings.manageDownloads,
                 onPress: () =>
                     props.navigation.navigate(
                         routeNames.ManageEditionsSettings,
@@ -97,7 +98,7 @@ const SignInButton = ({
             accessible={accessible}
             accessibilityRole={accessibilityRole}
             textPrimary={username}
-            textSecondary="Sign out"
+            textSecondary={Copy.settings.signOut}
             onPressPrimary={() =>
                 Linking.openURL(
                     'https://manage.theguardian.com/account-settings',
@@ -109,7 +110,7 @@ const SignInButton = ({
         <FullButton
             accessible={true}
             accessibilityRole={accessibilityRole}
-            text="Sign in"
+            text={Copy.settings.signIn}
             onPress={() => navigation.navigate(routeNames.SignIn)}
         />
     )
@@ -168,7 +169,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             ? [
                   {
                       key: 'Subscription details',
-                      title: 'Subscription details',
+                      title: Copy.settings.subscriptionDetails,
                       onPress: () => {
                           navigation.navigate(routeNames.SubscriptionDetails)
                       },
@@ -177,7 +178,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             : [
                   {
                       key: `I'm already subscribed`,
-                      title: `I'm already subscribed`,
+                      title: Copy.settings.alreadySubscribed,
                       onPress: () => {
                           navigation.navigate(routeNames.AlreadySubscribed)
                       },
@@ -213,7 +214,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={[
                         {
                             key: 'Privacy settings',
-                            title: 'Privacy settings',
+                            title: Copy.settings.privacySettings,
                             proxy: rightChevronIcon,
                             onPress: () => {
                                 navigation.navigate(routeNames.GdprConsent)
@@ -221,7 +222,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Privacy policy',
-                            title: 'Privacy policy',
+                            title: Copy.settings.privacyPolicy,
                             proxy: rightChevronIcon,
                             onPress: () => {
                                 navigation.navigate(routeNames.PrivacyPolicy)
@@ -229,7 +230,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Terms and conditions',
-                            title: 'Terms and conditions',
+                            title: Copy.settings.termsAndConditions,
                             onPress: () => {
                                 navigation.navigate(
                                     routeNames.TermsAndConditions,
@@ -244,7 +245,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={[
                         {
                             key: 'Help',
-                            title: 'Help',
+                            title: Copy.settings.help,
                             onPress: () => {
                                 navigation.navigate(routeNames.Help)
                             },
@@ -252,7 +253,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Credits',
-                            title: 'Credits',
+                            title: Copy.settings.credits,
                             onPress: () => {
                                 navigation.navigate(routeNames.Credits)
                             },
@@ -260,7 +261,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Version',
-                            title: 'Version',
+                            title: Copy.settings.version,
                             onPress: versionClickHandler,
                             proxy: <Text>{versionNumber}</Text>,
                         },

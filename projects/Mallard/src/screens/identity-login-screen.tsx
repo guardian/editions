@@ -17,6 +17,7 @@ import { Alert } from 'react-native'
 import { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
+import { Copy } from 'src/helpers/words'
 
 const useRandomState = () =>
     useState(
@@ -39,12 +40,13 @@ const AuthSwitcherScreen = ({
             email
                 ? isEmail(email)
                     ? null
-                    : 'Please enter a valid email'
-                : 'Please enter an email',
+                    : Copy.authSwitcherScreen.invalidEmail
+                : Copy.authSwitcherScreen.emptyEmail,
         onSet: () => setError(null),
     })
     const password = useFormField('', {
-        validator: password => (password ? null : 'Invalid password'),
+        validator: password =>
+            password ? null : Copy.authSwitcherScreen.invalidPassword,
         onSet: () => setError(null),
     })
 
@@ -115,9 +117,14 @@ const AuthSwitcherScreen = ({
                 },
                 deny: async () => {
                     Alert.alert(
-                        `${signInName || 'Social'} sign-in disabled`,
-                        `You have disabled ${signInName ||
-                            'social'} sign-in. You can enable it in Settings > Privacy Settings > Functional`,
+                        Copy.authSwitcherScreen.socialSignInDisabledTitle.replace(
+                            '%signInName%',
+                            signInName || 'Social',
+                        ),
+                        Copy.authSwitcherScreen.socialSignInDisabledSubtitle.replace(
+                            '%signInName%',
+                            signInName || 'social',
+                        ),
                     )
                 },
             },
@@ -126,9 +133,9 @@ const AuthSwitcherScreen = ({
 
     return (
         <Login
-            title="Sign in to activate your subscription"
+            title={Copy.authSwitcherScreen.title}
             resetLink="https://profile.theguardian.com/reset"
-            emailProgressText="Next"
+            emailProgressText={Copy.authSwitcherScreen.nextButton}
             submitText="Sign me in"
             email={email}
             password={password}

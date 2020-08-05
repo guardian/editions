@@ -6,13 +6,14 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
                 <div class=\\"\\">
                     
             <h1>
-                <Quotes />
                 <span class=\\"header-top-headline\\"
-                    >Test Headline
+                    ><Quotes />Test Headline
                 </span>
-                <span class=\\"header-top-byline\\"
-                    ><p>Test Byline</p>
-                </span>
+                
+                        <span class=\\"header-top-byline\\"
+                            ><p>Test Byline</p>
+                        </span>
+                    
             </h1>
         
                     
@@ -27,13 +28,14 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
                 <div class=\\"header-opinion-flex\\">
                     
             <h1>
-                <Quotes />
                 <span class=\\"header-top-headline\\"
-                    >Test Headline
+                    ><Quotes />Test Headline
                 </span>
-                <span class=\\"header-top-byline\\"
-                    ><p>Test Byline</p>
-                </span>
+                
+                        <span class=\\"header-top-byline\\"
+                            ><p>Test Byline</p>
+                        </span>
+                    
             </h1>
         
                     
@@ -54,13 +56,14 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
                 <div class=\\"header-opinion-flex\\">
                     
             <h1>
-                <Quotes />
                 <span class=\\"header-top-headline\\"
-                    >Test Headline
+                    ><Quotes />Test Headline
                 </span>
-                <span class=\\"header-top-byline\\"
-                    ><p>Test Byline</p>
-                </span>
+                
+                        <span class=\\"header-top-byline\\"
+                            ><p>Test Byline</p>
+                        </span>
+                    
             </h1>
         
                     
@@ -75,13 +78,14 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
                 <div class=\\"\\">
                     
             <h1>
-                
                 <span class=\\"header-top-headline\\"
                     >Test Headline
                 </span>
-                <span class=\\"header-top-byline\\"
-                    ><p>Test Byline</p>
-                </span>
+                
+                        <span class=\\"header-top-byline\\"
+                            ><p>Test Byline</p>
+                        </span>
+                    
             </h1>
         
                     
@@ -111,7 +115,7 @@ exports[`article html Header getStandFirst should display RegularByline Header T
                 Test Headline
             </h1>
         
-                <p>
+                <p class=\\"\\" style=\\"color: #121212;\\">
                         Test Standfirst
                       </p>
             </section>

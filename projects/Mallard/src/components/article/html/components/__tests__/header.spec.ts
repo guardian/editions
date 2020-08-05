@@ -1,5 +1,5 @@
 import { getStandFirst } from '../header'
-import { HeaderType, ArticleType } from '../../../../../../../Apps/common/src'
+import { HeaderType, ArticleType } from 'src/common'
 
 jest.mock('src/components/article/html/components/icon/quotes', () => ({
     Quotes: () => '<Quotes />',
@@ -14,6 +14,7 @@ describe('article html Header', () => {
                 { headline: 'Test Headline', bylineHtml: '<p>Test Byline</p>' },
                 null,
                 () => undefined,
+                'news',
             )
             expect(html).toMatchSnapshot()
         })
@@ -30,6 +31,7 @@ describe('article html Header', () => {
                 },
                 null,
                 () => undefined,
+                'news',
             )
             expect(html).toMatchSnapshot()
         })
@@ -46,6 +48,7 @@ describe('article html Header', () => {
                 },
                 '1234567880',
                 () => undefined,
+                'news',
             )
             expect(html).toMatchSnapshot()
         })
@@ -62,6 +65,7 @@ describe('article html Header', () => {
                 },
                 null,
                 () => undefined,
+                'news',
             )
             expect(html).toMatchSnapshot()
         })
@@ -76,6 +80,7 @@ describe('article html Header', () => {
                 },
                 null,
                 () => undefined,
+                'news',
             )
             expect(html).toMatchSnapshot()
         })
@@ -89,6 +94,7 @@ describe('article html Header', () => {
                 },
                 null,
                 () => undefined,
+                'news',
             )
             expect(html).toMatchSnapshot()
         })
