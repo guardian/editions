@@ -18,13 +18,12 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
     const { authIAP } = useContext(AccessContext)
     const { open } = useModal()
-
     const rightChevronIcon = <RightChevron />
 
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
-                <Heading>{`Guardian digital subscription/Digital + Print`}</Heading>
+                <Heading>{Copy.alreadySubscribed.subscriptionHeading}</Heading>
                 <List
                     data={
                         !canAccess
@@ -58,7 +57,9 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                 {Platform.OS === 'ios' ? (
                     <>
                         <Heading>{``}</Heading>
-                        <Heading>{`Daily Edition`}</Heading>
+                        <Heading>
+                            {Copy.alreadySubscribed.appHeadingDaily}
+                        </Heading>
                         <List
                             data={[
                                 {
@@ -122,7 +123,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
 }
 
 AlreadySubscribedScreen.navigationOptions = {
-    title: <Text style={{ fontSize: 20 }}>Subscription Activation</Text>,
+    title: <Text style={{ fontSize: 20 }}>{Copy.alreadySubscribed.title}</Text>,
 }
 
 export { AlreadySubscribedScreen }

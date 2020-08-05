@@ -6,7 +6,6 @@ export const REQUEST_INVALID_RESPONSE_VALIDATION = 'Failed to parse data'
 export const LOCAL_JSON_INVALID_RESPONSE_VALIDATION =
     'Failed to parse local data'
 
-export const APP_DISPLAY_NAME = 'Daily Edition'
 export const FEEDBACK_EMAIL = 'daily.feedback@theguardian.com'
 export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies'
 export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy'
@@ -60,10 +59,10 @@ const SignIn = {
     explainerTitle: 'Not subscribed yet?',
     explainerSubtitle: `${Platform.select({
         ios:
-            'Get the Daily with a digital subscription from The Guardian website.',
+            'Get access with a digital subscription from The Guardian website.',
 
         android:
-            'Read the Daily with a digital subscription from The Guardian.',
+            'Get access with a digital subscription from The Guardian website',
     })}`,
     freeTrial: 'Start your free 14 day trial',
 }
@@ -112,6 +111,9 @@ const AuthSwitcherScreen = {
 
 // Already Subscribed
 const AlreadySubscribed = {
+    title: 'Subscription Activation',
+    subscriptionHeading: 'Guardian digital subscription/Digital + Print',
+    appHeadingDaily: 'Daily Edition',
     signInTitle: 'Sign in to activate',
     subscriberIdTitle: 'Activate with subscriber ID',
     restoreIapTitle: 'Restore App Store subscription',
@@ -172,7 +174,11 @@ export const IssueListFooter = {
 }
 
 export const SubscriptionDetails = {
+    title: 'Subscription Details',
     heading: 'Paper + digital subscription',
+    iapHeadingDaily: 'Guardian Daily / App Store',
+    iapHeadingEditions: 'Guardian Editions / App Store',
+    loggedOutHeading: 'Not logged in',
     emailAddress: 'Email Address',
     userId: 'User ID',
     subscriptionType: 'Subscription type',
@@ -196,6 +202,73 @@ export const Weather = {
     cancelButton: 'No thanks',
 }
 
+export const DeprecateModal = {
+    titleEditions: 'This version of the Editions app is no longer supported',
+    titleDaily: 'This version of the Daily app is no longer supported',
+    subtitle: 'Please go to the %storeLink% to update to the latest version',
+}
+
+export const WeatherConsentHtml = {
+    contentDaily: `<h2>Location-based weather</h2>
+    <p>
+        This is a 3rd party service provided by AccuWeather. It works by taking
+        your location coordinates and bringing the weather to you.
+    </p>
+    <ul>
+        <li>
+            The Daily app only collects your geolocation and Accuweather uses it
+            for getting your weather forecast
+        </li>
+        <li>
+            Your geolocation is not used for advertising or any other purposes
+        </li>
+        <li>
+            Your geolocation is not linked to other identifiers such as your
+            name or email address
+        </li>
+        <li>
+            You can switch the weather feature on/off at any time on the app
+            Settings
+        </li>
+        </ul>
+        <p>
+            For more information about how Accuweather uses your location,
+            please check their
+            <a href="https://www.accuweather.com/en/privacy"> privacy policy</a>
+        </p>
+    </ul>
+`,
+    contentEditions: `<h2>Location-based weather</h2>
+<p>
+    This is a 3rd party service provided by AccuWeather. It works by taking
+    your location coordinates and bringing the weather to you.
+</p>
+<ul>
+    <li>
+        The Editions app only collects your geolocation and Accuweather uses it
+        for getting your weather forecast
+    </li>
+    <li>
+        Your geolocation is not used for advertising or any other purposes
+    </li>
+    <li>
+        Your geolocation is not linked to other identifiers such as your
+        name or email address
+    </li>
+    <li>
+        You can switch the weather feature on/off at any time on the app
+        Settings
+    </li>
+    </ul>
+    <p>
+        For more information about how Accuweather uses your location,
+        please check their
+        <a href="https://www.accuweather.com/en/privacy"> privacy policy</a>
+    </p>
+</ul>
+`,
+}
+
 export const Copy = {
     signIn: SignIn,
     failedSignIn: FailedSignIn,
@@ -210,4 +283,6 @@ export const Copy = {
     weather: Weather,
     subscriptionDetails: SubscriptionDetails,
     authSwitcherScreen: AuthSwitcherScreen,
+    deprecateModal: DeprecateModal,
+    weatherConsentHtml: WeatherConsentHtml,
 }

@@ -256,12 +256,12 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         },
                     },
                     {
-                        key: 'Enable edition menu',
-                        title: 'Enable edition menu',
+                        key: 'Enable multiple editions',
+                        title: 'Enable multiple editions',
                         onPress: () => {},
                         proxy: (
                             <Switch
-                                value={editionsMenuEnabled}
+                                value={editionsMenuEnabled} // this will also update the copy for multiple editions
                                 onValueChange={toggleEditionsMenuEnabled}
                             />
                         ),
