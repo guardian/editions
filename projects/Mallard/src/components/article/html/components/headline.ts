@@ -8,16 +8,23 @@ const getHeadline = (
     articleType: ArticleType,
     headerProps: ArticleHeaderProps,
 ) => {
-    if (articleHeaderType === HeaderType.LargeByline) {
+    if (
+        articleHeaderType === HeaderType.LargeByline ||
+        articleType === ArticleType.Interview
+    ) {
         return html`
             <h1>
-                ${articleType === ArticleType.Opinion && Quotes()}
                 <span class="header-top-headline"
-                    >${headerProps.headline}
+                    >${(articleType === ArticleType.Opinion ||
+                        articleType === ArticleType.Interview) &&
+                        Quotes()}${headerProps.headline}
                 </span>
-                <span class="header-top-byline"
-                    >${headerProps.bylineHtml}
-                </span>
+                ${articleType !== ArticleType.Interview &&
+                    html`
+                        <span class="header-top-byline"
+                            >${headerProps.bylineHtml}
+                        </span>
+                    `}
             </h1>
         `
     } else {
