@@ -126,6 +126,7 @@ export const renderArticle = (
                 showMedia,
                 canBeShared,
                 getImagePath,
+                pillar,
             })
             if (article.image && publishedId) {
                 content = PictureArticleContent(article.image, getImagePath)
@@ -144,6 +145,7 @@ export const renderArticle = (
                 showMedia,
                 canBeShared,
                 getImagePath,
+                pillar,
             })
             content = renderArticleContent(elements, {
                 showMedia,
@@ -160,6 +162,7 @@ export const renderArticle = (
                 publishedId,
                 showMedia,
                 canBeShared,
+                pillar,
                 getImagePath,
             })
             content = renderArticleContent(elements, {
