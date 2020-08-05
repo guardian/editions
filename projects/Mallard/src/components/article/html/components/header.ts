@@ -852,8 +852,11 @@ const getStandFirst = (
                 ${getHeadline(articleHeaderType, type, headerProps)}
                 ${articleHeaderType === HeaderType.RegularByline &&
                     headerProps.standfirst &&
-                    `<p class="${type === ArticleType.Interview &&
-                        'interview-standfirst'}" style="color: ${color};">
+                    `<p class="${
+                        type === ArticleType.Interview
+                            ? 'interview-standfirst'
+                            : ''
+                    }" style="color: ${color};">
                         ${headerProps.standfirst}
                       </p>`}
             </section>
