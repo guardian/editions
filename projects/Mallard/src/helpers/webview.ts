@@ -220,7 +220,7 @@ export const makeHtml = ({
     styles: string
     body: string
     topPadding?: number
-    type: ArticleType
+    type?: ArticleType
 }) => html`
     <html>
         <head>
