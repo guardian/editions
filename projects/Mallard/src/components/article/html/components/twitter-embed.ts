@@ -24,11 +24,10 @@ export const renderTweet = (elHtml: string) =>
         </script>
     ` + elHtml
 
-export const twitterEmbedStyles = () => css`
+export const twitterEmbedStyles = css`
     .twitter-tweet {
         border: none;
         font-style: italic;
-        color: #999999;
-        padding: 10px;
+        color: #767676;
     }
 `

@@ -165,7 +165,6 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
         }
     }
 
-    ${twitterEmbedStyles}
     ${quoteStyles({
         colors,
         theme,
@@ -179,6 +178,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
     ${starRatingStyles({ colors, theme })}
     ${sportScoreStyles({ colors, theme })}
     ${mediaAtomStyles}
+    ${twitterEmbedStyles}
 `
 
 export { makeCss }
