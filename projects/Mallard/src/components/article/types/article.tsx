@@ -188,8 +188,8 @@ const Article = ({
                 path={path}
                 scrollEnabled={true}
                 useWebKit={false}
-                allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
-                mediaPlaybackRequiresUserAction={false}
+                // allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
+                // mediaPlaybackRequiresUserAction={false}
                 style={[styles.webview]}
                 _ref={r => {
                     ref.current = r

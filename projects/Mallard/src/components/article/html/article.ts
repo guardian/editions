@@ -12,7 +12,7 @@ import { Header, ArticleHeaderProps } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
-import { renderTweet } from './components/twitter-embed'
+import { TwitterEmbed } from './components/twitter-embed'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { GetImagePath } from 'src/hooks/use-image-paths'
@@ -85,7 +85,7 @@ const renderArticleContent = (
                         ...el,
                     })
                 case 'tweet':
-                    return renderTweet(el.html)
+                    return TwitterEmbed(el.html)
                 default:
                     return ''
             }
