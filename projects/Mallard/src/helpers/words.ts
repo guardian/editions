@@ -6,15 +6,15 @@ export const REQUEST_INVALID_RESPONSE_VALIDATION = 'Failed to parse data'
 export const LOCAL_JSON_INVALID_RESPONSE_VALIDATION =
     'Failed to parse local data'
 
-export const FEEDBACK_EMAIL = 'daily.feedback@theguardian.com'
+export const FEEDBACK_EMAIL = 'edition.feedback@theguardian.com'
 export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies'
 export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy'
-export const IOS_BETA_EMAIL = 'daily.ios.beta@theguardian.com'
-export const ANDROID_BETA_EMAIL = 'daily.android.beta@theguardian.com'
-export const ISSUE_EMAIL = 'daily.feedback@theguardian.com'
+export const IOS_BETA_EMAIL = 'edition.ios.beta@theguardian.com'
+export const ANDROID_BETA_EMAIL = 'edition.android.beta@theguardian.com'
+export const ISSUE_EMAIL = 'edition.feedback@theguardian.com'
 export const SUBSCRIPTION_EMAIL = 'subscriptions@theguardian.com'
 export const READERS_EMAIL = 'guardian.readers@theguardian.com'
-export const APPS_FEEDBACK_EMAIL = 'daily.feedback@theguardian.com'
+export const APPS_FEEDBACK_EMAIL = 'edition.feedback@theguardian.com'
 
 export const CONNECTION_FAILED_ERROR = `Connection failed`
 export const CONNECTION_FAILED_SUB_ERROR = `Let's try and get your issue`
