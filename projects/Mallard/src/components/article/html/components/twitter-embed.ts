@@ -1,19 +1,6 @@
 import { html, css } from 'src/helpers/webview'
 import { color } from 'src/theme/color'
 
-export const TwitterEmbed = (elHtml: string) =>
-    makeTwitterEmbedJavaScript() +
-    html`
-        ${elHtml}
-    `
-
-export const twitterEmbedStyles = css`
-    .twitter-tweet {
-        border: none;
-        font-style: italic;
-        color: ${color.palette.neutral[46]};
-    }
-`
 // https://developer.twitter.com/en/docs/twitter-for-websites/javascript-api/guides/set-up-twitter-for-websites
 const makeTwitterEmbedJavaScript = () => html`
     <script>
@@ -35,4 +22,18 @@ const makeTwitterEmbedJavaScript = () => html`
             return t
         })(document, 'script', 'twitter-wjs')
     </script>
+`
+
+export const TwitterEmbed = (elHtml: string) =>
+    makeTwitterEmbedJavaScript() +
+    html`
+        ${elHtml}
+    `
+
+export const twitterEmbedStyles = css`
+    .twitter-tweet {
+        border: none;
+        font-style: italic;
+        color: ${color.palette.neutral[46]};
+    }
 `
