@@ -1,15 +1,25 @@
 import React from 'react'
 import { Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
-import { Linking } from 'react-native'
+import { UiBodyCopy } from 'src/components/styled-text'
+import { Linking, StyleSheet } from 'react-native'
 import { JOIN_BETA_LINK } from 'src/constants'
 import { isInBeta } from 'src/helpers/release-stream'
 import remoteConfig from '@react-native-firebase/remote-config'
+import { metrics } from 'src/theme/spacing'
+
+const betaButtonStyle = StyleSheet.create({
+    thanksText: {
+        marginTop: metrics.vertical,
+        marginLeft: metrics.horizontal,
+    },
+})
 
 const betaThanks = () => (
     <>
-        <Heading>{``}</Heading>
-        <Heading>Thank you for being a beta tester 🙌</Heading>
+        <UiBodyCopy style={betaButtonStyle.thanksText}>
+            Thank you for being a beta tester 🙌
+        </UiBodyCopy>
         <Heading>{``}</Heading>
     </>
 )
