@@ -148,37 +148,42 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     }
     
     .app h2 {
-        font-size: ${contentType === 'immersive' ? '24px' : '20px'};
-        line-height: ${contentType === 'immersive' ? '24px' : '20px'};
+        font-size: 20px;
+        line-height: 20px;
         margin-bottom: 2px;
-        font-weight: ${contentType === 'immersive' ? 'normal' : 'bold'};
-        color: ${
-            contentType === ArticleType.Immersive ? '#000000' : colors.main
-        };
-        font-family: ${
-            contentType === ArticleType.Immersive
-                ? families.headline.light
-                : families.text.bold
-        };
+        font-weight: bold;
+        color: ${colors.main};
+        font-family: ${families.text.bold};
+    }
+
+    .app[data-type='${ArticleType.Immersive}'] h2 { 
+        font-size: 24px;
+        line-height: 24px; 
+        color: #000000;
+        font-weight: normal;
+        font-family: ${families.headline.light}
+    }
+
+    .app[data-type='${ArticleType.Immersive}'] h2 > strong { 
+        color: ${colors.main};
+        font-family: ${families.headline.bold}
     }
 
     .app h2 > strong { 
-        color: ${
-            contentType === ArticleType.Immersive ? colors.main : '#000000'
-        };
-        font-weight: 'bold';
-        font-family: ${
-            contentType === ArticleType.Immersive
-                ? families.headline.bold
-                : families.text.bold
-        };
+        color: #000000;
+        font-weight: bold;
+        font-family: ${families.text.bold};
       }
 
       @media (min-width: ${px(Breakpoints.phone)}) {
-        .app h2 {
-            font-size: ${contentType === 'immersive' ? '28px' : '24px'};
-            line-height: ${contentType === 'immersive' ? '28px' : '24px'};
+        .app[data-type='${ArticleType.Immersive}'] h2 {
+            font-size: 28px;
+            line-height: 28px;
+        }
 
+        .app h2 { 
+            font-size: 24px;
+            line-height: 24px;
         }
     }
 
