@@ -122,6 +122,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { signOutIdentity } = useContext(AccessContext)
 
     const versionNumber = DeviceInfo.getVersion()
+    const buildNumber = DeviceInfo.getBuildNumber()
 
     if (query.loading) return null
     const { client } = query
@@ -257,7 +258,11 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             key: 'Version',
                             title: Copy.settings.version,
                             onPress: versionClickHandler,
-                            proxy: <Text>{versionNumber}</Text>,
+                            proxy: (
+                                <Text>
+                                    {versionNumber} ({buildNumber})
+                                </Text>
+                            ),
                         },
                     ]}
                 />
