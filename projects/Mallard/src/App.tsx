@@ -16,7 +16,6 @@ import {
     sendAppScreenEvent,
     setUserId,
 } from 'src/services/ophan'
-
 import { AccessProvider } from './authentication/AccessContext'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
