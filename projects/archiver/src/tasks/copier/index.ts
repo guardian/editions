@@ -7,7 +7,6 @@ import { attempt, hasFailed } from '../../../../backend/utils/try'
 import { getPublishedId } from '../../utils/path-builder'
 import { getIssue } from '../../utils/backend-client'
 import { sleep } from '../../utils/sleep'
-import { ServerlessApplicationRepository } from 'aws-sdk'
 
 type CopyTaskInput = IndexTaskOutput
 export type CopyTaskOutput = Pick<
