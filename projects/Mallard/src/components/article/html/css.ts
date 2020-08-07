@@ -15,7 +15,7 @@ import { sportScoreStyles } from './components/sport-score'
 import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
-import { ArticleType } from '../../../../../Apps/common/src'
+import { ArticleType } from 'src/common'
 import { twitterEmbedStyles } from './components/twitter-embed'
 
 const makeFontsCss = () => css`
