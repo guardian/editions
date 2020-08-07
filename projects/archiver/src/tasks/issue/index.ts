@@ -1,13 +1,13 @@
 import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
-import { Issue, IssuePublicationIdentifier } from '../../../common'
+import { Issue, IssuePublicationActionIdentifier } from '../../../common'
 import { getIssue } from '../../utils/backend-client'
 import { getBucket } from '../../utils/s3'
 import { getPublishedId } from '../../utils/path-builder'
 import { handleAndNotify } from '../../services/task-handler'
 
 export interface IssueParams {
-    issuePublication: IssuePublicationIdentifier
+    issuePublication: IssuePublicationActionIdentifier
 }
 export interface IssueTaskOutput extends IssueParams {
     issue: Issue

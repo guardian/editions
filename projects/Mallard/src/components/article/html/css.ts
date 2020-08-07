@@ -1,12 +1,11 @@
 import {
     css,
     generateAssetsFontCss,
-    getScaledFont,
     getScaledFontCss,
     px,
 } from 'src/helpers/webview'
 import { metrics } from 'src/theme/spacing'
-import { families } from 'src/theme/typography'
+import { families, getScaledFont } from 'src/theme/typography'
 import { headerStyles } from './components/header'
 import { imageStyles } from './components/images'
 import { lineStyles } from './components/line'
@@ -16,6 +15,7 @@ import { sportScoreStyles } from './components/sport-score'
 import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
+import { twitterEmbedStyles } from './components/twitter-embed'
 
 const makeFontsCss = () => css`
     /* text */
@@ -115,8 +115,6 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
 
     .app {
         padding: 0 ${metrics.article.sides} ${px(metrics.vertical)};
-        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
-        margin: auto;
         position: relative;
         animation-duration: .5s;
         animation-name: fade;
@@ -134,8 +132,10 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
         margin-bottom: ${px(metrics.vertical * 2)};
     }
     .app a {
-        color: ${colors.main};
-        text-decoration-color: ${colors.pastel};
+        color: ${theme == 'dark' ? colors.bright : colors.main};
+        text-decoration-color: ${
+            theme == 'dark' ? colors.bright : colors.pastel
+        };
     }
     * {
         margin: 0;
@@ -152,12 +152,19 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
       margin-top: ${px(metrics.vertical * 2.5)};
     }
     .content-wrap {
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        margin: auto;
         position: relative;
         padding-top: ${px(metrics.vertical)};
     }
-    .content-wrap .line {
-        margin-right: ${px(metrics.article.sides * -1)};
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .content-wrap {
+            padding-left: ${px(metrics.article.sides)};
+            padding-right: ${px(metrics.article.sides)};
+
+        }
     }
+
     ${quoteStyles({
         colors,
         theme,
@@ -171,6 +178,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
     ${starRatingStyles({ colors, theme })}
     ${sportScoreStyles({ colors, theme })}
     ${mediaAtomStyles}
+    ${twitterEmbedStyles}
 `
 
 export { makeCss }

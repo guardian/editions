@@ -1,32 +1,37 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import React, { useContext, ReactNode, useState, useEffect } from 'react'
+import gql from 'graphql-tag'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Alert, Clipboard, View } from 'react-native'
+import { Switch } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
+import { AccessContext } from 'src/authentication/AccessContext'
+import { isValid } from 'src/authentication/lib/Attempt'
+import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
+import { Button } from 'src/components/Button/Button'
 import { Footer, Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { routeNames } from 'src/navigation/routes'
-import { Button } from 'src/components/button/button'
-import { metrics } from 'src/theme/spacing'
-import { useToast } from 'src/hooks/use-toast'
-import { isInTestFlight, isInBeta } from 'src/helpers/release-stream'
-import { FSPaths } from 'src/paths'
-import { AccessContext } from 'src/authentication/AccessContext'
-import { isValid } from 'src/authentication/lib/Attempt'
-import DeviceInfo from 'react-native-device-info'
+import { getFileList, getEdtionIssuesCount } from 'src/helpers/files'
+import { locale } from 'src/helpers/locale'
+import { isInBeta, isInTestFlight } from 'src/helpers/release-stream'
+import { imageForScreenSize } from 'src/helpers/screen'
 import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
-import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
-import { getFileList } from 'src/helpers/files'
-import { deleteIssueFiles } from 'src/helpers/files'
-import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
-import { Switch } from 'react-native-gesture-handler'
+import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
 import { useNetInfo } from 'src/hooks/use-net-info'
-import { locale } from 'src/helpers/locale'
-import { imageForScreenSize } from 'src/helpers/screen'
+import { useToast } from 'src/hooks/use-toast'
+import { routeNames } from 'src/navigation/routes'
+import { FSPaths } from 'src/paths'
+import {
+    clearPushTracking,
+    getPushTracking,
+} from 'src/push-notifications/push-tracking'
+import { metrics } from 'src/theme/spacing'
+import { useEditions } from 'src/hooks/use-edition-provider'
+import { pushRegisteredTokens } from 'src/helpers/storage'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -53,7 +58,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         isDevButtonShown: showNetInfoButton,
         setIsDevButtonShown: setShowNetInfoButton,
     } = useNetInfo()
+    const {
+        editionsMenuEnabled,
+        toggleEditionsMenuEnabled,
+    } = useEditionsMenuEnabled()
     const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
+    const {
+        selectedEdition: { edition },
+    } = useEditions()
 
     const { attempt, signOutCAS } = useContext(AccessContext)
     const { showToast } = useToast()
@@ -61,7 +73,20 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
     const [imageSize, setImageSize] = useState('fetching...')
-    const buildNumber = DeviceInfo.getBuildNumber()
+    const [pushTokens, setPushTokens] = useState('fetching...')
+    const [downloadedIssues, setDownloadedIssues] = useState('fetching...')
+
+    useEffect(() => {
+        getEdtionIssuesCount().then(stats => {
+            setDownloadedIssues(stats.join('\n'))
+        })
+    }, [])
+
+    useEffect(() => {
+        pushRegisteredTokens.get().then(tokens => {
+            setPushTokens(JSON.stringify(tokens, null, 2))
+        })
+    }, [])
 
     useEffect(() => {
         getFileList().then(fileList => {
@@ -86,9 +111,8 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     )
     if (query.loading) return null
     const { data, client } = query
-    const { apiUrl, edition } = data
-    if (typeof apiUrl !== 'string' || typeof edition !== 'string')
-        throw new Error('expected string')
+    const { apiUrl } = data
+    if (typeof apiUrl !== 'string') throw new Error('expected string')
 
     return (
         <>
@@ -105,6 +129,15 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     }}
                 >
                     Storybook
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigation.navigate(
+                            routeNames.onboarding.OnboardingConsent,
+                        )
+                    }}
+                >
+                    Show Startup Consent
                 </Button>
                 <Button
                     onPress={() => {
@@ -204,11 +237,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         onPress: signOutCAS,
                     },
                     {
-                        key: 'Build number',
-                        title: 'Build number',
-                        explainer: buildNumber,
-                    },
-                    {
                         key: 'Locale',
                         title: 'Device locale',
                         explainer: locale,
@@ -228,6 +256,17 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         },
                     },
                     {
+                        key: 'Enable multiple editions',
+                        title: 'Enable multiple editions',
+                        onPress: () => {},
+                        proxy: (
+                            <Switch
+                                value={editionsMenuEnabled} // this will also update the copy for multiple editions
+                                onValueChange={toggleEditionsMenuEnabled}
+                            />
+                        ),
+                    },
+                    {
                         key: 'Display NetInfo Button',
                         title: 'Display NetInfo Button',
                         onPress: onToggleNetInfoButton,
@@ -242,6 +281,16 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Image Size used for Editions',
                         title: 'Image Size used for Editions',
                         explainer: imageSize,
+                    },
+                    {
+                        key: 'Push Tokens',
+                        title: 'Registered push tokens',
+                        explainer: pushTokens,
+                    },
+                    {
+                        key: 'All Downloaded Issues',
+                        title: 'All Downloaded Issues',
+                        explainer: downloadedIssues,
                     },
                     {
                         key: 'Files in Issues',

@@ -6,7 +6,9 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
     Object {
       "backgroundColor": "#121212",
       "bottom": 0,
+      "fontFamily": "GuardianTextEgyptian-Reg",
       "opacity": 0.8,
+      "padding": 10,
       "position": "absolute",
       "width": "100%",
       "zIndex": 1,
@@ -17,9 +19,10 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
     style={
       Object {
         "display": "flex",
+        "flex": 1,
         "flexDirection": "row",
+        "paddingBottom": 50,
         "paddingHorizontal": 10,
-        "paddingTop": 5,
       }
     }
   >
@@ -186,17 +189,44 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
         </RNSVGGroup>
       </RNSVGGroup>
     </RNSVGSvgView>
-    <Text
+    <View
       style={
         Object {
-          "color": "#dcdcdc",
-          "paddingBottom": 50,
+          "color": "#ffffff",
           "paddingLeft": 2,
+          "paddingRight": 13,
         }
       }
     >
-      Claude Gnapka scores Luton's third and winner
-    </Text>
+      <View>
+        <Text
+          onLongPress={null}
+          onPress={null}
+          style={
+            Object {
+              "color": "#ffffff",
+              "fontFamily": "GuardianTextSans-Regular",
+              "fontSize": 14,
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                null,
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "GuardianTextSans-Regular",
+                  "fontSize": 14,
+                },
+              ]
+            }
+          >
+            Claude Gnapka scores Luton's third and winner
+          </Text>
+        </Text>
+      </View>
+    </View>
   </View>
 </View>
 `;

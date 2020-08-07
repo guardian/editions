@@ -5,7 +5,6 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     View,
-    Platform,
 } from 'react-native'
 import {
     createStackNavigator,
@@ -14,13 +13,8 @@ import {
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
-const createNativeStackNavigator = require('react-native-screens/createNativeStackNavigator')
-    .default
 import { ariaHidden } from 'src/helpers/a11y'
-import {
-    supportsTransparentCards,
-    supportsAnimation,
-} from 'src/helpers/features'
+import { supportsAnimation } from 'src/helpers/features'
 import { safeInterpolation } from 'src/helpers/math'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
@@ -31,11 +25,6 @@ import {
 } from '../helpers/transition'
 import { sidebarWidth } from './sidebar/positions'
 import { screenInterpolator, mainLayerTransition } from './sidebar/transition'
-
-const USE_SIDEBAR_ANIMATION =
-    supportsTransparentCards() ||
-    /* Android API Level 29; would need to test further on lower versions */
-    (Platform.OS === 'android' && Platform.Version >= 29)
 
 const overlayStyles = StyleSheet.create({
     root: {
@@ -133,30 +122,17 @@ export const createSidebarNavigator = (
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
-        _: USE_SIDEBAR_ANIMATION
-            ? addViewsForMainLayer(mainRoute, () => animatedValue)
-            : mainRoute,
+        _: addViewsForMainLayer(mainRoute, () => animatedValue),
     }
     for (const [key, value] of Object.entries(sidebarRoute)) {
         if (!supportsAnimation()) {
             navigation[key] = value
         } else {
-            navigation[key] = USE_SIDEBAR_ANIMATION
-                ? addViewsForSidebarLayer(value, () => animatedValue)
-                : value
+            navigation[key] = addViewsForSidebarLayer(
+                value,
+                () => animatedValue,
+            )
         }
-    }
-
-    // -iOS12 only use Native navigator
-    if (!supportsAnimation()) {
-        return createNativeStackNavigator(navigation, {
-            initialRouteName: '_',
-            defaultNavigationOptions: {
-                gesturesEnabled: false,
-            },
-            headerMode: 'none',
-            mode: 'card',
-        })
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
@@ -178,13 +154,9 @@ export const createSidebarNavigator = (
             gesturesEnabled: false,
         },
         headerMode: 'none',
-        ...(USE_SIDEBAR_ANIMATION
-            ? {
-                  mode: 'modal',
-                  transparentCard: isTablet,
-                  cardOverlayEnabled: isTablet,
-                  transitionConfig,
-              }
-            : {}),
+        mode: 'modal',
+        transparentCard: isTablet,
+        cardOverlayEnabled: isTablet,
+        transitionConfig,
     })
 }

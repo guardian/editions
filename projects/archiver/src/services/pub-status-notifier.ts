@@ -4,7 +4,13 @@ import { IssuePublicationIdentifier, Edition } from '../../common'
 import { Status } from './status'
 import { Moment } from 'moment'
 
-export type ToolStatus = 'Processing' | 'Published' | 'Failed' | 'Copied'
+export type ToolStatus =
+    | 'Proofing'
+    | 'Proofed'
+    | 'Publishing'
+    | 'Published'
+    | 'Failed'
+    | 'Processing'
 
 export interface PublishEvent {
     edition: Edition
@@ -54,17 +60,30 @@ export const createPublishEvent = (
         case 'started':
         case 'assembled':
         case 'bundled':
+            return {
+                ...identifier,
+                status: 'Proofing',
+                message: `Proof stage: ${status}`,
+                timestamp,
+            }
         case 'proofed':
             return {
                 ...identifier,
-                status: 'Processing',
+                status: 'Proofed',
+                message: `Ready for proofing on-device`,
+                timestamp,
+            }
+        case 'copied':
+            return {
+                ...identifier,
+                status: 'Publishing',
                 message: `Publication stage: ${status}`,
                 timestamp,
             }
         case 'published':
             return {
                 ...identifier,
-                status: 'Processing',
+                status: 'Published',
                 message: `Publication stage: ${status}`,
                 timestamp,
             }
@@ -75,11 +94,11 @@ export const createPublishEvent = (
                 message: 'Publication processing complete',
                 timestamp,
             }
-        case 'copied':
+        case 'editionsListUpdated':
             return {
                 ...identifier,
-                status: 'Copied',
-                message: 'Publication processing complete',
+                status: 'Processing',
+                message: `Publication stage: ${status}`,
                 timestamp,
             }
         case 'errored':

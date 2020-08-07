@@ -10,14 +10,13 @@ import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
  * Bascially it will try to go to the filesystem and if it fails will
  * go to the API
  *
- * This had been implemented using RNFetchBlob.fs.exists, but it's just as slow
- * as this implementation for API calls and seems slower for cache hits
  */
 type ImageResourceProps = {
     image: IImage
     use: ImageUse
     style?: StyleProp<ImageStyle>
     setAspectRatio?: boolean
+    devUri?: string
 } & Omit<ImageProps, 'source'>
 
 const ImageResource = ({
@@ -25,19 +24,20 @@ const ImageResource = ({
     style,
     setAspectRatio = false,
     use,
+    devUri,
     ...props
 }: ImageResourceProps) => {
     const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
 
-    return imagePath ? (
+    return imagePath || devUri ? (
         <Image
             key={imagePath}
             resizeMethod={'resize'}
             {...props}
             style={[styles, style]}
-            source={{ uri: imagePath }}
+            source={{ uri: devUri || imagePath }}
         />
     ) : (
         <View style={styles}></View>

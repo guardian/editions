@@ -37,6 +37,7 @@ deployments:
                     editions-archiver-stepmachine-indexerProof-,
                     editions-archiver-stepmachine-copier-,
                     editions-archiver-stepmachine-indexerPublish-,
+
                 ]
     cloudformation:
         type: cloud-formation

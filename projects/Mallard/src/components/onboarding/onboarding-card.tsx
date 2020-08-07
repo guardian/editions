@@ -5,7 +5,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { minScreenSize } from 'src/helpers/screen'
-import { CloseModalButton } from '../button/close-modal-button'
+import { CloseButton } from '../Button/CloseButton'
+import { ButtonAppearance } from '../Button/Button'
 
 export enum CardAppearance {
     tomato,
@@ -138,7 +139,12 @@ const OnboardingCard = ({
                     </View>
                     {onDismissThisCard && (
                         <View style={styles.dismissIconContainer}>
-                            <CloseModalButton onPress={onDismissThisCard} />
+                            <CloseButton
+                                onPress={onDismissThisCard}
+                                accessibilityHint="This will dismiss the onboarding card"
+                                accessibilityLabel={`Dismiss the ${title} onboarding card`}
+                                appearance={ButtonAppearance.skeletonBlue}
+                            />
                         </View>
                     )}
                 </View>

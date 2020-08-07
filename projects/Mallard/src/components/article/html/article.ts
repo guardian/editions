@@ -12,6 +12,7 @@ import { Header, ArticleHeaderProps } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
+import { TwitterEmbed } from './components/twitter-embed'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { GetImagePath } from 'src/hooks/use-image-paths'
@@ -42,6 +43,7 @@ const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
             id: 'image',
             role: 'immersive',
         },
+        index: 0, // allows us to open lightbox
         path,
     })
 }
@@ -82,6 +84,8 @@ const renderArticleContent = (
                         role: el.role || 'inline',
                         ...el,
                     })
+                case 'tweet':
+                    return TwitterEmbed(el.html)
                 default:
                     return ''
             }
@@ -125,6 +129,7 @@ export const renderArticle = (
                 showMedia,
                 canBeShared,
                 getImagePath,
+                pillar,
             })
             if (article.image && publishedId) {
                 content = PictureArticleContent(article.image, getImagePath)
@@ -138,10 +143,12 @@ export const renderArticle = (
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
+                standfirst: article.standfirst,
                 image: article.image,
                 showMedia,
                 canBeShared,
                 getImagePath,
+                pillar,
             })
             content = renderArticleContent(elements, {
                 showMedia,
@@ -158,6 +165,7 @@ export const renderArticle = (
                 publishedId,
                 showMedia,
                 canBeShared,
+                pillar,
                 getImagePath,
             })
             content = renderArticleContent(elements, {
@@ -189,5 +197,5 @@ export const renderArticle = (
             </main>
         </div>
     `
-    return makeHtml({ styles, body, topPadding })
+    return makeHtml({ styles, body, topPadding, type })
 }

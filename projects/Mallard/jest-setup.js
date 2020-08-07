@@ -1,0 +1,28 @@
+jest.mock('src/helpers/locale', () => ({
+    locale: 'en_US',
+}))
+
+jest.mock('src/push-notifications/push-notifications', () => ({
+    pushNotifcationRegistration: () => jest.fn(),
+}))
+
+jest.mock('@react-native-community/geolocation', () => ({
+    setRNConfiguration: () => {},
+    getCurrentPosition: resolve =>
+        Promise.resolve().then(() => {
+            resolve({
+                coords: { latitude: 12, longitude: 34 },
+            })
+        }),
+}))
+
+jest.mock('react-native-permissions', () => {
+    return {
+        RESULTS: { GRANTED: 1, DENIED: 2 },
+        PERMISSIONS: {
+            IOS: { LOCATION_WHEN_IN_USE: 1 },
+            ANDROID: { ACCESS_FINE_LOCATION: 1 },
+        },
+        check: jest.fn().mockResolvedValue(2),
+    }
+})

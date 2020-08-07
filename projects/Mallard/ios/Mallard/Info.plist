@@ -36,6 +36,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>theguardianeditions</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>theguardianeditions</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>com.googleusercontent.apps.774465807556-kgaj5an4pc4fmr3svp5nfpulekc1rl3n</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -45,6 +55,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -87,7 +99,7 @@
 		<string>GuardianTextSans-Bold.ttf</string>
 		<string>GuardianTextSans-BoldItalic.ttf</string>
 		<string>GuardianTextSans-Regular.ttf</string>
-		<string>GuardianTextSans-RegularItalic.ttf</string>
+		<string>GuardianTextSans-RegularIt.ttf</string>
 		<string>GTGuardianTitlepiece-Bold.ttf</string>
 		<string>SpaceMono-Regular.ttf</string>
 		<string>GuardianTextEgyptian-Reg.ttf</string>
@@ -104,7 +116,7 @@
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
+	<string>Launch Screen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

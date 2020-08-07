@@ -27,4 +27,4 @@ const Quote = ({ fill = color.text, scale = 1 }) => (
     </Svg>
 )
 
-export default Quote
+export { Quote }

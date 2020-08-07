@@ -1,9 +1,9 @@
-import { PillarColours } from '@guardian/pasteup/palette'
 import { ArticleTheme } from '../article'
 import { color } from 'src/theme/color'
+import { PillarColoursWithTint } from 'src/helpers/transform'
 
 export interface CssProps {
-    colors: PillarColours
+    colors: PillarColoursWithTint
     theme: ArticleTheme
 }
 

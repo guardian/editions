@@ -1,4 +1,4 @@
-import { ErrorService } from '../errors'
+import { ErrorServiceImpl } from '../errors'
 import gql from 'graphql-tag'
 import Observable from 'zen-observable'
 
@@ -11,10 +11,11 @@ jest.mock('@sentry/react-native', () => ({
     setTag: jest.fn(() => {}),
     setExtra: jest.fn(() => {}),
 }))
+
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
 describe('errorService', () => {
-    let errorService: ErrorService
+    let errorService: ErrorServiceImpl
     let Sentry: any
     let apolloClient: any
     let setMockedConsent: (value: boolean) => void
@@ -146,5 +147,29 @@ describe('errorService', () => {
         await consentFetchPromise
 
         expect(Sentry.captureException).toHaveBeenCalledTimes(2)
+    })
+
+    it('Crashlytics: should default to not having consent', async () => {
+        errorService.init(apolloClient)
+        await Promise.resolve()
+
+        errorService.captureException(new Error())
+
+        const crashlytics = errorService.crashlytics
+        expect(
+            crashlytics.setCrashlyticsCollectionEnabled,
+        ).toHaveBeenCalledWith(false)
+
+        expect(crashlytics.recordError).not.toHaveBeenCalled()
+    })
+
+    it('Crashlytics: should send exception to crashlytics', async () => {
+        setMockedConsent(true)
+        errorService.init(apolloClient)
+        await consentFetchPromise
+
+        errorService.captureException(new Error())
+
+        expect(errorService.crashlytics.recordError).toBeCalled()
     })
 })

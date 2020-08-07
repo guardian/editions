@@ -1,5 +1,5 @@
 import { AccuWeatherLocation, Forecast } from 'src/common'
-import { AppState } from 'react-native'
+import { AppState, Platform } from 'react-native'
 import ApolloClient from 'apollo-client'
 import Geolocation, {
     GeolocationResponse,
@@ -7,6 +7,8 @@ import Geolocation, {
 import { resolveLocationPermissionStatus } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
 import gql from 'graphql-tag'
+import * as RNLocalize from 'react-native-localize'
+import { locale } from './locale'
 
 class CannotFetchError extends Error {}
 
@@ -48,7 +50,9 @@ export const getGeolocation = async (): Promise<GeolocationResponse> => {
 }
 
 const fetchFromWeatherApi = async <T>(path: string): Promise<T> => {
-    const res = await tryFetch(`http://mobile-weather.guardianapis.com/${path}`)
+    const res = await tryFetch(
+        `https://mobile-weather.guardianapis.com/${path}`,
+    )
     if (res.status >= 500) {
         throw new CannotFetchError('Server returned 500') // 500s don't return json
     }
@@ -118,6 +122,13 @@ const makeWeatherObject = (
     lastUpdated: Date.now(),
 })
 
+const shouldUseMetric = (): boolean => {
+    return Platform.select({
+        ios: RNLocalize.getTemperatureUnit() === 'celsius',
+        android: locale === 'en_US' ? false : true,
+    })
+}
+
 /**
  * We augment the return object with `__typename` fields to that Apollo can
  * "reconcile" the value when we update the cache later. If the weather is
@@ -129,7 +140,9 @@ const getWeather = async (
     try {
         const { accuLoc, isPrecise } = await getCurrentLocation()
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
-            `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=true&language=en-gb`,
+            `forecasts/v1/hourly/12hour/${
+                accuLoc.Key
+            }.json?metric=${shouldUseMetric()}&language=en-gb`,
         )
         return makeWeatherObject(accuLoc, isPrecise, forecasts)
     } catch (error) {

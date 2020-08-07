@@ -1,72 +1,71 @@
+import gql from 'graphql-tag'
 import React, {
+    MutableRefObject,
     ReactElement,
+    useEffect,
     useMemo,
     useRef,
-    useEffect,
-    MutableRefObject,
 } from 'react'
 import {
-    Image,
     FlatList,
+    Image,
     StyleProp,
     StyleSheet,
     View,
     ViewStyle,
 } from 'react-native'
-import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
-import { Button } from 'src/components/button/button'
+import { ReloadButton } from 'src/components/Button/ReloadButton'
 import { Front } from 'src/components/front'
-import { IssueTitle } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { Header } from 'src/components/layout/header/header'
 import { Container } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
-import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/Spinner/Spinner'
 import {
-    WeatherWidget,
-    WeatherQueryData,
-    WEATHER_QUERY as FULL_WEATHER_QUERY,
     EMPTY_WEATHER_HEIGHT,
-    WEATHER_HEIGHT,
     getValidWeatherData,
+    WeatherQueryData,
+    WeatherWidget,
+    WEATHER_HEIGHT,
+    WEATHER_QUERY as FULL_WEATHER_QUERY,
 } from 'src/components/weather'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { useIssueDate } from 'src/helpers/issues'
+import {
+    FlatCard,
+    flattenCollectionsToCards,
+    flattenFlatCardsToFront,
+} from 'src/helpers/transform'
 import {
     CONNECTION_FAILED_AUTO_RETRY,
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
+import { useQuery } from 'src/hooks/apollo'
+import {
+    useDimensions,
+    useLargeDeviceMemory,
+} from 'src/hooks/use-config-provider'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import {
     issueSummaryToLatestPath,
     useIssueSummary,
+    getIssueSummary,
 } from 'src/hooks/use-issue-summary'
-import { useDimensions } from 'src/hooks/use-config-provider'
+import { useNavPositionChange } from 'src/hooks/use-nav-position'
 import { useIsPreview } from 'src/hooks/use-settings'
-import { navigateToIssueList } from 'src/navigation/helpers/base'
 import { PathToIssue } from 'src/paths'
+import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
-import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
-import { IssueWithFronts, Front as TFront } from '../../../Apps/common/src'
-import {
-    flattenCollectionsToCards,
-    flattenFlatCardsToFront,
-    FlatCard,
-} from 'src/helpers/transform'
+import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
-import { useNavPositionChange } from 'src/hooks/use-nav-position'
-import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
-import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
+import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
+import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
+import { useEditions, BASE_EDITION } from 'src/hooks/use-edition-provider'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -99,41 +98,6 @@ const useIsWeatherActuallyShown = () => {
     )
     return getValidWeatherData(weatherResult) != null
 }
-
-const ScreenHeader = withNavigation(
-    ({
-        issue,
-        navigation,
-    }: { issue?: IssueWithFronts } & NavigationInjectedProps) => {
-        const { date, weekday } = useIssueDate(issue)
-
-        const goToIssueList = () => {
-            navigateToIssueList(navigation)
-        }
-
-        return (
-            <Header
-                accessibilityHint="More issues"
-                onPress={() => {
-                    goToIssueList()
-                }}
-                action={
-                    <Button
-                        icon={'\uE04A'}
-                        alt="More issues"
-                        onPress={() => {
-                            goToIssueList()
-                        }}
-                    />
-                }
-            >
-                <View>
-                    <IssueTitle title={weekday} subtitle={date} />
-                </View>
-            </Header>
-        )
-    },
-)
 
 type FrontWithCards = (TFront & { cards: FlatCard[] })[]
 
@@ -212,6 +176,7 @@ const IssueFronts = ({
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
     const ref = useRef<FlatList<any> | null>(null)
+    const { selectedEdition } = useEditions()
 
     const {
         frontWithCards,
@@ -284,11 +249,15 @@ const IssueFronts = ({
             ListFooterComponent={() => (
                 <>
                     <View style={[styles.illustrationPosition]}>
-                        <Image
-                            style={styles.illustrationImage}
-                            resizeMode={'contain'}
-                            source={require('src/assets/images/privacy.png')}
-                        />
+                        {selectedEdition &&
+                            selectedEdition.edition ===
+                                BASE_EDITION.edition && (
+                                <Image
+                                    style={styles.illustrationImage}
+                                    resizeMode={'contain'}
+                                    source={require('src/assets/images/privacy.png')}
+                                />
+                            )}
                     </View>
                     <View style={{ height: container.height / 3 }} />
                 </>
@@ -331,7 +300,7 @@ const handleError = (
     { retry }: { retry: () => void },
 ) => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
 
         <FlexErrorMessage
             debugMessage={message}
@@ -344,7 +313,7 @@ const handleError = (
 
 const handlePending = () => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
         <FlexCenter>
             <Spinner />
         </FlexCenter>
@@ -353,7 +322,7 @@ const handlePending = () => (
 
 const handleIssueScreenError = (error: string) => (
     <>
-        <ScreenHeader />
+        <IssueScreenHeader />
         <FlexErrorMessage
             debugMessage={error}
             title={CONNECTION_FAILED_ERROR}
@@ -385,7 +354,8 @@ const IssueScreenWithPath = React.memo(
         path: PathToIssue
         initialFrontKey: string | null
     }) => {
-        const response = useIssueResponse(path)
+        const preview = useIsPreview()
+        const response = useIssueResponse(path, preview)
 
         return response({
             error: handleError,
@@ -397,12 +367,14 @@ const IssueScreenWithPath = React.memo(
                 return (
                     <>
                         <PreviewReloadButton
-                            onPress={() => {
+                            onPress={async () => {
                                 clearCache()
+                                const issueSummary = await getIssueSummary()
+                                path = issueSummaryToLatestPath(issueSummary)
                                 retry()
                             }}
                         />
-                        <ScreenHeader issue={issue} />
+                        <IssueScreenHeader issue={issue} />
 
                         <WithBreakpoints>
                             {{

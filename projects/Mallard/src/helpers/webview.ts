@@ -1,6 +1,7 @@
-import { Platform, PixelRatio } from 'react-native'
+import { Platform } from 'react-native'
+import { ArticleType } from 'src/common'
 import { bundles } from 'src/html-bundle-info.json'
-import { getFont, FontSizes, FontFamily } from 'src/theme/typography'
+import { FontFamily, FontSizes, getScaledFont } from 'src/theme/typography'
 
 export type WebViewPing =
     | {
@@ -14,6 +15,7 @@ export type WebViewPing =
     | {
           type: 'openLightbox'
           index: number
+          isMainImage: string
       }
 
 /*
@@ -37,26 +39,15 @@ export const html = passthrough
 
 export const px = (value: string | number) => `${value}px`
 
-export const getScaledFont = <F extends FontFamily>(
-    family: F,
-    level: FontSizes<F>,
-) => {
-    const font = getFont(family, level)
-    return {
-        ...font,
-        lineHeight: font.lineHeight * PixelRatio.getFontScale(),
-        fontSize: font.fontSize * PixelRatio.getFontScale(),
-    }
-}
-
 export const getScaledFontCss = <F extends FontFamily>(
     family: F,
     level: FontSizes<F>,
 ) => {
     const font = getScaledFont(family, level)
+    const adjustment = Platform.OS == 'android' ? 2 : 0
     return css`
-        font-size: ${px(font.fontSize)};
-        line-height: ${px(font.lineHeight)};
+        font-size: ${px(font.fontSize + adjustment)};
+        line-height: ${px(font.lineHeight + adjustment)};
     `
 }
 
@@ -216,15 +207,6 @@ const makeJavaScript = (topPadding: number) => html`
         document.addEventListener('scroll', debounce(onScroll), {
             passive: true,
         })
-
-        const openLightbox = index => {
-            window.ReactNativeWebView.postMessage(
-                JSON.stringify({
-                    type: 'openLightbox',
-                    index: index,
-                }),
-            )
-        }
     </script>
 `
 
@@ -233,10 +215,12 @@ export const makeHtml = ({
     styles,
     body,
     topPadding = 0,
+    type,
 }: {
     styles: string
     body: string
     topPadding?: number
+    type?: ArticleType
 }) => html`
     <html>
         <head>
@@ -249,7 +233,7 @@ export const makeHtml = ({
             />
         </head>
         <body style="padding-top:${px(topPadding)}">
-            <div id="app" class="app">
+            <div id="app" class="app" data-type="${type}">
                 ${body}
             </div>
             ${makeJavaScript(topPadding)}

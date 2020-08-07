@@ -9,7 +9,7 @@ For iOS development you will need to install Xcode from the App Store and then o
 It's best to install the same version of cocoapods as is in the Podfile.lock - see [here](https://github.com/guardian/editions/blob/master/projects/Mallard/ios/Podfile.lock#L509)
 
 ```sh
-gem install cocoapods -v 1.7.5 # this may require `sudo` if you're not using rvm or rbenv
+gem install cocoapods -v 1.9.0 # this may require `sudo` if you're not using rvm or rbenv
 ```
 
 The following guides allow you to run the app locally on device emulators, or on real devices connected to your dev machine via USB.
@@ -50,6 +50,26 @@ in separate terminal
 
 ```bash
 $ yarn run wifi-android
+```
+
+### Android PROD build locally
+
+Make sure you have these two files in in android/app folder:
+`editions-release.keystore`
+`gradle.properties`
+
+You can download them from S3 (frontend)
+
+First run:
+
+```bash
+yarn local-bundle-android
+```
+
+And then run:
+
+```bash
+cd android && ./gradlew clean installRelease
 ```
 
 ### iOS

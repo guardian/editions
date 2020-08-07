@@ -16,6 +16,7 @@ const parseImageElement = (
             caption: element.imageTypeData.caption,
             copyright: element.imageTypeData.copyright,
             credit: element.imageTypeData.credit,
+            displayCredit: element.imageTypeData.displayCredit,
             role: element.imageTypeData.role,
         }
     }

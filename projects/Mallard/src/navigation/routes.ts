@@ -26,4 +26,5 @@ export const routeNames = {
         PrivacyPolicyInline: 'PrivacyPolicyInline',
     },
     Storybook: 'Storybook',
+    EditionsMenu: 'EditionsMenu',
 }

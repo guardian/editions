@@ -1,0 +1,385 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditionsMenu should display a EditionsMenu with correct styling and alternative Regional Buttons 1`] = `
+<RCTScrollView>
+  <View>
+    EditionsMenuHeader
+    <RCTScrollView
+      ItemSeparatorComponent={[Function]}
+      data={
+        Array [
+          Object {
+            "edition": "daily-edition",
+            "header": Object {
+              "title": "The Daily",
+            },
+            "subTitle": "Published every day by 12am (GMT)",
+            "title": "The UK Daily Edition",
+          },
+          Object {
+            "edition": "australian-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "Austraila",
+            },
+            "subTitle": "Published every day by 9:30am (AEST)",
+            "title": "Australia Daily",
+          },
+          Object {
+            "edition": "american-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "US",
+            },
+            "subTitle": "Published every Saturday by 8am (EST)",
+            "title": "US and Cananda Weekend",
+          },
+        ]
+      }
+      disableVirtualization={false}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={1}
+      onContentSizeChange={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      stickyHeaderIndices={Array []}
+      updateCellsBatchingPeriod={50}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={21}
+    >
+      <View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+        </View>
+      </View>
+    </RCTScrollView>
+  </View>
+</RCTScrollView>
+`;
+
+exports[`EditionsMenu should display a EditionsMenu with correct styling default Regional Buttons and a Special Edition Button 1`] = `
+<RCTScrollView>
+  <View>
+    EditionsMenuHeader
+    <RCTScrollView
+      ItemSeparatorComponent={[Function]}
+      data={
+        Array [
+          Object {
+            "edition": "daily-edition",
+            "header": Object {
+              "title": "The Daily",
+            },
+            "subTitle": "Published every morning
+by 6am (GMT)",
+            "title": "The Daily",
+          },
+          Object {
+            "edition": "australian-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "Australia",
+            },
+            "subTitle": "Published every Saturday morning 
+by 6am (AEST)",
+            "title": "Australia Weekender",
+          },
+          Object {
+            "edition": "american-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "US",
+            },
+            "subTitle": "Published every Saturday morning 
+by 6am (EST)",
+            "title": "US Weekender",
+          },
+        ]
+      }
+      disableVirtualization={false}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={1}
+      onContentSizeChange={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      stickyHeaderIndices={Array []}
+      updateCellsBatchingPeriod={50}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={21}
+    >
+      <View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+        </View>
+      </View>
+    </RCTScrollView>
+    EditionsMenuHeader
+    <RCTScrollView
+      data={
+        Array [
+          Object {
+            "buttonStyle": Object {
+              "backgroundColor": "#FEEEF7",
+              "expiry": Object {
+                "color": "#7D0068",
+                "font": "GuardianTextSans-Regular",
+                "lineHeight": 16,
+                "size": 15,
+              },
+              "image": Object {
+                "height": 134,
+                "width": 87,
+              },
+              "subTitle": Object {
+                "color": "#7D0068",
+                "font": "GuardianTextSans-Bold",
+                "lineHeight": 20,
+                "size": 17,
+              },
+              "title": Object {
+                "color": "#121212",
+                "font": "GHGuardianHeadline-Regular",
+                "lineHeight": 34,
+                "size": 34,
+              },
+            },
+            "edition": "daily-edition",
+            "expiry": 1998-02-01T00:00:00.000Z,
+            "header": Object {
+              "subTitle": "Monthly",
+              "title": "Food",
+            },
+            "image": Object {
+              "path": "/path/to/image",
+              "source": "media",
+            },
+            "subTitle": "Store cupboard special: 20 quick and easy lockdown suppers",
+            "title": "Food
+Monthly",
+          },
+        ]
+      }
+      disableVirtualization={false}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={1}
+      onContentSizeChange={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      stickyHeaderIndices={Array []}
+      updateCellsBatchingPeriod={50}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={21}
+    >
+      <View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          SpecialEditionButton
+        </View>
+      </View>
+    </RCTScrollView>
+  </View>
+</RCTScrollView>
+`;
+
+exports[`EditionsMenu should display a default EditionsMenu with correct styling and default Regional Buttons 1`] = `
+<RCTScrollView>
+  <View>
+    EditionsMenuHeader
+    <RCTScrollView
+      ItemSeparatorComponent={[Function]}
+      data={
+        Array [
+          Object {
+            "edition": "daily-edition",
+            "header": Object {
+              "title": "The Daily",
+            },
+            "subTitle": "Published every morning
+by 6am (GMT)",
+            "title": "The Daily",
+          },
+          Object {
+            "edition": "australian-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "Australia",
+            },
+            "subTitle": "Published every Saturday morning 
+by 6am (AEST)",
+            "title": "Australia Weekender",
+          },
+          Object {
+            "edition": "american-edition",
+            "header": Object {
+              "subTitle": "Weekender",
+              "title": "US",
+            },
+            "subTitle": "Published every Saturday morning 
+by 6am (EST)",
+            "title": "US Weekender",
+          },
+        ]
+      }
+      disableVirtualization={false}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={1}
+      onContentSizeChange={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      stickyHeaderIndices={Array []}
+      updateCellsBatchingPeriod={50}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={21}
+    >
+      <View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+          <View
+            style={
+              Object {
+                "backgroundColor": "#121212",
+                "height": 1,
+              }
+            }
+          />
+        </View>
+        <View
+          onLayout={[Function]}
+          style={null}
+        >
+          RegionButton
+        </View>
+      </View>
+    </RCTScrollView>
+  </View>
+</RCTScrollView>
+`;

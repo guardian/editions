@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Image, ImageSourcePropType } from 'react-native'
 import { TitlepieceText } from 'src/components/styled-text'
-import { Button } from 'src/components/button/button'
+import { Button } from 'src/components/Button/Button'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Link, LinkNav } from 'src/components/link'
@@ -10,6 +10,8 @@ import { FormField } from 'src/hooks/use-form-field'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { EmailInput, PasswordInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
+
+import { iosMajorVersion } from 'src/helpers/platform'
 
 const socialButtonStyles = StyleSheet.create({
     button: {
@@ -81,8 +83,10 @@ const Login = ({
     title,
     email,
     password,
+    onApplePress,
     onFacebookPress,
     onGooglePress,
+    onAppleOAuthPress,
     onSubmit,
     onDismiss,
     isLoading,
@@ -94,7 +98,9 @@ const Login = ({
 }: {
     title: string
     onFacebookPress: () => void
+    onApplePress: () => void
     onGooglePress: () => void
+    onAppleOAuthPress: () => void
     email: FormField
     password: FormField
     onSubmit: () => void
@@ -136,6 +142,23 @@ const Login = ({
                         >
                             Continue with Google
                         </SocialButton>
+                        {iosMajorVersion >= 13 && (
+                            <SocialButton
+                                onPress={onApplePress}
+                                iconRequire={require('src/assets/images/apple.png')}
+                            >
+                                Continue with Apple
+                            </SocialButton>
+                        )}
+
+                        {iosMajorVersion < 13 && (
+                            <SocialButton
+                                onPress={onAppleOAuthPress}
+                                iconRequire={require('src/assets/images/apple.png')}
+                            >
+                                Continue with Apple
+                            </SocialButton>
+                        )}
                     </View>
                     <TitlepieceText style={loginStyles.or}>or</TitlepieceText>
                 </>

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Text, Switch, Linking } from 'react-native'
+import { Alert, Text, Switch, Linking, AccessibilityRole } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationRoute,
@@ -29,6 +29,7 @@ import ApolloClient from 'apollo-client'
 import { NavigationScreenProp } from 'react-navigation'
 import { FullButton } from 'src/components/lists/FullButton'
 import { DualButton } from 'src/components/lists/DualButton'
+import { Copy } from 'src/helpers/words'
 
 const MiscSettingsList = React.memo(
     (props: {
@@ -44,10 +45,12 @@ const MiscSettingsList = React.memo(
         const items = [
             {
                 key: 'isWeatherShown',
-                title: 'Display weather',
-                onPress: onChange,
+                title: Copy.settings.displayWeather,
                 proxy: (
                     <Switch
+                        accessible={true}
+                        accessibilityLabel="Display weather."
+                        accessibilityRole="switch"
                         value={props.isWeatherShown}
                         onValueChange={onChange}
                     />
@@ -55,7 +58,7 @@ const MiscSettingsList = React.memo(
             },
             {
                 key: 'manageEditions',
-                title: 'Manage editions',
+                title: Copy.settings.manageDownloads,
                 onPress: () =>
                     props.navigation.navigate(
                         routeNames.ManageEditionsSettings,
@@ -80,15 +83,21 @@ const SignInButton = ({
     username,
     navigation,
     signOutIdentity,
+    accessible = true,
+    accessibilityRole = 'button',
 }: {
     username?: string
     navigation: NavigationScreenProp<NavigationRoute>
     signOutIdentity: () => void
+    accessible: boolean
+    accessibilityRole: AccessibilityRole
 }) =>
     username ? (
         <DualButton
+            accessible={accessible}
+            accessibilityRole={accessibilityRole}
             textPrimary={username}
-            textSecondary="Sign out"
+            textSecondary={Copy.settings.signOut}
             onPressPrimary={() =>
                 Linking.openURL(
                     'https://manage.theguardian.com/account-settings',
@@ -98,7 +107,9 @@ const SignInButton = ({
         />
     ) : (
         <FullButton
-            text="Sign in"
+            accessible={true}
+            accessibilityRole={accessibilityRole}
+            text={Copy.settings.signIn}
             onPress={() => navigation.navigate(routeNames.SignIn)}
         />
     )
@@ -111,6 +122,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { signOutIdentity } = useContext(AccessContext)
 
     const versionNumber = DeviceInfo.getVersion()
+    const buildNumber = DeviceInfo.getBuildNumber()
 
     if (query.loading) return null
     const { client } = query
@@ -152,7 +164,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             ? [
                   {
                       key: 'Subscription details',
-                      title: 'Subscription details',
+                      title: Copy.settings.subscriptionDetails,
                       onPress: () => {
                           navigation.navigate(routeNames.SubscriptionDetails)
                       },
@@ -161,7 +173,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             : [
                   {
                       key: `I'm already subscribed`,
-                      title: `I'm already subscribed`,
+                      title: Copy.settings.alreadySubscribed,
                       onPress: () => {
                           navigation.navigate(routeNames.AlreadySubscribed)
                       },
@@ -175,6 +187,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
                 <SignInButton
+                    accessible={true}
+                    accessibilityRole="button"
                     navigation={navigation}
                     username={
                         identityData
@@ -195,7 +209,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={[
                         {
                             key: 'Privacy settings',
-                            title: 'Privacy settings',
+                            title: Copy.settings.privacySettings,
                             proxy: rightChevronIcon,
                             onPress: () => {
                                 navigation.navigate(routeNames.GdprConsent)
@@ -203,7 +217,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Privacy policy',
-                            title: 'Privacy policy',
+                            title: Copy.settings.privacyPolicy,
                             proxy: rightChevronIcon,
                             onPress: () => {
                                 navigation.navigate(routeNames.PrivacyPolicy)
@@ -211,7 +225,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Terms and conditions',
-                            title: 'Terms and conditions',
+                            title: Copy.settings.termsAndConditions,
                             onPress: () => {
                                 navigation.navigate(
                                     routeNames.TermsAndConditions,
@@ -226,7 +240,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={[
                         {
                             key: 'Help',
-                            title: 'Help',
+                            title: Copy.settings.help,
                             onPress: () => {
                                 navigation.navigate(routeNames.Help)
                             },
@@ -234,7 +248,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Credits',
-                            title: 'Credits',
+                            title: Copy.settings.credits,
                             onPress: () => {
                                 navigation.navigate(routeNames.Credits)
                             },
@@ -242,9 +256,13 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                         {
                             key: 'Version',
-                            title: 'Version',
+                            title: Copy.settings.version,
                             onPress: versionClickHandler,
-                            proxy: <Text>{versionNumber}</Text>,
+                            proxy: (
+                                <Text>
+                                    {versionNumber} ({buildNumber})
+                                </Text>
+                            ),
                         },
                     ]}
                 />

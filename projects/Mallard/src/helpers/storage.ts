@@ -1,14 +1,17 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import { Settings, Platform } from 'react-native'
+import { Platform, Settings } from 'react-native'
 import * as Keychain from 'react-native-keychain'
+import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
+import { ReceiptIOS } from 'src/authentication/services/iap'
+import { RegionalEdition, SpecialEdition } from 'src/common'
 import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
+import { PushNotificationRegistration } from 'src/push-notifications/push-notifications'
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
-import { ReceiptIOS } from 'src/authentication/services/iap'
-import { PushNotificationRegistration } from 'src/helpers/push-notifications'
-import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
+import { PushToken } from 'src/push-notifications/notification-service'
+
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
@@ -47,7 +50,9 @@ const legacyCASPasswordCache = createSettingsCacheIOS<string>(
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
  * between AsyncStorage and the keychain helper below
  */
-const createAsyncCache = <T extends object | string | number>(key: string) => ({
+const createAsyncCache = <T extends object | string | boolean | number>(
+    key: string,
+) => ({
     set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
     get: (): Promise<T | null> =>
         AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
@@ -67,6 +72,25 @@ const pushNotificationRegistrationCache = createAsyncCache<
 const cacheClearCache = createAsyncCache<string>('cacheClear')
 
 const validAttemptCache = createAsyncCache<number>('validAttempt-cache')
+
+const loggingQueueCache = createAsyncCache<string>('loggingQueue')
+
+const enableEditionMenuCache = createAsyncCache<boolean>('edition-menu-enabled')
+
+const selectedEditionCache = createAsyncCache<RegionalEdition | SpecialEdition>(
+    'selectedEdition',
+)
+
+const defaultEditionCache = createAsyncCache<RegionalEdition>('defaultEdition')
+
+const editionsListCache = createAsyncCache<{
+    regionalEditions: RegionalEdition[]
+    specialEditions: SpecialEdition[]
+}>('editionsList')
+
+const pushRegisteredTokens = createAsyncCache<PushToken[]>(
+    'push-registered-tokens',
+)
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -128,4 +152,10 @@ export {
     iapReceiptCache,
     cacheClearCache,
     validAttemptCache,
+    loggingQueueCache,
+    enableEditionMenuCache,
+    selectedEditionCache,
+    defaultEditionCache,
+    editionsListCache,
+    pushRegisteredTokens,
 }

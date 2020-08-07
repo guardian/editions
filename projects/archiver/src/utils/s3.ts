@@ -8,10 +8,11 @@ import { oc } from 'ts-optchain'
 import { ListObjectsV2Output } from 'aws-sdk/clients/s3'
 
 const createCMSFrontsS3Client = () => {
-    console.log(`Creating S3 client with role arn: ${process.env.arn}`)
+    const roleArn = process.env.arn
+    console.log(`Creating S3 client with role arn: ${roleArn}`)
     const options: ChainableTemporaryCredentials.ChainableTemporaryCredentialsOptions = {
         params: {
-            RoleArn: process.env.arn as string,
+            RoleArn: roleArn as string,
             RoleSessionName: 'front-assume-role-access',
         },
         stsConfig: {},
@@ -23,7 +24,7 @@ const createCMSFrontsS3Client = () => {
 
     return new S3({
         region: 'eu-west-1',
-        credentials: process.env.arn ? cmsFrontsTmpCreds : iniFileCreds,
+        credentials: roleArn ? cmsFrontsTmpCreds : iniFileCreds,
     })
 }
 
@@ -170,11 +171,15 @@ export const list = (
 }
 
 export const copy = (
-    key: string,
+    key: string | undefined,
     inputBucket: Bucket,
     outputBucket: Bucket,
 ): Promise<{}> => {
     return new Promise((resolve, reject) => {
+        if (key == undefined) {
+            console.log('Copy request ignored due to undefined key')
+            resolve({})
+        }
         s3.copyObject(
             {
                 Bucket: outputBucket.name,
@@ -232,32 +237,40 @@ export const fetchfromCMSFrontsS3 = async (
 }
 
 export const recursiveCopy = async (
+    baseKey: string | undefined,
     inputBucket: Bucket,
     outputBucket: Bucket,
-    baseKey: string,
 ): Promise<{}[]> => {
     console.log(
         `Recursively copying ${baseKey} from ${inputBucket} to ${outputBucket}`,
     )
+    if (baseKey == undefined) {
+        console.log('Recursive copy request ignored due to undefined base key')
+        return []
+    } else {
+        const listing = await list(inputBucket, baseKey)
+        const keys = listing.objects.Contents || []
+        const subfolders = listing.objects.CommonPrefixes || []
 
-    const listing = await list(inputBucket, baseKey)
-    const keys = listing.objects.Contents || []
-    const subfolders = listing.objects.CommonPrefixes || []
+        console.log(
+            `Found ${keys.length} keys and ${subfolders.length} folders`,
+        )
 
-    console.log(`Found ${keys.length} keys and ${subfolders.length} folders`)
-
-    // Loop over creating copy promises
-    const copyPromises = await Promise.all(
-        keys.map(object =>
-            attempt(copy(object.Key!, inputBucket, outputBucket)),
-        ),
-    )
-    // Loop over creating recursive copy promises
-    const recursionPromises = await Promise.all(
-        subfolders.map(object =>
-            attempt(recursiveCopy(inputBucket, outputBucket, object.Prefix!)),
-        ),
-    )
-    // Gather the promises into one array and return
-    return copyPromises.concat(recursionPromises)
+        // Loop over creating copy promises
+        const copyPromises = await Promise.all(
+            keys.map(object =>
+                attempt(copy(object.Key, inputBucket, outputBucket)),
+            ),
+        )
+        // Loop over creating recursive copy promises
+        const recursionPromises = await Promise.all(
+            subfolders.map(object =>
+                attempt(
+                    recursiveCopy(object.Prefix, inputBucket, outputBucket),
+                ),
+            ),
+        )
+        // Gather the promises into one array and return
+        return copyPromises.concat(recursionPromises)
+    }
 }

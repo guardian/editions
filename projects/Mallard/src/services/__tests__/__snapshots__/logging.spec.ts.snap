@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`logging service baseLog should return a log object that matches the snapshot 1`] = `
+Object {
+  "app": "com.guardian.gce",
+  "buildNumber": "666",
+  "casCode": "QWERTYUIOP",
+  "defaultEdition": null,
+  "device": "iPad4,1",
+  "deviceId": "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9",
+  "digitalSub": true,
+  "iAP": true,
+  "level": "INFO",
+  "message": "test log",
+  "networkStatus": "wifi",
+  "optionalFields": Object {
+    "id": "test",
+  },
+  "os": "ios",
+  "release_channel": "BETA",
+  "selectedEdition": "daily-edition",
+  "signedIn": true,
+  "timestamp": 2019-08-21T00:00:00.000Z,
+  "userId": "testId",
+  "version": "3.1",
+}
+`;
+
+exports[`logging service baseLog should return an object with default values if they are missing and match snapshot 1`] = `
+Object {
+  "app": "com.guardian.gce",
+  "buildNumber": "666",
+  "casCode": null,
+  "defaultEdition": null,
+  "device": "iPad4,1",
+  "deviceId": "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9",
+  "digitalSub": false,
+  "iAP": false,
+  "level": "INFO",
+  "message": "test log",
+  "networkStatus": "unknown",
+  "optionalFields": Object {
+    "id": "test",
+  },
+  "os": "ios",
+  "release_channel": "BETA",
+  "selectedEdition": "daily-edition",
+  "signedIn": false,
+  "timestamp": 2019-08-21T00:00:00.000Z,
+  "userId": "",
+  "version": "3.1",
+}
+`;

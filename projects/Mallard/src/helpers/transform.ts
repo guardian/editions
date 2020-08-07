@@ -25,11 +25,27 @@ const colorMap = {
         bright: palette.neutral[20],
         pastel: palette.neutral[60],
         faded: palette.neutral[97],
+        tint: palette.neutral[100],
     },
 }
 
-export const getPillarColors = (pillar: ArticlePillar): PillarColours => {
-    return colorMap[pillar]
+// Extending the colour map rather than refactoring it everywhere
+const colorMapWithTint = {
+    ...colorMap,
+    news: { ...colorMap.news, tint: palette.neutral[93] },
+    sport: { ...colorMap.sport, tint: palette.highlight.main },
+    culture: { ...colorMap.culture, tint: palette.culture.faded },
+    lifestyle: { ...colorMap.lifestyle, tint: palette.lifestyle.faded },
+}
+
+export interface PillarColoursWithTint extends PillarColours {
+    tint?: string
+}
+
+export const getPillarColors = (
+    pillar: ArticlePillar,
+): PillarColoursWithTint => {
+    return colorMapWithTint[pillar]
 }
 
 export const getColor = (app: Appearance): string => {

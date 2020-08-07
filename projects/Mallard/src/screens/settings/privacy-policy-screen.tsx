@@ -13,11 +13,10 @@ const privacyPolicyHtml = html`
         and transfer your personal data when you use the services provided by
         the Daily. This is separate to how we collect and use your personal data
         on theguardian.com, which is explained in this
-        <a href="https://www.theguardian.com/help/privacy-policy"
-            >privacy policy</a
-        >. Sometimes this app may contain links to third party sites. These
-        sites have their own privacy policies. If you follow a link to a third
-        party, you should read the privacy policy shown on their site.
+        <strong>gu.com/p/2fycd</strong> privacy policy. Sometimes this app may
+        contain links to third party sites. These sites have their own privacy
+        policies. If you follow a link to a third party, you should read the
+        privacy policy shown on their site.
     </p>
     <p>
         This privacy policy covers our use of your personal data. Personal data
@@ -69,17 +68,23 @@ const privacyPolicyHtml = html`
             <p>
                 some limited data from your social media profile (further
                 information on this is below) if you have signed in to
-                theguardian.com using your social media details; and
+                theguardian.com using your social media details;
+            </p>
+        </li>
+        <li>
+            <p>
+                your ID details, e.g, if you register through a third party
+                application, e.g. Apple ID; and
             </p>
         </li>
         <li><p>your photograph, if you add one to your profile page.</p></li>
     </ul>
     <p>
         For more information about how we use your data on theguardian.com,
-        please see this
-        <a href="https://www.theguardian.com/help/privacy-policy"
-            >privacy policy</a
-        >.
+        please see this <strong>gu.com/p/2fycd</strong> privacy policy.
+    </p>
+    <p>
+        <em><strong>Using our app</strong></em>
     </p>
     <p>
         When you use this app, we may also use technology that is similar to
@@ -107,9 +112,6 @@ const privacyPolicyHtml = html`
         </li>
     </ul>
     <p>
-        <em><strong>Using our app</strong></em>
-    </p>
-    <p>
         The Daily uses information on the content you have viewed. A list of the
         articles that you have recently viewed is cached in the local storage on
         your mobile device. You can delete this reading history in the settings
@@ -117,6 +119,12 @@ const privacyPolicyHtml = html`
         information on bugs and crashes is also sent to us. You can choose to
         receive notifications on your mobile device via the app. You can manage
         these notifications in the settings of the app.
+    </p>
+    <p>
+        With your consent, we will use third party applications to enable us to
+        log and fix any errors you report more quickly; and to observe and
+        measure how you use our services. You can disable this feature or get
+        more information in your Privacy Settings at any time.
     </p>
     <h2><strong>How we collect personal data</strong></h2>
     <p>We collect personal data via :</p>
@@ -177,10 +185,7 @@ const privacyPolicyHtml = html`
             <p>
                 For security and fraud prevention, and to ensure that our app is
                 safe and secure and used in line with our
-                <a
-                    href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
-                    >terms of use</a
-                >.
+                <strong>gu.com/p/4vgfy</strong> terms of use.
             </p>
         </li>
         <li><p>To comply with applicable laws and regulations.</p></li>
@@ -276,8 +281,7 @@ const privacyPolicyHtml = html`
         advertising more relevant. Sometimes we use data about your interests or
         demographics that third parties have collected from you online to add to
         these groups. Please refer to our cookies policy for more information on
-        how we use
-        <a href="https://www.theguardian.com/info/cookies">cookies</a>.
+        how we use cookies <strong>gu.com/p/2j9cm</strong>.
     </p>
     <h2><strong>Using children’s personal data</strong></h2>
     <p>

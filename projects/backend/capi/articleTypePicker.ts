@@ -17,8 +17,10 @@ const articleTypePicker = (article: IContent): ArticleType => {
     const isTypePresent = (tagType: TagType): boolean =>
         doesTypeExist(article, tagType)
 
+    // NOTE: most interviews are also immersive - see switch statement below
     const isImmersive: boolean =
         (article.fields && article.fields.displayHint === 'immersive') || false
+
     const isLongRead: boolean = isTagPresent(
         'theguardian/journal/the-long-read',
     )
@@ -43,7 +45,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'news':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
@@ -55,7 +57,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'sport':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isMatchResult) return ArticleType.MatchResult
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
@@ -69,10 +71,10 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'journal':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
+                else if (isLetter) return ArticleType.Letter
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
-                else if (isLetter) return ArticleType.Letter
                 else if (isEditorial) return ArticleType.Article
                 else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article
@@ -82,7 +84,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isImmersive) return ArticleType.Immersive
                 else if (isReview) return ArticleType.Review
                 else if (isRecipe) return ArticleType.Recipe
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isGallery) return ArticleType.Gallery
                 else if (isLetter) return ArticleType.Letter
@@ -103,7 +105,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 if (isReview) return ArticleType.Review
                 else if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Immersive
+                else if (isInterview) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion

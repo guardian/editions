@@ -1,31 +1,5 @@
-import MockDate from 'mockdate'
-import {
-    matchSummmaryToKey,
-    downloadAndUnzipIssue,
-    issuesToDelete,
-} from '../files'
+import { matchSummmaryToKey } from '../../helpers/files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
-import { DownloadBlockedStatus } from 'src/hooks/use-net-info'
-import ApolloClient from 'apollo-client'
-
-const createIssueSummary = (localId: string) => ({
-    key: 'de/1-1-1',
-    name: 'any',
-    date: '1-1-1',
-    localId,
-    publishedId: '1/1',
-    assets: { data: '' },
-})
-
-const apolloClientMock: ApolloClient<object> = {
-    query: () => ({
-        data: {
-            netInfo: {
-                dowloadBlocked: DownloadBlockedStatus.NotBlocked,
-            },
-        },
-    }),
-} as any
 
 describe('helpers/files', () => {
     describe('matchSummmaryToKey', () => {
@@ -42,79 +16,72 @@ describe('helpers/files', () => {
         })
     })
 
-    describe('downloadAndUnzipIssue', () => {
-        it('should resolve the outer promise when the download runner resolves', async () => {
-            const localId = '1'
-            const p = downloadAndUnzipIssue(
-                apolloClientMock,
-                createIssueSummary(localId),
-                'phone',
-                () => {},
-                () => Promise.resolve(),
-                // the above promise is the main downloader that drives the outer promise
-                // and also updates the progress handler
-                // this is not part of the main API but passing it in tests is much easier than mocking
-                // all the downloads
-            )
-            await expect(p).resolves.toBeUndefined()
-        })
-        it('should not set any statuses without the passed promise calling an updater', async () => {
-            const updateStatus = jest.fn(() => {})
-            const p = downloadAndUnzipIssue(
-                apolloClientMock,
-                createIssueSummary('1'),
-                'phone',
-                updateStatus,
-                () => Promise.resolve(),
-            )
-            expect(updateStatus).not.toHaveBeenCalled()
-            await p
-        })
-        it('should create new downloads when previous ones have finished', async () => {
-            const localId = '1'
-            const p1 = downloadAndUnzipIssue(
-                apolloClientMock,
-                createIssueSummary(localId),
-                'phone',
-                () => {},
-                () => Promise.resolve(),
-            )
-            const p2 = downloadAndUnzipIssue(
-                apolloClientMock,
-                createIssueSummary(localId),
-                'phone',
-                () => {},
-                () => Promise.resolve(),
-            )
-            await Promise.all([p1, p2])
-            const p3 = downloadAndUnzipIssue(
-                apolloClientMock,
-                createIssueSummary(localId),
-                'phone',
-                () => {},
-                () => Promise.resolve(),
-            )
-            expect(p3).not.toBe(p2)
-            await p3
-        })
-    })
-
     describe('issuesToDelete', () => {
-        MockDate.set('2019-08-21')
-        it('should return items outside of the 7 days that dont follow the issue naming, or the issue index', async () => {
+        beforeEach(() => {
+            jest.resetModules()
+        })
+
+        it('should return items outside of the 7 latest issues', async () => {
+            jest.mock('src/helpers/settings', () => ({
+                getSetting: () => 7,
+            }))
+            const { issuesToDelete } = await require('../../helpers/files')
+
             const files = [
                 'daily-edition/issues',
                 'some-random-file',
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-14',
+                'daily-edition/2020-07-14',
+                'daily-edition/2020-07-15',
+                'daily-edition/2020-07-16',
+                'daily-edition/2020-07-17',
+                'daily-edition/2020-07-18',
+                'daily-edition/2020-07-19',
+                'daily-edition/2020-07-20',
+            ]
+
+            expect(await issuesToDelete(files)).toEqual([
+                'some-random-file',
+                'daily-edition/2019-08-15',
+                'daily-edition/2019-08-14',
+            ])
+        })
+
+        it('should return items outside of the 3 latest issues', async () => {
+            jest.mock('src/helpers/settings', () => ({
+                getSetting: () => 3,
+            }))
+            const { issuesToDelete } = await require('../../helpers/files')
+
+            const files = [
+                'daily-edition/issues',
+                'some-random-file',
+                'daily-edition/2019-08-15',
+                'daily-edition/2019-08-14',
+                'daily-edition/2020-07-14',
+                'daily-edition/2020-07-15',
+                'daily-edition/2020-07-16',
+                'daily-edition/2020-07-17',
+                'daily-edition/2020-07-18',
+                'daily-edition/2020-07-19',
             ]
             expect(await issuesToDelete(files)).toEqual([
                 'some-random-file',
+                'daily-edition/2020-07-16',
+                'daily-edition/2020-07-15',
+                'daily-edition/2020-07-14',
+                'daily-edition/2019-08-15',
                 'daily-edition/2019-08-14',
             ])
         })
 
         it("should return an empty array if there isn't any to delete", async () => {
+            jest.mock('src/helpers/settings', () => ({
+                getSetting: () => 3,
+            }))
+            const { issuesToDelete } = await require('../../helpers/files')
+
             const files = [
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-16',

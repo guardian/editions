@@ -1,21 +1,11 @@
 import { FSPaths } from '../'
 
-jest.mock('rn-fetch-blob', () => ({
-    fs: {
-        dirs: {
-            DocumentDir: 'path/to/base/directory',
-        },
-    },
+jest.mock('react-native-fs', () => ({
+    DocumentDirectoryPath: 'path/to/base/directory',
 }))
 
 describe('paths', () => {
     describe('FSPaths', () => {
-        it('should give correct context prefixed directory', () => {
-            expect(FSPaths.contentPrefixDir).toEqual(
-                'path/to/base/directory/issues/daily-edition',
-            )
-        })
-
         it('should give correct issues directory', () => {
             expect(FSPaths.issuesDir).toEqual('path/to/base/directory/issues')
         })

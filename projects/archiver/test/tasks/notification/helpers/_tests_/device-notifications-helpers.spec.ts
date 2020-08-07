@@ -13,6 +13,8 @@ describe('prepareScheduleDeviceNotificationRequest', () => {
             name: 'Daily Edition',
             edition: 'daily-edition',
             issueDate: '2019-09-18',
+            notificationUTCOffset: 1,
+            topic: 'uk',
         }
 
         const apiCfg = {
@@ -45,9 +47,24 @@ describe('prepareScheduleDeviceNotificationRequest', () => {
         expect(actual).toStrictEqual(expected)
     })
 })
+
 describe('createScheduleTime', () => {
-    it('should create schedule tiem from issue at 3 am', () => {
-        expect(createScheduleTime('2019-09-30')).toBe('2019-09-30T03:00:00Z')
+    it('should create schedule time from issue at 3 am if no offset specified', () => {
+        expect(createScheduleTime('2019-09-30')).toBe(
+            '2019-09-30T03:00:00+00:00',
+        )
+    })
+
+    it('should create schedule time from issue at specified positive offset', () => {
+        expect(createScheduleTime('2019-09-30', 1)).toBe(
+            '2019-09-30T01:00:00+00:00',
+        )
+    })
+
+    it('should create schedule time from issue at specified negative offset', () => {
+        expect(createScheduleTime('2019-09-30', -1)).toBe(
+            '2019-09-29T23:00:00+00:00',
+        )
     })
 })
 

@@ -12,9 +12,11 @@ We need a consistent and battle tested process for releasing the app on both And
 
 #### Internal Beta
 
-Our internal Beta is managed through testflight on the Guardian developer account. The group which this beta is sent to is labelled `GNM`. This includes the team and internal stakeholders within the organisation. We build this automatically through Fastlane and TeamCity once a day. Occasionally we will set off builds to test things on a number of devices.
+Our internal Beta is managed through testflight on the Guardian developer account. The group which this beta is sent to is labelled `GNM`. This includes the team and internal stakeholders within the organisation. We build this automatically through Fastlane and Github Actions once a day. Occasionally we will set off builds to test things on a number of devices.
 
-The TeamCity process is labelled `ios-beta-deploy`
+In github actions we have a [scheduled build](https://github.com/guardian/editions/actions?query=workflow%3Ascheduled-ios-beta) and an [ad-hoc one](https://github.com/guardian/editions/actions?query=workflow%3A%22Upload+ios-beta%22) triggered by a [script](https://github.com/guardian/editions/blob/master/script/upload-ios-build.sh)
+
+All builds generate a ['release' in github](https://github.com/guardian/editions/releases) to help us keep track of build numbers against certain commits. This is handled by the [make-release script](https://github.com/guardian/editions/blob/master/script/make-release.js).
 
 #### External Beta
 
@@ -36,17 +38,19 @@ In a similar vein as above, the Android internal beta is managed through Google 
 
 #### External Beta
 
-We take a slightly different approach to iOS. Due to not being able to determine within the app whether or not the app is in Beta or release, we have to create a release branch. This ensures that what we test in Beta is at the same point in time to what we release. We use the naming convention of `release/[version]` when creating this branch and is branched from Master.
+We take a slightly different approach to iOS. Due to not being able to determine within the app whether or not the app is in Beta or release, we have a different build configuration for releasing to production - which hides the 'report bug' button.
 
-The release number as it stands is `1.0.[next number]`. There is a ticket to improve this in the backlog.
+We build the APK using `android-beta-deploy`. This will release a build to google play to the 'internal beta' group for internal testing by the team. It is then manually promoted within the Google Play console to our external beta testers.
 
-We build the APK using `android-beta-deploy`. This will first go into internal beta where the team will check it. It is then promoted within the Google Play console to our external beta testers.
+As with iOS, releases to the play store can be tracked in [github releases](https://github.com/guardian/editions/releases) - each time the teamcity build is run a new github release is created including the play store version code of that release.
 
 #### Release
 
 After a successful external beta test, we **DO NOT** promote the external beta. This is because we have code in the app that attempts to determine whether or not the user is in beta. This does not work on Android as there isn't a distinction.
 
-As a result, we then use the TeamCity process `android-release-deploy` to then build the APK from the release branch defined in the external beta. Be warned, this process will automatically release the new version of the app. You will then need to go into the Google Play console to update the release notes.
+As a result, we then use the TeamCity process `android-release-deploy` to then build the APK. As you will only want to release a version that has been beta tested, you can use the [releases](https://github.com/guardian/editions/releases) list to find a release for the build you want to release, and copy the tag for that build. You can then search for this tag in the branch list within teamcity (the `android-release-deploy` config treats github tags as if they were branchs) and run a build on that tag.
+
+Be warned, this process will automatically release the new version of the app. You will then need to go into the Google Play console to update the release notes.
 
 ## Alternatives
 

@@ -8,6 +8,7 @@ import {
     Connectivity,
     hasRun,
 } from './Attempt'
+import { Feature, loggingService, Level } from 'src/services/logging'
 
 type UpdateHandler<S> = (attempt: AnyAttempt<S>) => void
 
@@ -70,6 +71,15 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return cachedValidAttempt && Date.now() - cachedValidAttempt < ONE_MONTH
     }
 
+    private logReAuthentication = (expectedConnection: string) => {
+        const feature = Feature.SIGN_IN
+        loggingService.log({
+            level: Level.INFO,
+            message: `Previous cached auth expired - re-authenticating user`,
+            optionalFields: { expectedConnection, feature },
+        })
+    }
+
     public async handleConnectionStatusChanged(
         isConnected: boolean,
         isPoorConnection = false,
@@ -81,11 +91,14 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         }
         if (!this.hasAuthRun) {
             if (hasConnection) {
+                this.logReAuthentication('online')
                 return this.runCachedAuth('online')
             } else {
+                this.logReAuthentication('offline')
                 return this.runCachedAuth('offline')
             }
         } else if (!this.isAuthOnline && hasConnection) {
+            this.logReAuthentication('online')
             return this.runCachedAuth('online')
         }
     }
@@ -127,6 +140,13 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         // when we get a valid attempt we want to store this (only for new valid attempts)
         const isPreviousAuthValid = await this.isPreviousAuthValid()
         if (isValid(attempt) && !isPreviousAuthValid) {
+            const feature = Feature.SIGN_IN
+            loggingService.log({
+                level: Level.INFO,
+                message:
+                    'Updating authentication cache with valid attempt date',
+                optionalFields: { feature },
+            })
             this.validAttemptCache.set(attempt.time)
         }
         this.updateAttempt(attempt)

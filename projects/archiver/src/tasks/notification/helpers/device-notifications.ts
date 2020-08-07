@@ -12,6 +12,8 @@ export interface IssueNotificationData {
     name: string
     issueDate: string
     edition: Edition
+    topic: string
+    notificationUTCOffset: number
 }
 
 export interface ScheduleDeviceNotificationAPIResponse {
@@ -67,18 +69,23 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
 ): Promise<NotificationStatus> => {
     const { edition } = issueData
 
-    if (edition != 'daily-edition') {
+    const scheduleTime = createScheduleTime(
+        issueData.issueDate,
+        issueData.notificationUTCOffset,
+    )
+
+    const stage: string = process.env.stage || 'code'
+
+    if (edition != 'daily-edition' && stage.toLowerCase() == 'prod') {
         console.log(
-            `skipping schedule Device Notification because the ${edition} edition is not eligible for Device Notification`,
+            `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the stage is prod and the edition is not eligible for Device Notification`,
         )
         return 'skipped'
     }
 
-    const scheduleTime = createScheduleTime(issueData.issueDate)
-
     if (!shouldSchedule(scheduleTime, now)) {
         console.log(
-            `skipping schedule Device Notification because the (scheduleTime: ${scheduleTime}) is in the past`,
+            `skipping schedule Device Notification for ${edition}, ${scheduleTime} because the schedule time is in the past`,
         )
         return 'skipped'
     }

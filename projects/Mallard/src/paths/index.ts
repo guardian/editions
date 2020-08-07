@@ -9,9 +9,10 @@ import {
     Image,
     ImageUse,
 } from 'src/common'
-import RNFetchBlob from 'rn-fetch-blob'
-import { defaultSettings } from 'src/helpers/settings/defaults'
+import RNFS from 'react-native-fs'
 import { imagePath } from '../../../Apps/common/src'
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
+import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
 
 export interface PathToIssue {
     localIssueId: Issue['localId']
@@ -32,14 +33,24 @@ export const APIPaths = {
     image: imagePath,
 }
 
-const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
+const issuesDir = `${RNFS.DocumentDirectoryPath}/issues`
 
 const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
 const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`
+const editionDir = async () => {
+    const edition = await getSelectedEditionSlug()
+    return `${issuesDir}/${edition}`
+}
+const edtionsDirList = async (): Promise<string[]> => {
+    return defaultRegionalEditions.map(reg => {
+        return `${issuesDir}/${reg.edition}`
+    })
+}
 
 export const FSPaths = {
     issuesDir,
-    contentPrefixDir: `${issuesDir}/${defaultSettings.contentPrefix}`,
+    editionDir,
+    edtionsDirList,
     issueRoot,
     mediaRoot,
     image: (
@@ -53,4 +64,7 @@ export const FSPaths = {
     issue: (localIssueId: string) => `${issueRoot(localIssueId)}/issue`,
     front: (localIssueId: string, frontId: string) =>
         `${issueRoot(localIssueId)}/front/${frontId}`,
+    downloadRoot: `${issuesDir}/download`,
+    downloadIssueLocation: (localIssueId: string) =>
+        `${issuesDir}/download/${localIssueId}`,
 }

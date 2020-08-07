@@ -1,9 +1,9 @@
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
-import { Linking, Platform } from 'react-native'
+import { Linking, Platform, Clipboard } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import RNFetchBlob from 'rn-fetch-blob'
-import { canViewEdition } from 'src/authentication/helpers'
+import RNFS from 'react-native-fs'
+import { canViewEdition, getCASCode } from 'src/authentication/helpers'
 import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
 import { gdprSwitchSettings, getSetting } from 'src/helpers/settings'
 import { NetInfo } from 'src/hooks/use-net-info'
@@ -11,27 +11,17 @@ import { FSPaths } from 'src/paths'
 import { runActionSheet } from './action-sheet'
 import { getFileList } from './files'
 import { locale } from './locale'
-import { getDiagnosticPushTracking } from './push-tracking'
+import { getDiagnosticPushTracking } from '../push-notifications/push-tracking'
 import { isInBeta } from './release-stream'
 import { imageForScreenSize } from './screen'
-import {
-    casCredentialsKeychain,
-    iapReceiptCache,
-    legacyCASUsernameCache,
-    userDataCache,
-} from './storage'
+import { iapReceiptCache, userDataCache, pushRegisteredTokens } from './storage'
 import {
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
-    DIAGNOSTICS_TITLE,
     IOS_BETA_EMAIL,
 } from './words'
-
-const getCASCode = () =>
-    Promise.all([
-        casCredentialsKeychain.get(),
-        legacyCASUsernameCache.get(),
-    ]).then(([current, legacy]) => (current && current.username) || legacy)
+import { OnCompletionToast } from 'src/screens/settings/help-screen'
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 
 const getGDPREntries = () =>
     Promise.all(
@@ -69,7 +59,7 @@ const getDiagnosticInfo = async (
     ])
     const netInfo = netInfoResult.data.netInfo
 
-    const folderStat = await RNFetchBlob.fs.stat(FSPaths.issuesDir)
+    const folderStat = await RNFS.stat(FSPaths.issuesDir)
     const size = parseInt(folderStat.size)
     const bytes = size
     const kilobytes = bytes / 1000
@@ -79,6 +69,9 @@ const getDiagnosticInfo = async (
     const version = DeviceInfo.getVersion()
     const deviceId = DeviceInfo.getDeviceId()
 
+    const bytesToMb = (bytes: number) =>
+        Math.floor(bytes / 1024 / 1024).toLocaleString('en')
+
     const [
         firstInstallTime,
         lastUpdateTime,
@@ -87,6 +80,8 @@ const getDiagnosticInfo = async (
         fileList,
         imageSize,
         pushTracking,
+        edition,
+        registeredPushTokens,
     ] = await Promise.all([
         DeviceInfo.getFirstInstallTime(),
         DeviceInfo.getLastUpdateTime(),
@@ -95,6 +90,8 @@ const getDiagnosticInfo = async (
         getFileList(),
         imageForScreenSize(),
         getDiagnosticPushTracking(),
+        getSelectedEditionSlug(),
+        pushRegisteredTokens.get(),
     ])
 
     return `
@@ -105,7 +102,7 @@ The information below will help us to better understand your query:
 Product: Daily App
 App Version: ${version} ${buildNumber}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
-App Edition: UK
+Current Edition: ${edition}
 Locale: ${locale}
 First app start: ${firstInstallTime}
 Last updated: ${lastUpdateTime}
@@ -119,8 +116,8 @@ Privacy settings: ${gdprEntries
         .map(([key, value]) => `${key}:${value}`)
         .join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
-Total Disk Space: ${totalDiskCapacity}
-Available Disk Spce: ${freeDiskStorage}
+Total Disk Space (Mb): ${bytesToMb(totalDiskCapacity)}
+Available Disk Spce (Mb): ${bytesToMb(freeDiskStorage)}
 Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
 
 -User / Supporter Info-
@@ -129,6 +126,9 @@ Digital Pack subscription: ${idData && canViewEdition(idData)}
 Apple IAP Transaction Details: ${receiptData &&
         `\n${JSON.stringify(receiptData, null, 2)}`}
 Subscriber ID: ${casCode}
+
+-Registered Push Tokens-
+${JSON.stringify(registeredPushTokens)}
 
 -Push Downloads-
 ${pushTracking && JSON.stringify(pushTracking, null, 2)}
@@ -164,8 +164,9 @@ const createMailtoHandler = (
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
+    dialogTitle = '',
 ) => () =>
-    runActionSheet(DIAGNOSTICS_TITLE, DIAGNOSTICS_REQUEST, [
+    runActionSheet(dialogTitle, DIAGNOSTICS_REQUEST, [
         {
             text: 'Include',
             onPress: async () => {
@@ -179,16 +180,45 @@ const createMailtoHandler = (
         },
     ])
 
+const copyDiagnosticInfoToClipboard = (
+    client: ApolloClient<object>,
+    authAttempt: AnyAttempt<string>,
+    callback: OnCompletionToast,
+) => async () => {
+    const diagnostics = await getDiagnosticInfo(client, authAttempt)
+    Clipboard.setString(diagnostics)
+    callback('Diagnostic info copied to clipboard')
+}
+
 const createSupportMailto = (
     client: ApolloClient<object>,
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
+    dialogTitle = '',
 ) => ({
     key: text,
     title: text,
     linkWeight: 'regular' as const,
-    onPress: createMailtoHandler(client, text, releaseURL, authAttempt),
+    onPress: createMailtoHandler(
+        client,
+        text,
+        releaseURL,
+        authAttempt,
+        dialogTitle,
+    ),
 })
 
-export { createSupportMailto, createMailtoHandler }
+const copyDiagnosticInfo = (
+    client: ApolloClient<object>,
+    text: string,
+    authAttempt: AnyAttempt<string>,
+    callback: OnCompletionToast,
+) => ({
+    key: text,
+    title: text,
+    linkWeight: 'regular' as const,
+    onPress: copyDiagnosticInfoToClipboard(client, authAttempt, callback),
+})
+
+export { createSupportMailto, createMailtoHandler, copyDiagnosticInfo }

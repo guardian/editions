@@ -24,7 +24,12 @@ export const handler: Handler<
     async ({ issuePublication, issue }) => {
         const stage: string = process.env.stage || 'code'
 
-        const { issueDate, edition } = issuePublication
+        const {
+            issueDate,
+            edition,
+            notificationUTCOffset,
+            topic,
+        } = issuePublication
         const { key, name } = issue
 
         const guNotificationServiceDomain =
@@ -35,7 +40,7 @@ export const handler: Handler<
         const guNotificationServiceAPIKey =
             process.env.gu_notify_service_api_key || ''
         const notificationStatus = await scheduleDeviceNotificationIfEligible(
-            { key, name, issueDate, edition },
+            { key, name, issueDate, edition, notificationUTCOffset, topic },
             {
                 domain: guNotificationServiceDomain,
                 apiKey: guNotificationServiceAPIKey,

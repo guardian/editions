@@ -1,6 +1,6 @@
-import React from 'react'
-import { FlatList, View, Alert, Text } from 'react-native'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import React, { useState, useEffect } from 'react'
+import { FlatList, View, Alert, Text, ScrollView } from 'react-native'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
 import {
@@ -14,8 +14,6 @@ import {
     CURRENT_CONSENT_VERSION,
     GdprBuckets,
     gdprSwitchSettings,
-    GdprSettings,
-    GdprDefaultSettings,
 } from 'src/helpers/settings'
 import {
     PREFS_SAVED_MSG,
@@ -29,16 +27,16 @@ import { routeNames } from 'src/navigation/routes'
 import {
     gdprAllowFunctionalityKey,
     gdprAllowPerformanceKey,
+    gdprConsentVersionKey,
 } from 'src/helpers/settings'
-import gql from 'graphql-tag'
-import { useQuery } from 'src/hooks/apollo'
-import { Settings } from 'src/helpers/settings'
-import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
-import {
-    setGdprConsentVersion,
-    setGdprFlag,
-} from 'src/helpers/settings/setters'
-import ApolloClient from 'apollo-client'
+import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters'
+import { storeSetting, getSetting } from 'src/helpers/settings'
+
+interface GdprConfig {
+    gdprAllowPerformance: ThreeWaySwitchValue
+    gdprAllowFunctionality: ThreeWaySwitchValue
+    gdprCurrentVersion: number | null
+}
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -50,49 +48,40 @@ type EssentialGdprSwitch = Omit<GdprSwitch, 'key'>
 
 const essentials: EssentialGdprSwitch = {
     name: 'Essential',
-    services: 'Ophan - Braze - YouTube Player',
+    services:
+        'Ophan - Braze - YouTube Player - Firebase Cloud Messaging - Firebase Remote Config',
     description:
-        'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
+        'These are essential to provide you with services that you have requested. These services support the ability for you to watch videos, see service-related messages, download content automatically and receive new features without app releases.',
 }
 
-const setConsent = (
-    client: ApolloClient<object>,
+const setGDPRCurrentVersion = () => {
+    storeSetting(GDPR_CONSENT_VERSION, CURRENT_CONSENT_VERSION)
+}
+
+export const setConsent = (
     consentBucketKey: keyof GdprSwitchSettings,
     value: ThreeWaySwitchValue,
 ) => {
-    setGdprFlag(client, consentBucketKey, value)
+    storeSetting(consentBucketKey, value)
     GdprBuckets[consentBucketKey].forEach(key => {
-        setGdprFlag(client, key, value)
+        storeSetting(key, value)
     })
-    setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
+    setGDPRCurrentVersion()
 }
 
-const consentToAll = (client: ApolloClient<object>) => {
+const consentToAll = () => {
     gdprSwitchSettings.forEach(sw => {
-        setConsent(client, sw, true)
+        setConsent(sw, true)
     })
-    setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
+    setGDPRCurrentVersion()
 }
 
-const DEVMODE_resetAll = (client: ApolloClient<object>) => {
+export const resetAll = () => {
     gdprSwitchSettings.forEach(sw => {
-        setConsent(client, sw, null)
+        setConsent(sw, null)
     })
-    setGdprConsentVersion(client, null)
+    setGDPRCurrentVersion()
 }
-
-const QUERY = gql`
-    {
-        isUsingProdDevtools @client
-        ${GDPR_SETTINGS_FRAGMENT}
-    }
-`
-
-type QueryData = {
-    isUsingProdDevtools: Settings['isUsingProdDevtools']
-} & GdprSettings &
-    GdprDefaultSettings &
-    GdprSwitchSettings
 
 const GdprConsent = ({
     shouldShowDismissableHeader = false,
@@ -103,37 +92,75 @@ const GdprConsent = ({
     continueText: string
 } & NavigationInjectedProps) => {
     const { showToast } = useToast()
-    const query = useQuery<QueryData>(QUERY)
-    if (query.loading) return null
-    const { client, data } = query
+
+    const [updateFlag, setDataUpdated] = useState(false)
+    const [gdprData, updateGdprData] = useState<GdprConfig>({
+        gdprAllowPerformance: null,
+        gdprAllowFunctionality: null,
+        gdprCurrentVersion: null,
+    })
+
+    const fetchAndSetGdprData = async () => {
+        const perfData = await getSetting(gdprAllowPerformanceKey)
+        const funcData = await getSetting(gdprAllowFunctionalityKey)
+        const currentVersion = await getSetting(gdprConsentVersionKey)
+        updateGdprData({
+            gdprAllowPerformance: perfData,
+            gdprAllowFunctionality: funcData,
+            gdprCurrentVersion: currentVersion,
+        })
+    }
+
+    useEffect(() => {
+        fetchAndSetGdprData()
+    }, [updateFlag])
+
+    const setConsentAndUpdate = (
+        consentBucketKey: keyof GdprSwitchSettings,
+        value: ThreeWaySwitchValue,
+    ) => {
+        setConsent(consentBucketKey, value)
+        setDataUpdated(!updateFlag) // force to re-render UI with updated value
+    }
+
+    const consentAllAndUpdate = () => {
+        consentToAll()
+        setDataUpdated(!updateFlag)
+    }
+
+    const resetAllAndUpdate = () => {
+        resetAll()
+        setDataUpdated(!updateFlag)
+    }
 
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
             key: gdprAllowPerformanceKey,
             name: 'Performance',
-            services: 'Sentry',
+            services: 'Sentry - Logging - Crashlytics',
             description:
-                'Enabling these allows us to measure how you use our services. We use this information to get a better sense of how our users engage with our journalism and to improve our services, so that users have a better experience. For example, we collect information about which of our pages are most frequently visited, and by which types of users. If you disable this, we will not be able to measure your use of our services, and we will have less information about their performance.',
+                'Enabling these allow us to observe and measure how you use our services. We use this information to fix bugs more quickly so that users have a better experience. For example, we would be able to see the journey you have taken and where the error was encountered. Your data will only be stored in our servers for two weeks. If you disable this, we will not be able to observe and measure your use of our services, and we will have less information about their performance and details of any issues encountered.',
         },
         gdprAllowFunctionality: {
             key: gdprAllowFunctionalityKey,
             name: 'Functionality',
-            services: 'Google - Facebook',
+            services: 'Apple - Google - Facebook',
             description:
-                'Enabling these allow us to provide you with a range of functionality and store related information. For example, you can use social media credentials such as your Google account to log into your Guardian account. If you disable this, some features of our services may not function.',
+                'Enabling these allow us to provide extra sign-in functionality. It enables us to offer alternative options for you to sign-in to your Guardian account using your Apple, Google, or Facebook credentials. If you disable this, you won’t be able to sign-in with the third-party services above.',
         },
     }
 
     const onEnableAllAndContinue = () => {
-        consentToAll(client)
+        consentAllAndUpdate()
         showToast(PREFS_SAVED_MSG)
         navigation.navigate('App')
     }
 
     const onDismiss = () => {
         if (
-            data.gdprAllowFunctionality != null &&
-            data.gdprAllowPerformance != null
+            gdprData.gdprAllowFunctionality != null &&
+            gdprData.gdprAllowPerformance != null &&
+            gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION
         ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
@@ -154,7 +181,7 @@ const GdprConsent = ({
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             {shouldShowDismissableHeader ? (
                 <LoginHeader onDismiss={onDismiss}>
                     {PRIVACY_SETTINGS_HEADER_TITLE}
@@ -162,77 +189,86 @@ const GdprConsent = ({
             ) : (
                 <></>
             )}
-            <TallRow
-                title={''}
-                explainer={
-                    <Text>
-                        Below you can manage your privacy settings for cookies
-                        and similar technologies for this service. These
-                        technologies are provided by us and by our third-party
-                        partners. To find out more, read our{' '}
-                        <LinkNav
-                            onPress={() =>
-                                navigation.navigate(routeNames.PrivacyPolicy)
-                            }
+            <ScrollView>
+                <TallRow
+                    title={''}
+                    explainer={
+                        <Text>
+                            Below you can manage your privacy settings for
+                            cookies and similar technologies for this service.
+                            These technologies are provided by us and by our
+                            third-party partners. To find out more, read our{' '}
+                            <LinkNav
+                                onPress={() =>
+                                    navigation.navigate(
+                                        routeNames.PrivacyPolicy,
+                                    )
+                                }
+                            >
+                                privacy policy
+                            </LinkNav>
+                            . If you disable a category, you may need to restart
+                            the app for your changes to fully take effect.
+                        </Text>
+                    }
+                    proxy={
+                        <Button
+                            appearance={ButtonAppearance.skeleton}
+                            onPress={() => onEnableAllAndContinue()}
                         >
-                            privacy policy
-                        </LinkNav>
-                        . If you disable a category, you may need to restart the
-                        app for your changes to fully take effect.
-                    </Text>
-                }
-                proxy={
-                    <Button
-                        appearance={ButtonAppearance.skeleton}
-                        onPress={() => onEnableAllAndContinue()}
-                    >
-                        {continueText}
-                    </Button>
-                }
-            ></TallRow>
-            <Separator></Separator>
-            <TallRow
-                title={essentials.name}
-                subtitle={essentials.services}
-                explainer={essentials.description}
-            ></TallRow>
+                            {continueText}
+                        </Button>
+                    }
+                ></TallRow>
+                <Separator></Separator>
+                <TallRow
+                    title={essentials.name}
+                    subtitle={essentials.services}
+                    explainer={essentials.description}
+                ></TallRow>
 
-            <FlatList
-                ItemSeparatorComponent={Separator}
-                ListFooterComponent={Separator}
-                ListHeaderComponent={Separator}
-                data={Object.values(switches)}
-                keyExtractor={({ key }) => key}
-                renderItem={({ item }) => (
-                    <TallRow
-                        title={item.name}
-                        subtitle={item.services}
-                        explainer={item.description}
-                        proxy={
-                            <ThreeWaySwitch
-                                onValueChange={value => {
-                                    setConsent(client, item.key, value)
-                                    showToast(PREFS_SAVED_MSG)
-                                }}
-                                value={data[item.key]}
-                            />
-                        }
-                    ></TallRow>
-                )}
-            />
-            <Footer>
-                <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
-                    You can change the above settings any time by selecting
-                    Privacy Settings from the Settings menu.
-                </UiBodyCopy>
-            </Footer>
-            {data.isUsingProdDevtools ? (
+                <FlatList
+                    ItemSeparatorComponent={Separator}
+                    ListFooterComponent={Separator}
+                    ListHeaderComponent={Separator}
+                    data={Object.values(switches)}
+                    keyExtractor={({ key }) => key}
+                    renderItem={({ item }) => (
+                        <TallRow
+                            title={item.name}
+                            subtitle={item.services}
+                            explainer={item.description}
+                            proxy={
+                                <ThreeWaySwitch
+                                    onValueChange={value => {
+                                        setConsentAndUpdate(item.key, value)
+                                        showToast(PREFS_SAVED_MSG)
+                                    }}
+                                    value={
+                                        gdprData.gdprCurrentVersion !==
+                                        CURRENT_CONSENT_VERSION
+                                            ? null
+                                            : gdprData[item.key]
+                                    }
+                                />
+                            }
+                        ></TallRow>
+                    )}
+                />
                 <Footer>
-                    <Button onPress={DEVMODE_resetAll.bind(undefined, client)}>
-                        Reset
-                    </Button>
+                    <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
+                        You can change the above settings any time by selecting
+                        Privacy Settings from the Settings menu.
+                    </UiBodyCopy>
                 </Footer>
-            ) : null}
+                {__DEV__ ? (
+                    <Footer>
+                        <Button onPress={resetAllAndUpdate.bind(undefined)}>
+                            Reset
+                        </Button>
+                    </Footer>
+                ) : null}
+            </ScrollView>
         </View>
     )
 }
@@ -252,13 +288,11 @@ const GdprConsentScreenForOnboarding = ({
     navigation,
 }: NavigationInjectedProps) => (
     <WithAppAppearance value={'settings'}>
-        <ScrollContainer>
-            <GdprConsent
-                shouldShowDismissableHeader={true}
-                continueText={'Enable all and continue'}
-                navigation={navigation}
-            ></GdprConsent>
-        </ScrollContainer>
+        <GdprConsent
+            shouldShowDismissableHeader={true}
+            continueText={'Enable all and continue'}
+            navigation={navigation}
+        ></GdprConsent>
     </WithAppAppearance>
 )
 

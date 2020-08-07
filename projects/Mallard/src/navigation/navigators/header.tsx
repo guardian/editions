@@ -1,14 +1,14 @@
+import React from 'react'
 import {
+    createStackNavigator,
     NavigationContainer,
     NavigationInjectedProps,
-    createStackNavigator,
     NavigationParams,
 } from 'react-navigation'
-
-import React from 'react'
-import { Header } from 'src/components/layout/header/header'
-import { Button } from 'src/components/button/button'
+import { Button } from 'src/components/Button/Button'
+import { CloseButton } from 'src/components/Button/CloseButton'
 import { IssueTitle } from 'src/components/issue/issue-title'
+import { Header } from 'src/components/layout/header/header'
 import { addStaticRouter } from '../helpers/base'
 
 interface NavigationOptions {
@@ -49,6 +49,7 @@ const addStaticRouterWithHeader = (
             options.showHeaderRight !== undefined
                 ? options.showHeaderRight
                 : false
+        const title = options.title || navigation.state.routeName
 
         return (
             <>
@@ -64,18 +65,16 @@ const addStaticRouterWithHeader = (
                     }
                     action={
                         showHeaderRight ? (
-                            <Button
-                                icon={'\uE04F'}
-                                alt="Back"
+                            <CloseButton
+                                accessibilityLabel={`Close the ${title} screen`}
+                                accessibilityHint="Closes the current screen"
                                 onPress={() => navigation.goBack(null)}
-                            ></Button>
+                            />
                         ) : null
                     }
                     layout={'center'}
                 >
-                    <IssueTitle
-                        title={options.title || navigation.state.routeName}
-                    />
+                    <IssueTitle title={title} />
                 </Header>
                 <Navigator navigation={navigation} />
             </>

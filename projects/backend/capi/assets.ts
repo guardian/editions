@@ -28,9 +28,7 @@ const extractImage: (
     })
 }
 
-export const getImage: (
-    assetArray: IAsset[],
-) => Image | undefined = assetArray => {
+export const getImage = (assetArray: IAsset[]): Image | undefined => {
     console.log('Asset array == ' + assetArray)
     console.log('Asset array type == ' + typeof assetArray)
     const asset = extractImage(assetArray)
@@ -38,7 +36,7 @@ export const getImage: (
         console.warn('Image asset potentially invalid.', JSON.stringify(asset))
         return
     }
-    return getImageFromURL(asset.file)
+    return getImageFromURL(asset.file, asset.typeData)
 }
 
 export const getCreditedImage: (
@@ -49,7 +47,7 @@ export const getCreditedImage: (
         console.warn('Image asset potentially invalid.', JSON.stringify(asset))
         return
     }
-    const image = getImageFromURL(asset.file)
+    const image = getImageFromURL(asset.file, asset.typeData)
     return (
         image && {
             ...image,

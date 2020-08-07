@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
@@ -9,12 +9,19 @@ import { WebviewWithArticle } from './article/webview'
 import { Article as ArticleT, PictureArticle, GalleryArticle } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
+import { NavigationScreenProp } from 'react-navigation'
 import {
     IssueOrigin,
     BlockElement,
     ImageElement,
+    CreditedImage,
 } from '../../../../../Apps/common/src'
-import { LightboxContext } from '../../../screens/use-lightbox-modal'
+import { navigateToLightbox } from 'src/navigation/helpers/base'
+import { selectImagePath } from 'src/hooks/use-image-paths'
+import { useApiUrl } from 'src/hooks/use-settings'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
+import { Image } from 'src/common'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 const styles = StyleSheet.create({
     block: {
@@ -72,6 +79,22 @@ export const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
     return images
 }
 
+export const getCreditedImages = (
+    elements: ImageElement[],
+): CreditedImage[] => {
+    const creditedImages: CreditedImage[] = elements.map(e => {
+        return {
+            source: e.src.source,
+            path: e.src.path,
+            role: e.src.role,
+            credit: e.credit,
+            caption: e.caption,
+            displayCredit: e.displayCredit,
+        }
+    })
+    return creditedImages
+}
+
 /**
  * This takes care of updating the value of a global *within* the web
  * view. Since the API is imperative, we cannot pass this as a "prop" to the
@@ -97,6 +120,7 @@ const useUpdateWebviewVariable = (
 }
 
 const Article = ({
+    navigation,
     article,
     path,
     onShouldShowHeaderChange,
@@ -105,22 +129,56 @@ const Article = ({
     onIsAtTopChange,
     origin,
 }: {
+    navigation: NavigationScreenProp<{}>
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
     origin: IssueOrigin
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
+    const [imagePaths, setImagePaths] = useState([''])
+    const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
         'shouldShowHeader',
         shouldShowHeader,
     )
-
-    const lbv = useContext(LightboxContext)
+    const lightboxEnabled = remoteConfig().getValue('lightbox_enabled').value
 
     const [, { pillar }] = useArticle()
+    const apiUrl = useApiUrl() || ''
+    const { issueId } = useIssueSummary()
+
+    useEffect(() => {
+        const lbimages = getLightboxImages(article.elements)
+        const lbCreditedImages = getCreditedImages(lbimages)
+        // to avoid image duplication we don't add the main image of gallery articles to the array
+        if (article.type !== 'gallery' && article.image) {
+            lbCreditedImages.unshift(article.image)
+        }
+        setLightboxImages(lbCreditedImages)
+        const getImagePathFromImage = async (image: Image) => {
+            if (issueId && image) {
+                const { localIssueId, publishedIssueId } = issueId
+                const imagePath = await selectImagePath(
+                    apiUrl,
+                    localIssueId,
+                    publishedIssueId,
+                    image,
+                    'full-size',
+                )
+                return imagePath
+            }
+            return ''
+        }
+        const fetchImagePaths = async () => {
+            return await Promise.all(
+                lbCreditedImages.map(image => getImagePathFromImage(image)),
+            )
+        }
+        fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
+    }, [apiUrl, article.elements, issueId, article.image, article.type])
 
     return (
         <Fader>
@@ -130,6 +188,8 @@ const Article = ({
                 path={path}
                 scrollEnabled={true}
                 useWebKit={false}
+                allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
+                mediaPlaybackRequiresUserAction={false}
                 style={[styles.webview]}
                 _ref={r => {
                     ref.current = r
@@ -140,16 +200,24 @@ const Article = ({
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
                         if (article.webUrl == null) return
-                        Share.share(
-                            {
-                                title: article.headline,
+                        if (Platform.OS === 'ios') {
+                            Share.share({
                                 url: article.webUrl,
-                                message: article.webUrl, // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
-                            },
-                            {
-                                subject: article.headline,
-                            },
-                        )
+                                message: article.headline,
+                            })
+                        } else {
+                            Share.share(
+                                {
+                                    title: article.headline,
+                                    url: article.webUrl,
+                                    // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
+                                    message: article.webUrl,
+                                },
+                                {
+                                    subject: article.headline,
+                                },
+                            )
+                        }
                         return
                     }
                     if (parsed.type === 'shouldShowHeaderChange') {
@@ -159,10 +227,26 @@ const Article = ({
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
                     }
-                    if (parsed.type === 'openLightbox') {
-                        const lbimages = getLightboxImages(article.elements)
-                        lbv.setLightboxData(lbimages, parsed.index, pillar)
-                        lbv.setLightboxVisible(true)
+                    if (lightboxEnabled && parsed.type === 'openLightbox') {
+                        let index = parsed.index
+                        if (
+                            article.type !== 'gallery' &&
+                            article.image &&
+                            parsed.isMainImage === 'false' &&
+                            lightboxImages &&
+                            lightboxImages.length > 1
+                        ) {
+                            index++
+                        }
+                        navigateToLightbox({
+                            navigation,
+                            navigationProps: {
+                                images: lightboxImages,
+                                imagePaths: imagePaths,
+                                index,
+                                pillar,
+                            },
+                        })
                     }
                 }}
             />

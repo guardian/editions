@@ -1,5 +1,5 @@
-import { Settings } from '../settings'
 import { Platform } from 'react-native'
+import { Settings } from '../settings'
 
 /*
 Default settings.
@@ -14,7 +14,7 @@ export const backends = [
     {
         title: 'PROD proofed',
         value: 'https://editions-proof-prod.s3-eu-west-1.amazonaws.com/',
-        preview: false,
+        preview: true,
     },
     {
         title: 'PROD preview',
@@ -29,7 +29,7 @@ export const backends = [
     {
         title: 'CODE proofed',
         value: 'https://editions-proof-code.s3-eu-west-1.amazonaws.com/',
-        preview: false,
+        preview: true,
     },
     {
         title: 'CODE preview',
@@ -46,14 +46,6 @@ export const backends = [
     value: string
     preview: boolean
 }[]
-
-export const editions = {
-    daily: 'daily-edition',
-    ausWeekly: 'australian-edition',
-    usWeekly: 'american-edition',
-    dummy: 'the-dummy-edition',
-    training: 'training-edition',
-}
 
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
@@ -79,7 +71,7 @@ const notificationTrackingDownloadedEndpoints = {
 
 export const senderId = {
     prod: '493559488652',
-    code: '43377569438',
+    code: '385815722272',
 }
 
 export const notificationTrackingUrl = (
@@ -105,18 +97,13 @@ export const notificationTrackingUrl = (
 
 const apiUrl = backends[0].value
 
-const edition = editions.daily
-
 const storeDetails = {
     ios: 'itms-apps://itunes.apple.com/app/id452707806',
     android: 'market://details?id=com.guardian.editions',
 }
 
-const contentPrefix = 'daily-edition'
-
 export const defaultSettings: Settings = {
     apiUrl,
-    edition,
     isUsingProdDevtools: false,
     gdprAllowEssential: true, // essential defaults to true and not switchable
     gdprAllowPerformance: null,
@@ -131,13 +118,16 @@ export const defaultSettings: Settings = {
         : notificationServiceRegister.prod,
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
-    contentPrefix,
+    editionsUrl: apiUrl + 'editions',
     issuesPath: `/issues`,
     storeDetails,
     senderId: __DEV__ ? senderId.code : senderId.prod,
     isWeatherShown: true,
     wifiOnlyDownloads: false,
     maxAvailableEditions: 7,
+    logging: __DEV__
+        ? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
+        : 'https://editions-logging.guardianapis.com/log/mallard',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {

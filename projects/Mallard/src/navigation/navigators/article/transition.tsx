@@ -21,7 +21,6 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
         Platform.OS === 'ios' ? parseInt(Platform.Version as string, 10) : 0
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
-    const { height: windowHeight } = Dimensions.get('window')
 
     /*
     these ones r easy
@@ -52,23 +51,8 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
         ]),
     })
 
-    /*
-    we wanna control how far from the top edge
-    this window lands, to do so we calculate how
-    many px it has to move up to account for the
-    scale and then we mess with that number
-    as we please
-    */
-    const translateOffset = (windowHeight - windowHeight * minScale) * -0.5
-    const finalTranslate = translateOffset + metrics.slideCardSpacing / 1.5
-
-    const translateY = position.interpolate({
-        inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
-        outputRange: safeInterpolation([0, finalTranslate]),
-    })
-
     return {
-        transform: [{ translateY }, { scale }],
+        transform: [{ scale }],
         opacity,
         borderRadius,
         overflow: 'hidden',

@@ -5,11 +5,9 @@
 import { ApolloProvider } from '@apollo/react-hooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
-import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native'
-import { enableScreens } from 'react-native-screens'
+import { AppState, StatusBar, StyleSheet, View } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationState } from 'react-navigation'
-import { clearAndDownloadIssue } from 'src/helpers/clear-download-issue'
 import { NavPositionProvider } from 'src/hooks/use-nav-position'
 import { RootNavigator } from 'src/navigation'
 import {
@@ -18,40 +16,47 @@ import {
     sendAppScreenEvent,
     setUserId,
 } from 'src/services/ophan'
-import { createApolloClient } from './apollo'
 import { AccessProvider } from './authentication/AccessContext'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
-import { BugButton } from './components/BugButton'
+import { BugButtonHandler } from './components/Button/BugButtonHandler'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { nestProviders } from './helpers/provider'
-import { pushNotifcationRegistration } from './helpers/push-notifications'
+import { pushNotifcationRegistration } from './push-notifications/push-notifications'
 import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
 import { NetInfoDevOverlay } from './components/NetInfoDevOverlay'
-import { ConfigProvider } from 'src/hooks/use-config-provider'
-import { Lightbox } from './screens/lightbox'
-import { LightboxProvider } from './screens/use-lightbox-modal'
-import { weatherHider } from './helpers/weather-hider'
+import {
+    ConfigProvider,
+    largeDeviceMemory,
+} from 'src/hooks/use-config-provider'
+import { loggingService } from './services/logging'
+import ApolloClient from 'apollo-client'
+import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
+import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue'
+import { remoteConfigService } from './services/remote-config'
+import analytics from '@react-native-firebase/analytics'
+import { prepFileSystem } from './helpers/files'
+import { EditionProvider } from './hooks/use-edition-provider'
+import { apolloClient } from './services/apollo-singleton'
+import { eventEmitter } from 'src/helpers/event-emitter'
+import { weatherHider } from 'src/helpers/weather-hider'
 
-/**
- * Only one global Apollo client. As such, any update done from any component
- * will cause dependent views to refresh and keep up-to-date.
- */
-const apolloClient = createApolloClient()
+analytics().setAnalyticsCollectionEnabled(false)
 
+// Log Intitialisation
 if (!__DEV__) {
     errorService.init(apolloClient)
 }
+loggingService.init(apolloClient)
+remoteConfigService.init()
 
-// useScreens is not a hook
-// eslint-disable-next-line react-hooks/rules-of-hooks
-Platform.OS === 'ios' && enableScreens()
-pushNotifcationRegistration(apolloClient)
-Platform.OS === 'android' && clearAndDownloadIssue(apolloClient)
+// --- SETUP OPERATIONS ---
+pushNotifcationRegistration()
+prepFileSystem()
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -127,23 +132,38 @@ const WithProviders = nestProviders(
     ToastProvider,
     NavPositionProvider,
     ConfigProvider,
-    LightboxProvider,
+    EditionProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
     setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)
 
+const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
+    const largeRAM = await largeDeviceMemory()
+    if (largeRAM) {
+        pushDownloadFailsafe(client)
+    }
+}
+
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
-        weatherHider(apolloClient)
-        clearAndDownloadIssue(apolloClient)
+        prepareAndDownloadTodaysIssue(apolloClient)
+        shouldHavePushFailsafe(apolloClient)
+        loggingService.postLogs()
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
-                clearAndDownloadIssue(apolloClient)
+                prepareAndDownloadTodaysIssue(apolloClient)
+                loggingService.postLogs()
             }
         })
+
+        {
+            eventEmitter.on('editionCachesSet', () => {
+                weatherHider(apolloClient)
+            })
+        }
     }
 
     async componentDidCatch(e: Error) {
@@ -184,9 +204,8 @@ export default class App extends React.Component<{}, {}> {
                                     <NetInfoAutoToast />
                                 </View>
                                 <ModalRenderer />
-                                <BugButton />
+                                <BugButtonHandler />
                                 <DeprecateVersionModal />
-                                <Lightbox />
                             </AccessProvider>
                         </WithProviders>
                     </NetInfoDevOverlay>

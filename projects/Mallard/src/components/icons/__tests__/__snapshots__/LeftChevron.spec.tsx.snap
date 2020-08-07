@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LeftChevron should display a LeftChevron icon using the icon font 1`] = `
+<Text
+  style={
+    Object {
+      "color": "#333333",
+      "fontFamily": "GuardianIcons-Regular",
+      "fontSize": 20,
+      "lineHeight": 20,
+    }
+  }
+>
+  
+</Text>
+`;

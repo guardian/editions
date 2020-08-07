@@ -9,8 +9,8 @@ storiesOf('Stars', module)
     .addDecorator(withKnobs)
     .add('Stars - default', () => <Stars rating={rating} />)
     .add('Stars - smallItems', () => (
-        <Stars rating={rating} type="smallItems" />
+        <Stars rating={rating} position="inline" />
     ))
     .add('Stars - trailImage', () => (
-        <Stars rating={rating} type="trailImage" />
+        <Stars rating={rating} position="bottomLeft" />
     ))

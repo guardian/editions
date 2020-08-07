@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
+import { EditionsMenuButton } from 'src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton'
 import { Highlight } from 'src/components/highlight'
 import { GridRowSplit, IssueTitle } from 'src/components/issue/issue-title'
 import { useInsets } from 'src/hooks/use-screen'
@@ -7,6 +8,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import { SpecialEditionHeaderStyles } from '../../../../../Apps/common/src'
 
 const styles = StyleSheet.create({
     background: {
@@ -67,7 +69,8 @@ type TouchableHeaderProps =
     | {}
 
 type HeaderProps = {
-    white?: boolean
+    theme?: 'light' | 'default'
+    headerStyles?: SpecialEditionHeaderStyles
     action?: ReactNode
     leftAction?: ReactNode
     layout?: 'issue' | 'center'
@@ -76,20 +79,28 @@ type HeaderProps = {
 
 const Header = ({
     action,
-    white = false,
+    theme,
+    headerStyles,
     leftAction,
     layout = 'issue',
     children,
     ...otherProps
 }: HeaderProps) => {
     const { top: marginTop } = useInsets()
-    const bg = white ? styles.backgroundWhite : styles.background
+    const bg = theme === 'light' ? styles.backgroundWhite : styles.background
     return (
-        <WithAppAppearance value={white ? 'default' : 'primary'}>
-            {white && (
+        <WithAppAppearance value={theme === 'light' ? 'default' : 'primary'}>
+            {theme === 'light' && (
                 <StatusBar barStyle="dark-content" backgroundColor="#fff" />
             )}
-            <View style={[bg]}>
+            <View
+                style={[
+                    bg,
+                    headerStyles && {
+                        backgroundColor: headerStyles.backgroundColor,
+                    },
+                ]}
+            >
                 {layout === 'issue' ? (
                     <GridRowSplit
                         proxy={
@@ -139,18 +150,17 @@ const Header = ({
     )
 }
 
-const IssuePickerHeader = (
-    headerProps: Omit<HeaderProps, 'children'> & TouchableHeaderProps,
-) => {
-    return (
-        <Header {...headerProps}>
-            <IssueTitle
-                {...headerProps}
-                title={`Recent`}
-                subtitle={`Editions`}
-            />
-        </Header>
-    )
-}
+const EditionsMenuScreenHeader = ({
+    leftActionPress,
+}: {
+    leftActionPress: () => void
+}) => (
+    <Header
+        leftAction={<EditionsMenuButton selected onPress={leftActionPress} />}
+        layout={'center'}
+    >
+        <IssueTitle title={`Editions`} />
+    </Header>
+)
 
-export { Header, IssuePickerHeader }
+export { Header, EditionsMenuScreenHeader }

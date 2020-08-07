@@ -1,12 +1,13 @@
+import ApolloClient from 'apollo-client'
+import gql from 'graphql-tag'
 import { Dispatch } from 'react'
+import { AppState, AppStateStatus } from 'react-native'
+import { eventEmitter } from 'src/helpers/event-emitter'
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
-import { AppState, AppStateStatus } from 'react-native'
-import gql from 'graphql-tag'
 import { getSetting } from '../helpers/settings'
 import { useQuery } from './apollo'
-import ApolloClient from 'apollo-client'
 
 interface IssueSummaryState {
     __typename: 'IssueSummary'
@@ -240,9 +241,9 @@ export const createIssueSummaryResolver = () => {
         //    selected "australian-edition" when they used to have 'daily-edition'), then fetch
         //    a new list of editions as well.
         {
-            type QueryValue = { edition: string }
-            const query = gql('{edition @client}')
-            client.watchQuery<QueryValue>({ query }).subscribe(refetchUpdate)
+            eventEmitter.on('editionUpdate', () => {
+                refetchUpdate()
+            })
         }
 
         /**

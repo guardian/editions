@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     },
     trailImage: {
         position: 'absolute',
-        backgroundColor: 'white',
         left: 0,
         bottom: 0,
     },

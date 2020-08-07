@@ -1,7 +1,7 @@
 import React from 'react'
-import { Platform } from 'react-native'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
-import { ModalButton } from './modal-button'
+import { ModalButton } from './Button/ModalButton'
+import { Copy } from 'src/helpers/words'
 
 const SubNotFoundModalCard = ({
     close,
@@ -15,19 +15,15 @@ const SubNotFoundModalCard = ({
     onDismiss: () => void
 }) => (
     <OnboardingCard
-        title="Already a subscriber?"
+        title={Copy.subNotFound.title}
         appearance={CardAppearance.blue}
         size="small"
-        explainerTitle="Not subscribed yet?"
+        explainerTitle={Copy.subNotFound.explainer}
         onDismissThisCard={() => {
             close()
             onDismiss()
         }}
-        explainerSubtitle={
-            Platform.OS === 'ios'
-                ? 'To get a free trial with our digital subscription, visit our website'
-                : 'Get a free trial with our digital subscription'
-        }
+        explainerSubtitle={Copy.subNotFound.explainerSubtitle}
         bottomContent={
             <>
                 <ModalButton
@@ -36,7 +32,7 @@ const SubNotFoundModalCard = ({
                         onLoginPress()
                     }}
                 >
-                    Sign in to activate
+                    {Copy.subNotFound.signIn}
                 </ModalButton>
                 <ModalButton
                     onPress={() => {
@@ -44,7 +40,7 @@ const SubNotFoundModalCard = ({
                         onOpenCASLogin()
                     }}
                 >
-                    Activate with subscriber ID
+                    {Copy.subNotFound.subscriberButton}
                 </ModalButton>
             </>
         }

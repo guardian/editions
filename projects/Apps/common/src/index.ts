@@ -227,6 +227,14 @@ export const Editions = [
 
 export type Edition = typeof Editions[number]
 
+export const editions = {
+    daily: 'daily-edition' as Edition,
+    ausWeekly: 'australian-edition' as Edition,
+    usWeekly: 'american-edition' as Edition,
+    dummy: 'the-dummy-edition' as Edition,
+    training: 'training-edition' as Edition,
+}
+
 export const imageUseSizes: {
     [u in ImageUse]: { [k in ImageSize]: number }
 } = /*
@@ -259,6 +267,18 @@ export interface IssueIdentifier {
 
 export interface IssuePublicationIdentifier extends IssueIdentifier {
     version: string
+}
+
+export interface IssuePublicationActionIdentifier
+    extends IssuePublicationIdentifier {
+    action: string
+    topic: string
+    notificationUTCOffset: number
+}
+
+export interface EditionListPublicationAction {
+    action: string
+    content: object
 }
 
 export interface IssueSummary extends WithKey, IssueCompositeKey {
@@ -320,6 +340,7 @@ export interface ImageElement {
     caption?: string
     copyright?: string
     credit?: string
+    displayCredit?: boolean
     role?: ImageRoles
 }
 export interface TweetElement {
@@ -453,6 +474,7 @@ export const issueSummaryPath = (edition: string) => `${edition}/issues`
 export interface Image {
     source: string
     path: string
+    role?: ImageRole
 }
 
 export const imageThumbnailUses = ['thumb', 'thumb-large', 'not-used'] as const
@@ -460,6 +482,21 @@ export const imageUses = [...imageThumbnailUses, 'full-size'] as const
 
 export type ImageThumbnailUse = typeof imageThumbnailUses[number]
 export type ImageUse = typeof imageUses[number]
+
+/**
+ * Note that not all of these roles are respected by this project - they are here for completeness.
+ * This list may need to change based off composer changes - currently the full list can be found here:
+ * https://github.com/guardian/flexible-content/blob/2b6c563e7649ccaaba22a178df868f9a274aded4/composer/src/js/controllers/content/common/body-block/elements/edit.js#L269
+ */
+export const imageRoles = [
+    'showcase',
+    'immersive',
+    'inline',
+    'thumbnail',
+    'supporting',
+    'halfWidth',
+] as const
+export type ImageRole = typeof imageRoles[number]
 
 export interface ImageDeviceUses {
     mobile: ImageUse
@@ -480,15 +517,21 @@ export const thumbsPath = (
     use: ImageThumbnailUse,
 ) => `${thumbsDir(issue, size)}${use}/${image.source}/${image.path}`
 
+export const getImageQueryString = (image: Image) =>
+    image.role ? `?role=${image.role}` : ''
+
 export const imagePath = (
     issue: string,
     size: ImageSize,
     image: Image,
     use: ImageUse = 'full-size',
-) =>
-    use == 'full-size'
-        ? mediaPath(issue, size, image)
-        : thumbsPath(issue, size, image, use)
+) => {
+    const baseUrl =
+        use == 'full-size'
+            ? mediaPath(issue, size, image)
+            : thumbsPath(issue, size, image, use)
+    return `${baseUrl}${getImageQueryString(image)}`
+}
 
 export interface CreditedImage extends Image {
     credit?: string
@@ -507,3 +550,54 @@ export interface Palette {
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
+
+export type TextFormatting = {
+    color: string
+    font: string
+    lineHeight: number
+    size: number
+}
+
+export interface SpecialEditionButtonStyles {
+    backgroundColor: string
+    title: TextFormatting
+    subTitle: TextFormatting
+    expiry: TextFormatting
+    image: { width: number; height: number }
+}
+
+export interface SpecialEditionHeaderStyles {
+    backgroundColor: string
+    textColorPrimary?: string
+    textColorSecondary?: string
+}
+
+export interface EditionsList {
+    regionalEditions: RegionalEdition[]
+    specialEditions: SpecialEdition[]
+}
+
+export interface RegionalEdition {
+    title: string
+    subTitle: string
+    edition: Edition
+    header: {
+        title: string
+        subTitle?: string
+    }
+}
+
+export interface SpecialEdition {
+    buttonStyle: SpecialEditionButtonStyles
+    devUri?: string
+    edition: Edition
+    expiry: Date
+    header: {
+        title: string
+        subTitle?: string
+    }
+    headerStyle?: SpecialEditionHeaderStyles
+    image: Image
+    subTitle: string
+    title: string
+}

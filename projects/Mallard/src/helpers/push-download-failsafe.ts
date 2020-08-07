@@ -1,7 +1,10 @@
 import BackgroundFetch from 'react-native-background-fetch'
-import { pushTracking } from './push-tracking'
-import { clearAndDownloadIssue } from './clear-download-issue'
+import { pushTracking } from '../push-notifications/push-tracking'
 import ApolloClient from 'apollo-client'
+import { Feature } from 'src/services/logging'
+import { prepareAndDownloadTodaysIssue } from 'src/download-edition/prepare-and-download-issue'
+
+const feature = Feature.BACKGROUNG_DOWNLOAD
 
 const pushDownloadFailsafe = (client: ApolloClient<object>) => {
     BackgroundFetch.configure(
@@ -11,13 +14,13 @@ const pushDownloadFailsafe = (client: ApolloClient<object>) => {
             startOnBoot: true,
         },
         async () => {
-            await pushTracking('backgroundFetch', 'started')
-            await clearAndDownloadIssue(client)
-            await pushTracking('backgroundFetch', 'ended')
+            await pushTracking('backgroundFetch', 'started', feature)
+            await prepareAndDownloadTodaysIssue(client)
+            await pushTracking('backgroundFetch', 'ended', feature)
             BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA)
         },
         error => {
-            pushTracking('backgroundFetchError', error.toString())
+            pushTracking('backgroundFetchError', error.toString(), feature)
         },
     )
 
@@ -25,13 +28,13 @@ const pushDownloadFailsafe = (client: ApolloClient<object>) => {
     BackgroundFetch.status(status => {
         switch (status) {
             case BackgroundFetch.STATUS_RESTRICTED:
-                pushTracking(ID, 'restricted')
+                pushTracking(ID, 'restricted', feature)
                 break
             case BackgroundFetch.STATUS_DENIED:
-                pushTracking(ID, 'denied')
+                pushTracking(ID, 'denied', feature)
                 break
             case BackgroundFetch.STATUS_AVAILABLE:
-                pushTracking(ID, 'enabled')
+                pushTracking(ID, 'enabled', feature)
                 break
         }
     })

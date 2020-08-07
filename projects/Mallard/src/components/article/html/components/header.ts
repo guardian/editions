@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { ArticleType, HeaderType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { GetImagePath } from 'src/hooks/use-image-paths'
@@ -6,18 +7,21 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import {
-    CreditedImage,
     Article,
+    CreditedImage,
     MediaAtomElement,
+    ArticlePillar,
 } from '../../../../../../Apps/common/src'
 import { CssProps, themeColors } from '../helpers/css'
 import { breakSides } from '../helpers/layout'
-import { Quotes } from './icon/quotes'
+import { getHeadline } from './headline'
 import { Line } from './line'
+import { renderMediaAtom } from './media-atoms'
 import { Rating } from './rating'
 import { SportScore } from './sport-score'
-import { renderMediaAtom } from './media-atoms'
-import { Platform } from 'react-native'
+import { getByLineText } from './helpers/getBylineText'
+import { palette } from '@guardian/pasteup/palette'
+import { getPillarColors } from 'src/helpers/transform'
 
 export interface ArticleHeaderProps {
     headline: string
@@ -35,11 +39,11 @@ export interface ArticleHeaderProps {
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
         display: inline-block;
-        height: 3em;
-        margin-top: -3em;
+        height: 1.70em;
+        margin-top: -1.75em;
         padding-right: ${metrics.article.sides};
-        margin-left: -10em;
-        padding-left: 10em;
+        margin-left: -20em;
+        padding-left: 20.5em;
         border: none;
         z-index: 9;
     }
@@ -71,6 +75,10 @@ const outieHeader = (type: ArticleType) => css`
     ${outieKicker(type)}
 `
 
+const shareButtonColor = ({ colors, theme }: CssProps) => {
+    return theme === 'dark' ? color.palette.neutral[100] : colors.main
+}
+
 export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     /* prevent clicks on byline links */
@@ -78,7 +86,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         pointer-events: none;
     }
 
-    .header:after {
+    .header:after, .header-immersive-video:after {
         background-image: repeating-linear-gradient(
             to bottom,
             ${color.dimLine},
@@ -95,7 +103,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin: 0;
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header:after {
+        .header:after, .header-immersive-video:after {
             margin-right: ${px(metrics.article.sides * -1)};
         }
     }
@@ -110,8 +118,17 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .header-container-line-wrap {
         z-index: 100;
-        ${breakSides}
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        margin: auto;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-container-line-wrap {
+            padding-left: ${px(metrics.article.sides)};
+            padding-right: ${px(metrics.article.sides)};
+        }
+    }
+            
+
     .header-bg {
         left: -50em;
         right: -50em;
@@ -120,26 +137,40 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         position: absolute;
         z-index: -1;
     }
-    .header-image {
-        height: 10%;
+    .header-image--wide {
+        max-width: ${px(metrics.article.maxWidth)};
+        margin: auto;
+    }
+
+    .header-image--standard > .rating, .sport-score {
+        position: absolute;
+        bottom:0;
+        left:0;
+    }
+
+    .header-image--wide > .rating, .sport-score {
+        position: absolute;
+        bottom:0;
+        left:0;
+    }
+    .header-image--immersive {
+        height: 65%;
         width: 100%;
         object-fit: cover;
         display: block;
         z-index: 99;
         position: relative;
-    }
-    .header-image > .rating, .sport-score {
-        position: absolute;
-        bottom:0;
-        left:0;
-    }
-    .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sides * -1)};
         width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-image--immersive {
+            height: 80%;
+        }
+    }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-image.header-image--immersive {
+        .header-image--immersive {
             padding-top: 140%;
         }
     }
@@ -153,7 +184,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
-    .header h1 {
+    .header h1, .header-immersive-video h1 {
         font-size: 30px;
         font-family: ${families.headline.regular};
         font-weight: 400;
@@ -228,16 +259,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
     }
 
-    .header-top p {
+    .header-top p, .header-immersive-video p {
         font-family: ${families.headline.medium};
         letter-spacing: 0.2px;
         line-height: 1.1875em;
         margin-bottom: 0.875em;
         font-size: 18px;
     }
-
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-top p {
+        .header-top p, .header-immersive-video p {
             font-size: 18px;
         }
     }
@@ -282,6 +312,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         overflow: visible;
         height: auto;
     }
+
     .image-as-bg__img {
         width: 100%;
         z-index: 0;
@@ -343,15 +374,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         display: flex;
         width:  ${metrics.fronts.circleButtonDiameter}px;
         height: ${metrics.fronts.circleButtonDiameter}px;
-        border: 1px solid ${colors.main};
-        color: ${colors.main};
+        border: 1px solid ${shareButtonColor({ theme, colors })};;
+        color: ${shareButtonColor({ theme, colors })};
         border-radius: 100%;
         align-items: center;
         justify-content: center;
     }
     .share-icon {
         padding-bottom: .1em;
-        color: ${colors.main};
+        color: ${shareButtonColor({ theme, colors })};
     }
 
     .clearfix {
@@ -363,6 +394,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='review'] .header-bg {
+        background-color: ${colors.faded};
+    }
+    .header-image[data-type='review'] .header-bg {
         background-color: ${colors.faded};
     }
     .header-container[data-type='review'] h1 {
@@ -386,6 +420,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='opinion'] .header-bg {
         background-color: ${color.palette.opinion.faded};
     }
+    .header-image[data-type='opinion'] .header-bg {
+        background-color: ${color.palette.opinion.faded};
+    }
     .header-container[data-type='opinion'] .header-kicker {
         display: none;
     }
@@ -407,6 +444,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='analysis'] .header-bg {
+        background-color: ${color.palette.neutral[93]};
+    }
+    .header-image[data-type='analysis'] .header-bg {
         background-color: ${color.palette.neutral[93]};
     }
     .header-container[data-type='analysis'] .header-kicker {
@@ -449,12 +489,16 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='immersive'] .header-bg {
         background-color: ${color.palette.neutral[100]};
     }
+    .header-image[data-type='immersive'] .header-bg {
+        background-color: ${color.palette.neutral[100]};
+    }
     .header-container[data-type='immersive'] .header {
         background-color: ${color.palette.neutral[100]};
     }
     .header-container[data-type='immersive'] .header-kicker {
         display: none;
     }
+
     .header-container[data-type='immersive'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
         color: ${colors.dark};
@@ -469,6 +513,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
     .header-container[data-type='${ArticleType.Longread}'] .header-bg {
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-image[data-type='${ArticleType.Longread}'] .header-bg {
         background-color: ${color.palette.neutral[7]};
     }
     .header-container[data-type='${ArticleType.Longread}'] .header {
@@ -488,12 +535,182 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
 
+
+    /*interview*/
+    ${outieHeader(ArticleType.Interview)}
+    .header-image--interview {
+        width: 100%;
+        object-fit: cover;
+        display: block;
+        z-index: 99;
+        position: relative;
+        margin: 0 ${px(metrics.article.sides * -1)};
+        width: calc(100% + ${px(metrics.article.sides * 2)});
+        padding-top: 100%;
+    }
+    .header-image--interview button {
+        margin-right: 10px;
+    }
+    .header-image--interview .image-as-bg-info {
+        padding: 15px 25px;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] {
+        color: ${color.textOverDarkBackground};
+    }
+    header-container-line-wrap 
+    .header-container[data-type='${ArticleType.Interview}'] .wrapper {
+        padding-top: 0px;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header {
+        background: ${colors.tint};
+        margin-top: 0;
+        margin-right: -50em;
+        padding-right: 50em;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header:after {
+        background-color: white;
+        background-image: none;
+        background-size: 0px 0px;
+        height: 0px;
+        margin: 0;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header h1 {
+        padding-left: 10px
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header h1 svg {
+        fill: white;
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header-top {
+        margin-top: -0.25em;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header-top h1 {
+        font-family: ${families.headline.medium};
+        padding-right: 25px;
+        margin-bottom: 12px;
+    }
+    .header-container[data-type='${
+        ArticleType.Interview
+    }'] .header h1 .header-top-headline {
+        background-color: ${color.palette.neutral[7]};
+        box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]}, 
+            -10px 0 0 ${color.palette.neutral[7]};
+        line-height: 38px;
+        padding-bottom: 6px;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header-kicker {
+        background-color: ${colors.main};
+        color: ${color.textOverDarkBackground};
+        font-family: ${families.headline.bold};
+        margin-left: 0;
+        padding-left: 10px;
+    }
+    .header-container[data-type='${
+        ArticleType.Interview
+    }'] .header-byline:before {
+        background-image: repeating-linear-gradient(
+            to bottom,
+            ${color.dimLine},
+            ${color.dimLine} 1px,
+            transparent 1px,
+            transparent 4px
+        );
+        background-repeat: repeat-x;
+        background-position: bottom;
+        background-size: 1px 16px;
+        content: '';
+        display: block;
+        height: 16px;
+        margin: 0;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header-byline {
+        padding: 0em 0 1.25em 0em;
+        color: ${color.palette.neutral[7]};
+    }
+    .header-container[data-type='${
+        ArticleType.Interview
+    }'] .header-byline button{
+        margin-right: 20px;
+        margin-top: 0px;
+    }
+    .header-container[data-type='${ArticleType.Interview}'] .header-byline span{
+        padding-left: 0px;
+        margin-top: 4px;
+        display: block;
+    }
+    .interview-standfirst {
+        margin-bottom: 0em !important;
+        padding: 0 10px 18px 10px;
+    }
+    .app[data-type='${ArticleType.Interview}'] {
+        padding: 0 !important;
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .wrapper[data-type='${ArticleType.Interview}'] {
+            margin-right: ${px(metrics.article.rightRail)}
+        }
+
+        .header-container[data-type='${ArticleType.Interview}'] .header-kicker {
+            height: 2.70em;
+            margin-top: -5.3em;
+        }
+
+        .header-container[data-type='${ArticleType.Interview}'] .header-top {
+            margin-top: -3.1em;
+        }
+
+        .header-container[data-type='${ArticleType.Interview}'] .header-byline {
+            border-right: 1px solid ${themeColors(theme).line};
+            border-bottom: 1px solid ${color.dimLine};
+        }
+
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header-byline:after {
+            display: none;
+        }
+
+        .interview-standfirst {
+            padding: 0 0px 30px 0px;
+        }
+
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header h1 .header-top-headline {
+            line-height: 50px;
+        }
+    }
+
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        .app[data-type='${ArticleType.Interview}'] .content-wrap main {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header-byline button{
+            margin-right: 10px;
+        }
+
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header-byline span{
+            padding-left: 10px;
+        }
+    }
+    
+
     /*obit*/
     ${outieKicker(ArticleType.Obituary)}
     .header-container[data-type='${ArticleType.Obituary}'] {
         color: ${color.textOverDarkBackground};
     }
     .header-container[data-type='${ArticleType.Obituary}'] .header-bg {
+        background-color: ${color.palette.neutral[20]};
+    }
+    .header-image[data-type='${ArticleType.Obituary}'] .header-bg {
         background-color: ${color.palette.neutral[20]};
     }
     .header-container[data-type='${ArticleType.Obituary}'] .header {
@@ -537,6 +754,8 @@ const Image = ({
 
 const MainMediaImage = ({
     image,
+    articleType,
+    isGallery,
     className,
     children,
     preserveRatio,
@@ -544,33 +763,43 @@ const MainMediaImage = ({
 }: {
     image: CreditedImage
     className?: string
+    articleType?: ArticleType
+    isGallery?: boolean
     children?: string
     preserveRatio?: boolean
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
-
     return html`
-        <div
-            class="image-as-bg ${className}"
-            data-preserve-ratio="${preserveRatio || 'false'}"
-            style="background-image: url(${path}); "
-            data-open="false"
-        >
-            ${preserveRatio &&
-                html`
-                    <img class="image-as-bg__img" src="${path}" aria-hidden />
-                `}
-            <button
-                aria-hidden
-                onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+        <div class="header-image" data-type="${articleType}">
+            <div
+                class="image-as-bg ${className}"
+                data-preserve-ratio="${preserveRatio || 'false'}"
+                style="background-image: url(${path}); "
+                ${!isGallery &&
+                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
+                data-open="false"
             >
-                
-            </button>
-            <div class="image-as-bg-info">
-                ${image.caption} ${!image.displayCredit ? '' : image.credit}
+                ${preserveRatio &&
+                    html`
+                        <img
+                            class="image-as-bg__img"
+                            src="${path}"
+                            aria-hidden
+                        />
+                    `}
+                <button
+                    aria-hidden
+                    onclick="event.stopPropagation(); this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+                >
+                    
+                </button>
+                <div class="image-as-bg-info">
+                    ${image.caption} ${!image.displayCredit ? '' : image.credit}
+                </div>
+                ${children}
+                <div class="header-bg"></div>
             </div>
-            ${children}
         </div>
     `
 }
@@ -579,7 +808,8 @@ const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive ||
     type === ArticleType.Longread ||
     type === ArticleType.Obituary ||
-    type === ArticleType.Gallery
+    type === ArticleType.Gallery ||
+    type === ArticleType.Interview
 
 const getStandFirst = (
     articleHeaderType: HeaderType,
@@ -587,6 +817,7 @@ const getStandFirst = (
     headerProps: ArticleHeaderProps,
     publishedId: Issue['publishedId'] | null,
     getImagePath: GetImagePath,
+    pillar: ArticlePillar,
 ): string => {
     const cutout =
         type === ArticleType.Opinion &&
@@ -596,15 +827,7 @@ const getStandFirst = (
         return html`
             <section class="header-top">
                 <div class="${cutout && `header-opinion-flex`}">
-                    <h1>
-                        ${type === ArticleType.Opinion && Quotes()}
-                        <span class="header-top-headline"
-                            >${headerProps.headline}
-                        </span>
-                        <span class="header-top-byline"
-                            >${headerProps.bylineHtml}
-                        </span>
-                    </h1>
+                    ${getHeadline(articleHeaderType, type, headerProps)}
                     ${publishedId &&
                         cutout &&
                         html`
@@ -619,14 +842,21 @@ const getStandFirst = (
             </section>
         `
     } else {
+        const color =
+            pillar === 'lifestyle'
+                ? getPillarColors(pillar).dark
+                : palette.neutral[7]
+
         return html`
             <section class="header-top">
-                <h1>
-                    ${headerProps.headline}
-                </h1>
+                ${getHeadline(articleHeaderType, type, headerProps)}
                 ${articleHeaderType === HeaderType.RegularByline &&
                     headerProps.standfirst &&
-                    `<p>
+                    `<p class="${
+                        type === ArticleType.Interview
+                            ? 'interview-standfirst'
+                            : ''
+                    }" style="color: ${color};">
                         ${headerProps.standfirst}
                       </p>`}
             </section>
@@ -651,21 +881,29 @@ const getHeaderClassForType = (headerType: HeaderType): string => {
     }
 }
 
+const hasByLine = (
+    byLineText: string | undefined,
+    canBeShared: boolean,
+): boolean => {
+    if (byLineText || canBeShared) {
+        return true
+    }
+    return false
+}
+
 const getByLine = (
     headerType: HeaderType,
     canBeShared: boolean,
     headerProps: ArticleHeaderProps,
+    articleType?: ArticleType,
 ): string => {
     const headerClass = getHeaderClassForType(headerType)
-    const bylineText =
-        headerType === HeaderType.NoByline ||
-        headerType === HeaderType.LargeByline
-            ? headerProps.standfirst
-            : headerProps.bylineHtml
+    const bylineText = getByLineText(headerType, headerProps, articleType)
     const shareButton = !canBeShared
         ? ''
         : html`
               <button
+                  name="Share button"
                   class="share-touch-zone"
                   onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
               >
@@ -677,9 +915,9 @@ const getByLine = (
               </button>
           `
     return html`
-        <aside class="${headerClass}">
+        <aside class="${headerClass}" data-type="${articleType}">
             ${shareButton}
-            <span>${bylineText}</span>
+            <span style="pointer-events: none">${bylineText}</span>
             <div class="clearfix"></div>
         </aside>
     `
@@ -690,6 +928,7 @@ const Header = ({
     type,
     headerType,
     getImagePath,
+    pillar,
     ...headerProps
 }: {
     showMedia: boolean
@@ -697,38 +936,75 @@ const Header = ({
     type: ArticleType
     headerType: HeaderType
     canBeShared: boolean
+    pillar: ArticlePillar
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const isGallery = type === ArticleType.Gallery
+    const byLineText = getByLineText(headerType, headerProps)
+    const displayWideImage =
+        type === ArticleType.Article || type === ArticleType.Review
     return html`
         ${immersive &&
             headerProps.image &&
             publishedId &&
             MainMediaImage({
                 image: headerProps.image,
-                className: 'header-image header-image--immersive',
+                isGallery: isGallery,
+                className:
+                    type === ArticleType.Interview
+                        ? 'header-image--interview'
+                        : 'header-image--immersive',
+                getImagePath,
+            })}
+        ${!immersive &&
+            displayWideImage &&
+            headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                articleType: type,
+                className: 'header-image--wide',
+                image: headerProps.image,
+                isGallery: isGallery,
+                preserveRatio: true,
+                children: headerProps.starRating
+                    ? Rating(headerProps)
+                    : headerProps.sportScore
+                    ? SportScore({
+                          sportScore: headerProps.sportScore,
+                      })
+                    : undefined,
                 getImagePath,
             })}
         <div class="header-container-line-wrap">
-            ${Line({ zIndex: 10 })}
+            ${type !== ArticleType.Interview && Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
-                <header class="header">
-                    ${!immersive &&
-                        headerProps.image &&
-                        publishedId &&
-                        MainMediaImage({
-                            className: 'header-image',
-                            image: headerProps.image,
-                            preserveRatio: true,
-                            children: headerProps.starRating
-                                ? Rating(headerProps)
-                                : headerProps.sportScore
-                                ? SportScore({
-                                      sportScore: headerProps.sportScore,
-                                  })
-                                : undefined,
-                            getImagePath,
-                        })}
+                ${!immersive &&
+                    !displayWideImage &&
+                    headerProps.image &&
+                    publishedId &&
+                    MainMediaImage({
+                        articleType: type,
+                        className: 'header-image--standard',
+                        image: headerProps.image,
+                        isGallery: isGallery,
+                        preserveRatio: true,
+                        children: headerProps.starRating
+                            ? Rating(headerProps)
+                            : headerProps.sportScore
+                            ? SportScore({
+                                  sportScore: headerProps.sportScore,
+                              })
+                            : undefined,
+                        getImagePath,
+                    })}
+                <header
+                    class=${immersive &&
+                    headerProps.mainMedia &&
+                    headerProps.showMedia
+                        ? 'header-immersive-video'
+                        : 'header'}
+                >
                     ${headerProps.mainMedia &&
                         (headerProps.showMedia
                             ? renderMediaAtom(headerProps.mainMedia)
@@ -745,17 +1021,19 @@ const Header = ({
                         headerProps,
                         publishedId,
                         getImagePath,
+                        pillar,
                     )}
                 </header>
-                ${getByLine(
-                    headerType,
-                    headerProps.canBeShared,
-                    headerProps as ArticleHeaderProps,
-                )}
+                ${hasByLine(byLineText, headerProps.canBeShared) &&
+                    getByLine(
+                        headerType,
+                        headerProps.canBeShared,
+                        headerProps as ArticleHeaderProps,
+                        type,
+                    )}
                 <div class="header-bg"></div>
             </div>
         </div>
     `
 }
-
-export { Header }
+export { Header, getStandFirst }

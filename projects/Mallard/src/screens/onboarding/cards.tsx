@@ -4,14 +4,21 @@ import {
     OnboardingCard,
     CardAppearance,
 } from 'src/components/onboarding/onboarding-card'
-import { ButtonAppearance } from 'src/components/button/button'
-import { ModalButton } from 'src/components/modal-button'
+import { ButtonAppearance } from 'src/components/Button/Button'
+import { ModalButton } from 'src/components/Button/ModalButton'
 import { LinkNav } from 'src/components/link'
-import { gdprSwitchSettings } from 'src/helpers/settings'
+import {
+    gdprSwitchSettings,
+    CURRENT_CONSENT_VERSION,
+} from 'src/helpers/settings'
 import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
-import { setGdprFlag } from 'src/helpers/settings/setters'
+import {
+    setGdprFlag,
+    setGdprConsentVersion,
+} from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
+import { Copy } from 'src/helpers/words'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
     <View
@@ -47,22 +54,21 @@ const OnboardingConsent = ({
 }) => {
     const query = useQuery<{ [key: string]: boolean | null }>(QUERY)
     if (query.loading) return null
-    const { data, client } = query
+    const { client } = query
 
     const enableNulls = () => {
         gdprSwitchSettings.map(sw => {
-            if (data[sw] === null) {
-                setGdprFlag(client, sw, true)
-            }
+            setGdprFlag(client, sw, true)
         })
+        setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
     }
 
     return (
         <Aligner>
             <OnboardingCard
                 appearance={CardAppearance.blue}
-                title="We care about your privacy"
-                explainerTitle="This app is free of ads"
+                title={Copy.consentOnboarding.title}
+                explainerTitle={Copy.consentOnboarding.explainerTitle}
                 bottomExplainerContent={
                     <>
                         <View style={styles.consentButtonContainer}>
@@ -75,7 +81,7 @@ const OnboardingConsent = ({
                                         ButtonAppearance.skeletonBlue
                                     }
                                 >
-                                    My options
+                                    {Copy.consentOnboarding.optionsButton}
                                 </ModalButton>
                             </View>
                             <View>
@@ -86,7 +92,7 @@ const OnboardingConsent = ({
                                     }}
                                     buttonAppearance={ButtonAppearance.dark}
                                 >
-                                    {`I'm okay with that`}
+                                    {Copy.consentOnboarding.okayButton}
                                 </ModalButton>
                             </View>
                         </View>
