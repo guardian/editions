@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import gql from 'graphql-tag'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Alert, Clipboard, View } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
 import { Switch } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { AccessContext } from 'src/authentication/AccessContext'
@@ -74,7 +73,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
     const [imageSize, setImageSize] = useState('fetching...')
-    const buildNumber = DeviceInfo.getBuildNumber()
     const [pushTokens, setPushTokens] = useState('fetching...')
     const [downloadedIssues, setDownloadedIssues] = useState('fetching...')
 
@@ -237,11 +235,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Clear CAS caches',
                         title: 'Clear CAS caches',
                         onPress: signOutCAS,
-                    },
-                    {
-                        key: 'Build number',
-                        title: 'Build number',
-                        explainer: buildNumber,
                     },
                     {
                         key: 'Locale',
