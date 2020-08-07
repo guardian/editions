@@ -1,13 +1,14 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
+import { Copy } from 'src/helpers/words'
 
 const SubFoundModalCard = ({ close }: { close: () => void }) => (
     <OnboardingCard
-        title="Subscription found"
+        title={Copy.subFound.title}
         onDismissThisCard={() => {
             close()
         }}
-        subtitle="Enjoy the Guardian and thank you for your support"
+        subtitle={Copy.subFound.subtitle}
         appearance={CardAppearance.blue}
         size="small"
         bottomContent={<></>}

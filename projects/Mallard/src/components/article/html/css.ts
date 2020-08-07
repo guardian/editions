@@ -16,6 +16,7 @@ import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
 import { ArticleType } from '../../../../../Apps/common/src'
+import { twitterEmbedStyles } from './components/twitter-embed'
 
 const makeFontsCss = () => css`
     /* text */
@@ -209,6 +210,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     ${starRatingStyles({ colors, theme })}
     ${sportScoreStyles({ colors, theme })}
     ${mediaAtomStyles}
+    ${twitterEmbedStyles}
 `
 
 export { makeCss }

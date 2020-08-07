@@ -12,25 +12,25 @@ import { useModal } from 'src/components/modal'
 import { isValid, isError } from 'src/authentication/lib/Attempt'
 import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
+import { Copy } from 'src/helpers/words'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
     const { authIAP } = useContext(AccessContext)
     const { open } = useModal()
-
     const rightChevronIcon = <RightChevron />
 
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
-                <Heading>{`Guardian digital subscription/Digital + Print`}</Heading>
+                <Heading>{Copy.alreadySubscribed.subscriptionHeading}</Heading>
                 <List
                     data={
                         !canAccess
                             ? [
                                   {
                                       key: 'Sign in to activate',
-                                      title: 'Sign in to activate',
+                                      title: Copy.alreadySubscribed.signInTitle,
                                       onPress: () => {
                                           navigation.navigate(routeNames.SignIn)
                                       },
@@ -39,7 +39,9 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                   },
                                   {
                                       key: 'Activate with subscriber ID',
-                                      title: 'Activate with subscriber ID',
+                                      title:
+                                          Copy.alreadySubscribed
+                                              .subscriberIdTitle,
                                       onPress: () => {
                                           navigation.navigate(
                                               routeNames.CasSignIn,
@@ -55,12 +57,15 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                 {Platform.OS === 'ios' ? (
                     <>
                         <Heading>{``}</Heading>
-                        <Heading>{`Daily Edition`}</Heading>
+                        <Heading>
+                            {Copy.alreadySubscribed.appHeadingDaily}
+                        </Heading>
                         <List
                             data={[
                                 {
                                     key: 'Restore App Store subscription',
-                                    title: 'Restore App Store subscription',
+                                    title:
+                                        Copy.alreadySubscribed.restoreIapTitle,
                                     onPress: async () => {
                                         const {
                                             accessAttempt,
@@ -74,8 +79,14 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                         } else if (isError(accessAttempt)) {
                                             open(close => (
                                                 <MissingIAPModalCard
-                                                    title="Verification error"
-                                                    subtitle="There was a problem whilst verifying your subscription"
+                                                    title={
+                                                        Copy.alreadySubscribed
+                                                            .restoreErrorTitle
+                                                    }
+                                                    subtitle={
+                                                        Copy.alreadySubscribed
+                                                            .restoreErrorSubtitle
+                                                    }
                                                     close={close}
                                                     onTryAgain={authIAP}
                                                 />
@@ -83,8 +94,14 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                         } else {
                                             open(close => (
                                                 <MissingIAPModalCard
-                                                    title="Subscription not found"
-                                                    subtitle="We were unable to find a subscription associated with your Apple ID"
+                                                    title={
+                                                        Copy.alreadySubscribed
+                                                            .restoreMissingTitle
+                                                    }
+                                                    subtitle={
+                                                        Copy.alreadySubscribed
+                                                            .restoreMissingSubtitle
+                                                    }
                                                     close={close}
                                                     onTryAgain={authIAP}
                                                 />
@@ -106,7 +123,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
 }
 
 AlreadySubscribedScreen.navigationOptions = {
-    title: <Text style={{ fontSize: 20 }}>Subscription Activation</Text>,
+    title: <Text style={{ fontSize: 20 }}>{Copy.alreadySubscribed.title}</Text>,
 }
 
 export { AlreadySubscribedScreen }

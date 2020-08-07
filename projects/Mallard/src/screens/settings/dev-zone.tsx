@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import gql from 'graphql-tag'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Alert, Clipboard, View } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
 import { Switch } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { AccessContext } from 'src/authentication/AccessContext'
@@ -14,7 +13,7 @@ import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { getFileList } from 'src/helpers/files'
+import { getFileList, getEdtionIssuesCount } from 'src/helpers/files'
 import { locale } from 'src/helpers/locale'
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream'
 import { imageForScreenSize } from 'src/helpers/screen'
@@ -74,8 +73,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
     const [imageSize, setImageSize] = useState('fetching...')
-    const buildNumber = DeviceInfo.getBuildNumber()
     const [pushTokens, setPushTokens] = useState('fetching...')
+    const [downloadedIssues, setDownloadedIssues] = useState('fetching...')
+
+    useEffect(() => {
+        getEdtionIssuesCount().then(stats => {
+            setDownloadedIssues(stats.join('\n'))
+        })
+    }, [])
 
     useEffect(() => {
         pushRegisteredTokens.get().then(tokens => {
@@ -232,11 +237,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         onPress: signOutCAS,
                     },
                     {
-                        key: 'Build number',
-                        title: 'Build number',
-                        explainer: buildNumber,
-                    },
-                    {
                         key: 'Locale',
                         title: 'Device locale',
                         explainer: locale,
@@ -256,12 +256,12 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         },
                     },
                     {
-                        key: 'Enable edition menu',
-                        title: 'Enable edition menu',
+                        key: 'Enable multiple editions',
+                        title: 'Enable multiple editions',
                         onPress: () => {},
                         proxy: (
                             <Switch
-                                value={editionsMenuEnabled}
+                                value={editionsMenuEnabled} // this will also update the copy for multiple editions
                                 onValueChange={toggleEditionsMenuEnabled}
                             />
                         ),
@@ -286,6 +286,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Push Tokens',
                         title: 'Registered push tokens',
                         explainer: pushTokens,
+                    },
+                    {
+                        key: 'All Downloaded Issues',
+                        title: 'All Downloaded Issues',
+                        explainer: downloadedIssues,
                     },
                     {
                         key: 'Files in Issues',

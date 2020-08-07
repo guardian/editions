@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Text } from 'react-native'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
@@ -9,6 +9,8 @@ import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthori
 import { CASExpiry } from '../../../../Apps/common/src/cas-expiry'
 import { Heading } from 'src/components/layout/ui/row'
 import { ReceiptIOS } from 'src/authentication/services/iap'
+import { Copy } from 'src/helpers/words'
+import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
 
 const keyValueItem = (key: string, value: string) =>
     ({
@@ -24,14 +26,17 @@ const IdentityDetails = ({
     identityData: IdentityAuthData
 }) => (
     <>
-        <Heading>Paper + digital subscription</Heading>
+        <Heading>{Copy.subscriptionDetails.heading}</Heading>
         <List
             data={[
                 keyValueItem(
-                    'Email Address',
+                    Copy.subscriptionDetails.emailAddress,
                     identityData.userDetails.primaryEmailAddress,
                 ),
-                keyValueItem('User ID', identityData.membershipData.userId),
+                keyValueItem(
+                    Copy.subscriptionDetails.userId,
+                    identityData.membershipData.userId,
+                ),
             ]}
         />
     </>
@@ -46,12 +51,21 @@ const getCASType = (casData: CASExpiry) =>
 
 const CASDetails = ({ casData }: { casData: CASExpiry }) => (
     <>
-        <Heading>Paper + digital subscription</Heading>
+        <Heading>{Copy.subscriptionDetails.heading}</Heading>
         <List
             data={[
-                keyValueItem('Subscription type', getCASType(casData)),
-                keyValueItem('Expiry date', casData.expiryDate),
-                keyValueItem('Subscription prefix', casData.provider),
+                keyValueItem(
+                    Copy.subscriptionDetails.subscriptionType,
+                    getCASType(casData),
+                ),
+                keyValueItem(
+                    Copy.subscriptionDetails.expiryDate,
+                    casData.expiryDate,
+                ),
+                keyValueItem(
+                    Copy.subscriptionDetails.subscriptionPrefix,
+                    casData.provider,
+                ),
             ]}
         />
     </>
@@ -67,20 +81,37 @@ const productIdPrettyLabels: { [key: string]: string } = {
 const getIAPType = (iapData: ReceiptIOS) =>
     productIdPrettyLabels[iapData.product_id] || iapData.name || 'Unknown'
 
-const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
-    <>
-        <Heading>Guardian Daily / App Store</Heading>
-        <List
-            data={[
-                keyValueItem('Subscription type', getIAPType(iapData)),
-                keyValueItem('Purchase date', iapData.original_purchase_date),
-                keyValueItem('Expiry date', iapData.expires_date),
-            ]}
-        />
-    </>
-)
+const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => {
+    const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
+    useEffect(() => {
+        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
+            setEditionsMenuEnabled(editionsMenuToggle)
+        })
+    }, [])
+    return (
+        <>
+            <Heading>
+                {editionsMenuEnabled
+                    ? Copy.subscriptionDetails.iapHeadingEditions
+                    : Copy.subscriptionDetails.iapHeadingDaily}
+            </Heading>
+            <List
+                data={[
+                    keyValueItem('Subscription type', getIAPType(iapData)),
+                    keyValueItem(
+                        'Purchase date',
+                        iapData.original_purchase_date,
+                    ),
+                    keyValueItem('Expiry date', iapData.expires_date),
+                ]}
+            />
+        </>
+    )
+}
 
-const LoggedOutDetails = () => <Heading>Not logged in</Heading>
+const LoggedOutDetails = () => (
+    <Heading>{Copy.subscriptionDetails.loggedOutHeading}</Heading>
+)
 
 const SubscriptionDetailsScreen = () => {
     const { identityData, iapData, casData, attempt } = useContext(
@@ -114,7 +145,9 @@ const SubscriptionDetailsScreen = () => {
 }
 
 SubscriptionDetailsScreen.navigationOptions = {
-    title: <Text style={{ fontSize: 20 }}>Subscription Details</Text>,
+    title: (
+        <Text style={{ fontSize: 20 }}>{Copy.subscriptionDetails.title}</Text>
+    ),
 }
 
 export { SubscriptionDetailsScreen }

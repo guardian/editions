@@ -47,6 +47,7 @@ import { IssueWithFronts } from '../../../Apps/common/src'
 import { ApiState } from './settings/api-screen'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
+import { Copy } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -181,7 +182,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                         })
                     }}
                 >
-                    Manage downloads
+                    {Copy.issueListFooter.manageDownloads}
                 </Button>
             </GridRowSplit>
             {isUsingProdDevtools ? (
@@ -200,7 +201,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                             })
                         }}
                     >
-                        Go to latest
+                        {Copy.issueListFooter.goToLatestButton}
                     </Button>
                 </GridRowSplit>
             ) : null}
@@ -449,7 +450,10 @@ export const HomeScreen = () => {
         editionsMenuEnabled ? (
             <IssuePickerHeader title={title} subTitle={subTitle} />
         ) : (
-            <IssuePickerHeader title="Recent" subTitle="Editions" />
+            <IssuePickerHeader
+                title={Copy.homeScreen.issuePickerTitle}
+                subTitle={Copy.homeScreen.issuePickerTitleSubtitle}
+            />
         )
 
     return (
