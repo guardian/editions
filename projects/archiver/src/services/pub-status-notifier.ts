@@ -10,7 +10,7 @@ export type ToolStatus =
     | 'Publishing'
     | 'Published'
     | 'Failed'
-    | 'Processing'
+    | 'PostProcessing'
 
 export interface PublishEvent {
     edition: Edition
@@ -58,47 +58,59 @@ export const createPublishEvent = (
     const timestamp = eventTime.format()
     switch (status) {
         case 'started':
+            return {
+                ...identifier,
+                status: 'Proofing',
+                message: '1/4: Started',
+                timestamp,
+            }
         case 'assembled':
+            return {
+                ...identifier,
+                status: 'Proofing',
+                message: '2/4: Assembled',
+                timestamp,
+            }
         case 'bundled':
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: `Proof stage: ${status}`,
+                message: '3/4: Bundled',
                 timestamp,
             }
         case 'proofed':
             return {
                 ...identifier,
                 status: 'Proofed',
-                message: `Ready for proofing on-device`,
+                message: '4/4: Ready for proofing on-device',
                 timestamp,
             }
         case 'copied':
             return {
                 ...identifier,
                 status: 'Publishing',
-                message: `Publication stage: ${status}`,
+                message: '1/2: Copied to publication location',
                 timestamp,
             }
         case 'published':
             return {
                 ...identifier,
                 status: 'Published',
-                message: `Publication stage: ${status}`,
+                message: '2/2: Added to issue index',
                 timestamp,
             }
         case 'notified':
             return {
                 ...identifier,
-                status: 'Published',
-                message: 'Publication processing complete',
+                status: 'PostProcessing',
+                message: 'Notification scheduled',
                 timestamp,
             }
         case 'editionsListUpdated':
             return {
                 ...identifier,
-                status: 'Processing',
-                message: `Publication stage: ${status}`,
+                status: 'PostProcessing',
+                message: 'Editions List updated',
                 timestamp,
             }
         case 'errored':
