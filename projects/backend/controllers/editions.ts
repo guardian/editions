@@ -9,6 +9,7 @@ const getSpecialEditions = (): Array<SpecialEdition> => {
 const editionsList: EditionsList = {
     regionalEditions: defaultRegionalEditions,
     specialEditions: getSpecialEditions(),
+    trainingEditions: [],
 }
 
 export const editionsController = (req: Request, res: Response) => {
