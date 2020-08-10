@@ -342,12 +342,9 @@ const getPreviewHeaders = (endpoint: string) => {
     }
 }
 
-const isScheduledSoon = (dateiso8601: string): boolean => {
+const isScheduledInNext30Days = (dateiso8601: string): boolean => {
     const date = new Date(dateiso8601)
-    const SOON_DAYS = 30
-    const oneMonthAway = new Date(
-        new Date().setDate(date.getDate() + SOON_DAYS),
-    )
+    const oneMonthAway = new Date(new Date().setDate(date.getDate() + 30))
     return date < oneMonthAway
 }
 
@@ -356,7 +353,7 @@ const removeUnscheduledDraftContent = (content: IContent[]): IContent[] => {
         c =>
             c.fields &&
             c.fields.scheduledPublicationDate &&
-            isScheduledSoon(c.fields.scheduledPublicationDate.iso8601),
+            isScheduledInNext30Days(c.fields.scheduledPublicationDate.iso8601),
     )
 }
 
