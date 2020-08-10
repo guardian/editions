@@ -123,9 +123,9 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { signOutIdentity, iapData } = useContext(AccessContext)
 
     const versionNumber = DeviceInfo.getVersion()
-    const isLoggedInWithIdentity = !!(identityData
+    const isLoggedInWithIdentity = identityData
         ? identityData.userDetails.primaryEmailAddress
-        : undefined)
+        : undefined
 
     const canDisplayBetaButton = !!!iapData && isLoggedInWithIdentity
 
