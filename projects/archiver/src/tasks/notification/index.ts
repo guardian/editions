@@ -7,6 +7,7 @@ import {
 import { IndexTaskOutput } from '../indexer'
 import { IssuePublicationIdentifier } from '../../../common'
 import { getBucket } from '../../utils/s3'
+import { sleep } from '../../utils/sleep'
 
 export type NotificationTaskInput = IndexTaskOutput
 export interface NotificationTaskOutput {
@@ -22,6 +23,9 @@ export const handler: Handler<
 > = handleAndNotify(
     'notified',
     async ({ issuePublication, issue }) => {
+        console.log(`Scheduling notification for ${issue.name}, ${issue.date}`)
+        await sleep(1000)
+
         const stage: string = process.env.stage || 'code'
 
         const {
