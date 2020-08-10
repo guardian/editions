@@ -12,6 +12,7 @@ import { useModal } from 'src/components/modal'
 import { isValid, isError } from 'src/authentication/lib/Attempt'
 import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
+import { Copy } from 'src/helpers/words'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
@@ -30,7 +31,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             ? [
                                   {
                                       key: 'Sign in to activate',
-                                      title: 'Sign in to activate',
+                                      title: Copy.alreadySubscribed.signInTitle,
                                       onPress: () => {
                                           navigation.navigate(routeNames.SignIn)
                                       },
@@ -39,7 +40,9 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                   },
                                   {
                                       key: 'Activate with subscriber ID',
-                                      title: 'Activate with subscriber ID',
+                                      title:
+                                          Copy.alreadySubscribed
+                                              .subscriberIdTitle,
                                       onPress: () => {
                                           navigation.navigate(
                                               routeNames.CasSignIn,
@@ -60,7 +63,8 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             data={[
                                 {
                                     key: 'Restore App Store subscription',
-                                    title: 'Restore App Store subscription',
+                                    title:
+                                        Copy.alreadySubscribed.restoreIapTitle,
                                     onPress: async () => {
                                         const {
                                             accessAttempt,
@@ -74,8 +78,14 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                         } else if (isError(accessAttempt)) {
                                             open(close => (
                                                 <MissingIAPModalCard
-                                                    title="Verification error"
-                                                    subtitle="There was a problem whilst verifying your subscription"
+                                                    title={
+                                                        Copy.alreadySubscribed
+                                                            .restoreErrorTitle
+                                                    }
+                                                    subtitle={
+                                                        Copy.alreadySubscribed
+                                                            .restoreErrorSubtitle
+                                                    }
                                                     close={close}
                                                     onTryAgain={authIAP}
                                                 />
@@ -83,8 +93,14 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                         } else {
                                             open(close => (
                                                 <MissingIAPModalCard
-                                                    title="Subscription not found"
-                                                    subtitle="We were unable to find a subscription associated with your Apple ID"
+                                                    title={
+                                                        Copy.alreadySubscribed
+                                                            .restoreMissingTitle
+                                                    }
+                                                    subtitle={
+                                                        Copy.alreadySubscribed
+                                                            .restoreMissingSubtitle
+                                                    }
                                                     close={close}
                                                     onTryAgain={authIAP}
                                                 />

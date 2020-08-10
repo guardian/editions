@@ -1,7 +1,4 @@
-import {
-    lightboxSettingCache,
-    enableEditionMenuCache,
-} from 'src/helpers/storage'
+import { enableEditionMenuCache } from 'src/helpers/storage'
 import { AsyncCache } from 'src/authentication/lib/Authorizer'
 
 const setDebugSetting = async (toggle: boolean, cache: AsyncCache<boolean>) => {
@@ -24,18 +21,9 @@ const fetchDebugSetting = async (
     }
 }
 
-const fetchLightboxSetting = () => fetchDebugSetting(lightboxSettingCache)
-const setlightboxSetting = (toggle: boolean) =>
-    setDebugSetting(toggle, lightboxSettingCache)
-
 const fetchEditionMenuEnabledSetting = () =>
     fetchDebugSetting(enableEditionMenuCache)
 const setEditionMenuEnabledSetting = (toggle: boolean) =>
     setDebugSetting(toggle, enableEditionMenuCache)
 
-export {
-    fetchLightboxSetting,
-    setlightboxSetting,
-    fetchEditionMenuEnabledSetting,
-    setEditionMenuEnabledSetting,
-}
+export { fetchEditionMenuEnabledSetting, setEditionMenuEnabledSetting }

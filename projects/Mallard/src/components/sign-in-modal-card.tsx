@@ -6,6 +6,7 @@ import { Link } from './link'
 import { ButtonAppearance } from './Button/Button'
 import { getFont } from 'src/theme/typography'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
+import { Copy } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     bottomContentContainer: {
@@ -29,8 +30,8 @@ const SignInModalCard = ({
 }) => (
     <OnboardingCard
         onDismissThisCard={onDismiss}
-        title="Already a subscriber?"
-        subtitle="Sign in with your subscriber details to continue"
+        title={Copy.signIn.title}
+        subtitle={Copy.signIn.subtitle}
         appearance={CardAppearance.blue}
         size="medium"
         bottomContent={
@@ -58,12 +59,8 @@ const SignInModalCard = ({
                 </View>
             </>
         }
-        explainerTitle="Not subscribed yet?"
-        explainerSubtitle={
-            Platform.OS === 'ios'
-                ? 'Get the Daily with a digital subscription from The Guardian website.'
-                : 'Read the Daily with a digital subscription from The Guardian.'
-        }
+        explainerTitle={Copy.signIn.explainerTitle}
+        explainerSubtitle={Copy.signIn.explainerSubtitle}
         bottomExplainerContent={
             <>
                 {/* Added only for Android - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
@@ -76,7 +73,7 @@ const SignInModalCard = ({
                         }}
                         buttonAppearance={ButtonAppearance.dark}
                     >
-                        {'Start your free 14 day trial'}
+                        {Copy.signIn.freeTrial}
                     </ModalButton>
                 ) : null}
                 {/* Being hidden temporarily - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}

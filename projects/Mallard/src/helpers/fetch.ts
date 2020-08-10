@@ -60,6 +60,7 @@ const fetchIssueWithFrontsFromFS = async (
 const fetchIssue = (
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
+    forceApiFetch: boolean,
 ): CachedOrPromise<IssueWithFronts> => {
     /*
     retrieve any cached value if we have any
@@ -71,7 +72,7 @@ const fetchIssue = (
             retrieve(localIssueId),
             async () => {
                 const issueOnDevice = await isIssueOnDevice(localIssueId)
-                if (issueOnDevice) {
+                if (!forceApiFetch && issueOnDevice) {
                     return fetchIssueWithFrontsFromFS(localIssueId)
                 } else {
                     return fetchIssueWithFrontsFromAPI(publishedIssueId)

@@ -5,6 +5,14 @@ export interface Failure {
     messages?: string[]
 }
 
+export const failFast = (message: string): Failure => {
+    return {
+        __failure: true,
+        error: {},
+        messages: [message],
+    }
+}
+
 export const failure = (failure: Omit<Failure, '__failure'>): Failure => ({
     __failure: true,
     ...failure,

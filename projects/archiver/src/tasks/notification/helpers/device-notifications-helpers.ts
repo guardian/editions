@@ -39,7 +39,13 @@ export const createScheduleTime = (issueDate: string, offset = 3): string => {
     const issueDateAsDate = moment.utc(issueDate, 'YYYY-MM-DD')
     issueDateAsDate.locale('utc')
     const notificationDate = issueDateAsDate.add(offset, 'hours')
-    return notificationDate.format('YYYY-MM-DDTHH:mm:ssZ')
+    const notificationDateAsString = notificationDate.format(
+        'YYYY-MM-DDTHH:mm:ssZ',
+    )
+    console.log(
+        `Calculated notification time: ${issueDate} + ${offset} gives ${notificationDateAsString}`,
+    )
+    return notificationDateAsString
 }
 
 export const shouldSchedule = (scheduleTime: string, now: Date): boolean => {
@@ -60,7 +66,7 @@ export const prepareScheduleDeviceNotificationRequest = (
 ): { reqEndpoint: RequestInfo; reqBody: RequestInit } => {
     const { domain, apiKey } = cfg
 
-    const { key, name, issueDate } = issueData
+    const { key, name, issueDate, topic } = issueData
 
     /**
      * TODO
@@ -70,7 +76,7 @@ export const prepareScheduleDeviceNotificationRequest = (
     const payload: ScheduleDeviceNotificationPayload = {
         id: uuid.fromString(key),
         type: 'editions',
-        topic: [{ type: 'editions', name: 'uk' }],
+        topic: [{ type: 'editions', name: topic }],
         key,
         name,
         date: issueDate,

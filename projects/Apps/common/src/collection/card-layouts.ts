@@ -150,15 +150,16 @@ const thirdPageCoverLayout = (
 const denseLayout = (): FrontCardsForArticleCount => {
     // Delete this once the client-side changes are running in the released
     // non-beta version of the app.
-    if (process.env.EDITIONS_DENSE_LAYOUT !== 'enabled') return defaultLayout(1)
+    if (process.env.EDITIONS_DENSE_LAYOUT !== 'enabled')
+        return defaultLayout(FrontCardAppearance.splashPage)
     return {
         0: [],
-        1: [1],
+        1: [FrontCardAppearance.splashPage],
 
         // We do not want to switch to 2 articles on front page right away. Prod
         // team can decide to add more articles if they need a denser layout.
-        2: [1, 1],
-        3: [1, 2],
+        2: [FrontCardAppearance.splashPage, FrontCardAppearance.splashPage],
+        3: [FrontCardAppearance.splashPage, 2],
         4: [2, 2],
         // Growing up to 2 articles on front page to distribute density.
         5: [3, 2],
@@ -200,9 +201,7 @@ export const getCardsForFront = (
 ): FrontCardsForArticleCount => {
     switch (frontName) {
         case 'National':
-            return denseLayout()
         case 'World':
-            return denseLayout()
         case 'Financial':
             return denseLayout()
         case 'Crosswords':
@@ -214,10 +213,8 @@ export const getCardsForFront = (
         case 'Life':
         case 'Culture':
             return thirdPageCoverLayout(FrontCardAppearance.splashPage)
-        case 'Sport':
-            return defaultLayout(1)
         case 'Journal':
-            return defaultLayout(1)
+        case 'Sport':
         default:
             return defaultLayout(FrontCardAppearance.splashPage)
     }

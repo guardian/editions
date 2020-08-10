@@ -52,6 +52,7 @@ import { useIssueResponse } from 'src/hooks/use-issue'
 import {
     issueSummaryToLatestPath,
     useIssueSummary,
+    getIssueSummary,
 } from 'src/hooks/use-issue-summary'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
 import { useIsPreview } from 'src/hooks/use-settings'
@@ -347,7 +348,8 @@ const IssueScreenWithPath = React.memo(
         path: PathToIssue
         initialFrontKey: string | null
     }) => {
-        const response = useIssueResponse(path)
+        const preview = useIsPreview()
+        const response = useIssueResponse(path, preview)
 
         return response({
             error: handleError,
@@ -359,8 +361,10 @@ const IssueScreenWithPath = React.memo(
                 return (
                     <>
                         <PreviewReloadButton
-                            onPress={() => {
+                            onPress={async () => {
                                 clearCache()
+                                const issueSummary = await getIssueSummary()
+                                path = issueSummaryToLatestPath(issueSummary)
                                 retry()
                             }}
                         />

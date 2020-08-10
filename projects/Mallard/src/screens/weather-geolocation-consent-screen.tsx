@@ -10,6 +10,7 @@ import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { requestLocationPermission } from 'src/helpers/location-permission'
 import { RESULTS } from 'react-native-permissions'
 import { getGeolocation } from 'src/helpers/weather'
+import { Copy } from 'src/helpers/words'
 
 const content = html`
     <h2>Location-based weather</h2>
@@ -55,10 +56,8 @@ const styles = StyleSheet.create({
 
 const showIsDisabledAlert = () => {
     Alert.alert(
-        'Location services',
-        'Location services are disabled in the device ' +
-            'settings. Enable them to see location-based ' +
-            'weather.',
+        Copy.weather.disabledLocationAlertTitle,
+        Copy.weather.disabledLocationAlertExplainer,
     )
 }
 
@@ -70,10 +69,8 @@ const WeatherGeolocationConsentScreen = ({
         const result = await requestLocationPermission(apolloClient)
         if (result === RESULTS.BLOCKED) {
             Alert.alert(
-                'Location permission',
-                'Location permission is blocked in the device ' +
-                    'settings. Allow the app to access location to ' +
-                    'see location-based weather.',
+                Copy.weather.locationPermissionTitle,
+                Copy.weather.locationPermissionExplainer,
                 [
                     {
                         text: 'OK',
@@ -113,14 +110,14 @@ const WeatherGeolocationConsentScreen = ({
                     onPress={onConsentPress}
                     style={styles.button}
                 >
-                    Ok, show me the weather
+                    {Copy.weather.acceptLocationButton}
                 </Button>
                 <Button
                     appearance={ButtonAppearance.skeletonBlue}
                     onPress={onHidePress}
                     style={styles.button}
                 >
-                    No thanks
+                    {Copy.weather.cancelButton}
                 </Button>
             </View>
         </>
