@@ -6,6 +6,7 @@ import { upload, FIVE_SECONDS, getBucket } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
 import { Status } from '../../services/status'
+import { sleep } from '../../utils/sleep'
 
 type IndexTaskInput = UploadTaskOutput
 export interface IndexTaskOutput extends UploadTaskOutput {
@@ -20,6 +21,9 @@ const handlerCurry: (
     handleAndNotify(
         statusOnSuccess,
         async ({ issuePublication, issue }) => {
+            console.log(`Updating index for ${issue.name}, ${issue.date}`)
+            await sleep(1000)
+
             const Bucket = getBucket(bucket)
             // at the moment we create and recreate these issue summaries every time
             // an optimisation would be to move the issue summary creation to the previous task

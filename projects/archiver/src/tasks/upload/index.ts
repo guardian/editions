@@ -4,6 +4,7 @@ import { issuePath } from '../../../common'
 import { handleAndNotify } from '../../services/task-handler'
 import { getBucket, ONE_WEEK, upload } from '../../utils/s3'
 import { IssueTaskOutput } from '../issue'
+import { sleep } from '../../utils/sleep'
 
 type UploadTaskInput = IssueTaskOutput
 export type UploadTaskOutput = Pick<
@@ -19,6 +20,9 @@ export const handler: Handler<
 > = handleAndNotify(
     'assembled',
     async ({ issuePublication, issue }) => {
+        console.log(`Uploading issue for ${issue.name}, ${issue.date}`)
+        await sleep(1000)
+
         const { publishedId } = issue
         const path = issuePath(publishedId)
         const Bucket = getBucket('proof')

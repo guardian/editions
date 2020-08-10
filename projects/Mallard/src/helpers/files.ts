@@ -3,7 +3,6 @@ import RNFS from 'react-native-fs'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { IssueSummary, editions } from '../../../Apps/common/src'
-import { lastNDays } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
@@ -26,6 +25,8 @@ interface IssueFile extends BasicFile {
     issue: Issue
     type: 'issue'
 }
+
+const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
 
 export type File = OtherFile | IssueFile
 export const fileIsIssue = (file: File): file is IssueFile =>
@@ -162,15 +163,47 @@ export const getLocalIssues = async () => {
     )
 }
 
+export const getEdtionIssuesCount = async () => {
+    const editionDirList = await FSPaths.edtionsDirList()
+    const result: string[] = []
+    for (let i = 0; i < editionDirList.length; i++) {
+        const dir = editionDirList[i]
+        const files = await RNFS.readdir(dir)
+        const issueFiles = files.filter(file => file.match(regex) != null)
+        result.push(`${dir.split('/').pop()}: ${issueFiles.length} issues`)
+    }
+    return result
+}
+
 export const issuesToDelete = async (files: string[]) => {
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
-    const edition = await getSelectedEditionSlug()
-    const lastNumberOfDays = lastNDays(maxAvailableEditions)
-    return files.filter(
-        issue =>
-            !lastNumberOfDays.map(withPathPrefix(edition)).includes(issue) &&
-            issue !== `${edition}/issues`,
-    )
+    const totalIssues = files.length
+
+    if (totalIssues <= maxAvailableEditions) {
+        console.log(
+            `No Issues to delete: downloaded issues are ${files.length} and max number is ${maxAvailableEditions}`,
+        )
+        return []
+    }
+
+    // sort in descending order so we can loop through it and keep the latest issues
+    files.sort().reverse()
+
+    const deleteList: string[] = []
+    let keepIssues = 0
+
+    for (let i = 0; i < totalIssues; i++) {
+        const isAnIssue = files[i].match(regex) != null
+        if (isAnIssue && keepIssues < maxAvailableEditions) {
+            keepIssues++
+            continue
+        }
+
+        const canDelete = !files[i].endsWith('/issues')
+        if (canDelete) deleteList.push(files[i])
+    }
+
+    return deleteList
 }
 
 export const matchSummmaryToKey = (

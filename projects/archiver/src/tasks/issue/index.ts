@@ -5,6 +5,7 @@ import { getIssue } from '../../utils/backend-client'
 import { getBucket } from '../../utils/s3'
 import { getPublishedId } from '../../utils/path-builder'
 import { handleAndNotify } from '../../services/task-handler'
+import { sleep } from '../../utils/sleep'
 
 export interface IssueParams {
     issuePublication: IssuePublicationActionIdentifier
@@ -24,6 +25,8 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
                 Bucket.name
             }`,
         )
+        await sleep(1000)
+
         const publishedId = getPublishedId(issuePublication)
         const issue = await attempt(getIssue(publishedId))
         if (hasFailed(issue)) {

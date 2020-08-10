@@ -65,6 +65,7 @@ import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
+import { useEditions, BASE_EDITION } from 'src/hooks/use-edition-provider'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -175,6 +176,7 @@ const IssueFronts = ({
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
     const ref = useRef<FlatList<any> | null>(null)
+    const { selectedEdition } = useEditions()
 
     const {
         frontWithCards,
@@ -247,11 +249,15 @@ const IssueFronts = ({
             ListFooterComponent={() => (
                 <>
                     <View style={[styles.illustrationPosition]}>
-                        <Image
-                            style={styles.illustrationImage}
-                            resizeMode={'contain'}
-                            source={require('src/assets/images/privacy.png')}
-                        />
+                        {selectedEdition &&
+                            selectedEdition.edition ===
+                                BASE_EDITION.edition && (
+                                <Image
+                                    style={styles.illustrationImage}
+                                    resizeMode={'contain'}
+                                    source={require('src/assets/images/privacy.png')}
+                                />
+                            )}
                     </View>
                     <View style={{ height: container.height / 3 }} />
                 </>

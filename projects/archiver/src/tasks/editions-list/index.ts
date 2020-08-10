@@ -8,6 +8,7 @@ import {
     IssuePublicationIdentifier,
 } from '../../../../Apps/common/src'
 import { IndexTaskOutput } from '../indexer'
+import { sleep } from '../../utils/sleep'
 
 type EditionsListTaskInput = IndexTaskOutput
 interface EditionsListOutput {
@@ -30,6 +31,9 @@ export const handler: Handler<
 > = handleAndNotify(
     'editionsListUpdated',
     async ({ issuePublication }) => {
+        console.log(`Uploading editions list file`)
+        await sleep(1000)
+
         const editionsList = await getEditions()
 
         if (hasFailed(editionsList)) {

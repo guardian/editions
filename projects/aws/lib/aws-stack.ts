@@ -53,6 +53,16 @@ export class EditionsStack extends cdk.Stack {
             description: 'fronts s3 access',
         })
 
+        const capiRoleARN = new cdk.CfnParameter(this, 'capi-role-arn', {
+            type: 'String',
+            description: 'role to access preview capi',
+        })
+
+        const capiPreviewUrl = new cdk.CfnParameter(this, 'capi-preview-url', {
+            type: 'String',
+            description: 'url to access preview capi',
+        })
+
         const frontsTopicARN = new cdk.CfnParameter(this, 'fronts-topic-arn', {
             type: 'String',
             description: 'topic arn for publication messages',
@@ -129,6 +139,12 @@ export class EditionsStack extends cdk.Stack {
             frontsRoleARN.valueAsString,
         )
 
+        const capiAccess = iam.Role.fromRoleArn(
+            this,
+            'capi-role',
+            capiRoleARN.valueAsString,
+        )
+
         const atomLambdaParam = new cdk.CfnParameter(this, 'atom-lambda-arn', {
             type: 'String',
             description: 'lambda access',
@@ -180,11 +196,16 @@ export class EditionsStack extends cdk.Stack {
                         psurl: printSentURLParameter.valueAsString,
                         IMAGE_SALT: imageSalt.valueAsString,
                         publicationStage,
+                        capiAccessArn: capiRoleARN.valueAsString,
+                        capiPreviewUrl: capiPreviewUrl.valueAsString,
                     },
                     initialPolicy: [
                         new iam.PolicyStatement({
                             actions: ['sts:AssumeRole'],
-                            resources: [frontsAccess.roleArn],
+                            resources: [
+                                frontsAccess.roleArn,
+                                capiAccess.roleArn,
+                            ],
                         }),
                         new iam.PolicyStatement({
                             resources: [atomLambdaParam.valueAsString],

@@ -19,6 +19,7 @@ import {
     getImageUses,
 } from './helpers/media'
 import pAll = require('p-all')
+import { sleep } from '../../utils/sleep'
 
 export interface FrontTaskInput extends IssueParams {
     issue: Issue
@@ -31,6 +32,9 @@ export const handler: Handler<
     FrontTaskInput,
     { message: string } //This is ignored by the state machine
 > = handleAndNotifyOnError(async ({ issue, front }) => {
+    console.log(`Uploading front+images for ${front}, ${issue}`)
+    await sleep(1000)
+
     const { publishedId } = issue
 
     const maybeFront = await getFront(publishedId, front)
