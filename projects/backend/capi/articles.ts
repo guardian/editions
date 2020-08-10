@@ -32,7 +32,10 @@ import { RequestSigner } from 'aws4'
 import {
     SharedIniFileCredentials,
     ChainableTemporaryCredentials,
+    STS,
+    AWSError,
 } from 'aws-sdk'
+import { AssumeRoleResponse } from 'aws-sdk/clients/sts'
 
 type NotInCAPI =
     | 'key'
@@ -290,21 +293,45 @@ const parseArticleResult = async (
 
 type CAPIEndpoint = 'preview' | 'printsent' | 'live'
 
+const getStsCreds = async (role: string) => {
+    const sts = new STS({ apiVersion: '2011-06-15' })
+    const creds = await sts
+        .assumeRole({
+            RoleArn: role as string,
+            RoleSessionName: 'capi-assume-role-access2',
+        })
+        .promise()
+        .catch(err => console.error('assume role failed', err))
+
+    if (creds && creds.Credentials) {
+        return {
+            secretAccessKey: creds.Credentials.SecretAccessKey,
+            accessKeyId: creds.Credentials.AccessKeyId,
+            sessionToken: creds.Credentials.SessionToken,
+        }
+    } else {
+        const errorMessage = `Could not generate credentials using STS role ${role}`
+        console.error(errorMessage)
+        throw new Error(errorMessage)
+    }
+}
+
+const getProfileCreds = async () => {
+    const credentials = new SharedIniFileCredentials({ profile: 'capi' })
+    return {
+        secretAccessKey: credentials.secretAccessKey,
+        accessKeyId: credentials.accessKeyId,
+        sessionToken: credentials.sessionToken,
+    }
+}
+
 /**
  * To access the capi Preview endpoint we need to sign requests (as it is a private api gateway endpoint)
  * This function generates the necessary headers.
  * @param endpoint
  */
-export function sign(endpoint: string) {
+export async function sign(endpoint: string) {
     const url = new URL(endpoint)
-    const credentials = process.env.capiAccessArn
-        ? new ChainableTemporaryCredentials({
-              params: {
-                  RoleArn: process.env.capiAccessArn as string,
-                  RoleSessionName: 'capi-assume-role-access',
-              },
-          })
-        : new SharedIniFileCredentials({ profile: 'capi' })
 
     const opts = {
         region: 'eu-west-1',
@@ -313,7 +340,17 @@ export function sign(endpoint: string) {
         path: url.pathname + url.search,
     }
 
+    const credentials = process.env.capiAccessArn
+        ? await getStsCreds(process.env.capiAccessArn)
+        : await getProfileCreds()
+
     const { headers } = new RequestSigner(opts, credentials).sign()
+
+    console.log(
+        `Signed request with credentials ${JSON.stringify(
+            credentials,
+        )}. Generated headers: ${JSON.stringify(headers)}`,
+    )
 
     return headers
 }
@@ -335,10 +372,10 @@ const getEndpoint = (capi: CAPIEndpoint, paths: string[]): string => {
     }
 }
 
-const getPreviewHeaders = (endpoint: string) => {
+const getPreviewHeaders = async (endpoint: string) => {
     return {
         Accept: 'application/json',
-        ...sign(endpoint),
+        ...(await sign(endpoint)),
     }
 }
 
@@ -364,7 +401,7 @@ export const getArticles = async (
     const paths = ids.map(_ => `internal-code/page/${_}`)
     const isFromPrint = capi === 'printsent'
     const endpoint = getEndpoint(capi, paths)
-    const headers = capi === 'preview' ? getPreviewHeaders(endpoint) : {}
+    const headers = capi === 'preview' ? await getPreviewHeaders(endpoint) : {}
 
     if (endpoint.length > 1000) {
         console.warn(
@@ -391,8 +428,16 @@ export const getArticles = async (
     console.log('Debug link:', endpoint.replace(/thrift/g, 'json'))
     const resp = await attempt(fetch(endpoint, { headers }))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
-    if (resp.status != 200)
-        console.warn(`Non 200 status code: ${resp.status} ${resp.statusText}`)
+    if (resp.status != 200) {
+        console.warn(
+            `Non 200 status code: ${resp.status} ${resp.statusText}. Full resp:`,
+            resp,
+        )
+        const t = await resp.text()
+        const j = await resp.json()
+        console.log('text response ', t)
+        console.log('json response ', j)
+    }
     const buffer = await resp.arrayBuffer()
 
     const receiver: BufferedTransport = BufferedTransport.receiver(
