@@ -15,6 +15,7 @@ import { sportScoreStyles } from './components/sport-score'
 import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
+import { ArticleType } from 'src/common'
 import { twitterEmbedStyles } from './components/twitter-embed'
 
 const makeFontsCss = () => css`
@@ -73,7 +74,7 @@ const makeFontsCss = () => css`
     })}
 `
 
-const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
+const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     ${makeFontsCss()}
 
     :root {
@@ -145,12 +146,48 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
       line-height: 1.4;
       margin-bottom: 15px;
     }
+    
     .app h2 {
-      font-size: ${px(getScaledFont('headline', 1).lineHeight)};
-      line-height: ${px(getScaledFont('headline', 1).lineHeight * 1.1)};
-      margin-bottom: ${px(metrics.vertical)};
-      margin-top: ${px(metrics.vertical * 2.5)};
+        font-size: 20px;
+        line-height: 20px;
+        margin-bottom: 2px;
+        font-weight: bold;
+        color: ${colors.main};
+        font-family: ${families.text.bold};
     }
+
+    .app[data-type='${ArticleType.Immersive}'] h2 { 
+        font-size: 24px;
+        line-height: 24px; 
+        color: #000000;
+        font-weight: normal;
+        font-family: ${families.headline.light}
+    }
+
+    .app[data-type='${ArticleType.Immersive}'] h2 > strong { 
+        color: ${colors.main};
+        font-family: ${families.headline.bold}
+    }
+
+    .app h2 > strong { 
+        color: #000000;
+        font-weight: bold;
+        font-family: ${families.text.bold};
+      }
+
+      @media (min-width: ${px(Breakpoints.phone)}) {
+        .app[data-type='${ArticleType.Immersive}'] h2 {
+            font-size: 28px;
+            line-height: 28px;
+        }
+
+        .app h2 { 
+            font-size: 24px;
+            line-height: 24px;
+        }
+    }
+
+    
     .content-wrap {
         max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
