@@ -16,6 +16,7 @@ import {
 import { IssueParams } from '../tasks/issue'
 import { fetchfromCMSFrontsS3, GetS3ObjParams } from '../utils/s3'
 import { parseIssueActionRecord, parseEditionListActionRecord } from './parser'
+import { URL } from '../utils/backend-client'
 
 export interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
@@ -96,9 +97,18 @@ const invokeEditionList = async (
     console.log('Found following edition lists:', JSON.stringify(editionLists))
 
     return await Promise.all(
-        editionLists.map(() => {
-            return failFast(
-                `No backend address to PUT edition list to yet - TODO`,
+        editionLists.map(async data => {
+            const editionList = data.content
+            const response = await fetch(URL, {
+                method: 'POST',
+                body: JSON.stringify(editionList),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            console.log(
+                'Editionlist post response: ',
+                `${response.status} ${response.statusText}`,
             )
         }),
     )
