@@ -12,8 +12,14 @@ const stub = (req: Request, res: Response) => {
 }
 
 const stubEditionController = {
-    READ: (req: Request, res: Response) => {},
-    WRITE: (req: Request, res: Response) => {},
+    READ: (req: Request, res: Response) => {
+        console.log(`endpoint (READ): ${req.path} called`)
+        res.sendStatus(200)
+    },
+    WRITE: (req: Request, res: Response) => {
+        console.log(`endpoint (WRITE): ${req.path} called`)
+        res.sendStatus(200)
+    },
 }
 
 const testStubControllers: EditionsBackendControllers = {
