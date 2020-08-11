@@ -48,6 +48,7 @@ import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createSidebarNavigator } from './navigators/sidebar'
 import { routeNames } from './routes'
+import { BetaProgrammeFAQsScreen } from 'src/screens/settings/beta-programme-faqs'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -99,6 +100,7 @@ const AppStack = createModalNavigator(
                 [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
                 [routeNames.ManageEditionsSettings]: ManageEditionsScreen,
                 [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
+                [routeNames.BetaProgrammeFAQs]: BetaProgrammeFAQsScreen,
                 [routeNames.Help]: HelpScreen,
                 [routeNames.Credits]: CreditsScreen,
                 [routeNames.FAQ]: FAQScreen,

@@ -48,6 +48,7 @@ export const PREFS_SAVED_MSG = 'Your preferences are saved.'
 
 export const PRIVACY_SETTINGS_HEADER_TITLE = 'Privacy Settings'
 export const PRIVACY_POLICY_HEADER_TITLE = 'Privacy Policy'
+export const BETA_PROGRAMME_FAQ_HEADER_TITLE = 'Beta Programme FAQ'
 export const REFRESH_BUTTON_TEXT = 'Refresh'
 export const DOWNLOAD_ISSUE_MESSAGE_OFFLINE = `You're currently offline. You can download it when you go online`
 export const CUSTOMER_HELP_EMAIL = 'customer.help@theguardian.com'
@@ -147,6 +148,7 @@ export const Settings = {
     help: 'Help',
     credits: 'Credits',
     version: 'Version',
+    betaProgrammeFAQs: 'Beta Programme FAQs',
 }
 
 export const ManageDownloads = {

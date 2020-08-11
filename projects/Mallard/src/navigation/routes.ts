@@ -8,6 +8,7 @@ export const routeNames = {
     GdprConsent: 'GdprConsent',
     PrivacyPolicy: 'PrivacyPolicy',
     TermsAndConditions: 'TermsAndConditions',
+    BetaProgrammeFAQs: 'BetaProgrammeFAQs',
     Help: 'Help',
     ManageEditions: 'ManageEditions',
     ManageEditionsSettings: 'ManageEditionsSettings',
