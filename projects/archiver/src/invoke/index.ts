@@ -5,7 +5,6 @@ import {
     Attempt,
     attempt,
     Failure,
-    failFast,
     hasFailed,
     hasSucceeded,
     withFailureMessage,
@@ -110,6 +109,12 @@ const invokeEditionList = async (
                 'Editionlist post response: ',
                 `${response.status} ${response.statusText}`,
             )
+
+            // we just need to return success or failue in a form IssuePublicationIdentifier
+            // so it can be reported upstream and logs all success or failed tasks
+            return response.ok
+                ? ({ version: 'success' } as IssuePublicationIdentifier)
+                : fail(response.statusText)
         }),
     )
 }
