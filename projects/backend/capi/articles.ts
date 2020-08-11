@@ -340,11 +340,7 @@ export async function sign(endpoint: string) {
 
     const { headers } = new RequestSigner(opts, credentials).sign()
 
-    console.log(
-        `Signed request with credentials ${JSON.stringify(
-            credentials,
-        )}. Generated headers: ${JSON.stringify(headers)}`,
-    )
+    console.log(`Signed request, generated headers: ${JSON.stringify(headers)}`)
 
     return headers
 }
@@ -423,14 +419,7 @@ export const getArticles = async (
     const resp = await attempt(fetch(endpoint, { headers }))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
     if (resp.status != 200) {
-        console.warn(
-            `Non 200 status code: ${resp.status} ${resp.statusText}. Full resp:`,
-            resp,
-        )
-        const t = await resp.text()
-        const j = await resp.json()
-        console.log('text response ', t)
-        console.log('json response ', j)
+        console.warn(`Non 200 status code: ${resp.status} ${resp.statusText}`)
     }
     const buffer = await resp.arrayBuffer()
 
