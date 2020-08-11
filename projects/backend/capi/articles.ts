@@ -29,13 +29,7 @@ import { rationaliseAtoms } from './atoms'
 import { articleTypePicker, headerTypePicker } from './articleTypePicker'
 import { getImages } from './articleImgPicker'
 import { RequestSigner } from 'aws4'
-import {
-    SharedIniFileCredentials,
-    ChainableTemporaryCredentials,
-    STS,
-    AWSError,
-} from 'aws-sdk'
-import { AssumeRoleResponse } from 'aws-sdk/clients/sts'
+import { SharedIniFileCredentials, STS } from 'aws-sdk'
 
 type NotInCAPI =
     | 'key'
