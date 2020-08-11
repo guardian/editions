@@ -25,6 +25,11 @@ const GOOGLE_CLIENT_ID =
 const LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY = 'printSubscriberID'
 const LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY = 'printSubscriberPostcode'
 
+const JOIN_BETA_LINK = Platform.select({
+    ios: 'https://testflight.apple.com/join/O2EojUEl',
+    android: 'https://play.google.com/apps/testing/com.guardian.editions',
+})
+
 export {
     CAS_ENDPOINT_URL,
     ID_API_URL,
@@ -37,4 +42,5 @@ export {
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
     ITUNES_CONNECT_SHARED_SECRET,
     ANDROID_RELEASE_STREAM,
+    JOIN_BETA_LINK,
 }
