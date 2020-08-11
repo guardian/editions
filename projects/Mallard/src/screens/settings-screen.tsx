@@ -125,9 +125,9 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const versionNumber = DeviceInfo.getVersion()
     const isLoggedInWithIdentity = identityData
         ? identityData.userDetails.primaryEmailAddress
-        : undefined
+        : false
 
-    const canDisplayBetaButton = !!!iapData && isLoggedInWithIdentity
+    const canDisplayBetaButton = !iapData && isLoggedInWithIdentity
     const buildNumber = DeviceInfo.getBuildNumber()
 
     if (query.loading) return null

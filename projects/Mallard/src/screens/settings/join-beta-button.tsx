@@ -5,7 +5,7 @@ import { UiBodyCopy } from 'src/components/styled-text'
 import { Linking, StyleSheet } from 'react-native'
 import { JOIN_BETA_LINK } from 'src/constants'
 import { isInBeta } from 'src/helpers/release-stream'
-import remoteConfig from '@react-native-firebase/remote-config'
+import { remoteConfigService } from 'src/services/remote-config'
 import { metrics } from 'src/theme/spacing'
 
 const betaButtonStyle = StyleSheet.create({
@@ -43,7 +43,7 @@ const joinBetaMenuButton = () => (
 )
 
 const BetaButtonOption = () => {
-    if (!!remoteConfig().getValue('join_beta_button_enabled').value) {
+    if (remoteConfigService.getBoolean('join_beta_button_enabled')) {
         return isInBeta() ? betaThanks() : joinBetaMenuButton()
     } else {
         return <></>
