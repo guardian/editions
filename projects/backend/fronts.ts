@@ -236,32 +236,48 @@ export const parseCollection = async (
     ] => [itemResponse.internalPageCode, itemResponse.furniture])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
-    const [capiPrintArticles, capiSearchArticles] = await Promise.all([
+    const [
+        capiPrintArticles,
+        capiSearchArticles,
+        capiPreviewArticles,
+    ] = await Promise.all([
         attempt(getArticles(ids, 'printsent')),
-        attempt(getArticles(ids, 'search')),
+        attempt(getArticles(ids, 'live')),
+        attempt(getArticles(ids, 'preview')),
     ])
-    if (hasFailed(capiPrintArticles))
+
+    if (hasFailed(capiPrintArticles)) {
         return withFailureMessage(
             capiPrintArticles,
             'Could not connect to capi print sent',
         )
+    }
     if (hasFailed(capiSearchArticles))
         return withFailureMessage(
             capiSearchArticles,
             'Could not connect to CAPI',
         )
+    if (hasFailed(capiPreviewArticles))
+        return withFailureMessage(
+            capiPreviewArticles,
+            'Could not connect to preview CAPI',
+        )
 
     const articles: [CAPIContent, PublishedFurniture][] = articleFragmentList
         .filter(([key]) => {
             const inResponse =
-                key in capiPrintArticles || key in capiSearchArticles
+                key in capiPrintArticles ||
+                key in capiSearchArticles ||
+                key in capiPreviewArticles
             if (!inResponse) {
                 console.warn(`Removing ${key} as not in CAPI response.`)
             }
             return inResponse
         })
         .map(([key, furniture]) => [
-            capiSearchArticles[key] || capiPrintArticles[key],
+            capiSearchArticles[key] ||
+                capiPrintArticles[key] ||
+                capiPreviewArticles[key],
             furniture,
         ])
 

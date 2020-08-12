@@ -120,7 +120,6 @@ export const getIssuesSummary = async (
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
-    console.log('Issue summary requested.')
     const issueEdition = req.params.edition
     const pageSize = req.query.pageSize && parseInt(req.query.pageSize, 10)
     getIssuesSummary(issueEdition, isPreviewStage, pageSize)
