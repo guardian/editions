@@ -63,14 +63,15 @@ const joinBetaMenuButton = (
         <Heading>{``}</Heading>
         <List
             data={[
-                betaProgrammeFAQs(navigation),
                 {
                     key: 'Become a beta tester 🙌',
                     title: 'Become a beta tester 🙌',
                     onPress: () => {
                         Linking.openURL(JOIN_BETA_LINK) //what to catch here?
                     },
+                    proxy: <RightChevron />,
                 },
+                betaProgrammeFAQs(navigation),
             ]}
         />
         <Heading>{``}</Heading>
@@ -84,7 +85,7 @@ const BetaButtonOption = (props: {
     >
 }) => {
     if (remoteConfigService.getBoolean('join_beta_button_enabled')) {
-        return !isInBeta()
+        return isInBeta()
             ? betaThanks(props.navigation)
             : joinBetaMenuButton(props.navigation)
     } else {
