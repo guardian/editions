@@ -49,13 +49,6 @@ const betaProgrammeFAQsHtml = html`
     <p><em>*The diagnostic information tell us about your app version, device and subscription types.</em></p>
 </p>
 
-
-<h2><strong>Can I still access the existing Daily Edition now I have downloaded the Daily beta app?</strong></h2>
-
-<p>
-    Yes, you can access the existing Daily Edition app. In order to do this you will need to uninstall the beta version and reinstall the Daily Edition from the Apple App Store.
-</p>
-
 <h2><strong>Which devices is the Daily beta app available on?</strong></h2>
 
 <p>
