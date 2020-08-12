@@ -38,12 +38,24 @@ const s3FrontsClient = new S3({
         : new SharedIniFileCredentials({ profile: 'cmsFronts' }),
 })
 
-const s3EditionClient = new S3({
-    region: 'eu-west-1',
-    credentials: process.env.stage
-        ? undefined
-        : new SharedIniFileCredentials({ profile: 'frontend' }),
-})
+const s3EditionClient = () => {
+    if (process.env.stage === 'CODE' || process.env.stage === 'PROD') {
+        console.log(
+            `Using default credentials for editions S3 client, stage: ${process.env.stage}`,
+        )
+        return new S3({ region: 'eu-west-1' })
+    } else {
+        console.log(
+            `Using shared credentials file. stage: ${process.env.stage}`,
+        )
+        return new S3({
+            region: 'eu-west-1',
+            credentials: new SharedIniFileCredentials({
+                profile: 'frontend',
+            }),
+        })
+    }
+}
 
 interface S3Response {
     text: () => Promise<string>
@@ -163,18 +175,23 @@ export const s3fetch = (path: Path): Promise<Attempt<S3Response>> => {
     })
 }
 
-export const s3Put = (path: Path, data: string) => {
-    s3EditionClient.putObject(
-        {
+export const s3Put = async (path: Path, data: string) => {
+    await s3EditionClient()
+        .putObject({
             ACL: 'public-read',
             Key: path.key,
             Bucket: getEditionsBucket(path.bucket),
             Body: data,
             ContentType: 'application/json',
-        },
-        (error, result) => {
-            if (error) console.error(error)
-            else console.log(result)
-        },
-    )
+        })
+        .promise()
+        .catch(error => {
+            console.error(
+                `S3 putObject failed. bucket ${getEditionsBucket(
+                    path.bucket,
+                )} key: ${path.key} `,
+                error,
+            )
+            throw error
+        })
 }

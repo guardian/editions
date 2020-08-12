@@ -18,21 +18,31 @@ export const editionsControllerGet = (req: Request, res: Response) => {
     res.send(JSON.stringify(editionsList))
 }
 
-export const editionsControllerPost = (req: Request, res: Response) => {
+export const editionsControllerPost = async (req: Request, res: Response) => {
     try {
         // TODO: doing simple validation now but would be good to enhance this further
         const editionsList: EditionsList = JSON.parse(JSON.stringify(req.body))
         console.log(
             `Edition list parsed successfully: ${JSON.stringify(editionsList)}`,
         )
-
-        // write to s3 bucket for both proof/store(published)
-        s3Put({ key: 'editions', bucket: 'proof' }, JSON.stringify(req.body))
-        s3Put({ key: 'editions', bucket: 'store' }, JSON.stringify(req.body))
-        res.send('success')
     } catch (error) {
         console.log('Unable to parse edition list')
         console.error(error)
-        res.send('Error: ' + error)
+        res.send('Parse error')
+    }
+
+    try {
+        // write to s3 bucket for both proof/store(published)
+        await s3Put(
+            { key: 'editions', bucket: 'proof' },
+            JSON.stringify(req.body),
+        )
+        await s3Put(
+            { key: 'editions', bucket: 'store' },
+            JSON.stringify(req.body),
+        )
+        res.send('success')
+    } catch (error) {
+        res.send('Failed to upload to both S3 buckets')
     }
 }

@@ -268,14 +268,14 @@ export class EditionsStack extends cdk.Stack {
         })
         previewApiIpAccessPolicyStatement.addAnyPrincipal()
 
-        const previewApiListenerAccessPolicyStatement = new iam.PolicyStatement(
-            {
-                effect: Effect.ALLOW,
-                actions: ['execute-api:invoke'],
-                resources: [`${listenerFunctionArn.valueAsString}`],
-            },
-        )
-        previewApiListenerAccessPolicyStatement.addAnyPrincipal()
+        // const previewApiListenerAccessPolicyStatement = new iam.PolicyStatement(
+        //     {
+        //         effect: Effect.ALLOW,
+        //         actions: ['execute-api:invoke'],
+        //         resources: [`${listenerFunctionArn.valueAsString}`],
+        //     },
+        // )
+        // previewApiListenerAccessPolicyStatement.addAnyPrincipal()
 
         const previewApi = new apigateway.LambdaRestApi(
             this,
@@ -286,7 +286,7 @@ export class EditionsStack extends cdk.Stack {
                 policy: new iam.PolicyDocument({
                     statements: [
                         previewApiIpAccessPolicyStatement,
-                        previewApiListenerAccessPolicyStatement,
+                        // previewApiListenerAccessPolicyStatement,
                     ],
                 }),
             },
