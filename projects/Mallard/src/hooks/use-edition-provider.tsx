@@ -150,10 +150,10 @@ export const defaultEditionDecider = async (
         await selectedEditionCache.set(dE)
         pushNotifcationRegistration()
     } else {
-        const defaultLocaleEnabled = remoteConfigService.getBoolean(
-            'default_locale',
+        const autoDetectEdition = remoteConfigService.getBoolean(
+            'auto_edition_detection',
         )
-        const useUserLocaleToDecideEdition = defaultLocaleEnabled || isInBeta()
+        const useUserLocaleToDecideEdition = autoDetectEdition || isInBeta()
         if (useUserLocaleToDecideEdition) {
             // Get the correct edition for the locale
             const dE = localeToEdition.get(locale)

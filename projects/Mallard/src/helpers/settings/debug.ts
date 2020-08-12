@@ -1,6 +1,5 @@
 import { enableEditionMenuCache } from 'src/helpers/storage'
 import { AsyncCache } from 'src/authentication/lib/Authorizer'
-import { isInBeta } from '../release-stream'
 import { remoteConfigService } from 'src/services/remote-config'
 
 const setDebugSetting = async (toggle: boolean, cache: AsyncCache<boolean>) => {

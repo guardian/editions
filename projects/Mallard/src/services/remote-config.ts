@@ -12,16 +12,16 @@ interface RemoteConfig {
 
 const remoteConfigDefaults = {
     logging_enabled: true,
-    default_locale: false,
     join_beta_button_enabled: false,
     enable_multi_edition: false,
+    auto_edition_detection: false,
 }
 
 export const RemoteConfigProperties = [
     'logging_enabled',
-    'default_locale',
     'join_beta_button_enabled',
     'enable_multi_edition',
+    'auto_edition_detection',
 ] as const
 
 export type RemoteConfigProperty = typeof RemoteConfigProperties[number]
