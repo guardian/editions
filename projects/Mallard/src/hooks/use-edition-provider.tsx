@@ -51,9 +51,9 @@ export const DEFAULT_EDITIONS_LIST = {
 export const BASE_EDITION = defaultRegionalEditions[0]
 
 const localeToEdition = new Map<string, RegionalEdition>()
+localeToEdition.set('en_GB', defaultRegionalEditions[0])
 localeToEdition.set('en_AU', defaultRegionalEditions[1])
 localeToEdition.set('en_US', defaultRegionalEditions[2])
-localeToEdition.set('en_GB', defaultRegionalEditions[0])
 
 const defaultState: EditionState = {
     editionsList: DEFAULT_EDITIONS_LIST,
@@ -111,13 +111,6 @@ export const getEditions = async () => {
                 await editionsListCache.set(editionsList)
                 return editionsList
             }
-            // Unsuccessful, try getting it from our local storage
-            const cachedEditionsList = await editionsListCache.get()
-            if (cachedEditionsList) {
-                return cachedEditionsList
-            }
-            // Not in local storage either?
-            throw new Error('Unable to Get Editions')
         }
         // Not connected? Try local storage
         const cachedEditionsList = await editionsListCache.get()
@@ -159,7 +152,6 @@ export const defaultEditionDecider = async (
         const defaultLocaleEnabled = remoteConfigService.getBoolean(
             'default_locale',
         )
-        // Feature flag on?
         if (defaultLocaleEnabled) {
             // Get the correct edition for the locale
             const dE = localeToEdition.get(locale)
@@ -174,7 +166,7 @@ export const defaultEditionDecider = async (
                 )
             }
         } else {
-            // FF is off, so set to the default
+            // Feature Flag is off, so set to the default
             await setEdition(
                 BASE_EDITION,
                 setDefaultEdition,
