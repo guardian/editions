@@ -22,7 +22,9 @@ export const editionsControllerPost = (req: Request, res: Response) => {
     try {
         // TODO: doing simple validation now but would be good to enhance this further
         const editionsList: EditionsList = JSON.parse(JSON.stringify(req.body))
-        console.log(`Edition list parsed successfully: ${editionsList}`)
+        console.log(
+            `Edition list parsed successfully: ${JSON.stringify(editionsList)}`,
+        )
 
         // write to s3 bucket for both proof/store(published)
         s3Put({ key: 'editions', bucket: 'proof' }, JSON.stringify(req.body))

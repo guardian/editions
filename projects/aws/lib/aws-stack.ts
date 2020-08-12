@@ -29,6 +29,16 @@ export class EditionsStack extends cdk.Stack {
             description: 'Stage',
         })
 
+        const lowerCaseStageParameter = new cdk.CfnParameter(
+            this,
+            'lowerCaseStage',
+            {
+                type: 'String',
+                description: 'Lower case stage',
+                allowedValues: ['prod', 'code'],
+            },
+        )
+
         const capiKeyParameter = new cdk.CfnParameter(this, 'capi', {
             type: 'String',
             description: 'Capi key',
@@ -127,6 +137,21 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
+        /**
+         * This parameter creates a circular dependency between this stack and the archiver stack
+         * which isn't ideal, but I can't find a sensible alternative way to allow the listener lambda
+         * to execute the backend API, which it needs to do to post the editions list.
+         */
+        const listenerFunctionArn = new cdk.CfnParameter(
+            this,
+            'listener-function-arn',
+            {
+                type: 'String',
+                description:
+                    'ARN of the archiver listener function. NOTE: circular dependency. If creating from scratch you can leave this blank',
+            },
+        )
+
         const deployBucket = s3.Bucket.fromBucketName(
             this,
             'editions-dist',
@@ -211,6 +236,13 @@ export class EditionsStack extends cdk.Stack {
                             resources: [atomLambdaParam.valueAsString],
                             actions: ['lambda:InvokeFunction'],
                         }),
+                        new iam.PolicyStatement({
+                            resources: [
+                                `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}/*`,
+                                `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}/*`,
+                            ],
+                            actions: ['s3:PutObject'],
+                        }),
                     ],
                 },
             )
@@ -224,7 +256,7 @@ export class EditionsStack extends cdk.Stack {
 
         const publishedBackend = backendFunction('published')
 
-        const previewApiPolicyStatement = new iam.PolicyStatement({
+        const previewApiIpAccessPolicyStatement = new iam.PolicyStatement({
             effect: Effect.ALLOW,
             actions: ['execute-api:Invoke'],
             resources: ['*'],
@@ -234,7 +266,16 @@ export class EditionsStack extends cdk.Stack {
                 },
             },
         })
-        previewApiPolicyStatement.addAnyPrincipal()
+        previewApiIpAccessPolicyStatement.addAnyPrincipal()
+
+        const previewApiListenerAccessPolicyStatement = new iam.PolicyStatement(
+            {
+                effect: Effect.ALLOW,
+                actions: ['execute-api:invoke'],
+                resources: [`${listenerFunctionArn.valueAsString}`],
+            },
+        )
+        previewApiListenerAccessPolicyStatement.addAnyPrincipal()
 
         const previewApi = new apigateway.LambdaRestApi(
             this,
@@ -243,7 +284,10 @@ export class EditionsStack extends cdk.Stack {
                 handler: previewBackend,
                 // a policy that only allows users access from certain IPs
                 policy: new iam.PolicyDocument({
-                    statements: [previewApiPolicyStatement],
+                    statements: [
+                        previewApiIpAccessPolicyStatement,
+                        previewApiListenerAccessPolicyStatement,
+                    ],
                 }),
             },
         )
