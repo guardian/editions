@@ -1,5 +1,7 @@
 import { enableEditionMenuCache } from 'src/helpers/storage'
 import { AsyncCache } from 'src/authentication/lib/Authorizer'
+import { isInBeta } from '../release-stream'
+import { remoteConfigService } from 'src/services/remote-config'
 
 const setDebugSetting = async (toggle: boolean, cache: AsyncCache<boolean>) => {
     await cache.set(toggle)
@@ -21,8 +23,13 @@ const fetchDebugSetting = async (
     }
 }
 
-const fetchEditionMenuEnabledSetting = () =>
-    fetchDebugSetting(enableEditionMenuCache)
+const fetchEditionMenuEnabledSetting = (isInBeta: boolean) => {
+    if (isInBeta || remoteConfigService.getBoolean('enable_multi_edition'))
+        return Promise.resolve(true)
+
+    return fetchDebugSetting(enableEditionMenuCache)
+}
+
 const setEditionMenuEnabledSetting = (toggle: boolean) =>
     setDebugSetting(toggle, enableEditionMenuCache)
 

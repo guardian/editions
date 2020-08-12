@@ -12,6 +12,7 @@ import { RESULTS } from 'react-native-permissions'
 import { getGeolocation } from 'src/helpers/weather'
 import { Copy } from 'src/helpers/words'
 import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
+import { isInBeta } from 'src/helpers/release-stream'
 
 const styles = StyleSheet.create({
     button: {
@@ -73,9 +74,11 @@ const WeatherGeolocationConsentScreen = ({
     }
 
     useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
+        fetchEditionMenuEnabledSetting(isInBeta()).then(
+            (editionsMenuToggle: boolean) => {
+                setEditionsMenuEnabled(editionsMenuToggle)
+            },
+        )
     }, [])
 
     return (

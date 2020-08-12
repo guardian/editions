@@ -11,12 +11,16 @@ jest.mock('src/services/remote-config', () => ({
     },
 }))
 
+jest.mock('src/helpers/release-stream', () => ({
+    isInBeta: () => false,
+}))
+
 describe('useEditions', () => {
     describe('defaultEditionDecider', () => {
         beforeEach(async () => {
             await editionsListCache.reset()
         })
-        it('should set the BASE EDITION if remote config is turned off', async () => {
+        it('should set the BASE EDITION if remote config is turned off and not in Beta', async () => {
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
 

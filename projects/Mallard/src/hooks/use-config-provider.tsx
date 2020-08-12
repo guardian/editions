@@ -6,6 +6,7 @@ import {
     fetchEditionMenuEnabledSetting,
     setEditionMenuEnabledSetting,
 } from 'src/helpers/settings/debug'
+import { isInBeta } from 'src/helpers/release-stream'
 
 const oneGB = 1073741824
 
@@ -74,9 +75,11 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     }, [])
 
     useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
+        fetchEditionMenuEnabledSetting(isInBeta()).then(
+            (editionsMenuToggle: boolean) => {
+                setEditionsMenuEnabled(editionsMenuToggle)
+            },
+        )
     }, [])
 
     return (

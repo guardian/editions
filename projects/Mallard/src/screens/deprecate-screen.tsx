@@ -17,6 +17,7 @@ import { useNetInfo } from '../hooks/use-net-info'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { Copy } from 'src/helpers/words'
 import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
+import { isInBeta } from 'src/helpers/release-stream'
 
 const styles = StyleSheet.create({
     container: {
@@ -68,9 +69,11 @@ const DeprecateVersionModal = () => {
     const { showModal } = useDeprecationModal()
     const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
     useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
+        fetchEditionMenuEnabledSetting(isInBeta()).then(
+            (editionsMenuToggle: boolean) => {
+                setEditionsMenuEnabled(editionsMenuToggle)
+            },
+        )
     }, [])
 
     return (

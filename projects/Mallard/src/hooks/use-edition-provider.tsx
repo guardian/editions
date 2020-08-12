@@ -20,6 +20,7 @@ import { AppState, AppStateStatus } from 'react-native'
 import { remoteConfigService } from 'src/services/remote-config'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/push-notifications/push-notifications'
+import { isInBeta } from 'src/helpers/release-stream'
 
 interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
@@ -152,7 +153,8 @@ export const defaultEditionDecider = async (
         const defaultLocaleEnabled = remoteConfigService.getBoolean(
             'default_locale',
         )
-        if (defaultLocaleEnabled) {
+        const useUserLocaleToDecideEdition = defaultLocaleEnabled || isInBeta()
+        if (useUserLocaleToDecideEdition) {
             // Get the correct edition for the locale
             const dE = localeToEdition.get(locale)
             // Here as it "can" be undefined, but previous branch says not

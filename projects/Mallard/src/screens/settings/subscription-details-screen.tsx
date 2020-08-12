@@ -11,6 +11,7 @@ import { Heading } from 'src/components/layout/ui/row'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 import { Copy } from 'src/helpers/words'
 import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
+import { isInBeta } from 'src/helpers/release-stream'
 
 const keyValueItem = (key: string, value: string) =>
     ({
@@ -84,9 +85,11 @@ const getIAPType = (iapData: ReceiptIOS) =>
 const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => {
     const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
     useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
+        fetchEditionMenuEnabledSetting(isInBeta()).then(
+            (editionsMenuToggle: boolean) => {
+                setEditionsMenuEnabled(editionsMenuToggle)
+            },
+        )
     }, [])
     return (
         <>
