@@ -16,6 +16,7 @@ import { IssueParams } from '../tasks/issue'
 import { fetchfromCMSFrontsS3, GetS3ObjParams } from '../utils/s3'
 import { parseIssueActionRecord, parseEditionListActionRecord } from './parser'
 import { URL } from '../utils/backend-client'
+import fetch from 'node-fetch'
 
 export interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
