@@ -142,15 +142,15 @@ export class EditionsStack extends cdk.Stack {
          * which isn't ideal, but I can't find a sensible alternative way to allow the listener lambda
          * to execute the backend API, which it needs to do to post the editions list.
          */
-        const listenerFunctionArn = new cdk.CfnParameter(
-            this,
-            'listener-function-arn',
-            {
-                type: 'String',
-                description:
-                    'ARN of the archiver listener function. NOTE: circular dependency. If creating from scratch you can leave this blank',
-            },
-        )
+        // const listenerFunctionArn = new cdk.CfnParameter(
+        //     this,
+        //     'listener-function-arn',
+        //     {
+        //         type: 'String',
+        //         description:
+        //             'ARN of the archiver listener function. NOTE: circular dependency. If creating from scratch you can leave this blank',
+        //     },
+        // )
 
         const deployBucket = s3.Bucket.fromBucketName(
             this,
