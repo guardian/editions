@@ -99,7 +99,9 @@ const invokeEditionList = async (
     return await Promise.all(
         editionLists.map(async data => {
             const editionList = data.content
-            const response = await fetch(URL, {
+            const endpoint = `${URL}editions`
+            console.log(`Posting editions list to ${endpoint}`)
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 body: JSON.stringify(editionList),
                 headers: {
