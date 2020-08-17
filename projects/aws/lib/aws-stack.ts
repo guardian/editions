@@ -4,7 +4,6 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
-import cloudfront = require('@aws-cdk/aws-cloudfront')
 import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
 import acm = require('@aws-cdk/aws-certificatemanager')
 import { Effect } from '@aws-cdk/aws-iam'
@@ -290,37 +289,9 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
-        const previewGatewayId = previewApi.restApiId
         const publishedGatewayId = publishedApi.restApiId
 
         const backendURL = `${publishedGatewayId}.execute-api.eu-west-1.amazonaws.com/prod/` //Yes, this (the region) really should not be hard coded.
-
-        const previewDist = new cloudfront.CloudFrontWebDistribution(
-            this,
-            'backend-cloudfront-distribution',
-            {
-                comment: `Cloudfront distribution for editions ${stageParameter.valueAsString}`,
-                defaultRootObject: '',
-                originConfigs: [
-                    {
-                        originPath: '/prod', //This is hard coded and could be the deployment id
-                        behaviors: [
-                            {
-                                isDefaultBehavior: true,
-                                defaultTtl: Duration.seconds(10),
-                            },
-                        ],
-                        customOriginSource: {
-                            domainName: `${previewGatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
-                        },
-                    },
-                ],
-            },
-        )
-        new CfnOutput(this, 'Cloudfront-distribution', {
-            description: 'URL for distribution',
-            value: `https://${previewDist.domainName}`,
-        })
 
         const proofArchive = s3.Bucket.fromBucketName(
             this,
