@@ -55,7 +55,7 @@ import {
     getIssueSummary,
 } from 'src/hooks/use-issue-summary'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
-import { useIsPreview } from 'src/hooks/use-settings'
+import { useIsPreview, useIsProof } from 'src/hooks/use-settings'
 import { PathToIssue } from 'src/paths'
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 import { sendPageViewEvent } from 'src/services/ophan'
@@ -66,6 +66,7 @@ import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
 import { useEditions, BASE_EDITION } from 'src/hooks/use-edition-provider'
+import RNRestart from 'react-native-restart'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -355,6 +356,7 @@ const IssueScreenWithPath = React.memo(
         initialFrontKey: string | null
     }) => {
         const preview = useIsPreview()
+        const proof = useIsProof()
         const response = useIssueResponse(path, preview)
 
         return response({
@@ -368,6 +370,9 @@ const IssueScreenWithPath = React.memo(
                     <>
                         <PreviewReloadButton
                             onPress={async () => {
+                                if (proof) {
+                                    RNRestart.Restart()
+                                }
                                 clearCache()
                                 const issueSummary = await getIssueSummary()
                                 path = issueSummaryToLatestPath(issueSummary)
