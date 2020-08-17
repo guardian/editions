@@ -1,5 +1,5 @@
 import { html } from 'src/helpers/webview'
-import { HeaderType, ArticleType } from 'src/common'
+import { HeaderType, ArticleType, ArticlePillar } from 'src/common'
 import { ArticleHeaderProps } from './header'
 import { Quotes } from './icon/quotes'
 
@@ -7,6 +7,7 @@ const getHeadline = (
     articleHeaderType: HeaderType,
     articleType: ArticleType,
     headerProps: ArticleHeaderProps,
+    pillar?: ArticlePillar,
 ) => {
     if (
         articleHeaderType === HeaderType.LargeByline ||
@@ -28,8 +29,15 @@ const getHeadline = (
             </h1>
         `
     } else {
+        const pillarInclusion =
+            pillar === 'news' || pillar === 'neutral' || pillar === 'opinion'
+        console.log(pillarInclusion)
+        const showcaseStyle =
+            articleType === ArticleType.Showcase && pillarInclusion
+                ? ` class="alt"`
+                : ``
         return html`
-            <h1>
+            <h1${showcaseStyle}>
                 ${headerProps.headline}
             </h1>
         `
