@@ -12,11 +12,11 @@ export const listStyles = () => css`
         display: inline-block;
     }
 
-    ul>li>p:first-child {
+    ul > li > p:first-child {
         display: inline;
     }
 
-    ul>li:before {
+    ul > li:before {
         display: inline-block;
         content: '';
         border-radius: 0.375rem;
