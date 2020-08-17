@@ -50,7 +50,9 @@ describe('useEditions', () => {
                 status: 200,
                 body,
             })
-            const editionsList = await fetchEditions()
+            const editionsList = await fetchEditions(
+                defaultSettings.editionsUrl,
+            )
             expect(editionsList).toEqual(body)
         })
         it('should return null if there is not a 200 response from the endpoint', async () => {
@@ -61,7 +63,9 @@ describe('useEditions', () => {
                 },
                 { overwriteRoutes: false },
             )
-            const editionsList = await fetchEditions()
+            const editionsList = await fetchEditions(
+                defaultSettings.editionsUrl,
+            )
             expect(editionsList).toEqual(null)
         })
     })

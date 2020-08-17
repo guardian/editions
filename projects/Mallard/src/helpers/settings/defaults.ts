@@ -130,6 +130,9 @@ export const defaultSettings: Settings = {
         : 'https://editions-logging.guardianapis.com/log/mallard',
 }
 
+export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
+    `${apiUrl}editions`
+
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
     const backend = backends.find(backend => backend.value === apiUrl)
     return (backend && backend.preview) || false
