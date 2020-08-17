@@ -578,7 +578,7 @@ export interface EditionsList {
     trainingEditions: TrainingEdition[]
 }
 
-export interface RegionalEdition {
+interface EditionInterface {
     title: string
     subTitle: string
     edition: Edition
@@ -586,29 +586,19 @@ export interface RegionalEdition {
         title: string
         subTitle?: string
     }
+    editionType: 'Regional' | 'Training' | 'Special'
+    notificationUTCOffset: number
+    topic: string
 }
 
-export interface TrainingEdition {
-    title: string
-    subTitle: string
-    edition: Edition
-    header: {
-        title: string
-        subTitle?: string
-    }
-}
+export interface RegionalEdition extends EditionInterface {}
 
-export interface SpecialEdition {
+export interface TrainingEdition extends EditionInterface {}
+
+export interface SpecialEdition extends EditionInterface {
     buttonStyle: SpecialEditionButtonStyles
     devUri?: string
-    edition: Edition
     expiry: Date
-    header: {
-        title: string
-        subTitle?: string
-    }
     headerStyle?: SpecialEditionHeaderStyles
     image: Image
-    subTitle: string
-    title: string
 }
