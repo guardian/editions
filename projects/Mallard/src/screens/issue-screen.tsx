@@ -52,7 +52,6 @@ import { useIssueResponse } from 'src/hooks/use-issue'
 import {
     issueSummaryToLatestPath,
     useIssueSummary,
-    getIssueSummary,
 } from 'src/hooks/use-issue-summary'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
 import { useIsPreview, useIsProof } from 'src/hooks/use-settings'
@@ -67,6 +66,7 @@ import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
 import { useEditions, BASE_EDITION } from 'src/hooks/use-edition-provider'
 import RNRestart from 'react-native-restart'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -371,7 +371,7 @@ const IssueScreenWithPath = React.memo(
                         <PreviewReloadButton
                             onPress={async () => {
                                 if (proof) {
-                                    await getIssueSummary()
+                                    await deleteIssueFiles()
                                     RNRestart.Restart()
                                 }
                                 clearCache()
