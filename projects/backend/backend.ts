@@ -18,8 +18,8 @@ const runtimeControllers: EditionsBackendControllers = {
     frontController,
     imageController,
     editionsController: {
-        READ: editionsControllerGet,
-        WRITE: editionsControllerPost,
+        GET: editionsControllerGet,
+        POST: editionsControllerPost,
     },
 }
 

@@ -12,12 +12,10 @@ const stub = (req: Request, res: Response) => {
 }
 
 const stubEditionController = {
-    READ: (req: Request, res: Response) => {
-        console.log(`endpoint (READ): ${req.path} called`)
+    GET: (req: Request, res: Response) => {
         res.sendStatus(200)
     },
-    WRITE: (req: Request, res: Response) => {
-        console.log(`endpoint (WRITE): ${req.path} called`)
+    POST: (req: Request, res: Response) => {
         res.sendStatus(200)
     },
 }
