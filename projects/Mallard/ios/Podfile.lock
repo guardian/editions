@@ -279,6 +279,8 @@ PODS:
     - React
   - react-native-netinfo (5.6.2):
     - React
+  - react-native-restart (0.0.17):
+    - React
   - react-native-safe-area-context (0.6.4):
     - React
   - react-native-safe-area-insets (0.1.0):
@@ -407,6 +409,7 @@ DEPENDENCIES:
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-in-app-utils (from `../node_modules/react-native-in-app-utils`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-safe-area-insets (from `../node_modules/@delightfulstudio/react-native-safe-area-insets`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -508,6 +511,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-in-app-utils"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-restart:
+    :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-safe-area-insets:
@@ -620,6 +625,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-in-app-utils: 07ea1df4bb6e8cbb27337d42a65ffe4cf7a35e97
   react-native-netinfo: 73303369946c2487c600418961bfdc87748b832f
+  react-native-restart: d19a0f8d053d065fe64cd2baebb6487111c77149
   react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
