@@ -371,11 +371,10 @@ const IssueScreenWithPath = React.memo(
                         <PreviewReloadButton
                             onPress={async () => {
                                 if (proof) {
+                                    await getIssueSummary()
                                     RNRestart.Restart()
                                 }
                                 clearCache()
-                                const issueSummary = await getIssueSummary()
-                                path = issueSummaryToLatestPath(issueSummary)
                                 retry()
                             }}
                         />
