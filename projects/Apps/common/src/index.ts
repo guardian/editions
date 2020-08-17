@@ -591,8 +591,16 @@ interface EditionInterface {
     topic: string
 }
 
+// disabling tslint here as  it's useful to give this types a different name
+// and in future Regional/Training editions may have unique properties
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RegionalEdition extends EditionInterface {}
 
+// disabling tslint here as  it's useful to give this types a different name
+// and in future Regional/Training editions may have unique properties
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TrainingEdition extends EditionInterface {}
 
 export interface SpecialEdition extends EditionInterface {
