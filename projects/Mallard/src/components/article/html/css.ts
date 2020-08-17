@@ -16,6 +16,7 @@ import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
 import { twitterEmbedStyles } from './components/twitter-embed'
+import { listStyles } from './components/lists'
 
 const makeFontsCss = () => css`
     /* text */
@@ -164,6 +165,8 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
 
         }
     }
+
+    ${listStyles()}
 
     ${quoteStyles({
         colors,
