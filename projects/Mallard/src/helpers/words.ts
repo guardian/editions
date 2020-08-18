@@ -177,7 +177,7 @@ export const SubscriptionDetails = {
     title: 'Subscription Details',
     heading: 'Paper + digital subscription',
     iapHeadingDaily: 'Guardian Daily / App Store',
-    iapHeadingEditions: 'The Guardian Editions / App Store',
+    iapHeadingEditions: 'Guardian Editions / App Store',
     loggedOutHeading: 'Not logged in',
     emailAddress: 'Email Address',
     userId: 'User ID',
