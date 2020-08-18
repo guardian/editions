@@ -1,4 +1,4 @@
-import { Platform } from 'react-native'
+import { Platform, Dimensions } from 'react-native'
 import { ArticleType, HeaderType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { GetImagePath } from 'src/hooks/use-image-paths'
@@ -79,28 +79,31 @@ const shareButtonColor = ({ colors, theme }: CssProps) => {
     return theme === 'dark' ? color.palette.neutral[100] : colors.main
 }
 
-export const headerStyles = ({ colors, theme }: CssProps) => css`
+const threeLines = `
+background-image: repeating-linear-gradient(
+    to bottom,
+    ${color.dimLine},
+    ${color.dimLine} 1px,
+    transparent 1px,
+    transparent 4px
+);
+background-repeat: repeat-x;
+background-position: bottom;
+background-size: 1px 16px;
+content: '';
+display: block;
+height: 16px;
+margin: 0;
+`
 
+export const headerStyles = ({ colors, theme }: CssProps) => css`
     /* prevent clicks on byline links */
     .header a {
         pointer-events: none;
     }
 
     .header:after, .header-immersive-video:after {
-        background-image: repeating-linear-gradient(
-            to bottom,
-            ${color.dimLine},
-            ${color.dimLine} 1px,
-            transparent 1px,
-            transparent 4px
-        );
-        background-repeat: repeat-x;
-        background-position: bottom;
-        background-size: 1px 16px;
-        content: '';
-        display: block;
-        height: 16px;
-        margin: 0;
+        ${threeLines}
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header:after, .header-immersive-video:after {
@@ -701,6 +704,74 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
     }
     
+    /*showcase*/
+    .header-container[data-type='${ArticleType.Showcase}'] .header-kicker {
+        border-top: 1px solid ${color.dimLine}
+    }
+
+    .header-container[data-type='${ArticleType.Showcase}'] .header:after {
+        background-color: white;
+        background-image: none;
+        background-size: 0px 0px;
+        height: 0px;
+        margin: 0;
+    }
+
+    .header-container[data-type='${ArticleType.Showcase}'] h1 {
+        color: ${colors.main};
+        font-family: ${families.headline.bold};
+        font-size: 28px;
+        line-height: 30px;
+        margin-bottom: 0;
+        padding-bottom: 0.75em;
+    }
+
+    .header-container[data-type='${ArticleType.Showcase}'] h1.alt {
+        font-family: ${families.headline.regular};
+        color: ${color.palette.neutral[7]};
+    }
+
+    .header-image--showcase {
+        max-width: 100%;
+        margin: auto;
+    }
+
+    .header-container[data-type='${ArticleType.Showcase}'] .standfirst {
+        font-size: 19px;
+        line-height: 24px;
+    }
+
+    .header-container[data-type='${ArticleType.Showcase}'] .standfirst:after {
+        ${threeLines}
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .app[data-type='${ArticleType.Showcase}'] {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
+        .wrapper[data-type='${ArticleType.Showcase}'] {
+            margin-right: ${px(metrics.article.rightRail)}
+        }
+
+        .header-container[data-type='${ArticleType.Showcase}'] h1 {
+            font-size: 34px;
+            line-height: 38px;
+        }
+
+        .header-image--showcase {
+            margin-right: 0;
+            margin-left: ${(Dimensions.get('window').width -
+                metrics.article.maxWidth) /
+                2};
+        }
+
+        .header-container[data-type='${ArticleType.Showcase}'] .standfirst {
+            font-size: 20px;
+            line-height: 25px;
+        }
+    }
 
     /*obit*/
     ${outieKicker(ArticleType.Obituary)}
@@ -811,6 +882,32 @@ const isImmersive = (type: ArticleType) =>
     type === ArticleType.Gallery ||
     type === ArticleType.Interview
 
+const getStandFirstText = ({
+    pillar,
+    standfirst,
+    type,
+}: {
+    pillar?: ArticlePillar
+    standfirst: ArticleHeaderProps['standfirst']
+    type: ArticleType
+}) => {
+    const color =
+        pillar === 'lifestyle'
+            ? getPillarColors(pillar).dark
+            : palette.neutral[7]
+
+    return html`
+        <p
+            class="${type === ArticleType.Interview
+                ? 'interview-standfirst'
+                : ''}"
+            style="color: ${color};"
+        >
+            ${standfirst}
+        </p>
+    `
+}
+
 const getStandFirst = (
     articleHeaderType: HeaderType,
     type: ArticleType,
@@ -842,23 +939,16 @@ const getStandFirst = (
             </section>
         `
     } else {
-        const color =
-            pillar === 'lifestyle'
-                ? getPillarColors(pillar).dark
-                : palette.neutral[7]
-
         return html`
             <section class="header-top">
                 ${getHeadline(articleHeaderType, type, headerProps)}
                 ${articleHeaderType === HeaderType.RegularByline &&
                     headerProps.standfirst &&
-                    `<p class="${
-                        type === ArticleType.Interview
-                            ? 'interview-standfirst'
-                            : ''
-                    }" style="color: ${color};">
-                        ${headerProps.standfirst}
-                      </p>`}
+                    getStandFirstText({
+                        standfirst: headerProps.standfirst,
+                        type,
+                        pillar,
+                    })}
             </section>
         `
     }
@@ -1036,4 +1126,75 @@ const Header = ({
         </div>
     `
 }
-export { Header, getStandFirst }
+
+const HeaderShowcase = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    pillar,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    pillar: ArticlePillar
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    const byLineText = getByLineText(headerType, headerProps)
+    return html`
+        <div class="header-container-line-wrap">
+            ${Line({ zIndex: 10 })}
+            <div class="header-container wrapper" data-type="${type}">
+                <header class="header">
+                    ${headerProps.kicker &&
+                        html`
+                            <span class="header-kicker"
+                                >${headerProps.kicker}</span
+                            >
+                        `}
+                    ${getHeadline(headerType, type, headerProps, pillar)}
+                </header>
+            </div>
+        </div>
+        ${headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                articleType: type,
+                className: 'header-image--showcase',
+                image: headerProps.image,
+                isGallery: false,
+                preserveRatio: true,
+                children: headerProps.starRating
+                    ? Rating(headerProps)
+                    : headerProps.sportScore
+                    ? SportScore({
+                          sportScore: headerProps.sportScore,
+                      })
+                    : undefined,
+                getImagePath,
+            })}
+        <div class="header-container-line-wrap">
+            ${Line({ zIndex: 10 })}
+            <div class="header-container wrapper" data-type="${type}">
+                <div class="standfirst">
+                    ${getStandFirstText({
+                        standfirst: headerProps.standfirst,
+                        type,
+                    })}
+                </div>
+                ${hasByLine(byLineText, headerProps.canBeShared) &&
+                    getByLine(
+                        headerType,
+                        headerProps.canBeShared,
+                        headerProps as ArticleHeaderProps,
+                        type,
+                    )}
+            </div>
+        </div>
+    `
+}
+
+export { Header, HeaderShowcase, getStandFirst }
