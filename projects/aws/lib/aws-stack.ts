@@ -29,6 +29,16 @@ export class EditionsStack extends cdk.Stack {
             description: 'Stage',
         })
 
+        const lowerCaseStageParameter = new cdk.CfnParameter(
+            this,
+            'lowerCaseStage',
+            {
+                type: 'String',
+                description: 'Lower case stage',
+                allowedValues: ['prod', 'code'],
+            },
+        )
+
         const capiKeyParameter = new cdk.CfnParameter(this, 'capi', {
             type: 'String',
             description: 'Capi key',
@@ -211,6 +221,13 @@ export class EditionsStack extends cdk.Stack {
                             resources: [atomLambdaParam.valueAsString],
                             actions: ['lambda:InvokeFunction'],
                         }),
+                        new iam.PolicyStatement({
+                            resources: [
+                                `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}/*`,
+                                `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}/*`,
+                            ],
+                            actions: ['s3:PutObject', 's3:PutObjectAcl'],
+                        }),
                     ],
                 },
             )
@@ -224,7 +241,7 @@ export class EditionsStack extends cdk.Stack {
 
         const publishedBackend = backendFunction('published')
 
-        const previewApiPolicyStatement = new iam.PolicyStatement({
+        const previewApiIpAccessPolicyStatement = new iam.PolicyStatement({
             effect: Effect.ALLOW,
             actions: ['execute-api:Invoke'],
             resources: ['*'],
@@ -234,7 +251,7 @@ export class EditionsStack extends cdk.Stack {
                 },
             },
         })
-        previewApiPolicyStatement.addAnyPrincipal()
+        previewApiIpAccessPolicyStatement.addAnyPrincipal()
 
         const previewApi = new apigateway.LambdaRestApi(
             this,
@@ -243,7 +260,7 @@ export class EditionsStack extends cdk.Stack {
                 handler: previewBackend,
                 // a policy that only allows users access from certain IPs
                 policy: new iam.PolicyDocument({
-                    statements: [previewApiPolicyStatement],
+                    statements: [previewApiIpAccessPolicyStatement],
                 }),
             },
         )

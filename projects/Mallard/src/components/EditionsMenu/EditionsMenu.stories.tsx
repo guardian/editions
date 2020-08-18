@@ -3,8 +3,9 @@ import { storiesOf } from '@storybook/react-native'
 import { withKnobs } from '@storybook/addon-knobs'
 import { EditionsMenu } from './EditionsMenu'
 import { editions, Edition } from 'src/common'
+import { SpecialEdition } from '../../../../Apps/common/src'
 
-const props = {
+const props: { specialEditions: SpecialEdition[] } = {
     specialEditions: [
         {
             edition: 'daily-edition' as Edition,
@@ -15,6 +16,9 @@ const props = {
                 source: 'media',
                 path: '/path/to/image',
             },
+            topic: 'food',
+            editionType: 'Special',
+            notificationUTCOffset: 0,
             header: {
                 title: `Food
 Monthly`,

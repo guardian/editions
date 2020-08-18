@@ -2,6 +2,7 @@ import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { Edition, editions } from 'src/common'
 import { EditionsMenu } from '../EditionsMenu'
+import { RegionalEdition, SpecialEdition } from '../../../../../Apps/common/src'
 
 jest.mock('src/components/EditionsMenu/RegionButton/RegionButton', () => ({
     RegionButton: () => 'RegionButton',
@@ -18,7 +19,7 @@ jest.mock('src/components/EditionsMenu/Header/Header', () => ({
     EditionsMenuHeader: () => 'EditionsMenuHeader',
 }))
 
-const regionalEditions = [
+const regionalEditions: RegionalEdition[] = [
     {
         title: 'The UK Daily Edition',
         subTitle: 'Published every day by 12am (GMT)',
@@ -26,6 +27,9 @@ const regionalEditions = [
         header: {
             title: 'The Daily',
         },
+        editionType: 'Regional',
+        topic: 'au',
+        notificationUTCOffset: 1,
     },
     {
         title: 'Australia Daily',
@@ -35,6 +39,9 @@ const regionalEditions = [
             title: 'Austraila',
             subTitle: 'Weekender',
         },
+        editionType: 'Regional',
+        topic: 'au',
+        notificationUTCOffset: 1,
     },
     {
         title: 'US and Cananda Weekend',
@@ -44,10 +51,13 @@ const regionalEditions = [
             title: 'US',
             subTitle: 'Weekender',
         },
+        editionType: 'Regional',
+        topic: 'au',
+        notificationUTCOffset: 1,
     },
 ]
 
-const specialEditions = [
+const specialEditions: SpecialEdition[] = [
     {
         edition: 'daily-edition' as Edition,
         expiry: new Date(98, 1),
@@ -55,6 +65,9 @@ const specialEditions = [
             source: 'media',
             path: '/path/to/image',
         },
+        editionType: 'Special',
+        notificationUTCOffset: 1,
+        topic: 'food',
         title: `Food
 Monthly`,
         subTitle: 'Store cupboard special: 20 quick and easy lockdown suppers',

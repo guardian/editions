@@ -17,6 +17,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
 import { ArticleType } from 'src/common'
 import { twitterEmbedStyles } from './components/twitter-embed'
+import { listStyles } from './components/lists'
 
 const makeFontsCss = () => css`
     /* text */
@@ -201,6 +202,8 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
 
         }
     }
+
+    ${listStyles()}
 
     ${quoteStyles({
         colors,

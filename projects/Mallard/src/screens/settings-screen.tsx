@@ -174,6 +174,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                       onPress: () => {
                           navigation.navigate(routeNames.SubscriptionDetails)
                       },
+                      proxy: rightChevronIcon,
                   },
               ]
             : [
@@ -183,7 +184,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                       onPress: () => {
                           navigation.navigate(routeNames.AlreadySubscribed)
                       },
-
                       proxy: rightChevronIcon,
                   },
               ]),

@@ -7,7 +7,10 @@ import React, {
 } from 'react'
 import { RegionalEdition, SpecialEdition } from 'src/common'
 import { eventEmitter } from 'src/helpers/event-emitter'
-import { defaultSettings } from 'src/helpers/settings/defaults'
+import {
+    defaultSettings,
+    editionsEndpoint,
+} from 'src/helpers/settings/defaults'
 import {
     defaultEditionCache,
     selectedEditionCache,
@@ -21,6 +24,7 @@ import { remoteConfigService } from 'src/services/remote-config'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/push-notifications/push-notifications'
 import { isInBeta } from 'src/helpers/release-stream'
+import { useApiUrl } from './use-settings'
 
 interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
@@ -84,9 +88,9 @@ export const getDefaultEditionSlug = async () => {
     return defaultEdition ? defaultEdition.edition : null
 }
 
-export const fetchEditions = async () => {
+export const fetchEditions = async (apiUrl: string) => {
     try {
-        const response = await fetch(defaultSettings.editionsUrl)
+        const response = await fetch(apiUrl)
         if (response.status !== 200) {
             throw new Error(
                 `Bad response from Editions URL - status: ${response.status}`,
@@ -94,19 +98,21 @@ export const fetchEditions = async () => {
         }
         return response.json()
     } catch (e) {
-        e.message = `Unable to fetch ${defaultSettings.editionsUrl} : ${e.message}`
+        e.message = `Unable to fetch ${apiUrl} : ${e.message}`
         errorService.captureException(e)
         return null
     }
 }
 
-export const getEditions = async () => {
+export const getEditions = async (
+    apiUrl: string = defaultSettings.editionsUrl,
+) => {
     try {
         const { isConnected } = await NetInfo.fetch()
         // We are connected
         if (isConnected) {
             // Grab editions list from the endpoint
-            const editionsList = await fetchEditions()
+            const editionsList = await fetchEditions(apiUrl)
             if (editionsList) {
                 // Successful? Store in the cache and return
                 await editionsListCache.set(editionsList)
@@ -193,6 +199,7 @@ export const EditionProvider = ({
     const [defaultEdition, setDefaultEdition] = useState<RegionalEdition>(
         BASE_EDITION,
     )
+    const apiUrl = editionsEndpoint(useApiUrl() || defaultSettings.apiUrl)
 
     /**
      * Default Edition and Selected
@@ -212,8 +219,8 @@ export const EditionProvider = ({
      * editions that are set in the initial state
      */
     useEffect(() => {
-        getEditions().then(ed => ed && setEditionsList(ed))
-    }, [])
+        getEditions(apiUrl).then(ed => ed && setEditionsList(ed))
+    }, [apiUrl])
 
     /**
      * If a chosen edition is regional, then we mark that as default for future reference
@@ -238,7 +245,7 @@ export const EditionProvider = ({
     useEffect(() => {
         const appChangeEventHandler = async (appState: AppStateStatus) =>
             appState === 'active' &&
-            getEditions().then(ed => ed && setEditionsList(ed))
+            getEditions(apiUrl).then(ed => ed && setEditionsList(ed))
 
         AppState.addEventListener('change', appChangeEventHandler)
 
