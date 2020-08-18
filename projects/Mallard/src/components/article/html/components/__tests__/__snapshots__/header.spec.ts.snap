@@ -117,8 +117,7 @@ exports[`article html Header getStandFirst should display RegularByline Header T
         
                 
         <p
-            class=\\"\\"
-            style=\\"color: #121212;\\"
+            
         >
             Test Standfirst
         </p>
