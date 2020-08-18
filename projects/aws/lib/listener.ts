@@ -15,6 +15,7 @@ export const s3EventListenerFunction = (
     proofStateMachineArn: string,
     publishStateMachineArn: string,
     frontsRoleARN: string,
+    backendURL: string,
 ) => {
     const fn = new lambda.Function(
         scope,
@@ -34,6 +35,7 @@ export const s3EventListenerFunction = (
                 proofStateMachineARN: proofStateMachineArn,
                 publishStateMachineARN: publishStateMachineArn,
                 arn: frontsRoleARN,
+                backend: backendURL,
             },
         },
     )
@@ -104,6 +106,7 @@ export const constructTriggeredStepFunction = (
         proofArchiverStateMachine.stateMachineArn,
         publishArchiverStateMachine.stateMachineArn,
         frontsRoleARN,
+        backendURL,
     )
 
     new CfnOutput(scope, 'archiver-s3-event-listener-arn', {

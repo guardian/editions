@@ -14,16 +14,19 @@ import { notNull } from './common'
 
 export interface Path {
     key: string
-    bucket: 'published' | 'preview'
+    bucket: 'published' | 'preview' | 'store' | 'proof'
 }
 const stage = process.env.frontsStage || 'code'
 
-const getBucket = (bucketType: Path['bucket']) =>
+const getFrontsBucket = (bucketType: Path['bucket']) =>
     `${bucketType}-editions-${stage.toLowerCase()}`
+
+const getEditionsBucket = (bucketType: string) =>
+    `editions-${bucketType}-${stage.toLowerCase()}`
 
 console.log(`Creating S3 client with role arn: ${process.env.arn}`)
 
-const s3 = new S3({
+const s3FrontsClient = new S3({
     region: 'eu-west-1',
     credentials: process.env.arn
         ? new ChainableTemporaryCredentials({
@@ -34,6 +37,25 @@ const s3 = new S3({
           })
         : new SharedIniFileCredentials({ profile: 'cmsFronts' }),
 })
+
+const s3EditionClient = () => {
+    if (process.env.stage === 'CODE' || process.env.stage === 'PROD') {
+        console.log(
+            `Using default credentials for editions S3 client, stage: ${process.env.stage}`,
+        )
+        return new S3({ region: 'eu-west-1' })
+    } else {
+        console.log(
+            `Using shared credentials file. stage: ${process.env.stage}`,
+        )
+        return new S3({
+            region: 'eu-west-1',
+            credentials: new SharedIniFileCredentials({
+                profile: 'frontend',
+            }),
+        })
+    }
+}
 
 interface S3Response {
     text: () => Promise<string>
@@ -53,9 +75,9 @@ export const s3List = async (
     >
 > => {
     const response = await attempt(
-        s3
+        s3FrontsClient
             .listObjectsV2({
-                Bucket: getBucket(path.bucket),
+                Bucket: getFrontsBucket(path.bucket),
                 Prefix: path.key,
             })
             .promise(),
@@ -63,9 +85,9 @@ export const s3List = async (
     if (hasFailed(response)) {
         return withFailureMessage(
             response,
-            `S3 Access failed for path ${JSON.stringify(path)} in ${getBucket(
-                path.bucket,
-            )}`,
+            `S3 Access failed for path ${JSON.stringify(
+                path,
+            )} in ${getFrontsBucket(path.bucket)}`,
         )
     }
     if (response.KeyCount === 0) {
@@ -89,10 +111,10 @@ export const s3List = async (
 }
 export const s3fetch = (path: Path): Promise<Attempt<S3Response>> => {
     return new Promise(resolve => {
-        s3.getObject(
+        s3FrontsClient.getObject(
             {
                 Key: path.key,
-                Bucket: getBucket(path.bucket),
+                Bucket: getFrontsBucket(path.bucket),
             },
             (error, result) => {
                 if (error && error.code == 'NoSuchKey') {
@@ -151,4 +173,25 @@ export const s3fetch = (path: Path): Promise<Attempt<S3Response>> => {
             },
         )
     })
+}
+
+export const s3Put = async (path: Path, data: string) => {
+    await s3EditionClient()
+        .putObject({
+            ACL: 'public-read',
+            Key: path.key,
+            Bucket: getEditionsBucket(path.bucket),
+            Body: data,
+            ContentType: 'application/json',
+        })
+        .promise()
+        .catch(error => {
+            console.error(
+                `S3 putObject failed. bucket ${getEditionsBucket(
+                    path.bucket,
+                )} key: ${path.key} `,
+                error,
+            )
+            throw error
+        })
 }

@@ -11,12 +11,21 @@ const stub = (req: Request, res: Response) => {
     res.sendStatus(200)
 }
 
+const stubEditionController = {
+    GET: (req: Request, res: Response) => {
+        res.sendStatus(200)
+    },
+    POST: (req: Request, res: Response) => {
+        res.sendStatus(200)
+    },
+}
+
 const testStubControllers: EditionsBackendControllers = {
     issuesSummaryController: stub,
     issueController: stub,
     frontController: stub,
     imageController: stub,
-    editionsController: stub,
+    editionsController: stubEditionController,
 }
 
 describe('Endpoints contract test for Preview Editions Backend application', () => {
