@@ -31,7 +31,6 @@ const getHeadline = (
     } else {
         const pillarInclusion =
             pillar === 'news' || pillar === 'neutral' || pillar === 'opinion'
-        console.log(pillarInclusion)
         const showcaseStyle =
             articleType === ArticleType.Showcase && pillarInclusion
                 ? ` class="alt"`
