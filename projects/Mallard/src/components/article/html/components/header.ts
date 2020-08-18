@@ -891,17 +891,16 @@ const getStandFirstText = ({
     standfirst: ArticleHeaderProps['standfirst']
     type: ArticleType
 }) => {
-    const color =
+    const interviewColor =
         pillar === 'lifestyle'
             ? getPillarColors(pillar).dark
             : palette.neutral[7]
 
     return html`
         <p
-            class="${type === ArticleType.Interview
-                ? 'interview-standfirst'
-                : ''}"
-            style="color: ${color};"
+            ${type === ArticleType.Interview &&
+                `class=interview-standfirst` &&
+                `style=color:${interviewColor};`}
         >
             ${standfirst}
         </p>
