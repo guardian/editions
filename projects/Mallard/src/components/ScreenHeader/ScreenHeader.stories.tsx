@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/react-native'
 import React from 'react'
 import { ScreenHeader } from './ScreenHeader'
 import { props } from './fixtures'
-import { EditionsMenuScreenHeader } from '../layout/header/EditionMenuScreenHeader'
+import { EditionsMenuScreenHeader } from './EditionMenuScreenHeader'
 
 storiesOf('ScreenHeader', module)
     .add('Default', () => <ScreenHeader />)

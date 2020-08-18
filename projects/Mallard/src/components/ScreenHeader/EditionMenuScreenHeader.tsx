@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header } from './header'
+import { Header } from '../layout/header/header'
 import { EditionsMenuButton } from 'src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton'
 import { IssueTitle } from 'src/components/issue/issue-title'
 
