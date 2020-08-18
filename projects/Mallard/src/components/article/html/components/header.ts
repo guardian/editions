@@ -164,16 +164,18 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
+
+    @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+        .header-image--immersive {
+            padding-top: 59.6%;
+        }
+    }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header-image--immersive {
             height: 80%;
         }
     }
-    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-image--immersive {
-            padding-top: 140%;
-        }
-    }
+
 
     .header-kicker {
         font-family: ${families.titlepiece.regular};
@@ -301,7 +303,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     .image-as-bg {
         display: block;
-        padding-top: 60%;
+        padding-top: 59.6%;
         background-size: cover;
         background-position: center;
         position: relative;
@@ -563,7 +565,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .header-container[data-type='${ArticleType.Interview}'] .header {
         background: ${colors.tint};
-        margin-top: 0;
         margin-right: -50em;
         padding-right: 50em;
     }
@@ -644,6 +645,12 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .app[data-type='${ArticleType.Interview}'] {
         padding: 0 !important;
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletLandscape)}) { 
+        .header-image--interview { 
+            padding-top: 59.7%; 
+        }
     }
 
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
