@@ -355,9 +355,9 @@ const IssueScreenWithPath = React.memo(
         path: PathToIssue
         initialFrontKey: string | null
     }) => {
-        const preview = useIsPreview()
-        const proof = useIsProof()
-        const response = useIssueResponse(path, preview)
+        const isPreview = useIsPreview()
+        const isProof = useIsProof()
+        const response = useIssueResponse(path, isPreview)
 
         return response({
             error: handleError,
@@ -369,10 +369,17 @@ const IssueScreenWithPath = React.memo(
                 return (
                     <>
                         <PreviewReloadButton
-                            onPress={async () => {
-                                if (proof) {
-                                    await deleteIssueFiles()
-                                    RNRestart.Restart()
+                            onPress={() => {
+                                if (isProof) {
+                                    deleteIssueFiles()
+                                        .then(RNRestart.Restart)
+                                        .catch(error => {
+                                            console.error(
+                                                'failed to delete files',
+                                                error,
+                                            ),
+                                                RNRestart.Restart()
+                                        })
                                 }
                                 clearCache()
                                 retry()
