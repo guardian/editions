@@ -842,7 +842,7 @@ const getStandFirst = (
             </section>
         `
     } else {
-        const color =
+        const interviewColor =
             pillar === 'lifestyle'
                 ? getPillarColors(pillar).dark
                 : palette.neutral[7]
@@ -852,13 +852,13 @@ const getStandFirst = (
                 ${getHeadline(articleHeaderType, type, headerProps)}
                 ${articleHeaderType === HeaderType.RegularByline &&
                     headerProps.standfirst &&
-                    `<p class="${
-                        type === ArticleType.Interview
-                            ? 'interview-standfirst'
-                            : ''
-                    }" style="color: ${color};">
-                        ${headerProps.standfirst}
-                      </p>`}
+                    ` <p
+            ${type === ArticleType.Interview &&
+                `class=interview-standfirst` &&
+                `style=color:${interviewColor};`}
+        >
+            ${headerProps.standfirst}
+        </p>`}
             </section>
         `
     }
