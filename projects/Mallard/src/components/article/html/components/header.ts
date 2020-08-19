@@ -154,7 +154,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         left:0;
     }
     .header-image--immersive {
-        height: 65%;
         width: 100%;
         object-fit: cover;
         display: block;
@@ -170,16 +169,10 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-top: 59.6%;
         }
     }
-    
-    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-image--immersive {
-            height: 80%;
-        }
-    }
 
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {	
-        .header-image--immersive {	        
-            padding-top: 140%;	           
+        .header-image--immersive {        
+            padding-top: 167%;	           
         }	  
     }
 
