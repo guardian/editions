@@ -369,17 +369,18 @@ const IssueScreenWithPath = React.memo(
                 return (
                     <>
                         <PreviewReloadButton
-                            onPress={() => {
+                            onPress={async () => {
                                 if (isProof) {
-                                    deleteIssueFiles()
-                                        .then(RNRestart.Restart)
-                                        .catch(error => {
-                                            console.error(
-                                                'failed to delete files',
-                                                error,
-                                            ),
-                                                RNRestart.Restart()
-                                        })
+                                    try {
+                                        await deleteIssueFiles()
+                                    } catch (error) {
+                                        console.error(
+                                            'failed to delete files',
+                                            error,
+                                        )
+                                    } finally {
+                                        RNRestart.Restart()
+                                    }
                                 }
                                 clearCache()
                                 retry()
