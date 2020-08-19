@@ -170,12 +170,18 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-top: 59.6%;
         }
     }
+    
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header-image--immersive {
             height: 80%;
         }
     }
 
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {	
+        .header-image--immersive {	        
+            padding-top: 140%;	           
+        }	  
+    }
 
     .header-kicker {
         font-family: ${families.titlepiece.regular};
