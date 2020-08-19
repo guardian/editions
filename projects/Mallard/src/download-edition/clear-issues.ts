@@ -16,6 +16,7 @@ const clearDownloadsDirectory = async () => {
         files.map(
             async (file: RNFS.ReadDirItem) => await RNFS.unlink(file.path),
         )
+        await prepFileSystem()
     } catch (error) {
         await pushTracking(
             'tempFileRemoveError',
@@ -27,12 +28,17 @@ const clearDownloadsDirectory = async () => {
     }
 }
 
-const deleteIssue = (localId: string): Promise<void> => {
-    const promise = RNFS.unlink(FSPaths.issueRoot(localId)).catch(e => {
-        errorService.captureException(e)
-    })
-    promise.then(() => localIssueListStore.remove(localId))
-    return promise
+const deleteIssue = async (localId: string): Promise<boolean> => {
+    const issuePath = FSPaths.issueRoot(localId)
+    const doesItExist = await RNFS.exists(issuePath)
+    if (doesItExist) {
+        await RNFS.unlink(issuePath).catch(e => {
+            errorService.captureException(e)
+        })
+        localIssueListStore.remove(localId)
+        return true
+    }
+    return false
 }
 
 const deleteIssueFiles = async (): Promise<void> => {

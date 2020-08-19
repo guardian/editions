@@ -33,6 +33,7 @@ export enum ArticleType {
     Gallery = 'gallery',
     Feature = 'feature',
     Immersive = 'immersive',
+    Showcase = 'showcase',
 }
 
 export enum HeaderType {
