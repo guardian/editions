@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
-import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { BasicArticleHeader } from '../header'
