@@ -46,6 +46,11 @@ export const prepFileSystem = async (): Promise<void> => {
             ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
         ),
     )
+    await Promise.all(
+        Object.values(editions).map(edition =>
+            ensureDirExists(`${FSPaths.downloadRoot}/${edition}`),
+        ),
+    )
 }
 
 export const getJson = <T extends any>(path: string): Promise<T> =>

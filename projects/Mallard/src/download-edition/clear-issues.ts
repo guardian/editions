@@ -16,6 +16,7 @@ const clearDownloadsDirectory = async () => {
         files.map(
             async (file: RNFS.ReadDirItem) => await RNFS.unlink(file.path),
         )
+        await prepFileSystem()
     } catch (error) {
         await pushTracking(
             'tempFileRemoveError',
