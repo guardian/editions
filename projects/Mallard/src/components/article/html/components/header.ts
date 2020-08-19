@@ -40,7 +40,7 @@ const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
         display: inline-block;
         height: 1.70em;
-        margin-top: -1.75em;
+        margin-top: -1.70em;
         padding-right: ${metrics.article.sides};
         margin-left: -20em;
         padding-left: 20.5em;
