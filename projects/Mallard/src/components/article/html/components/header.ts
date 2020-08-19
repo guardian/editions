@@ -943,7 +943,6 @@ const getStandFirst = (
                 ${getHeadline(articleHeaderType, type, headerProps)}
                 ${articleHeaderType === HeaderType.RegularByline &&
                     headerProps.standfirst &&
-
                     getStandFirstText({
                         standfirst: headerProps.standfirst,
                         type,
