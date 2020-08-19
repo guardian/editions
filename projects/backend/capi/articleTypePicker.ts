@@ -45,7 +45,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'news':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Article
+                else if (isInterview) return ArticleType.Interview
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
@@ -57,7 +57,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'sport':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Article
+                else if (isInterview) return ArticleType.Interview
                 else if (isMatchResult) return ArticleType.MatchResult
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
@@ -84,7 +84,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isImmersive) return ArticleType.Immersive
                 else if (isReview) return ArticleType.Review
                 else if (isRecipe) return ArticleType.Recipe
-                else if (isInterview) return ArticleType.Article
+                else if (isInterview) return ArticleType.Interview
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isGallery) return ArticleType.Gallery
                 else if (isLetter) return ArticleType.Letter
@@ -105,7 +105,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 if (isReview) return ArticleType.Review
                 else if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
-                else if (isInterview) return ArticleType.Article
+                else if (isInterview) return ArticleType.Interview
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
