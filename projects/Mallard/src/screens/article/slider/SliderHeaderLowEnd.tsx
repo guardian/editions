@@ -3,7 +3,6 @@ import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { BasicArticleHeader } from '../header'
-import { supportsAnimation } from 'src/helpers/features'
 import { SliderTitle, SliderTitleProps } from './SliderTitle'
 import DeviceInfo from 'react-native-device-info'
 
@@ -45,23 +44,21 @@ const SliderHeaderLowEnd = ({
     sliderDetails: SliderTitleProps
 }) => {
     const [top] = useState(new Animated.Value(0))
-    if (supportsAnimation()) {
-        useEffect(() => {
-            if (isShown) {
-                Animated.timing(top, {
-                    toValue: 0,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            } else {
-                Animated.timing(top, {
-                    toValue: -HEADER_LOW_END_HEIGHT,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            }
-        }, [isShown, top])
-    }
+    useEffect(() => {
+        if (isShown) {
+            Animated.timing(top, {
+                toValue: 0,
+                easing: Easing.out(Easing.ease),
+                duration: 200,
+            }).start()
+        } else {
+            Animated.timing(top, {
+                toValue: -HEADER_LOW_END_HEIGHT,
+                easing: Easing.out(Easing.ease),
+                duration: 200,
+            }).start()
+        }
+    }, [isShown, top])
 
     return (
         <Animated.View style={[styles.header, { top }]}>
