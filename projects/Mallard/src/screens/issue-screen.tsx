@@ -52,10 +52,9 @@ import { useIssueResponse } from 'src/hooks/use-issue'
 import {
     issueSummaryToLatestPath,
     useIssueSummary,
-    getIssueSummary,
 } from 'src/hooks/use-issue-summary'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
-import { useIsPreview } from 'src/hooks/use-settings'
+import { useIsPreview, useIsProof } from 'src/hooks/use-settings'
 import { PathToIssue } from 'src/paths'
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 import { sendPageViewEvent } from 'src/services/ophan'
@@ -66,6 +65,8 @@ import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
 import { useEditions, BASE_EDITION } from 'src/hooks/use-edition-provider'
+import RNRestart from 'react-native-restart'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -354,8 +355,9 @@ const IssueScreenWithPath = React.memo(
         path: PathToIssue
         initialFrontKey: string | null
     }) => {
-        const preview = useIsPreview()
-        const response = useIssueResponse(path, preview)
+        const isPreview = useIsPreview()
+        const isProof = useIsProof()
+        const response = useIssueResponse(path, isPreview)
 
         return response({
             error: handleError,
@@ -368,9 +370,19 @@ const IssueScreenWithPath = React.memo(
                     <>
                         <PreviewReloadButton
                             onPress={async () => {
+                                if (isProof) {
+                                    try {
+                                        await deleteIssueFiles()
+                                    } catch (error) {
+                                        console.error(
+                                            'failed to delete files',
+                                            error,
+                                        )
+                                    } finally {
+                                        RNRestart.Restart()
+                                    }
+                                }
                                 clearCache()
-                                const issueSummary = await getIssueSummary()
-                                path = issueSummaryToLatestPath(issueSummary)
                                 retry()
                             }}
                         />

@@ -27,6 +27,11 @@ export const useIsPreview = () => {
     return apiUrl != null && isPreview(apiUrl)
 }
 
+export const useIsProof = () => {
+    const apiUrl = useApiUrl()
+    return apiUrl && apiUrl.includes('proof')
+}
+
 const PROD_DEV_QUERY = gql('{ isUsingProdDevtools @client }')
 export const useIsUsingProdDevtools = () => {
     const query = useQuery<{ isUsingProdDevtools: boolean }>(PROD_DEV_QUERY)

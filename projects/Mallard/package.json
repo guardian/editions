@@ -82,6 +82,7 @@
         "react-native-permissions": "^2.0.3",
         "react-native-progress-circle": "^2.1.0",
         "react-native-push-notification": "^3.5.2",
+        "react-native-restart": "^0.0.17",
         "react-native-safe-area-context": "^0.6.4",
         "react-native-splash-screen": "^3.2.0",
         "react-native-status-bar-height": "^2.4.0",
