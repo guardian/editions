@@ -8,7 +8,7 @@ import {
     ImageSize,
     Issue,
 } from '../../../common'
-import { Header, ArticleHeaderProps } from './components/header'
+import { Header, ArticleHeaderProps, HeaderShowcase } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
@@ -158,16 +158,28 @@ export const renderArticle = (
             })
             break
         default:
-            header = Header({
-                ...article,
-                type,
-                headerType,
-                publishedId,
-                showMedia,
-                canBeShared,
-                pillar,
-                getImagePath,
-            })
+            header =
+                type === ArticleType.Showcase
+                    ? HeaderShowcase({
+                          ...article,
+                          type,
+                          headerType,
+                          publishedId,
+                          showMedia,
+                          canBeShared,
+                          pillar,
+                          getImagePath,
+                      })
+                    : Header({
+                          ...article,
+                          type,
+                          headerType,
+                          publishedId,
+                          showMedia,
+                          canBeShared,
+                          pillar,
+                          getImagePath,
+                      })
             content = renderArticleContent(elements, {
                 showMedia,
                 publishedId,

@@ -10,29 +10,38 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
         Array [
           Object {
             "edition": "daily-edition",
+            "editionType": "Regional",
             "header": Object {
               "title": "The Daily",
             },
+            "notificationUTCOffset": 1,
             "subTitle": "Published every day by 12am (GMT)",
             "title": "The UK Daily Edition",
+            "topic": "au",
           },
           Object {
             "edition": "australian-edition",
+            "editionType": "Regional",
             "header": Object {
               "subTitle": "Weekender",
               "title": "Austraila",
             },
+            "notificationUTCOffset": 1,
             "subTitle": "Published every day by 9:30am (AEST)",
             "title": "Australia Daily",
+            "topic": "au",
           },
           Object {
             "edition": "american-edition",
+            "editionType": "Regional",
             "header": Object {
               "subTitle": "Weekender",
               "title": "US",
             },
+            "notificationUTCOffset": 1,
             "subTitle": "Published every Saturday by 8am (EST)",
             "title": "US and Cananda Weekend",
+            "topic": "au",
           },
         ]
       }
@@ -110,32 +119,41 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
         Array [
           Object {
             "edition": "daily-edition",
+            "editionType": "Regional",
             "header": Object {
               "title": "The Daily",
             },
+            "notificationUTCOffset": 3,
             "subTitle": "Published every morning
 by 6am (GMT)",
             "title": "The Daily",
+            "topic": "uk",
           },
           Object {
             "edition": "australian-edition",
+            "editionType": "Regional",
             "header": Object {
               "subTitle": "Weekender",
               "title": "Australia",
             },
-            "subTitle": "Published every Saturday morning 
+            "notificationUTCOffset": -5,
+            "subTitle": "Published every Saturday morning
 by 6am (AEST)",
             "title": "Australia Weekender",
+            "topic": "au",
           },
           Object {
             "edition": "american-edition",
+            "editionType": "Regional",
             "header": Object {
               "subTitle": "Weekender",
               "title": "US",
             },
-            "subTitle": "Published every Saturday morning 
+            "notificationUTCOffset": 8,
+            "subTitle": "Published every Saturday morning
 by 6am (EST)",
             "title": "US Weekender",
+            "topic": "us",
           },
         ]
       }
@@ -230,6 +248,7 @@ by 6am (EST)",
               },
             },
             "edition": "daily-edition",
+            "editionType": "Special",
             "expiry": 1998-02-01T00:00:00.000Z,
             "header": Object {
               "subTitle": "Monthly",
@@ -239,9 +258,11 @@ by 6am (EST)",
               "path": "/path/to/image",
               "source": "media",
             },
+            "notificationUTCOffset": 1,
             "subTitle": "Store cupboard special: 20 quick and easy lockdown suppers",
             "title": "Food
 Monthly",
+            "topic": "food",
           },
         ]
       }
@@ -291,32 +312,41 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
         Array [
           Object {
             "edition": "daily-edition",
+            "editionType": "Regional",
             "header": Object {
               "title": "The Daily",
             },
+            "notificationUTCOffset": 3,
             "subTitle": "Published every morning
 by 6am (GMT)",
             "title": "The Daily",
+            "topic": "uk",
           },
           Object {
             "edition": "australian-edition",
+            "editionType": "Regional",
             "header": Object {
               "subTitle": "Weekender",
               "title": "Australia",
             },
-            "subTitle": "Published every Saturday morning 
+            "notificationUTCOffset": -5,
+            "subTitle": "Published every Saturday morning
 by 6am (AEST)",
             "title": "Australia Weekender",
+            "topic": "au",
           },
           Object {
             "edition": "american-edition",
+            "editionType": "Regional",
             "header": Object {
               "subTitle": "Weekender",
               "title": "US",
             },
-            "subTitle": "Published every Saturday morning 
+            "notificationUTCOffset": 8,
+            "subTitle": "Published every Saturday morning
 by 6am (EST)",
             "title": "US Weekender",
+            "topic": "us",
           },
         ]
       }

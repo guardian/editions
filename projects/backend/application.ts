@@ -14,7 +14,10 @@ export interface EditionsBackendControllers {
     issueController: (req: Request, res: Response) => void
     frontController: (req: Request, res: Response) => void
     imageController: (req: Request, res: Response) => void
-    editionsController: (req: Request, res: Response) => void
+    editionsController: {
+        GET: (req: Request, res: Response) => void
+        POST: (req: Request, res: Response) => void
+    }
 }
 
 export const createApp = (
@@ -41,7 +44,9 @@ export const createApp = (
     // it should return the issues list for the daily-edition
     app.get('/issues', controllers.issuesSummaryController)
 
-    app.get('/editions', controllers.editionsController)
+    app.get('/editions', controllers.editionsController.GET)
+
+    app.post('/editions', express.json(), controllers.editionsController.POST)
 
     app.get(
         '/' + issueSummaryPath(':edition'),
