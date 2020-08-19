@@ -115,8 +115,8 @@ exports[`article html Header getStandFirst should display RegularByline Header T
                 Test Headline
             </h1>
         
-                 <p
-            false
+        <p
+        
         >
             Test Standfirst
         </p>
