@@ -655,7 +655,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     @media (min-width: ${px(Breakpoints.tabletLandscape)}) { 
         .header-image--interview { 
-            padding-top: 59.7%; 
+            padding-top: 59.6%; 
         }
     }
 
