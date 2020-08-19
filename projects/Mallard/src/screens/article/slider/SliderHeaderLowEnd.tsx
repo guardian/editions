@@ -36,46 +36,42 @@ const styles = StyleSheet.create({
     },
 })
 
-const SliderHeaderLowEnd = withNavigation(
-    ({
-        isShown,
-        isAtTop,
-        sliderDetails,
-    }: {
-        isShown: boolean
-        isAtTop: boolean
-        sliderDetails: SliderTitleProps
-    } & NavigationInjectedProps) => {
-        const [top] = useState(new Animated.Value(0))
-        if (supportsAnimation()) {
-            useEffect(() => {
-                if (isShown) {
-                    Animated.timing(top, {
-                        toValue: 0,
-                        easing: Easing.out(Easing.ease),
-                        duration: 200,
-                    }).start()
-                } else {
-                    Animated.timing(top, {
-                        toValue: -HEADER_LOW_END_HEIGHT,
-                        easing: Easing.out(Easing.ease),
-                        duration: 200,
-                    }).start()
-                }
-            }, [isShown, top])
-        }
+const SliderHeaderLowEnd = ({
+    isShown,
+    isAtTop,
+    sliderDetails,
+}: {
+    isShown: boolean
+    isAtTop: boolean
+    sliderDetails: SliderTitleProps
+}) => {
+    const [top] = useState(new Animated.Value(0))
+    if (supportsAnimation()) {
+        useEffect(() => {
+            if (isShown) {
+                Animated.timing(top, {
+                    toValue: 0,
+                    easing: Easing.out(Easing.ease),
+                    duration: 200,
+                }).start()
+            } else {
+                Animated.timing(top, {
+                    toValue: -HEADER_LOW_END_HEIGHT,
+                    easing: Easing.out(Easing.ease),
+                    duration: 200,
+                }).start()
+            }
+        }, [isShown, top])
+    }
 
-        return (
-            <Animated.View style={[styles.header, { top }]}>
-                <BasicArticleHeader />
-                <View
-                    style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
-                >
-                    <SliderTitle {...sliderDetails} />
-                </View>
-            </Animated.View>
-        )
-    },
-)
+    return (
+        <Animated.View style={[styles.header, { top }]}>
+            <BasicArticleHeader />
+            <View style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}>
+                <SliderTitle {...sliderDetails} />
+            </View>
+        </Animated.View>
+    )
+}
 
 export { SliderHeaderLowEnd, HEADER_LOW_END_HEIGHT }
