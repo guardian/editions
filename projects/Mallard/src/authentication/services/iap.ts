@@ -57,7 +57,10 @@ const isReceiptValid = (receipt: ReceiptIOS) => {
 }
 
 const findValidReceipt = (receipt: ReceiptValidationResponse) =>
-    (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptValid) || null
+    receipt
+        ? (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptValid) ||
+          null
+        : null
 
 /**
  * This will attempt to restore existing purchases
@@ -120,4 +123,5 @@ export {
     fetchActiveIOSSubscriptionReceipt,
     tryRestoreActiveIOSSubscriptionReceipt,
     isReceiptValid,
+    findValidReceipt,
 }
