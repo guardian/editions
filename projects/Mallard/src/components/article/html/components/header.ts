@@ -1132,6 +1132,66 @@ const Header = ({
     `
 }
 
+const HeaderInterview = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    pillar,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    pillar: ArticlePillar
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    const byLineText = getByLineText(headerType, headerProps)
+    return html`
+        ${headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                image: headerProps.image,
+                className: 'header-image--interview',
+                getImagePath,
+            })}
+        <div class="header-container-line-wrap">
+            <div class="header-container wrapper" data-type="${type}">
+                <header class="header">
+                    ${headerProps.mainMedia &&
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
+                    ${headerProps.kicker &&
+                        html`
+                            <span class="header-kicker"
+                                >${headerProps.kicker}</span
+                            >
+                        `}
+                    ${getStandFirst(
+                        headerType,
+                        type,
+                        headerProps,
+                        publishedId,
+                        getImagePath,
+                        pillar,
+                    )}
+                </header>
+                ${hasByLine(byLineText, headerProps.canBeShared) &&
+                    getByLine(
+                        headerType,
+                        headerProps.canBeShared,
+                        headerProps as ArticleHeaderProps,
+                        type,
+                    )}
+                <div class="header-bg"></div>
+            </div>
+        </div>
+    `
+}
+
 const HeaderShowcase = ({
     publishedId,
     type,
@@ -1202,4 +1262,4 @@ const HeaderShowcase = ({
     `
 }
 
-export { Header, HeaderShowcase, getStandFirst }
+export { Header, HeaderShowcase, HeaderInterview, getStandFirst }

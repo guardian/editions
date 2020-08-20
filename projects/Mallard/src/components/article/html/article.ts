@@ -8,7 +8,12 @@ import {
     ImageSize,
     Issue,
 } from '../../../common'
-import { Header, ArticleHeaderProps, HeaderShowcase } from './components/header'
+import {
+    Header,
+    ArticleHeaderProps,
+    HeaderShowcase,
+    HeaderInterview,
+} from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
@@ -161,6 +166,17 @@ export const renderArticle = (
             header =
                 type === ArticleType.Showcase
                     ? HeaderShowcase({
+                          ...article,
+                          type,
+                          headerType,
+                          publishedId,
+                          showMedia,
+                          canBeShared,
+                          pillar,
+                          getImagePath,
+                      })
+                    : type === ArticleType.Interview
+                    ? HeaderInterview({
                           ...article,
                           type,
                           headerType,
