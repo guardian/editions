@@ -28,13 +28,9 @@ const createSettingsCacheIOS = Platform.select({
         },
     }),
     default: () => ({
-        set: async () => {
-            throw new Error('not implemented')
-        },
+        set: async () => Promise.resolve(),
         get: async () => null,
-        reset: async () => {
-            throw new Error('not implemented')
-        },
+        reset: async () => Promise.resolve(),
     }),
 })
 
