@@ -175,7 +175,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {	
         .header-image--immersive {        
-            padding-top: 167%;	           
+            padding-top: 167%;	   
+            height: 65%;        
         }	  
     }
 
@@ -540,10 +541,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
 
     /*interview*/    
-
-    @media (max-width: ${px(Breakpoints.tabletVertical)}) { 
-        ${outieHeader(ArticleType.Interview)}
-    }
     .header-image--interview {
         width: 100%;
         object-fit: cover;
@@ -556,6 +553,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
 
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        ${outieHeader(ArticleType.Interview)}
         .interview-tablet { 
             display: none;
         }
@@ -598,6 +596,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .header-container[data-type='${ArticleType.Interview}'] .header {
         background: ${colors.tint};
+        margin-top: 0;
         margin-right: -50em;
         padding-right: 50em;
     }
@@ -682,7 +681,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
 
     @media (min-width: ${px(Breakpoints.tabletVertical)}) { 
-       
         .header-image-container--interview { 
             position: relative;
          }   
