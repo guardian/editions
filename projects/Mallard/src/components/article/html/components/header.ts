@@ -576,9 +576,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-left: 10px;
         }
 
-        .header-container[data-type='${
-            ArticleType.Interview
-        }'] .header-top p {
+        .header-container[data-type='${ArticleType.Interview}'] .header-top p {
             padding-left: 10px;
             padding-right: 25px;
         }
@@ -669,7 +667,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin-right: 20px;
         margin-top: 0px;
     }
-    .header-container[data-type='${ArticleType.Interview}'] .header-byline span {
+    .header-container[data-type='${
+        ArticleType.Interview
+    }'] .header-byline span {
         margin-top: 4px;
         display: block;
     }
