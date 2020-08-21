@@ -607,50 +607,50 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         padding: 10px;
     }
 
-    .interview-tablet .standfirst--interview { 
+    .interview-tablet .header-bottom { 
         background: ${colors.tint};
     }
 
-    .interview-tablet .standfirst--interview p {
+    .interview-tablet-standfirst { 
+        padding-top: 12px; 
+        padding-bottom: 12px;
+    }
+
+    .interview-tablet .header-bottom p {
         font-family: ${families.headline.medium};
         letter-spacing: 0.2px;
         line-height: 1.1875em;
         margin-bottom: 0.875em;
         font-size: 18px;
     }
-    
-    .interview-tablet .standfirst--interview p:after {
-        ${threeLines}
+
+    .byline-container:before { 
+        ${threeLines};
     }
 
-    .interview-tablet .standfirst--interview p { 
+    .interview-tablet-wrapper { 
         margin-left: ${px(
             (Dimensions.get('window').width - metrics.article.maxWidth) / 2,
+        )};
+        margin-right: ${px(
+            (Dimensions.get('window').width - metrics.article.maxWidth) / 2 +
+                metrics.article.rightRail,
         )};
     }
 
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .headline-top-container {
-            margin-right: ${px(metrics.article.rightRail)};
-            margin-left: ${px(
-                (Dimensions.get('window').width - metrics.article.maxWidth) / 2,
-            )};
-        }
-
         .interview-tablet .standfirst--interview p {
             font-size: 18px;
             margin-right:${px(metrics.article.rightRail)}; 
         }
 
-        .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        .headline-top-container[data-type="${
             ArticleType.Interview
         }"] .header-kicker {
             display: inline-block;
         }
 
-        .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
-            ArticleType.Interview
-        }"] h1 { 
+        .headline-top-container[data-type="${ArticleType.Interview}"] h1 { 
             font-size: 40px;
         }
 
@@ -659,6 +659,16 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }"] h1 .header-top-headline {
             line-height: 50px;
         }
+
+        .interview-tablet .header-byline:not(:empty):after {
+            left: 0;
+            right: 0;
+        }
+
+        .interview-tablet .share-touch-zone { 
+            padding-right: 14px;
+        }
+        
     }
 
     /*interview*/
@@ -1280,7 +1290,10 @@ const HeaderInterviewTablet = ({
                         className: 'header-image--interview',
                         getImagePath,
                     })}
-                <div class="headline-top-container wrapper" data-type="${type}">
+                <div
+                    class="headline-top-container interview-tablet-wrapper"
+                    data-type="${type}"
+                >
                     ${headerProps.mainMedia &&
                         (headerProps.showMedia
                             ? renderMediaAtom(headerProps.mainMedia)
@@ -1296,8 +1309,10 @@ const HeaderInterviewTablet = ({
                     </header>
                 </div>
             </div>
-            <div class="standfirst--interview" data-type="${type}">
-                <section class="interview-standfirst">
+            <div class="header-bottom" data-type="${type}">
+                <section
+                    class="interview-tablet-standfirst interview-tablet-wrapper"
+                >
                     ${headerProps.standfirst &&
                         getStandFirstText({
                             standfirst: headerProps.standfirst,
@@ -1305,17 +1320,20 @@ const HeaderInterviewTablet = ({
                             pillar,
                         })}
                 </section>
-            </div>
-            <div class="headline-top-container wrapper" data-type="${type}">
-                ${hasByLine(byLineText, headerProps.canBeShared) &&
-                    getByLine(
-                        headerType,
-                        headerProps.canBeShared,
-                        headerProps as ArticleHeaderProps,
-                        type,
-                    )}
-                <div>
-                    <div class="header-bg"></div>
+                <div
+                    class="byline-container interview-tablet-wrapper"
+                    data-type="${type}"
+                >
+                    ${hasByLine(byLineText, headerProps.canBeShared) &&
+                        getByLine(
+                            headerType,
+                            headerProps.canBeShared,
+                            headerProps as ArticleHeaderProps,
+                            type,
+                        )}
+                    <div>
+                        <div class="header-bg"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1452,10 +1470,4 @@ const HeaderShowcase = ({
     `
 }
 
-export {
-    Header,
-    HeaderShowcase,
-    HeaderInterview,
-    HeaderInterviewTablet,
-    getStandFirst,
-}
+export { Header, HeaderShowcase, HeaderInterview, HeaderInterviewTablet, getStandFirst }
