@@ -13,7 +13,6 @@ import {
     ArticleHeaderProps,
     HeaderShowcase,
     HeaderInterview,
-    HeaderInterviewTablet,
 } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'

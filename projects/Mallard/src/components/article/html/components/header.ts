@@ -671,6 +671,18 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         
     }
 
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        .interview-tablet { 
+            display: none;
+        }
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) { 
+        .interview-mobile { 
+            display: none;
+        }
+    }
+
     /*interview*/
     ${outieHeader(ArticleType.Interview)}
     .header-image--interview {
@@ -1340,7 +1352,7 @@ const HeaderInterviewTablet = ({
     `
 }
 
-const HeaderInterview = ({
+const HeaderInterviewMobile = ({
     publishedId,
     type,
     headerType,
@@ -1358,45 +1370,83 @@ const HeaderInterview = ({
 } & ArticleHeaderProps) => {
     const byLineText = getByLineText(headerType, headerProps)
     return html`
-        ${headerProps.image &&
-            publishedId &&
-            MainMediaImage({
-                image: headerProps.image,
-                className: 'header-image--interview',
-                getImagePath,
-            })}
-        <div class="header-container-line-wrap">
-            <div class="header-container wrapper" data-type="${type}">
-                <header class="header">
-                    ${headerProps.mainMedia &&
-                        (headerProps.showMedia
-                            ? renderMediaAtom(headerProps.mainMedia)
-                            : null)}
-                    ${headerProps.kicker &&
-                        html`
-                            <span class="header-kicker"
-                                >${headerProps.kicker}</span
-                            >
-                        `}
-                    ${getStandFirst(
-                        headerType,
-                        type,
-                        headerProps,
-                        publishedId,
-                        getImagePath,
-                        pillar,
-                    )}
-                </header>
-                ${hasByLine(byLineText, headerProps.canBeShared) &&
-                    getByLine(
-                        headerType,
-                        headerProps.canBeShared,
-                        headerProps as ArticleHeaderProps,
-                        type,
-                    )}
-                <div class="header-bg"></div>
+        <div class="interview-mobile">
+            ${headerProps.image &&
+                publishedId &&
+                MainMediaImage({
+                    image: headerProps.image,
+                    className: 'header-image--interview',
+                    getImagePath,
+                })}
+            <div class="header-container-line-wrap">
+                <div class="header-container wrapper" data-type="${type}">
+                    <header class="header">
+                        ${headerProps.mainMedia &&
+                            (headerProps.showMedia
+                                ? renderMediaAtom(headerProps.mainMedia)
+                                : null)}
+                        ${headerProps.kicker &&
+                            html`
+                                <span class="header-kicker"
+                                    >${headerProps.kicker}</span
+                                >
+                            `}
+                        ${getStandFirst(
+                            headerType,
+                            type,
+                            headerProps,
+                            publishedId,
+                            getImagePath,
+                            pillar,
+                        )}
+                    </header>
+                    ${hasByLine(byLineText, headerProps.canBeShared) &&
+                        getByLine(
+                            headerType,
+                            headerProps.canBeShared,
+                            headerProps as ArticleHeaderProps,
+                            type,
+                        )}
+                    <div class="header-bg"></div>
+                </div>
             </div>
         </div>
+    `
+}
+
+const HeaderInterview = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    pillar,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    pillar: ArticlePillar
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    return html`
+        ${HeaderInterviewMobile({
+            publishedId,
+            type,
+            headerType,
+            getImagePath,
+            pillar,
+            ...headerProps,
+        })}
+        ${HeaderInterviewTablet({
+            publishedId,
+            type,
+            headerType,
+            getImagePath,
+            pillar,
+            ...headerProps,
+        })}
     `
 }
 
@@ -1470,4 +1520,4 @@ const HeaderShowcase = ({
     `
 }
 
-export { Header, HeaderShowcase, HeaderInterview, HeaderInterviewTablet, getStandFirst }
+export { Header, HeaderShowcase, HeaderInterview, getStandFirst }
