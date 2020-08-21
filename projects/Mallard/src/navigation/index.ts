@@ -35,7 +35,7 @@ import {
 } from 'src/screens/settings/privacy-policy-screen'
 import { SubscriptionDetailsScreen } from 'src/screens/settings/subscription-details-screen'
 import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
-// import StorybookScreen from 'src/screens/storybook-screen'
+import StorybookScreen from 'src/screens/storybook-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
 import { color } from 'src/theme/color'
 import { ArticleScreen } from '../screens/article-screen'
@@ -105,7 +105,7 @@ const AppStack = createModalNavigator(
                 [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
                 [routeNames.SubscriptionDetails]: SubscriptionDetailsScreen,
                 // Turned off to remove Promise rejection error on Android
-                // [routeNames.Storybook]: StorybookScreen,
+                [routeNames.Storybook]: StorybookScreen,
             },
             {
                 defaultNavigationOptions: {
