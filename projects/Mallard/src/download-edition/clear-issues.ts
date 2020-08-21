@@ -14,8 +14,12 @@ const clearDownloadsDirectory = async () => {
     try {
         const files = await RNFS.readDir(FSPaths.downloadRoot)
         files.map(
-            async (file: RNFS.ReadDirItem) => await RNFS.unlink(file.path),
+            async (file: RNFS.ReadDirItem) =>
+                await RNFS.unlink(file.path).catch(() => {
+                    // Android says nothing exists here but they are empty folders, so this supresses the warning
+                }),
         )
+        await Promise.all(files)
         await prepFileSystem()
     } catch (error) {
         await pushTracking(
