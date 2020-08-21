@@ -93,12 +93,18 @@ export const downloadNamedIssueArchive = async ({
             progressInterval: 1,
         }).promise
         return {
-            promise: returnable.then(async res => {
-                // Ensure issue is removed from the cache on completion
-                const { clear } = withCache('issue')
-                clear(localIssueId)
-                return res
-            }),
+            promise: returnable
+                .then(async res => {
+                    // Ensure issue is removed from the cache on completion
+                    const { clear } = withCache('issue')
+                    clear(localIssueId)
+                    return res
+                })
+                .catch(
+                    e =>
+                        e.message !== 'timeout' &&
+                        errorService.captureException(e),
+                ),
         }
     } catch (e) {
         e.message = `downloadNamedIssueArchive failed: ${e.message}`
