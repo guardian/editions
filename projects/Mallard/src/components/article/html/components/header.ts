@@ -539,6 +539,127 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
 
+    /*interview tablet */ 
+    ${outieHeader(ArticleType.Interview)}
+    .interview-tablet .interview-headline-image--tablet { 
+        position: relative;
+    }
+
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] { 
+        position: absolute;
+        bottom: 0;
+        z-index: 250;
+    }
+
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] {
+        color: ${color.textOverDarkBackground};
+    }
+
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] h1 {
+        padding-left: 10px;
+        font-weight: normal;
+    }
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] h1 svg {
+        height: .7em;
+        transform: scale(1.1);
+        width: auto;
+        fill: ${colors.main};
+    }
+
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] h1 svg {
+        fill: white;
+        background-color: ${color.palette.neutral[7]};
+    }
+
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] h1 .header-top-headline {
+        background-color: ${color.palette.neutral[7]};
+        box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]}, 
+            -10px 0 0 ${color.palette.neutral[7]};
+        line-height: 38px;
+    }
+
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] h1 {
+        font-family: ${families.headline.medium};
+        padding-right: 25px;
+    }
+
+    .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+        ArticleType.Interview
+    }"] .header-kicker {
+        background-color: ${colors.main};
+        color: ${color.textOverDarkBackground};
+        font-family: ${families.headline.bold};
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .interview-tablet .standfirst--interview { 
+        background: ${colors.tint};
+    }
+
+    .interview-tablet .standfirst--interview p {
+        font-family: ${families.headline.medium};
+        letter-spacing: 0.2px;
+        line-height: 1.1875em;
+        margin-bottom: 0.875em;
+        font-size: 18px;
+    }
+    
+    .interview-tablet .standfirst--interview p:after {
+        ${threeLines}
+    }
+
+    .interview-tablet .standfirst--interview p { 
+        margin-left: ${px(
+            (Dimensions.get('window').width - metrics.article.maxWidth) / 2,
+        )};
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .headline-top-container {
+            margin-right: ${px(metrics.article.rightRail)};
+            margin-left: ${px(
+                (Dimensions.get('window').width - metrics.article.maxWidth) / 2,
+            )};
+        }
+
+        .interview-tablet .standfirst--interview p {
+            font-size: 18px;
+            margin-right:${px(metrics.article.rightRail)}; 
+        }
+
+        .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+            ArticleType.Interview
+        }"] .header-kicker {
+            display: inline-block;
+        }
+
+        .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+            ArticleType.Interview
+        }"] h1 { 
+            font-size: 40px;
+        }
+
+        .interview-tablet .interview-headline-image--tablet .headline-top-container[data-type="${
+            ArticleType.Interview
+        }"] h1 .header-top-headline {
+            line-height: 50px;
+        }
+    }
 
     /*interview*/
     ${outieHeader(ArticleType.Interview)}
@@ -1132,6 +1253,75 @@ const Header = ({
     `
 }
 
+const HeaderInterviewTablet = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    pillar,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    pillar: ArticlePillar
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    const byLineText = getByLineText(headerType, headerProps)
+    return html`
+        <div class="interview-tablet">
+            <div class="interview-headline-image--tablet">
+                ${headerProps.image &&
+                    publishedId &&
+                    MainMediaImage({
+                        image: headerProps.image,
+                        className: 'header-image--interview',
+                        getImagePath,
+                    })}
+                <div class="headline-top-container wrapper" data-type="${type}">
+                    ${headerProps.mainMedia &&
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
+                    ${headerProps.kicker &&
+                        html`
+                            <span class="header-kicker"
+                                >${headerProps.kicker}</span
+                            >
+                        `}
+                    <header>
+                        ${getHeadline(headerType, type, headerProps)}
+                    </header>
+                </div>
+            </div>
+            <div class="standfirst--interview" data-type="${type}">
+                <section class="interview-standfirst">
+                    ${headerProps.standfirst &&
+                        getStandFirstText({
+                            standfirst: headerProps.standfirst,
+                            type,
+                            pillar,
+                        })}
+                </section>
+            </div>
+            <div class="headline-top-container wrapper" data-type="${type}">
+                ${hasByLine(byLineText, headerProps.canBeShared) &&
+                    getByLine(
+                        headerType,
+                        headerProps.canBeShared,
+                        headerProps as ArticleHeaderProps,
+                        type,
+                    )}
+                <div>
+                    <div class="header-bg"></div>
+                </div>
+            </div>
+        </div>
+    `
+}
+
 const HeaderInterview = ({
     publishedId,
     type,
@@ -1262,4 +1452,10 @@ const HeaderShowcase = ({
     `
 }
 
-export { Header, HeaderShowcase, HeaderInterview, getStandFirst }
+export {
+    Header,
+    HeaderShowcase,
+    HeaderInterview,
+    HeaderInterviewTablet,
+    getStandFirst,
+}
