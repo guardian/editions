@@ -270,7 +270,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
         return issueSummary
     } catch (e) {
         const issueSummary = await readIssueSummary()
-        if (!issueSummary) {
+        if (!issueSummary && e.message !== 'Network request failed') {
             e.message = `Failed to fetch valid issue summary and empty cache: ${e.message}`
             errorService.captureException(e)
         }
