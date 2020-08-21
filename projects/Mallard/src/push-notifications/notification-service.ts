@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
 import { getSetting } from 'src/helpers/settings'
 import { notificationEdition } from 'src/helpers/settings/defaults'
+import { errorService } from 'src/services/errors'
 
 export interface PushToken {
     name: 'uk' | 'us' | 'au'
@@ -26,11 +27,13 @@ const registerWithNotificationService = async (
         headers: {
             'Content-Type': 'application/json',
         },
-    }).then(response =>
-        response.ok
-            ? Promise.resolve(response.json())
-            : Promise.reject(response.status),
-    )
+    })
+        .then(response =>
+            response.ok
+                ? Promise.resolve(response.json())
+                : Promise.reject(response.status),
+        )
+        .catch(e => errorService.captureException(e))
 }
 
 export { registerWithNotificationService }
