@@ -57,9 +57,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                 {Platform.OS === 'ios' ? (
                     <>
                         <Heading>{``}</Heading>
-                        <Heading>
-                            {Copy.alreadySubscribed.appHeadingDaily}
-                        </Heading>
+                        <Heading>{Copy.alreadySubscribed.appHeading}</Heading>
                         <List
                             data={[
                                 {

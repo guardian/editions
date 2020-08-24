@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
     Image,
     Modal,
@@ -16,7 +16,6 @@ import { TitlepieceText } from '../components/styled-text'
 import { useNetInfo } from '../hooks/use-net-info'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { Copy } from 'src/helpers/words'
-import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
 
 const styles = StyleSheet.create({
     container: {
@@ -66,12 +65,6 @@ const StoreLink = () => {
 const DeprecateVersionModal = () => {
     const { isConnected } = useNetInfo()
     const { showModal } = useDeprecationModal()
-    const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
-    useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
-    }, [])
 
     return (
         <Modal visible={isConnected && showModal}>
@@ -81,9 +74,7 @@ const DeprecateVersionModal = () => {
                         accessibilityRole="header"
                         style={[getFont('titlepiece', 2), styles.title]}
                     >
-                        {editionsMenuEnabled
-                            ? Copy.deprecateModal.titleEditions
-                            : Copy.deprecateModal.titleDaily}
+                        {Copy.deprecateModal.title}
                     </TitlepieceText>
                     <TitlepieceText
                         style={[getFont('titlepiece', 1.5), styles.subTitle]}
