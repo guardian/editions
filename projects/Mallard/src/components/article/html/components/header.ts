@@ -157,7 +157,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         left:0;
     }
     .header-image--immersive {
-        height: 65%;
         width: 100%;
         object-fit: cover;
         display: block;
@@ -167,15 +166,18 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
-    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+
+    @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
         .header-image--immersive {
-            height: 80%;
+            padding-top: 59.6%;
         }
     }
-    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-image--immersive {
-            padding-top: 140%;
-        }
+
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {	
+        .header-image--immersive {        
+            padding-top: 167%;	   
+            height: 65%;        
+        }	  
     }
 
     .header-kicker {
@@ -304,7 +306,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     .image-as-bg {
         display: block;
-        padding-top: 60%;
+        padding-top: 59.6%;
         background-size: cover;
         background-position: center;
         position: relative;
@@ -538,9 +540,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
 
-
-    /*interview*/
-    ${outieHeader(ArticleType.Interview)}
+    /*interview*/    
     .header-image--interview {
         width: 100%;
         object-fit: cover;
@@ -549,8 +549,38 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         position: relative;
         margin: 0 ${px(metrics.article.sides * -1)};
         width: calc(100% + ${px(metrics.article.sides * 2)});
-        padding-top: 100%;
+        padding-top: 59.6%;
     }
+
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        ${outieHeader(ArticleType.Interview)}
+        .interview-tablet { 
+            display: none;
+        }
+        .app[data-type='${ArticleType.Interview}'] .content-wrap main {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header-byline button{
+            margin-right: 10px;
+        }
+    
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header-byline span {
+            padding-left: 10px;
+        }
+
+        .header-container[data-type='${ArticleType.Interview}'] .header-top p {
+            padding-left: 10px;
+            padding-right: 25px;
+        }
+
+    }
+
     .header-image--interview button {
         margin-right: 10px;
     }
@@ -636,8 +666,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin-right: 20px;
         margin-top: 0px;
     }
-    .header-container[data-type='${ArticleType.Interview}'] .header-byline span{
-        padding-left: 0px;
+    .header-container[data-type='${
+        ArticleType.Interview
+    }'] .header-byline span {
         margin-top: 4px;
         display: block;
     }
@@ -649,58 +680,123 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         padding: 0 !important;
     }
 
-    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .wrapper[data-type='${ArticleType.Interview}'] {
-            margin-right: ${px(metrics.article.rightRail)}
-        }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) { 
+        .header-image-container--interview { 
+            position: relative;
+         }   
 
-        .header-container[data-type='${ArticleType.Interview}'] .header-kicker {
-            height: 2.70em;
-            margin-top: -5.3em;
-        }
-
-        .header-container[data-type='${ArticleType.Interview}'] .header-top {
-            margin-top: -3.1em;
-        }
-
-        .header-container[data-type='${ArticleType.Interview}'] .header-byline {
-            border-right: 1px solid ${themeColors(theme).line};
-            border-bottom: 1px solid ${color.dimLine};
-        }
-
-        .header-container[data-type='${
+        .header-image-container--interview .header-container[data-type="${
             ArticleType.Interview
-        }'] .header-byline:after {
-            display: none;
+        }"] { 
+            position: absolute;
+            bottom: 0;
+            z-index: 250;
         }
 
-        .interview-standfirst {
-            padding: 0 0px 30px 0px;
+        .header-container[data-type="${ArticleType.Interview}"] {
+            color: ${color.textOverDarkBackground};
         }
 
-        .header-container[data-type='${
+        .header-container[data-type="${ArticleType.Interview}"] h1 {
+            padding-left: 10px;
+            font-weight: normal;
+        }
+
+        .header-container[data-type="${ArticleType.Interview}"] h1 svg {
+            height: .7em;
+            transform: scale(1.1);
+            width: auto;
+            fill: white;
+        }
+
+        .header-container[data-type="${
             ArticleType.Interview
-        }'] .header h1 .header-top-headline {
+        }"] h1 .header-top-headline {
+            background-color: ${color.palette.neutral[7]};
+            box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]}, 
+                -10px 0 0 ${color.palette.neutral[7]};
+            line-height: 38px;
+        }
+
+        .header-container[data-type="${ArticleType.Interview}"] h1 {
+            font-family: ${families.headline.medium};
+            padding-right: 25px;
+        }
+
+        .header-container[data-type="${ArticleType.Interview}"] .header-kicker {
+            background-color: ${colors.main};
+            color: ${color.textOverDarkBackground};
+            font-family: ${families.headline.bold};
+            margin-left: 0;
+            padding: 10px;
+        }
+
+        .interview-tablet .header-bottom { 
+            background: ${colors.tint};
+        }
+
+        .interview-tablet-standfirst { 
+            padding-top: 12px; 
+            padding-bottom: 12px;
+        }
+
+        .interview-tablet .header-bottom p {
+            font-family: ${families.headline.medium};
+            letter-spacing: 0.2px;
+            line-height: 1.1875em;
+            margin-bottom: 0.875em;
+            font-size: 18px;
+        }
+
+        .byline-container:before { 
+            ${threeLines};
+        }
+
+        .interview-tablet-wrapper { 
+            margin-left: ${px(
+                (Dimensions.get('window').width - metrics.article.maxWidth) / 2,
+            )};
+            margin-right: ${px(
+                (Dimensions.get('window').width - metrics.article.maxWidth) /
+                    2 +
+                    metrics.article.rightRail,
+            )};
+        }
+
+        .interview-tablet .standfirst--interview p {
+            font-size: 18px;
+            margin-right:${px(metrics.article.rightRail)}; 
+        }
+
+        .header-container[data-type="${ArticleType.Interview}"] .header-kicker {
+            display: inline-block;
+        }
+
+        .header-container[data-type="${ArticleType.Interview}"] h1 { 
+            font-size: 40px;
+        }
+
+        .interview-tablet .header-image-container--interview .header-container[data-type="${
+            ArticleType.Interview
+        }"] h1 .header-top-headline {
             line-height: 50px;
         }
-    }
 
-    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .app[data-type='${ArticleType.Interview}'] .content-wrap main {
-            padding-left: 10px;
-            padding-right: 10px;
+        .interview-tablet .header-byline:not(:empty):after {
+            left: 0;
+            right: 0;
         }
 
-        .header-container[data-type='${
-            ArticleType.Interview
-        }'] .header-byline button{
-            margin-right: 10px;
+        .interview-tablet .share-touch-zone { 
+            padding-right: 14px;
         }
 
-        .header-container[data-type='${
-            ArticleType.Interview
-        }'] .header-byline span{
-            padding-left: 10px;
+        .header-image--interview { 
+            padding-top: 59.6%; 
+        }
+
+        .interview-mobile { 
+            display: none;
         }
     }
     
@@ -1126,6 +1222,183 @@ const Header = ({
     `
 }
 
+const HeaderInterviewTablet = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    pillar,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    pillar: ArticlePillar
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    const byLineText = getByLineText(headerType, headerProps)
+    return html`
+        <div class="interview-tablet">
+            <div class="header-image-container--interview">
+                ${headerProps.image &&
+                    publishedId &&
+                    MainMediaImage({
+                        image: headerProps.image,
+                        className: 'header-image--interview',
+                        getImagePath,
+                    })}
+                <div
+                    class="header-container interview-tablet-wrapper"
+                    data-type="${type}"
+                >
+                    ${headerProps.mainMedia &&
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
+                    ${headerProps.kicker &&
+                        html`
+                            <span class="header-kicker"
+                                >${headerProps.kicker}</span
+                            >
+                        `}
+                    <header>
+                        ${getHeadline(headerType, type, headerProps)}
+                    </header>
+                </div>
+            </div>
+            <div class="header-bottom" data-type="${type}">
+                <section
+                    class="interview-tablet-standfirst interview-tablet-wrapper"
+                >
+                    ${headerProps.standfirst &&
+                        getStandFirstText({
+                            standfirst: headerProps.standfirst,
+                            type,
+                            pillar,
+                        })}
+                </section>
+                <div
+                    class="byline-container interview-tablet-wrapper"
+                    data-type="${type}"
+                >
+                    ${hasByLine(byLineText, headerProps.canBeShared) &&
+                        getByLine(
+                            headerType,
+                            headerProps.canBeShared,
+                            headerProps as ArticleHeaderProps,
+                            type,
+                        )}
+                    <div class="header-bg"></div>
+                </div>
+            </div>
+        </div>
+    `
+}
+
+const HeaderInterviewMobile = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    pillar,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    pillar: ArticlePillar
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    const byLineText = getByLineText(headerType, headerProps)
+    return html`
+        <div class="interview-mobile">
+            ${headerProps.image &&
+                publishedId &&
+                MainMediaImage({
+                    image: headerProps.image,
+                    className: 'header-image--interview',
+                    getImagePath,
+                })}
+            <div class="header-container-line-wrap">
+                <div class="header-container wrapper" data-type="${type}">
+                    <header class="header">
+                        ${headerProps.mainMedia &&
+                            (headerProps.showMedia
+                                ? renderMediaAtom(headerProps.mainMedia)
+                                : null)}
+                        ${headerProps.kicker &&
+                            html`
+                                <span class="header-kicker"
+                                    >${headerProps.kicker}</span
+                                >
+                            `}
+                        ${getStandFirst(
+                            headerType,
+                            type,
+                            headerProps,
+                            publishedId,
+                            getImagePath,
+                            pillar,
+                        )}
+                    </header>
+                    ${hasByLine(byLineText, headerProps.canBeShared) &&
+                        getByLine(
+                            headerType,
+                            headerProps.canBeShared,
+                            headerProps as ArticleHeaderProps,
+                            type,
+                        )}
+                    <div class="header-bg"></div>
+                </div>
+            </div>
+        </div>
+    `
+}
+
+/* 
+In order to render the interview header differently on mobile/tablet we add two
+different templates and use css to hide one or the other depending on the breakpoint.
+*/
+const HeaderInterview = ({
+    publishedId,
+    type,
+    headerType,
+    getImagePath,
+    pillar,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    headerType: HeaderType
+    canBeShared: boolean
+    pillar: ArticlePillar
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    return html`
+        ${HeaderInterviewMobile({
+            publishedId,
+            type,
+            headerType,
+            getImagePath,
+            pillar,
+            ...headerProps,
+        })}
+        ${HeaderInterviewTablet({
+            publishedId,
+            type,
+            headerType,
+            getImagePath,
+            pillar,
+            ...headerProps,
+        })}
+    `
+}
+
 const HeaderShowcase = ({
     publishedId,
     type,
@@ -1196,4 +1469,4 @@ const HeaderShowcase = ({
     `
 }
 
-export { Header, HeaderShowcase, getStandFirst }
+export { Header, HeaderShowcase, HeaderInterview, getStandFirst }
