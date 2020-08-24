@@ -549,7 +549,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         position: relative;
         margin: 0 ${px(metrics.article.sides * -1)};
         width: calc(100% + ${px(metrics.article.sides * 2)});
-        padding-top: 100%;
+        padding-top: 59.6%;
     }
 
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
@@ -707,10 +707,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             transform: scale(1.1);
             width: auto;
             fill: white;
-        }
-
-        .header-image--interview {
-            padding-top: 56%;
         }
 
         .header-container[data-type="${
