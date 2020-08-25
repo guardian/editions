@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "GuardianDaily.app"
+               BuildableName = "Guardian Editions.app"
                BlueprintName = "Mallard"
                ReferencedContainer = "container:Mallard.xcodeproj">
             </BuildableReference>
@@ -59,7 +59,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "GuardianDaily.app"
+            BuildableName = "Guardian Editions.app"
             BlueprintName = "Mallard"
             ReferencedContainer = "container:Mallard.xcodeproj">
          </BuildableReference>
@@ -82,7 +82,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "GuardianDaily.app"
+            BuildableName = "Guardian Editions.app"
             BlueprintName = "Mallard"
             ReferencedContainer = "container:Mallard.xcodeproj">
          </BuildableReference>
@@ -99,7 +99,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "GuardianDaily.app"
+            BuildableName = "Guardian Editions.app"
             BlueprintName = "Mallard"
             ReferencedContainer = "container:Mallard.xcodeproj">
          </BuildableReference>
