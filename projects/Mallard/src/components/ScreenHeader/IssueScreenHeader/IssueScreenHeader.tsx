@@ -2,7 +2,6 @@ import React from 'react'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common'
 import { useIssueDate } from 'src/helpers/issues'
-import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
 import {
     navigateToEditionMenu,
     navigateToIssueList,
@@ -21,7 +20,6 @@ const IssueScreenHeader = withNavigation(
         issue?: IssueWithFronts
     } & NavigationInjectedProps) => {
         const { date, weekday } = useIssueDate(issue)
-        const { editionsMenuEnabled } = useEditionsMenuEnabled()
 
         const goToIssueList = () => {
             navigateToIssueList(navigation)
@@ -36,11 +34,7 @@ const IssueScreenHeader = withNavigation(
                 subTitle={date}
                 onPress={goToIssueList}
                 rightAction={<IssueMenuButton onPress={goToIssueList} />}
-                leftAction={
-                    editionsMenuEnabled ? (
-                        <EditionsMenuButton onPress={goToEditionsMenu} />
-                    ) : null
-                }
+                leftAction={<EditionsMenuButton onPress={goToEditionsMenu} />}
                 headerStyles={headerStyles}
             />
         )

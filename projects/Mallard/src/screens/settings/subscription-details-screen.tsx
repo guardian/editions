@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { Text } from 'react-native'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
@@ -10,7 +10,6 @@ import { CASExpiry } from '../../../../Apps/common/src/cas-expiry'
 import { Heading } from 'src/components/layout/ui/row'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 import { Copy } from 'src/helpers/words'
-import { fetchEditionMenuEnabledSetting } from 'src/helpers/settings/debug'
 
 const keyValueItem = (key: string, value: string) =>
     ({
@@ -81,33 +80,18 @@ const productIdPrettyLabels: { [key: string]: string } = {
 const getIAPType = (iapData: ReceiptIOS) =>
     productIdPrettyLabels[iapData.product_id] || iapData.name || 'Unknown'
 
-const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => {
-    const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
-    useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
-    }, [])
-    return (
-        <>
-            <Heading>
-                {editionsMenuEnabled
-                    ? Copy.subscriptionDetails.iapHeadingEditions
-                    : Copy.subscriptionDetails.iapHeadingDaily}
-            </Heading>
-            <List
-                data={[
-                    keyValueItem('Subscription type', getIAPType(iapData)),
-                    keyValueItem(
-                        'Purchase date',
-                        iapData.original_purchase_date,
-                    ),
-                    keyValueItem('Expiry date', iapData.expires_date),
-                ]}
-            />
-        </>
-    )
-}
+const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
+    <>
+        <Heading>{Copy.subscriptionDetails.iapHeading}</Heading>
+        <List
+            data={[
+                keyValueItem('Subscription type', getIAPType(iapData)),
+                keyValueItem('Purchase date', iapData.original_purchase_date),
+                keyValueItem('Expiry date', iapData.expires_date),
+            ]}
+        />
+    </>
+)
 
 const LoggedOutDetails = () => (
     <Heading>{Copy.subscriptionDetails.loggedOutHeading}</Heading>

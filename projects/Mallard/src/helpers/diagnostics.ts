@@ -99,7 +99,7 @@ const getDiagnosticInfo = async (
 The information below will help us to better understand your query:
 
 -App-
-Product: Daily App
+Product: Guardian Editions
 App Version: ${version} ${buildNumber}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
 Current Edition: ${edition}
@@ -148,7 +148,7 @@ const openSupportMailto = async (
     const version = DeviceInfo.getVersion()
     const buildNumber = DeviceInfo.getBuildNumber()
 
-    const subject = `${text} - ${Platform.OS} Daily ${
+    const subject = `${text} - ${Platform.OS} Editions ${
         isInBeta() ? 'Beta' : ''
     } App, ${version} ${buildNumber}`
 

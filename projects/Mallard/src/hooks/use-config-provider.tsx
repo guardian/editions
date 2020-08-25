@@ -2,10 +2,6 @@ import React, { createContext, useState, useEffect, useContext } from 'react'
 import { Dimensions } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { Breakpoints } from 'src/theme/breakpoints'
-import {
-    fetchEditionMenuEnabledSetting,
-    setEditionMenuEnabledSetting,
-} from 'src/helpers/settings/debug'
 
 const oneGB = 1073741824
 
@@ -17,8 +13,6 @@ const ConfigContext = createContext({
         scale: 0,
         fontScale: 0,
     },
-    editionsMenuEnabled: false,
-    toggleEditionsMenuEnabled: () => {},
 })
 
 export const largeDeviceMemory = () => {
@@ -29,13 +23,7 @@ export const largeDeviceMemory = () => {
 
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     const [largeDeviceMemeory, setLargeDeviceMemory] = useState(false)
-    const [editionsMenuEnabled, setEditionsMenuEnabled] = useState(false)
     const [dimensions, setDimensions] = useState(Dimensions.get('window'))
-
-    const toggleEditionsMenuEnabled = () => {
-        setEditionsMenuEnabled(!editionsMenuEnabled)
-        setEditionMenuEnabledSetting(!editionsMenuEnabled)
-    }
 
     useEffect(() => {
         largeDeviceMemory().then(deviceMemory =>
@@ -73,19 +61,11 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [])
 
-    useEffect(() => {
-        fetchEditionMenuEnabledSetting().then((editionsMenuToggle: boolean) => {
-            setEditionsMenuEnabled(editionsMenuToggle)
-        })
-    }, [])
-
     return (
         <ConfigContext.Provider
             value={{
                 largeDeviceMemeory,
                 dimensions,
-                editionsMenuEnabled,
-                toggleEditionsMenuEnabled,
             }}
         >
             {children}
@@ -97,9 +77,3 @@ export const useLargeDeviceMemory = () =>
     useContext(ConfigContext).largeDeviceMemeory
 
 export const useDimensions = () => useContext(ConfigContext).dimensions
-
-export const useEditionsMenuEnabled = () => ({
-    editionsMenuEnabled: useContext(ConfigContext).editionsMenuEnabled,
-    toggleEditionsMenuEnabled: useContext(ConfigContext)
-        .toggleEditionsMenuEnabled,
-})

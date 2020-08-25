@@ -20,7 +20,6 @@ import { imageForScreenSize } from 'src/helpers/screen'
 import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
-import { useEditionsMenuEnabled } from 'src/hooks/use-config-provider'
 import { useNetInfo } from 'src/hooks/use-net-info'
 import { useToast } from 'src/hooks/use-toast'
 import { routeNames } from 'src/navigation/routes'
@@ -58,10 +57,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         isDevButtonShown: showNetInfoButton,
         setIsDevButtonShown: setShowNetInfoButton,
     } = useNetInfo()
-    const {
-        editionsMenuEnabled,
-        toggleEditionsMenuEnabled,
-    } = useEditionsMenuEnabled()
     const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
     const {
         selectedEdition: { edition },
@@ -254,17 +249,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                             Clipboard.setString(FSPaths.issuesDir)
                             Alert.alert(FSPaths.issuesDir)
                         },
-                    },
-                    {
-                        key: 'Enable multiple editions',
-                        title: 'Enable multiple editions',
-                        onPress: () => {},
-                        proxy: (
-                            <Switch
-                                value={editionsMenuEnabled} // this will also update the copy for multiple editions
-                                onValueChange={toggleEditionsMenuEnabled}
-                            />
-                        ),
                     },
                     {
                         key: 'Display NetInfo Button',
