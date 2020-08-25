@@ -209,7 +209,33 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                     ]
                   }
                 >
-                  The Daily
+                  UK
+                </Text>
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "flexShrink": 0,
+                        "fontFamily": "GTGuardianTitlepiece-Bold",
+                        "fontSize": 24,
+                        "lineHeight": 26,
+                      },
+                      Array [
+                        Object {
+                          "color": "#ffffff",
+                          "marginTop": -2,
+                        },
+                        Object {
+                          "color": "#ffe500",
+                        },
+                        Object {
+                          "color": "#F3C100",
+                        },
+                      ],
+                    ]
+                  }
+                >
+                  Daily
                 </Text>
               </View>
             </View>
@@ -508,7 +534,31 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                     ]
                   }
                 >
-                  The Daily
+                  UK
+                </Text>
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "flexShrink": 0,
+                        "fontFamily": "GTGuardianTitlepiece-Bold",
+                        "fontSize": 24,
+                        "lineHeight": 26,
+                      },
+                      Array [
+                        Object {
+                          "color": "#ffffff",
+                          "marginTop": -2,
+                        },
+                        Object {
+                          "color": "#ffe500",
+                        },
+                        Object {},
+                      ],
+                    ]
+                  }
+                >
+                  Daily
                 </Text>
               </View>
             </View>

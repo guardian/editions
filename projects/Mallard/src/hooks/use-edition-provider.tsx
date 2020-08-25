@@ -211,7 +211,7 @@ export const EditionProvider = ({
      * Default Edition and Selected
      *
      * On clean install the cache will be empty, therefore defaultRegionalEditions[0]
-     * (aka The Daily) remains as the default until one is set. If found, we want to
+     * (aka UK Daily) remains as the default until one is set. If found, we want to
      * also set this as the selected edition
      */
     useEffect(() => {

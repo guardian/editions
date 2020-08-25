@@ -21,11 +21,12 @@ jest.mock('src/components/EditionsMenu/Header/Header', () => ({
 
 const regionalEditions: RegionalEdition[] = [
     {
-        title: 'The UK Daily Edition',
+        title: 'UK Daily',
         subTitle: 'Published every day by 12am (GMT)',
         edition: editions.daily as Edition,
         header: {
-            title: 'The Daily',
+            title: 'UK Daily',
+            subTitle: 'Daily',
         },
         editionType: 'Regional',
         topic: 'au',

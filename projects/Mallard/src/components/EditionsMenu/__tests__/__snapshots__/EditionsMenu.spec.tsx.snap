@@ -12,11 +12,12 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
             "edition": "daily-edition",
             "editionType": "Regional",
             "header": Object {
-              "title": "The Daily",
+              "subTitle": "Daily",
+              "title": "UK Daily",
             },
             "notificationUTCOffset": 1,
             "subTitle": "Published every day by 12am (GMT)",
-            "title": "The UK Daily Edition",
+            "title": "UK Daily",
             "topic": "au",
           },
           Object {
@@ -121,12 +122,13 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
             "edition": "daily-edition",
             "editionType": "Regional",
             "header": Object {
-              "title": "The Daily",
+              "subTitle": "Daily",
+              "title": "UK",
             },
             "notificationUTCOffset": 3,
             "subTitle": "Published every morning
 by 6am (GMT)",
-            "title": "The Daily",
+            "title": "UK Daily",
             "topic": "uk",
           },
           Object {
@@ -314,12 +316,13 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
             "edition": "daily-edition",
             "editionType": "Regional",
             "header": Object {
-              "title": "The Daily",
+              "subTitle": "Daily",
+              "title": "UK",
             },
             "notificationUTCOffset": 3,
             "subTitle": "Published every morning
 by 6am (GMT)",
-            "title": "The Daily",
+            "title": "UK Daily",
             "topic": "uk",
           },
           Object {

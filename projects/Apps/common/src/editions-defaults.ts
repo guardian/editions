@@ -2,12 +2,13 @@ import { RegionalEdition, editions } from './index'
 
 export const defaultRegionalEditions: RegionalEdition[] = [
     {
-        title: 'The Daily',
+        title: 'UK Daily',
         subTitle: `Published every morning
 by 6am (GMT)`,
         edition: editions.daily,
         header: {
-            title: 'The Daily',
+            title: 'UK',
+            subTitle: 'Daily',
         },
         editionType: 'Regional',
         topic: 'uk',
