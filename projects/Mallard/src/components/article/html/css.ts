@@ -18,6 +18,7 @@ import { mediaAtomStyles } from './components/media-atoms'
 import { ArticleType } from 'src/common'
 import { twitterEmbedStyles } from './components/twitter-embed'
 import { listStyles } from './components/lists'
+import { Platform } from 'react-native'
 
 const makeFontsCss = () => css`
     /* text */
@@ -75,6 +76,9 @@ const makeFontsCss = () => css`
     })}
 `
 
+const dropCapFontSizeMultiplier = Platform.OS === 'ios' ? 5.25 : 5.75
+const dropCapLineHeightMultiplier = Platform.OS === 'ios' ? 4.1 : 4.6
+
 const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     ${makeFontsCss()}
 
@@ -94,15 +98,20 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
         box-sizing: border-box;
     }
     .drop-cap p:first-child:first-letter {
-        font-family: 'GHGuardianHeadline-Regular';
+        font-family: ${families.titlepiece.regular};
         color: ${colors.main};
         float: left;
-        font-size: ${px(getScaledFont('text', 1).lineHeight * 4)};
-        line-height: ${px(getScaledFont('text', 1).lineHeight * 4)};
+        font-size: ${px(
+            getScaledFont('text', 1).lineHeight * dropCapFontSizeMultiplier,
+        )};
+        line-height: ${px(
+            getScaledFont('text', 1).lineHeight * dropCapLineHeightMultiplier,
+        )};
         display: inline-block;
-        transform: scale(1.335) translateY(1px) translateX(-2px);
-        transform-origin: left center;
-        margin-right: 25px;
+        font-variant: normal;
+        font-weight: normal;
+        font-style: normal;
+        padding-right: 10px;
     }
 
     @keyframes fade {
