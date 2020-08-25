@@ -81,7 +81,7 @@ describe('fronts', () => {
     describe('patchArticleElements', () => {
         it('should add drop caps for the first html element only in certain `articleType`s', () => {
             const els = patchArticleElements({
-                articleType: ArticleType.Feature,
+                articleType: ArticleType.Interview,
                 elements: [
                     { id: 'html', html: '<p>hi</p>' },
                     { id: 'html', html: '<p>hi</p>' },

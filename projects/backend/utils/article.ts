@@ -1,9 +1,9 @@
 import { ArticleType, BlockElement, HTMLElement } from '../../Apps/common/src'
 
 const DROP_CAP_ARTICLE_TYPES: ArticleType[] = [
-    ArticleType.Feature,
     ArticleType.Immersive,
     ArticleType.Longread,
+    ArticleType.Interview,
 ]
 
 const articleShouldHaveDropCap = ({
