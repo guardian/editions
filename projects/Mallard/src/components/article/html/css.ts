@@ -94,15 +94,16 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
         box-sizing: border-box;
     }
     .drop-cap p:first-child:first-letter {
-        font-family: 'GHGuardianHeadline-Regular';
+        font-family: ${families.titlepiece.regular};
         color: ${colors.main};
         float: left;
-        font-size: ${px(getScaledFont('text', 1).lineHeight * 4)};
-        line-height: ${px(getScaledFont('text', 1).lineHeight * 4)};
+        font-size: ${px(getScaledFont('text', 1).lineHeight * 5.25)};
+        line-height: ${px(getScaledFont('text', 1).lineHeight * 4.1)};
         display: inline-block;
-        transform: scale(1.335) translateY(1px) translateX(-2px);
-        transform-origin: left center;
-        margin-right: 25px;
+        font-variant: normal;
+        font-weight: normal;
+        font-style: normal;
+        padding-right: 10px;
     }
 
     @keyframes fade {
