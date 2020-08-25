@@ -63,21 +63,11 @@ export const publishArchiverStepFunction = (
         environment,
     )
 
-    const editionsList = publishTask(
-        scope,
-        'editionsList',
-        'Generate editions list',
-        lambdaParams,
-        environment,
-    )
-
     copier.task.next(indexerPublish.task)
 
     indexerPublish.task.next(notification.task)
 
-    notification.task.next(editionsList.task)
-
-    editionsList.task.next(
+    notification.task.next(
         new sfn.Succeed(scope, 'publish-successfully-archived'),
     )
 
