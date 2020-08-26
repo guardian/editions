@@ -41,7 +41,11 @@ exports[`article html Header getStandFirst should display LargeByline Header Typ
                     
                             <div>
                                 
-        <img class=\\"\\" src=\\"\\" />
+        <img
+            class=\\"\\"
+            src=\\"\\"
+            onerror=\\"this.src=''\\"
+        />
     
                             </div>
                         
