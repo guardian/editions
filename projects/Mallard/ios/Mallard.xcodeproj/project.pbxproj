@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		144ED6CC5BE2FA6DEDDB6DF4 /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BAD660688DF776E1FA0A2130 /* libPods-Mallard-tvOS.a */; };
 		230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */ = {isa = PBXBuildFile; fileRef = CEC9D18600B14CC098C48387 /* guardianIcons_1.12.otf */; };
@@ -27,6 +26,7 @@
 		95B08633238D6EEA00828D1E /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; };
 		95B08634238D6EEA00828D1E /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
+		95FF359724F6AC62003425F7 /* ImagesEditions.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FF359624F6AC62003425F7 /* ImagesEditions.xcassets */; };
 		9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */; };
 		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
 		A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC323167BB400505524 /* ReleaseStream.m */; };
@@ -168,6 +168,7 @@
 		95B08632238D6EEA00828D1E /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../../Apps/ophan/build/bin/ios/universalFramework/ophan.framework; sourceTree = "<group>"; };
 		95CB9F192316B6E900F2F6B0 /* Ophan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ophan.m; sourceTree = "<group>"; };
 		95CB9F1D2316C53F00F2F6B0 /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/debugFramework/ophan.framework; sourceTree = "<group>"; };
+		95FF359624F6AC62003425F7 /* ImagesEditions.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ImagesEditions.xcassets; path = Mallard/ImagesEditions.xcassets; sourceTree = "<group>"; };
 		A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mallard-Bridging-Header.h"; sourceTree = "<group>"; };
 		A13D0DC12316783B00505524 /* ReleaseStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseStream.swift; sourceTree = "<group>"; };
 		A13D0DC323167BB400505524 /* ReleaseStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReleaseStream.m; sourceTree = "<group>"; };
@@ -249,6 +250,7 @@
 		13B07FAE1A68108700A75B9A /* Mallard */ = {
 			isa = PBXGroup;
 			children = (
+				95FF359624F6AC62003425F7 /* ImagesEditions.xcassets */,
 				9553F9232396A2B700AB0CA3 /* RNBackgroundFetch+AppDelegate.m */,
 				C521D66822CF6FAA00F493D5 /* Mallard.entitlements */,
 				C51056C222D60C1700ED3078 /* crosswords.bundle */,
@@ -603,7 +605,7 @@
 				C54937AA22B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */,
 				C232E2BBBE624C1DB73FF340 /* GuardianTextSans-RegularIt.ttf in Resources */,
 				C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				95FF359724F6AC62003425F7 /* ImagesEditions.xcassets in Resources */,
 				E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */,
 				30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */,
 				230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */,
