@@ -20,7 +20,6 @@ import { errorService } from 'src/services/errors'
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
 import NetInfo from '@react-native-community/netinfo'
 import { AppState, AppStateStatus } from 'react-native'
-import { remoteConfigService } from 'src/services/remote-config'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/push-notifications/push-notifications'
 import { useApiUrl } from './use-settings'
@@ -55,9 +54,9 @@ export const DEFAULT_EDITIONS_LIST = {
 export const BASE_EDITION = defaultRegionalEditions[0]
 
 const localeToEdition = new Map<string, RegionalEdition>()
+localeToEdition.set('en_GB', defaultRegionalEditions[0])
 localeToEdition.set('en_AU', defaultRegionalEditions[1])
 localeToEdition.set('en_US', defaultRegionalEditions[2])
-localeToEdition.set('en_GB', defaultRegionalEditions[0])
 
 const defaultState: EditionState = {
     editionsList: DEFAULT_EDITIONS_LIST,
@@ -155,6 +154,7 @@ export const defaultEditionDecider = async (
     setDefaultEdition: Dispatch<RegionalEdition>,
     setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
 ): Promise<void> => {
+    // When user already has default edition set then that edition
     const dE = await getDefaultEdition()
     if (dE) {
         setDefaultEdition(dE)
@@ -162,25 +162,17 @@ export const defaultEditionDecider = async (
         await selectedEditionCache.set(dE)
         pushNotifcationRegistration()
     } else {
-        const defaultLocaleEnabled = remoteConfigService.getBoolean(
-            'default_locale',
-        )
-        // Feature flag on?
-        if (defaultLocaleEnabled) {
-            // Get the correct edition for the locale
-            const dE = localeToEdition.get(locale)
-            // Here as it "can" be undefined, but previous branch says not
-            if (dE) {
-                await setEdition(dE, setDefaultEdition, setSelectedEdition)
-            } else {
-                await setEdition(
-                    BASE_EDITION,
-                    setDefaultEdition,
-                    setSelectedEdition,
-                )
-            }
+        // Get the correct edition for the device locale
+        const autoDetectedEdition = localeToEdition.get(locale)
+
+        if (autoDetectedEdition) {
+            await setEdition(
+                autoDetectedEdition,
+                setDefaultEdition,
+                setSelectedEdition,
+            )
         } else {
-            // FF is off, so set to the default
+            // auto detected edition was not possible, set default edition
             await setEdition(
                 BASE_EDITION,
                 setDefaultEdition,
