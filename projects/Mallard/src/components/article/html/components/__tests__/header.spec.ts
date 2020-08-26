@@ -11,7 +11,10 @@ describe('article html Header', () => {
             const html = getStandFirst(
                 HeaderType.LargeByline,
                 ArticleType.Opinion,
-                { headline: 'Test Headline', bylineHtml: '<p>Test Byline</p>' },
+                {
+                    headline: 'Test Headline',
+                    bylineHtml: '<p>Test Byline</p>',
+                },
                 null,
                 () => undefined,
                 'news',

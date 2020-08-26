@@ -59,16 +59,26 @@ const WebviewWithArticle = ({
     const { imageSize, apiUrl } = res.data
     const { localIssueId, publishedIssueId } = path
 
-    const getImagePath = (image?: Image, use: ImageUse = 'full-size') => {
+    const getImagePath = (
+        image?: Image,
+        use: ImageUse = 'full-size',
+        forceRemotePath = false,
+    ) => {
         if (image == null) return undefined
+
+        const issueId = publishedIssueId
+
+        if (forceRemotePath) {
+            // Duplicates the below, but we want an early return
+            const imagePath = APIPaths.image(issueId, imageSize, image, use)
+            return `${apiUrl}${imagePath}`
+        }
 
         if (origin === 'filesystem') {
             const fs = FSPaths.image(localIssueId, imageSize, image, use)
             return Platform.OS === 'android' ? 'file:///' + fs : fs
         }
-        if (origin !== 'api') throw new Error('unrecognized "origin"')
 
-        const issueId = publishedIssueId
         const imagePath = APIPaths.image(issueId, imageSize, image, use)
         return `${apiUrl}${imagePath}`
     }
