@@ -937,6 +937,7 @@ const MainMediaImage = ({
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
+    const backupPath = getImagePath(image, 'full-size', true)
     return html`
         <div class="header-image" data-type="${articleType}">
             <div
@@ -953,6 +954,7 @@ const MainMediaImage = ({
                             class="image-as-bg__img"
                             src="${path}"
                             aria-hidden
+                            onerror="this.src='${backupPath}'"
                         />
                     `}
                 <button

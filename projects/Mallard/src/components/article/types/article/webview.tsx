@@ -12,6 +12,7 @@ import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
+import { errorService } from 'src/services/errors'
 
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`
@@ -59,16 +60,26 @@ const WebviewWithArticle = ({
     const { imageSize, apiUrl } = res.data
     const { localIssueId, publishedIssueId } = path
 
-    const getImagePath = (image?: Image, use: ImageUse = 'full-size') => {
+    const getImagePath = (
+        image?: Image,
+        use: ImageUse = 'full-size',
+        backup: boolean = false,
+    ) => {
         if (image == null) return undefined
+
+        const issueId = publishedIssueId
+
+        if (backup) {
+            // Duplicates the below, but we want an early return
+            const imagePath = APIPaths.image(issueId, imageSize, image, use)
+            return `${apiUrl}${imagePath}`
+        }
 
         if (origin === 'filesystem') {
             const fs = FSPaths.image(localIssueId, imageSize, image, use)
             return Platform.OS === 'android' ? 'file:///' + fs : fs
         }
-        if (origin !== 'api') throw new Error('unrecognized "origin"')
 
-        const issueId = publishedIssueId
         const imagePath = APIPaths.image(issueId, imageSize, image, use)
         return `${apiUrl}${imagePath}`
     }
