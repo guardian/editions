@@ -62,13 +62,13 @@ const WebviewWithArticle = ({
     const getImagePath = (
         image?: Image,
         use: ImageUse = 'full-size',
-        backup = false,
+        forceRemotePath = false,
     ) => {
         if (image == null) return undefined
 
         const issueId = publishedIssueId
 
-        if (backup) {
+        if (forceRemotePath) {
             // Duplicates the below, but we want an early return
             const imagePath = APIPaths.image(issueId, imageSize, image, use)
             return `${apiUrl}${imagePath}`

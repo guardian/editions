@@ -914,12 +914,12 @@ const Image = ({
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
-    const backupPath = getImagePath(image, 'full-size', true)
+    const remotePath = getImagePath(image, 'full-size', true)
     return html`
         <img
             class="${className}"
             src="${path}"
-            onerror="this.src='${backupPath}'"
+            onerror="this.src='${remotePath}'"
         />
     `
 }
@@ -942,13 +942,13 @@ const MainMediaImage = ({
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
-    const backupPath = getImagePath(image, 'full-size', true)
+    const remotePath = getImagePath(image, 'full-size', true)
     return html`
         <div class="header-image" data-type="${articleType}">
             <div
                 class="image-as-bg ${className}"
                 data-preserve-ratio="${preserveRatio || 'false'}"
-                style="background-image: url(${path}), url(${backupPath}); "
+                style="background-image: url(${path}), url(${remotePath}); "
                 ${!isGallery &&
                     `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
                 data-open="false"
@@ -959,7 +959,7 @@ const MainMediaImage = ({
                             class="image-as-bg__img"
                             src="${path}"
                             aria-hidden
-                            onerror="this.src='${backupPath}'"
+                            onerror="this.src='${remotePath}'"
                         />
                     `}
                 <button

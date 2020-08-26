@@ -10,7 +10,7 @@ import { useApiUrl } from './use-settings'
 export type GetImagePath = (
     image?: Image,
     use?: ImageUse,
-    backup?: boolean,
+    forceRemotePath?: boolean,
 ) => string | undefined
 
 const getFsPath = (

@@ -42,7 +42,7 @@ const usesDarkTheme = (type: Content['type']) =>
 
 const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
     const path = getImagePath(image)
-    const backupPath = getImagePath(image, 'full-size', true)
+    const remotePath = getImagePath(image, 'full-size', true)
     return Image({
         imageElement: {
             src: image,
@@ -51,7 +51,7 @@ const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
         },
         index: 0, // allows us to open lightbox
         path,
-        backupPath,
+        remotePath,
     })
 }
 
