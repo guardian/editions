@@ -12,13 +12,11 @@ interface RemoteConfig {
 
 const remoteConfigDefaults = {
     logging_enabled: true,
-    default_locale: false,
     join_beta_button_enabled: false,
 }
 
 export const RemoteConfigProperties = [
     'logging_enabled',
-    'default_locale',
     'join_beta_button_enabled',
 ] as const
 
@@ -31,28 +29,23 @@ const configValues = {
 }
 
 class RemoteConfigService implements RemoteConfig {
-    private initialized: boolean
-
-    constructor() {
-        this.initialized = false
-    }
-
-    private setInitialized(isInitialized: boolean) {
-        this.initialized = isInitialized
-    }
-
     init() {
         remoteConfig()
             .setDefaults(remoteConfigDefaults)
             .then(() => remoteConfig().setConfigSettings(configValues))
             .then(() => {
-                remoteConfig().fetchAndActivate()
-                this.setInitialized(true)
-                console.log('Remote config fetched & activated!')
-                if (__DEV__) console.log(remoteConfig().getAll())
+                remoteConfig()
+                    .fetchAndActivate()
+                    .then(activated => {
+                        if (activated) {
+                            console.log('Remote config fetched & activated!')
+                            if (__DEV__) console.log(remoteConfig().getAll())
+                        } else {
+                            console.log('Remote config NOT activated!')
+                        }
+                    })
             })
             .catch(() => {
-                this.setInitialized(false)
                 console.log(
                     'Remote config not activated - something went wrong',
                 )
@@ -60,19 +53,11 @@ class RemoteConfigService implements RemoteConfig {
     }
 
     getBoolean(key: RemoteConfigProperty): boolean {
-        if (this.initialized) {
-            return remoteConfig().getValue(key).value as boolean
-        }
-
-        return false
+        return remoteConfig().getValue(key).value as boolean
     }
 
     getString(key: RemoteConfigProperty): RemoteStringValue {
-        if (this.initialized) {
-            return remoteConfig().getValue(key).value as string
-        }
-
-        return undefined
+        return remoteConfig().getValue(key).value as string
     }
 }
 

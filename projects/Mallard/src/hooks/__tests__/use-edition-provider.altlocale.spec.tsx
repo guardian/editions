@@ -20,7 +20,7 @@ describe('useEditions', () => {
         beforeEach(async () => {
             await editionsListCache.reset()
         })
-        it('should set the BASE EDITION if remote config is on but locale is not in the list', async () => {
+        it('should set the BASE EDITION if locale is not in the list', async () => {
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
 
