@@ -126,8 +126,8 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
               "title": "UK",
             },
             "notificationUTCOffset": 3,
-            "subTitle": "Published every morning
-by 6am (GMT)",
+            "subTitle": "Published from London every 
+morning by 6am (GMT)",
             "title": "UK Daily",
             "topic": "uk",
           },
@@ -135,26 +135,26 @@ by 6am (GMT)",
             "edition": "australian-edition",
             "editionType": "Regional",
             "header": Object {
-              "subTitle": "Weekender",
+              "subTitle": "Weekend",
               "title": "Australia",
             },
             "notificationUTCOffset": -5,
-            "subTitle": "Published every Saturday morning
-by 6am (AEST)",
-            "title": "Australia Weekender",
+            "subTitle": "Published from Sydney every 
+Saturday by 6 am (AEST)",
+            "title": "Australia Weekend",
             "topic": "au",
           },
           Object {
             "edition": "american-edition",
             "editionType": "Regional",
             "header": Object {
-              "subTitle": "Weekender",
+              "subTitle": "Weekend",
               "title": "US",
             },
             "notificationUTCOffset": 8,
-            "subTitle": "Published every Saturday morning
-by 6am (EST)",
-            "title": "US Weekender",
+            "subTitle": "Published from New York every 
+Saturday morning by 6am (EST)",
+            "title": "US Weekend",
             "topic": "us",
           },
         ]
@@ -320,8 +320,8 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
               "title": "UK",
             },
             "notificationUTCOffset": 3,
-            "subTitle": "Published every morning
-by 6am (GMT)",
+            "subTitle": "Published from London every 
+morning by 6am (GMT)",
             "title": "UK Daily",
             "topic": "uk",
           },
@@ -329,26 +329,26 @@ by 6am (GMT)",
             "edition": "australian-edition",
             "editionType": "Regional",
             "header": Object {
-              "subTitle": "Weekender",
+              "subTitle": "Weekend",
               "title": "Australia",
             },
             "notificationUTCOffset": -5,
-            "subTitle": "Published every Saturday morning
-by 6am (AEST)",
-            "title": "Australia Weekender",
+            "subTitle": "Published from Sydney every 
+Saturday by 6 am (AEST)",
+            "title": "Australia Weekend",
             "topic": "au",
           },
           Object {
             "edition": "american-edition",
             "editionType": "Regional",
             "header": Object {
-              "subTitle": "Weekender",
+              "subTitle": "Weekend",
               "title": "US",
             },
             "notificationUTCOffset": 8,
-            "subTitle": "Published every Saturday morning
-by 6am (EST)",
-            "title": "US Weekender",
+            "subTitle": "Published from New York every 
+Saturday morning by 6am (EST)",
+            "title": "US Weekend",
             "topic": "us",
           },
         ]
