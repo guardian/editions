@@ -914,8 +914,13 @@ const Image = ({
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
+    const backupPath = getImagePath(image, 'full-size', true)
     return html`
-        <img class="${className}" src="${path}" />
+        <img
+            class="${className}"
+            src="${path}"
+            onerror="this.src='${backupPath}'"
+        />
     `
 }
 
@@ -943,7 +948,7 @@ const MainMediaImage = ({
             <div
                 class="image-as-bg ${className}"
                 data-preserve-ratio="${preserveRatio || 'false'}"
-                style="background-image: url(${path}); "
+                style="background-image: url(${path}), url(${backupPath}); "
                 ${!isGallery &&
                     `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
                 data-open="false"

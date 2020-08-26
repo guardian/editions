@@ -185,6 +185,7 @@ const ImageBase = ({
     credit,
     displayCredit,
     role,
+    backupPath,
 }: {
     path: string
     index?: number
@@ -193,6 +194,7 @@ const ImageBase = ({
     credit?: string
     displayCredit?: boolean
     role?: ImageElement['role']
+    backupPath?: string
 }) => {
     const figcaption = renderCaption({ caption, credit, displayCredit })
     return html`
@@ -202,6 +204,7 @@ const ImageBase = ({
                 onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
                 alt="${alt}"
                 id="img-${index}"
+                onerror="this.src='${backupPath}'"
             />
 
             ${figcaption &&
@@ -218,13 +221,15 @@ const Image = ({
     imageElement,
     path,
     index,
+    backupPath,
 }: {
     imageElement: ImageElement
     path: string | undefined
     index?: number | undefined
+    backupPath?: string
 }) => {
     if (path) {
-        return ImageBase({ path, index, ...imageElement })
+        return ImageBase({ path, index, backupPath, ...imageElement })
     }
     return null
 }

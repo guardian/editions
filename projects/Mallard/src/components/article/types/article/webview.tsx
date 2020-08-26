@@ -12,7 +12,6 @@ import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
-import { errorService } from 'src/services/errors'
 
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`
@@ -63,7 +62,7 @@ const WebviewWithArticle = ({
     const getImagePath = (
         image?: Image,
         use: ImageUse = 'full-size',
-        backup: boolean = false,
+        backup = false,
     ) => {
         if (image == null) return undefined
 
