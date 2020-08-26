@@ -1,6 +1,6 @@
 import { ImageElement } from 'src/common'
 import { Direction } from 'src/common'
-import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
+import { css, getFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
@@ -54,7 +54,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
         .image figcaption {
             font-family: 'GuardianTextSans-Regular';
             color: ${themeColors(theme).dimText};
-            ${getScaledFontCss('sans', 0.5)}
+            ${getFontCss('sans', 0.5)}
             position: relative;
             margin-top: 0.5em;
         }
@@ -69,7 +69,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
         /* Tablet captions */
         @media (min-width: ${px(Breakpoints.tabletVertical)}) {
             .image figcaption {
-                ${getScaledFontCss('sans', 0.9)}
+                ${getFontCss('sans', 0.9)}
             }
         }
 

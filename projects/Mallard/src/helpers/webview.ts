@@ -1,7 +1,12 @@
 import { Platform } from 'react-native'
 import { ArticleType } from 'src/common'
 import { bundles } from 'src/html-bundle-info.json'
-import { FontFamily, FontSizes, getScaledFont } from 'src/theme/typography'
+import {
+    FontFamily,
+    FontSizes,
+    getScaledFont,
+    getFont,
+} from 'src/theme/typography'
 
 export type WebViewPing =
     | {
@@ -39,6 +44,16 @@ export const html = passthrough
 
 export const px = (value: string | number) => `${value}px`
 
+export const getFontCss = <F extends FontFamily>(
+    family: F,
+    level: FontSizes<F>,
+) => {
+    const font = getFont(family, level)
+    return css`
+        font-size: ${px(font.fontSize)};
+        line-height: ${px(font.lineHeight)};
+    `
+}
 export const getScaledFontCss = <F extends FontFamily>(
     family: F,
     level: FontSizes<F>,
