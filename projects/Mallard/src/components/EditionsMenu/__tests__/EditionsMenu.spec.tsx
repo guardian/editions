@@ -38,7 +38,7 @@ const regionalEditions: RegionalEdition[] = [
         edition: editions.ausWeekly as Edition,
         header: {
             title: 'Austraila',
-            subTitle: 'Weekender',
+            subTitle: 'Weekend',
         },
         editionType: 'Regional',
         topic: 'au',
@@ -50,7 +50,7 @@ const regionalEditions: RegionalEdition[] = [
         edition: editions.usWeekly as Edition,
         header: {
             title: 'US',
-            subTitle: 'Weekender',
+            subTitle: 'Weekend',
         },
         editionType: 'Regional',
         topic: 'au',

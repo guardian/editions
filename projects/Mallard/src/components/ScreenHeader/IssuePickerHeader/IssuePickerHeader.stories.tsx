@@ -9,7 +9,7 @@ storiesOf('IssuePickerHeader', module)
         <IssuePickerHeader title="Recent" subTitle="Editions" />
     ))
     .add('With Different Title and SubTitle', () => (
-        <IssuePickerHeader title="Australia" subTitle="Weekender" />
+        <IssuePickerHeader title="Australia" subTitle="Weekend" />
     ))
     .add('With Header Styles', () => (
         <IssuePickerHeader
