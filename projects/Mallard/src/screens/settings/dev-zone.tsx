@@ -27,7 +27,7 @@ import { FSPaths } from 'src/paths'
 import {
     clearPushTracking,
     getPushTracking,
-} from 'src/push-notifications/push-tracking'
+} from 'src/notifications/push-tracking'
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens } from 'src/helpers/storage'

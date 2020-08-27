@@ -8,9 +8,9 @@ import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
-import { PushNotificationRegistration } from 'src/push-notifications/push-notifications'
+import { PushNotificationRegistration } from 'src/notifications/push-notifications'
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
-import { PushToken } from 'src/push-notifications/notification-service'
+import { PushToken } from 'src/notifications/notification-service'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app

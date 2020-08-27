@@ -1,5 +1,5 @@
 import { IssueSummary, ImageSize } from '../../../Apps/common/src'
-import { pushTracking } from 'src/push-notifications/push-tracking'
+import { pushTracking } from 'src/notifications/push-tracking'
 import { Feature } from '../../../Apps/common/src/logging'
 import {
     downloadNamedIssueArchive,

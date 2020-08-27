@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-client'
 import { fetchCacheClear } from '../helpers/fetch'
 import { prepFileSystem } from '../helpers/files'
-import { cleanPushTrackingByDays } from '../push-notifications/push-tracking'
+import { cleanPushTrackingByDays } from '../notifications/push-tracking'
 import { largeDeviceMemory } from 'src/hooks/use-config-provider'
 import { downloadTodaysIssue } from 'src/download-edition/download-todays-issue'
 import { clearOldIssues, clearDownloadsDirectory } from './clear-issues'

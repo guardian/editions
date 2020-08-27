@@ -21,7 +21,7 @@ import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defau
 import NetInfo from '@react-native-community/netinfo'
 import { AppState, AppStateStatus } from 'react-native'
 import { locale } from 'src/helpers/locale'
-import { pushNotifcationRegistration } from 'src/push-notifications/push-notifications'
+import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 
 interface EditionsEndpoint {
