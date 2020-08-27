@@ -87,6 +87,8 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             console.log('Data download response: ' + complete)
         })
 
+        // TODO throw away if DATA download fails
+
         await pushTracking('attemptDataDownload', 'completed', Feature.DOWNLOAD)
 
         await pushTracking(
