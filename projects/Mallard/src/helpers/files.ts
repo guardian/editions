@@ -78,6 +78,8 @@ export const downloadNamedIssueArchive = async ({
         const returnable = RNFS.downloadFile({
             fromUrl: zipUrl,
             toFile: `${downloadFolderLocation}/${filename}`,
+            readTimeout: 300 * 1000, // set it to 5 mins, default is 15sec (android & iOS)
+            connectionTimeout: 30 * 1000, // set it to 30sec, default is 5sec (android only)
             background: true,
             begin: () => console.log('start download'),
             progress: response => {
