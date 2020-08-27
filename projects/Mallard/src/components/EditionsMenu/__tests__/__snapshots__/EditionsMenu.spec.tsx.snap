@@ -24,7 +24,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
             "edition": "australian-edition",
             "editionType": "Regional",
             "header": Object {
-              "subTitle": "Weekender",
+              "subTitle": "Weekend",
               "title": "Austraila",
             },
             "notificationUTCOffset": 1,
@@ -36,7 +36,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
             "edition": "american-edition",
             "editionType": "Regional",
             "header": Object {
-              "subTitle": "Weekender",
+              "subTitle": "Weekend",
               "title": "US",
             },
             "notificationUTCOffset": 1,
