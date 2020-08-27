@@ -3900,6 +3900,11 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
+async-await-retry@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/async-await-retry/-/async-await-retry-1.1.0.tgz#a89a606155a6d8799caf7989974df9bda41170d6"
+  integrity sha512-8qK4tPYUxVLxOhVJQzsJr9olO8NYIpycn+csrg0FY13GXZ75YjZiZazIK300dQ/XfR4SUtlINcxO8NOLgUhXKg==
+
 async-each@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.3.tgz#b727dbf87d7651602f06f4d4ac387f47d91b0cbf"

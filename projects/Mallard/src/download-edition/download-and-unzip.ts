@@ -74,14 +74,18 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             Feature.DOWNLOAD,
         )
 
-        const issueDataDownload = await downloadNamedIssueArchive({
-            localIssueId: localId,
-            assetPath: assets.data,
-            filename: 'data.zip',
-            withProgress: false,
-        }) // just the issue json
+        const retry = require('async-await-retry')
 
-        await issueDataDownload.promise
+        await retry(async () => {
+            const issueDataDownload = await downloadNamedIssueArchive({
+                localIssueId: localId,
+                assetPath: assets.data,
+                filename: 'data.zip',
+                withProgress: false,
+            }) // just the issue json
+            const complete = await issueDataDownload.promise
+            console.log('Data download response: ' + complete)
+        })
 
         await pushTracking('attemptDataDownload', 'completed', Feature.DOWNLOAD)
 
@@ -91,14 +95,16 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             Feature.DOWNLOAD,
         )
 
-        const imgDL = await downloadNamedIssueArchive({
-            localIssueId: localId,
-            assetPath: assets[imageSize] as string,
-            filename: 'media.zip',
-            withProgress: true,
-        }) // just the images
-
-        await imgDL.promise
+        await retry(async () => {
+            const imgDL = await downloadNamedIssueArchive({
+                localIssueId: localId,
+                assetPath: assets[imageSize] as string,
+                filename: 'media.zip',
+                withProgress: true,
+            }) // just the images
+            const complete = await imgDL.promise
+            console.log('Image download response: ' + complete)
+        })
 
         await pushTracking(
             'attemptMediaDownload',
