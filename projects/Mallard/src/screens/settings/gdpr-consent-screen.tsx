@@ -201,7 +201,8 @@ const GdprConsent = ({
                             <LinkNav
                                 onPress={() =>
                                     navigation.navigate(
-                                        routeNames.PrivacyPolicy,
+                                        routeNames.onboarding
+                                            .PrivacyPolicyInline,
                                     )
                                 }
                             >
