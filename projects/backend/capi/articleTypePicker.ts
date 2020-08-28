@@ -1,12 +1,6 @@
 import { IContent } from '@guardian/capi-ts/dist/Content'
 import { ArticleType, HeaderType } from '../../Apps/common/src/index'
-import {
-    TagType,
-    IElement,
-    Asset,
-    AssetType,
-    ElementType,
-} from '@guardian/capi-ts'
+import { TagType, IElement, ElementType } from '@guardian/capi-ts'
 
 const doesTagExist = (article: IContent, tagId: string): boolean => {
     return article.tags.find(tag => tag.id === tagId) != undefined
