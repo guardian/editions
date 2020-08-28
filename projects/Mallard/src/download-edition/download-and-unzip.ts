@@ -12,6 +12,7 @@ import { DownloadBlockedStatus, NetInfo } from 'src/hooks/use-net-info'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import gql from 'graphql-tag'
 import { FSPaths } from 'src/paths'
+import retry from 'async-retry'
 
 type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> }
 const DOWNLOAD_BLOCKED_QUERY = gql`
@@ -62,6 +63,7 @@ export const updateListeners = (localId: string, status: DLStatus) => {
 
 const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
     const { assets, localId } = issue
+
     try {
         if (!assets) {
             await pushTracking('noAssets', 'complete', Feature.DOWNLOAD)
@@ -74,75 +76,80 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             Feature.DOWNLOAD,
         )
 
-        const issueDataDownload = await downloadNamedIssueArchive({
-            localIssueId: localId,
-            assetPath: assets.data,
-            filename: 'data.zip',
-            withProgress: false,
-        }) // just the issue json
+        await retry(
+            async () => {
+                // We are not asking for progress update during Data bundle download (to avoid false visual completion)
+                // So, instead we are artificially triggering a small progress update to render some visual change
+                updateListeners(localId, {
+                    type: 'download',
+                    data: 0.5,
+                })
+                const dataDownloadResult = await downloadNamedIssueArchive({
+                    localIssueId: localId,
+                    assetPath: assets.data,
+                    filename: 'data.zip',
+                    withProgress: false,
+                })
+                console.log(
+                    'Data download completed with status: ' +
+                        dataDownloadResult.statusCode,
+                )
 
-        await issueDataDownload.promise
+                await pushTracking(
+                    'attemptDataDownload',
+                    'completed',
+                    Feature.DOWNLOAD,
+                )
 
-        await pushTracking('attemptDataDownload', 'completed', Feature.DOWNLOAD)
+                await pushTracking(
+                    'attemptMediaDownload',
+                    JSON.stringify({ localId, assets: assets[imageSize] }),
+                    Feature.DOWNLOAD,
+                )
 
-        await pushTracking(
-            'attemptMediaDownload',
-            JSON.stringify({ localId, assets: assets[imageSize] }),
-            Feature.DOWNLOAD,
+                const dlImg = await downloadNamedIssueArchive({
+                    localIssueId: localId,
+                    assetPath: assets[imageSize] as string,
+                    filename: 'media.zip',
+                    withProgress: true,
+                })
+                console.log(
+                    'Image download completed with status: ' + dlImg.statusCode,
+                )
+
+                await pushTracking(
+                    'attemptMediaDownload',
+                    'completed',
+                    Feature.DOWNLOAD,
+                )
+
+                updateListeners(localId, {
+                    type: 'unzip',
+                    data: 'start',
+                })
+
+                await pushTracking('unzipData', 'start', Feature.DOWNLOAD)
+
+                await unzipNamedIssueArchive(
+                    `${FSPaths.downloadIssueLocation(localId)}/data.zip`,
+                )
+
+                await pushTracking('unzipData', 'end', Feature.DOWNLOAD)
+
+                await pushTracking('unzipImages', 'start', Feature.DOWNLOAD)
+
+                await unzipNamedIssueArchive(
+                    `${FSPaths.downloadIssueLocation(localId)}/media.zip`,
+                )
+
+                await pushTracking('unzipImages', 'end', Feature.DOWNLOAD)
+
+                return 'success'
+            },
+            {
+                retries: 2,
+            },
         )
-
-        const imgDL = await downloadNamedIssueArchive({
-            localIssueId: localId,
-            assetPath: assets[imageSize] as string,
-            filename: 'media.zip',
-            withProgress: true,
-        }) // just the images
-
-        await imgDL.promise
-
-        await pushTracking(
-            'attemptMediaDownload',
-            'completed',
-            Feature.DOWNLOAD,
-        )
-
-        updateListeners(localId, {
-            type: 'unzip',
-            data: 'start',
-        })
-
-        try {
-            /**
-             * because `isIssueOnDevice` checks for the issue folder's existence
-             * leave unzipping to be the last thing to do so that, if there is an issue
-             * with the image downloads we don't assume the issue is on the device
-             * and then block things like re-downloading if the images stopped downloading
-             */
-
-            await pushTracking('unzipData', 'start', Feature.DOWNLOAD)
-            await unzipNamedIssueArchive(
-                `${FSPaths.downloadIssueLocation(localId)}/data.zip`,
-            )
-            await pushTracking('unzipData', 'end', Feature.DOWNLOAD)
-            /**
-             * The last thing we do is unzip the directory that will confirm if the issue exists
-             */
-            await pushTracking('unzipImages', 'start', Feature.DOWNLOAD)
-            await unzipNamedIssueArchive(
-                `${FSPaths.downloadIssueLocation(localId)}/media.zip`,
-            )
-            await pushTracking('unzipImages', 'end', Feature.DOWNLOAD)
-        } catch (error) {
-            updateListeners(localId, { type: 'failure', data: error })
-            error.message = `Unzip error: ${error.message}`
-            await pushTracking(
-                'unzipError',
-                JSON.stringify(error),
-                Feature.DOWNLOAD,
-            )
-            errorService.captureException(error)
-            console.log('Unzip error: ', error)
-        }
 
         await pushTracking('downloadAndUnzip', 'complete', Feature.DOWNLOAD)
         updateListeners(localId, { type: 'success' }) // null is unstarted or end

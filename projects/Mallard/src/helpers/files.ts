@@ -74,58 +74,41 @@ export const downloadNamedIssueArchive = async ({
     await ensureDirExists(FSPaths.issueRoot(localIssueId))
     await ensureDirExists(downloadFolderLocation)
 
-    try {
-        const returnable = RNFS.downloadFile({
-            fromUrl: zipUrl,
-            toFile: `${downloadFolderLocation}/${filename}`,
-            readTimeout: 300 * 1000, // set it to 5 mins, default is 15sec (android & iOS)
-            connectionTimeout: 30 * 1000, // set it to 30sec, default is 5sec (android only)
-            background: true,
-            begin: () => console.log('start download'),
-            progress: response => {
-                if (withProgress) {
-                    const percentage =
-                        (response.bytesWritten / response.contentLength) * 100
-                    updateListeners(localIssueId, {
-                        type: 'download',
-                        data: percentage,
-                    })
-                }
-            },
-            progressInterval: 1,
-        }).promise
-        return {
-            promise: returnable
-                .then(async res => {
-                    // Ensure issue is removed from the cache on completion
-                    const { clear } = withCache('issue')
-                    clear(localIssueId)
-                    return res
+    const returnable = RNFS.downloadFile({
+        fromUrl: zipUrl,
+        toFile: `${downloadFolderLocation}/${filename}`,
+        readTimeout: 300 * 1000, // set it to 5 mins, default is 15sec (android & iOS)
+        connectionTimeout: 30 * 1000, // set it to 30sec, default is 5sec (android only)
+        background: true,
+        begin: () => console.log('start download'),
+        progress: response => {
+            if (withProgress) {
+                const percentage =
+                    (response.bytesWritten / response.contentLength) * 100
+                updateListeners(localIssueId, {
+                    type: 'download',
+                    data: percentage,
                 })
-                .catch(
-                    e =>
-                        e.message !== 'timeout' &&
-                        errorService.captureException(e),
-                ),
-        }
-    } catch (e) {
-        e.message = `downloadNamedIssueArchive failed: ${e.message}`
-        errorService.captureException(e)
-        throw e
-    }
+            }
+        },
+        progressInterval: 1,
+    })
+
+    const { clear } = withCache('issue')
+    clear(localIssueId)
+    return await returnable.promise
 }
 
-export const unzipNamedIssueArchive = (zipFilePath: string) => {
+export const unzipNamedIssueArchive = async (zipFilePath: string) => {
     const outputPath = FSPaths.issuesDir
 
-    return unzip(zipFilePath, outputPath)
-        .then(() => {
-            return RNFS.unlink(zipFilePath)
-        })
-        .catch(e => {
-            e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`
-            errorService.captureException(e)
-        })
+    try {
+        await unzip(zipFilePath, outputPath)
+        return RNFS.unlink(zipFilePath)
+    } catch (e) {
+        e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`
+        errorService.captureException(e)
+    }
 }
 
 /**
