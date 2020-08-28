@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs'
-import { pushTracking } from 'src/push-notifications/push-tracking'
+import { pushTracking } from 'src/notifications/push-tracking'
 import { Feature } from '../../../Apps/common/src/logging'
 import { errorService } from 'src/services/errors'
 import { FSPaths } from 'src/paths'
