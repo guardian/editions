@@ -24,7 +24,9 @@ const getFrontsBucket = (bucketType: Path['bucket']) =>
 const getEditionsBucket = (bucketType: string) =>
     `editions-${bucketType}-${stage.toLowerCase()}`
 
-console.log(`Creating S3 client with role arn: ${process.env.arn}`)
+if (process.env.arn) {
+    console.log(`Creating S3 client with role arn: ${process.env.arn}`)
+}
 
 const s3FrontsClient = new S3({
     region: 'eu-west-1',

@@ -102,7 +102,6 @@ const getImages = (
         image: getMainImage(result, articleType),
         trailImage: getTrailImage(result, articleType),
     }
-    console.debug('Found images: ' + JSON.stringify(images))
     return images
 }
 
