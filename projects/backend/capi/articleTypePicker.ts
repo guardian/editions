@@ -68,6 +68,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
                 else if (isReview) return ArticleType.Review
+                else if (isShowcase) return ArticleType.Showcase
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isShowcase) return ArticleType.Showcase
@@ -134,7 +135,6 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isFeature) return ArticleType.Feature
-                else if (isShowcase) return ArticleType.Showcase
                 else return ArticleType.Article
 
             default:
