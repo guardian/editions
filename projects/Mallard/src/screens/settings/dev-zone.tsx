@@ -31,6 +31,7 @@ import {
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens } from 'src/helpers/storage'
+import { localnotification } from 'src/notifications/local-notifications'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -118,6 +119,13 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </UiBodyCopy>
             </Footer>
             <ButtonList>
+                <Button
+                    onPress={() => {
+                        localnotification()
+                    }}
+                >
+                    Local Notification
+                </Button>
                 <Button
                     onPress={() => {
                         navigation.navigate(routeNames.Storybook)

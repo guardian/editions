@@ -30,6 +30,7 @@
       >
 
       <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+      <meta-data android:name="com.dieam.reactnativepushnotification.notification_color" android:resource="@color/primary"/>
 
     <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
     <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
