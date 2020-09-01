@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import gql from 'graphql-tag'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
-import { Alert, Clipboard, View } from 'react-native'
+import { Alert, Clipboard, View, Platform } from 'react-native'
 import { Switch } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { AccessContext } from 'src/authentication/AccessContext'
@@ -32,6 +32,7 @@ import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens } from 'src/helpers/storage'
 import { localnotification } from 'src/notifications/local-notifications'
+import { useNotificationsEnabled } from 'src/hooks/use-config-provider'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -65,6 +66,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 
     const { attempt, signOutCAS } = useContext(AccessContext)
     const { showToast } = useToast()
+    const { notificationsEnabled } = useNotificationsEnabled()
 
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
@@ -119,13 +121,15 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </UiBodyCopy>
             </Footer>
             <ButtonList>
-                <Button
-                    onPress={() => {
-                        localnotification()
-                    }}
-                >
-                    Local Notification
-                </Button>
+                {Platform.OS === 'android' && (
+                    <Button
+                        onPress={() => {
+                            localnotification(notificationsEnabled)
+                        }}
+                    >
+                        Local Notification
+                    </Button>
+                )}
                 <Button
                     onPress={() => {
                         navigation.navigate(routeNames.Storybook)

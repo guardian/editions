@@ -134,18 +134,19 @@ export const ConsentOnboarding = {
 }
 
 export const Settings = {
-    subscriptionDetails: 'Subscription details',
     alreadySubscribed: "I'm already subscribed",
-    signIn: 'Sign in',
-    signOut: 'Sign out',
-    displayWeather: 'Display weather',
-    manageDownloads: 'Manage downloads',
-    signInTitle: "I'm already subscribed",
-    privacySettings: 'Privacy settings',
-    privacyPolicy: 'Privacy policy',
-    termsAndConditions: 'Terms and conditions',
-    help: 'Help',
     credits: 'Credits',
+    displayWeather: 'Display weather',
+    help: 'Help',
+    manageDownloads: 'Manage downloads',
+    notifications: 'Receive notifications',
+    privacyPolicy: 'Privacy policy',
+    privacySettings: 'Privacy settings',
+    signIn: 'Sign in',
+    signInTitle: "I'm already subscribed",
+    signOut: 'Sign out',
+    subscriptionDetails: 'Subscription details',
+    termsAndConditions: 'Terms and conditions',
     version: 'Version',
 }
 

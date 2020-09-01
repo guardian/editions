@@ -88,6 +88,10 @@ const pushRegisteredTokens = createAsyncCache<PushToken[]>(
     'push-registered-tokens',
 )
 
+const notificationsEnabledCache = createAsyncCache<boolean>(
+    'notificationsEnabled',
+)
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -154,4 +158,5 @@ export {
     defaultEditionCache,
     editionsListCache,
     pushRegisteredTokens,
+    notificationsEnabledCache,
 }

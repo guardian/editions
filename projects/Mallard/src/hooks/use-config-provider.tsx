@@ -1,11 +1,25 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { Dimensions } from 'react-native'
+import { Dimensions, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { notificationsEnabledCache } from 'src/helpers/storage'
+import { errorService } from 'src/services/errors'
 
 const oneGB = 1073741824
 
-const ConfigContext = createContext({
+interface ConfigState {
+    largeDeviceMemeory: boolean
+    dimensions: {
+        width: number
+        height: number
+        scale: number
+        fontScale: number
+    }
+    notificationsEnabled: boolean
+    setNotifications: (setting: boolean) => Promise<void>
+}
+
+const initialState: ConfigState = {
     largeDeviceMemeory: false,
     dimensions: {
         width: 0,
@@ -13,7 +27,11 @@ const ConfigContext = createContext({
         scale: 0,
         fontScale: 0,
     },
-})
+    notificationsEnabled: Platform.OS === 'android' ? true : false,
+    setNotifications: () => Promise.resolve(),
+}
+
+const ConfigContext = createContext(initialState)
 
 export const largeDeviceMemory = () => {
     return DeviceInfo.getTotalMemory().then(
@@ -24,6 +42,28 @@ export const largeDeviceMemory = () => {
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     const [largeDeviceMemeory, setLargeDeviceMemory] = useState(false)
     const [dimensions, setDimensions] = useState(Dimensions.get('window'))
+    const [notificationsEnabled, setNotificationsEnabled] = useState(
+        Platform.OS === 'android' ? true : false,
+    )
+
+    const setNotifications = async (setting: boolean) => {
+        try {
+            await notificationsEnabledCache.set(setting)
+            setNotificationsEnabled(setting)
+        } catch (e) {
+            console.log(e)
+            e.message = `Unable to Set Notifications Enabled: ${e.message}`
+            errorService.captureException(e)
+        }
+    }
+
+    useEffect(() => {
+        notificationsEnabledCache
+            .get()
+            .then(
+                setting => setting !== null && setNotificationsEnabled(setting),
+            )
+    }, [])
 
     useEffect(() => {
         largeDeviceMemory().then(deviceMemory =>
@@ -66,6 +106,8 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
             value={{
                 largeDeviceMemeory,
                 dimensions,
+                notificationsEnabled,
+                setNotifications,
             }}
         >
             {children}
@@ -77,3 +119,8 @@ export const useLargeDeviceMemory = () =>
     useContext(ConfigContext).largeDeviceMemeory
 
 export const useDimensions = () => useContext(ConfigContext).dimensions
+
+export const useNotificationsEnabled = () => ({
+    notificationsEnabled: useContext(ConfigContext).notificationsEnabled,
+    setNotifications: useContext(ConfigContext).setNotifications,
+})
