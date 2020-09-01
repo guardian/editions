@@ -13,6 +13,7 @@ import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import gql from 'graphql-tag'
 import { FSPaths } from 'src/paths'
 import retry from 'async-retry'
+import { deleteIssue } from './clear-issues'
 
 type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> }
 const DOWNLOAD_BLOCKED_QUERY = gql`
@@ -162,6 +163,10 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
         errorService.captureException(error)
         updateListeners(localId, { type: 'failure', data: error })
         console.log('Download error: ', error)
+
+        // To avoid having part of issue data on the device (i.e. when image bundle failed to unzip)
+        // we are clearing the folder, so user does not experience article without image, for example.
+        deleteIssue(localId)
     }
 }
 

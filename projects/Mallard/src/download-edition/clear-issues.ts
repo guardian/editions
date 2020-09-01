@@ -32,7 +32,7 @@ const clearDownloadsDirectory = async () => {
     }
 }
 
-const deleteIssue = async (localId: string): Promise<boolean> => {
+export const deleteIssue = async (localId: string): Promise<boolean> => {
     const issuePath = FSPaths.issueRoot(localId)
     const doesItExist = await RNFS.exists(issuePath)
     if (doesItExist) {
