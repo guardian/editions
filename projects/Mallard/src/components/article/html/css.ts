@@ -175,12 +175,11 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
     }
 
     .app[data-type='${ArticleType.Immersive}'] h2 > strong { 
-        color: ${colors.main};
         font-family: ${families.headline.bold}
     }
 
     .app h2 > strong { 
-        color: #000000;
+        color: ${colors.main};
         font-weight: bold;
         font-family: ${families.text.bold};
       }
