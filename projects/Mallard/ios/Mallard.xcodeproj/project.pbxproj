@@ -13,12 +13,11 @@
 		144ED6CC5BE2FA6DEDDB6DF4 /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BAD660688DF776E1FA0A2130 /* libPods-Mallard-tvOS.a */; };
 		230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */ = {isa = PBXBuildFile; fileRef = CEC9D18600B14CC098C48387 /* guardianIcons_1.12.otf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
-		5A94510D24D1A5730085A5D0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A94510C24D1A5730085A5D0 /* Launch Screen.storyboard */; };
+		5ACB83BE24FE6CC400324619 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5ACB83BD24FE6CC400324619 /* LaunchScreen.storyboard */; };
 		7836FF3F0ADEA9274CAD15ED /* libPods-Mallard-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C512E12ECC343D6E33F7A1 /* libPods-Mallard-tvOSTests.a */; };
 		896089CE248679CF00DCBF7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 896089CD248679CF00DCBF7D /* GoogleService-Info.plist */; };
 		950E1C012317E06F00F38B92 /* Ophan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950E1C002317E06F00F38B92 /* Ophan.swift */; };
@@ -125,7 +124,6 @@
 		13B07F961A680F5B00A75B9A /* Guardian Editions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guardian Editions.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Mallard/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Mallard/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Mallard/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Mallard/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Mallard/main.m; sourceTree = "<group>"; };
 		199EA3FD38444461A2EDB428 /* GuardianTextEgyptian-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-BoldItalic.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -148,8 +146,8 @@
 		4F62AA3123198F8B0052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = "../ophan/build/fat-framework/debug/ophan.framework"; sourceTree = "<group>"; };
 		4F62AA35231E8D660052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/universalFramework/ophan.framework; sourceTree = "<group>"; };
 		574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-Regular.ttf"; path = "../src/assets/fonts/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; };
-		5A94510C24D1A5730085A5D0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		5AB25EB224ADE6200074CF93 /* GuardianTextSans-RegularIt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextSans-RegularIt.ttf"; path = "../src/assets/fonts/GuardianTextSans-RegularIt.ttf"; sourceTree = "<group>"; };
+		5ACB83BD24FE6CC400324619 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5DA07BFB0DCC824DF7C94988 /* Pods-Mallard-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		633BB1AFE255417982D19DF7 /* GHGuardianHeadline-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Regular.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Regular.ttf"; sourceTree = "<group>"; };
 		661D742028FAF03E3532CEC8 /* Pods-Mallard-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -257,11 +255,10 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */,
-				5A94510C24D1A5730085A5D0 /* Launch Screen.storyboard */,
+				5ACB83BD24FE6CC400324619 /* LaunchScreen.storyboard */,
 			);
 			name = Mallard;
 			sourceTree = "<group>";
@@ -584,8 +581,8 @@
 				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
 				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
 				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
+				5ACB83BE24FE6CC400324619 /* LaunchScreen.storyboard in Resources */,
 				C549379A22B149BB00B1D9A2 /* GHGuardianHeadline-BoldItalic.ttf in Resources */,
-				5A94510D24D1A5730085A5D0 /* Launch Screen.storyboard in Resources */,
 				C549379B22B149BB00B1D9A2 /* GHGuardianHeadline-Light.ttf in Resources */,
 				C549379C22B149BB00B1D9A2 /* GHGuardianHeadline-LightItalic.ttf in Resources */,
 				C549379D22B149BB00B1D9A2 /* GHGuardianHeadline-Medium.ttf in Resources */,
@@ -617,7 +614,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
