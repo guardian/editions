@@ -1,5 +1,6 @@
 import { IssuePublicationIdentifier, IssueSummary } from '../../../../common'
 import { getIssueSummaryInternal } from '../../../../src/tasks/indexer/helpers/get-issue-summary'
+import { defaultRegionalEditions } from '../../../../../Apps/common/src/editions-defaults'
 
 describe('getIssueSummaryInternal', () => {
     const assetKeys = [
@@ -17,7 +18,11 @@ describe('getIssueSummaryInternal', () => {
             issueDate: '2019-10-09',
         }
 
-        const actual = await getIssueSummaryInternal(issue, assetKeys)
+        const actual = getIssueSummaryInternal(
+            issue,
+            assetKeys,
+            'American Edition',
+        )
 
         const expected: IssueSummary = {
             key: 'american-edition/2019-10-09',
@@ -49,9 +54,10 @@ describe('getIssueSummaryInternal', () => {
             issueDate: '2019-1011-09',
         }
 
-        const actual = await getIssueSummaryInternal(
+        const actual = getIssueSummaryInternal(
             issueWithIncorrectDate,
             assetKeys,
+            'American Edition',
         )
 
         expect(actual).toBeUndefined()
@@ -64,7 +70,11 @@ describe('getIssueSummaryInternal', () => {
             issueDate: '2019-10-09',
         }
 
-        const actual = await getIssueSummaryInternal(issueWithIncorrectDate, [])
+        const actual = getIssueSummaryInternal(
+            issueWithIncorrectDate,
+            [],
+            'American Edition',
+        )
 
         expect(actual).toBeUndefined()
     })

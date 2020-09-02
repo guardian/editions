@@ -58,10 +58,11 @@ const makeImageAssetObject = (assetFiles: {
  * includes simple metadata (key, localId, etc) and the list of zip assets.
  * If the issue isn't valid this will return undefined.
  */
-export const getIssueSummaryInternal = async (
+export const getIssueSummaryInternal = (
     issuePublication: IssuePublicationIdentifier,
     assetKeys: string[],
-): Promise<IssueSummary | undefined> => {
+    name: string,
+): IssueSummary | undefined => {
     const { edition, issueDate } = issuePublication
 
     const publishedIssuePrefix = getPublishedId(issuePublication)
@@ -85,7 +86,6 @@ export const getIssueSummaryInternal = async (
     const assets = { data, ...images }
     const localId = `${edition}/${issueDate}`
     const key = localId
-    const name = await getEditionDisplayName(edition)
 
     return {
         key,
@@ -120,5 +120,7 @@ export const getIssueSummary = async (
         JSON.stringify(assetKeyList),
     )
 
-    return await getIssueSummaryInternal(issuePublication, assetKeys)
+    const displayName = await getEditionDisplayName(issuePublication.edition)
+
+    return getIssueSummaryInternal(issuePublication, assetKeys, displayName)
 }
