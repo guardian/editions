@@ -139,7 +139,7 @@ export const Settings = {
     displayWeather: 'Display weather',
     help: 'Help',
     manageDownloads: 'Manage downloads',
-    notifications: 'Receive notifications',
+    notifications: 'Notifications',
     privacyPolicy: 'Privacy policy',
     privacySettings: 'Privacy settings',
     signIn: 'Sign in',
