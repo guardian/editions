@@ -1,5 +1,6 @@
 import { css } from 'src/helpers/webview'
 import { color } from 'src/theme/color'
+import { PillarColoursWithTint } from 'src/helpers/transform'
 
 const bulletStyle = () => css`
     display: inline-block;
@@ -7,10 +8,9 @@ const bulletStyle = () => css`
     border-radius: 0.375rem;
     height: 0.75rem;
     width: 0.75rem;
-    background-color: ${color.palette.neutral[86]};
 `
 
-export const listStyles = () => css`
+export const listStyles = (colors: PillarColoursWithTint) => css`
     ul {
         list-style: none;
         margin-bottom: 15px;
@@ -29,6 +29,7 @@ export const listStyles = () => css`
         ${bulletStyle()};
         margin-right: 0.5rem;
         margin-left: -1.25rem;
+        background-color: ${color.palette.neutral[86]};
     }
 
     .bullet {
@@ -37,6 +38,7 @@ export const listStyles = () => css`
 
     .bullet:before {
         ${bulletStyle()};
+        background-color: ${colors.main};
         margin-right: 0.125rem;
     }
 `

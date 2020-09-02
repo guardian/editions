@@ -211,7 +211,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
         }
     }
 
-    ${listStyles()}
+    ${listStyles(colors)}
 
     ${quoteStyles({
         colors,
