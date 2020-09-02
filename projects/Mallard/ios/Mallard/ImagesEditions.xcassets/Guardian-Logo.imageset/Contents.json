@@ -1,27 +1,27 @@
 {
   "images" : [
     {
-      "filename" : "splash-phone-aligned.png",
+      "filename" : "guardian-logo-phone-aligned.png",
       "idiom" : "iphone",
       "scale" : "1x"
     },
     {
-      "filename" : "splash-phone-aligned@2x.png",
+      "filename" : "guardian-logo-phone-aligned@2x.png",
       "idiom" : "iphone",
       "scale" : "2x"
     },
     {
-      "filename" : "splash-phone-aligned@3x.png",
+      "filename" : "guardian-logo-phone-aligned@3x.png",
       "idiom" : "iphone",
       "scale" : "3x"
     },
     {
-      "filename" : "splash-ipad-aligned@2x.png",
+      "filename" : "guardian-logo-ipad-aligned@2x.png",
       "idiom" : "ipad",
       "scale" : "1x"
     },
     {
-      "filename" : "splash-ipad-aligned@3x.png",
+      "filename" : "guardian-logo-ipad-aligned@3x.png",
       "idiom" : "ipad",
       "scale" : "2x"
     }
