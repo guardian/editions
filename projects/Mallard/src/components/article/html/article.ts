@@ -55,6 +55,14 @@ const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
     })
 }
 
+/* 
+As well as list items bullet points from composer can be sent as a unicode character •
+This method applies a class to the bullet string in order to add stlying through css 
+*/
+const cleanupBullets = (html: string) => {
+    return html.replace('•', `<span class="bullet">•</span>`)
+}
+
 const renderArticleContent = (
     elements: BlockElement[],
     { showMedia, publishedId, getImagePath }: ArticleContentProps,
@@ -70,6 +78,9 @@ const renderArticleContent = (
                                 ${el.html}
                             </div>
                         `
+                    }
+                    if (el.html.includes('•')) {
+                        return cleanupBullets(el.html)
                     }
                     return el.html
                 case 'media-atom':
