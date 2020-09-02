@@ -37,6 +37,21 @@ const getTopicName = async (): Promise<PushToken[]> => {
     return BASE_PUSH_TOKEN
 }
 
+const objectsEqual = (token1: PushToken, token2: PushToken) =>
+    Object.keys(token1).length === Object.keys(token2).length &&
+    token1.name === token2.name &&
+    token2.type === token2.type
+
+const isSameTopics = (t1: PushToken[] | null, t2: PushToken[]) => {
+    if (t1 == null || t1.length != t2.length) return false
+
+    for (let index = 0; index < t1.length; index++) {
+        if (!objectsEqual(t1[index], t2[index])) return false
+    }
+
+    return true
+}
+
 const shouldReRegister = (
     newToken: string,
     registration: PushNotificationRegistration | null,
@@ -48,7 +63,7 @@ const shouldReRegister = (
         ? moment(now).diff(moment(registration.registrationDate), 'days') > 14
         : true
     const differentToken = registration ? newToken !== registration.token : true
-    const unmatchedTopics = currentTopics !== newTopics
+    const unmatchedTopics = !isSameTopics(currentTopics, newTopics)
     return exceedTime || differentToken || unmatchedTopics
 }
 
