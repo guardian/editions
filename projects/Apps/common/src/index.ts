@@ -581,7 +581,7 @@ export interface EditionsList {
 
 export type Locale = 'en_GB' | 'en_AU'
 
-interface EditionInterface {
+export interface EditionInterface {
     title: string
     subTitle: string
     edition: Edition

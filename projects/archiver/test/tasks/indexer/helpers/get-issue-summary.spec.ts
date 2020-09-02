@@ -10,14 +10,14 @@ describe('getIssueSummaryInternal', () => {
         'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
     ]
 
-    it('should return IssueSummary', () => {
+    it('should return IssueSummary', async () => {
         const issue: IssuePublicationIdentifier = {
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
         }
 
-        const actual = getIssueSummaryInternal(issue, assetKeys)
+        const actual = await getIssueSummaryInternal(issue, assetKeys)
 
         const expected: IssueSummary = {
             key: 'american-edition/2019-10-09',
@@ -42,14 +42,14 @@ describe('getIssueSummaryInternal', () => {
         expect(actual).toStrictEqual(expected)
     })
 
-    it('should return undefined if issue date was invalid', () => {
+    it('should return undefined if issue date was invalid', async () => {
         const issueWithIncorrectDate: IssuePublicationIdentifier = {
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-1011-09',
         }
 
-        const actual = getIssueSummaryInternal(
+        const actual = await getIssueSummaryInternal(
             issueWithIncorrectDate,
             assetKeys,
         )
@@ -57,14 +57,14 @@ describe('getIssueSummaryInternal', () => {
         expect(actual).toBeUndefined()
     })
 
-    it('should return undefined if there was no assets', () => {
+    it('should return undefined if there was no assets', async () => {
         const issueWithIncorrectDate: IssuePublicationIdentifier = {
             edition: 'american-edition',
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
         }
 
-        const actual = getIssueSummaryInternal(issueWithIncorrectDate, [])
+        const actual = await getIssueSummaryInternal(issueWithIncorrectDate, [])
 
         expect(actual).toBeUndefined()
     })
