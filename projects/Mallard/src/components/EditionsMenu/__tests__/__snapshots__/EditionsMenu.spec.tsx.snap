@@ -256,10 +256,6 @@ Saturday morning by 6am (EST)",
               "subTitle": "Monthly",
               "title": "Food",
             },
-            "image": Object {
-              "path": "/path/to/image",
-              "source": "media",
-            },
             "notificationUTCOffset": 1,
             "subTitle": "Store cupboard special: 20 quick and easy lockdown suppers",
             "title": "Food

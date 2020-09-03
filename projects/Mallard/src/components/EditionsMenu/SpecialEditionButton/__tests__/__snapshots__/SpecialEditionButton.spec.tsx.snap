@@ -22,7 +22,14 @@ Monthly - Special Edition Button"
     }
   }
 >
-  ImageResource
+  <View
+    style={
+      Object {
+        "height": 134,
+        "width": 87,
+      }
+    }
+  />
   <View
     style={
       Object {
@@ -102,7 +109,14 @@ Monthly - Special Edition Button"
     }
   }
 >
-  ImageResource
+  <View
+    style={
+      Object {
+        "height": 134,
+        "width": 87,
+      }
+    }
+  />
   <View
     style={
       Object {
