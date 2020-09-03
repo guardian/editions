@@ -16,7 +16,6 @@ type ImageResourceProps = {
     use: ImageUse
     style?: StyleProp<ImageStyle>
     setAspectRatio?: boolean
-    devUri?: string
 } & Omit<ImageProps, 'source'>
 
 const ImageResource = ({
@@ -24,20 +23,19 @@ const ImageResource = ({
     style,
     setAspectRatio = false,
     use,
-    devUri,
     ...props
 }: ImageResourceProps) => {
     const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
 
-    return imagePath || devUri ? (
+    return imagePath ? (
         <Image
             key={imagePath}
             resizeMethod={'resize'}
             {...props}
             style={[styles, style]}
-            source={{ uri: devUri || imagePath }}
+            source={{ uri: imagePath }}
         />
     ) : (
         <View style={styles}></View>

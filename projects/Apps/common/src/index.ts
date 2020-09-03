@@ -606,8 +606,7 @@ export interface TrainingEdition extends EditionInterface {}
 
 export interface SpecialEdition extends EditionInterface {
     buttonStyle: SpecialEditionButtonStyles
-    devUri?: string
+    imageUri?: string
     expiry: Date
     headerStyle?: SpecialEditionHeaderStyles
-    image: Image
 }

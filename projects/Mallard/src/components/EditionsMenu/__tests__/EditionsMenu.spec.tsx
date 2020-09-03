@@ -62,10 +62,6 @@ const specialEditions: SpecialEdition[] = [
     {
         edition: 'daily-edition' as Edition,
         expiry: new Date(98, 1),
-        image: {
-            source: 'media',
-            path: '/path/to/image',
-        },
         editionType: 'Special',
         notificationUTCOffset: 1,
         topic: 'food',
