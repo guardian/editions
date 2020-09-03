@@ -66,8 +66,7 @@ export {
 }
 
 /**
- *
+ * Test all the things that have changed
  * implement remote config so it can be turned off
  * Go to the Issues route
- * List scheduled notifications (ios only) in duck menu and diagnostics
  */
