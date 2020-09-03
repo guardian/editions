@@ -78,5 +78,22 @@ describe('push-notifications/helpers', () => {
                 ),
             ).toBe(true)
         })
+        it('should return false if the topics are but in different order', () => {
+            const registrationCache = {
+                token: 'token',
+                registrationDate: today().toISOString(),
+            }
+            const topics = [{ name: 'uk', type: 'editions' }] as PushToken[]
+            const topics2 = [{ type: 'editions', name: 'uk' }] as PushToken[]
+            expect(
+                shouldReRegister(
+                    'token',
+                    registrationCache,
+                    today().toISOString(),
+                    topics,
+                    topics2,
+                ),
+            ).toBe(false)
+        })
     })
 })
