@@ -7,5 +7,9 @@ Object {
   "id": "20200902",
   "message": "The latest edition of Australia Weekend is available",
   "title": "Australia Weekend",
+  "userInfo": Object {
+    "edition": "australian-edition",
+    "route": "Issue",
+  },
 }
 `;

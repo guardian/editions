@@ -1,8 +1,35 @@
 import { Edition, RegionalEdition } from 'src/common'
-import { Moment } from 'moment'
+import moment, { Moment } from 'moment'
 import { routeNames } from 'src/navigation/routes'
 
-// Having a consistent way to produce notification ids should help with identifying them for cancellation
+const nextSaturday = (locale: string): Moment => {
+    const requiredDay = 6
+    const today = moment()
+        .tz(locale)
+        .isoWeekday()
+
+    // if we haven't yet passed the day of the week that we need:
+    if (today <= requiredDay) {
+        // then just give me this week's instance of that day
+        return moment()
+            .tz(locale)
+            .isoWeekday(requiredDay)
+            .set('hour', 7)
+            .set('minute', 0)
+            .set('second', 0)
+    } else {
+        // otherwise, give me *next week's* instance of that same day
+        return moment()
+            .tz(locale)
+            .add(1, 'weeks')
+            .isoWeekday(requiredDay)
+            .set('hour', 7)
+            .set('minute', 0)
+            .set('second', 0)
+    }
+}
+
+// Having a consistent way to produce notification ids for identification purposes
 const notificationId = (edition: Edition, date: Moment): string =>
     date.format('YYYYMMDD')
 
@@ -18,4 +45,4 @@ const notificationPayload = (
     userInfo: { route: routeNames.Issue, edition: defaultEdition.edition },
 })
 
-export { notificationId, notificationPayload }
+export { nextSaturday, notificationId, notificationPayload }

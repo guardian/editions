@@ -4,9 +4,7 @@ import moment, { Moment } from 'moment-timezone'
 import { Edition } from 'src/common'
 import { loggingService, Level } from 'src/services/logging'
 import { notificationsAreEnabled } from 'src/hooks/use-config-provider'
-import { RegionalEdition } from '../../../Apps/common/src'
-import { NotificationSettings } from 'react-native-permissions'
-import { notificationPayload, notificationId } from './local-notification-setup'
+import { notificationPayload, nextSaturday } from './local-notification-setup'
 
 // Currently used for manual testing notifications
 const localnotification = async (): Promise<void> => {
@@ -16,33 +14,6 @@ const localnotification = async (): Promise<void> => {
             title: 'Good Morning!',
             message: 'This weekend’s edition is ready. Have a good one!',
         })
-    }
-}
-
-const nextSaturday = (locale: string): Moment => {
-    const requiredDay = 6
-    const today = moment()
-        .tz(locale)
-        .isoWeekday()
-
-    // if we haven't yet passed the day of the week that we need:
-    if (today <= requiredDay) {
-        // then just give me this week's instance of that day
-        return moment()
-            .tz(locale)
-            .isoWeekday(requiredDay)
-            .set('hour', 7)
-            .set('minute', 0)
-            .set('second', 0)
-    } else {
-        // otherwise, give me *next week's* instance of that same day
-        return moment()
-            .tz(locale)
-            .add(1, 'weeks')
-            .isoWeekday(requiredDay)
-            .set('hour', 7)
-            .set('minute', 0)
-            .set('second', 0)
     }
 }
 
@@ -91,13 +62,12 @@ const cancelSheduledLocalNotifications = async (): Promise<void> => {
 export {
     cancelSheduledLocalNotifications,
     localnotification,
-    nextSaturday,
     scheduledLocalNotification,
 }
 
 /**
  *
  * implement remote config so it can be turned off
- *
- *
+ * Go to the Issues route
+ * List scheduled notifications (ios only) in duck menu and diagnostics
  */
