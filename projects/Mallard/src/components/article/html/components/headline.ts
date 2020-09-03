@@ -16,8 +16,7 @@ const getHeadline = (
         return html`
             <h1>
                 <span class="header-top-headline"
-                    >${(articleType === ArticleType.Opinion ||
-                        articleType === ArticleType.Interview) &&
+                    >${articleType === ArticleType.Opinion &&
                         Quotes()}${headerProps.headline}
                 </span>
                 ${articleType !== ArticleType.Interview &&
