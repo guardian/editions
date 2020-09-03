@@ -6,7 +6,7 @@ import { styles } from './styles'
 
 const SpecialEditionButton = ({
     expiry,
-    imageUri,
+    buttonImageUri,
     onPress,
     selected = false,
     subTitle,
@@ -14,7 +14,7 @@ const SpecialEditionButton = ({
     title,
 }: {
     expiry: Date
-    imageUri?: string
+    buttonImageUri?: string
     onPress: () => void
     selected?: boolean
     style: SpecialEditionButtonStyles
@@ -33,12 +33,12 @@ const SpecialEditionButton = ({
             onPress={onPress}
         >
             <View style={defaultStyles.container}>
-                {imageUri ? (
+                {buttonImageUri ? (
                     <Image
-                        key={imageUri}
+                        key={buttonImageUri}
                         resizeMethod={'resize'}
                         style={defaultStyles.image}
-                        source={{ uri: imageUri }}
+                        source={{ uri: buttonImageUri }}
                     />
                 ) : (
                     <View style={defaultStyles.image}></View>

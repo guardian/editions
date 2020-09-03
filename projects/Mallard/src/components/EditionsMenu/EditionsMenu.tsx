@@ -51,7 +51,7 @@ const EditionsMenu = ({
                         renderItem={({ item }: { item: SpecialEdition }) => {
                             const {
                                 buttonStyle,
-                                imageUri,
+                                buttonImageUri,
                                 edition,
                                 expiry,
                                 title,
@@ -59,7 +59,7 @@ const EditionsMenu = ({
                             } = item
                             return (
                                 <SpecialEditionButton
-                                    imageUri={imageUri}
+                                    buttonImageUri={buttonImageUri}
                                     expiry={expiry}
                                     onPress={() => {
                                         storeSelectedEdition(
