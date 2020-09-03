@@ -23,6 +23,10 @@ import { AppState, AppStateStatus } from 'react-native'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
+import {
+    scheduledLocalNotification,
+    cancelSheduledLocalNotifications,
+} from 'src/notifications/local-notifications'
 
 interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
@@ -148,6 +152,8 @@ const setEdition = async (
     await defaultEditionCache.set(edition)
     eventEmitter.emit('editionCachesSet')
     pushNotifcationRegistration()
+    await cancelSheduledLocalNotifications()
+    await scheduledLocalNotification()
 }
 
 export const defaultEditionDecider = async (
@@ -161,6 +167,8 @@ export const defaultEditionDecider = async (
         setSelectedEdition(dE)
         await selectedEditionCache.set(dE)
         pushNotifcationRegistration()
+        await cancelSheduledLocalNotifications()
+        await scheduledLocalNotification()
     } else {
         // Get the correct edition for the device locale
         const autoDetectedEdition = localeToEdition.get(locale)
@@ -233,6 +241,8 @@ export const EditionProvider = ({
             await defaultEditionCache.set(chosenEdition as RegionalEdition)
             setDefaultEdition(chosenEdition as RegionalEdition)
             pushNotifcationRegistration()
+            await cancelSheduledLocalNotifications()
+            await scheduledLocalNotification()
         }
         eventEmitter.emit('editionUpdate')
     }

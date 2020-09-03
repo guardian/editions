@@ -1,11 +1,16 @@
 import PushNotification from 'react-native-push-notification'
 import { getDefaultEdition } from 'src/hooks/use-edition-provider'
-import moment from 'moment-timezone'
+import moment, { Moment } from 'moment-timezone'
 import { Edition } from 'src/common'
 import { loggingService, Level } from 'src/services/logging'
+import { notificationsAreEnabled } from 'src/hooks/use-config-provider'
+import { RegionalEdition } from '../../../Apps/common/src'
+import { NotificationSettings } from 'react-native-permissions'
+import { notificationPayload, notificationId } from './local-notification-setup'
 
-// Currently used for testing notifications
-const localnotification = (notificationsEnabled: boolean) => {
+// Currently used for manual testing notifications
+const localnotification = async (): Promise<void> => {
+    const notificationsEnabled = await notificationsAreEnabled()
     if (notificationsEnabled) {
         PushNotification.localNotification({
             title: 'Good Morning!',
@@ -14,7 +19,7 @@ const localnotification = (notificationsEnabled: boolean) => {
     }
 }
 
-const nextSaturday = (locale: string) => {
+const nextSaturday = (locale: string): Moment => {
     const requiredDay = 6
     const today = moment()
         .tz(locale)
@@ -29,7 +34,6 @@ const nextSaturday = (locale: string) => {
             .set('hour', 7)
             .set('minute', 0)
             .set('second', 0)
-            .toDate()
     } else {
         // otherwise, give me *next week's* instance of that same day
         return moment()
@@ -39,14 +43,16 @@ const nextSaturday = (locale: string) => {
             .set('hour', 7)
             .set('minute', 0)
             .set('second', 0)
-            .toDate()
     }
 }
 
 const editionToMomentTimezone = new Map<Edition, string>()
 editionToMomentTimezone.set('australian-edition', 'Australia/Sydney')
 
-const scheduledLocalNotification = async (notificationsEnabled: boolean) => {
+const scheduledLocalNotification = async (
+    testOveride?: Moment,
+): Promise<void> => {
+    const notificationsEnabled = await notificationsAreEnabled()
     if (notificationsEnabled) {
         const defaultEdition = await getDefaultEdition()
 
@@ -56,14 +62,11 @@ const scheduledLocalNotification = async (notificationsEnabled: boolean) => {
             )
 
             if (editionTimezone) {
-                // As it stands, this means we only set AUS
-                const date = nextSaturday(editionTimezone)
-
-                PushNotification.localNotificationSchedule({
-                    title: defaultEdition.title,
-                    message: `The latest edition of ${defaultEdition.title} is available`,
-                    date,
-                })
+                const date = testOveride || nextSaturday(editionTimezone)
+                console.log(notificationPayload(defaultEdition, date))
+                await PushNotification.localNotificationSchedule(
+                    notificationPayload(defaultEdition, date),
+                )
                 loggingService.log({
                     message: `Notification Schdueled`,
                     level: Level.INFO,
@@ -77,11 +80,24 @@ const scheduledLocalNotification = async (notificationsEnabled: boolean) => {
     }
 }
 
-export { localnotification, scheduledLocalNotification }
+const cancelSheduledLocalNotifications = async (): Promise<void> => {
+    await PushNotification.cancelAllLocalNotifications()
+    loggingService.log({
+        message: `Notifications Cancelled`,
+        level: Level.INFO,
+    })
+}
+
+export {
+    cancelSheduledLocalNotifications,
+    localnotification,
+    nextSaturday,
+    scheduledLocalNotification,
+}
 
 /**
  *
  * implement remote config so it can be turned off
- * update what happens when a user clicks. Needs a payload. When clicked send a log or Ophan event
- * delete scheduled notifications and add new one when change edition
+ *
+ *
  */

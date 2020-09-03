@@ -7,12 +7,12 @@ import { regionalEdition } from './__fixtures__/regional-edition'
 
 describe('Local Notification Setup', () => {
     describe('notificationId', () => {
-        it('should return the notification in a {edition}-{YYYY-MM-DD} format', () => {
+        it('should return the notification in a {YYYYMMDD} format', () => {
             const id = notificationId(
                 'australian-edition',
                 moment('2020-09-02T13:57:03.896Z'),
             )
-            expect(id).toEqual('australian-edition-2020-09-02')
+            expect(id).toEqual('20200902')
         })
     })
 

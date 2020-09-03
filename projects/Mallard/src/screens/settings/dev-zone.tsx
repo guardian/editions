@@ -31,8 +31,13 @@ import {
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens } from 'src/helpers/storage'
-import { localnotification } from 'src/notifications/local-notifications'
+import {
+    localnotification,
+    scheduledLocalNotification,
+    cancelSheduledLocalNotifications,
+} from 'src/notifications/local-notifications'
 import { useNotificationsEnabled } from 'src/hooks/use-config-provider'
+import moment from 'moment'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -122,13 +127,26 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             </Footer>
             <ButtonList>
                 {Platform.OS === 'android' && (
-                    <Button
-                        onPress={() => {
-                            localnotification(notificationsEnabled)
-                        }}
-                    >
-                        Local Notification
-                    </Button>
+                    <>
+                        <Button
+                            onPress={() => {
+                                localnotification()
+                            }}
+                        >
+                            Local Notification
+                        </Button>
+
+                        <Button
+                            onPress={() => {
+                                cancelSheduledLocalNotifications()
+                                scheduledLocalNotification(
+                                    moment().add(1, 'minute'),
+                                )
+                            }}
+                        >
+                            Schedule Notification in 1 min
+                        </Button>
+                    </>
                 )}
                 <Button
                     onPress={() => {

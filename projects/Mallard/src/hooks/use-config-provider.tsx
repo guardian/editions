@@ -19,6 +19,9 @@ interface ConfigState {
     setNotifications: (setting: boolean) => Promise<void>
 }
 
+const notificationInitialState = () =>
+    Platform.OS === 'android' ? true : false
+
 const initialState: ConfigState = {
     largeDeviceMemeory: false,
     dimensions: {
@@ -27,7 +30,7 @@ const initialState: ConfigState = {
         scale: 0,
         fontScale: 0,
     },
-    notificationsEnabled: Platform.OS === 'android' ? true : false,
+    notificationsEnabled: notificationInitialState(),
     setNotifications: () => Promise.resolve(),
 }
 
@@ -39,11 +42,19 @@ export const largeDeviceMemory = () => {
     )
 }
 
+export const notificationsAreEnabled = async () => {
+    if (Platform.OS !== 'android') {
+        return false
+    }
+    const isEnabled = await notificationsEnabledCache.get()
+    return isEnabled || false
+}
+
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     const [largeDeviceMemeory, setLargeDeviceMemory] = useState(false)
     const [dimensions, setDimensions] = useState(Dimensions.get('window'))
     const [notificationsEnabled, setNotificationsEnabled] = useState(
-        Platform.OS === 'android' ? true : false,
+        notificationInitialState(),
     )
 
     const setNotifications = async (setting: boolean) => {
@@ -58,11 +69,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     useEffect(() => {
-        notificationsEnabledCache
-            .get()
-            .then(
-                setting => setting !== null && setNotificationsEnabled(setting),
-            )
+        notificationsAreEnabled().then(setting =>
+            setNotificationsEnabled(setting),
+        )
     }, [])
 
     useEffect(() => {
