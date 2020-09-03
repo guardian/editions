@@ -1,6 +1,5 @@
 import { IssuePublicationIdentifier, IssueSummary } from '../../../../common'
 import { getIssueSummaryInternal } from '../../../../src/tasks/indexer/helpers/get-issue-summary'
-import { defaultRegionalEditions } from '../../../../../Apps/common/src/editions-defaults'
 
 describe('getIssueSummaryInternal', () => {
     const assetKeys = [

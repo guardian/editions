@@ -8,7 +8,6 @@ export const getEditionDisplayName = async (editionId: Edition) => {
         console.error("Failed to fetch editions list, can't find display name")
         throw new Error(`Could not fetch editions list`)
     }
-    console.log('fetched editions list', maybeEditionsList)
 
     const allEditions: EditionInterface[] = maybeEditionsList.regionalEditions
         .concat(maybeEditionsList.specialEditions)
