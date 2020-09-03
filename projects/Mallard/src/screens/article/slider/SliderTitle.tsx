@@ -38,14 +38,14 @@ const styles = (color: string, location: string, isTablet: boolean) => {
 
     const titleArticle = {
         ...titleShared,
-        fontSize: isTablet ? 30 : 20,
-        lineHeight: isTablet ? 33 : 22,
+        fontSize: getFont('titlepiece', 1.1).fontSize,
+        lineHeight: getFont('titlepiece', 1.1).lineHeight,
     }
 
     const titleFront = {
         ...titleShared,
-        fontSize: isTablet ? 38 : 28,
-        lineHeight: isTablet ? 42 : 32,
+        fontSize: getFont('titlepiece', 1.4).fontSize,
+        lineHeight: getFont('titlepiece', 1.4).lineHeight,
     }
 
     const title = location === 'article' ? titleArticle : titleFront

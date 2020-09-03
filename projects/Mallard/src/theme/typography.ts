@@ -280,6 +280,21 @@ const scale = {
                 lineHeight: 20,
             },
         },
+        // 1.1 is just for article titles
+        1.1: {
+            [Breakpoints.smallPhone]: {
+                fontSize: 18,
+                lineHeight: 20,
+            },
+            [Breakpoints.phone]: {
+                fontSize: 20,
+                lineHeight: 22,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 30,
+                lineHeight: 33,
+            },
+        },
         1.25: {
             [Breakpoints.smallPhone]: {
                 fontSize: 20,
@@ -288,6 +303,21 @@ const scale = {
             [Breakpoints.phone]: {
                 fontSize: 24,
                 lineHeight: 26,
+            },
+        },
+        // 1.4 is just for fronts section titles and sub-titles
+        1.4: {
+            [Breakpoints.smallPhone]: {
+                fontSize: 24,
+                lineHeight: 26,
+            },
+            [Breakpoints.phone]: {
+                fontSize: 28,
+                lineHeight: 32,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 38,
+                lineHeight: 42,
             },
         },
         1.5: {
