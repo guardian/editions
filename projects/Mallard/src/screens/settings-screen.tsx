@@ -1,5 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Text, Switch, Linking, AccessibilityRole } from 'react-native'
+import {
+    Alert,
+    Text,
+    Switch,
+    Linking,
+    AccessibilityRole,
+    Platform,
+} from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationRoute,
@@ -31,6 +38,7 @@ import { FullButton } from 'src/components/lists/FullButton'
 import { DualButton } from 'src/components/lists/DualButton'
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
 import { Copy } from 'src/helpers/words'
+import { useNotificationsEnabled } from 'src/hooks/use-config-provider'
 
 const MiscSettingsList = React.memo(
     (props: {
@@ -41,8 +49,40 @@ const MiscSettingsList = React.memo(
             NavigationParams
         >
     }) => {
-        const onChange = () =>
+        const {
+            notificationsEnabled,
+            setNotifications,
+        } = useNotificationsEnabled()
+        const [
+            settingNotificationsEnabled,
+            setSettingNotificationsEnabled,
+        ] = useState(notificationsEnabled)
+
+        const onWeatherChange = () =>
             setIsWeatherShown(props.client, !props.isWeatherShown)
+
+        const onNotificationChange = () => {
+            const setting = !settingNotificationsEnabled
+            setSettingNotificationsEnabled(setting)
+            setNotifications(setting)
+        }
+
+        const androidItems = [
+            {
+                key: 'notificationEnabled',
+                title: Copy.settings.notifications,
+                proxy: (
+                    <Switch
+                        accessible={true}
+                        accessibilityLabel={Copy.settings.notifications}
+                        accessibilityRole="switch"
+                        value={settingNotificationsEnabled}
+                        onValueChange={onNotificationChange}
+                    />
+                ),
+            },
+        ]
+
         const items = [
             {
                 key: 'isWeatherShown',
@@ -50,10 +90,10 @@ const MiscSettingsList = React.memo(
                 proxy: (
                     <Switch
                         accessible={true}
-                        accessibilityLabel="Display weather."
+                        accessibilityLabel={Copy.settings.displayWeather}
                         accessibilityRole="switch"
                         value={props.isWeatherShown}
-                        onValueChange={onChange}
+                        onValueChange={onWeatherChange}
                     />
                 ),
             },
@@ -67,7 +107,11 @@ const MiscSettingsList = React.memo(
                 proxy: <RightChevron />,
             },
         ]
-        return <List data={items} />
+
+        const data =
+            Platform.OS === 'android' ? [...androidItems, ...items] : items
+
+        return <List data={data} />
     },
 )
 
