@@ -65,7 +65,6 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isShowcase) return ArticleType.Showcase
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
-                else if (isShowcase) return ArticleType.Showcase
                 else return ArticleType.Article
 
             case 'sport':
