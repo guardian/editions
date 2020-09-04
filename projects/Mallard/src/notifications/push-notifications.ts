@@ -5,11 +5,10 @@ import { downloadViaNotification } from 'src/download-edition/download-via-notif
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { apolloClient } from 'src/services/apollo-singleton'
 import { errorService } from 'src/services/errors'
-import { Feature, loggingService, Level } from 'src/services/logging'
+import { Feature } from 'src/services/logging'
 import { maybeRegister } from './helpers'
 import { notificationTracking } from './notification-tracking'
 import { pushTracking } from './push-tracking'
-import { navigateToIssue } from 'src/navigation/helpers/base'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -37,19 +36,6 @@ const pushNotifcationRegistration = () => {
             }
         },
         onNotification: async (notification: any) => {
-            // Used for local notifications and just opens the app
-            if (notification.userInfo && notification.userInfo.route) {
-                loggingService.log({
-                    message: `Notifications Tapped`,
-                    level: Level.INFO,
-                    optionalFields: {
-                        notificationDate: notification.date,
-                        edition: notification.userInfo.edition,
-                    },
-                })
-                return false
-            }
-
             const key = notification.data.key
             const notificationId =
                 Platform.OS === 'ios'
