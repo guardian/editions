@@ -1,6 +1,6 @@
 import { IContent } from '@guardian/capi-ts/dist/Content'
 import { ArticleType, HeaderType } from '../../Apps/common/src/index'
-import { TagType } from '@guardian/capi-ts'
+import { TagType, IElement, ElementType } from '@guardian/capi-ts'
 
 const doesTagExist = (article: IContent, tagId: string): boolean => {
     return article.tags.find(tag => tag.id === tagId) != undefined
@@ -8,6 +8,17 @@ const doesTagExist = (article: IContent, tagId: string): boolean => {
 
 const doesTypeExist = (article: IContent, tagType: TagType): boolean => {
     return article.tags.find(tag => tag.type === tagType) != undefined
+}
+
+const showCaseMainMedia = (elements: IElement[]): boolean => {
+    const mainImage = elements.find(
+        e => e.relation === 'main' && e.type === ElementType.IMAGE,
+    )
+    return mainImage
+        ? mainImage.assets.some(
+              a => a.typeData && a.typeData.role === 'showcase',
+          )
+        : false
 }
 
 const articleTypePicker = (article: IContent): ArticleType => {
@@ -36,6 +47,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
     const isReview: boolean = isTagPresent('tone/reviews')
     const isRecipe: boolean = isTagPresent('tone/recipes')
     const isMatchResult: boolean = isTagPresent('tone/matchreports')
+    const isShowcase: boolean = showCaseMainMedia(article.elements || [])
 
     /**
      * Order of conditionals under each pillar is important as certain conditions take precedent.
@@ -50,6 +62,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
                 else if (isReview) return ArticleType.Review
+                else if (isShowcase) return ArticleType.Showcase
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else return ArticleType.Article
@@ -65,6 +78,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isFeature) return ArticleType.Feature
+                else if (isShowcase) return ArticleType.Showcase
                 else return ArticleType.Article
 
             case 'opinion':
@@ -92,6 +106,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isFeature) return ArticleType.Feature
+                else if (isShowcase) return ArticleType.Showcase
                 else return ArticleType.Article
 
             case 'culture':
