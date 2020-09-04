@@ -13,6 +13,9 @@ export const getEditionDisplayName = async (editionId: Edition) => {
         .concat(maybeEditionsList.specialEditions)
         .concat(maybeEditionsList.trainingEditions)
 
+    console.log('editionsList', maybeEditionsList)
+    console.log('allEditions', allEditions)
+
     const edition = allEditions.find(e => e.edition === editionId)
 
     if (!edition) {

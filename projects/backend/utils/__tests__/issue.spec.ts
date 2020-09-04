@@ -24,7 +24,6 @@ describe('getEditionOrFallback', () => {
         expect(getEditionOrFallback(usEdition)).toStrictEqual(usEdition)
     })
     it('should fallback to daily-edition', () => {
-        expect(getEditionOrFallback('banana')).toStrictEqual(dailyEdition)
         expect(getEditionOrFallback('')).toStrictEqual(dailyEdition)
         expect(getEditionOrFallback(undefined)).toStrictEqual(dailyEdition)
     })
