@@ -40,7 +40,7 @@ const pushNotifcationRegistration = () => {
             // Used for local notifications and just opens the app
             if (notification.userInfo && notification.userInfo.route) {
                 loggingService.log({
-                    message: `Notifications Clicked`,
+                    message: `Notifications Tapped`,
                     level: Level.INFO,
                     optionalFields: {
                         notificationDate: notification.date,

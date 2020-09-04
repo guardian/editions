@@ -67,6 +67,7 @@ export {
 
 /**
  * Test all the things that have changed
+ * We should only cancel notifications when default edition changes to reduce missing out on them
  * implement remote config so it can be turned off
  * Go to the Issues route
  */

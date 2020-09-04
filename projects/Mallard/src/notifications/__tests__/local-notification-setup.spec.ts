@@ -25,4 +25,13 @@ describe('Local Notification Setup', () => {
             expect(payload).toMatchSnapshot()
         })
     })
+
+    describe('nextSaturday', () => {
+        it('should give us the saturday next week if we are on Sunday')
+        it(
+            'should give us staturday next week if we are on saturday after 6am local time',
+        )
+        it('should give us this saturday if we are on a day before saturday')
+        it('should give us today if we are on saturday before 6am local time')
+    })
 })
