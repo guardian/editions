@@ -6,9 +6,7 @@ const pickBucket = (asPreview: boolean) => (asPreview ? 'preview' : 'published')
 export const getEditionOrFallback = (
     maybeEdition: string | undefined,
 ): Edition => {
-    return maybeEdition && maybeEdition.length > 0
-        ? maybeEdition
-        : 'daily-edition'
+    return maybeEdition || 'daily-edition'
 }
 
 export const buildIssueObjectPath = (

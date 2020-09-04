@@ -13,14 +13,13 @@ export const getEditionDisplayName = async (editionId: Edition) => {
         .concat(maybeEditionsList.specialEditions)
         .concat(maybeEditionsList.trainingEditions)
 
-    console.log('editionsList', maybeEditionsList)
-    console.log('allEditions', allEditions)
-
     const edition = allEditions.find(e => e.edition === editionId)
 
     if (!edition) {
-        throw new Error(`${edition} missing in editionToName mapping`)
+        throw new Error(
+            `${edition} missing in editionToName mapping. Editions List: ${allEditions}`,
+        )
     }
-    // it will never be empty string because of above check, || '' is made to make compiler happy
+
     return edition.title
 }

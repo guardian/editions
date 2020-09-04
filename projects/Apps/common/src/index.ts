@@ -220,6 +220,8 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
 
 export type Edition = string
 
+// NOTE this list is incomplete and should not be relied on for
+// a complete list of editions - instead use the API/editions endpoint
 export const editions = {
     daily: 'daily-edition' as Edition,
     ausWeekly: 'australian-edition' as Edition,
