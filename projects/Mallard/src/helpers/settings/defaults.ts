@@ -13,7 +13,7 @@ export const backends = [
     },
     {
         title: 'PROD proofed',
-        value: 'https://editions-proof-prod.s3-eu-west-1.amazonaws.com/',
+        value: 'https://editions-proof.guardianapis.com/',
         preview: true,
     },
     {
@@ -28,7 +28,7 @@ export const backends = [
     },
     {
         title: 'CODE proofed',
-        value: 'https://editions-proof-code.s3-eu-west-1.amazonaws.com/',
+        value: 'https://editions-proof.code.dev-guardianapis.com/',
         preview: true,
     },
     {
