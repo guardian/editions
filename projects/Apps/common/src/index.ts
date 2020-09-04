@@ -218,15 +218,7 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
     tabletXL: 1140,
 }
 
-export const Editions = [
-    'daily-edition',
-    'american-edition',
-    'australian-edition',
-    'training-edition',
-    'the-dummy-edition',
-] as const
-
-export type Edition = typeof Editions[number]
+export type Edition = string
 
 export const editions = {
     daily: 'daily-edition' as Edition,
