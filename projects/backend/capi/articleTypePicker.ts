@@ -91,7 +91,6 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isEditorial) return ArticleType.Article
                 else if (isComment) return ArticleType.Opinion
-                else if (isShowcase) return ArticleType.Showcase
                 else return ArticleType.Article
 
             case 'lifestyle':
