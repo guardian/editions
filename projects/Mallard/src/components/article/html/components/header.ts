@@ -814,7 +814,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
 
     .header-container[data-type='${ArticleType.Showcase}'] h1 {
-        color: ${colors.main};
+        color: ${colors.dark};
         font-family: ${families.headline.bold};
         font-size: 28px;
         line-height: 30px;
@@ -867,6 +867,19 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             font-size: 20px;
             line-height: 25px;
         }
+
+        .header-container[data-type='${
+            ArticleType.Showcase
+        }'] .share-touch-zone { 
+            margin: -8px 0 0 0;
+        }
+
+        .header-container[data-type='${
+            ArticleType.Showcase
+        }'] .header-byline:not(:empty):after {
+            right: 4px;
+        }
+
     }
 
     /*obit*/
