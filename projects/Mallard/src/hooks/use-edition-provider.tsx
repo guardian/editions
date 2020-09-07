@@ -5,7 +5,7 @@ import React, {
     useState,
     Dispatch,
 } from 'react'
-import { RegionalEdition, SpecialEdition } from 'src/common'
+import { RegionalEdition, SpecialEdition, Locale } from 'src/common'
 import { eventEmitter } from 'src/helpers/event-emitter'
 import {
     defaultSettings,
@@ -53,10 +53,16 @@ export const DEFAULT_EDITIONS_LIST = {
 
 export const BASE_EDITION = defaultRegionalEditions[0]
 
-const localeToEdition = new Map<string, RegionalEdition>()
-localeToEdition.set('en_GB', defaultRegionalEditions[0])
-localeToEdition.set('en_AU', defaultRegionalEditions[1])
-localeToEdition.set('en_US', defaultRegionalEditions[2])
+const localeToEdition = (
+    locale: Locale,
+    editionsList: EditionsEndpoint,
+): RegionalEdition => {
+    return (
+        editionsList.regionalEditions.find(
+            edition => edition.locale === locale,
+        ) || BASE_EDITION
+    )
+}
 
 const defaultState: EditionState = {
     editionsList: DEFAULT_EDITIONS_LIST,
@@ -153,6 +159,7 @@ const setEdition = async (
 export const defaultEditionDecider = async (
     setDefaultEdition: Dispatch<RegionalEdition>,
     setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
+    editionsList: EditionsEndpoint,
 ): Promise<void> => {
     // When user already has default edition set then that edition
     const dE = await getDefaultEdition()
@@ -163,7 +170,7 @@ export const defaultEditionDecider = async (
         pushNotifcationRegistration()
     } else {
         // Get the correct edition for the device locale
-        const autoDetectedEdition = localeToEdition.get(locale)
+        const autoDetectedEdition = localeToEdition(locale, editionsList)
 
         if (autoDetectedEdition) {
             await setEdition(
@@ -207,7 +214,11 @@ export const EditionProvider = ({
      * also set this as the selected edition
      */
     useEffect(() => {
-        defaultEditionDecider(setDefaultEdition, setSelectedEdition)
+        defaultEditionDecider(
+            setDefaultEdition,
+            setSelectedEdition,
+            editionsList,
+        )
     }, [])
 
     /**

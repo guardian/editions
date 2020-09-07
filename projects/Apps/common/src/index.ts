@@ -579,6 +579,8 @@ export interface EditionsList {
     trainingEditions: TrainingEdition[]
 }
 
+export type Locale = 'en_GB' | 'en_AU'
+
 interface EditionInterface {
     title: string
     subTitle: string
@@ -590,6 +592,7 @@ interface EditionInterface {
     editionType: 'Regional' | 'Training' | 'Special'
     notificationUTCOffset: number
     topic: string
+    locale: Locale
 }
 
 // disabling tslint here as  it's useful to give this types a different name
