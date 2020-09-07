@@ -42,7 +42,7 @@ const validateEdition = (edition: any) => {
 export const validateEditionsList = (editionList: any): boolean => {
     if (
         editionList.regionalEditions &&
-        editionList.regionalEditions.length >= 3
+        editionList.regionalEditions.length >= 2
     ) {
         const validEditions = editionList.regionalEditions.filter(
             validateEdition,
