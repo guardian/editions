@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { SpecialEdition, EditionsList } from '../../Apps/common/src'
 import { defaultRegionalEditions } from '../../Apps/common/src/editions-defaults'
-import { s3Put, s3fetch } from '../s3'
+import { s3Put } from '../s3'
 
 const getSpecialEditions = (): Array<SpecialEdition> => {
     return []
@@ -15,14 +15,7 @@ const editionsList: EditionsList = {
 
 export const editionsControllerGet = (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/json')
-    s3fetch({ key: 'editions', bucket: 'store' })
-        .then(data => {
-            res.send(JSON.stringify(data))
-        })
-        .catch(e => {
-            console.error(e)
-            res.send(JSON.stringify(editionsList))
-        })
+    res.send(JSON.stringify(editionsList))
 }
 
 const validateEdition = (edition: any) => {
