@@ -1,5 +1,5 @@
 jest.mock('src/helpers/locale', () => ({
-    locale: 'en_US',
+    locale: 'en_AU',
 }))
 
 jest.mock('src/notifications/push-notifications', () => ({

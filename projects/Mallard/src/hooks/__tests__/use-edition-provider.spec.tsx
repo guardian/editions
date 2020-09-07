@@ -35,10 +35,10 @@ describe('useEditions', () => {
             const editionSlug = await getSelectedEditionSlug()
             expect(editionSlug).toEqual(BASE_EDITION.edition)
         })
-        it('should return "american-edition" slug when the US edition is set', async () => {
-            await selectedEditionCache.set(defaultRegionalEditions[2])
+        it('should return "australian-edition" slug when the US edition is set', async () => {
+            await selectedEditionCache.set(defaultRegionalEditions[1])
             const editionSlug = await getSelectedEditionSlug()
-            expect(editionSlug).toEqual('american-edition')
+            expect(editionSlug).toEqual('australian-edition')
         })
     })
 
@@ -127,9 +127,17 @@ describe('useEditions', () => {
         it('should set default and selected edition local state as well as selected storage if found in default storage', async () => {
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
+            const editionsList = {
+                regionalEditions: defaultRegionalEditions,
+                specialEditions: [],
+            }
             defaultEditionCache.set(defaultRegionalEditions[1])
 
-            await defaultEditionDecider(defaultLocalState, selectedLocalState)
+            await defaultEditionDecider(
+                defaultLocalState,
+                selectedLocalState,
+                editionsList,
+            )
             expect(defaultLocalState).toBeCalledTimes(1)
             expect(defaultLocalState).toBeCalledWith(defaultRegionalEditions[1])
             expect(selectedLocalState).toBeCalledTimes(1)
@@ -142,21 +150,29 @@ describe('useEditions', () => {
             expect(defaultEdition).toEqual(defaultRegionalEditions[1])
         })
         it('should set a default based on locale if the feature flag is on and nothing in the default edition cache', async () => {
-            // defaultRegionalEditions[2] = US and locale mock = US
+            // defaultRegionalEditions[1] = AU and locale mock = AU
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
+            const editionsList = {
+                regionalEditions: defaultRegionalEditions,
+                specialEditions: [],
+            }
 
-            await defaultEditionDecider(defaultLocalState, selectedLocalState)
+            await defaultEditionDecider(
+                defaultLocalState,
+                selectedLocalState,
+                editionsList,
+            )
             expect(defaultLocalState).toBeCalledTimes(1)
-            expect(defaultLocalState).toBeCalledWith(defaultRegionalEditions[2])
+            expect(defaultLocalState).toBeCalledWith(defaultRegionalEditions[1])
             expect(selectedLocalState).toBeCalledTimes(1)
             expect(selectedLocalState).toBeCalledWith(
-                defaultRegionalEditions[2],
+                defaultRegionalEditions[1],
             )
             const selectedEdition = await selectedEditionCache.get()
-            expect(selectedEdition).toEqual(defaultRegionalEditions[2])
+            expect(selectedEdition).toEqual(defaultRegionalEditions[1])
             const defaultEdition = await defaultEditionCache.get()
-            expect(defaultEdition).toEqual(defaultRegionalEditions[2])
+            expect(defaultEdition).toEqual(defaultRegionalEditions[1])
         })
     })
 

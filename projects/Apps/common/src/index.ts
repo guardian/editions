@@ -592,14 +592,15 @@ interface EditionInterface {
     editionType: 'Regional' | 'Training' | 'Special'
     notificationUTCOffset: number
     topic: string
-    locale: Locale
 }
 
 // disabling tslint here as  it's useful to give this types a different name
 // and in future Regional/Training editions may have unique properties
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface RegionalEdition extends EditionInterface {}
+export interface RegionalEdition extends EditionInterface {
+    locale: Locale
+}
 
 // disabling tslint here as  it's useful to give this types a different name
 // and in future Regional/Training editions may have unique properties

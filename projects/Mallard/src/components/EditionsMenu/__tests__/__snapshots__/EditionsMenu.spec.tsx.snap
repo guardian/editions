@@ -15,6 +15,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
               "subTitle": "Daily",
               "title": "UK Daily",
             },
+            "locale": "en_GB",
             "notificationUTCOffset": 1,
             "subTitle": "Published every day by 12am (GMT)",
             "title": "UK Daily",
@@ -27,21 +28,10 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
               "subTitle": "Weekend",
               "title": "Austraila",
             },
+            "locale": "en_AU",
             "notificationUTCOffset": 1,
             "subTitle": "Published every day by 9:30am (AEST)",
             "title": "Australia Daily",
-            "topic": "au",
-          },
-          Object {
-            "edition": "american-edition",
-            "editionType": "Regional",
-            "header": Object {
-              "subTitle": "Weekend",
-              "title": "US",
-            },
-            "notificationUTCOffset": 1,
-            "subTitle": "Published every Saturday by 8am (EST)",
-            "title": "US and Cananda Weekend",
             "topic": "au",
           },
         ]
@@ -70,20 +60,6 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
       windowSize={21}
     >
       <View>
-        <View
-          onLayout={[Function]}
-          style={null}
-        >
-          RegionButton
-          <View
-            style={
-              Object {
-                "backgroundColor": "#121212",
-                "height": 1,
-              }
-            }
-          />
-        </View>
         <View
           onLayout={[Function]}
           style={null}
@@ -125,6 +101,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
               "subTitle": "Daily",
               "title": "UK",
             },
+            "locale": "en_GB",
             "notificationUTCOffset": 3,
             "subTitle": "Published from London every 
 morning by 6am (GMT)",
@@ -138,24 +115,12 @@ morning by 6am (GMT)",
               "subTitle": "Weekend",
               "title": "Australia",
             },
+            "locale": "en_AU",
             "notificationUTCOffset": -5,
             "subTitle": "Published from Sydney every 
 Saturday by 6 am (AEST)",
             "title": "Australia Weekend",
             "topic": "au",
-          },
-          Object {
-            "edition": "american-edition",
-            "editionType": "Regional",
-            "header": Object {
-              "subTitle": "Weekend",
-              "title": "US",
-            },
-            "notificationUTCOffset": 8,
-            "subTitle": "Published from New York every 
-Saturday morning by 6am (EST)",
-            "title": "US Weekend",
-            "topic": "us",
           },
         ]
       }
@@ -183,20 +148,6 @@ Saturday morning by 6am (EST)",
       windowSize={21}
     >
       <View>
-        <View
-          onLayout={[Function]}
-          style={null}
-        >
-          RegionButton
-          <View
-            style={
-              Object {
-                "backgroundColor": "#121212",
-                "height": 1,
-              }
-            }
-          />
-        </View>
         <View
           onLayout={[Function]}
           style={null}
@@ -319,6 +270,7 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
               "subTitle": "Daily",
               "title": "UK",
             },
+            "locale": "en_GB",
             "notificationUTCOffset": 3,
             "subTitle": "Published from London every 
 morning by 6am (GMT)",
@@ -332,24 +284,12 @@ morning by 6am (GMT)",
               "subTitle": "Weekend",
               "title": "Australia",
             },
+            "locale": "en_AU",
             "notificationUTCOffset": -5,
             "subTitle": "Published from Sydney every 
 Saturday by 6 am (AEST)",
             "title": "Australia Weekend",
             "topic": "au",
-          },
-          Object {
-            "edition": "american-edition",
-            "editionType": "Regional",
-            "header": Object {
-              "subTitle": "Weekend",
-              "title": "US",
-            },
-            "notificationUTCOffset": 8,
-            "subTitle": "Published from New York every 
-Saturday morning by 6am (EST)",
-            "title": "US Weekend",
-            "topic": "us",
           },
         ]
       }
@@ -377,20 +317,6 @@ Saturday morning by 6am (EST)",
       windowSize={21}
     >
       <View>
-        <View
-          onLayout={[Function]}
-          style={null}
-        >
-          RegionButton
-          <View
-            style={
-              Object {
-                "backgroundColor": "#121212",
-                "height": 1,
-              }
-            }
-          />
-        </View>
         <View
           onLayout={[Function]}
           style={null}

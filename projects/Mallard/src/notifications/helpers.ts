@@ -1,38 +1,25 @@
-import {
-    PushToken,
-    registerWithNotificationService,
-} from './notification-service'
-import { RegionalEdition } from 'src/common'
-import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
-import { getDefaultEditionSlug } from 'src/hooks/use-edition-provider'
-import { PushNotificationRegistration } from './push-notifications'
 import moment, { MomentInput } from 'moment'
 import {
     pushNotificationRegistrationCache,
     pushRegisteredTokens,
 } from 'src/helpers/storage'
+import { getDefaultEdition } from 'src/hooks/use-edition-provider'
+import {
+    PushToken,
+    registerWithNotificationService,
+} from './notification-service'
+import { PushNotificationRegistration } from './push-notifications'
 
 const BASE_PUSH_TOKEN = [{ name: 'uk', type: 'editions' }] as PushToken[]
-const topicToEdition = new Map<RegionalEdition['edition'], PushToken[]>()
-topicToEdition.set(defaultRegionalEditions[1].edition, [
-    {
-        name: 'au',
-        type: 'editions',
-    },
-])
-topicToEdition.set(defaultRegionalEditions[2].edition, [
-    {
-        name: 'us',
-        type: 'editions',
-    },
-])
-topicToEdition.set(defaultRegionalEditions[0].edition, BASE_PUSH_TOKEN)
 
 const getTopicName = async (): Promise<PushToken[]> => {
-    const defaultSlug = await getDefaultEditionSlug()
-    if (defaultSlug) {
-        const chosenTopic = topicToEdition.get(defaultSlug)
-        return chosenTopic || BASE_PUSH_TOKEN
+    const defaultEdition = await getDefaultEdition()
+    if (defaultEdition) {
+        return (
+            ([
+                { name: defaultEdition.topic, type: 'editions' },
+            ] as PushToken[]) || BASE_PUSH_TOKEN
+        )
     }
     return BASE_PUSH_TOKEN
 }

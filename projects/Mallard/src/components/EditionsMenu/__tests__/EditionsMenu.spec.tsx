@@ -31,6 +31,7 @@ const regionalEditions: RegionalEdition[] = [
         editionType: 'Regional',
         topic: 'au',
         notificationUTCOffset: 1,
+        locale: 'en_GB',
     },
     {
         title: 'Australia Daily',
@@ -43,18 +44,7 @@ const regionalEditions: RegionalEdition[] = [
         editionType: 'Regional',
         topic: 'au',
         notificationUTCOffset: 1,
-    },
-    {
-        title: 'US and Cananda Weekend',
-        subTitle: 'Published every Saturday by 8am (EST)',
-        edition: editions.usWeekly as Edition,
-        header: {
-            title: 'US',
-            subTitle: 'Weekend',
-        },
-        editionType: 'Regional',
-        topic: 'au',
-        notificationUTCOffset: 1,
+        locale: 'en_AU',
     },
 ]
 

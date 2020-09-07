@@ -24,7 +24,7 @@ import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 
-interface EditionsEndpoint {
+export interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
     specialEditions: SpecialEdition[]
 }
@@ -219,7 +219,7 @@ export const EditionProvider = ({
             setSelectedEdition,
             editionsList,
         )
-    }, [])
+    }, [editionsList])
 
     /**
      * List of Editions
