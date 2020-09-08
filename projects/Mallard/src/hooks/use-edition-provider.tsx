@@ -94,13 +94,19 @@ export const getDefaultEditionSlug = async () => {
 
 export const fetchEditions = async (apiUrl: string) => {
     try {
-        const response = await fetch(apiUrl)
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Content-Type': 'application/json',
+                'cache-control': 'max-age=300',
+            },
+        })
         if (response.status !== 200) {
             throw new Error(
                 `Bad response from Editions URL - status: ${response.status}`,
             )
         }
-        return response.json()
+        const json = await response.json()
+        return json
     } catch (e) {
         e.message = `Unable to fetch ${apiUrl} : ${e.message}`
         errorService.captureException(e)
