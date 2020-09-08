@@ -28,6 +28,7 @@ const WebviewWithArticle = ({
     _ref,
     topPadding,
     origin,
+    base64images,
     ...webViewProps
 }: {
     article: Article | PictureArticle | GalleryArticle
@@ -36,6 +37,7 @@ const WebviewWithArticle = ({
     _ref?: (ref: WebView) => void
     topPadding: number
     origin: IssueOrigin
+    base64images: any
 } & WebViewProps & { onScroll?: any }) => {
     const client = useApolloClient()
     // This line ensures we don't re-render the article when
@@ -76,7 +78,12 @@ const WebviewWithArticle = ({
 
         if (origin === 'filesystem') {
             const fs = FSPaths.image(localIssueId, imageSize, image, use)
-            return Platform.OS === 'android' ? 'file:///' + fs : fs
+            const base64ImageToUse = base64images.find(
+                (img: any) => img.path === fs,
+            )
+            return Platform.OS === 'android'
+                ? 'file:///' + fs
+                : (base64ImageToUse && base64ImageToUse.base64) || fs
         }
 
         const imagePath = APIPaths.image(issueId, imageSize, image, use)

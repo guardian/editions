@@ -22,6 +22,7 @@ import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Image } from 'src/common'
 import remoteConfig from '@react-native-firebase/remote-config'
+import RNFS from 'react-native-fs'
 
 const styles = StyleSheet.create({
     block: {
@@ -137,6 +138,7 @@ const Article = ({
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
     const [imagePaths, setImagePaths] = useState([''])
+    const [base64images, setBase64images] = useState<any>([])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
     const wasShowingHeader = useUpdateWebviewVariable(
@@ -177,7 +179,33 @@ const Article = ({
                 lbCreditedImages.map(image => getImagePathFromImage(image)),
             )
         }
-        fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
+        fetchImagePaths()
+            .then(imagePaths => {
+                setImagePaths(imagePaths)
+                return imagePaths
+            })
+            .then(imagePaths =>
+                Promise.all(
+                    imagePaths.map(path => {
+                        const removeQuestionMark = path.split('?')
+                        return RNFS.readFile(
+                            removeQuestionMark[0],
+                            'base64',
+                        ).then(file => {
+                            const fileExtensionSplit = path.split('.')
+                            const fileExtension =
+                                fileExtensionSplit[
+                                    fileExtensionSplit.length - 1
+                                ]
+                            console.log(fileExtension)
+                            return {
+                                path,
+                                base64: `data:image/${fileExtension};base64,${file}`,
+                            }
+                        })
+                    }),
+                ).then(base64paths => setBase64images(base64paths)),
+            )
     }, [apiUrl, article.elements, issueId, article.image, article.type])
 
     return (
@@ -187,7 +215,6 @@ const Article = ({
                 article={article}
                 path={path}
                 scrollEnabled={true}
-                useWebKit={false}
                 allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
                 mediaPlaybackRequiresUserAction={false}
                 style={[styles.webview]}
@@ -196,6 +223,7 @@ const Article = ({
                 }}
                 topPadding={topPadding}
                 origin={origin}
+                base64images={base64images}
                 onMessage={event => {
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
