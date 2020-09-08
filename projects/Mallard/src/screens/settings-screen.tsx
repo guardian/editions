@@ -317,7 +317,9 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     ]}
                 />
 
-                {canDisplayBetaButton && <BetaButtonOption />}
+                {canDisplayBetaButton && (
+                    <BetaButtonOption navigation={navigation} />
+                )}
 
                 {isUsingProdDevtools && <DevZone />}
             </ScrollContainer>
