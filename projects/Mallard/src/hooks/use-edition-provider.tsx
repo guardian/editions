@@ -92,7 +92,9 @@ export const getDefaultEditionSlug = async () => {
     return defaultEdition ? defaultEdition.edition : null
 }
 
-export const fetchEditions = async (apiUrl: string) => {
+export const fetchEditions = async (
+    apiUrl: string,
+): Promise<EditionsEndpoint | null> => {
     try {
         const response = await fetch(apiUrl, {
             headers: {
