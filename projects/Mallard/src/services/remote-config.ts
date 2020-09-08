@@ -44,6 +44,9 @@ class RemoteConfigService implements RemoteConfig {
                             console.log('Remote config NOT activated!')
                         }
                     })
+                    .catch(() => {
+                        console.log('Remote config failed to fetch')
+                    })
             })
             .catch(() => {
                 console.log(
