@@ -128,7 +128,7 @@ const betaProgrammeFAQsHtml = html`
         and accessing the settings screen from the cog icon on the top left
         corner of the screen
     </p>
-    <p>5. Allow notifications so that you can be aware of new updates</p>
+    <p>5. <strong>Allow notifications so that you can be aware of new updates</strong></p>
     <p>On Android phones and tablets:</p>
     <p>
         1. Open the following link on your device:
@@ -160,10 +160,10 @@ const betaProgrammeFAQsHtml = html`
     </p>
     <p>
         2. Choose if you want to include diagnostic information* or not to your
-        email Describe the steps that led to the bug.
+        email 
     </p>
     <p>
-        3. Please be as descriptive as possible to help us find and fix the
+        3. Describe the steps that led to the bug. Please be as descriptive as possible to help us find and fix the
         issue
     </p>
     <p>
