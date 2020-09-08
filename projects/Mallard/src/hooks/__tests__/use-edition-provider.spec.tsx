@@ -35,7 +35,7 @@ describe('useEditions', () => {
             const editionSlug = await getSelectedEditionSlug()
             expect(editionSlug).toEqual(BASE_EDITION.edition)
         })
-        it('should return "australian-edition" slug when the US edition is set', async () => {
+        it('should return "australian-edition" slug when the AU edition is set', async () => {
             await selectedEditionCache.set(defaultRegionalEditions[1])
             const editionSlug = await getSelectedEditionSlug()
             expect(editionSlug).toEqual('australian-edition')
