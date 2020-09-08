@@ -579,6 +579,8 @@ export interface EditionsList {
     trainingEditions: TrainingEdition[]
 }
 
+export type Locale = 'en_GB' | 'en_AU'
+
 interface EditionInterface {
     title: string
     subTitle: string
@@ -596,7 +598,9 @@ interface EditionInterface {
 // and in future Regional/Training editions may have unique properties
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface RegionalEdition extends EditionInterface {}
+export interface RegionalEdition extends EditionInterface {
+    locale: Locale
+}
 
 // disabling tslint here as  it's useful to give this types a different name
 // and in future Regional/Training editions may have unique properties

@@ -4,6 +4,7 @@ import {
     selectedEditionCache,
 } from 'src/helpers/storage'
 import { BASE_EDITION, defaultEditionDecider } from '../use-edition-provider'
+import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
 
 jest.mock('src/services/remote-config', () => ({
     remoteConfigService: {
@@ -23,8 +24,16 @@ describe('useEditions', () => {
         it('should set the BASE EDITION if locale is not in the list', async () => {
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
+            const editionsList = {
+                regionalEditions: defaultRegionalEditions,
+                specialEditions: [],
+            }
 
-            await defaultEditionDecider(defaultLocalState, selectedLocalState)
+            await defaultEditionDecider(
+                defaultLocalState,
+                selectedLocalState,
+                editionsList,
+            )
             expect(defaultLocalState).toBeCalledTimes(1)
             expect(defaultLocalState).toBeCalledWith(BASE_EDITION)
             expect(selectedLocalState).toBeCalledTimes(1)
