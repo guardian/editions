@@ -30,8 +30,7 @@ interface SliderTitleProps {
     editionDate: Date | undefined //temporary until we have subtitles for the last 30 editions
 }
 
-//** test to remove isTablet: boolean** //const styles = (color: string, location: string, isTablet: boolean) => {
-const styles = (color: string, location: string) => {
+const styles = (color: string, location: string, isTablet: boolean) => {
     const titleShared = {
         color,
         fontFamily: getFont('titlepiece', 1).fontFamily,
@@ -39,14 +38,14 @@ const styles = (color: string, location: string) => {
 
     const titleArticle = {
         ...titleShared,
-        fontSize: getFont('titlepiece', 1.1).fontSize,
-        lineHeight: getFont('titlepiece', 1.1).lineHeight,
+        fontSize: isTablet ? 30 : 20,
+        lineHeight: isTablet ? 33 : 22,
     }
 
     const titleFront = {
         ...titleShared,
-        fontSize: getFont('titlepiece', 1.4).fontSize,
-        lineHeight: getFont('titlepiece', 1.4).lineHeight,
+        fontSize: isTablet ? 38 : 28,
+        lineHeight: isTablet ? 42 : 32,
     }
 
     const title = location === 'article' ? titleArticle : titleFront
