@@ -30,7 +30,8 @@ interface SliderTitleProps {
     editionDate: Date | undefined //temporary until we have subtitles for the last 30 editions
 }
 
-const styles = (color: string, location: string, isTablet: boolean) => {
+//** test to remove isTablet: boolean** //const styles = (color: string, location: string, isTablet: boolean) => {
+const styles = (color: string, location: string) => {
     const titleShared = {
         color,
         fontFamily: getFont('titlepiece', 1).fontFamily,
