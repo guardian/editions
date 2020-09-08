@@ -99,7 +99,7 @@ const betaProgrammeFAQsHtml = html`
         Thank you for your interest in the Guardian Editions beta. The beta
         version of the Guardian Editions app (current Daily app) provides you
         access to new developments in the app and also the new Australia Weekend
-        editions.
+        edition.
     </p>
     <p>
         By joining our beta programme, you&rsquo;ll be helping us deliver the
