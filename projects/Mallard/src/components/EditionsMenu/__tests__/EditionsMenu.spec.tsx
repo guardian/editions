@@ -72,6 +72,8 @@ Monthly`,
             title: 'Food',
             subTitle: 'Monthly',
         },
+        buttonImageUri:
+            'https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png',
         buttonStyle: {
             backgroundColor: '#FEEEF7',
             expiry: {
