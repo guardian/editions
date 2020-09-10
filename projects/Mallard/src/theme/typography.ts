@@ -280,7 +280,7 @@ const scale = {
                 lineHeight: 20,
             },
         },
-        // 1.1 is just for article titles
+        // 1.1 is NOT in the design system - for use only in SliderTitle
         1.1: {
             [Breakpoints.smallPhone]: {
                 fontSize: 18,
@@ -305,7 +305,7 @@ const scale = {
                 lineHeight: 26,
             },
         },
-        // 1.4 is just for fronts section titles and sub-titles
+        // 1.4 is NOT in the design system - for use only in SliderTitle
         1.4: {
             [Breakpoints.smallPhone]: {
                 fontSize: 24,
