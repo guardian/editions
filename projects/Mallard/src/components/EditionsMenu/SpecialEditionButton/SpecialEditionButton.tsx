@@ -1,7 +1,7 @@
 import moment from 'moment'
 import React, { useState } from 'react'
 import { Text, TouchableWithoutFeedback, View, Image } from 'react-native'
-import { SpecialEditionButtonStyles } from '../../../../../Apps/common/src'
+import { SpecialEditionButtonStyles } from 'src/common'
 import { styles } from './styles'
 
 const SpecialEditionButton = ({
