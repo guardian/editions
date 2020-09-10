@@ -40,6 +40,7 @@ Images on fronts normally take up the full width of the container they are in[1]
 [1] Except for this image which is 100% height but only 50% width!
 
 <img src="https://github.com/guardian/editions/raw/master/docs/images/width-constrained-image.jpeg" width="400" alt="width constrained image">
+
 ### Text
 
 Text is a bit more complex! Currently headline font sizes are determined in the `getFontSize` function in [text-block.ts](https://github.com/guardian/editions/blob/e9f0a1f8d301f8a0011111432c96a0a6b3725519/projects/Mallard/src/components/front/items/helpers/text-block.tsx#L38). The trail text font size (confusingly) lives in a file called [standfirst.tsx](https://github.com/guardian/editions/blob/master/projects/Mallard/src/components/front/items/helpers/standfirst.tsx#L8). The decimal numbers you see in these files correspond to values set in [typography.ts](https://github.com/guardian/editions/blob/master/projects/Mallard/src/theme/typography.ts)
