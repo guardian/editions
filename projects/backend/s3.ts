@@ -185,7 +185,7 @@ export const s3Put = async (path: Path, data: string) => {
             Bucket: getEditionsBucket(path.bucket),
             Body: data,
             ContentType: 'application/json',
-            CacheControl: `max-age=60`,
+            CacheControl: 'max-age=60',
         })
         .promise()
         .catch(error => {
