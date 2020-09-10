@@ -14,7 +14,7 @@ const SpecialEditionButton = ({
     title,
 }: {
     expiry: Date
-    buttonImageUri?: string
+    buttonImageUri: string
     onPress: () => void
     selected?: boolean
     style: SpecialEditionButtonStyles
