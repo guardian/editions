@@ -6,7 +6,7 @@ jest.mock('react-native-device-info', () => ({
 
 jest.mock('react-native/Libraries/Utilities/Dimensions', () => {
     const Dimensions = {
-        get: anything => {
+        get: () => {
             return { width: 700, height: 100 }
         },
     }
