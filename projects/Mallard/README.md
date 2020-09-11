@@ -112,3 +112,12 @@ yarn cache clean &&
 yarn install &&
 yarn start -- --reset-cache
 ```
+
+### Update credits page content
+
+We can use an auto credits generator tool to scan package.json file and generates a `credits` content. There are many tools out there. We can use `credits-generator` for this purpose. If we do use this tool then steps are:
+
+1. run `npx @opengovsg/credits-generator` - this will produce a CREDITS.md file
+2. Copy the content of `CREDITS.md` file and convert it into html (https://markdowntohtml.com/ can be use for this purpose)
+3. Converted html needs to be `string escapped` so we use it in a json file (https://www.freeformatter.com/json-escape.html can be use for this purpose)
+4. Copy the string escapped html content and paste inside `credits.json` file under `bodyHtml`

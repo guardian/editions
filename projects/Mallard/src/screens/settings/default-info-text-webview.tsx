@@ -9,6 +9,9 @@ import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes'
 
 const styles: string = css`
     ${generateAssetsFontCss({ fontFamily: 'GuardianTextEgyptian-Reg' })}
+    body {
+        word-wrap: break-word;
+    }
     * {
         margin: 0;
         padding: 0;

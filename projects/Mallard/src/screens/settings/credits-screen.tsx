@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 
-const termsAndConditionsHtml = require('src/constants/settings/credits.json')
-    .bodyHtml
+const CreditsScreen = () => {
+    const [htmlData, setHtmlData] = useState('loading...')
 
-const CreditsScreen = () => (
-    <DefaultInfoTextWebview html={termsAndConditionsHtml} />
-)
+    useEffect(() => {
+        setHtmlData(require('src/constants/settings/credits.json').bodyHtml)
+    })
+
+    return <DefaultInfoTextWebview html={htmlData} />
+}
 
 CreditsScreen.navigationOptions = {
     title: 'Credits',
