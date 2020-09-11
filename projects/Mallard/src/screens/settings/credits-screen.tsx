@@ -6,7 +6,7 @@ const CreditsScreen = () => {
 
     useEffect(() => {
         setHtmlData(require('src/constants/settings/credits.json').bodyHtml)
-    })
+    }, [])
 
     return <DefaultInfoTextWebview html={htmlData} />
 }
