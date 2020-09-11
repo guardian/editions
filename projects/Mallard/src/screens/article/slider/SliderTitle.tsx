@@ -30,7 +30,7 @@ interface SliderTitleProps {
     editionDate: Date | undefined //temporary until we have subtitles for the last 30 editions
 }
 
-const styles = (color: string, location: string, isTablet: boolean) => {
+const styles = (color: string, location: string) => {
     const titleShared = {
         color,
         fontFamily: getFont('titlepiece', 1).fontFamily,
@@ -38,14 +38,14 @@ const styles = (color: string, location: string, isTablet: boolean) => {
 
     const titleArticle = {
         ...titleShared,
-        fontSize: isTablet ? 30 : 20,
-        lineHeight: isTablet ? 33 : 22,
+        fontSize: getFont('titlepiece', 1.1).fontSize,
+        lineHeight: getFont('titlepiece', 1.1).lineHeight,
     }
 
     const titleFront = {
         ...titleShared,
-        fontSize: isTablet ? 38 : 28,
-        lineHeight: isTablet ? 42 : 32,
+        fontSize: getFont('titlepiece', 1.4).fontSize,
+        lineHeight: getFont('titlepiece', 1.4).lineHeight,
     }
 
     const title = location === 'article' ? titleArticle : titleFront
@@ -79,8 +79,7 @@ const SliderTitle = React.memo(
         startIndex,
         editionDate,
     }: SliderTitleProps) => {
-        const isTablet = DeviceInfo.isTablet()
-        const appliedStyle = styles(color, location, isTablet)
+        const appliedStyle = styles(color, location)
         // takes a key e.g. O:Top Stories and provides the end part
         const transformedSubtitle =
             subtitle && subtitle.split(':')[subtitle.split(':').length - 1]
