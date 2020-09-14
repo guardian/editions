@@ -1,6 +1,11 @@
 import { Edition, hasFailed, EditionInterface } from '../../common'
 import { getEditions } from '../utils/backend-client'
 
+const getTitle = (list: EditionInterface[], editionId: string) => {
+    const match = list.find(l => l.edition === editionId)
+    return match && match.title
+}
+
 export const getEditionDisplayName = async (editionId: Edition) => {
     const maybeEditionsList = await getEditions()
 
@@ -9,17 +14,15 @@ export const getEditionDisplayName = async (editionId: Edition) => {
         throw new Error(`Could not fetch editions list`)
     }
 
-    const allEditions: EditionInterface[] = maybeEditionsList.regionalEditions
-        .concat(maybeEditionsList.specialEditions)
-        .concat(maybeEditionsList.trainingEditions)
+    const editionTitle =
+        getTitle(maybeEditionsList.regionalEditions, editionId) ||
+        getTitle(maybeEditionsList.specialEditions, editionId)
 
-    const edition = allEditions.find(e => e.edition === editionId)
-
-    if (!edition) {
+    if (!editionTitle) {
         throw new Error(
-            `${edition} missing in editionToName mapping. Editions List: ${allEditions}`,
+            `${editionId} missing in editionToName mapping. Editions List: ${maybeEditionsList}`,
         )
     }
 
-    return edition.title
+    return editionTitle
 }
