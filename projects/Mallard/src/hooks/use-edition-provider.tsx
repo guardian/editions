@@ -116,7 +116,7 @@ export const fetchEditions = async (
     }
 }
 
-const removeExpiredSpecialEditions = (
+export const removeExpiredSpecialEditions = (
     editionsList: EditionsList,
 ): EditionsList => {
     return {
