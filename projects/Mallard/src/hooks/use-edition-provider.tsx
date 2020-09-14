@@ -24,6 +24,9 @@ import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 
+// NOTE: This is *almost* a duplicate of the EditionsList type except without trainingEditions
+// the editions client doesn't care about trainingEditions (but the backend does), so here in the client
+// we use a type without trainingEditions so we can ignore them
 export interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
     specialEditions: SpecialEdition[]
