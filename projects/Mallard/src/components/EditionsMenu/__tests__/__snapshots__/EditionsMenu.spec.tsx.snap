@@ -175,6 +175,7 @@ Saturday by 6 am (AEST)",
       data={
         Array [
           Object {
+            "buttonImageUri": "https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png",
             "buttonStyle": Object {
               "backgroundColor": "#FEEEF7",
               "expiry": Object {
@@ -206,10 +207,6 @@ Saturday by 6 am (AEST)",
             "header": Object {
               "subTitle": "Monthly",
               "title": "Food",
-            },
-            "image": Object {
-              "path": "/path/to/image",
-              "source": "media",
             },
             "notificationUTCOffset": 1,
             "subTitle": "Store cupboard special: 20 quick and easy lockdown suppers",

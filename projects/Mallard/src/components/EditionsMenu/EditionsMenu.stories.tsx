@@ -10,12 +10,8 @@ const props: { specialEditions: SpecialEdition[] } = {
         {
             edition: 'daily-edition' as Edition,
             expiry: new Date(98, 1),
-            devUri:
+            buttonImageUri:
                 'https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png',
-            image: {
-                source: 'media',
-                path: '/path/to/image',
-            },
             topic: 'food',
             editionType: 'Special',
             notificationUTCOffset: 0,

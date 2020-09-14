@@ -1,17 +1,12 @@
 import moment from 'moment'
 import React, { useState } from 'react'
-import { Text, TouchableWithoutFeedback, View } from 'react-native'
-import { ImageResource } from 'src/components/front/image-resource'
-import {
-    Image,
-    SpecialEditionButtonStyles,
-} from '../../../../../Apps/common/src'
+import { Text, TouchableWithoutFeedback, View, Image } from 'react-native'
+import { SpecialEditionButtonStyles } from 'src/common'
 import { styles } from './styles'
 
 const SpecialEditionButton = ({
     expiry,
-    devUri,
-    image,
+    buttonImageUri,
     onPress,
     selected = false,
     subTitle,
@@ -19,8 +14,7 @@ const SpecialEditionButton = ({
     title,
 }: {
     expiry: Date
-    devUri?: string
-    image: Image
+    buttonImageUri: string
     onPress: () => void
     selected?: boolean
     style: SpecialEditionButtonStyles
@@ -39,12 +33,16 @@ const SpecialEditionButton = ({
             onPress={onPress}
         >
             <View style={defaultStyles.container}>
-                <ImageResource
-                    devUri={devUri}
-                    image={image}
-                    use="full-size"
-                    style={defaultStyles.image}
-                />
+                {buttonImageUri ? (
+                    <Image
+                        key={buttonImageUri}
+                        resizeMethod={'resize'}
+                        style={defaultStyles.image}
+                        source={{ uri: buttonImageUri }}
+                    />
+                ) : (
+                    <View style={defaultStyles.image}></View>
+                )}
                 <View style={defaultStyles.textBox}>
                     <Text style={defaultStyles.title}>{title}</Text>
                     <Text style={defaultStyles.subTitle}>{subTitle}</Text>
