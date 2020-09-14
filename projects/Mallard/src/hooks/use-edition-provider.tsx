@@ -116,6 +116,17 @@ export const fetchEditions = async (
     }
 }
 
+const removeExpiredSpecialEditions = (
+    editionsList: EditionsList,
+): EditionsList => {
+    return {
+        ...editionsList,
+        specialEditions: editionsList.specialEditions.filter(e =>
+            moment().isBefore(e.expiry),
+        ),
+    }
+}
+
 export const getEditions = async (
     apiUrl: string = defaultSettings.editionsUrl,
 ) => {
@@ -126,9 +137,10 @@ export const getEditions = async (
             // Grab editions list from the endpoint
             const editionsList = await fetchEditions(apiUrl)
             if (editionsList) {
+                const filteredList = removeExpiredSpecialEditions(editionsList)
                 // Successful? Store in the cache and return
-                await editionsListCache.set(editionsList)
-                return editionsList
+                await editionsListCache.set(filteredList)
+                return filteredList
             }
             // Unsuccessful, try getting it from our local storage
             const cachedEditionsList = await editionsListCache.get()
