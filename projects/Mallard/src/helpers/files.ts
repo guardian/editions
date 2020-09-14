@@ -52,12 +52,12 @@ export const prepFileSystem = async (): Promise<void> => {
         : []
 
     await Promise.all(
-        Object.values(editionIds).map(edition =>
+        editionIds.map(edition =>
             ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
         ),
     )
     await Promise.all(
-        Object.values(editionIds).map(edition =>
+        editionIds.map(edition =>
             ensureDirExists(`${FSPaths.downloadRoot}/${edition}`),
         ),
     )
