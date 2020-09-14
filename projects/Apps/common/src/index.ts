@@ -218,16 +218,10 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
     tabletXL: 1140,
 }
 
-export const Editions = [
-    'daily-edition',
-    'american-edition',
-    'australian-edition',
-    'training-edition',
-    'the-dummy-edition',
-] as const
+export type Edition = string
 
-export type Edition = typeof Editions[number]
-
+// NOTE this list is incomplete and should not be relied on for
+// a complete list of editions - instead use the API/editions endpoint
 export const editions = {
     daily: 'daily-edition' as Edition,
     ausWeekly: 'australian-edition' as Edition,
@@ -581,7 +575,7 @@ export interface EditionsList {
 
 export type Locale = 'en_GB' | 'en_AU'
 
-interface EditionInterface {
+export interface EditionInterface {
     title: string
     subTitle: string
     edition: Edition

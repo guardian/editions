@@ -65,6 +65,9 @@ export const proofArchiverStepFunction = (
         'indexerProof',
         'Generate Index',
         lambdaParams,
+        {
+            backend: backendURL,
+        },
     )
 
     issue.task.next(frontMap)

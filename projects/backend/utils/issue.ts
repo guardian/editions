@@ -1,4 +1,4 @@
-import { IssuePublicationIdentifier, Edition, Editions } from '../common'
+import { IssuePublicationIdentifier, Edition } from '../common'
 import { Path } from '../s3'
 
 const pickBucket = (asPreview: boolean) => (asPreview ? 'preview' : 'published')
@@ -6,9 +6,7 @@ const pickBucket = (asPreview: boolean) => (asPreview ? 'preview' : 'published')
 export const getEditionOrFallback = (
     maybeEdition: string | undefined,
 ): Edition => {
-    return (
-        (Editions.find(t => t === maybeEdition) as Edition) || 'daily-edition'
-    )
+    return maybeEdition || 'daily-edition'
 }
 
 export const buildIssueObjectPath = (

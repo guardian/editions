@@ -61,6 +61,7 @@ const makeImageAssetObject = (assetFiles: {
 export const getIssueSummaryInternal = (
     issuePublication: IssuePublicationIdentifier,
     assetKeys: string[],
+    name: string,
 ): IssueSummary | undefined => {
     const { edition, issueDate } = issuePublication
 
@@ -85,7 +86,6 @@ export const getIssueSummaryInternal = (
     const assets = { data, ...images }
     const localId = `${edition}/${issueDate}`
     const key = localId
-    const name = getEditionDisplayName(edition)
 
     return {
         key,
@@ -120,5 +120,7 @@ export const getIssueSummary = async (
         JSON.stringify(assetKeyList),
     )
 
-    return getIssueSummaryInternal(issuePublication, assetKeys)
+    const displayName = await getEditionDisplayName(issuePublication.edition)
+
+    return getIssueSummaryInternal(issuePublication, assetKeys, displayName)
 }

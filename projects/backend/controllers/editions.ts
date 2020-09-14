@@ -1,21 +1,23 @@
 import { Request, Response } from 'express'
-import { SpecialEdition, EditionsList } from '../../Apps/common/src'
-import { defaultRegionalEditions } from '../../Apps/common/src/editions-defaults'
-import { s3Put } from '../s3'
+import { EditionsList } from '../../Apps/common/src'
+import { s3Put, s3fetch } from '../s3'
+import { isPreview } from '../preview'
+import { hasFailed } from '../utils/try'
 
-const getSpecialEditions = (): Array<SpecialEdition> => {
-    return []
-}
+export const editionsControllerGet = async (req: Request, res: Response) => {
+    const editionsList = await s3fetch({
+        key: 'editionsList',
+        bucket: isPreview ? 'preview' : 'published',
+    })
+    if (hasFailed(editionsList)) {
+        res.status(500)
+        res.send('failed to fetch editions list - do you have credentials')
+    } else {
+        const json = await editionsList.json()
 
-const editionsList: EditionsList = {
-    regionalEditions: defaultRegionalEditions,
-    specialEditions: getSpecialEditions(),
-    trainingEditions: [],
-}
-
-export const editionsControllerGet = (req: Request, res: Response) => {
-    res.setHeader('Content-Type', 'application/json')
-    res.send(JSON.stringify(editionsList))
+        res.setHeader('Content-Type', 'application/json')
+        res.send(JSON.stringify(json))
+    }
 }
 
 const validateEdition = (edition: any) => {
@@ -65,7 +67,9 @@ export const editionsControllerPost = async (req: Request, res: Response) => {
     const editionsListValid = validateEditionsList(req.body)
     if (editionsListValid) {
         console.log(
-            `Edition list parsed successfully: ${JSON.stringify(editionsList)}`,
+            `Edition list parsed successfully: ${JSON.stringify(
+                editionsListValid,
+            )}`,
         )
         try {
             await uploadEditionsList(req.body)
