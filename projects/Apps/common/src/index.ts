@@ -218,16 +218,16 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
     tabletXL: 1140,
 }
 
-export type Edition = string
+export type EditionId = string
 
 // NOTE this list is incomplete and should not be relied on for
 // a complete list of editions - instead use the API/editions endpoint
 export const editions = {
-    daily: 'daily-edition' as Edition,
-    ausWeekly: 'australian-edition' as Edition,
-    usWeekly: 'american-edition' as Edition,
-    dummy: 'the-dummy-edition' as Edition,
-    training: 'training-edition' as Edition,
+    daily: 'daily-edition' as EditionId,
+    ausWeekly: 'australian-edition' as EditionId,
+    usWeekly: 'american-edition' as EditionId,
+    dummy: 'the-dummy-edition' as EditionId,
+    training: 'training-edition' as EditionId,
 }
 
 export const imageUseSizes: {
@@ -256,7 +256,7 @@ Don't really want to run this all the time, so it's calculated below.
     'thumb-large': { phone: 225, tablet: 385, tabletL: 510, tabletXL: 605 },
 }
 export interface IssueIdentifier {
-    edition: Edition
+    edition: EditionId
     issueDate: string
 }
 
@@ -578,7 +578,7 @@ export type Locale = 'en_GB' | 'en_AU'
 export interface EditionInterface {
     title: string
     subTitle: string
-    edition: Edition
+    edition: EditionId
     header: {
         title: string
         subTitle?: string

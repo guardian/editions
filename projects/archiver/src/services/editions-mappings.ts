@@ -1,4 +1,4 @@
-import { Edition, hasFailed, EditionInterface } from '../../common'
+import { EditionId, hasFailed, EditionInterface } from '../../common'
 import { getEditions } from '../utils/backend-client'
 
 const getTitle = (list: EditionInterface[], editionId: string) => {
@@ -6,7 +6,7 @@ const getTitle = (list: EditionInterface[], editionId: string) => {
     return match && match.title
 }
 
-export const getEditionDisplayName = async (editionId: Edition) => {
+export const getEditionDisplayName = async (editionId: EditionId) => {
     const maybeEditionsList = await getEditions()
 
     if (hasFailed(maybeEditionsList)) {

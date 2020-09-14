@@ -5,13 +5,13 @@ import {
     pickIssuePathSegments,
     getEditionOrFallback,
 } from '../issue'
-import { IssuePublicationIdentifier, Edition } from '../../common'
+import { IssuePublicationIdentifier, EditionId } from '../../common'
 import { Path } from '../../s3'
 
 const issueDate = '2019-09-11'
 const version = '2019-10-04T11:28:04.07Z'
-const dailyEdition: Edition = 'daily-edition'
-const usEdition: Edition = 'american-edition'
+const dailyEdition: EditionId = 'daily-edition'
+const usEdition: EditionId = 'american-edition'
 
 const issue: IssuePublicationIdentifier = {
     issueDate,
