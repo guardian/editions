@@ -16,7 +16,7 @@ import {
     getDefaultEdition,
     removeExpiredSpecialEditions,
 } from '../use-edition-provider'
-import { SpecialEdition, Edition } from '../../../../Apps/common/src'
+import { SpecialEdition, EditionId } from '../../../../Apps/common/src'
 
 jest.mock('@react-native-community/netinfo', () => ({
     fetch: jest.fn(() => Promise.resolve({ isConnected: true })),
@@ -30,7 +30,7 @@ jest.mock('src/services/remote-config', () => ({
 
 const specialEditions: SpecialEdition[] = [
     {
-        edition: 'special-edition-expired' as Edition,
+        edition: 'special-edition-expired' as EditionId,
         expiry: new Date(2020, 1, 1),
         editionType: 'Special',
         notificationUTCOffset: 1,
@@ -72,7 +72,7 @@ Monthly`,
         },
     },
     {
-        edition: 'special-edition-notexpired' as Edition,
+        edition: 'special-edition-notexpired' as EditionId,
         expiry: new Date(3000, 3, 1),
         editionType: 'Special',
         notificationUTCOffset: 1,
