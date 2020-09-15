@@ -30,7 +30,7 @@ import {
 } from 'src/notifications/push-tracking'
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
-import { pushRegisteredTokens } from 'src/helpers/storage'
+import { pushRegisteredTokens, showAllEditionsCache } from 'src/helpers/storage'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -57,6 +57,12 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         isDevButtonShown: showNetInfoButton,
         setIsDevButtonShown: setShowNetInfoButton,
     } = useNetInfo()
+    const [showAllEditions, setShowAllEditions] = useState(false)
+
+    const onToggleShowAllEditions = () => {
+        showAllEditionsCache.set(!showAllEditions)
+        setShowAllEditions(!showAllEditions)
+    }
     const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
     const {
         selectedEdition: { edition },
@@ -70,6 +76,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [imageSize, setImageSize] = useState('fetching...')
     const [pushTokens, setPushTokens] = useState('fetching...')
     const [downloadedIssues, setDownloadedIssues] = useState('fetching...')
+
+    // initialise local showAllEditions property
+    useEffect(() => {
+        showAllEditionsCache.get().then(v => v != null && setShowAllEditions(v))
+    }, [])
 
     useEffect(() => {
         getEdtionIssuesCount().then(stats => {
@@ -217,6 +228,19 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         onPress: () => {
                             navigation.navigate(routeNames.Edition)
                         },
+                    },
+                    {
+                        key: 'Show All Editions',
+                        title: 'Show All Editions',
+                        explainer:
+                            'Show all editions in the editions menu - including expired editions and those with 0 issues',
+                        onPress: onToggleNetInfoButton,
+                        proxy: (
+                            <Switch
+                                value={showAllEditions}
+                                onValueChange={onToggleShowAllEditions}
+                            />
+                        ),
                     },
                     {
                         key: 'Hide this menu',

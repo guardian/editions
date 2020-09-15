@@ -15,6 +15,7 @@ import {
     defaultEditionCache,
     selectedEditionCache,
     editionsListCache,
+    showAllEditionsCache,
 } from 'src/helpers/storage'
 import { errorService } from 'src/services/errors'
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
@@ -141,7 +142,10 @@ export const getEditions = async (
             // Grab editions list from the endpoint
             const editionsList = await fetchEditions(apiUrl)
             if (editionsList) {
-                const filteredList = removeExpiredSpecialEditions(editionsList)
+                const showAllEditions = await showAllEditionsCache.get()
+                const filteredList = showAllEditions
+                    ? editionsList
+                    : removeExpiredSpecialEditions(editionsList)
                 // Successful? Store in the cache and return
                 await editionsListCache.set(filteredList)
                 return filteredList

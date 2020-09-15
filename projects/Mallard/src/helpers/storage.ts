@@ -77,6 +77,8 @@ const selectedEditionCache = createAsyncCache<RegionalEdition | SpecialEdition>(
     'selectedEdition',
 )
 
+const showAllEditionsCache = createAsyncCache<boolean>('showAllEditions')
+
 const defaultEditionCache = createAsyncCache<RegionalEdition>('defaultEdition')
 
 const editionsListCache = createAsyncCache<{
@@ -159,4 +161,5 @@ export {
     editionsListCache,
     pushRegisteredTokens,
     notificationsEnabledCache,
+    showAllEditionsCache,
 }
