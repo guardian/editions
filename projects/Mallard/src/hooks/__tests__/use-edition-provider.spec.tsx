@@ -14,7 +14,9 @@ import {
     getEditions,
     getSelectedEditionSlug,
     getDefaultEdition,
+    removeExpiredSpecialEditions,
 } from '../use-edition-provider'
+import { SpecialEdition, Edition } from '../../../../Apps/common/src'
 
 jest.mock('@react-native-community/netinfo', () => ({
     fetch: jest.fn(() => Promise.resolve({ isConnected: true })),
@@ -25,6 +27,107 @@ jest.mock('src/services/remote-config', () => ({
         getBoolean: jest.fn().mockReturnValue(true),
     },
 }))
+
+const specialEditions: SpecialEdition[] = [
+    {
+        edition: 'special-edition-expired' as Edition,
+        expiry: new Date(2020, 1, 1),
+        editionType: 'Special',
+        notificationUTCOffset: 1,
+        topic: 'food',
+        title: `Food
+Monthly`,
+        subTitle: 'Store cupboard special: 20 quick and easy lockdown suppers',
+        header: {
+            title: 'Food',
+            subTitle: 'Monthly',
+        },
+        buttonImageUri:
+            'https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png',
+        buttonStyle: {
+            backgroundColor: '#FEEEF7',
+            expiry: {
+                color: '#7D0068',
+                font: 'GuardianTextSans-Regular',
+                lineHeight: 16,
+                size: 15,
+            },
+
+            subTitle: {
+                color: '#7D0068',
+                font: 'GuardianTextSans-Bold',
+                lineHeight: 20,
+                size: 17,
+            },
+            title: {
+                color: '#121212',
+                font: 'GHGuardianHeadline-Regular',
+                lineHeight: 34,
+                size: 34,
+            },
+            image: {
+                height: 134,
+                width: 87,
+            },
+        },
+    },
+    {
+        edition: 'special-edition-notexpired' as Edition,
+        expiry: new Date(3000, 3, 1),
+        editionType: 'Special',
+        notificationUTCOffset: 1,
+        topic: 'food',
+        title: `Food
+Monthly`,
+        subTitle: 'Store cupboard special: 20 quick and easy lockdown suppers',
+        header: {
+            title: 'Food',
+            subTitle: 'Monthly',
+        },
+        buttonImageUri:
+            'https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png',
+        buttonStyle: {
+            backgroundColor: '#FEEEF7',
+            expiry: {
+                color: '#7D0068',
+                font: 'GuardianTextSans-Regular',
+                lineHeight: 16,
+                size: 15,
+            },
+
+            subTitle: {
+                color: '#7D0068',
+                font: 'GuardianTextSans-Bold',
+                lineHeight: 20,
+                size: 17,
+            },
+            title: {
+                color: '#121212',
+                font: 'GHGuardianHeadline-Regular',
+                lineHeight: 34,
+                size: 34,
+            },
+            image: {
+                height: 134,
+                width: 87,
+            },
+        },
+    },
+]
+
+describe('removeExpiredSpecialEditions', () => {
+    it('should remove an expired special edition and ignore non-expired editions', () => {
+        const editionsList = {
+            ...DEFAULT_EDITIONS_LIST,
+            specialEditions: specialEditions,
+        }
+        const filteredList = removeExpiredSpecialEditions(editionsList)
+        expect(filteredList.specialEditions.length).toEqual(1)
+        expect(filteredList.specialEditions[0].edition).toEqual(
+            'special-edition-notexpired',
+        )
+    })
+})
 
 describe('useEditions', () => {
     describe('getSelectedEditionSlug', () => {

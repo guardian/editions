@@ -23,7 +23,11 @@ import { AppState, AppStateStatus } from 'react-native'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
+import moment from 'moment'
 
+// NOTE: This is *almost* a duplicate of the EditionsList type except without trainingEditions
+// the editions client doesn't care about trainingEditions (but the backend does), so here in the client
+// we use a type without trainingEditions so we can ignore them
 export interface EditionsEndpoint {
     regionalEditions: RegionalEdition[]
     specialEditions: SpecialEdition[]
@@ -116,6 +120,17 @@ export const fetchEditions = async (
     }
 }
 
+export const removeExpiredSpecialEditions = (
+    editionsList: EditionsEndpoint,
+): EditionsEndpoint => {
+    return {
+        ...editionsList,
+        specialEditions: editionsList.specialEditions.filter(e =>
+            moment().isBefore(e.expiry),
+        ),
+    }
+}
+
 export const getEditions = async (
     apiUrl: string = defaultSettings.editionsUrl,
 ) => {
@@ -126,9 +141,10 @@ export const getEditions = async (
             // Grab editions list from the endpoint
             const editionsList = await fetchEditions(apiUrl)
             if (editionsList) {
+                const filteredList = removeExpiredSpecialEditions(editionsList)
                 // Successful? Store in the cache and return
-                await editionsListCache.set(editionsList)
-                return editionsList
+                await editionsListCache.set(filteredList)
+                return filteredList
             }
             // Unsuccessful, try getting it from our local storage
             const cachedEditionsList = await editionsListCache.get()
