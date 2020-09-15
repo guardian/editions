@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { Edition, editions } from 'src/common'
+import { EditionId, editions } from 'src/common'
 import { EditionsMenu } from '../EditionsMenu'
 import { RegionalEdition, SpecialEdition } from '../../../../../Apps/common/src'
 
@@ -23,7 +23,7 @@ const regionalEditions: RegionalEdition[] = [
     {
         title: 'UK Daily',
         subTitle: 'Published every day by 12am (GMT)',
-        edition: editions.daily as Edition,
+        edition: editions.daily as EditionId,
         header: {
             title: 'UK Daily',
             subTitle: 'Daily',
@@ -36,7 +36,7 @@ const regionalEditions: RegionalEdition[] = [
     {
         title: 'Australia Daily',
         subTitle: 'Published every day by 9:30am (AEST)',
-        edition: editions.ausWeekly as Edition,
+        edition: editions.ausWeekly as EditionId,
         header: {
             title: 'Austraila',
             subTitle: 'Weekend',
@@ -50,7 +50,7 @@ const regionalEditions: RegionalEdition[] = [
 
 const specialEditions: SpecialEdition[] = [
     {
-        edition: 'daily-edition' as Edition,
+        edition: 'daily-edition' as EditionId,
         expiry: new Date(98, 1),
         editionType: 'Special',
         notificationUTCOffset: 1,

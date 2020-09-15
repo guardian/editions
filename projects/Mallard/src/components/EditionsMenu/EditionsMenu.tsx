@@ -1,6 +1,6 @@
 import React from 'react'
 import { FlatList, ScrollView } from 'react-native'
-import { Edition, RegionalEdition, SpecialEdition } from 'src/common'
+import { EditionId, RegionalEdition, SpecialEdition } from 'src/common'
 import { StoreSelectedEditionFunc } from 'src/hooks/use-edition-provider'
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
 import { EditionsMenuHeader } from './Header/Header'
@@ -17,7 +17,7 @@ const EditionsMenu = ({
 }: {
     navigationPress: () => void
     regionalEditions?: RegionalEdition[]
-    selectedEdition: Edition
+    selectedEdition: EditionId
     specialEditions?: SpecialEdition[]
     storeSelectedEdition: StoreSelectedEditionFunc
 }) => {

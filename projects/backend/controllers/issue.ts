@@ -4,7 +4,7 @@ import {
     IssueSummary,
     notNull,
     IssuePublicationIdentifier,
-    Edition,
+    EditionId,
 } from '../common'
 import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
@@ -55,7 +55,7 @@ export const getIssuesSummary = async (
      * to support /issues path
      * TODO to delete in the future
      */
-    const edition: Edition = getEditionOrFallback(maybeEdition)
+    const edition: EditionId = getEditionOrFallback(maybeEdition)
     const editionPath = buildEditionPath(maybeEdition, isPreview)
     const issueKeys = await s3List(editionPath)
 

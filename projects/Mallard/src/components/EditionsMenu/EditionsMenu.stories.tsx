@@ -2,13 +2,13 @@ import React from 'react'
 import { storiesOf } from '@storybook/react-native'
 import { withKnobs } from '@storybook/addon-knobs'
 import { EditionsMenu } from './EditionsMenu'
-import { editions, Edition } from 'src/common'
+import { editions, EditionId } from 'src/common'
 import { SpecialEdition } from '../../../../Apps/common/src'
 
 const props: { specialEditions: SpecialEdition[] } = {
     specialEditions: [
         {
-            edition: 'daily-edition' as Edition,
+            edition: 'daily-edition' as EditionId,
             expiry: new Date(98, 1),
             buttonImageUri:
                 'https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png',

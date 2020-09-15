@@ -5,13 +5,13 @@ import {
     createScheduleTime,
     shouldSchedule,
 } from './device-notifications-helpers'
-import { Edition } from '../../../../common'
+import { EditionId } from '../../../../common'
 
 export interface IssueNotificationData {
     key: string
     name: string
     issueDate: string
-    edition: Edition
+    edition: EditionId
     topic: string
     notificationUTCOffset: number
 }
