@@ -232,6 +232,8 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     {
                         key: 'Show All Editions',
                         title: 'Show All Editions',
+                        explainer:
+                            'Show all editions in the editions menu - including expired editions and those with 0 issues',
                         onPress: onToggleNetInfoButton,
                         proxy: (
                             <Switch
