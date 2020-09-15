@@ -120,8 +120,8 @@ describe('isExpired', () => {
     })
 
     it('should return true for expired editions', () => {
-        const expired = isExpired(expiredSpecialEdition)
-        expect(expired).toBe(true)
+        const expired = isExpired(specialEdition)
+        expect(expired).toBe(false)
     })
 })
 
