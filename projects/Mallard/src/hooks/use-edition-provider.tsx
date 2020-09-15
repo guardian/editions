@@ -25,6 +25,7 @@ import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 import moment from 'moment'
+import { IssueSummary, editions } from '../../../Apps/common/src'
 
 // NOTE: This is *almost* a duplicate of the EditionsList type except without trainingEditions
 // the editions client doesn't care about trainingEditions (but the backend does), so here in the client
@@ -121,31 +122,66 @@ export const fetchEditions = async (
     }
 }
 
-export const removeExpiredSpecialEditions = (
-    editionsList: EditionsEndpoint,
-): EditionsEndpoint => {
-    return {
-        ...editionsList,
-        specialEditions: editionsList.specialEditions.filter(e =>
-            moment().isBefore(e.expiry),
-        ),
+export const isExpired = (e: SpecialEdition) => moment().isAfter(e.expiry)
+
+const editionHasAtLeastOneIssue = async (
+    editionId: string,
+    apiUrl: string,
+): Promise<boolean> => {
+    const response = await fetch(`${apiUrl}${editionId}/issues`, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    if (response.status !== 200) {
+        return false
     }
+    const res: Array<IssueSummary> = await response.json()
+    return res.length > 0
 }
 
-export const getEditions = async (
-    apiUrl: string = defaultSettings.editionsUrl,
-) => {
+const filterSpecialEditions = async (
+    editionsList: SpecialEdition[],
+    apiUrl: string,
+): Promise<SpecialEdition[]> => {
+    const withOneIssue = await Promise.all(
+        editionsList.map(e => editionHasAtLeastOneIssue(e.edition, apiUrl)),
+    )
+    return editionsList.filter(
+        (e, index) => !isExpired(e) && withOneIssue[index],
+    )
+}
+
+const filterEditionsList = async (
+    editionsList: EditionsEndpoint,
+    apiUrl: string,
+    showAll: boolean,
+): Promise<EditionsEndpoint> => {
+    return showAll
+        ? editionsList
+        : {
+              ...editionsList,
+              specialEditions: await filterSpecialEditions(
+                  editionsList.specialEditions,
+                  apiUrl,
+              ),
+          }
+}
+
+export const getEditions = async (apiUrl: string = defaultSettings.apiUrl) => {
     try {
         const { isConnected } = await NetInfo.fetch()
         // We are connected
         if (isConnected) {
             // Grab editions list from the endpoint
-            const editionsList = await fetchEditions(apiUrl)
+            const editionsList = await fetchEditions(editionsEndpoint(apiUrl))
             if (editionsList) {
                 const showAllEditions = await showAllEditionsCache.get()
-                const filteredList = showAllEditions
-                    ? editionsList
-                    : removeExpiredSpecialEditions(editionsList)
+                const filteredList = await filterEditionsList(
+                    editionsList,
+                    apiUrl,
+                    showAllEditions || false,
+                )
                 // Successful? Store in the cache and return
                 await editionsListCache.set(filteredList)
                 return filteredList
@@ -232,7 +268,7 @@ export const EditionProvider = ({
     const [defaultEdition, setDefaultEdition] = useState<RegionalEdition>(
         BASE_EDITION,
     )
-    const apiUrl = editionsEndpoint(useApiUrl() || defaultSettings.apiUrl)
+    const apiUrl = useApiUrl() || defaultSettings.apiUrl
 
     /**
      * Default Edition and Selected
