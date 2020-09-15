@@ -2,7 +2,7 @@ import { unzip } from 'react-native-zip-archive'
 import RNFS from 'react-native-fs'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
-import { IssueSummary, editions } from '../../../Apps/common/src'
+import { IssueSummary, EditionInterface } from '../../../Apps/common/src'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
@@ -11,7 +11,7 @@ import { londonTime } from './date'
 import { withCache } from './fetch/cache'
 import { updateListeners } from 'src/download-edition/download-and-unzip'
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
-
+import { editionsListCache } from 'src/helpers/storage'
 interface BasicFile {
     filename: string
     path: string
@@ -35,19 +35,29 @@ export const fileIsIssue = (file: File): file is IssueFile =>
 export const ensureDirExists = (dir: string): Promise<void> =>
     RNFS.mkdir(dir).catch(() => Promise.resolve())
 
+const extractEditionIds = (editionList: EditionInterface[]) =>
+    editionList.map(e => e.edition)
+
 /*
 We always try to prep the file system before accessing issuesDir
 */
 export const prepFileSystem = async (): Promise<void> => {
     await ensureDirExists(FSPaths.issuesDir)
     await ensureDirExists(FSPaths.downloadRoot)
+    const editionsList = await editionsListCache.get()
+    const editionIds = editionsList
+        ? extractEditionIds(editionsList.regionalEditions).concat(
+              extractEditionIds(editionsList.specialEditions),
+          )
+        : []
+
     await Promise.all(
-        Object.values(editions).map(edition =>
+        editionIds.map(edition =>
             ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
         ),
     )
     await Promise.all(
-        Object.values(editions).map(edition =>
+        editionIds.map(edition =>
             ensureDirExists(`${FSPaths.downloadRoot}/${edition}`),
         ),
     )
