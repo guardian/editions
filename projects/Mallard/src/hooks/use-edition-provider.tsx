@@ -25,7 +25,7 @@ import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 import moment from 'moment'
-import { IssueSummary, editions } from '../../../Apps/common/src'
+import { IssueSummary } from '../../../Apps/common/src'
 
 // NOTE: This is *almost* a duplicate of the EditionsList type except without trainingEditions
 // the editions client doesn't care about trainingEditions (but the backend does), so here in the client
@@ -136,8 +136,8 @@ const editionHasAtLeastOneIssue = async (
     if (response.status !== 200) {
         return false
     }
-    const res: Array<IssueSummary> = await response.json()
-    return res.length > 0
+    const issueList: Array<IssueSummary> = await response.json()
+    return issueList.length > 0
 }
 
 const filterSpecialEditions = async (
