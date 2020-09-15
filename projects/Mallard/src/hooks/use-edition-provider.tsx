@@ -23,6 +23,7 @@ import { AppState, AppStateStatus } from 'react-native'
 import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
+import moment from 'moment'
 
 // NOTE: This is *almost* a duplicate of the EditionsList type except without trainingEditions
 // the editions client doesn't care about trainingEditions (but the backend does), so here in the client
@@ -120,8 +121,8 @@ export const fetchEditions = async (
 }
 
 export const removeExpiredSpecialEditions = (
-    editionsList: EditionsList,
-): EditionsList => {
+    editionsList: EditionsEndpoint,
+): EditionsEndpoint => {
     return {
         ...editionsList,
         specialEditions: editionsList.specialEditions.filter(e =>
