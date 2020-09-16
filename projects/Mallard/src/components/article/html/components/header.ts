@@ -752,15 +752,34 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             ${threeLines};
         }
 
+        .app[data-type='${ArticleType.Interview}'] .content-wrap {
+            padding-left: ${
+                Dimensions.get('window').width > metrics.article.maxWidth
+                    ? metrics.article.sides
+                    : metrics.article.sides * 2
+            }
+        }
+
         .interview-tablet-wrapper { 
-            margin-left: ${px(
-                (Dimensions.get('window').width - metrics.article.maxWidth) / 2,
-            )};
-            margin-right: ${px(
-                (Dimensions.get('window').width - metrics.article.maxWidth) /
-                    2 +
-                    metrics.article.rightRail,
-            )};
+            margin-left: ${
+                Dimensions.get('window').width > metrics.article.maxWidth
+                    ? px(
+                          (Dimensions.get('window').width -
+                              metrics.article.maxWidth) /
+                              2,
+                      )
+                    : px(metrics.article.sides * 2)
+            };
+            margin-right: ${
+                Dimensions.get('window').width > metrics.article.maxWidth
+                    ? px(
+                          (Dimensions.get('window').width -
+                              metrics.article.maxWidth) /
+                              2 +
+                              metrics.article.rightRail,
+                      )
+                    : px(metrics.article.rightRail + metrics.article.sides)
+            };
         }
 
         .interview-tablet .standfirst--interview p {
