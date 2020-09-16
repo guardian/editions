@@ -350,7 +350,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     .map(([title, explainer]) => ({
                         key: title,
                         title,
-                        explainer: explainer + '',
+                        explainer: explainer ? explainer + '' : 'false',
                     }))
                     .concat([
                         {
