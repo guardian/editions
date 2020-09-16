@@ -755,8 +755,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         .app[data-type='${ArticleType.Interview}'] .content-wrap {
             padding-left: ${
                 Dimensions.get('window').width > metrics.article.maxWidth
-                    ? metrics.article.sides
-                    : metrics.article.sides * 2
+                    ? px(metrics.article.sides)
+                    : px(metrics.article.sides * 2)
             }
         }
 
