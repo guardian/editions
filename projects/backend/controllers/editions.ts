@@ -68,7 +68,9 @@ export const editionsControllerGet = async (req: Request, res: Response) => {
     })
     if (hasFailed(result)) {
         res.status(500)
-        res.send('failed to fetch editions list - do you have credentials')
+        res.send(
+            `failed to fetch editions list from bucket ${bucket} S3 Result: ${result}`,
+        )
     } else {
         const editionsList = (await result.json()) as { content: EditionsList }
 
