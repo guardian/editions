@@ -1,4 +1,3 @@
-import moment from 'moment'
 import React, { useState } from 'react'
 import { Text, TouchableWithoutFeedback, View, Image } from 'react-native'
 import { SpecialEditionButtonStyles } from 'src/common'
@@ -47,10 +46,7 @@ const SpecialEditionButton = ({
                     <Text style={defaultStyles.title}>{title}</Text>
                     <Text style={defaultStyles.subTitle}>{subTitle}</Text>
                     <Text style={defaultStyles.expiry}>
-                        Available until{' '}
-                        {moment(expiry)
-                            .local()
-                            .format('l')}
+                        Available until {expiry.toLocaleDateString()}
                     </Text>
                 </View>
             </View>
