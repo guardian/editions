@@ -23,9 +23,12 @@ const hasAtLeastOneIssue = async (
         s3Client,
     )
     if (hasFailed(issues)) {
+        console.log(
+            `Failed to find issue directories in bucket ${bucket}, key ${editionId}`,
+        )
         return false
     } else {
-        if (issues.length > 0) {
+        if (issues.length == 0) {
             console.log(
                 `Found ${issues.length} issue for ${editionId} in bucket ${bucket}. Removing ${editionId} from editions list.`,
             )
