@@ -6,7 +6,7 @@ import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
 
 const PUSH_TRACKING_KEY = '@push-tracking'
 
-type PushTrackingId =
+export type PushTrackingId =
     | 'notification'
     | 'pushScreenSize'
     | 'pushIssueSummaries'

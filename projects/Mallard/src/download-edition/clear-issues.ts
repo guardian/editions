@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs'
-import { pushTracking } from 'src/notifications/push-tracking'
+import { pushTracking, PushTrackingId } from 'src/notifications/push-tracking'
 import { Feature } from '../../../Apps/common/src/logging'
 import { errorService } from 'src/services/errors'
 import { FSPaths } from 'src/paths'
@@ -9,6 +9,10 @@ import {
     getLocalIssues,
     issuesToDelete,
 } from 'src/helpers/files'
+import {
+    getSelectedEditionSlug,
+    useEditions,
+} from 'src/hooks/use-edition-provider'
 
 const clearDownloadsDirectory = async () => {
     try {
@@ -52,18 +56,55 @@ const deleteIssueFiles = async (): Promise<void> => {
     await clearDownloadsDirectory()
 }
 
-const clearOldIssues = async (): Promise<void> => {
-    const files = await getLocalIssues()
-
-    const iTD: string[] = await issuesToDelete(files)
-
-    return Promise.all(iTD.map((issue: string) => deleteIssue(issue)))
-        .then(() =>
-            pushTracking('clearOldIssues', 'completed', Feature.CLEAR_ISSUES),
+// maybe this is unnecessary as James suggested we don't
+// want to delete the folders as that might cause bugs
+const deleteEditionDirectory = async (
+    editionSlug: string,
+): Promise<boolean> => {
+    const editionPath = FSPaths.editionDir(editionSlug)
+    const doesItExist = RNFS.exists(editionPath)
+    if (doesItExist) {
+        await RNFS.unlink(editionPath).catch(e =>
+            errorService.captureException(e),
         )
+        return true
+    }
+    return false
+}
+
+/**
+ * Unfinished function!
+ * @param editionsList needs to be passed in somehow
+ */
+const deleteOldEditions = async (editionsList: EditionsList) => {
+    const allFolders = await RNFS.readDir(FSPaths.issuesDir)
+    const editionFolders = allFolders.filter(f => f.name !== 'download')
+    const downloadFolders = RNFS.readDir(FSPaths.downloadRoot)
+
+    console.log(allFolders, editionFolders)
+    // difficult to fetch editions list here as useEditions is a hook so probably
+    // need to pass it in
+
+    deleteIssues(await getLocalIssues(edition), 'clearExpiredEditionIssues)
+
+}
+
+const deleteIssues = (issuesToDelete: string[], trackingId: PushTrackingId) => {
+    return Promise.all(
+        issuesToDelete.map((issue: string) => deleteIssue(issue)),
+    )
+        .then(() => pushTracking(trackingId, 'completed', Feature.CLEAR_ISSUES))
         .catch(e => {
             errorService.captureException(e)
         })
+}
+
+const clearOldIssues = async (): Promise<void> => {
+    const edition = await getSelectedEditionSlug()
+    const files = await getLocalIssues(edition)
+
+    const iTD: string[] = await issuesToDelete(files)
+    return deleteIssues(iTD, 'clearOldIssues')
 }
 
 export { clearOldIssues, deleteIssueFiles, clearDownloadsDirectory }
