@@ -24,7 +24,7 @@ const hasAtLeastOneIssue = async (
     )
     if (hasFailed(issues)) {
         console.log(
-            `Failed to find issue directories in bucket ${bucket}, key ${editionId}`,
+            `Failed to find issue directories in bucket ${bucket}, key ${editionId}. Error: ${issues.error} msg: ${issues.messages}`,
         )
         return false
     } else {
