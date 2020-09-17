@@ -61,7 +61,10 @@ const filterEditionsList = async (
 }
 
 export const editionsControllerGet = async (req: Request, res: Response) => {
-    const bucket = getFrontsBucket(isPreview ? 'preview' : 'published')
+    // we are always using the published bucket here as editionsList doesn't seem to
+    // exist in the preview bucket but leaving ternary in case we want to do something better in future
+    const bucket = getFrontsBucket(isPreview ? 'published' : 'published')
+
     const result = await s3fetch({
         key: 'editionsList',
         bucket: bucket,
