@@ -8,10 +8,7 @@ import {
     NavigationTransitionProps,
 } from 'react-navigation'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
-import {
-    supportsTransparentCards,
-    supportsAnimation,
-} from 'src/helpers/features'
+import { supportsTransparentCards } from 'src/helpers/features'
 import { getScreenPositionOfItem } from 'src/navigation/navigators/article/positions'
 import { useDimensions } from 'src/hooks/use-config-provider'
 import { color } from 'src/theme/color'
@@ -199,10 +196,9 @@ const createArticleNavigator = (
             front,
             () => animatedValue,
         ),
-        [routeNames.Article]:
-            !supportsAnimation() || !supportsTransparentCards()
-                ? wrapInBasicCard(article, () => new Animated.Value(1))
-                : wrapInSlideCard(article, () => animatedValue),
+        [routeNames.Article]: !supportsTransparentCards()
+            ? wrapInBasicCard(article, () => new Animated.Value(1))
+            : wrapInSlideCard(article, () => animatedValue),
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
@@ -216,24 +212,13 @@ const createArticleNavigator = (
         }
     }
 
-    if (!supportsAnimation()) {
-        return createStackNavigator(navigation, {
-            initialRouteName: routeNames.Issue,
-            defaultNavigationOptions: {
-                gesturesEnabled: false,
-            },
-            headerMode: 'none',
-            mode: 'modal',
-        })
-    }
-
     return createStackNavigator(navigation, {
         initialRouteName: routeNames.Issue,
         defaultNavigationOptions: {
             gesturesEnabled: false,
         },
         headerMode: 'none',
-        ...(supportsTransparentCards() && supportsAnimation()
+        ...(supportsTransparentCards()
             ? {
                   mode: 'modal',
                   transparentCard: true,
