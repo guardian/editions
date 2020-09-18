@@ -9,7 +9,7 @@ import DeviceInfo from 'react-native-device-info'
 const HEADER_LOW_END_HEIGHT = DeviceInfo.isTablet()
     ? Platform.OS === 'ios'
         ? 160
-        : 100
+        : 140
     : 110
 
 const styles = StyleSheet.create({
