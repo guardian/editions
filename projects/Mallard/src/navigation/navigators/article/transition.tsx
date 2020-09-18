@@ -16,7 +16,7 @@ const getScaleForArticle = (width: LayoutRectangle['width']) => {
 }
 
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
-    // FIXME - iOS13 hack for dodgy background scale issue
+    // FIXME - iOS13 and above hack for dodgy background scale issue
     const majorVersionIOS =
         Platform.OS === 'ios' ? parseInt(Platform.Version as string, 10) : 0
     const { position, scene } = sceneProps
@@ -34,7 +34,7 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
         outputRange: safeInterpolation([
             1,
             1,
-            majorVersionIOS === 13 ? 1 : minScale,
+            majorVersionIOS >= 13 ? 1 : minScale,
         ]),
     })
     const borderRadius = position.interpolate({
