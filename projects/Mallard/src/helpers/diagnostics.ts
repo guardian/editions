@@ -68,6 +68,7 @@ const getDiagnosticInfo = async (
     const buildNumber = DeviceInfo.getBuildNumber()
     const version = DeviceInfo.getVersion()
     const deviceId = DeviceInfo.getDeviceId()
+    const uniqueId = DeviceInfo.getUniqueId()
 
     const bytesToMb = (bytes: number) =>
         Math.floor(bytes / 1024 / 1024).toLocaleString('en')
@@ -111,6 +112,7 @@ Image Size for Downloads: ${imageSize}
 -Device-
 ${Platform.OS} Version: ${Platform.Version}
 Device Type: ${deviceId}
+Device Id: ${uniqueId}
 Network availability: ${netInfo.type}
 Privacy settings: ${gdprEntries
         .map(([key, value]) => `${key}:${value}`)
