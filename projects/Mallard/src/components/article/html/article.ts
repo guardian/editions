@@ -60,7 +60,7 @@ As well as list items bullet points from composer can be sent as a unicode chara
 This method applies a class to the bullet string in order to add stlying through css 
 */
 const cleanupBullets = (html: string) => {
-    return html.replaceAll('•', `<span class="bullet">•</span>`)
+    return html.replace(/•/g, `<span class="bullet">•</span>`)
 }
 
 const renderArticleContent = (
