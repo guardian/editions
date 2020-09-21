@@ -225,7 +225,7 @@ export class EditionsStack extends cdk.Stack {
                                 `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}/*`,
                                 `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}/*`,
                                 `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}`,
-                                `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}`,
+                                `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}`,
                             ],
                             actions: [
                                 's3:PutObject',
