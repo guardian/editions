@@ -87,22 +87,19 @@ export const s3ListDirectories = async (
             }`,
         )
     }
-    if (response.KeyCount === 0) {
+    if (!response.CommonPrefixes || response.CommonPrefixes.length === 0) {
         return failure({
             httpStatus: 404,
             error: new Error(
-                `No keys returned from listObject of ${JSON.stringify(path)}`,
+                `No directories returned from listObject of ${JSON.stringify(
+                    path,
+                )}`,
             ),
         })
+    } else {
+        const directories = response.CommonPrefixes.map(cp => cp.Prefix || '')
+        return directories
     }
-    const directories = response.CommonPrefixes
-        ? response.CommonPrefixes.map(cp => cp.Prefix || '')
-        : []
-
-    if (directories.length == 0)
-        throw new Error(`Nothing at ${JSON.stringify(path)}`)
-
-    return directories
 }
 
 export const s3List = async (
