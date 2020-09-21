@@ -7,14 +7,14 @@ import { downloadTodaysIssue } from 'src/download-edition/download-todays-issue'
 import {
     clearOldIssues,
     clearDownloadsDirectory,
-    deleteOldEditions,
+    cleanOldEditions,
 } from './clear-issues'
 
 const prepareAndDownloadTodaysIssue = async (client: ApolloClient<object>) => {
     await prepFileSystem()
     await clearOldIssues()
     await clearDownloadsDirectory()
-    await deleteOldEditions()
+    await cleanOldEditions()
     await cleanPushTrackingByDays()
     const weOk = await fetchCacheClear()
     if (weOk) {

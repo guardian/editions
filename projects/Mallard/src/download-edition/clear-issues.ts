@@ -9,12 +9,9 @@ import {
     getLocalIssues,
     issuesToDelete,
 } from 'src/helpers/files'
-import {
-    getSelectedEditionSlug,
-    useEditions,
-} from 'src/hooks/use-edition-provider'
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 import { editionsListCache } from 'src/helpers/storage'
-import { allEditionIds } from '../../../Apps/common/src/helpers'
+import { getEditionIds } from '../../../Apps/common/src/helpers'
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
 import { EditionId } from '../../../Apps/common/src'
 
@@ -107,7 +104,13 @@ const deleteOldEditionIssues = async (editionIds: EditionId[]) => {
     const issuesToClear = await Promise.all(
         rootEditionFoldersToClean.map(e => getLocalIssues(e.name)),
     )
-    issuesToClear.forEach(issues => deleteIssues(issues, 'clearOldEditions'))
+    issuesToClear.forEach(issues => {
+        try {
+            deleteIssues(issues, 'clearOldEditions')
+        } catch (error) {
+            errorService.captureException(error)
+        }
+    })
 }
 
 const cleanEditionsDownloadFolder = async (editionIds: EditionId[]) => {
@@ -117,12 +120,16 @@ const cleanEditionsDownloadFolder = async (editionIds: EditionId[]) => {
         editionIds,
     )
     // we don't care about download folders - delete them all!
-    downloadEditionFoldersToDelete.forEach(f => RNFS.unlink(f.path))
+    downloadEditionFoldersToDelete.forEach(f =>
+        RNFS.unlink(f.path).catch(e => {
+            errorService.captureException(e)
+        }),
+    )
 }
 
-const deleteOldEditions = async () => {
+const cleanOldEditions = async () => {
     const editionsList = await editionsListCache.get()
-    const editionIds = editionsList ? allEditionIds(editionsList) : []
+    const editionIds = editionsList ? getEditionIds(editionsList) : []
     await deleteOldEditionIssues(editionIds)
     await cleanEditionsDownloadFolder(editionIds)
 }
@@ -131,6 +138,6 @@ export {
     clearOldIssues,
     deleteIssueFiles,
     clearDownloadsDirectory,
-    deleteOldEditions,
+    cleanOldEditions,
     editionDirsToClean,
 }

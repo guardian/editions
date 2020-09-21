@@ -11,7 +11,6 @@ import {
 import { PushNotificationRegistration } from 'src/notifications/push-notifications'
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { PushToken } from 'src/notifications/notification-service'
-import { EditionsList } from '../../../Apps/common/src'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
