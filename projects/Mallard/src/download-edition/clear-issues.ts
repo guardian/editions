@@ -13,6 +13,10 @@ import {
     getSelectedEditionSlug,
     useEditions,
 } from 'src/hooks/use-edition-provider'
+import { editionsListCache } from 'src/helpers/storage'
+import { allEditionIds } from '../../../Apps/common/src/helpers'
+import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
+import { EditionId } from '../../../Apps/common/src'
 
 const clearDownloadsDirectory = async () => {
     try {
@@ -56,39 +60,6 @@ const deleteIssueFiles = async (): Promise<void> => {
     await clearDownloadsDirectory()
 }
 
-// maybe this is unnecessary as James suggested we don't
-// want to delete the folders as that might cause bugs
-const deleteEditionDirectory = async (
-    editionSlug: string,
-): Promise<boolean> => {
-    const editionPath = FSPaths.editionDir(editionSlug)
-    const doesItExist = RNFS.exists(editionPath)
-    if (doesItExist) {
-        await RNFS.unlink(editionPath).catch(e =>
-            errorService.captureException(e),
-        )
-        return true
-    }
-    return false
-}
-
-/**
- * Unfinished function!
- * @param editionsList needs to be passed in somehow
- */
-const deleteOldEditions = async (editionsList: EditionsList) => {
-    const allFolders = await RNFS.readDir(FSPaths.issuesDir)
-    const editionFolders = allFolders.filter(f => f.name !== 'download')
-    const downloadFolders = RNFS.readDir(FSPaths.downloadRoot)
-
-    console.log(allFolders, editionFolders)
-    // difficult to fetch editions list here as useEditions is a hook so probably
-    // need to pass it in
-
-    deleteIssues(await getLocalIssues(edition), 'clearExpiredEditionIssues)
-
-}
-
 const deleteIssues = (issuesToDelete: string[], trackingId: PushTrackingId) => {
     return Promise.all(
         issuesToDelete.map((issue: string) => deleteIssue(issue)),
@@ -107,4 +78,59 @@ const clearOldIssues = async (): Promise<void> => {
     return deleteIssues(iTD, 'clearOldIssues')
 }
 
-export { clearOldIssues, deleteIssueFiles, clearDownloadsDirectory }
+const editionDirsToClean = (
+    directoryList: { name: string; path: string }[],
+    editionList: EditionId[],
+): { name: string; path: string }[] => {
+    // we never want to delete default region editions
+    const editionsToKeep = editionList.concat(
+        defaultRegionalEditions.map(e => e.edition),
+    )
+    // don't clean hidden folders, the download folder or editions we want to keep
+    return directoryList.filter(
+        d =>
+            !d.name.startsWith('.') &&
+            d.name !== 'download' &&
+            !editionsToKeep.includes(d.name),
+    )
+}
+
+const deleteOldEditionIssues = async (editionIds: EditionId[]) => {
+    const rootFolders = await RNFS.readDir(FSPaths.issuesDir)
+
+    const rootEditionFoldersToClean = editionDirsToClean(
+        rootFolders,
+        editionIds,
+    )
+
+    // we've had issues in the past with deleting issue folders, so just delete the issues for the edition
+    const issuesToClear = await Promise.all(
+        rootEditionFoldersToClean.map(e => getLocalIssues(e.name)),
+    )
+    issuesToClear.forEach(issues => deleteIssues(issues, 'clearOldEditions'))
+}
+
+const cleanEditionsDownloadFolder = async (editionIds: EditionId[]) => {
+    const downloadFolders = await RNFS.readDir(FSPaths.downloadRoot)
+    const downloadEditionFoldersToDelete = editionDirsToClean(
+        downloadFolders,
+        editionIds,
+    )
+    // we don't care about download folders - delete them all!
+    downloadEditionFoldersToDelete.forEach(f => RNFS.unlink(f.path))
+}
+
+const deleteOldEditions = async () => {
+    const editionsList = await editionsListCache.get()
+    const editionIds = editionsList ? allEditionIds(editionsList) : []
+    await deleteOldEditionIssues(editionIds)
+    await cleanEditionsDownloadFolder(editionIds)
+}
+
+export {
+    clearOldIssues,
+    deleteIssueFiles,
+    clearDownloadsDirectory,
+    deleteOldEditions,
+    editionDirsToClean,
+}

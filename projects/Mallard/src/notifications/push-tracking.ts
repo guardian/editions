@@ -27,6 +27,7 @@ export type PushTrackingId =
     | 'downloadBlocked'
     | 'completeAndDeleteCache'
     | 'clearOldIssues'
+    | 'clearOldEditions'
     | 'backgroundFetch'
     | 'backgroundFetchStatus'
     | 'backgroundFetchError'
