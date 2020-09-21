@@ -149,6 +149,7 @@ const issueList = [
 
 jest.mock('../../s3', () => ({
     s3List: () => Promise.resolve(issueList),
+    getFrontsBucket: (bucketType: string) => `${bucketType}-editions-dev)}`,
 }))
 
 const getNthKey = (n: number) => {

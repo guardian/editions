@@ -35,7 +35,7 @@ describe('buildIssueObjectPath', () => {
         const actual = buildIssueObjectPath(issue, isPreview)
         const expected: Path = {
             key: 'daily-edition/2019-09-11/2019-10-04T11:28:04.07Z.json',
-            bucket: 'preview',
+            bucket: 'preview-editions-code',
         }
         expect(actual).toStrictEqual(expected)
     })
@@ -44,7 +44,7 @@ describe('buildIssueObjectPath', () => {
         const actual = buildIssueObjectPath(issue, isPreview)
         const expected: Path = {
             key: 'daily-edition/2019-09-11/2019-10-04T11:28:04.07Z.json',
-            bucket: 'published',
+            bucket: 'published-editions-code',
         }
         expect(actual).toStrictEqual(expected)
     })
@@ -56,7 +56,7 @@ describe('buildEditionRootPath', () => {
         const actual = buildEditionRootPath(usEdition, isPreview)
         const expected: Path = {
             key: `${usEdition}/`,
-            bucket: 'preview',
+            bucket: 'preview-editions-code',
         }
         expect(actual).toStrictEqual(expected)
     })
@@ -65,7 +65,7 @@ describe('buildEditionRootPath', () => {
         const actual = buildEditionRootPath(usEdition, isPreview)
         const expected: Path = {
             key: `${usEdition}/`,
-            bucket: 'published',
+            bucket: 'published-editions-code',
         }
         expect(actual).toStrictEqual(expected)
     })
@@ -73,7 +73,7 @@ describe('buildEditionRootPath', () => {
         const isPreview = true
         const expected: Path = {
             key: 'daily-edition/',
-            bucket: 'preview',
+            bucket: 'preview-editions-code',
         }
         expect(buildEditionRootPath('', isPreview)).toStrictEqual(expected)
         expect(buildEditionRootPath(undefined, isPreview)).toStrictEqual(
@@ -84,7 +84,7 @@ describe('buildEditionRootPath', () => {
         const isPreview = false
         const expected: Path = {
             key: 'daily-edition/',
-            bucket: 'published',
+            bucket: 'published-editions-code',
         }
         expect(buildEditionRootPath('', isPreview)).toStrictEqual(expected)
         expect(buildEditionRootPath(undefined, isPreview)).toStrictEqual(
