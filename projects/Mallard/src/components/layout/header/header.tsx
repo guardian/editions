@@ -87,6 +87,7 @@ const Header = ({
 }: HeaderProps) => {
     const { top: marginTop } = useInsets()
     const bg = theme === 'light' ? styles.backgroundWhite : styles.background
+
     return (
         <WithAppAppearance value={theme === 'light' ? 'default' : 'primary'}>
             {theme === 'light' && (

@@ -64,7 +64,11 @@ import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
-import { useEditions, BASE_EDITION } from 'src/hooks/use-edition-provider'
+import {
+    useEditions,
+    BASE_EDITION,
+    getSpecialEditionProps,
+} from 'src/hooks/use-edition-provider'
 import RNRestart from 'react-native-restart'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
@@ -358,6 +362,8 @@ const IssueScreenWithPath = React.memo(
         const isPreview = useIsPreview()
         const isProof = useIsProof()
         const response = useIssueResponse(path, isPreview)
+        const { selectedEdition } = useEditions()
+        const specialEditionProps = getSpecialEditionProps(selectedEdition)
 
         return response({
             error: handleError,
@@ -386,7 +392,14 @@ const IssueScreenWithPath = React.memo(
                                 retry()
                             }}
                         />
-                        <IssueScreenHeader issue={issue} />
+                        <IssueScreenHeader
+                            issue={issue}
+                            headerStyles={
+                                specialEditionProps
+                                    ? specialEditionProps.headerStyle
+                                    : undefined
+                            }
+                        />
 
                         <WithBreakpoints>
                             {{
