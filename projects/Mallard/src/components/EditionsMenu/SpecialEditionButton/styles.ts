@@ -63,14 +63,13 @@ const styles = ({
         image: {
             width: imageWidth,
             height: (style && style.image && style.image.height) || 134,
-            left: imageNegativeOffset,
+            marginLeft: imageNegativeOffset,
         },
         textBox: {
             flexShrink: 1,
             paddingLeft: 20,
             paddingBottom: 15,
             paddingRight: 20,
-            marginLeft: imageNegativeOffset,
         },
         title: {
             flexWrap: 'wrap',
