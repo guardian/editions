@@ -43,8 +43,11 @@ const styles = ({
 }: {
     style: SpecialEditionButtonStyles
     selected: boolean
-}) =>
-    StyleSheet.create({
+}) => {
+    const imageWidth = (style && style.image && style.image.width) || 87
+    const imageNegativeOffset = -1 * Math.floor(imageWidth / 2)
+
+    return StyleSheet.create({
         container: {
             backgroundColor:
                 (selected ? color.primary : style && style.backgroundColor) ||
@@ -58,13 +61,16 @@ const styles = ({
             ...textFormatting(selected, style && style.expiry, expiryDefaults),
         },
         image: {
-            width: (style && style.image && style.image.width) || 87,
+            width: imageWidth,
             height: (style && style.image && style.image.height) || 134,
+            left: imageNegativeOffset,
         },
         textBox: {
             flexShrink: 1,
-            paddingLeft: 10,
+            paddingLeft: 20,
             paddingBottom: 15,
+            paddingRight: 20,
+            marginLeft: imageNegativeOffset,
         },
         title: {
             flexWrap: 'wrap',
@@ -81,5 +87,6 @@ const styles = ({
             ),
         },
     })
+}
 
 export { styles }
