@@ -25,7 +25,7 @@ import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 import moment from 'moment'
-import { EditionsList } from '../../../Apps/common/src'
+import { EditionsList } from 'src/common'
 
 interface EditionState {
     editionsList: EditionsList
