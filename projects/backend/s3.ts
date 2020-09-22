@@ -18,8 +18,8 @@ export interface Path {
 }
 const stage = process.env.frontsStage || 'code'
 
-export const getFrontsBucket = (bucketType: Path['bucket']) =>
-    `${bucketType}-editions-${stage.toLowerCase()}`
+export const getFrontsBucket = (isPreview: boolean) =>
+    `${isPreview ? 'preview' : 'published'}-editions-${stage.toLowerCase()}`
 
 export const getEditionsBucket = (bucketType: string) =>
     `editions-${bucketType}-${stage.toLowerCase()}`

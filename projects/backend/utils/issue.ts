@@ -1,8 +1,6 @@
 import { IssuePublicationIdentifier, EditionId } from '../common'
 import { Path, getFrontsBucket } from '../s3'
 
-const pickBucket = (asPreview: boolean) => (asPreview ? 'preview' : 'published')
-
 export const getEditionOrFallback = (
     maybeEdition: string | undefined,
 ): EditionId => {
@@ -16,7 +14,7 @@ export const buildIssueObjectPath = (
     const { edition, issueDate, version } = issue
     return {
         key: `${edition}/${issueDate}/${version}.json`,
-        bucket: getFrontsBucket(pickBucket(asPreview)),
+        bucket: getFrontsBucket(asPreview),
     }
 }
 
@@ -27,7 +25,7 @@ export const buildEditionRootPath = (
     const edition: EditionId = getEditionOrFallback(maybeEdition)
     return {
         key: `${edition}/`,
-        bucket: getFrontsBucket(pickBucket(asPreview)),
+        bucket: getFrontsBucket(asPreview),
     }
 }
 
