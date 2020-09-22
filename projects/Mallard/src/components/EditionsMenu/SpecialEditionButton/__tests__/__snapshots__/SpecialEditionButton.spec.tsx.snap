@@ -32,6 +32,7 @@ Monthly - Special Edition Button"
     style={
       Object {
         "height": 134,
+        "marginLeft": -43,
         "width": 87,
       }
     }
@@ -41,7 +42,8 @@ Monthly - Special Edition Button"
       Object {
         "flexShrink": 1,
         "paddingBottom": 15,
-        "paddingLeft": 10,
+        "paddingLeft": 20,
+        "paddingRight": 20,
       }
     }
   >
@@ -124,6 +126,7 @@ Monthly - Special Edition Button"
     style={
       Object {
         "height": 134,
+        "marginLeft": -43,
         "width": 87,
       }
     }
@@ -133,7 +136,8 @@ Monthly - Special Edition Button"
       Object {
         "flexShrink": 1,
         "paddingBottom": 15,
-        "paddingLeft": 10,
+        "paddingLeft": 20,
+        "paddingRight": 20,
       }
     }
   >
