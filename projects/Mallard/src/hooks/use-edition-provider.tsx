@@ -25,17 +25,10 @@ import { locale } from 'src/helpers/locale'
 import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 import moment from 'moment'
-
-// NOTE: This is *almost* a duplicate of the EditionsList type except without trainingEditions
-// the editions client doesn't care about trainingEditions (but the backend does), so here in the client
-// we use a type without trainingEditions so we can ignore them
-export interface EditionsEndpoint {
-    regionalEditions: RegionalEdition[]
-    specialEditions: SpecialEdition[]
-}
+import { EditionsList } from 'src/common'
 
 interface EditionState {
-    editionsList: EditionsEndpoint
+    editionsList: EditionsList
     selectedEdition: RegionalEdition | SpecialEdition
     defaultEdition: RegionalEdition
     storeSelectedEdition: (
@@ -54,13 +47,14 @@ export interface StoreSelectedEditionFunc {
 export const DEFAULT_EDITIONS_LIST = {
     regionalEditions: defaultRegionalEditions,
     specialEditions: [],
+    trainingEditions: [],
 }
 
 export const BASE_EDITION = defaultRegionalEditions[0]
 
 const localeToEdition = (
     locale: Locale,
-    editionsList: EditionsEndpoint,
+    editionsList: EditionsList,
 ): RegionalEdition => {
     return (
         editionsList.regionalEditions.find(
@@ -99,7 +93,7 @@ export const getDefaultEditionSlug = async () => {
 
 export const fetchEditions = async (
     apiUrl: string,
-): Promise<EditionsEndpoint | null> => {
+): Promise<EditionsList | null> => {
     try {
         const response = await fetch(apiUrl, {
             headers: {
@@ -122,8 +116,8 @@ export const fetchEditions = async (
 }
 
 export const removeExpiredSpecialEditions = (
-    editionsList: EditionsEndpoint,
-): EditionsEndpoint => {
+    editionsList: EditionsList,
+): EditionsList => {
     return {
         ...editionsList,
         specialEditions: editionsList.specialEditions.filter(e =>
@@ -187,7 +181,7 @@ const setEdition = async (
 export const defaultEditionDecider = async (
     setDefaultEdition: Dispatch<RegionalEdition>,
     setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
-    editionsList: EditionsEndpoint,
+    editionsList: EditionsList,
 ): Promise<void> => {
     // When user already has default edition set then that edition
     const dE = await getDefaultEdition()
@@ -222,10 +216,9 @@ export const EditionProvider = ({
 }: {
     children: React.ReactNode
 }) => {
-    const [editionsList, setEditionsList] = useState<EditionsEndpoint>({
-        regionalEditions: defaultRegionalEditions,
-        specialEditions: [],
-    })
+    const [editionsList, setEditionsList] = useState<EditionsList>(
+        DEFAULT_EDITIONS_LIST,
+    )
     const [selectedEdition, setSelectedEdition] = useState<
         RegionalEdition | SpecialEdition
     >(BASE_EDITION)

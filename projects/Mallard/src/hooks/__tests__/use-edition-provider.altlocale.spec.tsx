@@ -27,6 +27,7 @@ describe('useEditions', () => {
             const editionsList = {
                 regionalEditions: defaultRegionalEditions,
                 specialEditions: [],
+                trainingEditions: [],
             }
 
             await defaultEditionDecider(

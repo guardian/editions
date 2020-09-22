@@ -3,7 +3,7 @@ import { Platform, Settings } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
 import { ReceiptIOS } from 'src/authentication/services/iap'
-import { RegionalEdition, SpecialEdition } from 'src/common'
+import { RegionalEdition, SpecialEdition, EditionsList } from 'src/common'
 import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
@@ -81,10 +81,7 @@ const showAllEditionsCache = createAsyncCache<boolean>('showAllEditions')
 
 const defaultEditionCache = createAsyncCache<RegionalEdition>('defaultEdition')
 
-const editionsListCache = createAsyncCache<{
-    regionalEditions: RegionalEdition[]
-    specialEditions: SpecialEdition[]
-}>('editionsList')
+const editionsListCache = createAsyncCache<EditionsList>('editionsList')
 
 const pushRegisteredTokens = createAsyncCache<PushToken[]>(
     'push-registered-tokens',
