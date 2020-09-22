@@ -12,7 +12,7 @@ export const ReloadButton: React.FC<{
                 {
                     position: 'absolute',
                     top: top + 20,
-                    left: left + 20,
+                    left: left + 60,
                     zIndex: 99999,
                 },
             ]}
