@@ -230,16 +230,12 @@ describe('useEditions', () => {
         it('should set default and selected edition local state as well as selected storage if found in default storage', async () => {
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
-            const editionsList = {
-                regionalEditions: defaultRegionalEditions,
-                specialEditions: [],
-            }
             defaultEditionCache.set(defaultRegionalEditions[1])
 
             await defaultEditionDecider(
                 defaultLocalState,
                 selectedLocalState,
-                editionsList,
+                DEFAULT_EDITIONS_LIST,
             )
             expect(defaultLocalState).toBeCalledTimes(1)
             expect(defaultLocalState).toBeCalledWith(defaultRegionalEditions[1])
@@ -256,15 +252,11 @@ describe('useEditions', () => {
             // defaultRegionalEditions[1] = AU and locale mock = AU
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
-            const editionsList = {
-                regionalEditions: defaultRegionalEditions,
-                specialEditions: [],
-            }
 
             await defaultEditionDecider(
                 defaultLocalState,
                 selectedLocalState,
-                editionsList,
+                DEFAULT_EDITIONS_LIST,
             )
             expect(defaultLocalState).toBeCalledTimes(1)
             expect(defaultLocalState).toBeCalledWith(defaultRegionalEditions[1])
