@@ -31,7 +31,7 @@ jest.mock('src/services/remote-config', () => ({
 const specialEditions: SpecialEdition[] = [
     {
         edition: 'special-edition-expired' as EditionId,
-        expiry: new Date(2020, 1, 1),
+        expiry: new Date(2020, 1, 1).toISOString(),
         editionType: 'Special',
         notificationUTCOffset: 1,
         topic: 'food',
@@ -73,7 +73,7 @@ Monthly`,
     },
     {
         edition: 'special-edition-notexpired' as EditionId,
-        expiry: new Date(3000, 3, 1),
+        expiry: new Date(3000, 3, 1).toISOString(),
         editionType: 'Special',
         notificationUTCOffset: 1,
         topic: 'food',
