@@ -73,9 +73,9 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
     const path = `${URL}editions`
     console.log(`Attempt to get editions list from path: ${path}`)
     const response = await fetch(path)
-    const maybeEditionsList = await attempt(response.json() as Promise<{
-        content: EditionsList
-    }>)
+    const maybeEditionsList = await attempt(response.json() as Promise<
+        EditionsList
+    >)
     console.log(`Got response: ${JSON.stringify(maybeEditionsList)}`)
     if (hasFailed(maybeEditionsList)) {
         return withFailureMessage(
@@ -83,5 +83,5 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
             `Failed to download editions list from ${path}`,
         )
     }
-    return maybeEditionsList.content
+    return maybeEditionsList
 }

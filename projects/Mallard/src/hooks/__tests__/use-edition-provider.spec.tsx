@@ -16,7 +16,7 @@ import {
     getDefaultEdition,
     removeExpiredSpecialEditions,
 } from '../use-edition-provider'
-import { SpecialEdition, Edition } from '../../../../Apps/common/src'
+import { SpecialEdition, EditionId } from '../../../../Apps/common/src'
 
 jest.mock('@react-native-community/netinfo', () => ({
     fetch: jest.fn(() => Promise.resolve({ isConnected: true })),
@@ -30,8 +30,8 @@ jest.mock('src/services/remote-config', () => ({
 
 const specialEditions: SpecialEdition[] = [
     {
-        edition: 'special-edition-expired' as Edition,
-        expiry: new Date(2020, 1, 1),
+        edition: 'special-edition-expired' as EditionId,
+        expiry: new Date(2020, 1, 1).toISOString(),
         editionType: 'Special',
         notificationUTCOffset: 1,
         topic: 'food',
@@ -72,8 +72,8 @@ Monthly`,
         },
     },
     {
-        edition: 'special-edition-notexpired' as Edition,
-        expiry: new Date(3000, 3, 1),
+        edition: 'special-edition-notexpired' as EditionId,
+        expiry: new Date(3000, 3, 1).toISOString(),
         editionType: 'Special',
         notificationUTCOffset: 1,
         topic: 'food',
@@ -230,16 +230,12 @@ describe('useEditions', () => {
         it('should set default and selected edition local state as well as selected storage if found in default storage', async () => {
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
-            const editionsList = {
-                regionalEditions: defaultRegionalEditions,
-                specialEditions: [],
-            }
             defaultEditionCache.set(defaultRegionalEditions[1])
 
             await defaultEditionDecider(
                 defaultLocalState,
                 selectedLocalState,
-                editionsList,
+                DEFAULT_EDITIONS_LIST,
             )
             expect(defaultLocalState).toBeCalledTimes(1)
             expect(defaultLocalState).toBeCalledWith(defaultRegionalEditions[1])
@@ -256,15 +252,11 @@ describe('useEditions', () => {
             // defaultRegionalEditions[1] = AU and locale mock = AU
             const defaultLocalState = jest.fn()
             const selectedLocalState = jest.fn()
-            const editionsList = {
-                regionalEditions: defaultRegionalEditions,
-                specialEditions: [],
-            }
 
             await defaultEditionDecider(
                 defaultLocalState,
                 selectedLocalState,
-                editionsList,
+                DEFAULT_EDITIONS_LIST,
             )
             expect(defaultLocalState).toBeCalledTimes(1)
             expect(defaultLocalState).toBeCalledWith(defaultRegionalEditions[1])

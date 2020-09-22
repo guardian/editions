@@ -116,8 +116,9 @@ const Login = ({
     const [showError, setShowError] = useState(false)
 
     const onInputChange = (fn: (value: string) => void) => (value: string) => {
+        const email = value.trim()
         setShowError(false)
-        fn(value)
+        fn(email)
     }
 
     return (

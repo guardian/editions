@@ -8,7 +8,7 @@ import {
 } from '../common'
 import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
-import { s3List } from '../s3'
+import { s3List, s3FrontsClient } from '../s3'
 import { Attempt, hasFailed } from '../utils/try'
 import {
     buildEditionRootPath as buildEditionPath,
@@ -57,7 +57,7 @@ export const getIssuesSummary = async (
      */
     const edition: EditionId = getEditionOrFallback(maybeEdition)
     const editionPath = buildEditionPath(maybeEdition, isPreview)
-    const issueKeys = await s3List(editionPath)
+    const issueKeys = await s3List(editionPath, s3FrontsClient)
 
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')

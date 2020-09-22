@@ -14,9 +14,9 @@ const basicMetrics = {
 const buttonHeight = getFont('sans', 1).fontSize + basicMetrics.vertical * 2.5
 const sides = basicMetrics.horizontal
 
-// FIXME - iOS13 hack for dodgy background scale issue
+// FIXME - iOS13 and above hack for dodgy background scale issue
 const slideCardSpacing = () => {
-    if (Platform.OS === 'ios' && iosMajorVersion === 13) {
+    if (Platform.OS === 'ios' && iosMajorVersion >= 13) {
         return 40
     } else if (Platform.OS === 'ios') {
         return spacing[5]

@@ -2,7 +2,6 @@ import ViewPagerAndroid from '@react-native-community/viewpager'
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Platform, StyleSheet, View } from 'react-native'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
-import { supportsAnimation } from 'src/helpers/features'
 import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
 import { getAppearancePillar } from 'src/hooks/use-article'
@@ -305,32 +304,18 @@ const ArticleSlider = React.memo(
                             position={index}
                             onShouldShowHeaderChange={onShouldShowHeaderChange}
                             shouldShowHeader={shouldShowHeader}
-                            topPadding={
-                                supportsAnimation()
-                                    ? HEADER_HIGH_END_HEIGHT
-                                    : HEADER_LOW_END_HEIGHT
-                            }
+                            topPadding={HEADER_HIGH_END_HEIGHT}
                             onIsAtTopChange={onIsAtTopChange}
                         />
                     )}
                 />
 
-                {!supportsAnimation() && (
-                    <SliderHeaderLowEnd
-                        isShown={shouldShowHeader}
-                        isAtTop={isAtTop}
-                        sliderDetails={sliderDetails}
-                    />
-                )}
-
-                {supportsAnimation() && (
-                    <SliderHeaderHighEnd
-                        isShown={shouldShowHeader}
-                        isAtTop={isAtTop}
-                        panResponder={panResponder}
-                        sliderDetails={sliderDetails}
-                    />
-                )}
+                <SliderHeaderHighEnd
+                    isShown={shouldShowHeader}
+                    isAtTop={isAtTop}
+                    panResponder={panResponder}
+                    sliderDetails={sliderDetails}
+                />
 
                 {preview && (
                     <PreviewControls goNext={goNext} goPrevious={goPrevious} />

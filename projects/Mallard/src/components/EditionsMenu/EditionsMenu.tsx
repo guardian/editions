@@ -60,7 +60,7 @@ const EditionsMenu = ({
                             return (
                                 <SpecialEditionButton
                                     buttonImageUri={buttonImageUri}
-                                    expiry={expiry}
+                                    expiry={new Date(expiry)}
                                     onPress={() => {
                                         storeSelectedEdition(
                                             item,

@@ -51,7 +51,7 @@ const regionalEditions: RegionalEdition[] = [
 const specialEditions: SpecialEdition[] = [
     {
         edition: 'daily-edition' as EditionId,
-        expiry: new Date(98, 1),
+        expiry: new Date(98, 1).toISOString(),
         editionType: 'Special',
         notificationUTCOffset: 1,
         topic: 'food',

@@ -14,7 +14,6 @@ import {
     NavigationTransitionProps,
 } from 'react-navigation'
 import { ariaHidden } from 'src/helpers/a11y'
-import { supportsAnimation } from 'src/helpers/features'
 import { safeInterpolation } from 'src/helpers/math'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
@@ -125,14 +124,7 @@ export const createSidebarNavigator = (
         _: addViewsForMainLayer(mainRoute, () => animatedValue),
     }
     for (const [key, value] of Object.entries(sidebarRoute)) {
-        if (!supportsAnimation()) {
-            navigation[key] = value
-        } else {
-            navigation[key] = addViewsForSidebarLayer(
-                value,
-                () => animatedValue,
-            )
-        }
+        navigation[key] = addViewsForSidebarLayer(value, () => animatedValue)
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {

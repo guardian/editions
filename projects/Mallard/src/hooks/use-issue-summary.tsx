@@ -8,6 +8,7 @@ import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
 import { getSetting } from '../helpers/settings'
 import { useQuery } from './apollo'
+import { errorService } from 'src/services/errors'
 
 interface IssueSummaryState {
     __typename: 'IssueSummary'
@@ -28,8 +29,14 @@ const getIssueSummary = async (
             ? await fetchAndStoreIssueSummary()
             : await readIssueSummary()
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
-    const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
-    return trimmedSummary
+    try {
+        const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
+        return trimmedSummary
+    } catch (e) {
+        e.message = `getIssueSummary error: maxAvailableEditions: ${maxAvailableEditions} & issueSummary: ${issueSummary}`
+        errorService.captureException(e)
+        throw Error(e)
+    }
 }
 
 const issueSummaryToLatestPath = (issueSummary: IssueSummary[]): PathToIssue =>
