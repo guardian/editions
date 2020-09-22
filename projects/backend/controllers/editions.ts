@@ -83,7 +83,7 @@ export const editionsControllerGet = async (req: Request, res: Response) => {
         const filteredJson: EditionsList = await filterEditionsList(
             editionsList.content,
             s3FrontsClient,
-            bucket,
+            getFrontsBucket(isPreview ? 'preview' : 'published'),
         )
 
         res.setHeader('Content-Type', 'application/json')
