@@ -27,7 +27,7 @@ import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defau
 import NetInfo from '@react-native-community/netinfo'
 import { AppState, AppStateStatus } from 'react-native'
 import { locale } from 'src/helpers/locale'
-import { pushNotifcationRegistration } from 'src/notifications/push-notifications'
+import { pushNotificationRegistration } from 'src/notifications/push-notifications'
 import { useApiUrl } from './use-settings'
 import moment from 'moment'
 import { EditionsList } from 'src/common'
@@ -188,7 +188,7 @@ const setEdition = async (
     await selectedEditionCache.set(edition)
     await defaultEditionCache.set(edition)
     eventEmitter.emit('editionCachesSet')
-    pushNotifcationRegistration()
+    pushNotificationRegistration()
 }
 
 export const defaultEditionDecider = async (
@@ -202,7 +202,7 @@ export const defaultEditionDecider = async (
         setDefaultEdition(dE)
         setSelectedEdition(dE)
         await selectedEditionCache.set(dE)
-        pushNotifcationRegistration()
+        pushNotificationRegistration()
     } else {
         // Get the correct edition for the device locale
         const autoDetectedEdition = localeToEdition(locale, editionsList)
@@ -277,7 +277,7 @@ export const EditionProvider = ({
         if (type === 'RegionalEdition') {
             await defaultEditionCache.set(chosenEdition as RegionalEdition)
             setDefaultEdition(chosenEdition as RegionalEdition)
-            pushNotifcationRegistration()
+            pushNotificationRegistration()
         }
         eventEmitter.emit('editionUpdate')
     }

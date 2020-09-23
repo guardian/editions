@@ -15,7 +15,7 @@ export interface PushNotificationRegistration {
     token: string
 }
 
-const pushNotifcationRegistration = () => {
+const pushNotificationRegistration = () => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
             pushTracking(
@@ -72,4 +72,4 @@ const pushNotifcationRegistration = () => {
     )
 }
 
-export { pushNotifcationRegistration }
+export { pushNotificationRegistration }
