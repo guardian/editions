@@ -60,7 +60,11 @@ import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
-import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
+import {
+    Front as TFront,
+    IssueWithFronts,
+    SpecialEditionHeaderStyles,
+} from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
@@ -299,13 +303,19 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
     return preview ? <ReloadButton onPress={onPress} /> : null
 }
 
-const handleError = (
+const handleError = (specialEditionProps?: {
+    headerStyle?: SpecialEditionHeaderStyles
+}) => (
     { message }: { message: string },
     _: unknown,
     { retry }: { retry: () => void },
 ) => (
     <>
-        <IssueScreenHeader />
+        <IssueScreenHeader
+            headerStyles={
+                specialEditionProps && specialEditionProps.headerStyle
+            }
+        />
 
         <FlexErrorMessage
             debugMessage={message}
@@ -316,9 +326,15 @@ const handleError = (
     </>
 )
 
-const handlePending = () => (
+const handlePending = (specialEditionProps?: {
+    headerStyle?: SpecialEditionHeaderStyles
+}) => () => (
     <>
-        <IssueScreenHeader />
+        <IssueScreenHeader
+            headerStyles={
+                specialEditionProps && specialEditionProps.headerStyle
+            }
+        />
         <FlexCenter>
             <Spinner />
         </FlexCenter>
@@ -366,8 +382,8 @@ const IssueScreenWithPath = React.memo(
         const specialEditionProps = getSpecialEditionProps(selectedEdition)
 
         return response({
-            error: handleError,
-            pending: handlePending,
+            error: handleError(specialEditionProps),
+            pending: handlePending(specialEditionProps),
             success: (issue, { retry }) => {
                 sendPageViewEvent({
                     path: `editions/uk/daily/${issue.key}`,
