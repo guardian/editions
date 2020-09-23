@@ -64,26 +64,28 @@ const filterEditionsList = async (
 }
 
 export const editionsControllerGet = async (req: Request, res: Response) => {
-    // we are always using the published bucket here as editionsList doesn't seem to
-    // exist in the preview bucket but leaving ternary in case we want to do something better in future
-    const bucket = getFrontsBucket(isPreview ? 'published' : 'published')
+    // we always use the published bucket to fetch editionsList as it doesn't
+    // exist in the preview bucket - we'd need to change the fronts tool to fix this
+    // so here we set isPreview to false to force use of the published bucket
+    const editionsListBucket = getFrontsBucket(false)
 
     const result = await s3fetch({
         key: 'editionsList',
-        bucket: bucket,
+        bucket: editionsListBucket,
     })
     if (hasFailed(result)) {
         res.status(500)
         res.send(
-            `failed to fetch editions list from bucket ${bucket} S3 Result: ${result}`,
+            `failed to fetch editions list from bucket ${editionsListBucket} S3 Result: ${result}`,
         )
     } else {
         const editionsList = (await result.json()) as { content: EditionsList }
+        const editionIssuesBucket = getFrontsBucket(isPreview)
 
         const filteredJson: EditionsList = await filterEditionsList(
             editionsList.content,
             s3FrontsClient,
-            bucket,
+            editionIssuesBucket,
         )
 
         res.setHeader('Content-Type', 'application/json')
