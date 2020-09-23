@@ -303,19 +303,13 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
     return preview ? <ReloadButton onPress={onPress} /> : null
 }
 
-const handleError = (specialEditionProps?: {
-    headerStyle?: SpecialEditionHeaderStyles
-}) => (
+const handleError = (headerStyle?: SpecialEditionHeaderStyles) => (
     { message }: { message: string },
     _: unknown,
     { retry }: { retry: () => void },
 ) => (
     <>
-        <IssueScreenHeader
-            headerStyles={
-                specialEditionProps && specialEditionProps.headerStyle
-            }
-        />
+        <IssueScreenHeader headerStyles={headerStyle} />
 
         <FlexErrorMessage
             debugMessage={message}
@@ -326,24 +320,21 @@ const handleError = (specialEditionProps?: {
     </>
 )
 
-const handlePending = (specialEditionProps?: {
-    headerStyle?: SpecialEditionHeaderStyles
-}) => () => (
+const handlePending = (headerStyle?: SpecialEditionHeaderStyles) => () => (
     <>
-        <IssueScreenHeader
-            headerStyles={
-                specialEditionProps && specialEditionProps.headerStyle
-            }
-        />
+        <IssueScreenHeader headerStyles={headerStyle} />
         <FlexCenter>
             <Spinner />
         </FlexCenter>
     </>
 )
 
-const handleIssueScreenError = (error: string) => (
+const handleIssueScreenError = (
+    error: string,
+    headerStyle?: SpecialEditionHeaderStyles,
+) => (
     <>
-        <IssueScreenHeader />
+        <IssueScreenHeader headerStyles={headerStyle} />
         <FlexErrorMessage
             debugMessage={error}
             title={CONNECTION_FAILED_ERROR}
@@ -371,19 +362,19 @@ const IssueScreenWithPath = React.memo(
     ({
         path,
         initialFrontKey,
+        headerStyle,
     }: {
         path: PathToIssue
         initialFrontKey: string | null
+        headerStyle?: SpecialEditionHeaderStyles
     }) => {
         const isPreview = useIsPreview()
         const isProof = useIsProof()
         const response = useIssueResponse(path, isPreview)
-        const { selectedEdition } = useEditions()
-        const specialEditionProps = getSpecialEditionProps(selectedEdition)
 
         return response({
-            error: handleError(specialEditionProps),
-            pending: handlePending(specialEditionProps),
+            error: handleError(headerStyle),
+            pending: handlePending(headerStyle),
             success: (issue, { retry }) => {
                 sendPageViewEvent({
                     path: `editions/uk/daily/${issue.key}`,
@@ -410,11 +401,7 @@ const IssueScreenWithPath = React.memo(
                         />
                         <IssueScreenHeader
                             issue={issue}
-                            headerStyles={
-                                specialEditionProps
-                                    ? specialEditionProps.headerStyle
-                                    : undefined
-                            }
+                            headerStyles={headerStyle}
                         />
 
                         <WithBreakpoints>
@@ -481,20 +468,25 @@ const IssueScreenWithPath = React.memo(
 
 export const IssueScreen = () => {
     const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
+    const { selectedEdition } = useEditions()
+    const specialEditionProps = getSpecialEditionProps(selectedEdition)
+    const headerStyle = specialEditionProps && specialEditionProps.headerStyle
     return (
         <Container>
             {issueId ? (
                 <IssueScreenWithPath
                     path={issueId}
                     initialFrontKey={initialFrontKey}
+                    headerStyle={headerStyle}
                 />
             ) : issueSummary ? (
                 <IssueScreenWithPath
                     path={issueSummaryToLatestPath(issueSummary)}
                     initialFrontKey={initialFrontKey}
+                    headerStyle={headerStyle}
                 />
             ) : error ? (
-                error && handleIssueScreenError(error)
+                error && handleIssueScreenError(error, headerStyle)
             ) : (
                 handlePending()
             )}
