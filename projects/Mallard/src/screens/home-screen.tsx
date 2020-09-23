@@ -45,7 +45,10 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { IssueWithFronts } from '../../../Apps/common/src'
 import { ApiState } from './settings/api-screen'
-import { useEditions } from 'src/hooks/use-edition-provider'
+import {
+    useEditions,
+    getSpecialEditionProps,
+} from 'src/hooks/use-edition-provider'
 import { Copy } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
@@ -437,15 +440,18 @@ const IssueListFetchContainer = () => {
 
 export const HomeScreen = () => {
     const { issueSummary, error } = useIssueSummary()
-    const {
-        selectedEdition: {
-            header: { title, subTitle },
-        },
-    } = useEditions()
+    const { selectedEdition } = useEditions()
 
+    const specialEditionProps = getSpecialEditionProps(selectedEdition)
     return (
         <WithAppAppearance value={'tertiary'}>
-            <IssuePickerHeader title={title} subTitle={subTitle} />
+            <IssuePickerHeader
+                title={selectedEdition.header.title}
+                subTitle={selectedEdition.header.subTitle}
+                headerStyles={
+                    specialEditionProps && specialEditionProps.headerStyle
+                }
+            />
             {issueSummary ? (
                 <IssueListFetchContainer />
             ) : error ? (

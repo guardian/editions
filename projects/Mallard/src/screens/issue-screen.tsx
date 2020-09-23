@@ -60,11 +60,19 @@ import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
-import { Front as TFront, IssueWithFronts } from '../../../Apps/common/src'
+import {
+    Front as TFront,
+    IssueWithFronts,
+    SpecialEditionHeaderStyles,
+} from '../../../Apps/common/src'
 import { FrontSpec } from './article-screen'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader'
-import { useEditions, BASE_EDITION } from 'src/hooks/use-edition-provider'
+import {
+    useEditions,
+    BASE_EDITION,
+    getSpecialEditionProps,
+} from 'src/hooks/use-edition-provider'
 import RNRestart from 'react-native-restart'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
@@ -295,13 +303,13 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
     return preview ? <ReloadButton onPress={onPress} /> : null
 }
 
-const handleError = (
+const handleError = (headerStyle?: SpecialEditionHeaderStyles) => (
     { message }: { message: string },
     _: unknown,
     { retry }: { retry: () => void },
 ) => (
     <>
-        <IssueScreenHeader />
+        <IssueScreenHeader headerStyles={headerStyle} />
 
         <FlexErrorMessage
             debugMessage={message}
@@ -312,18 +320,21 @@ const handleError = (
     </>
 )
 
-const handlePending = () => (
+const handlePending = (headerStyle?: SpecialEditionHeaderStyles) => () => (
     <>
-        <IssueScreenHeader />
+        <IssueScreenHeader headerStyles={headerStyle} />
         <FlexCenter>
             <Spinner />
         </FlexCenter>
     </>
 )
 
-const handleIssueScreenError = (error: string) => (
+const handleIssueScreenError = (
+    error: string,
+    headerStyle?: SpecialEditionHeaderStyles,
+) => (
     <>
-        <IssueScreenHeader />
+        <IssueScreenHeader headerStyles={headerStyle} />
         <FlexErrorMessage
             debugMessage={error}
             title={CONNECTION_FAILED_ERROR}
@@ -351,17 +362,19 @@ const IssueScreenWithPath = React.memo(
     ({
         path,
         initialFrontKey,
+        headerStyle,
     }: {
         path: PathToIssue
         initialFrontKey: string | null
+        headerStyle?: SpecialEditionHeaderStyles
     }) => {
         const isPreview = useIsPreview()
         const isProof = useIsProof()
         const response = useIssueResponse(path, isPreview)
 
         return response({
-            error: handleError,
-            pending: handlePending,
+            error: handleError(headerStyle),
+            pending: handlePending(headerStyle),
             success: (issue, { retry }) => {
                 sendPageViewEvent({
                     path: `editions/uk/daily/${issue.key}`,
@@ -386,7 +399,10 @@ const IssueScreenWithPath = React.memo(
                                 retry()
                             }}
                         />
-                        <IssueScreenHeader issue={issue} />
+                        <IssueScreenHeader
+                            issue={issue}
+                            headerStyles={headerStyle}
+                        />
 
                         <WithBreakpoints>
                             {{
@@ -452,20 +468,25 @@ const IssueScreenWithPath = React.memo(
 
 export const IssueScreen = () => {
     const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
+    const { selectedEdition } = useEditions()
+    const specialEditionProps = getSpecialEditionProps(selectedEdition)
+    const headerStyle = specialEditionProps && specialEditionProps.headerStyle
     return (
         <Container>
             {issueId ? (
                 <IssueScreenWithPath
                     path={issueId}
                     initialFrontKey={initialFrontKey}
+                    headerStyle={headerStyle}
                 />
             ) : issueSummary ? (
                 <IssueScreenWithPath
                     path={issueSummaryToLatestPath(issueSummary)}
                     initialFrontKey={initialFrontKey}
+                    headerStyle={headerStyle}
                 />
             ) : error ? (
-                error && handleIssueScreenError(error)
+                error && handleIssueScreenError(error, headerStyle)
             ) : (
                 handlePending()
             )}

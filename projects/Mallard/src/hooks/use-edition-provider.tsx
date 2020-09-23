@@ -5,7 +5,12 @@ import React, {
     useState,
     Dispatch,
 } from 'react'
-import { RegionalEdition, SpecialEdition, Locale } from 'src/common'
+import {
+    RegionalEdition,
+    SpecialEdition,
+    Locale,
+    SpecialEditionHeaderStyles,
+} from 'src/common'
 import { eventEmitter } from 'src/helpers/event-emitter'
 import {
     defaultSettings,
@@ -42,6 +47,14 @@ export interface StoreSelectedEditionFunc {
         chosenEdition: RegionalEdition | SpecialEdition,
         type: 'RegionalEdition' | 'SpecialEdition' | 'TrainingEdition',
     ): void
+}
+
+export const getSpecialEditionProps = (
+    edition: RegionalEdition | SpecialEdition,
+): { headerStyle?: SpecialEditionHeaderStyles } | undefined => {
+    return edition.editionType === 'Special'
+        ? (edition as SpecialEdition)
+        : undefined
 }
 
 export const DEFAULT_EDITIONS_LIST = {
