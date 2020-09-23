@@ -24,6 +24,7 @@ class ErrorBoundary extends Component<
     }
 
     componentDidCatch(err: Error) {
+        err.message = `Error Boundary: ${err.message}`
         errorService.captureException(err)
     }
 
