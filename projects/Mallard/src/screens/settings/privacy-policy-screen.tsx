@@ -28,11 +28,11 @@ const privacyPolicyHtml = html`
 	Personal data is any information about you by which you can be identified or be identifiable. This can include information such as:
 </p>
 
-<p>
+<ul>
 	<li>your name, date of birth, email address, postal address, phone number, mobile number, financial details, such as payment cards you use to purchase this product and register with us</li> 
 	<li>information about your device (such as the IP address, which is a numerical code to identify your device that can provide information about the country, region or city where you are based) information relating to how you use and interact with this app</li>
 	<li>When we refer to &lsquo;personal data&rsquo; in this privacy policy, we are also referencing &lsquo;personal information&rsquo; as defined by Australian privacy law.</li>
-</p>
+</ul>
 
 <p>
 	<strong>
@@ -50,14 +50,14 @@ const privacyPolicyHtml = html`
 	</strong>
 </p>
 
-<p>
+<ul>
 	We collect personal data via:
 
 	<li>the registration process for a Guardian account through the Guardian website</li>
 	<li>When you use any of the Editions apps services, such as the various region specific curated editions of editorial content, and Crosswords</li>
 	<li>technology similar to cookies when you use mobile devices to access the content in the app</li>
 	<li>when you email us directly about the app or when you contact us via our app</li>
-</p>
+</ul>
 
 <p>
 	To access the Guardian Editions app, you will need to register for a Guardian account and obtain a Digital Subscription. When you register for a Guardian account on theguardian.com we collect:
@@ -69,14 +69,14 @@ const privacyPolicyHtml = html`
 	</strong>
 </p>
 
-<p>
+<ul>
 	<li>your name</li>
 	<li>your email address</li>
 	<li>some limited data from your social media profile, such as your username if you have signed in to theguardian.com using your social media details</li>
 	<li>your ID details, e.g, if you register through a third party application, e.g. Apple ID</li>
 	<li>Your photograph, if you add one to your profile page</li>
 	<li>You can change or remove these details using the profile and settings area of your Guardian account. For more information about our use of your personal data via the Guardian website, please see our privacy policy <strong>( https://www.theguardian.com/help/privacy-policy )</strong>.</li> 
-</p>
+</ul>
 
 <p>
 	<strong>
@@ -88,11 +88,12 @@ const privacyPolicyHtml = html`
 	When you use this app, we also use technology that is similar to cookies to collect additional data, including:
 </p>
 
-<p>
+<ul>
 	<li>your IP address - a numerical code to identify your device and which can provide information about the country, region or city where you are based</li>
 	<li>your browsing history of the content and screens you have viewed on this app to understand how you use the app and to improve it  </li>
 	<li>details of your devices, for example, the unique device ID used to access our content</li>
 	<li>Information on bugs and technical issues, such as the app crashing</li>
+</ul>
 <p>
 	Where we rely on cookies to collect any personal data across all our apps and sites, please see our cookie policy <strong>( https://www.theguardian.com/info/cookies )</strong> for more information and how to manage your cookie choices.
 </p>
@@ -111,7 +112,7 @@ const privacyPolicyHtml = html`
 	We use personal data collected through our app for a number of purposes related to this app, including the following:
 </p>
 
-<p>
+<ul>
 	<li>To provide the services you sign up for, including accessing your Digital Subscription that enables you to access the Editions app or related internal administrative purposes - such as our accounting and records - and to make you aware of any changes to our services once you have subscribed to the Editions app</li>
 	<li>To analyse how visitors use our app so that we can improve the experience and the functions of the app</li>
 	<li>To send you service notifications about this app</li>
@@ -123,7 +124,7 @@ const privacyPolicyHtml = html`
 	<li>For security and fraud prevention, and to ensure that our  app is  safe and secure and used in line with our terms and conditions of use (https://www.theguardian.com/help/terms-of-service )</li>
 	<li>To comply with applicable laws and regulations</li>
 	<li>To enable us to detect and fix any bugs or defects within the app</li>
-</p>
+</ul>
 
 <p>
 	<strong>
@@ -135,14 +136,14 @@ const privacyPolicyHtml = html`
 	We use personal data collected through this app only when we have a valid reason and the legal grounds to do so. We determine the legal grounds based on the purposes for which we have collected your personal data. The legal ground will be one of the following:
 </p>
 
-<p>
+<ul>
 	<li><em>Consent:</em> For example, where you have provided your consent to receive marketing emails from us. You can withdraw your consent at any time. In the case of marketing emails you can withdraw your consent by clicking on the &ldquo;unsubscribe&rdquo; link at the bottom of the email or through your email preferences in the &ldquo;emails and marketing&rdquo; tab, when signed into your Guardian account.</li>
 	<li><em>Performance of a contract with you (or in order to take steps prior to entering into a contract with you):</em> For example, where you have purchased a subscription from us and we need to use your contact details and payment data in order to process your order and deliver your subscription.</li>
 	<li><em>Compliance with law:</em> In some cases, we may have a legal obligation to use or keep your personal data.</li>
 	<li><em>Our legitimate interests:</em> Where it is necessary for us to understand our readers, promote our services and operate our sites and apps efficiently for the creation, publication and distribution of news, media and related journalistic content both online and in print form, globally. Examples of when we rely on our legitimate interests to use your personal data include: when we analyse what content has been viewed on our sites and apps, so that we can understand how they are used and improve our content.</li>
 	<li>Personal data that we receive about you from other organisations</li>
 	<li>Adding to or combining the personal data you provide to us</li>
-</p>
+</ul>
 
 <p>
 	When you sign up to a Digital Subscription to access the Editions app, we may add to the personal data you give us by combining it with other personal data shared with us by other trusted organisations. This includes, for example, the region that you are located in, so that we can show you the prices for subscriptions or other products in your local currency. We may also add personal data to improve the accuracy of your delivery address when we send out mail. We may also obtain your personal data from partners whose offers we include in some of our marketing communications and we use this personal data to ensure that we do not send you irrelevant marketing.
@@ -193,12 +194,12 @@ const privacyPolicyHtml = html`
 	</em>
 </p>
 
-<p>
+<ul>
 	We may share your data with other organisations that provide services on our behalf such as fraud prevention services, services that assist with tracking errors and defects in the app, as well as services that deal with online payments and other forms of payment processing, ie credit card transactions
 	We may reveal your personal data to any law enforcement agency, court, regulator, government authority or other organisation if we are required to do so to meet a legal or regulatory obligation, or otherwise to protect our rights or the rights of anyone else
 	We may reveal your personal data to any other organisation that buys, or to which we transfer all, or substantially all, of our assets and business. If this sale or transfer takes place, we will use reasonable efforts to try to make sure that the organisation we transfer your personal data to uses it in line with our privacy policy
 	Any organisations which access your data in the course of providing services on our behalf will be governed by strict contractual restrictions to make sure that they protect your data and keep to all data privacy laws that apply. We may also independently audit these service providers to make sure that they meet our standards.
-</p>
+</ul>
 
 <p>
 	For a full list of who we may share data with that we collect via the Guardian website, please see the Guardian.com privacy policy <strong>( https://www.theguardian.com/help/privacy-policy )</strong>. 
@@ -280,7 +281,7 @@ const privacyPolicyHtml = html`
 	You have a number of rights with regard to the personal data that we hold about you and you can contact us with regard to the following rights in relation to your personal data:
 </p>
 
-<p>
+<ul>
 	<li>You have the right to receive a copy of the personal data we hold about you</li>
 	<li>You have the right to correct the personal data we hold about you</li>
 	<li>Where applicable, you may also have a right to receive a machine-readable copy of your personal data</li>
@@ -288,7 +289,7 @@ const privacyPolicyHtml = html`
 	<li>Where applicable, you have the right to object to processing of your personal data for certain purposes</li>
 	<li>Where you have provided us with consent to use your personal data, you can withdraw this at any time</li>
 	<li>If you do not want us to use your personal data for marketing analysis, you can change your settings in the &ldquo;Emails and marketing&rdquo; tab of your Guardian account</li>
-</p>
+</ul>
 
 <p>
 	<strong>
