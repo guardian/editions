@@ -9,7 +9,7 @@ const privacyPolicyHtml = html`
     <h2><strong>About this privacy policy</strong></h2>
     <p>
         This is a privacy policy for the Guardian Editions app. The privacy
-        policy explains how we (Guardian News & Media Limited) collect, use,
+        policy explains how we (Guardian News &amp; Media Limited) collect, use,
         share and transfer your personal data when you use the Guardian Editions
         app. This is separate to how we collect and use your personal data on
         theguardian.com, which is explained on the website
@@ -49,11 +49,11 @@ const privacyPolicyHtml = html`
     </ul>
     <h3>Who we are and how to contact us</h3>
     <p>
-        The data controller for the Guardian Editions is Guardian News & Media
-        Limited, Kings Place, 90 York Way, London N1 9GU. This means that we are
-        responsible for deciding how and why we hold and use your personal data.
-        If you want to contact us, you can find our contact details in the “How
-        to contact us” section below.
+        The data controller for the Guardian Editions is Guardian News &amp;
+        Media Limited, Kings Place, 90 York Way, London N1 9GU. This means that
+        we are responsible for deciding how and why we hold and use your
+        personal data. If you want to contact us, you can find our contact
+        details in the “How to contact us” section below.
     </p>
     <h3>What personal data we collect and how we use it</h3>
     <p>We collect personal data via:</p>
@@ -433,7 +433,7 @@ const privacyPolicyHtml = html`
     <p>
         If you would like to exercise any of your rights specified above, please
         email dataprotection@theguardian.com or write to the Data Protection
-        Officer at Guardian News & Media Limited, Kings Place, 90 York Way,
+        Officer at Guardian News &amp; Media Limited, Kings Place, 90 York Way,
         London N1 9GU. We will deal with requests within one month.
     </p>
     <p>
@@ -449,8 +449,9 @@ const privacyPolicyHtml = html`
     <p>
         If you have any questions about how we use your personal data or if you
         have a concern about how your personal data is used, please contact the
-        Data Protection Officer at Guardian News & Media Limited, Kings Place,
-        90 York Way, London N1 9GU. Or, email dataprotection@theguardian.com.
+        Data Protection Officer at Guardian News &amp; Media Limited, Kings
+        Place, 90 York Way, London N1 9GU. Or, email
+        dataprotection@theguardian.com.
     </p>
     <p>Complaints will be responded to within 30 days.</p>
     <p>
@@ -459,7 +460,7 @@ const privacyPolicyHtml = html`
     </p>
     <p>
         If you have a question about anything else, please see our Contact us
-        information under Settings -> Help in this app.
+        information under Settings -&gt; Help in this app.
     </p>
     <h3>Changes to the Privacy Policy</h3>
     <p>
