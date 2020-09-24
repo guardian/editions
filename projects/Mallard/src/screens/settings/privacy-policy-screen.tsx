@@ -47,6 +47,7 @@ const privacyPolicyHtml = html`
             law.
         </li>
     </ul>
+    <br />
     <h3>Who we are and how to contact us</h3>
     <p>
         The data controller for the Guardian Editions is Guardian News &amp;
@@ -76,12 +77,14 @@ const privacyPolicyHtml = html`
             our app
         </li>
     </ul>
+    <br />
+    <h3>Registering an account with us</h3>
     <p>
         To access the Guardian Editions app, you will need to register for a
         Guardian account and obtain a Digital Subscription. When you register
         for a Guardian account on theguardian.com we collect:
     </p>
-    <h3>Registering an account with us</h3>
+
     <ul>
         <li>Your name</li>
         <li>Your email address</li>
@@ -105,6 +108,7 @@ const privacyPolicyHtml = html`
             >
         </li>
     </ul>
+    <br />
     <h3>When you use the Guardian Editions app</h3>
     <p>
         When you use this app, we also use technology that is similar to cookies
@@ -191,6 +195,7 @@ const privacyPolicyHtml = html`
             To enable us to detect and fix any bugs or defects within the app
         </li>
     </ul>
+    <br />
     <h3>Legal grounds for using your personal data</h3>
     <p>
         We use personal data collected through this app only when we have a
@@ -378,6 +383,7 @@ const privacyPolicyHtml = html`
         If you have raised a query or a complaint with us, we may contact you to
         answer your query or to resolve your complaint.
     </p>
+    <br />
     <h3>Your rights with regard to the personal data that we hold about you</h3>
     <p>
         You have a number of rights with regard to the personal data that we
