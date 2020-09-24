@@ -32,7 +32,6 @@ Monthly - Special Edition Button"
     style={
       Object {
         "height": 134,
-        "marginLeft": -43,
         "width": 87,
       }
     }
@@ -88,7 +87,7 @@ Monthly
       }
     >
       Available until 
-      2/1/1998
+      01/02/1998
     </Text>
   </View>
 </View>
@@ -126,7 +125,6 @@ Monthly - Special Edition Button"
     style={
       Object {
         "height": 134,
-        "marginLeft": -43,
         "width": 87,
       }
     }
@@ -182,7 +180,7 @@ Monthly
       }
     >
       Available until 
-      2/1/1998
+      01/02/1998
     </Text>
   </View>
 </View>
