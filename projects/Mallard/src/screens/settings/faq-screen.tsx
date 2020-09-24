@@ -436,6 +436,7 @@ const faqHtml = html`
             of the subscription period
         </li>
     </ul>
+    <br />
     <h3>Is an issue published on Christmas Day?</h3>
     <p>No, we don’t publish an issue on Christmas Day.</p>
 `
