@@ -98,6 +98,10 @@ const faqHtml = html`
     <h3>Contents</h3>
     <ul>
         <li>What is The Guardian Editions app?</li>
+        <li>
+            What makes the Guardian Editions app different to the Guardian Live
+            app?
+        </li>
         <li>How do I purchase the Editions app?</li>
         <li>How do I access the Editions app?</li>
         <li>How do I access different Editions within the app?</li>
@@ -117,6 +121,8 @@ const faqHtml = html`
         </li>
         <li>I have feedback, where should I send it?</li>
         <li>Where can I find out more about my subscription?</li>
+        <li>How do I cancel my subscription?</li>
+        <li>Is an issue published on Christmas Day?</li>
     </ul>
     <br />
     <h3>What is The Guardian Editions app?</h3>
@@ -125,25 +131,27 @@ const faqHtml = html`
         other special editions all in one app.
     </p>
     <p>
-        <strong>The UK Guardian Daily</strong> brings you the coverage you need
-        for the day, giving you a considered alternative to the never-ending
-        news feed. Beautifully designed and easy to navigate on mobile and
-        tablet, the Daily brings you the stories that matter every morning.
+        <strong>The UK Daily</strong> brings you the coverage you need for the
+        day, giving you a considered alternative to the never-ending news feed.
+        Beautifully designed and easy to navigate on mobile and tablet, the
+        Daily brings you the stories that matter every morning.
     </p>
     <p>
-        The UK Guardian Daily is published daily - each edition available to
-        read by 6am (GMT), 7 days a week
+        The UK Daily is published daily - each edition available to read by 6am
+        (GMT), 7 days a week.
     </p>
     <p>
-        <strong>The Guardian Australia Weekend</strong> brings you The
-        Guardian&rsquo;s perspective and analysis on the most important stories
-        from throughout the week, to be enjoyed across the weekend
+        <strong>Australia Weekend</strong> brings you The Guardian&rsquo;s
+        perspective and analysis on the most important stories from throughout
+        the week, to be enjoyed across the weekend.
     </p>
     <p>
-        The Guardian Australia Weekend is published weekly - each edition
-        available to read by 6am (AEST), every Saturday
+        The Australia Weekend is published weekly - each edition available to
+        read by 6am (AEST), every Saturday.
     </p>
-    <p>The Guardian Editions app features;</p>
+    <p>
+        <strong>The Guardian Editions app features:</strong>
+    </p>
     <p>
         <strong>A new way to read</strong> - newspapers, reimagined for mobile
         and tablet
@@ -161,7 +169,16 @@ const faqHtml = html`
     </p>
     <p>
         <strong>Ad-free</strong> - enjoy our journalism uninterrupted, without
-        adverts
+        adverts.
+    </p>
+    <h3>
+        What makes the Guardian Editions app different to the Guardian Live app?
+    </h3>
+    <p>
+        The Guardian Live app features all articles found on our website and you
+        can follow live news coverage as it happens. The Editions app offers an
+        alternative to live news coverage, providing a finite selection of
+        articles put together by our editorial teams in the UK and Australia.
     </p>
     <h3>How do I purchase the Guardian Editions app?</h3>
     <p>
@@ -179,17 +196,19 @@ const faqHtml = html`
     </p>
     <p>
         <strong>The Guardian Editions app</strong> - which includes the UK Daily
-        edition, Australia Weekend and a special environment Edition.
+        edition, Australia Weekend and a special environment Edition
     </p>
     <p>
         <strong>Premium access to the Live app</strong> - breaking news, sport
-        and opinion, updated throughout the day
+        and opinion, updated throughout the day.
     </p>
     <p>
         <strong>Ad-free</strong> - no adverts and no interruptions across all
-        your devices
+        your devices.
     </p>
-    <p>You can find out more about subscribing and pricing on our website.</p>
+    <p>
+        You can find out more about subscribing and pricing on our website.
+    </p>
     <p>
         You can also access the Guardian Editions app if you have an existing
         iTunes subscription. Please note, the Guardian Editions app is no longer
@@ -203,12 +222,12 @@ const faqHtml = html`
             href="https://apps.apple.com/gb/app/the-guardian-daily-edition/id452707806"
             >here</a
         >
-        for iOS devices (iOS 12 and above), or
+        for iOS devices (iOS 12.4 and above), or
         <a
             href="https://play.google.com/store/apps/details?id=com.guardian.editions"
             >here</a
         >
-        for android devices.
+        for the Android version (Android 5.0 Lollipop and above).
     </p>
     <p>
         Once you have downloaded the Guardian Editions app, press the app icon
@@ -228,8 +247,9 @@ const faqHtml = html`
         the app using your Subscriber ID. Your Subscriber ID can be found on
         your subscription confirmation email. If you are a Paper + Digital
         subscriber, your subscriber ID can also be found on the vouchers you
-        exchange for the newspaper. To enter, open the drop down icon on the top
-        right and tap on the cog icon on the top left to access:
+        exchange for the newspaper. To enter, tap the yellow button on top right
+        hand corner of the home page, and then select the cog icon to access the
+        settings screen:
     </p>
     <p>
         From the settings menu tap &lsquo;I am already subscribed&rsquo;, then
@@ -243,7 +263,7 @@ const faqHtml = html`
     <p>
         If you are using a new Apple device, tap on the yellow button top right
         corner, then tap the cog icon to open settings. From here, click 'I am
-        already subscribed', then tap on your app store subscription where you
+        already subscribed', then tap Restore App Store subscription where you
         will be prompted to enter your iTunes account sign-in details.
     </p>
     <p>
@@ -297,18 +317,18 @@ const faqHtml = html`
     </p>
     <h3>How do I access crosswords?</h3>
     <p>
-        The UK Guardian Daily features crosswords everyday and can always be
-        found at the bottom of the home page.
+        The UK Daily features crosswords everyday and can always be found at the
+        bottom of the home page.
     </p>
     <p>
-        The Australia Weekend features a crossword in every week&rsquo;s edition
-        and can always be found at the bottom of the home page.
+        Australia Weekend features a crossword in every week&rsquo;s edition and
+        can always be found at the bottom of the home page.
     </p>
     <h3>Can I access video in the Guardian Editions app?</h3>
     <p>
-        Yes, the Edition app gives you access to videos featured in the last 30
-        days of editions while your device is online. To listen to a video
-        audio, your phone or tablet ring should be ON, not silent.
+        Yes, the app gives you access to videos featured in the last 30 days of
+        editions while your device is online. To listen to a video audio, your
+        phone or tablet ring should be ON, not silent.
     </p>
     <h3>How do I change the font size?</h3>
     <p>
@@ -365,9 +385,59 @@ const faqHtml = html`
     </p>
     <h3>Where can I find out more information about my subscription?</h3>
     <p>
-        You&rsquo;ll find more Digital subscription FAQs can be found on our
-        website.
+        You’ll find more Digital subscription FAQs on our website.
     </p>
+    <h3>How do I cancel my subscription?</h3>
+    <p>
+        If you are a Digital or Print+Digital subscriber and no longer wish to
+        continue your subscription, please contact us using the details below.
+    </p>
+    <p>
+        <strong>Contact us</strong>
+    </p>
+    <p>
+        Email - customer.help@theguardian.com
+    </p>
+    <p>
+        Phone:
+    </p>
+    <p>
+        UK, Europe and rest of world<br />
+        Tel: +44 (0) 330 333 6767<br />
+        Lines are open 8am-8pm on weekdays, 8am-6pm at weekends (GMT/BST)
+    </p>
+    <p>
+        Canada and USA<br />
+        Tel: 1-844-632-2010 (toll free); 917-900-4663 (direct line)<br />
+        Lines are open 9:15am - 6pm Monday - Friday (EST)
+    </p>
+    <p>
+        Australia, New Zealand, and Asia Pacific<br />
+        Tel: 1800 773 766 (from within Australia) or +61 2 8076 8599 (from
+        outside Australia)
+    </p>
+    <p>
+        If you have an iTunes Apple subscription, you can cancel your
+        subscription via the settings menu on your iPhone or iPad as follows:
+    </p>
+    <ul>
+        <li>Go to Settings > [your name] > iTunes & App Store.</li>
+        <li>Tap your Apple ID at the top of the screen.</li>
+        <li>
+            Tap View Apple ID. You might need to authenticate your Apple ID.
+        </li>
+        <li>Tap Subscriptions.</li>
+        <li>
+            From the Subscriptions page, tap Guardian. From here it is possible
+            to disable auto-renewal
+        </li>
+        <li>
+            You will continue to have access to the Editions app until the end
+            of the subscription period
+        </li>
+    </ul>
+    <h3>Is an issue published on Christmas Day?</h3>
+    <p>No, we don’t publish an issue on Christmas Day.</p>
 `
 
 const FAQScreen = () => <DefaultInfoTextWebview html={faqHtml} />
