@@ -1,6 +1,6 @@
-# editions
+# Editions
 
-The future Daily Edition app.
+The Guardian Editions app includes the UK Daily edition, Australia Weekend and other special editions. The app is available on Android and iOS phones and tablets.
 
 ## Setup
 
