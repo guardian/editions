@@ -3,7 +3,7 @@ jest.mock('src/helpers/locale', () => ({
 }))
 
 jest.mock('src/notifications/push-notifications', () => ({
-    pushNotifcationRegistration: () => jest.fn(),
+    pushNotificationRegistration: () => jest.fn(),
 }))
 
 jest.mock('@react-native-community/geolocation', () => ({

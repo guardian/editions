@@ -24,7 +24,7 @@ import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { nestProviders } from './helpers/provider'
-import { pushNotifcationRegistration } from './notifications/push-notifications'
+import { pushNotificationRegistration } from './notifications/push-notifications'
 import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
@@ -55,7 +55,7 @@ loggingService.init(apolloClient)
 remoteConfigService.init()
 
 // --- SETUP OPERATIONS ---
-pushNotifcationRegistration()
+pushNotificationRegistration()
 prepFileSystem()
 
 const styles = StyleSheet.create({
