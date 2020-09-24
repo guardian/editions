@@ -146,8 +146,8 @@ const faqHtml = html`
         the week, to be enjoyed across the weekend.
     </p>
     <p>
-        The Australia Weekend is published weekly - each edition available to
-        read by 6am (AEST), every Saturday.
+        Australia Weekend is published weekly - each edition available to read
+        by 6am (AEST), every Saturday.
     </p>
     <p>
         <strong>The Guardian Editions app features:</strong>
