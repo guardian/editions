@@ -265,10 +265,10 @@ const privacyPolicyHtml = html`
     </p>
     <h3>Using children’s personal data</h3>
     <p>
-        This app is not aimed directly at children under the age of 13[a][b][c]
-        and we do not knowingly collect personal data via this app about
-        children under 13. Some of our services may have a higher age
-        restriction and this will be shown at the point of registration.
+        This app is not aimed directly at children under the age of 13 and we do
+        not knowingly collect personal data via this app about children under
+        13. Some of our services may have a higher age restriction and this will
+        be shown at the point of registration.
     </p>
     <h3>Security of your personal data</h3>
     <p>
