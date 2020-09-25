@@ -94,7 +94,7 @@ const editionsMenuButton = () => html`
 `
 
 const faqHtml = html`
-    <h1>The Guardian Editions FAQs</h1>
+    <h2>The Guardian Editions FAQs</h2>
     <h3>Contents</h3>
     <ul>
         <li>What is The Guardian Editions app?</li>
