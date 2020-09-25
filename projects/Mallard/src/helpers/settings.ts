@@ -10,8 +10,9 @@ import { defaultSettings } from './settings/defaults'
  * v4 - Add Apple in FUNCTIONALITY
  * v5 - Add Firebase in ESSENTIAL
  * v6 - Add Crashlytics in PERFORMANCE, update wording in ESSENTIAL
+ * v7 - Remove Braze from wording in ESSENTIAL
  */
-export const CURRENT_CONSENT_VERSION = 6
+export const CURRENT_CONSENT_VERSION = 7
 
 export interface GdprDefaultSettings {
     gdprAllowEssential: boolean
