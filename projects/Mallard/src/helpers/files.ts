@@ -1,8 +1,8 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFS from 'react-native-fs'
-import { Issue } from 'src/common'
+import { Issue, IssueSummary } from 'src/common'
 import { FSPaths } from 'src/paths'
-import { IssueSummary, EditionInterface } from '../../../Apps/common/src'
+import { getEditionIds } from '../../../Apps/common/src/helpers'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
@@ -35,9 +35,6 @@ export const fileIsIssue = (file: File): file is IssueFile =>
 export const ensureDirExists = (dir: string): Promise<void> =>
     RNFS.mkdir(dir).catch(() => Promise.resolve())
 
-const extractEditionIds = (editionList: EditionInterface[]) =>
-    editionList.map(e => e.edition)
-
 /*
 We always try to prep the file system before accessing issuesDir
 */
@@ -45,11 +42,7 @@ export const prepFileSystem = async (): Promise<void> => {
     await ensureDirExists(FSPaths.issuesDir)
     await ensureDirExists(FSPaths.downloadRoot)
     const editionsList = await editionsListCache.get()
-    const editionIds = editionsList
-        ? extractEditionIds(editionsList.regionalEditions).concat(
-              extractEditionIds(editionsList.specialEditions),
-          )
-        : []
+    const editionIds = editionsList ? getEditionIds(editionsList) : []
 
     await Promise.all(
         editionIds.map(edition =>

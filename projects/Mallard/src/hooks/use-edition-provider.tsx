@@ -31,6 +31,7 @@ import { pushNotificationRegistration } from 'src/notifications/push-notificatio
 import { useApiUrl } from './use-settings'
 import moment from 'moment'
 import { EditionsList } from 'src/common'
+import { getEditionIds } from '../../../Apps/common/src/helpers'
 
 interface EditionState {
     editionsList: EditionsList
@@ -85,8 +86,22 @@ const defaultState: EditionState = {
 
 const EditionContext = createContext(defaultState)
 
+const getSelectedEdition = async () => {
+    try {
+        const selected = await selectedEditionCache.get()
+        const editionsList = await editionsListCache.get()
+        const editionIds = editionsList ? getEditionIds(editionsList) : []
+
+        return selected && editionIds.includes(selected.edition)
+            ? selected
+            : null
+    } catch {
+        return null
+    }
+}
+
 export const getSelectedEditionSlug = async () => {
-    const edition = await selectedEditionCache.get()
+    const edition = await getSelectedEdition()
     return edition ? edition.edition : BASE_EDITION.edition
 }
 
@@ -196,12 +211,17 @@ export const defaultEditionDecider = async (
     setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
     editionsList: EditionsList,
 ): Promise<void> => {
+    const selectedEdition = await getSelectedEdition()
     // When user already has default edition set then that edition
-    const dE = await getDefaultEdition()
-    if (dE) {
-        setDefaultEdition(dE)
-        setSelectedEdition(dE)
-        await selectedEditionCache.set(dE)
+    const defaultEdition = await getDefaultEdition()
+
+    // if user has already selected an edition, use that one
+    if (selectedEdition) {
+        setSelectedEdition(selectedEdition)
+    } else if (defaultEdition) {
+        setDefaultEdition(defaultEdition)
+        setSelectedEdition(defaultEdition)
+        await selectedEditionCache.set(defaultEdition)
         pushNotificationRegistration()
     } else {
         // Get the correct edition for the device locale
