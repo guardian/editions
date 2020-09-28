@@ -31,6 +31,7 @@ import { pushNotificationRegistration } from 'src/notifications/push-notificatio
 import { useApiUrl } from './use-settings'
 import moment from 'moment'
 import { EditionsList } from 'src/common'
+import { getEditionIds } from '../../../Apps/common/src/helpers'
 
 interface EditionState {
     editionsList: EditionsList
@@ -87,7 +88,13 @@ const EditionContext = createContext(defaultState)
 
 const getSelectedEdition = async () => {
     try {
-        return await selectedEditionCache.get()
+        const selected = await selectedEditionCache.get()
+        const editionsList = await editionsListCache.get()
+        const editionIds = editionsList ? getEditionIds(editionsList) : []
+
+        return selected && editionIds.includes(selected.edition)
+            ? selected
+            : null
     } catch {
         return null
     }
