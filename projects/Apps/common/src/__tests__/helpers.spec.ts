@@ -1,4 +1,5 @@
-import { issueSummarySort } from '../helpers'
+import { getEditionIds, issueSummarySort } from '../helpers'
+import { editionsListFixture } from './fixtures/editions-fixtures'
 
 describe('issueSummarySort', () => {
     it('should sort issues', () => {
@@ -29,6 +30,18 @@ describe('issueSummarySort', () => {
             '2019-09-29',
             '2019-09-27',
             '2019-09-24',
+        ])
+    })
+})
+
+describe('getEditionIds', () => {
+    it('should get regional and special edition ids', () => {
+        const ids = getEditionIds(editionsListFixture)
+
+        expect(ids).toEqual([
+            'daily-edition',
+            'australian-edition',
+            'special-edition',
         ])
     })
 })
