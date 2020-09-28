@@ -133,6 +133,7 @@ describe('useEditions', () => {
     describe('getSelectedEditionSlug', () => {
         beforeEach(async () => {
             await selectedEditionCache.reset()
+            await editionsListCache.reset()
         })
         it('should return the default slug as there is nothing in Async Storage', async () => {
             const editionSlug = await getSelectedEditionSlug()
@@ -140,6 +141,7 @@ describe('useEditions', () => {
         })
         it('should return "australian-edition" slug when the AU edition is set', async () => {
             await selectedEditionCache.set(defaultRegionalEditions[1])
+            await editionsListCache.set(DEFAULT_EDITIONS_LIST)
             const editionSlug = await getSelectedEditionSlug()
             expect(editionSlug).toEqual('australian-edition')
         })
