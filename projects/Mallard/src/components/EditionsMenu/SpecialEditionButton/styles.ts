@@ -63,8 +63,9 @@ const styles = ({
         },
         textBox: {
             flexShrink: 1,
-            paddingLeft: 10,
+            paddingLeft: 20,
             paddingBottom: 15,
+            paddingRight: 20,
         },
         title: {
             flexWrap: 'wrap',
