@@ -8,6 +8,8 @@ import { ItemSeperator } from './ItemSeperator/ItemSeperator'
 import { RegionButton } from './RegionButton/RegionButton'
 import { SpecialEditionButton } from './SpecialEditionButton/SpecialEditionButton'
 
+export const EDITIONS_MENU_TEXT_LEFT_PADDING = 96
+
 const EditionsMenu = ({
     navigationPress,
     regionalEditions,
