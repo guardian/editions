@@ -79,7 +79,7 @@ const editionDirsToClean = (
     directoryList: { name: string; path: string }[],
     editionList: EditionId[],
 ): { name: string; path: string }[] => {
-    // we never want to delete default region editions
+    // we never want to delete default regional editions
     const editionsToKeep = editionList.concat(
         defaultRegionalEditions.map(e => e.edition),
     )

@@ -1,6 +1,6 @@
-import { editionDirsToClean } from '../clear-issues'
+import { editionDirsToClean } from '../clear-issues-and-editions'
 
-describe('clear-issues', () => {
+describe('clear-issues-and-editions', () => {
     describe('editionDirsToClean', () => {
         it('should never return default editions', () => {
             const toClean = editionDirsToClean(

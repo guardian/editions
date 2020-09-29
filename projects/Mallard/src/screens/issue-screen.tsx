@@ -74,7 +74,7 @@ import {
     getSpecialEditionProps,
 } from 'src/hooks/use-edition-provider'
 import RNRestart from 'react-native-restart'
-import { deleteIssueFiles } from 'src/download-edition/clear-issues'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {

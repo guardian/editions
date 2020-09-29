@@ -6,7 +6,7 @@ import { pushTracking } from 'src/notifications/push-tracking'
 import { errorService } from 'src/services/errors'
 import { Feature } from '../../../Apps/common/src/logging'
 import { downloadAndUnzipIssue } from './download-and-unzip'
-import { clearOldIssues } from './clear-issues'
+import { clearOldIssues } from './clear-issues-and-editions'
 
 const downloadViaNotification = async (
     key: string,

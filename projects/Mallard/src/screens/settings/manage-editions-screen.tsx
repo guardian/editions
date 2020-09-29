@@ -12,7 +12,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { MANAGE_EDITIONS_TITLE } from 'src/helpers/words'
-import { deleteIssueFiles } from 'src/download-edition/clear-issues'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
 import { Copy } from 'src/helpers/words'
 
 const buttonStyles = StyleSheet.create({
