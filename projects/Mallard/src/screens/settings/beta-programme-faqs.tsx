@@ -76,22 +76,26 @@ const betaProgrammeFAQsHtml = html`
         <li><strong>What is the Editions beta app?</strong></li>
         <li><strong>How do I become a beta tester?</strong></li>
         <li>
-            <strong>How do I supply feedback or report bugs on the Editions
-                beta?</strong>
+            <strong>
+                How do I supply feedback or report bugs on the Editions beta?
+            </strong>
         </li>
         <li>
-            <strong>Which devices is the Editions beta app available on?</strong>
+            <strong>
+                Which devices is the Editions beta app available on?
+            </strong>
         </li>
         <li>
-            <strong
-                >Can I access the Editions beta app on more than one
-                device?</strong
-            >
+            <strong>
+                Can I access the Editions beta app on more than one device?
+            </strong>
         </li>
         <li><strong>How can I leave the beta app?</strong></li>
         <li>
-            <strong>I have a question about my subscription, where can I find more
-                FAQs?</strong>
+            <strong>
+                I have a question about my subscription, where can I find more
+                FAQs?
+            </strong>
         </li>
     </ul>
     <h2>What is the Editions beta app?</h2>
@@ -117,8 +121,9 @@ const betaProgrammeFAQsHtml = html`
     <p>On iPhone and iPads:</p>
     <p>
         1. Open the following link on your device:
-        <a href="https://testflight.apple.com/join/O2EojUEl"
-            >https://testflight.apple.com/join/O2EojUEl</a>
+        <a href="https://testflight.apple.com/join/O2EojUEl">
+            https://testflight.apple.com/join/O2EojUEl</a
+        >
     </p>
     <p>2. Download the Testflight app</p>
     <p>3. Install the beta version of the Guardian Editions app</p>
@@ -128,14 +133,18 @@ const betaProgrammeFAQsHtml = html`
         and accessing the settings screen from the cog icon on the top left
         corner of the screen
     </p>
-    <p>5. <strong>Allow notifications so that you can be aware of new updates</strong></p>
+    <p>
+        5.
+        <strong>
+            Allow notifications so that you can be aware of new updates
+        </strong>
+    </p>
     <p>On Android phones and tablets:</p>
     <p>
         1. Open the following link on your device:
-        <p>
         <a href="https://play.google.com/apps/testing/com.guardian.editions"
-            >https://play.google.com/apps/testing/com.guardian.editions</a>
-        </p>
+            >https://play.google.com/apps/testing/com.guardian.editions</a
+        >
     </p>
     <p>2. Sign in to your Google account</p>
     <p>3. Follow the download instructions on Play Store</p>
@@ -149,22 +158,23 @@ const betaProgrammeFAQsHtml = html`
     <p>
         Once in the app, you can access the new editions by tapping on the top
         left corner icon on your home screen.
-        
-        <p>${editionsButton()}</p>
+    </p>
+    <p>
+        ${editionsButton()}
     </p>
     <h2>How do I supply feedback or report bugs and issues?</h2>
     <p>If you want to report a technical issue:</p>
     <p>1. Tap the &lsquo;bug&rsquo; icon on the bottom right of the screen</p>
     <p>
-    ${bugButtonSvg()}
+        ${bugButtonSvg()}
     </p>
     <p>
         2. Choose if you want to include diagnostic information* or not to your
-        email 
+        email
     </p>
     <p>
-        3. Describe the steps that led to the bug. Please be as descriptive as possible to help us find and fix the
-        issue
+        3. Describe the steps that led to the bug. Please be as descriptive as
+        possible to help us find and fix the issue
     </p>
     <p>
         4. Send the email to our beta team. After sending the email, you will
