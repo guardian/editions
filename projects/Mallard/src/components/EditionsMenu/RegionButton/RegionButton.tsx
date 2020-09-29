@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { TitlepieceText } from 'src/components/styled-text'
 import { color } from 'src/theme/color'
 import { families } from 'src/theme/typography'
+import { EDITIONS_MENU_TEXT_LEFT_PADDING } from '../EditionsMenu'
 
 const styles = (selected: boolean) =>
     StyleSheet.create({
@@ -11,7 +12,7 @@ const styles = (selected: boolean) =>
                 ? color.primary
                 : color.palette.neutral[97],
             paddingBottom: 32,
-            paddingLeft: 96,
+            paddingLeft: EDITIONS_MENU_TEXT_LEFT_PADDING,
             paddingTop: 4,
         },
         title: {

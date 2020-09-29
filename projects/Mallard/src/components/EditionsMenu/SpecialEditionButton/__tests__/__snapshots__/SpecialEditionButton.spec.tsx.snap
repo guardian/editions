@@ -41,7 +41,7 @@ Monthly - Special Edition Button"
       Object {
         "flexShrink": 1,
         "paddingBottom": 15,
-        "paddingLeft": 20,
+        "paddingLeft": 9,
         "paddingRight": 20,
       }
     }
@@ -134,7 +134,7 @@ Monthly - Special Edition Button"
       Object {
         "flexShrink": 1,
         "paddingBottom": 15,
-        "paddingLeft": 20,
+        "paddingLeft": 9,
         "paddingRight": 20,
       }
     }
