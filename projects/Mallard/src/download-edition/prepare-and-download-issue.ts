@@ -8,7 +8,7 @@ import {
     clearOldIssues,
     clearDownloadsDirectory,
     cleanOldEditions,
-} from './clear-issues-and-editions-and-editions'
+} from './clear-issues-and-editions'
 
 const prepareAndDownloadTodaysIssue = async (client: ApolloClient<object>) => {
     await prepFileSystem()
