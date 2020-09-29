@@ -44,7 +44,7 @@
         "express-list-endpoints": "^4.0.1",
         "jest": "^24.8.0",
         "moment": "^2.24.0",
-        "node-fetch": "^2.6.0",
+        "node-fetch": "^2.6.1",
         "ramda": "^0.26.1",
         "react-native-inappbrowser-reborn": "^3.0.1",
         "striptags": "^3.1.1",
