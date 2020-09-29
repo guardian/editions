@@ -1,7 +1,6 @@
 import React from 'react'
 import { FlatList, ScrollView } from 'react-native'
 import { EditionId, RegionalEdition, SpecialEdition } from 'src/common'
-import { StoreSelectedEditionFunc } from 'src/hooks/use-edition-provider'
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
 import { EditionsMenuHeader } from './Header/Header'
 import { ItemSeperator } from './ItemSeperator/ItemSeperator'
@@ -19,7 +18,9 @@ const EditionsMenu = ({
     regionalEditions?: RegionalEdition[]
     selectedEdition: EditionId
     specialEditions?: SpecialEdition[]
-    storeSelectedEdition: StoreSelectedEditionFunc
+    storeSelectedEdition: (
+        chosenEdition: RegionalEdition | SpecialEdition,
+    ) => void
 }) => {
     return (
         <ScrollView>
@@ -33,7 +34,7 @@ const EditionsMenu = ({
                                 selectedEdition === item.edition ? true : false
                             }
                             onPress={() => {
-                                storeSelectedEdition(item, 'RegionalEdition')
+                                storeSelectedEdition(item)
                                 navigationPress()
                             }}
                             title={item.title}
@@ -62,10 +63,7 @@ const EditionsMenu = ({
                                     buttonImageUri={buttonImageUri}
                                     expiry={new Date(expiry)}
                                     onPress={() => {
-                                        storeSelectedEdition(
-                                            item,
-                                            'SpecialEdition',
-                                        )
+                                        storeSelectedEdition(item)
                                         navigationPress()
                                     }}
                                     title={title}
