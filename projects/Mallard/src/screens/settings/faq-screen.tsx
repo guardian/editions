@@ -421,7 +421,7 @@ const faqHtml = html`
         subscription via the settings menu on your iPhone or iPad as follows:
     </p>
     <ul>
-        <li>Go to Settings > [your name] > iTunes & App Store.</li>
+        <li>Go to Settings > [your name] > iTunes &amp; App Store.</li>
         <li>Tap your Apple ID at the top of the screen.</li>
         <li>
             Tap View Apple ID. You might need to authenticate your Apple ID.
