@@ -32,6 +32,7 @@ import { useApiUrl } from './use-settings'
 import moment from 'moment'
 import { EditionsList } from 'src/common'
 import { getEditionIds } from '../../../Apps/common/src/helpers'
+import { setApiUrl } from 'src/helpers/settings/setters'
 
 interface EditionState {
     editionsList: EditionsList
@@ -162,7 +163,9 @@ export const getEditions = async (
         // We are connected
         if (isConnected) {
             // Grab editions list from the endpoint
+            console.log(`APIURL for getting: ${apiUrl}`)
             const editionsList = await fetchEditions(apiUrl)
+            console.log(`GOT EDITIONS LIST WITH SPECIALS: ${editionsList?.specialEditions}`)
             if (editionsList) {
                 const showAllEditions = await showAllEditionsCache.get()
                 const filteredList = showAllEditions
@@ -244,6 +247,19 @@ export const defaultEditionDecider = async (
     }
 }
 
+const fetchApiUrl = async () => {
+    try {
+        const fetchedApiUrl = await useApiUrl()
+        console.log(`fetchedApiUrl: ${fetchedApiUrl}`)
+        if (fetchedApiUrl) {
+            return fetchedApiUrl
+        }
+    } catch {
+        console.log("API couldn't be fetched from settings")
+    }
+    return defaultSettings.apiUrl
+}
+
 export const EditionProvider = ({
     children,
 }: {
@@ -258,7 +274,12 @@ export const EditionProvider = ({
     const [defaultEdition, setDefaultEdition] = useState<RegionalEdition>(
         BASE_EDITION,
     )
-    const apiUrl = editionsEndpoint(useApiUrl() || defaultSettings.apiUrl)
+
+    const [apiUrl, setApiUrl] = useState("")
+
+    fetchApiUrl().then(apiUrl => setApiUrl(editionsEndpoint(apiUrl)))
+
+    // const apiUrl = editionsEndpoint(useApiUrl() || defaultSettings.apiUrl)
 
     /**
      * Default Edition and Selected
