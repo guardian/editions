@@ -24,7 +24,7 @@ export const createApp = (
     controllers: EditionsBackendControllers,
     asPreview: boolean,
 ): express.Application => {
-    const app: express.Application = express()
+    const app = express()
 
     if (asPreview) {
         console.log('🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞')
