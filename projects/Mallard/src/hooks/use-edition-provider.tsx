@@ -255,7 +255,7 @@ const fetchApiUrl = async () => {
             return fetchedApiUrl
         }
     } catch {
-        console.log("API couldn't be fetched from settings")
+        console.log("An error occurred when fetching API from settings")
     }
     return defaultSettings.apiUrl
 }
