@@ -210,9 +210,15 @@ const faqHtml = html`
         You can find out more about subscribing and pricing on our website.
     </p>
     <p>
-        You can also access the Guardian Editions app if you have an existing
-        iTunes subscription. Please note, the Guardian Editions app is no longer
-        available to purchase as a stand alone product in iTunes.
+        You can also access the Guardian Editions app on compatible iOS devices
+        if you have an existing iTunes subscription to the Guardian old Daily
+        Edition. Please note, the Guardian Editions app is no longer available
+        to purchase as a stand-alone product in iTunes. If you have a Live app
+        Premium tier subscription through Apple or Google Play, your
+        subscription doesn't include access to Guardian Editions. For access to
+        both the Guardian Live app and Guardian Editions app we recommend that
+        you subscribe to our Guardian Digital subscription package. More details
+        about the package can be found on the Guardian website.
     </p>
     <h3>How do I access the Guardian Editions app?</h3>
     <p>
