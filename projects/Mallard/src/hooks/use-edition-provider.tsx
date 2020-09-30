@@ -39,15 +39,7 @@ interface EditionState {
     defaultEdition: RegionalEdition
     storeSelectedEdition: (
         chosenEdition: RegionalEdition | SpecialEdition,
-        type: 'RegionalEdition' | 'SpecialEdition' | 'TrainingEdition',
     ) => void
-}
-
-export interface StoreSelectedEditionFunc {
-    (
-        chosenEdition: RegionalEdition | SpecialEdition,
-        type: 'RegionalEdition' | 'SpecialEdition' | 'TrainingEdition',
-    ): void
 }
 
 export const getSpecialEditionProps = (
@@ -288,13 +280,12 @@ export const EditionProvider = ({
     /**
      * If a chosen edition is regional, then we mark that as default for future reference
      */
-    const storeSelectedEdition: StoreSelectedEditionFunc = async (
-        chosenEdition,
-        type,
+    const storeSelectedEdition = async (
+        chosenEdition: RegionalEdition | SpecialEdition,
     ) => {
         await selectedEditionCache.set(chosenEdition)
         setSelectedEdition(chosenEdition)
-        if (type === 'RegionalEdition') {
+        if (chosenEdition.editionType === 'Regional') {
             await defaultEditionCache.set(chosenEdition as RegionalEdition)
             setDefaultEdition(chosenEdition as RegionalEdition)
             pushNotificationRegistration()

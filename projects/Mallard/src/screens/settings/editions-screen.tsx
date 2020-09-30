@@ -26,7 +26,7 @@ const EditionsScreen = ({
                     key: edition.title,
                     data: consolidatedEditions,
                     onPress: () => {
-                        storeSelectedEdition(edition, 'TrainingEdition')
+                        storeSelectedEdition(edition)
                         navigation.goBack()
                     },
                 }))}
