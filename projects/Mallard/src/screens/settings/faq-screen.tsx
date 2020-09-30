@@ -210,7 +210,7 @@ const faqHtml = html`
         You can find out more about subscribing and pricing on our website.
     </p>
     <p>
-        "You can also access the Guardian Editions app on compatible iOS devices
+        You can also access the Guardian Editions app on compatible iOS devices
         if you have an existing iTunes subscription to the Guardian old Daily
         Edition. Please note, the Guardian Editions app is no longer available
         to purchase as a stand-alone product in iTunes. If you have a Live app
