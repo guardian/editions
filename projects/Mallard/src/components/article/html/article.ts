@@ -123,18 +123,20 @@ export const renderArticle = (
         imageSize,
         type,
         getImagePath,
+        shareUrl,
     }: {
         pillar: ArticlePillar
         topPadding: number
         article: CAPIArticle
         type: ArticleType
         showWebHeader: boolean
+        shareUrl?: string
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     } & ArticleContentProps,
 ) => {
     let content, header
     const headerType = article.headerType || HeaderType.RegularByline
-    const canBeShared = article.webUrl != null
+    const canBeShared = shareUrl != undefined
     switch (article.type) {
         case 'picture':
             header = Header({

@@ -130,7 +130,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-right: ${px(metrics.article.sides)};
         }
     }
-            
+
 
     .header-bg {
         left: -50em;
@@ -173,11 +173,11 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
     }
 
-    @media (max-width: ${px(Breakpoints.tabletVertical)}) {	
-        .header-image--immersive {        
-            padding-top: 167%;	   
-            height: 65%;        
-        }	  
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-image--immersive {
+            padding-top: 167%;
+            height: 65%;
+        }
     }
 
     .header-kicker {
@@ -216,8 +216,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${colors.main};
     }
 
-    .header-standfirst { 
-        font-weight: 600; 
+    .header-standfirst {
+        font-weight: 600;
         color: ${color.palette.neutral[46]};
     }
 
@@ -540,7 +540,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         color: ${color.textOverDarkBackground};
     }
 
-    /*interview*/    
+    /*interview*/
     .header-image--interview {
         width: 100%;
         object-fit: cover;
@@ -554,20 +554,20 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
         ${outieHeader(ArticleType.Interview)}
-        .interview-tablet { 
+        .interview-tablet {
             display: none;
         }
         .app[data-type='${ArticleType.Interview}'] .content-wrap main {
             padding-left: 10px;
             padding-right: 10px;
         }
-    
+
         .header-container[data-type='${
             ArticleType.Interview
         }'] .header-byline button{
             margin-right: 10px;
         }
-    
+
         .header-container[data-type='${
             ArticleType.Interview
         }'] .header-byline span {
@@ -590,7 +590,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='${ArticleType.Interview}'] {
         color: ${color.textOverDarkBackground};
     }
-    header-container-line-wrap 
+    header-container-line-wrap
     .header-container[data-type='${ArticleType.Interview}'] .wrapper {
         padding-top: 0px;
     }
@@ -626,7 +626,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         ArticleType.Interview
     }'] .header h1 .header-top-headline {
         background-color: ${color.palette.neutral[7]};
-        box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]}, 
+        box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]},
             -10px 0 0 ${color.palette.neutral[7]};
         line-height: 38px;
         padding-bottom: 6px;
@@ -680,14 +680,14 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         padding: 0 !important;
     }
 
-    @media (min-width: ${px(Breakpoints.tabletVertical)}) { 
-        .header-image-container--interview { 
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-image-container--interview {
             position: relative;
-         }   
+         }
 
         .header-image-container--interview .header-container[data-type="${
             ArticleType.Interview
-        }"] { 
+        }"] {
             position: absolute;
             bottom: 0;
             z-index: 250;
@@ -713,7 +713,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             ArticleType.Interview
         }"] h1 .header-top-headline {
             background-color: ${color.palette.neutral[7]};
-            box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]}, 
+            box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]},
                 -10px 0 0 ${color.palette.neutral[7]};
             line-height: 38px;
         }
@@ -731,12 +731,12 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding: 10px;
         }
 
-        .interview-tablet .header-bottom { 
+        .interview-tablet .header-bottom {
             background: ${colors.tint};
         }
 
-        .interview-tablet-standfirst { 
-            padding-top: 12px; 
+        .interview-tablet-standfirst {
+            padding-top: 12px;
             padding-bottom: 12px;
         }
 
@@ -748,7 +748,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             font-size: 18px;
         }
 
-        .byline-container:before { 
+        .byline-container:before {
             ${threeLines};
         }
 
@@ -760,7 +760,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             }
         }
 
-        .interview-tablet-wrapper { 
+        .interview-tablet-wrapper {
             margin-left: ${
                 Dimensions.get('window').width > metrics.article.maxWidth
                     ? px(
@@ -784,14 +784,14 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
         .interview-tablet .standfirst--interview p {
             font-size: 18px;
-            margin-right:${px(metrics.article.rightRail)}; 
+            margin-right:${px(metrics.article.rightRail)};
         }
 
         .header-container[data-type="${ArticleType.Interview}"] .header-kicker {
             display: inline-block;
         }
 
-        .header-container[data-type="${ArticleType.Interview}"] h1 { 
+        .header-container[data-type="${ArticleType.Interview}"] h1 {
             font-size: 40px;
         }
 
@@ -806,19 +806,19 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             right: 0;
         }
 
-        .interview-tablet .share-touch-zone { 
+        .interview-tablet .share-touch-zone {
             padding-right: 14px;
         }
 
-        .header-image--interview { 
-            padding-top: 59.6%; 
+        .header-image--interview {
+            padding-top: 59.6%;
         }
 
-        .interview-mobile { 
+        .interview-mobile {
             display: none;
         }
     }
-    
+
     /*showcase*/
     .header-container[data-type='${ArticleType.Showcase}'] .header-kicker {
         border-top: 1px solid ${color.dimLine}
@@ -865,7 +865,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-left: 0;
             padding-right: 0;
         }
-        
+
         .wrapper[data-type='${ArticleType.Showcase}'] {
             margin-right: ${px(metrics.article.rightRail)}
         }
@@ -889,7 +889,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
         .header-container[data-type='${
             ArticleType.Showcase
-        }'] .share-touch-zone { 
+        }'] .share-touch-zone {
             margin: -8px 0 0 0;
         }
 
@@ -1398,7 +1398,7 @@ const HeaderInterviewMobile = ({
     `
 }
 
-/* 
+/*
 In order to render the interview header differently on mobile/tablet we add two
 different templates and use css to hide one or the other depending on the breakpoint.
 */

@@ -22,6 +22,7 @@ import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Image } from 'src/common'
 import { remoteConfigService } from 'src/services/remote-config'
+import { defaultSettings } from 'src/helpers/settings/defaults'
 
 const styles = StyleSheet.create({
     block: {
@@ -139,6 +140,8 @@ const Article = ({
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
+    const [shareUrl, setShareUrl] = useState(article.webUrl)
+
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
         'shouldShowHeader',
@@ -178,7 +181,31 @@ const Article = ({
             )
         }
         fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
-    }, [apiUrl, article.elements, issueId, article.image, article.type])
+        // sometimes we publish content into an edition before it appears on the website
+        // in this scenario the webUrl will be missing as it isn't live yet but the webUrl is
+        // likely to just be theguardian.com/<article id> so here we make a request to the website to check that
+        const generateMissingWebUrl = async (articlePath: string) => {
+            const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
+            // HEAD request as we only need the status code
+            const dotComResult = await fetch(`${generatedUrl}`, {
+                method: 'HEAD',
+            })
+            return dotComResult.status == 200 ? generatedUrl : null
+        }
+
+        !shareUrl &&
+            generateMissingWebUrl(article.key).then(
+                url => url && setShareUrl(url),
+            )
+    }, [
+        apiUrl,
+        article.elements,
+        issueId,
+        article.image,
+        article.type,
+        article.key,
+        shareUrl,
+    ])
 
     return (
         <Fader>
@@ -196,20 +223,21 @@ const Article = ({
                 }}
                 topPadding={topPadding}
                 origin={origin}
+                shareUrl={shareUrl}
                 onMessage={event => {
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
-                        if (article.webUrl == null) return
+                        if (!shareUrl) return
                         if (Platform.OS === 'ios') {
                             Share.share({
-                                url: article.webUrl,
+                                url: shareUrl,
                                 message: article.headline,
                             })
                         } else {
                             Share.share(
                                 {
                                     title: article.headline,
-                                    url: article.webUrl,
+                                    url: shareUrl,
                                     // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
                                     message: article.webUrl,
                                 },

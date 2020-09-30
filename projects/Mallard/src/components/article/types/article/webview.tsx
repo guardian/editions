@@ -28,6 +28,7 @@ const WebviewWithArticle = ({
     _ref,
     topPadding,
     origin,
+    shareUrl,
     ...webViewProps
 }: {
     article: Article | PictureArticle | GalleryArticle
@@ -36,6 +37,7 @@ const WebviewWithArticle = ({
     _ref?: (ref: WebView) => void
     topPadding: number
     origin: IssueOrigin
+    shareUrl?: string
 } & WebViewProps & { onScroll?: any }) => {
     const client = useApolloClient()
     // This line ensures we don't re-render the article when
@@ -93,6 +95,7 @@ const WebviewWithArticle = ({
         publishedId: publishedIssueId || null,
         topPadding,
         getImagePath,
+        shareUrl,
     })
 
     return (
