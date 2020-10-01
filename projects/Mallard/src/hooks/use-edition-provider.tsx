@@ -28,10 +28,10 @@ import NetInfo from '@react-native-community/netinfo'
 import { AppState, AppStateStatus } from 'react-native'
 import { locale } from 'src/helpers/locale'
 import { pushNotificationRegistration } from 'src/notifications/push-notifications'
-import { useApiUrl } from './use-settings'
 import moment from 'moment'
 import { EditionsList } from 'src/common'
 import { getEditionIds } from '../../../Apps/common/src/helpers'
+import { getSetting } from 'src/helpers/settings'
 
 interface EditionState {
     editionsList: EditionsList
@@ -250,7 +250,10 @@ export const EditionProvider = ({
     const [defaultEdition, setDefaultEdition] = useState<RegionalEdition>(
         BASE_EDITION,
     )
-    const apiUrl = editionsEndpoint(useApiUrl() || defaultSettings.apiUrl)
+
+    const [apiUrl, setApiUrl] = useState('')
+
+    getSetting('apiUrl').then(apiUrl => setApiUrl(editionsEndpoint(apiUrl)))
 
     /**
      * Default Edition and Selected
