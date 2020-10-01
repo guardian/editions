@@ -163,9 +163,7 @@ export const getEditions = async (
         // We are connected
         if (isConnected) {
             // Grab editions list from the endpoint
-            console.log(`APIURL for getting: ${apiUrl}`)
             const editionsList = await fetchEditions(apiUrl)
-            console.log(`GOT EDITIONS LIST WITH SPECIALS: ${editionsList?.specialEditions}`)
             if (editionsList) {
                 const showAllEditions = await showAllEditionsCache.get()
                 const filteredList = showAllEditions
@@ -262,7 +260,7 @@ export const EditionProvider = ({
         BASE_EDITION,
     )
 
-    const [apiUrl, setApiUrl] = useState("")
+    const [apiUrl, setApiUrl] = useState('')
 
     getSetting('apiUrl').then(apiUrl => setApiUrl(editionsEndpoint(apiUrl)))
 
