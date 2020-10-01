@@ -32,7 +32,7 @@ import { useApiUrl } from './use-settings'
 import moment from 'moment'
 import { EditionsList } from 'src/common'
 import { getEditionIds } from '../../../Apps/common/src/helpers'
-import { setApiUrl } from 'src/helpers/settings/setters'
+import { getSetting } from 'src/helpers/settings'
 
 interface EditionState {
     editionsList: EditionsList
@@ -247,19 +247,6 @@ export const defaultEditionDecider = async (
     }
 }
 
-const fetchApiUrl = async () => {
-    try {
-        const fetchedApiUrl = await useApiUrl()
-        console.log(`fetchedApiUrl: ${fetchedApiUrl}`)
-        if (fetchedApiUrl) {
-            return fetchedApiUrl
-        }
-    } catch {
-        console.log("An error occurred when fetching API from settings")
-    }
-    return defaultSettings.apiUrl
-}
-
 export const EditionProvider = ({
     children,
 }: {
@@ -277,9 +264,7 @@ export const EditionProvider = ({
 
     const [apiUrl, setApiUrl] = useState("")
 
-    fetchApiUrl().then(apiUrl => setApiUrl(editionsEndpoint(apiUrl)))
-
-    // const apiUrl = editionsEndpoint(useApiUrl() || defaultSettings.apiUrl)
+    getSetting('apiUrl').then(apiUrl => setApiUrl(editionsEndpoint(apiUrl)))
 
     /**
      * Default Edition and Selected
