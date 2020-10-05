@@ -99,11 +99,15 @@ const editionDirsToClean = (
     )
 }
 
+const getDirsToClean = async (path: string, editionList: EditionId[]) => {
+    const directories = await RNFS.readDir(path)
+    return editionDirsToClean(directories, editionList)
+}
+
 // deletes issue files in editon directories at <root>/
 const deleteOldEditionIssues = async (editionIds: EditionId[]) => {
-    const rootFolders = await RNFS.readDir(FSPaths.issuesDir)
-    const rootEditionFoldersToClean = editionDirsToClean(
-        rootFolders,
+    const rootEditionFoldersToClean = await getDirsToClean(
+        FSPaths.issuesDir,
         editionIds,
     )
 
@@ -122,9 +126,8 @@ const deleteOldEditionIssues = async (editionIds: EditionId[]) => {
 
 // deletes everything in the <root>/download/ directory
 const cleanEditionsDownloadFolder = async (editionIds: EditionId[]) => {
-    const downloadFolders = await RNFS.readDir(FSPaths.downloadRoot)
-    const downloadEditionFoldersToDelete = editionDirsToClean(
-        downloadFolders,
+    const downloadEditionFoldersToDelete = await getDirsToClean(
+        FSPaths.downloadRoot,
         editionIds,
     )
     downloadEditionFoldersToDelete.forEach(f =>
