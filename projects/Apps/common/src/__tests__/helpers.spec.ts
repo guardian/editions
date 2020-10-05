@@ -1,3 +1,4 @@
+import { defaultRegionalEditions } from '../editions-defaults'
 import { getEditionIds, issueSummarySort } from '../helpers'
 import { editionsListFixture } from './fixtures/editions-fixtures'
 
@@ -43,5 +44,11 @@ describe('getEditionIds', () => {
             'australian-edition',
             'special-edition',
         ])
+    })
+
+    it('should always include defaultRegionalEditions', () => {
+        const ids = getEditionIds(null)
+
+        expect(ids).toEqual(defaultRegionalEditions.map(e => e.edition))
     })
 })

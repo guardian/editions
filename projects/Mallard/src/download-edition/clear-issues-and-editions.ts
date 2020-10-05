@@ -12,7 +12,6 @@ import {
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 import { editionsListCache } from 'src/helpers/storage'
 import { getEditionIds } from '../../../Apps/common/src/helpers'
-import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
 import { EditionId } from '../../../Apps/common/src'
 
 const clearDownloadsDirectory = async () => {
@@ -86,30 +85,25 @@ const editionDirsToClean = (
     directoryList: { name: string; path: string }[],
     editionList: EditionId[],
 ): { name: string; path: string }[] => {
-    // we never want to delete default regional editions
-    const editionsToKeep = editionList.concat(
-        defaultRegionalEditions.map(e => e.edition),
-    )
     // don't clean hidden folders, folders called 'download' or editions we want to keep
     return directoryList.filter(
         d =>
             !d.name.startsWith('.') &&
             d.name !== 'download' &&
-            !editionsToKeep.includes(d.name),
+            !editionList.includes(d.name),
     )
 }
 
-const getDirsToClean = async (path: string, editionList: EditionId[]) => {
+const getDirsToClean = async (path: string) => {
+    const editionsList = await editionsListCache.get()
+    const editionIds = getEditionIds(editionsList)
     const directories = await RNFS.readDir(path)
-    return editionDirsToClean(directories, editionList)
+    return editionDirsToClean(directories, editionIds)
 }
 
 // deletes issue files in editon directories at <root>/
-const deleteOldEditionIssues = async (editionIds: EditionId[]) => {
-    const rootEditionFoldersToClean = await getDirsToClean(
-        FSPaths.issuesDir,
-        editionIds,
-    )
+const deleteOldEditionIssues = async () => {
+    const rootEditionFoldersToClean = await getDirsToClean(FSPaths.issuesDir)
 
     // we've had issues in the past with deleting issue folders, so just delete the issues for the edition
     const issuesToClear = await Promise.all(
@@ -125,10 +119,9 @@ const deleteOldEditionIssues = async (editionIds: EditionId[]) => {
 }
 
 // deletes everything in the <root>/download/ directory
-const cleanEditionsDownloadFolder = async (editionIds: EditionId[]) => {
+const cleanEditionsDownloadFolder = async () => {
     const downloadEditionFoldersToDelete = await getDirsToClean(
         FSPaths.downloadRoot,
-        editionIds,
     )
     downloadEditionFoldersToDelete.forEach(f =>
         RNFS.unlink(f.path).catch(e => {
@@ -138,12 +131,10 @@ const cleanEditionsDownloadFolder = async (editionIds: EditionId[]) => {
 }
 
 const cleanOldEditions = async () => {
-    const editionsList = await editionsListCache.get()
-    const editionIds = editionsList ? getEditionIds(editionsList) : []
     // we don't care *that* much if we fail to delete old editions so just log any errors to sentry
     try {
-        await deleteOldEditionIssues(editionIds)
-        await cleanEditionsDownloadFolder(editionIds)
+        await deleteOldEditionIssues()
+        await cleanEditionsDownloadFolder()
     } catch (error) {
         errorService.captureException(error)
     }

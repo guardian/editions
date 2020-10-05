@@ -2,17 +2,6 @@ import { editionDirsToClean } from '../clear-issues-and-editions'
 
 describe('clear-issues-and-editions', () => {
     describe('editionDirsToClean', () => {
-        it('should never return default editions', () => {
-            const toClean = editionDirsToClean(
-                [
-                    { name: 'daily-edition', path: '' },
-                    { name: 'test-edition', path: '' },
-                ],
-                [],
-            )
-            expect(toClean).toEqual([{ name: 'test-edition', path: '' }])
-        })
-
         it('should never return the download folder', () => {
             const toClean = editionDirsToClean(
                 [
