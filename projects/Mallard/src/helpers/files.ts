@@ -42,7 +42,7 @@ export const prepFileSystem = async (): Promise<void> => {
     await ensureDirExists(FSPaths.issuesDir)
     await ensureDirExists(FSPaths.downloadRoot)
     const editionsList = await editionsListCache.get()
-    const editionIds = editionsList ? getEditionIds(editionsList) : []
+    const editionIds = getEditionIds(editionsList)
 
     await Promise.all(
         editionIds.map(edition =>
