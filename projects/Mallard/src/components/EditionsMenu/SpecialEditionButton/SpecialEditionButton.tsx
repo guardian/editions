@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Text, TouchableWithoutFeedback, View, Image } from 'react-native'
 import { SpecialEditionButtonStyles } from 'src/common'
 import { styles } from './styles'
+import * as RNLocalize from 'react-native-localize'
 
 const SpecialEditionButton = ({
     expiry,
@@ -46,7 +47,10 @@ const SpecialEditionButton = ({
                     <Text style={defaultStyles.title}>{title}</Text>
                     <Text style={defaultStyles.subTitle}>{subTitle}</Text>
                     <Text style={defaultStyles.expiry}>
-                        Available until {expiry.toLocaleDateString()}
+                        Available until{' '}
+                        {expiry.toLocaleDateString(
+                            RNLocalize.getLocales()[0].languageTag,
+                        )}
                     </Text>
                 </View>
             </View>
