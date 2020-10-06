@@ -26,3 +26,20 @@ jest.mock('react-native-permissions', () => {
         check: jest.fn().mockResolvedValue(2),
     }
 })
+
+jest.mock('react-native-localize', () => ({
+    getLocales: () => [
+        {
+            countryCode: 'GB',
+            languageTag: 'en-GB',
+            languageCode: 'en',
+            isRTL: false,
+        },
+        {
+            countryCode: 'US',
+            languageTag: 'en-US',
+            languageCode: 'en',
+            isRTL: false,
+        },
+    ],
+}))
