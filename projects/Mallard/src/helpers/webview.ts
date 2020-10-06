@@ -246,6 +246,8 @@ export const makeHtml = ({
                 name="viewport"
                 content="width=device-width, initial-scale=1"
             />
+            <!-- Avoid iOS formatting issues disable telephone auto-linking on articles -->
+            ${type && `<meta name="format-detection" content="telephone=no" />`}
         </head>
         <body style="padding-top:${px(topPadding)}">
             <div id="app" class="app" data-type="${type}">
