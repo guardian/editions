@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Text, TouchableWithoutFeedback, View, Image } from 'react-native'
 import { SpecialEditionButtonStyles } from 'src/common'
 import { styles } from './styles'
+import { localDate } from 'src/helpers/date'
 
 const SpecialEditionButton = ({
     expiry,
@@ -46,7 +47,7 @@ const SpecialEditionButton = ({
                     <Text style={defaultStyles.title}>{title}</Text>
                     <Text style={defaultStyles.subTitle}>{subTitle}</Text>
                     <Text style={defaultStyles.expiry}>
-                        Available until {expiry.toLocaleDateString()}
+                        Available until {localDate(expiry)}
                     </Text>
                 </View>
             </View>
