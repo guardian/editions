@@ -13,7 +13,7 @@ import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import gql from 'graphql-tag'
 import { FSPaths } from 'src/paths'
 import retry from 'async-retry'
-import { deleteIssue } from './clear-issues'
+import { deleteIssue } from './clear-issues-and-editions'
 
 type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> }
 const DOWNLOAD_BLOCKED_QUERY = gql`

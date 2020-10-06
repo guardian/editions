@@ -10,7 +10,7 @@ import { defaultSettings } from './settings/defaults'
 import { cacheClearCache } from './storage'
 import { FSPaths, APIPaths } from 'src/paths'
 import { Front, IssueWithFronts } from '../../../Apps/common/src'
-import { deleteIssueFiles } from 'src/download-edition/clear-issues'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 

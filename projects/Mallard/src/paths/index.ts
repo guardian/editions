@@ -11,7 +11,6 @@ import {
 } from 'src/common'
 import RNFS from 'react-native-fs'
 import { imagePath } from '../../../Apps/common/src'
-import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
 
 export interface PathToIssue {
@@ -37,9 +36,8 @@ const issuesDir = `${RNFS.DocumentDirectoryPath}/issues`
 
 const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
 const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`
-const editionDir = async () => {
-    const edition = await getSelectedEditionSlug()
-    return `${issuesDir}/${edition}`
+const editionDir = (editionSlug: string) => {
+    return `${issuesDir}/${editionSlug}`
 }
 const edtionsDirList = async (): Promise<string[]> => {
     return defaultRegionalEditions.map(reg => {

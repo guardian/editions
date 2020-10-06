@@ -154,11 +154,10 @@ export type DLStatus =
 
 const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
 
-export const getLocalIssues = async () => {
-    const editionDirectory = await FSPaths.editionDir()
-    const edition = await getSelectedEditionSlug()
+export const getLocalIssues = async (editionSlug: string) => {
+    const editionDirectory = await FSPaths.editionDir(editionSlug)
     return RNFS.readdir(editionDirectory).then(files =>
-        files.map(withPathPrefix(edition)),
+        files.map(withPathPrefix(editionSlug)),
     )
 }
 
@@ -216,7 +215,8 @@ export const matchSummmaryToKey = (
 }
 
 export const readIssueSummary = async (): Promise<IssueSummary[]> => {
-    const editionDirectory = await FSPaths.editionDir()
+    const editionSlug = await getSelectedEditionSlug()
+    const editionDirectory = await FSPaths.editionDir(editionSlug)
     return RNFS.readFile(editionDirectory + defaultSettings.issuesPath, 'utf8')
         .then(data => {
             try {
@@ -236,7 +236,7 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> => {
 export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     const apiUrl = await getSetting('apiUrl')
     const edition = await getSelectedEditionSlug()
-    const editionDirectory = await FSPaths.editionDir()
+    const editionDirectory = await FSPaths.editionDir(edition)
 
     const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
 
@@ -275,7 +275,8 @@ const cleanFileDisplay = (stat: RNFS.ReadDirItem | RNFS.StatResult) => ({
 
 export const getFileList = async () => {
     const imageFolders: RNFS.ReadDirItem[] = []
-    const editionDirectory = await FSPaths.editionDir()
+    const editionSlug = await getSelectedEditionSlug()
+    const editionDirectory = await FSPaths.editionDir(editionSlug)
     const files = await RNFS.readDir(editionDirectory)
 
     const subfolders = await Promise.all(
