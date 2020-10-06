@@ -2,10 +2,7 @@ import React, { useState } from 'react'
 import { Text, TouchableWithoutFeedback, View, Image } from 'react-native'
 import { SpecialEditionButtonStyles } from 'src/common'
 import { styles } from './styles'
-import * as RNLocalize from 'react-native-localize'
-
-const localDate = (expiry: Date): string =>
-    expiry.toLocaleDateString(RNLocalize.getLocales()[0].languageTag)
+import { localDate } from 'src/helpers/date'
 
 const SpecialEditionButton = ({
     expiry,
