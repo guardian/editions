@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { receiptIOS } from 'src/authentication/__tests__/fixtures'
+import { isNullOrUndefined } from 'util'
 import { isReceiptValid, findValidReceipt } from '../iap'
 
 describe('iap', () => {
@@ -74,6 +75,23 @@ describe('iap', () => {
                     receipt_creation_date: '',
                 },
                 latest_receipt_info: [receipt],
+            }
+            expect(findValidReceipt(receiptValidationResponse)).toEqual(null)
+        })
+        it('should return null if last_receipt_info is missing', () => {
+            const fourDaysAgo = moment()
+                .subtract(4, 'days')
+                .toDate()
+            const receipt = receiptIOS({ expires_date: fourDaysAgo })
+            const receiptValidationResponse = {
+                status: 0,
+                receipt: {
+                    bundle_id: 'test',
+                    application_version: '1.2',
+                    in_app: [],
+                    original_application_version: '',
+                    receipt_creation_date: '',
+                },
             }
             expect(findValidReceipt(receiptValidationResponse)).toEqual(null)
         })
