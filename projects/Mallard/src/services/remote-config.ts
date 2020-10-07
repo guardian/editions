@@ -13,19 +13,20 @@ interface RemoteConfig {
 const remoteConfigDefaults = {
     logging_enabled: true,
     join_beta_button_enabled: false,
+    lightbox_enabled: true,
 }
 
 export const RemoteConfigProperties = [
     'logging_enabled',
     'join_beta_button_enabled',
+    'lightbox_enabled',
 ] as const
 
 export type RemoteConfigProperty = typeof RemoteConfigProperties[number]
 
 const configValues = {
     // fetch config, cache for 5mins. This cache persists when app is reloaded
-    minimumFetchInterval: 300,
-    isDeveloperModeEnabled: __DEV__, // dev mode bypass caching and enable quick testing
+    minimumFetchIntervalMillis: 300,
 }
 
 class RemoteConfigService implements RemoteConfig {
@@ -56,11 +57,15 @@ class RemoteConfigService implements RemoteConfig {
     }
 
     getBoolean(key: RemoteConfigProperty): boolean {
-        return remoteConfig().getValue(key).value as boolean
+        return remoteConfig()
+            .getValue(key)
+            .asBoolean()
     }
 
     getString(key: RemoteConfigProperty): RemoteStringValue {
-        return remoteConfig().getValue(key).value as string
+        return remoteConfig()
+            .getValue(key)
+            .asString()
     }
 }
 
