@@ -348,8 +348,8 @@ const faqHtml = html`
     </p>
     <h3>How do I share content?</h3>
     <p>
-        Articles available for sharing have a share icon (screenshot) on the
-        right hand side near the top of the article page.
+        Articles available for sharing have a share icon on the right hand side
+        near the top of the article page.
     </p>
     <p>
         For technical reasons, currently, not all articles are available for
