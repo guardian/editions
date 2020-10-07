@@ -23,6 +23,7 @@ import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Image } from 'src/common'
 import { remoteConfigService } from 'src/services/remote-config'
 import { defaultSettings } from 'src/helpers/settings/defaults'
+import { remoteConfigService } from 'src/services/remote-config'
 
 const styles = StyleSheet.create({
     block: {
@@ -120,6 +121,20 @@ const useUpdateWebviewVariable = (
     return valueInWebview
 }
 
+/**
+ * Sometimes the webUrl is empty due to that content not being published at the point the edition
+ * was created. However, we still have access to the article path at the time of publication
+ * This function checks to see if theguardian.com/<path at publication time> exists
+ */
+const generateMissingWebUrl = async (articlePath: string) => {
+    const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
+    // HEAD request as we only need the status code
+    const dotComResult = await fetch(`${generatedUrl}`, {
+        method: 'HEAD',
+    })
+    return [302, 200].includes(dotComResult.status) ? generatedUrl : null
+}
+
 const Article = ({
     navigation,
     article,
@@ -181,19 +196,9 @@ const Article = ({
             )
         }
         fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
-        // sometimes we publish content into an edition before it appears on the website
-        // in this scenario the webUrl will be missing as it isn't live yet but the webUrl is
-        // likely to just be theguardian.com/<article id> so here we make a request to the website to check that
-        const generateMissingWebUrl = async (articlePath: string) => {
-            const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
-            // HEAD request as we only need the status code
-            const dotComResult = await fetch(`${generatedUrl}`, {
-                method: 'HEAD',
-            })
-            return dotComResult.status == 200 ? generatedUrl : null
-        }
 
         !shareUrl &&
+            remoteConfigService.getBoolean('generate_share_url') &&
             generateMissingWebUrl(article.key).then(
                 url => url && setShareUrl(url),
             )
