@@ -49,18 +49,29 @@ const getMostRecentTransactionReceipt = (purchases: Purchase[]) => {
         .transactionReceipt
 }
 
+const findValidReceipt = (receipt: ReceiptValidationResponse) =>
+    hasLatestReceiptInfo(receipt)
+        ? findValidReceiptFromLatestInfo(receipt) || null
+        : null
+
+const hasLatestReceiptInfo = (receipt: ReceiptValidationResponse) => {
+    return (
+        receipt &&
+        receipt.latest_receipt_info &&
+        (receipt.latest_receipt_info as ReceiptIOS[]).length > 0
+    )
+}
+
+const findValidReceiptFromLatestInfo = (receipt: ReceiptValidationResponse) => {
+    return (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptValid)
+}
+
 const isReceiptValid = (receipt: ReceiptIOS) => {
     const expirationInMilliseconds = Number(receipt.expires_date_ms)
     const expirationWithGracePeriod = expirationInMilliseconds + THREE_DAYS
     const nowInMilliseconds = Date.now()
     return expirationWithGracePeriod > nowInMilliseconds
 }
-
-const findValidReceipt = (receipt: ReceiptValidationResponse) =>
-    receipt
-        ? (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptValid) ||
-          null
-        : null
 
 /**
  * This will attempt to restore existing purchases

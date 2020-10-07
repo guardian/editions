@@ -1,6 +1,5 @@
 import moment from 'moment'
 import { receiptIOS } from 'src/authentication/__tests__/fixtures'
-import { isNullOrUndefined } from 'util'
 import { isReceiptValid, findValidReceipt } from '../iap'
 
 describe('iap', () => {
