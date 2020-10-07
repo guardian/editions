@@ -225,6 +225,17 @@ const makeJavaScript = (topPadding: number) => html`
     </script>
 `
 
+const DROP_CAP_ARTICLE_TYPES: ArticleType[] = [
+    ArticleType.Immersive,
+    ArticleType.Longread,
+    ArticleType.Interview,
+]
+
+// Telephone auto-linking can create formatting issues with drop caps
+const shouldDisableTelephoneLinking = (type: ArticleType): boolean => {
+    return DROP_CAP_ARTICLE_TYPES.includes(type)
+}
+
 /* makes some HTML and posts the height back */
 export const makeHtml = ({
     styles,
@@ -246,8 +257,9 @@ export const makeHtml = ({
                 name="viewport"
                 content="width=device-width, initial-scale=1"
             />
-            <!-- Avoid iOS formatting issues disable telephone auto-linking on articles -->
-            ${type && `<meta name="format-detection" content="telephone=no" />`}
+            ${type &&
+                shouldDisableTelephoneLinking(type) &&
+                `<meta name="format-detection" content="telephone=no" />`}
         </head>
         <body style="padding-top:${px(topPadding)}">
             <div id="app" class="app" data-type="${type}">
