@@ -19,3 +19,6 @@ export const onShouldStartLoadWithRequest = (event: any) => {
     }
     return true
 }
+
+export const isSuccessOrRedirect = (status: number) =>
+    [302, 200].includes(status)

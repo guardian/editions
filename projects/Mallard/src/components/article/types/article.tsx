@@ -24,6 +24,7 @@ import { Image } from 'src/common'
 import { remoteConfigService } from 'src/services/remote-config'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { remoteConfigService } from 'src/services/remote-config'
+import { isSuccessOrRedirect } from './article/helpers'
 
 const styles = StyleSheet.create({
     block: {
@@ -120,7 +121,6 @@ const useUpdateWebviewVariable = (
     }, [value])
     return valueInWebview
 }
-
 /**
  * Sometimes the webUrl is empty due to that content not being published at the point the edition
  * was created. However, we still have access to the article path at the time of publication
@@ -132,7 +132,7 @@ const generateMissingWebUrl = async (articlePath: string) => {
     const dotComResult = await fetch(`${generatedUrl}`, {
         method: 'HEAD',
     })
-    return [302, 200].includes(dotComResult.status) ? generatedUrl : null
+    return isSuccessOrRedirect(dotComResult.status) ? generatedUrl : null
 }
 
 const Article = ({
