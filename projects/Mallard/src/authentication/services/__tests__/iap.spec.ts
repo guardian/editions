@@ -77,5 +77,18 @@ describe('iap', () => {
             }
             expect(findValidReceipt(receiptValidationResponse)).toEqual(null)
         })
+        it('should return null if last_receipt_info is missing', () => {
+            const receiptValidationResponse = {
+                status: 0,
+                receipt: {
+                    bundle_id: 'test',
+                    application_version: '1.2',
+                    in_app: [],
+                    original_application_version: '',
+                    receipt_creation_date: '',
+                },
+            }
+            expect(findValidReceipt(receiptValidationResponse)).toEqual(null)
+        })
     })
 })
