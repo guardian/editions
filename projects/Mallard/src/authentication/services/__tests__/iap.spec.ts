@@ -78,10 +78,6 @@ describe('iap', () => {
             expect(findValidReceipt(receiptValidationResponse)).toEqual(null)
         })
         it('should return null if last_receipt_info is missing', () => {
-            const fourDaysAgo = moment()
-                .subtract(4, 'days')
-                .toDate()
-            const receipt = receiptIOS({ expires_date: fourDaysAgo })
             const receiptValidationResponse = {
                 status: 0,
                 receipt: {
