@@ -21,7 +21,7 @@ import { selectImagePath } from 'src/hooks/use-image-paths'
 import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Image } from 'src/common'
-import remoteConfig from '@react-native-firebase/remote-config'
+import { remoteConfigService } from 'src/services/remote-config'
 
 const styles = StyleSheet.create({
     block: {
@@ -144,7 +144,7 @@ const Article = ({
         'shouldShowHeader',
         shouldShowHeader,
     )
-    const lightboxEnabled = remoteConfig().getValue('lightbox_enabled').value
+    const lightboxEnabled = remoteConfigService.getBoolean('lightbox_enabled')
 
     const [, { pillar }] = useArticle()
     const apiUrl = useApiUrl() || ''
