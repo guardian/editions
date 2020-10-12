@@ -11,7 +11,9 @@ const localDate = (date: Date): string => {
     if (Platform.OS === 'ios') {
         return date.toLocaleDateString(languageLocale)
     } else {
-        return languageLocale === "en-US" ? moment(date).format('MM/DD/YYYY') : moment(date).format('DD/MM/YYYY')
+        return languageLocale === 'en-US'
+            ? moment(date).format('MM/DD/YYYY')
+            : moment(date).format('DD/MM/YYYY')
     }
 }
 
