@@ -29,7 +29,8 @@ const WebviewWithArticle = ({
     // Hold off rendering until we have all the necessary data.
     if (res.loading) return null
 
-    const uri = defaultSettings.appRenderingService + article.key + "?template=editions"
+    const uri =
+        defaultSettings.appRenderingService + article.key + '?template=editions'
     console.log(uri)
 
     return (
