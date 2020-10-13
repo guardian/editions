@@ -11,6 +11,7 @@ const localDate = (date: Date): string => {
     if (Platform.OS === 'ios') {
         return date.toLocaleDateString(languageLocale)
     } else {
+        // toLocaleDateString is not a reliable way of getting the format we need on android
         return languageLocale === 'en-US'
             ? moment(date).format('MM/DD/YYYY')
             : moment(date).format('DD/MM/YYYY')
