@@ -79,6 +79,7 @@ export interface DevSettings {
     issuesPath: string
     senderId: string
     logging: string
+    appRenderingService: string
 }
 
 interface UserSettings {

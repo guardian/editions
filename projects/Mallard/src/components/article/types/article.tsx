@@ -122,19 +122,15 @@ const useUpdateWebviewVariable = (
 const Article = ({
     navigation,
     article,
-    path,
     onShouldShowHeaderChange,
     shouldShowHeader,
-    topPadding,
     onIsAtTopChange,
-    origin,
 }: {
     navigation: NavigationScreenProp<{}>
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
     origin: IssueOrigin
 } & HeaderControlProps) => {
-    const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
@@ -183,20 +179,15 @@ const Article = ({
     return (
         <Fader>
             <WebviewWithArticle
-                type={type}
                 article={article}
-                path={path}
                 scrollEnabled={true}
-                useWebKit={false}
                 allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
                 mediaPlaybackRequiresUserAction={false}
                 style={[styles.webview]}
-                _ref={r => {
+                _ref={(r: any) => {
                     ref.current = r
                 }}
-                topPadding={topPadding}
-                origin={origin}
-                onMessage={event => {
+                onMessage={(event: any) => {
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
                         if (article.webUrl == null) return

@@ -47,6 +47,11 @@ export const backends = [
     preview: boolean
 }[]
 
+const appRenderingService = {
+    prod: 'https://mobile.guardianapis.com/rendered-items/',
+    code: 'http://mobile.code.dev-guardianapis.com/rendered-items/',
+}
+
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
     code: 'https://notifications.code.dev-guardianapis.com/device/register',
@@ -128,6 +133,9 @@ export const defaultSettings: Settings = {
     logging: __DEV__
         ? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
         : 'https://editions-logging.guardianapis.com/log/mallard',
+    appRenderingService: __DEV__
+        ? appRenderingService.code
+        : appRenderingService.prod,
 }
 
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
