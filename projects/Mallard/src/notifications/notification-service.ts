@@ -33,7 +33,10 @@ const registerWithNotificationService = async (
                 ? Promise.resolve(response.json())
                 : Promise.reject(response.status),
         )
-        .catch(e => errorService.captureException(e))
+        .catch(e => {
+            errorService.captureException(e)
+            errorService.captureException(new Error(JSON.stringify(options)))
+        })
 }
 
 export { registerWithNotificationService }
