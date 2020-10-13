@@ -6,4 +6,6 @@ const locale =
           NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
         : NativeModules.I18nManager.localeIdentifier
 
-export { locale }
+const languageLocale = locale.replace('_', '-')
+
+export { locale, languageLocale }
