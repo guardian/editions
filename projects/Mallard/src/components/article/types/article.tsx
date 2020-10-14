@@ -25,6 +25,8 @@ import { remoteConfigService } from 'src/services/remote-config'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { remoteConfigService } from 'src/services/remote-config'
 import { isSuccessOrRedirect } from './article/helpers'
+import { useApolloClient } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 const styles = StyleSheet.create({
     block: {
@@ -121,17 +123,28 @@ const useUpdateWebviewVariable = (
     }, [value])
     return valueInWebview
 }
+
+const injectJavascript = (
+    webviewRef: React.MutableRefObject<WebView | null>,
+    script: string,
+): void => {
+    if (webviewRef && webviewRef.current) {
+        webviewRef.current.injectJavaScript(script)
+    }
+}
+
 /**
  * Sometimes the webUrl is empty due to that content not being published at the point the edition
  * was created. However, we still have access to the article path at the time of publication
  * This function checks to see if theguardian.com/<path at publication time> exists
  */
-const generateMissingWebUrl = async (articlePath: string) => {
+const pathLookup = async (articlePath: string) => {
     const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
     // HEAD request as we only need the status code
     const dotComResult = await fetch(`${generatedUrl}`, {
         method: 'HEAD',
     })
+
     return isSuccessOrRedirect(dotComResult.status) ? generatedUrl : null
 }
 
@@ -155,7 +168,16 @@ const Article = ({
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
+    const client = useApolloClient()
+    const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
+        query: gql('{ netInfo @client { isConnected @client } }'),
+    })
+    const isConnected = data && data.netInfo.isConnected
     const [shareUrl, setShareUrl] = useState(article.webUrl)
+    const shareUrlFetchEnabled =
+        isConnected &&
+        !shareUrl &&
+        remoteConfigService.getBoolean('generate_share_url')
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
@@ -197,11 +219,18 @@ const Article = ({
         }
         fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
 
-        !shareUrl &&
-            remoteConfigService.getBoolean('generate_share_url') &&
-            generateMissingWebUrl(article.key).then(
-                url => url && setShareUrl(url),
-            )
+        const updateShareUrl = async () => {
+            const url = await pathLookup(article.key)
+            if (url) {
+                setShareUrl(url)
+                injectJavascript(
+                    ref,
+                    `document.querySelector('.share-hidden').style.display='inline';`,
+                )
+            }
+        }
+
+        shareUrlFetchEnabled && updateShareUrl()
     }, [
         apiUrl,
         article.elements,
@@ -209,7 +238,7 @@ const Article = ({
         article.image,
         article.type,
         article.key,
-        shareUrl,
+        shareUrlFetchEnabled,
     ])
 
     return (
@@ -228,11 +257,9 @@ const Article = ({
                 }}
                 topPadding={topPadding}
                 origin={origin}
-                shareUrl={shareUrl}
                 onMessage={event => {
                     const parsed = parsePing(event.nativeEvent.data)
-                    if (parsed.type === 'share') {
-                        if (!shareUrl) return
+                    if (parsed.type === 'share' && shareUrl) {
                         if (Platform.OS === 'ios') {
                             Share.share({
                                 url: shareUrl,
@@ -244,7 +271,7 @@ const Article = ({
                                     title: article.headline,
                                     url: shareUrl,
                                     // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
-                                    message: article.webUrl,
+                                    message: shareUrl,
                                 },
                                 {
                                     subject: article.headline,

@@ -55,9 +55,9 @@ const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
     })
 }
 
-/* 
+/*
 As well as list items bullet points from composer can be sent as a unicode character •
-This method applies a class to the bullet string in order to add stlying through css 
+This method applies a class to the bullet string in order to add stlying through css
 */
 const cleanupBullets = (html: string) => {
     return html.replace(/•/g, `<span class="bullet">•</span>`)
@@ -123,20 +123,17 @@ export const renderArticle = (
         imageSize,
         type,
         getImagePath,
-        shareUrl,
     }: {
         pillar: ArticlePillar
         topPadding: number
         article: CAPIArticle
         type: ArticleType
         showWebHeader: boolean
-        shareUrl?: string
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     } & ArticleContentProps,
 ) => {
     let content, header
     const headerType = article.headerType || HeaderType.RegularByline
-    const canBeShared = shareUrl != undefined
     switch (article.type) {
         case 'picture':
             header = Header({
@@ -147,7 +144,7 @@ export const renderArticle = (
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
                 showMedia,
-                canBeShared,
+                webUrl: article.webUrl,
                 getImagePath,
                 pillar,
             })
@@ -166,7 +163,6 @@ export const renderArticle = (
                 standfirst: article.standfirst,
                 image: article.image,
                 showMedia,
-                canBeShared,
                 getImagePath,
                 pillar,
             })
@@ -186,7 +182,6 @@ export const renderArticle = (
                           headerType,
                           publishedId,
                           showMedia,
-                          canBeShared,
                           pillar,
                           getImagePath,
                       })
@@ -197,7 +192,6 @@ export const renderArticle = (
                           headerType,
                           publishedId,
                           showMedia,
-                          canBeShared,
                           pillar,
                           getImagePath,
                       })
@@ -207,7 +201,6 @@ export const renderArticle = (
                           headerType,
                           publishedId,
                           showMedia,
-                          canBeShared,
                           pillar,
                           getImagePath,
                       })

@@ -366,6 +366,10 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         outline-width:0;
     }
 
+    .share-hidden {
+        display: none;
+    }
+
     .share-touch-zone {
         float: right;
         margin: -8px -8px 0 0;
@@ -1117,27 +1121,28 @@ const hasByLine = (
 
 const getByLine = (
     headerType: HeaderType,
-    canBeShared: boolean,
     headerProps: ArticleHeaderProps,
     articleType?: ArticleType,
+    webUrl?: string,
 ): string => {
-    const headerClass = getHeaderClassForType(headerType)
     const bylineText = getByLineText(headerType, headerProps, articleType)
-    const shareButton = !canBeShared
-        ? ''
-        : html`
-              <button
-                  name="Share button"
-                  class="share-touch-zone"
-                  onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
-              >
-                  <div class="share-button">
-                      <div class="share-icon">
-                          ${Platform.OS === 'ios' ? '\uE009' : '\uE008'}
-                      </div>
-                  </div>
-              </button>
-          `
+    if (!bylineText && !webUrl) return ''
+    const headerClass = getHeaderClassForType(headerType)
+    const hideInitially = webUrl ? '' : 'share-hidden'
+
+    const shareButton = html`
+        <button
+            name="Share button"
+            class="share-touch-zone ${hideInitially}"
+            onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
+        >
+            <div class="share-button">
+                <div class="share-icon">
+                    ${Platform.OS === 'ios' ? '\uE009' : '\uE008'}
+                </div>
+            </div>
+        </button>
+    `
     return html`
         <aside class="${headerClass}" data-type="${articleType}">
             ${shareButton}
@@ -1151,21 +1156,21 @@ const Header = ({
     publishedId,
     type,
     headerType,
-    getImagePath,
     pillar,
+    webUrl,
+    getImagePath,
     ...headerProps
 }: {
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
     headerType: HeaderType
-    canBeShared: boolean
     pillar: ArticlePillar
+    webUrl?: string
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
     const isGallery = type === ArticleType.Gallery
-    const byLineText = getByLineText(headerType, headerProps)
     const displayWideImage =
         type === ArticleType.Article || type === ArticleType.Review
     return html`
@@ -1248,13 +1253,12 @@ const Header = ({
                         pillar,
                     )}
                 </header>
-                ${hasByLine(byLineText, headerProps.canBeShared) &&
-                    getByLine(
-                        headerType,
-                        headerProps.canBeShared,
-                        headerProps as ArticleHeaderProps,
-                        type,
-                    )}
+                ${getByLine(
+                    headerType,
+                    headerProps as ArticleHeaderProps,
+                    type,
+                    webUrl,
+                )}
                 <div class="header-bg"></div>
             </div>
         </div>
@@ -1265,6 +1269,7 @@ const HeaderInterviewTablet = ({
     publishedId,
     type,
     headerType,
+    webUrl,
     getImagePath,
     pillar,
     ...headerProps
@@ -1273,11 +1278,10 @@ const HeaderInterviewTablet = ({
     publishedId: Issue['publishedId'] | null
     type: ArticleType
     headerType: HeaderType
-    canBeShared: boolean
+    webUrl?: string
     pillar: ArticlePillar
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
-    const byLineText = getByLineText(headerType, headerProps)
     return html`
         <div class="interview-tablet">
             <div class="header-image-container--interview">
@@ -1322,13 +1326,12 @@ const HeaderInterviewTablet = ({
                     class="byline-container interview-tablet-wrapper"
                     data-type="${type}"
                 >
-                    ${hasByLine(byLineText, headerProps.canBeShared) &&
-                        getByLine(
-                            headerType,
-                            headerProps.canBeShared,
-                            headerProps as ArticleHeaderProps,
-                            type,
-                        )}
+                    ${getByLine(
+                        headerType,
+                        headerProps as ArticleHeaderProps,
+                        type,
+                        webUrl,
+                    )}
                     <div class="header-bg"></div>
                 </div>
             </div>
@@ -1340,6 +1343,7 @@ const HeaderInterviewMobile = ({
     publishedId,
     type,
     headerType,
+    webUrl,
     getImagePath,
     pillar,
     ...headerProps
@@ -1348,11 +1352,10 @@ const HeaderInterviewMobile = ({
     publishedId: Issue['publishedId'] | null
     type: ArticleType
     headerType: HeaderType
-    canBeShared: boolean
+    webUrl?: string
     pillar: ArticlePillar
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
-    const byLineText = getByLineText(headerType, headerProps)
     return html`
         <div class="interview-mobile">
             ${headerProps.image &&
@@ -1384,13 +1387,12 @@ const HeaderInterviewMobile = ({
                             pillar,
                         )}
                     </header>
-                    ${hasByLine(byLineText, headerProps.canBeShared) &&
-                        getByLine(
-                            headerType,
-                            headerProps.canBeShared,
-                            headerProps as ArticleHeaderProps,
-                            type,
-                        )}
+                    ${getByLine(
+                        headerType,
+                        headerProps as ArticleHeaderProps,
+                        type,
+                        webUrl,
+                    )}
                     <div class="header-bg"></div>
                 </div>
             </div>
@@ -1408,13 +1410,14 @@ const HeaderInterview = ({
     headerType,
     getImagePath,
     pillar,
+    webUrl,
     ...headerProps
 }: {
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
     headerType: HeaderType
-    canBeShared: boolean
+    webUrl?: string
     pillar: ArticlePillar
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
@@ -1442,6 +1445,7 @@ const HeaderShowcase = ({
     publishedId,
     type,
     headerType,
+    webUrl,
     getImagePath,
     pillar,
     ...headerProps
@@ -1450,7 +1454,7 @@ const HeaderShowcase = ({
     publishedId: Issue['publishedId'] | null
     type: ArticleType
     headerType: HeaderType
-    canBeShared: boolean
+    webUrl?: string
     pillar: ArticlePillar
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
@@ -1496,13 +1500,12 @@ const HeaderShowcase = ({
                         type,
                     })}
                 </div>
-                ${hasByLine(byLineText, headerProps.canBeShared) &&
-                    getByLine(
-                        headerType,
-                        headerProps.canBeShared,
-                        headerProps as ArticleHeaderProps,
-                        type,
-                    )}
+                ${getByLine(
+                    headerType,
+                    headerProps as ArticleHeaderProps,
+                    type,
+                    webUrl,
+                )}
             </div>
         </div>
     `
