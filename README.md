@@ -65,10 +65,12 @@ This contains `common` which is the code shared between app and backends and `cr
 These are deployed using [riffraff](https://riffraff.gutools.co.uk) as `editions`.
 
 ## Uploading iOS internal beta to testflight
+There is a scheduled github [action](https://github.com/guardian/editions/actions?query=workflow%3Ascheduled-ios-beta) which runs everyday at 3pm and uploads an internal beta build to testflight.
 
-1. Create a GitHub personal access token (you will need to select the "repo" scope)
-2. Set your personal access token as an environment variable: export GITHUB_TOKEN="secret".
-3. Execute `editions/script/upload-build.sh` to upload a build from master
+To **manually** upload an internal beta 
+1. Go to the scheduled github [action](https://github.com/guardian/editions/actions?query=workflow%3Ascheduled-ios-beta)
+2. Select Run Worflow
+3. Select which branch you would like to use the workflow from
 
 ## Complete Process Flow
 
