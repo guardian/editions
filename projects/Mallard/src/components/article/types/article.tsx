@@ -168,17 +168,6 @@ const Article = ({
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
 
-    const client = useApolloClient()
-    const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
-        query: gql('{ netInfo @client { isConnected @client } }'),
-    })
-    const isConnected = data && data.netInfo.isConnected
-    const [shareUrl, setShareUrl] = useState(article.webUrl)
-    const shareUrlFetchEnabled =
-        isConnected &&
-        !shareUrl &&
-        remoteConfigService.getBoolean('generate_share_url')
-
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
         'shouldShowHeader',
@@ -189,6 +178,18 @@ const Article = ({
     const [, { pillar }] = useArticle()
     const apiUrl = useApiUrl() || ''
     const { issueId } = useIssueSummary()
+
+    // sharing logic
+    const client = useApolloClient()
+    const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
+        query: gql('{ netInfo @client { isConnected @client } }'),
+    })
+    const isConnected = data && data.netInfo.isConnected
+    const [shareUrl, setShareUrl] = useState(article.webUrl)
+    const shareUrlFetchEnabled =
+        !shareUrl &&
+        isConnected &&
+        remoteConfigService.getBoolean('generate_share_url')
 
     useEffect(() => {
         const lbimages = getLightboxImages(article.elements)
@@ -225,7 +226,9 @@ const Article = ({
                 setShareUrl(url)
                 injectJavascript(
                     ref,
-                    `document.querySelector('.share-hidden').style.display='inline';`,
+                    `document.getElementById('.share-button').classList.remove('display-none');
+                     document.getElementById('.byline-area').classList.remove('display-none');
+                    `,
                 )
             }
         }

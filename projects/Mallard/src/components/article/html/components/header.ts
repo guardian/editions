@@ -366,7 +366,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         outline-width:0;
     }
 
-    .share-hidden {
+    .display-none {
         display: none;
     }
 
@@ -1126,14 +1126,14 @@ const getByLine = (
     webUrl?: string,
 ): string => {
     const bylineText = getByLineText(headerType, headerProps, articleType)
-    if (!bylineText && !webUrl) return ''
     const headerClass = getHeaderClassForType(headerType)
-    const hideInitially = webUrl ? '' : 'share-hidden'
+    const hideByline = bylineText || webUrl ? '' : 'byline-hidden'
+    const hideShareButton = webUrl ? '' : 'share-hidden'
 
     const shareButton = html`
         <button
             name="Share button"
-            class="share-touch-zone ${hideInitially}"
+            class="share-touch-zone"
             onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
         >
             <div class="share-button">
@@ -1144,8 +1144,14 @@ const getByLine = (
         </button>
     `
     return html`
-        <aside class="${headerClass}" data-type="${articleType}">
-            ${shareButton}
+        <aside
+            id="byline-area"
+            class="${headerClass} ${hideByline}"
+            data-type="${articleType}"
+        >
+            <div id="share-button" class="${hideShareButton}">
+                ${shareButton}
+            </div>
             <span style="pointer-events: none">${bylineText}</span>
             <div class="clearfix"></div>
         </aside>
