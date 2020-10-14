@@ -1109,16 +1109,6 @@ const getHeaderClassForType = (headerType: HeaderType): string => {
     }
 }
 
-const hasByLine = (
-    byLineText: string | undefined,
-    canBeShared: boolean,
-): boolean => {
-    if (byLineText || canBeShared) {
-        return true
-    }
-    return false
-}
-
 const getByLine = (
     headerType: HeaderType,
     headerProps: ArticleHeaderProps,
@@ -1434,6 +1424,7 @@ const HeaderInterview = ({
             headerType,
             getImagePath,
             pillar,
+            webUrl,
             ...headerProps,
         })}
         ${HeaderInterviewTablet({
@@ -1442,6 +1433,7 @@ const HeaderInterview = ({
             headerType,
             getImagePath,
             pillar,
+            webUrl,
             ...headerProps,
         })}
     `
@@ -1464,7 +1456,6 @@ const HeaderShowcase = ({
     pillar: ArticlePillar
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
-    const byLineText = getByLineText(headerType, headerProps)
     return html`
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}

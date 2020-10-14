@@ -140,12 +140,14 @@ const injectJavascript = (
  */
 const pathLookup = async (articlePath: string) => {
     const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
-    // HEAD request as we only need the status code
+    // HEAD request as we only need the status code. If the request fails return null
     const dotComResult = await fetch(`${generatedUrl}`, {
         method: 'HEAD',
-    })
+    }).catch(() => null)
 
-    return isSuccessOrRedirect(dotComResult.status) ? generatedUrl : null
+    return dotComResult && isSuccessOrRedirect(dotComResult.status)
+        ? generatedUrl
+        : null
 }
 
 const Article = ({
@@ -179,16 +181,18 @@ const Article = ({
     const apiUrl = useApiUrl() || ''
     const { issueId } = useIssueSummary()
 
-    // sharing logic
+    // if webUrl is undefined then we attempt to fetch a url to use for sharing
+    const [shareUrl, setShareUrl] = useState(article.webUrl)
+    // we can only attempt to fetch the url if connected
     const client = useApolloClient()
     const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
         query: gql('{ netInfo @client { isConnected @client } }'),
     })
     const isConnected = data && data.netInfo.isConnected
-    const [shareUrl, setShareUrl] = useState(article.webUrl)
     const shareUrlFetchEnabled =
         !shareUrl &&
         isConnected &&
+        // TODO: remove remote switch once we are happy this feature is stable
         remoteConfigService.getBoolean('generate_share_url')
 
     useEffect(() => {
