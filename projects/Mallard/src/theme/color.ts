@@ -1,4 +1,17 @@
 import { palette } from '@guardian/pasteup/palette'
+import {
+    neutral,
+    brand,
+    text,
+    brandText,
+    background,
+    brandBackground,
+    border,
+    brandBorder,
+    news,
+    opinion,
+    sport,
+} from '@guardian/src-foundations/palette'
 
 /*
 Roles for colors.  Prefer using these over the palette.  It makes it easier
@@ -13,44 +26,44 @@ export const color = {
     /*
     Backgrounds
     */
-    background: palette.neutral[100],
-    text: palette.neutral[7],
-    dimBackground: palette.neutral[93],
-    dimmerBackground: palette.neutral[86],
-    dimText: palette.neutral[20],
-    darkBackground: palette.neutral[20],
-    photoBackground: palette.neutral[7],
-    textOverPhotoBackground: palette.neutral[100],
-    textOverDarkBackground: palette.neutral[100],
-    artboardBackground: palette.neutral[7],
-    skeleton: palette.neutral[60],
+    background: background.primary,
+    text: text.primary,
+    dimBackground: neutral[93],
+    dimmerBackground: neutral[86],
+    dimText: neutral[20],
+    darkBackground: neutral[20],
+    photoBackground: neutral[7],
+    textOverPhotoBackground: background.primary,
+    textOverDarkBackground: background.primary,
+    artboardBackground: neutral[7],
+    skeleton: neutral[60],
 
     /*
     Brand (our blue)
     */
-    textOverPrimary: palette.neutral[100],
-    primary: palette.brand.main,
-    primaryDarker: palette.brand.dark,
+    textOverPrimary: brandText.primary,
+    primary: brandBackground.primary,
+    primaryDarker: brand[300],
 
     /*
     Border colors
     */
-    line: palette.neutral[60],
-    dimLine: palette.neutral[85],
-    lineOverPrimary: palette.brand.pastel,
+    line: border.primary,
+    dimLine: border.secondary,
+    lineOverPrimary: brandBorder.primary,
 
     /*
     Error messages and icons.
     */
-    error: palette.news.main,
+    error: text.error,
 
     /*
     Onboarding & button UI.
     */
     ui: {
-        tomato: palette.news.bright,
-        apricot: palette.opinion.bright,
-        shark: palette.sport.main,
+        tomato: news[500],
+        apricot: opinion[500],
+        shark: sport[400],
         sea: '#279DDC',
         supportBlue: '#41A9E0',
     },
