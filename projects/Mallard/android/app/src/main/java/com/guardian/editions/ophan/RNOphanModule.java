@@ -6,7 +6,6 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.guardian.editions.BuildConfig;
 import com.guardian.editions.R;
 
@@ -32,6 +31,10 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @Nullable
     private String lastViewId = null;
 
+    @Nullable
+    private InstallationIdHelper installationIdHelper = null;
+
+
     public RNOphanModule(@Nonnull ReactApplicationContext reactContext) {
         super(reactContext);
         recordStoreDir = new File(reactContext.getCacheDir(), "ophan");
@@ -40,6 +43,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
         } else {
             deviceClass = DeviceClass.PHONE;
         }
+        installationIdHelper = new InstallationIdHelper(reactContext);
         ophanApi = newOphanApi(null);
     }
 
@@ -59,8 +63,8 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     }
 
     @Nonnull
-    private static String getDeviceId() {
-        return FirebaseInstanceId.getInstance().getId();
+    private String getDeviceId() {
+        return installationIdHelper.id();
     }
 
     @Nonnull
