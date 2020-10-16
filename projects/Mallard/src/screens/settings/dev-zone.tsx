@@ -31,6 +31,7 @@ import {
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens, showAllEditionsCache } from 'src/helpers/storage'
+import { errorService } from 'src/services/errors'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -209,6 +210,13 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     }}
                 >
                     Clear caches
+                </Button>
+                <Button
+                    onPress={() => {
+                        errorService.crashApp()
+                    }}
+                >
+                    Force app to crash
                 </Button>
             </ButtonList>
             <List
