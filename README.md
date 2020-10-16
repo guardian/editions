@@ -4,6 +4,8 @@ The Guardian Editions app includes the UK Daily edition, Australia Weekend and o
 
 ## Setup
 
+If you're a guardian staff member and haven't already it's worth running the [strap](https://gu-strap.herokuapp.com/) script which installs a [load of useful stuff](https://github.com/guardian/homebrew-devtools/blob/master/Casks/gu-base.rb) including VSCode - the editor used by the editions team.
+
 The project uses [nvm](https://github.com/nvm-sh/nvm) so this will need to be installed before if it's not already. Do not install it using brew.
 
 Once nvm is installed run `nvm use`.
