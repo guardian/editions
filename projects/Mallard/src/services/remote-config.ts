@@ -14,12 +14,14 @@ const remoteConfigDefaults = {
     logging_enabled: true,
     join_beta_button_enabled: false,
     lightbox_enabled: true,
+    generate_share_url: false,
 }
 
 export const RemoteConfigProperties = [
     'logging_enabled',
     'join_beta_button_enabled',
     'lightbox_enabled',
+    'generate_share_url',
 ] as const
 
 export type RemoteConfigProperty = typeof RemoteConfigProperties[number]

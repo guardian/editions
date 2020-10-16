@@ -76,6 +76,7 @@ export interface DevSettings {
         ios: string
         android: string
     }
+    websiteUrl: string
     issuesPath: string
     senderId: string
     logging: string

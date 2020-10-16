@@ -22,6 +22,10 @@ import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Image } from 'src/common'
 import { remoteConfigService } from 'src/services/remote-config'
+import { defaultSettings } from 'src/helpers/settings/defaults'
+import { isSuccessOrRedirect } from './article/helpers'
+import { useApolloClient } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 const styles = StyleSheet.create({
     block: {
@@ -119,6 +123,32 @@ const useUpdateWebviewVariable = (
     return valueInWebview
 }
 
+const injectJavascript = (
+    webviewRef: React.MutableRefObject<WebView | null>,
+    script: string,
+): void => {
+    if (webviewRef && webviewRef.current) {
+        webviewRef.current.injectJavaScript(script)
+    }
+}
+
+/**
+ * Sometimes the webUrl is empty due to that content not being published at the point the edition
+ * was created. However, we still have access to the article path at the time of publication
+ * This function checks to see if theguardian.com/<path at publication time> exists
+ */
+const checkPathExists = async (articlePath: string) => {
+    const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
+    // HEAD request as we only need the status code. If the request fails return null
+    const dotComResult = await fetch(`${generatedUrl}`, {
+        method: 'HEAD',
+    }).catch(() => null)
+
+    return dotComResult && isSuccessOrRedirect(dotComResult.status)
+        ? generatedUrl
+        : null
+}
+
 const Article = ({
     navigation,
     article,
@@ -150,6 +180,20 @@ const Article = ({
     const apiUrl = useApiUrl() || ''
     const { issueId } = useIssueSummary()
 
+    // if webUrl is undefined then we attempt to fetch a url to use for sharing
+    const [shareUrl, setShareUrl] = useState(article.webUrl)
+    // we can only attempt to fetch the url if connected
+    const client = useApolloClient()
+    const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
+        query: gql('{ netInfo @client { isConnected @client } }'),
+    })
+    const isConnected = data && data.netInfo.isConnected
+    const shareUrlFetchEnabled =
+        !shareUrl &&
+        isConnected &&
+        // TODO: remove remote switch once we are happy this feature is stable
+        remoteConfigService.getBoolean('generate_share_url')
+
     useEffect(() => {
         const lbimages = getLightboxImages(article.elements)
         const lbCreditedImages = getCreditedImages(lbimages)
@@ -178,7 +222,30 @@ const Article = ({
             )
         }
         fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
-    }, [apiUrl, article.elements, issueId, article.image, article.type])
+
+        const updateShareUrl = async () => {
+            const url = await checkPathExists(article.key)
+            if (url) {
+                setShareUrl(url)
+                injectJavascript(
+                    ref,
+                    `document.getElementById('.share-button').classList.remove('display-none');
+                     document.getElementById('.byline-area').classList.remove('display-none');
+                    `,
+                )
+            }
+        }
+
+        shareUrlFetchEnabled && updateShareUrl()
+    }, [
+        apiUrl,
+        article.elements,
+        issueId,
+        article.image,
+        article.type,
+        article.key,
+        shareUrlFetchEnabled,
+    ])
 
     return (
         <Fader>
@@ -198,20 +265,19 @@ const Article = ({
                 origin={origin}
                 onMessage={event => {
                     const parsed = parsePing(event.nativeEvent.data)
-                    if (parsed.type === 'share') {
-                        if (article.webUrl == null) return
+                    if (parsed.type === 'share' && shareUrl) {
                         if (Platform.OS === 'ios') {
                             Share.share({
-                                url: article.webUrl,
+                                url: shareUrl,
                                 message: article.headline,
                             })
                         } else {
                             Share.share(
                                 {
                                     title: article.headline,
-                                    url: article.webUrl,
+                                    url: shareUrl,
                                     // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
-                                    message: article.webUrl,
+                                    message: shareUrl,
                                 },
                                 {
                                     subject: article.headline,
