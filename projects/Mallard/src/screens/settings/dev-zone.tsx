@@ -31,7 +31,8 @@ import {
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens, showAllEditionsCache } from 'src/helpers/storage'
-import { errorService } from 'src/services/errors'
+import { NativeModules } from 'react-native'
+export default NativeModules.CrashyCrashy
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -213,7 +214,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </Button>
                 <Button
                     onPress={() => {
-                        errorService.crashApp()
+                        NativeModules.CrashyCrashy.generateCrash()
                     }}
                 >
                     Force app to crash

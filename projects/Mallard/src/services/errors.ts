@@ -17,7 +17,6 @@ const QUERY = gql('{ gdprAllowPerformance @client }')
 export interface ErrorService {
     init(apolloClient: ApolloClient<object>): void
     captureException(err: Error): void
-    crashApp(): void
 }
 
 export class ErrorServiceImpl implements ErrorService {
@@ -99,10 +98,6 @@ export class ErrorServiceImpl implements ErrorService {
         } else {
             console.log('Crashlytics is now Disabled')
         }
-    }
-
-    public crashApp() {
-        this.crashlytics.crash()
     }
 
     private sendBasicAttributes = async () => {
