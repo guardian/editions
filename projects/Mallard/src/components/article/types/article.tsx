@@ -137,7 +137,7 @@ const injectJavascript = (
  * was created. However, we still have access to the article path at the time of publication
  * This function checks to see if theguardian.com/<path at publication time> exists
  */
-const pathLookup = async (articlePath: string) => {
+const checkPathExists = async (articlePath: string) => {
     const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
     // HEAD request as we only need the status code. If the request fails return null
     const dotComResult = await fetch(`${generatedUrl}`, {
@@ -224,7 +224,7 @@ const Article = ({
         fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
 
         const updateShareUrl = async () => {
-            const url = await pathLookup(article.key)
+            const url = await checkPathExists(article.key)
             if (url) {
                 setShareUrl(url)
                 injectJavascript(
