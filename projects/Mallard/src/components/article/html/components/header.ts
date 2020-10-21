@@ -1117,8 +1117,9 @@ const getByLine = (
 ): string => {
     const bylineText = getByLineText(headerType, headerProps, articleType)
     const headerClass = getHeaderClassForType(headerType)
-    const hideByline = bylineText || webUrl ? '' : 'byline-hidden'
-    const hideShareButton = webUrl ? '' : 'share-hidden'
+    const displayNoneClass = 'display-none'
+    const hideByline = bylineText || webUrl ? '' : displayNoneClass
+    const hideShareButton = webUrl ? '' : displayNoneClass
 
     const shareButton = html`
         <button
