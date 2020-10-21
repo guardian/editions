@@ -33,7 +33,9 @@ const getIssueSummary = async (
         const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
         return trimmedSummary
     } catch (e) {
-        e.message = `getIssueSummary error: maxAvailableEditions: ${maxAvailableEditions} & issueSummary: ${issueSummary}`
+        e.message = `getIssueSummary error: maxAvailableEditions: ${maxAvailableEditions} & issueSummary: ${JSON.stringify(
+            issueSummary,
+        )}`
         errorService.captureException(e)
         throw Error(e)
     }
