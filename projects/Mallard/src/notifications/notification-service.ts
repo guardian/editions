@@ -21,6 +21,9 @@ const registerWithNotificationService = async (
                 : notificationEdition.android,
         topics,
     }
+
+    console.log('*** NOTIFICATION REG PAYLOAD *** ' + JSON.stringify(options))
+
     return fetch(registerDeviceUrl as string, {
         method: 'post',
         body: JSON.stringify(options),
@@ -35,7 +38,6 @@ const registerWithNotificationService = async (
         )
         .catch(e => {
             errorService.captureException(e)
-            errorService.captureException(new Error(JSON.stringify(options)))
         })
 }
 
