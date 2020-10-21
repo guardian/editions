@@ -2,6 +2,8 @@ import { Platform } from 'react-native'
 import { getSetting } from 'src/helpers/settings'
 import { notificationEdition } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
+import { isInBeta } from 'src/helpers/release-stream'
+import { getDefaultEdition } from 'src/hooks/use-edition-provider'
 
 export interface PushToken {
     name: 'uk' | 'us' | 'au'
@@ -22,7 +24,12 @@ const registerWithNotificationService = async (
         topics,
     }
 
-    console.log('*** NOTIFICATION REG PAYLOAD *** ' + JSON.stringify(options))
+    if (isInBeta()) {
+        const defaultEdition = await getDefaultEdition()
+        console.log('*** NOTIFICATION REG PAYLOAD *** ')
+        console.log('*** default edition *** ' + defaultEdition)
+        console.log('*** body *** ' + JSON.stringify(options))
+    }
 
     return fetch(registerDeviceUrl as string, {
         method: 'post',
