@@ -275,7 +275,7 @@ export const EditionProvider = ({
      * editions that are set in the initial state
      */
     useEffect(() => {
-        // apiUrl get set in async manner
+        // Get the api url and then make network request to fetch edition list
         getSetting('apiUrl').then(async url => {
             setApiUrl(editionsEndpoint(url))
             const ed = await getEditions(apiUrl)
