@@ -253,8 +253,6 @@ export const EditionProvider = ({
 
     const [apiUrl, setApiUrl] = useState('')
 
-    getSetting('apiUrl').then(apiUrl => setApiUrl(editionsEndpoint(apiUrl)))
-
     /**
      * Default Edition and Selected
      *
@@ -277,7 +275,14 @@ export const EditionProvider = ({
      * editions that are set in the initial state
      */
     useEffect(() => {
-        getEditions(apiUrl).then(ed => ed && setEditionsList(ed))
+        // apiUrl get set in async manner
+        getSetting('apiUrl').then(async url => {
+            setApiUrl(editionsEndpoint(url))
+            const ed = await getEditions(apiUrl)
+            if (ed) {
+                setEditionsList(ed)
+            }
+        })
     }, [apiUrl])
 
     /**
