@@ -189,7 +189,7 @@ const Article = ({
     })
     const isConnected = data && data.netInfo.isConnected
     const shareUrlFetchEnabled =
-        !shareUrl &&
+        !article.webUrl &&
         isConnected &&
         // TODO: remove remote switch once we are happy this feature is stable
         remoteConfigService.getBoolean('generate_share_url')
@@ -226,13 +226,13 @@ const Article = ({
         const updateShareUrl = async () => {
             const url = await checkPathExists(article.key)
             if (url) {
-                setShareUrl(url)
                 injectJavascript(
                     ref,
-                    `document.getElementById('.share-button').classList.remove('display-none');
-                     document.getElementById('.byline-area').classList.remove('display-none');
+                    `document.getElementById('share-button').classList.remove('display-none');
+                     document.getElementById('byline-area').classList.remove('display-none');
                     `,
                 )
+                setShareUrl(url)
             }
         }
 

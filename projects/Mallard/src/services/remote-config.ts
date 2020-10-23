@@ -14,7 +14,7 @@ const remoteConfigDefaults = {
     logging_enabled: true,
     join_beta_button_enabled: false,
     lightbox_enabled: true,
-    generate_share_url: false,
+    generate_share_url: true,
 }
 
 export const RemoteConfigProperties = [
