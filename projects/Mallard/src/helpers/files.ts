@@ -125,7 +125,7 @@ export const getLocalIssues = async (editionSlug: string) => {
     )
 }
 
-export const getEditionIssuesCount = async () => {
+export const getIssuesCountStrings = async () => {
     const editionDirList = await FSPaths.edtionsDirList()
     const result: string[] = []
     for (let i = 0; i < editionDirList.length; i++) {
@@ -139,7 +139,7 @@ export const getEditionIssuesCount = async () => {
     return result
 }
 
-export const issuesToDelete = async (files: string[]) => {
+export const getIssuesToDelete = async (files: string[]) => {
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
     const totalIssues = files.length
 

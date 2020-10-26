@@ -3,22 +3,22 @@ import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/I
 
 describe('helpers/files', () => {
     describe('matchSummmaryToKey', () => {
-        it('should return a matched IssueSummary if the key matches', () => {
+        it('should return an IssueSummary if the key matches', () => {
             const key = 'daily-edition/2019-09-18'
-            const isValidIssueSummary = findIssueSummaryByKey(
+            const issueSummary = findIssueSummaryByKey(
                 issueSummaries,
                 key,
             )
-            expect(isValidIssueSummary).toEqual(issueSummaries[0])
+            expect(issueSummary).toEqual(issueSummaries[0])
         })
 
         it('should return null if the key doesnt match', () => {
             const key = 'daily-edition/2019-09-20'
-            const isValidIssueSummary = findIssueSummaryByKey(
+            const issueSummary = findIssueSummaryByKey(
                 issueSummaries,
                 key,
             )
-            expect(isValidIssueSummary).toEqual(null)
+            expect(issueSummary).toEqual(null)
         })
     })
 

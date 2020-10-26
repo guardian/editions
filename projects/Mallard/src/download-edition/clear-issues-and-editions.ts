@@ -7,7 +7,7 @@ import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import {
     prepFileSystem,
     getLocalIssues,
-    issuesToDelete,
+    getIssuesToDelete,
 } from 'src/helpers/files'
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 import { editionsListCache } from 'src/helpers/storage'
@@ -70,7 +70,7 @@ const clearOldIssues = async (): Promise<void> => {
     const edition = await getSelectedEditionSlug()
     const files = await getLocalIssues(edition)
 
-    const iTD: string[] = await issuesToDelete(files)
+    const iTD: string[] = await getIssuesToDelete(files)
     return deleteIssues(iTD, 'clearOldIssues')
 }
 
