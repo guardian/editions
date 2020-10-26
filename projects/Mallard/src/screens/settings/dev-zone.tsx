@@ -13,7 +13,7 @@ import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { getFileList, getEdtionIssuesCount } from 'src/helpers/files'
+import { getFileList, getEditionIssuesCount } from 'src/helpers/files'
 import { locale } from 'src/helpers/locale'
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream'
 import { imageForScreenSize } from 'src/helpers/screen'
@@ -83,7 +83,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     }, [])
 
     useEffect(() => {
-        getEdtionIssuesCount().then(stats => {
+        getEditionIssuesCount().then(stats => {
             setDownloadedIssues(stats.join('\n'))
         })
     }, [])

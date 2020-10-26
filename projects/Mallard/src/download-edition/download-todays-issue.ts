@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-client'
 import { todayAsKey } from 'src/helpers/issues'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
-import { matchSummmaryToKey, isIssueOnDevice } from 'src/helpers/files'
+import { findIssueSummaryByKey, isIssueOnDevice } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { errorService } from 'src/services/errors'
 import { downloadAndUnzipIssue } from './download-and-unzip'
@@ -12,7 +12,10 @@ const downloadTodaysIssue = async (client: ApolloClient<object>) => {
         const issueSummaries = await getIssueSummary()
 
         // Find the todays issue summary from the list of summary
-        const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
+        const todaysIssueSummary = findIssueSummaryByKey(
+            issueSummaries,
+            todaysKey,
+        )
 
         // If there isnt one for today, then fahgettaboudit...
         if (!todaysIssueSummary) return null
