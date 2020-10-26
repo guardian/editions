@@ -5,19 +5,13 @@ describe('helpers/files', () => {
     describe('matchSummmaryToKey', () => {
         it('should return an IssueSummary if the key matches', () => {
             const key = 'daily-edition/2019-09-18'
-            const issueSummary = findIssueSummaryByKey(
-                issueSummaries,
-                key,
-            )
+            const issueSummary = findIssueSummaryByKey(issueSummaries, key)
             expect(issueSummary).toEqual(issueSummaries[0])
         })
 
         it('should return null if the key doesnt match', () => {
             const key = 'daily-edition/2019-09-20'
-            const issueSummary = findIssueSummaryByKey(
-                issueSummaries,
-                key,
-            )
+            const issueSummary = findIssueSummaryByKey(issueSummaries, key)
             expect(issueSummary).toEqual(null)
         })
     })
