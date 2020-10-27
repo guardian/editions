@@ -25,7 +25,7 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 7,
             }))
-            const { issuesToDelete } = await require('../../helpers/files')
+            const { getIssuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/issues',
@@ -41,7 +41,7 @@ describe('helpers/files', () => {
                 'daily-edition/2020-07-20',
             ]
 
-            expect(await issuesToDelete(files)).toEqual([
+            expect(await getIssuesToDelete(files)).toEqual([
                 'some-random-file',
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-14',
@@ -52,7 +52,7 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
-            const { issuesToDelete } = await require('../../helpers/files')
+            const { getIssuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/issues',
@@ -66,7 +66,7 @@ describe('helpers/files', () => {
                 'daily-edition/2020-07-18',
                 'daily-edition/2020-07-19',
             ]
-            expect(await issuesToDelete(files)).toEqual([
+            expect(await getIssuesToDelete(files)).toEqual([
                 'some-random-file',
                 'daily-edition/2020-07-16',
                 'daily-edition/2020-07-15',
@@ -80,13 +80,13 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
-            const { issuesToDelete } = await require('../../helpers/files')
+            const { getIssuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-16',
             ]
-            expect(await issuesToDelete(files)).toEqual([])
+            expect(await getIssuesToDelete(files)).toEqual([])
         })
     })
 })
