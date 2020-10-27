@@ -1883,6 +1883,11 @@
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.11.tgz#a1e442b6dba4540fce1273eff74abb74c0652f2d"
   integrity sha512-MLzUhb0+oaMS1g9FQ8nL3G3cdEsQTzC8/Hq1vdrIV/ufbu/6u7sult/AXXk602WodE4ugRZoJMZ5N90Z0WCfBg==
 
+"@guardian/src-foundations@^2.5.0-rc.1":
+  version "2.5.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@guardian/src-foundations/-/src-foundations-2.5.0-rc.1.tgz#e21869dac88f848241ea8f3da8205b1da808ee1d"
+  integrity sha512-7ukVvo2ZGHvMOf1t1iVzHYDRcZ4XY95Wzkgr4GxmZz8rDLXqDkyePKm005v5WHqLbShUVZfyPNYi3Ya+Dr/lcQ==
+
 "@hapi/address@2.x.x":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.0.0.tgz#9f05469c88cb2fd3dcd624776b54ee95c312126a"

@@ -91,7 +91,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                 },
                 Object {
                   "backgroundColor": undefined,
-                  "borderColor": "#ffffff",
+                  "borderColor": "#FFFFFF",
                   "borderWidth": 1,
                 },
                 Object {
@@ -116,7 +116,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                   },
                   Array [
                     Object {
-                      "color": "#ffffff",
+                      "color": "#FFFFFF",
                     },
                     undefined,
                   ],
@@ -198,7 +198,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -222,7 +222,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
@@ -418,7 +418,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                 },
                 Object {
                   "backgroundColor": undefined,
-                  "borderColor": "#ffffff",
+                  "borderColor": "#FFFFFF",
                   "borderWidth": 1,
                 },
                 Object {
@@ -443,7 +443,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                   },
                   Array [
                     Object {
-                      "color": "#ffffff",
+                      "color": "#FFFFFF",
                     },
                     undefined,
                   ],
@@ -525,7 +525,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -547,7 +547,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
@@ -741,7 +741,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                 },
                 Object {
                   "backgroundColor": undefined,
-                  "borderColor": "#ffffff",
+                  "borderColor": "#FFFFFF",
                   "borderWidth": 1,
                 },
                 Object {
@@ -766,7 +766,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                   },
                   Array [
                     Object {
-                      "color": "#ffffff",
+                      "color": "#FFFFFF",
                     },
                     undefined,
                   ],
@@ -848,7 +848,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -870,7 +870,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {

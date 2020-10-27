@@ -290,6 +290,7 @@ const Article = ({
                         wasShowingHeader.current = parsed.shouldShowHeader
                         onShouldShowHeaderChange(parsed.shouldShowHeader)
                     }
+
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
                     }

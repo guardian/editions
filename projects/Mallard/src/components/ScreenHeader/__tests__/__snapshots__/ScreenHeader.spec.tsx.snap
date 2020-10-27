@@ -119,7 +119,7 @@ exports[`ScreenHeader should show a default version 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -390,7 +390,7 @@ exports[`ScreenHeader should show a version with title 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -412,7 +412,7 @@ exports[`ScreenHeader should show a version with title 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
@@ -561,7 +561,7 @@ exports[`ScreenHeader should show a version with title and subTitle 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -583,7 +583,7 @@ exports[`ScreenHeader should show a version with title and subTitle 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
@@ -1264,7 +1264,7 @@ exports[`ScreenHeader should show a version with title, subTitle, rightAction an
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -1286,7 +1286,7 @@ exports[`ScreenHeader should show a version with title, subTitle, rightAction an
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
@@ -1843,7 +1843,7 @@ exports[`ScreenHeader should show a version with title, subTitle, rightAction, l
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -1865,7 +1865,7 @@ exports[`ScreenHeader should show a version with title, subTitle, rightAction, l
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
@@ -2424,7 +2424,7 @@ exports[`ScreenHeader should show a version with title, subTitle, rightAction, l
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -2448,7 +2448,7 @@ exports[`ScreenHeader should show a version with title, subTitle, rightAction, l
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
