@@ -186,6 +186,7 @@ export interface Article extends Content {
     starRating?: number
     sportScore?: string
     mainMedia?: MediaAtomElement
+    displayHint?: string
 }
 
 export interface CrosswordArticle extends Content {

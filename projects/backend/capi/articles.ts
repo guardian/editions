@@ -107,6 +107,8 @@ const parseArticleResult = async (
 
     const headerType = headerTypePicker(result)
 
+    const displayHint = (result.fields && result.fields.displayHint) || ''
+
     const trail = result.fields && result.fields.trailText
 
     const byline = result.fields && result.fields.byline
@@ -146,6 +148,7 @@ const parseArticleResult = async (
                     kicker,
                     articleType,
                     headerType,
+                    displayHint,
                     trail,
                     ...images,
                     byline: byline || '',
