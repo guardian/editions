@@ -50,7 +50,7 @@ exports[`ReloadButton should display a ReloadButton 1`] = `
             "paddingHorizontal": 21,
           },
           Object {
-            "backgroundColor": "#ff4e36",
+            "backgroundColor": "#FF5943",
           },
           false,
           Object {

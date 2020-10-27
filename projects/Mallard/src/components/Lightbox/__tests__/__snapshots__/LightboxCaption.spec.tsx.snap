@@ -192,7 +192,7 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
     <View
       style={
         Object {
-          "color": "#ffffff",
+          "color": "#FFFFFF",
           "paddingLeft": 2,
           "paddingRight": 13,
         }
@@ -204,7 +204,7 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
           onPress={null}
           style={
             Object {
-              "color": "#ffffff",
+              "color": "#FFFFFF",
               "fontFamily": "GuardianTextSans-Regular",
               "fontSize": 14,
             }
@@ -215,7 +215,7 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
               Array [
                 null,
                 Object {
-                  "color": "#ffffff",
+                  "color": "#FFFFFF",
                   "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 14,
                 },

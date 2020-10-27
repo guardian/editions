@@ -455,7 +455,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -479,7 +479,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {
@@ -1038,7 +1038,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         undefined,
@@ -1060,7 +1060,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                       },
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#FFFFFF",
                           "marginTop": -2,
                         },
                         Object {

@@ -125,7 +125,7 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
           "paddingHorizontal": 21,
         },
         Object {
-          "backgroundColor": "#ff7f0f",
+          "backgroundColor": "#FF7F0F",
         },
         false,
         undefined,

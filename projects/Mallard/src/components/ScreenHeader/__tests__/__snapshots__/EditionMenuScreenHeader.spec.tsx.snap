@@ -118,7 +118,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
                 },
                 Array [
                   Object {
-                    "color": "#ffffff",
+                    "color": "#FFFFFF",
                     "marginTop": -2,
                   },
                   undefined,
