@@ -8,11 +8,16 @@ Follow the steps in the project [readme](https://github.com/guardian/editions/bl
 
 ### Janus
 
-Ensure you have Janus credentials for `cmsFronts`.
+Ensure you have Janus credentials for `cmsFronts`, `capi` and `frontend`.
 
 ### Env vars
 
-You will need a `.env` file from another developer to run the backend.
+You will need a `.env` file to run the backend. This file should have following details in it:
+APPS_RENDERING_ROOT='<apps rendering url>'
+frontsStage=<code/prod>
+capiPreviewUrl=<capi preview url>
+CAPI_KEY=<a capi key>
+psurl=<preview printsent url>
 
 `stage` is `prod` due to the fact that you get more results that way! The CAPI key is the canonical testing key ... if this, for whatever reason, doesn't work in future you can change it to a valid one.
 
