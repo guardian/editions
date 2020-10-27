@@ -1,5 +1,5 @@
 import ApolloClient from 'apollo-client'
-import { matchSummmaryToKey } from 'src/helpers/files'
+import { findIssueSummaryByKey } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushTracking } from 'src/notifications/push-tracking'
@@ -22,7 +22,7 @@ const downloadViaNotification = async (
         await pushTracking('pushIssueSummaries', 'received', Feature.DOWNLOAD)
 
         // Check to see if we can find the image summary for the one that is pushed
-        const pushImageSummary = matchSummmaryToKey(issueSummaries, key)
+        const pushImageSummary = findIssueSummaryByKey(issueSummaries, key)
 
         await pushTracking(
             'pushImageSummary',

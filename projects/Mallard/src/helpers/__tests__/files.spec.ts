@@ -1,18 +1,18 @@
-import { matchSummmaryToKey } from '../../helpers/files'
+import { findIssueSummaryByKey } from '../../helpers/files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
 
 describe('helpers/files', () => {
     describe('matchSummmaryToKey', () => {
-        it('should return a matched IssueSummary if the key matches', () => {
+        it('should return an IssueSummary if the key matches', () => {
             const key = 'daily-edition/2019-09-18'
-            const isValidIssueSummary = matchSummmaryToKey(issueSummaries, key)
-            expect(isValidIssueSummary).toEqual(issueSummaries[0])
+            const issueSummary = findIssueSummaryByKey(issueSummaries, key)
+            expect(issueSummary).toEqual(issueSummaries[0])
         })
 
         it('should return null if the key doesnt match', () => {
             const key = 'daily-edition/2019-09-20'
-            const isValidIssueSummary = matchSummmaryToKey(issueSummaries, key)
-            expect(isValidIssueSummary).toEqual(null)
+            const issueSummary = findIssueSummaryByKey(issueSummaries, key)
+            expect(issueSummary).toEqual(null)
         })
     })
 
@@ -25,7 +25,7 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 7,
             }))
-            const { issuesToDelete } = await require('../../helpers/files')
+            const { getIssuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/issues',
@@ -41,7 +41,7 @@ describe('helpers/files', () => {
                 'daily-edition/2020-07-20',
             ]
 
-            expect(await issuesToDelete(files)).toEqual([
+            expect(await getIssuesToDelete(files)).toEqual([
                 'some-random-file',
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-14',
@@ -52,7 +52,7 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
-            const { issuesToDelete } = await require('../../helpers/files')
+            const { getIssuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/issues',
@@ -66,7 +66,7 @@ describe('helpers/files', () => {
                 'daily-edition/2020-07-18',
                 'daily-edition/2020-07-19',
             ]
-            expect(await issuesToDelete(files)).toEqual([
+            expect(await getIssuesToDelete(files)).toEqual([
                 'some-random-file',
                 'daily-edition/2020-07-16',
                 'daily-edition/2020-07-15',
@@ -80,13 +80,13 @@ describe('helpers/files', () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
-            const { issuesToDelete } = await require('../../helpers/files')
+            const { getIssuesToDelete } = await require('../../helpers/files')
 
             const files = [
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-16',
             ]
-            expect(await issuesToDelete(files)).toEqual([])
+            expect(await getIssuesToDelete(files)).toEqual([])
         })
     })
 })

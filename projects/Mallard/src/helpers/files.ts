@@ -12,25 +12,15 @@ import { withCache } from './fetch/cache'
 import { updateListeners } from 'src/download-edition/download-and-unzip'
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 import { editionsListCache } from 'src/helpers/storage'
-interface BasicFile {
-    filename: string
-    path: string
-    size: number
-    id: string
-}
-interface OtherFile extends BasicFile {
-    type: 'other' | 'archive' | 'json'
-}
-interface IssueFile extends BasicFile {
-    issue: Issue
-    type: 'issue'
-}
 
-const regex = /\d{4}-\d{2}-\d{2}/gm // this matches issue date, i.g. 2020-02-01
+// matches the issue date, i.e. 2020-02-01
+const ISSUE_DATE_REGEX = /\d{4}-\d{2}-\d{2}/gm
 
-export type File = OtherFile | IssueFile
-export const fileIsIssue = (file: File): file is IssueFile =>
-    file.type === 'issue'
+export type DLStatus =
+    | { type: 'download'; data: number }
+    | { type: 'unzip'; data: 'start' }
+    | { type: 'success' }
+    | { type: 'failure' }
 
 export const ensureDirExists = (dir: string): Promise<void> =>
     RNFS.mkdir(dir).catch(() => Promise.resolve())
@@ -56,7 +46,7 @@ export const prepFileSystem = async (): Promise<void> => {
     )
 }
 
-export const getJson = <T extends any>(path: string): Promise<T> =>
+export const readFileAsJSON = <T extends any>(path: string): Promise<T> =>
     RNFS.readFile(path, 'utf8').then(d => JSON.parse(d))
 
 export const downloadNamedIssueArchive = async ({
@@ -127,31 +117,6 @@ export const isIssueOnDevice = async (
         RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
     ])).every(_ => _)
 
-/*
-Cheeky size helper
-*/
-export const displayPerc = (elapsed: number, total: number) => {
-    return `${Math.ceil((elapsed / total) * 100)}%`
-}
-
-export const displayFileSize = (size: File['size']): string => {
-    if (!size) size = -1
-    if (size / 1024 < 1) {
-        return size.toFixed(2) + ' B'
-    }
-    if (size / 1024 / 1024 < 1) {
-        return (size / 1024).toFixed(2) + ' KB'
-    }
-    return (size / 1024 / 1024).toFixed(2) + ' MB'
-}
-
-// TODO: have better types here!
-export type DLStatus =
-    | { type: 'download'; data: number }
-    | { type: 'unzip'; data: 'start' }
-    | { type: 'success' }
-    | { type: 'failure' }
-
 const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
 
 export const getLocalIssues = async (editionSlug: string) => {
@@ -161,19 +126,21 @@ export const getLocalIssues = async (editionSlug: string) => {
     )
 }
 
-export const getEdtionIssuesCount = async () => {
+export const getIssuesCountStrings = async () => {
     const editionDirList = await FSPaths.edtionsDirList()
     const result: string[] = []
     for (let i = 0; i < editionDirList.length; i++) {
         const dir = editionDirList[i]
         const files = await RNFS.readdir(dir)
-        const issueFiles = files.filter(file => file.match(regex) != null)
+        const issueFiles = files.filter(
+            file => file.match(ISSUE_DATE_REGEX) != null,
+        )
         result.push(`${dir.split('/').pop()}: ${issueFiles.length} issues`)
     }
     return result
 }
 
-export const issuesToDelete = async (files: string[]) => {
+export const getIssuesToDelete = async (files: string[]) => {
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
     const totalIssues = files.length
 
@@ -191,7 +158,7 @@ export const issuesToDelete = async (files: string[]) => {
     let keepIssues = 0
 
     for (let i = 0; i < totalIssues; i++) {
-        const isAnIssue = files[i].match(regex) != null
+        const isAnIssue = files[i].match(ISSUE_DATE_REGEX) != null
         if (isAnIssue && keepIssues < maxAvailableEditions) {
             keepIssues++
             continue
@@ -204,7 +171,7 @@ export const issuesToDelete = async (files: string[]) => {
     return deleteList
 }
 
-export const matchSummmaryToKey = (
+export const findIssueSummaryByKey = (
     issueSummaries: IssueSummary[],
     key: string,
 ): IssueSummary => {
