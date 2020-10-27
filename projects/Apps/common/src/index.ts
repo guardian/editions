@@ -176,6 +176,7 @@ export interface Content extends WithKey {
     sportScore?: string
     isFromPrint: boolean
     webUrl?: string
+    displayHint?: string
 }
 export interface Article extends Content {
     type: 'article'
