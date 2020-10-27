@@ -4,7 +4,7 @@ import {
     CachedOrPromise,
     createCachedOrPromise,
 } from './fetch/cached-or-promise'
-import { readFileJSON, isIssueOnDevice } from './files'
+import { readFileAsJSON, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
 import { defaultSettings } from './settings/defaults'
 import { cacheClearCache } from './storage'
@@ -46,10 +46,10 @@ const fetchIssueWithFrontsFromAPI = async (
 const fetchIssueWithFrontsFromFS = async (
     id: string,
 ): Promise<IssueWithFronts> => {
-    const issue = await readFileJSON<Issue>(FSPaths.issue(id))
+    const issue = await readFileAsJSON<Issue>(FSPaths.issue(id))
     const fronts = await Promise.all(
         issue.fronts.map(frontId =>
-            readFileJSON<Front>(FSPaths.front(id, frontId)),
+            readFileAsJSON<Front>(FSPaths.front(id, frontId)),
         ),
     )
     return {

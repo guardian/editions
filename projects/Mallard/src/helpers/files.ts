@@ -13,6 +13,7 @@ import { updateListeners } from 'src/download-edition/download-and-unzip'
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
 import { editionsListCache } from 'src/helpers/storage'
 
+// matches the issue date, i.e. 2020-02-01
 const ISSUE_DATE_REGEX = /\d{4}-\d{2}-\d{2}/gm
 
 export type DLStatus =
@@ -45,7 +46,7 @@ export const prepFileSystem = async (): Promise<void> => {
     )
 }
 
-export const readFileJSON = <T extends any>(path: string): Promise<T> =>
+export const readFileAsJSON = <T extends any>(path: string): Promise<T> =>
     RNFS.readFile(path, 'utf8').then(d => JSON.parse(d))
 
 export const downloadNamedIssueArchive = async ({
