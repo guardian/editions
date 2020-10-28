@@ -76,7 +76,7 @@ describe('helpers/files', () => {
             ])
         })
 
-        it('should return an empty array if there are less than the specified amount', async () => {
+        it('should return an empty array if there are fewer files to delete', async () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
