@@ -1,13 +1,19 @@
 import { Request, Response } from 'express'
 import fetch from 'node-fetch'
+import { ImageSize } from '../../Apps/common/src'
 
-const replaceImageUrls = (html: string): string => {
-    return html.replace(/https:\/\/i.guim.co.uk\/img\//g, '../../')
+// TODO: this needs a test once we're happy with the correct format for the paths
+const replaceImageUrls = (html: string, imageSize: ImageSize): string => {
+    return html.replace(
+        /https:\/\/i.guim.co.uk\/img\//g,
+        `../../media/${imageSize}/`,
+    )
 }
 
 export const renderController = async (req: Request, res: Response) => {
     const path = req.params.path
     const replaceImagePaths = req.query.replaceImagePaths
+    const imageSize = req.query.imageSize as ImageSize
     const renderingUrl = `${process.env.APPS_RENDERING_URL}${path}`
     console.log(
         `Fetching ${renderingUrl} from apps rendering. replaceImagePaths: ${replaceImagePaths}`,
@@ -22,7 +28,7 @@ export const renderController = async (req: Request, res: Response) => {
 
     const editionsRenderedHtml =
         replaceImagePaths === 'true'
-            ? replaceImageUrls(responseBody)
+            ? replaceImageUrls(responseBody, imageSize)
             : responseBody
 
     if (response.statusText == 'OK') {
