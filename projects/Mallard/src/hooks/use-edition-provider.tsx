@@ -307,6 +307,7 @@ export const EditionProvider = ({
     useEffect(() => {
         const appChangeEventHandler = async (appState: AppStateStatus) =>
             appState === 'active' &&
+            apiUrl &&
             getEditions(apiUrl).then(ed => ed && setEditionsList(ed))
 
         AppState.addEventListener('change', appChangeEventHandler)
