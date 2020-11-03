@@ -156,6 +156,7 @@ export type MediaType =
     | 'coverCard'
 
 export interface Content extends WithKey {
+    internalPageCode: number
     type: string
     headline: string
     kicker: string

@@ -142,6 +142,7 @@ const parseArticleResult = async (
             const article: [number, CArticle] = [
                 internalid,
                 {
+                    internalPageCode: internalid,
                     type: 'article',
                     path: path,
                     headline: title,
@@ -168,6 +169,7 @@ const parseArticleResult = async (
             const galleryArticle: [number, CGallery] = [
                 internalid,
                 {
+                    internalPageCode: internalid,
                     type: 'gallery',
                     path: path,
                     headline: title,
@@ -191,6 +193,7 @@ const parseArticleResult = async (
             const pictureArticle: [number, CPicture] = [
                 internalid,
                 {
+                    internalPageCode: internalid,
                     type: 'picture',
                     path: path,
                     headline: title,
@@ -238,6 +241,7 @@ const parseArticleResult = async (
             const crosswordArticle: [number, CAPIContent] = [
                 internalid,
                 {
+                    internalPageCode: internalid,
                     type: 'crossword',
                     trail,
                     path: path,
@@ -259,6 +263,7 @@ const parseArticleResult = async (
             return [
                 internalid,
                 {
+                    internalPageCode: internalid,
                     type: 'article',
                     path: path,
                     headline: title,
