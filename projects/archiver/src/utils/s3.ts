@@ -106,6 +106,7 @@ function cacheControlHeader(maxAge: number | undefined): string {
     return 'private'
 }
 
+export const ONE_MONTH = 3600 * 24 * 30
 export const ONE_WEEK = 3600 * 24 * 7
 export const ONE_MINUTE = 60
 export const FIVE_SECONDS = 5
@@ -114,7 +115,7 @@ export const upload = (
     key: string,
     body: {} | Buffer,
     bucket: Bucket,
-    mime: 'image/jpeg' | 'application/json' | 'application/zip',
+    mime: 'image/jpeg' | 'application/json' | 'application/zip' | 'text/html',
     maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
