@@ -212,6 +212,11 @@ export type CAPIArticle =
 export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
 export type ImageSize = typeof imageSizes[number]
 
+export interface RenderedContent {
+    size: ImageSize
+    html: string
+}
+
 export const sizeDescriptions: { [k in ImageSize]: number } = {
     phone: 375,
     tablet: 740,
