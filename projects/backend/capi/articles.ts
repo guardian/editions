@@ -137,6 +137,7 @@ const parseArticleResult = async (
 
     const webUrl = !isFromPrint ? result.webUrl : undefined
 
+    console.log('internalid: ' + internalid)
     switch (result.type) {
         case ContentType.ARTICLE:
             const article: [number, CArticle] = [
@@ -160,6 +161,7 @@ const parseArticleResult = async (
                     mainMedia: getMainMediaAtom(result.blocks),
                     isFromPrint,
                     webUrl,
+                    internalId: internalid,
                 },
             ]
             return article
@@ -182,6 +184,7 @@ const parseArticleResult = async (
                     elements,
                     isFromPrint,
                     webUrl,
+                    internalId: internalid,
                 },
             ]
 
@@ -205,6 +208,7 @@ const parseArticleResult = async (
                     elements,
                     isFromPrint,
                     webUrl,
+                    internalId: internalid,
                 },
             ]
 
@@ -250,6 +254,7 @@ const parseArticleResult = async (
                     crossword,
                     isFromPrint,
                     webUrl,
+                    internalId: internalid,
                 },
             ]
 
@@ -283,6 +288,7 @@ const parseArticleResult = async (
                     ],
                     isFromPrint,
                     webUrl,
+                    internalId: internalid,
                 },
             ]
     }

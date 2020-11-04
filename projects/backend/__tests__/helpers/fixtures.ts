@@ -39,6 +39,7 @@ const Content = <T extends string>(
     mediaType,
     sportScore,
     isFromPrint: false,
+    internalId: 1,
 })
 
 const Article = ({
