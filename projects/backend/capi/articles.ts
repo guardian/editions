@@ -137,7 +137,6 @@ const parseArticleResult = async (
 
     const webUrl = !isFromPrint ? result.webUrl : undefined
 
-    console.log('internalid: ' + internalid)
     switch (result.type) {
         case ContentType.ARTICLE:
             const article: [number, CArticle] = [
