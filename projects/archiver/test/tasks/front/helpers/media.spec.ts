@@ -21,7 +21,7 @@ test('getImage', () => {
         mediaType: 'Image',
         elements: [],
         isFromPrint: true,
-        internalId: 1,
+        internalPageCode: 1,
     }
     expect(getImagesFromArticle(article)).toContain(image)
 })
@@ -47,7 +47,7 @@ test('getImageUse', () => {
         elements: [],
         isFromPrint: false,
         bylineHtml: '<a>🧬</<a> Senior person',
-        internalId: 1,
+        internalPageCode: 1,
     }
     expect(getImagesFromArticle(article)).toContain(image)
 })
