@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import fetch from 'node-fetch'
-import { ImageSize, imageSizes, RenderedContent } from '../../Apps/common/src'
 
 const fetchRenderedArticle = async (url: string) => {
     const response = await fetch(url, {
@@ -18,36 +17,8 @@ const fetchRenderedArticle = async (url: string) => {
 }
 
 // TODO: this needs a test once we're happy with the correct format for the paths
-const replaceImageUrls = (html: string, imageSize: ImageSize): string => {
-    return html.replace(
-        /https:\/\/i.guim.co.uk\/img\//g,
-        `../../media/${imageSize}/`,
-    )
-}
-
-const getAllImageSizesHtml = (renderedArticle: string): RenderedContent[] => {
-    return imageSizes.map(size => {
-        return {
-            size,
-            html: replaceImageUrls(renderedArticle, size),
-        }
-    })
-}
-
-const getRenderResponse = (renderedArticle: string, imageSize: string) => {
-    if (imageSize === 'all') {
-        return {
-            contentType: 'application/json',
-            responseBody: JSON.stringify(getAllImageSizesHtml(renderedArticle)),
-        }
-    } else {
-        const responseBody = (imageSizes as readonly string[]).includes(
-            imageSize,
-        )
-            ? replaceImageUrls(renderedArticle, imageSize as ImageSize)
-            : renderedArticle
-        return { contentType: 'text/html', responseBody }
-    }
+const replaceImageUrls = (html: string): string => {
+    return html.replace(/https:\/\/i.guim.co.uk\/img\//g, `../media/`)
 }
 
 export const renderController = async (req: Request, res: Response) => {
@@ -59,11 +30,11 @@ export const renderController = async (req: Request, res: Response) => {
     )
     const renderResponse = await fetchRenderedArticle(renderingUrl)
 
-    const response = getRenderResponse(renderResponse.body, imageSize)
+    const htmlWithImagesReplaced = replaceImageUrls(renderResponse.body)
 
     if (renderResponse.success) {
-        res.setHeader('Content-Type', response.contentType)
-        res.send(response.responseBody)
+        res.setHeader('Content-Type', 'text/html')
+        res.send(htmlWithImagesReplaced)
     } else {
         const message = `Failed to fetch story from ${renderingUrl}. Response: ${renderResponse.body}`
         console.error(`${message}`)
