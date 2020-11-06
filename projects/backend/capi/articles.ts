@@ -92,9 +92,9 @@ const parseArticleResult = async (
 ): Promise<[number, CAPIContent]> => {
     const path = result.id
     console.log(`Parsing CAPI response for ${path}`)
-    const internalid = result.fields && result.fields.internalPageCode
-    if (internalid == null)
-        throw new Error(`internalid was undefined in ${path}!`)
+    const internalPageCode = result.fields && result.fields.internalPageCode
+    if (internalPageCode == null)
+        throw new Error(`internalPageCode was undefined in ${path}!`)
 
     const title = (result.fields && result.fields.headline) || result.webTitle
 
@@ -140,7 +140,7 @@ const parseArticleResult = async (
     switch (result.type) {
         case ContentType.ARTICLE:
             const article: [number, CArticle] = [
-                internalid,
+                internalPageCode,
                 {
                     type: 'article',
                     path: path,
@@ -160,13 +160,14 @@ const parseArticleResult = async (
                     mainMedia: getMainMediaAtom(result.blocks),
                     isFromPrint,
                     webUrl,
+                    internalPageCode,
                 },
             ]
             return article
 
         case ContentType.GALLERY:
             const galleryArticle: [number, CGallery] = [
-                internalid,
+                internalPageCode,
                 {
                     type: 'gallery',
                     path: path,
@@ -182,6 +183,7 @@ const parseArticleResult = async (
                     elements,
                     isFromPrint,
                     webUrl,
+                    internalPageCode,
                 },
             ]
 
@@ -189,7 +191,7 @@ const parseArticleResult = async (
 
         case ContentType.PICTURE:
             const pictureArticle: [number, CPicture] = [
-                internalid,
+                internalPageCode,
                 {
                     type: 'picture',
                     path: path,
@@ -205,6 +207,7 @@ const parseArticleResult = async (
                     elements,
                     isFromPrint,
                     webUrl,
+                    internalPageCode,
                 },
             ]
 
@@ -236,7 +239,7 @@ const parseArticleResult = async (
             }
 
             const crosswordArticle: [number, CAPIContent] = [
-                internalid,
+                internalPageCode,
                 {
                     type: 'crossword',
                     trail,
@@ -250,6 +253,7 @@ const parseArticleResult = async (
                     crossword,
                     isFromPrint,
                     webUrl,
+                    internalPageCode,
                 },
             ]
 
@@ -257,7 +261,7 @@ const parseArticleResult = async (
 
         default:
             return [
-                internalid,
+                internalPageCode,
                 {
                     type: 'article',
                     path: path,
@@ -283,6 +287,7 @@ const parseArticleResult = async (
                     ],
                     isFromPrint,
                     webUrl,
+                    internalPageCode,
                 },
             ]
     }

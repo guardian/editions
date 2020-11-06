@@ -177,6 +177,7 @@ export interface Content extends WithKey {
     isFromPrint: boolean
     webUrl?: string
     displayHint?: string
+    internalPageCode: number
 }
 export interface Article extends Content {
     type: 'article'
