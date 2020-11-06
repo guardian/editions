@@ -113,15 +113,16 @@ export const FIVE_SECONDS = 5
 
 export const upload = (
     key: string,
-    body: {} | Buffer,
+    body: {} | Buffer | string,
     bucket: Bucket,
     mime: 'image/jpeg' | 'application/json' | 'application/zip' | 'text/html',
     maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
+        console.log(`Uploading ${key} to bucket ${bucket.name}`)
         s3.upload(
             {
-                Body: body instanceof Buffer ? body : JSON.stringify(body),
+                Body: mime != 'application/json' ? body : JSON.stringify(body),
                 Bucket: bucket.name,
                 Key: `${key}`,
                 ACL: 'public-read',

@@ -16,7 +16,6 @@ import {
     hasFailed,
     withFailureMessage,
 } from '../../../backend/utils/try'
-import { RenderedContent } from '../../../Apps/common/src'
 
 export const URL =
     process.env.backend !== undefined
@@ -89,13 +88,11 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
 
 export const getRenderedContent = async (
     contentPath: string,
-): Promise<Attempt<RenderedContent[]>> => {
-    const path = `${URL}render${contentPath}?imageSize=all`
+): Promise<Attempt<string>> => {
+    const path = `${URL}render/${contentPath}`
     console.log(`Attempting to fetch rendered html for ${path}`)
     const response = await fetch(path)
-    const maybeRenderedContent = await attempt(response.json() as Promise<
-        RenderedContent[]
-    >)
+    const maybeRenderedContent = await attempt(response.text())
     if (hasFailed(maybeRenderedContent)) {
         const failureMessage = `Failed to fetch html for ${path}`
         console.error(failureMessage)
