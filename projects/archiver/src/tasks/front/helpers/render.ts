@@ -1,12 +1,5 @@
 import { unnest } from 'ramda'
-import {
-    CAPIArticle,
-    ImageSize,
-    imageSizes,
-    RenderedContent,
-} from '../../../../../Apps/common/src'
-import { Attempt, hasFailed } from '../../../../../backend/utils/try'
-import { Front, TrailImage, Image } from '../../../../common'
+import { Front } from '../../../../common'
 import { getRenderedContent } from '../../../utils/backend-client'
 import { getBucket, ONE_MONTH, upload } from '../../../utils/s3'
 
@@ -14,15 +7,11 @@ import { getBucket, ONE_MONTH, upload } from '../../../utils/s3'
 
 export const uploadRenderedArticle = async (
     internalPageCode: number,
-    html: RenderedContent[],
+    html: string,
 ) => {
     const Bucket = getBucket('proof')
-    return await Promise.all(
-        html.map(html => {
-            const path = `html/${html.size}/${internalPageCode}.html`
-            return upload(path, html.html, Bucket, 'text/html', ONE_MONTH)
-        }),
-    )
+    const path = `html/${internalPageCode}.html`
+    return upload(path, html, Bucket, 'text/html', ONE_MONTH)
 }
 
 export const getHtmlFromFront = async (front: Front) => {
