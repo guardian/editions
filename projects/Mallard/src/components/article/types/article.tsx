@@ -164,7 +164,6 @@ const Article = ({
     path: PathToArticle
     origin: IssueOrigin
 } & HeaderControlProps) => {
-    const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
@@ -250,11 +249,9 @@ const Article = ({
     return (
         <Fader>
             <WebviewWithArticle
-                type={type}
                 article={article}
                 path={path}
                 scrollEnabled={true}
-                useWebKit={false}
                 allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
                 mediaPlaybackRequiresUserAction={false}
                 style={[styles.webview]}

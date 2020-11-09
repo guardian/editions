@@ -80,6 +80,7 @@ export interface DevSettings {
     issuesPath: string
     senderId: string
     logging: string
+    appsRenderingService: string
 }
 
 interface UserSettings {
