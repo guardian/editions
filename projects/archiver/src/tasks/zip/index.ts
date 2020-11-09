@@ -30,7 +30,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             `${publishedId}/data`,
             [issuePath(publishedId), frontPath(publishedId, '')],
             {
-                removeFromOutputPath: `${version}/`,
+                removeFromOutputPath: [`${version}/`],
             },
             bucket,
         )
@@ -47,7 +47,8 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
                             mediaDir(publishedId, size),
                         ],
                         {
-                            removeFromOutputPath: `${version}/`,
+                            removeFromOutputPath: [`${version}/`],
+                            replaceWith: '',
                         },
                         bucket,
                     )
@@ -56,6 +57,35 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
                     return [size, imgUpload.Key]
                 },
             ),
+        )
+        console.log('Media zips uploaded.')
+
+        // Generate image bundle with simpler structure, without imageSize
+        await Promise.all(
+            imageSizes
+                .filter(f => f == 'phone')
+                .map(
+                    async (size): Promise<[ImageSize, string]> => {
+                        const imgUpload = await zip(
+                            `${publishedId}/ssr/${size}`,
+                            [
+                                thumbsDir(publishedId, size),
+                                mediaDir(publishedId, size),
+                            ],
+                            {
+                                removeFromOutputPath: [
+                                    `${version}/media/${size}`,
+                                    `${version}/thumbs/${size}`,
+                                ],
+                                replaceWith: 'images',
+                            },
+                            bucket,
+                        )
+
+                        console.log(` ${size}   media zip uploaded`)
+                        return [size, imgUpload.Key]
+                    },
+                ),
         )
         console.log('Media zips uploaded.')
         return {

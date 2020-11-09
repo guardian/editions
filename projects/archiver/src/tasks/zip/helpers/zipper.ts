@@ -6,7 +6,7 @@ import { getMatchingObjects } from './lister'
 export const zip = async (
     name: string,
     prefixes: string[],
-    options: { removeFromOutputPath?: string },
+    options: { removeFromOutputPath: string[]; replaceWith?: string },
     bucket: Bucket,
 ) => {
     const output = new PassThrough()
@@ -35,9 +35,16 @@ export const zip = async (
 
     await Promise.all(
         files.map(async file => {
-            const zipPath = options.removeFromOutputPath
-                ? file.replace(`${options.removeFromOutputPath}`, '')
-                : file
+            let zipPath = ''
+            if (options.removeFromOutputPath) {
+                options.removeFromOutputPath.forEach(str => {
+                    if (file.includes(str)) {
+                        zipPath = file.replace(str, options.replaceWith || '')
+                    }
+                })
+            } else {
+                zipPath = file
+            }
             console.log(`getting ${file}`)
             const s3response = await s3
                 .getObject({ Bucket: bucket.name, Key: file })
