@@ -1,5 +1,6 @@
 import { Linking, Platform } from 'react-native'
-import { EMBED_DOMAIN } from '../../html/components/media-atoms'
+
+export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 const urlIsNotAnEmbed = (url: string) =>
     !(
@@ -7,6 +8,7 @@ const urlIsNotAnEmbed = (url: string) =>
         url.startsWith('https://www.youtube.com/embed')
     )
 
+// @TODO: Question whether this is needed in a post Apps Rendering world...
 export const onShouldStartLoadWithRequest = (event: any) => {
     if (
         Platform.select({
