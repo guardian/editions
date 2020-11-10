@@ -30,7 +30,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             `${publishedId}/data`,
             [issuePath(publishedId), frontPath(publishedId, '')],
             {
-                removeFromOutputPath: [`${version}/`],
+                removeFromOutputPath: `${version}/`,
             },
             bucket,
         )
@@ -47,8 +47,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
                             mediaDir(publishedId, size),
                         ],
                         {
-                            removeFromOutputPath: [`${version}/`],
-                            replaceWith: '',
+                            removeFromOutputPath: `${version}/`,
                         },
                         bucket,
                     )
@@ -71,11 +70,8 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
                             mediaDir(publishedId, size),
                         ],
                         {
-                            removeFromOutputPath: [
-                                `${version}/media/${size}`,
-                                `${version}/thumbs/${size}`,
-                            ],
-                            replaceWith: 'images',
+                            removeFromOutputPath: `${version}/`,
+                            replaceImageSize: size,
                         },
                         bucket,
                     )
