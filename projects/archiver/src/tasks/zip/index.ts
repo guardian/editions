@@ -62,32 +62,42 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
 
         // Generate image bundle with simpler structure, without imageSize
         await Promise.all(
-            imageSizes
-                .filter(f => f == 'phone')
-                .map(
-                    async (size): Promise<[ImageSize, string]> => {
-                        const imgUpload = await zip(
-                            `${publishedId}/ssr/${size}`,
-                            [
-                                thumbsDir(publishedId, size),
-                                mediaDir(publishedId, size),
+            imageSizes.map(
+                async (size): Promise<[ImageSize, string]> => {
+                    const imgUpload = await zip(
+                        `${publishedId}/ssr/${size}`,
+                        [
+                            thumbsDir(publishedId, size),
+                            mediaDir(publishedId, size),
+                        ],
+                        {
+                            removeFromOutputPath: [
+                                `${version}/media/${size}`,
+                                `${version}/thumbs/${size}`,
                             ],
-                            {
-                                removeFromOutputPath: [
-                                    `${version}/media/${size}`,
-                                    `${version}/thumbs/${size}`,
-                                ],
-                                replaceWith: 'images',
-                            },
-                            bucket,
-                        )
+                            replaceWith: 'images',
+                        },
+                        bucket,
+                    )
 
-                        console.log(` ${size}   media zip uploaded`)
-                        return [size, imgUpload.Key]
-                    },
-                ),
+                    console.log(` ${size}   media zip uploaded`)
+                    return [size, imgUpload.Key]
+                },
+            ),
         )
         console.log('Media zips uploaded.')
+
+        // TODO zip upload with SSR article htmls
+        // await zip(
+        //     `${publishedId}/data`,
+        //     [issuePath(publishedId), frontPath(publishedId, '')],
+        //     {
+        //         removeFromOutputPath: [`${version}/`],
+        //     },
+        //     bucket,
+        // )
+        // console.log(`data zip uploaded to: s3://${bucket.name}/${publishedId}`)
+
         return {
             issuePublication,
             issue,

@@ -1,5 +1,6 @@
 import { IssuePublicationIdentifier, IssueSummary } from '../../../../common'
 import { getIssueSummaryInternal } from '../../../../src/tasks/indexer/helpers/get-issue-summary'
+import { Bucket } from '../../../../src/utils/s3'
 
 describe('getIssueSummaryInternal', () => {
     const assetKeys = [
@@ -10,6 +11,8 @@ describe('getIssueSummaryInternal', () => {
         'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
     ]
 
+    const bucket: Bucket = { name: 'test', context: 'default' }
+
     it('should return IssueSummary', async () => {
         const issue: IssuePublicationIdentifier = {
             edition: 'american-edition',
@@ -17,9 +20,9 @@ describe('getIssueSummaryInternal', () => {
             issueDate: '2019-10-09',
         }
 
-        const actual = getIssueSummaryInternal(
+        const actual = await getIssueSummaryInternal(
             issue,
-            assetKeys,
+            bucket,
             'American Edition',
         )
 
@@ -53,9 +56,9 @@ describe('getIssueSummaryInternal', () => {
             issueDate: '2019-1011-09',
         }
 
-        const actual = getIssueSummaryInternal(
+        const actual = await getIssueSummaryInternal(
             issueWithIncorrectDate,
-            assetKeys,
+            bucket,
             'American Edition',
         )
 
@@ -69,9 +72,9 @@ describe('getIssueSummaryInternal', () => {
             issueDate: '2019-10-09',
         }
 
-        const actual = getIssueSummaryInternal(
+        const actual = await getIssueSummaryInternal(
             issueWithIncorrectDate,
-            [],
+            bucket,
             'American Edition',
         )
 
