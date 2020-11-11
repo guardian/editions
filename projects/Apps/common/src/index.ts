@@ -213,7 +213,6 @@ export type CAPIArticle =
 export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
 export type ImageSize = typeof imageSizes[number]
 
-
 export const sizeDescriptions: { [k in ImageSize]: number } = {
     phone: 375,
     tablet: 740,
@@ -456,6 +455,9 @@ export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
 export const frontPath = (issue: string, frontId: string) =>
     `${issueDir(issue)}/front/${frontId}`
+
+export const htmlPath = (issue: string, internalPageCode: number) =>
+    `${issueDir(issue)}/html/${internalPageCode}.html`
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 

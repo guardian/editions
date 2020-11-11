@@ -28,9 +28,16 @@ const createCMSFrontsS3Client = () => {
     })
 }
 
-export const s3 = new S3({
+const s3DefaultCredentials = new S3({
     region: 'eu-west-1',
 })
+
+const s3FrontendCredentials = new S3({
+    region: 'eu-west-1',
+    credentials: new SharedIniFileCredentials({ profile: 'frontend' }),
+})
+
+export const s3 = process.env.arn ? s3DefaultCredentials : s3FrontendCredentials
 
 export type Bucket = {
     name: string
@@ -119,8 +126,10 @@ export const upload = (
     maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
-        console.log(`Uploading ${key} to bucket ${bucket.name}`)
-        s3.upload(
+        console.log(
+            `Uploading ${key} to bucket ${bucket.name} with maxAge ${maxAge}`,
+        )
+        return s3.upload(
             {
                 Body: mime != 'application/json' ? body : JSON.stringify(body),
                 Bucket: bucket.name,
