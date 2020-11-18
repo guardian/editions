@@ -97,13 +97,15 @@ const notificationsEnabledCache = createAsyncCache<boolean>(
  * This is keyed off the given service.
  */
 const createServiceTokenStore = (service: string) => ({
-    get: () =>
-        Keychain.getGenericPassword({ service }).then(val =>
-            val ? val : null,
-        ),
-    set: async ({ username, token }: { username: string; token: string }) => {
+    get: () => 
+        Keychain.getGenericPassword({ service }).then(val => {
+            return val ? val : null
+        }).catch(e => {
+            console.log(`KEYCHAIN GET ERROR: ` + e)
+        }),
+    set: async ({ username, token }: { username: string; token: string }) => (
         await Keychain.setGenericPassword(username, token, { service })
-    },
+    ),
     reset: async (): Promise<void> => {
         await Keychain.resetGenericPassword({ service })
     },
