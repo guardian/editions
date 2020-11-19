@@ -13,7 +13,7 @@ Ensure you have Janus credentials for `cmsFronts`, `capi` and `frontend`.
 ### Env vars
 
 You will need a `.env` file to run the backend. This file should have following details in it:
-APPS_RENDERING_ROOT='<apps rendering url>'
+APPS_RENDERING_URL='<apps rendering url>'
 frontsStage=<code/prod>
 capiPreviewUrl=<capi preview url>
 CAPI_KEY=<a capi key>

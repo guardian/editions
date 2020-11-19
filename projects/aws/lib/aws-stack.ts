@@ -57,6 +57,15 @@ export class EditionsStack extends cdk.Stack {
             description: 'print sent url parameter',
         })
 
+        const appsRenderingEndpoint = new cdk.CfnParameter(
+            this,
+            'apps-rendering-endpoint',
+            {
+                type: 'String',
+                description: 'Apps rendering endpoint',
+            },
+        )
+
         const frontsRoleARN = new cdk.CfnParameter(this, 'fronts-role-arn', {
             type: 'String',
             description: 'fronts s3 access',
@@ -207,6 +216,7 @@ export class EditionsStack extends cdk.Stack {
                         publicationStage,
                         capiAccessArn: capiRoleARN.valueAsString,
                         capiPreviewUrl: capiPreviewUrl.valueAsString,
+                        APPS_RENDERING_URL: appsRenderingEndpoint.valueAsString,
                     },
                     initialPolicy: [
                         new iam.PolicyStatement({
