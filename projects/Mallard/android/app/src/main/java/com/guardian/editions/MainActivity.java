@@ -2,6 +2,8 @@ package com.guardian.editions;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivityDelegate;
@@ -45,5 +47,16 @@ public class MainActivity extends ReactFragmentActivity {
                 return new RNGestureHandlerEnabledRootView(MainActivity.this);
             }
         };
+    }
+
+    // There is a known issue with androix 1.1.0 which cause webview to crash
+    // This is a workaround for this bug (https://github.com/react-native-webview/react-native-webview/issues/858)
+    // androidX bug: https://issuetracker.google.com/issues/141132133
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if(Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT <= 25) {
+            return;
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
     }
 }

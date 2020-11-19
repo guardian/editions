@@ -20,6 +20,7 @@ const Content = <T extends string>(
         mediaType = 'Image',
         sportScore,
         bylineHtml,
+        internalPageCode = 12345,
     }: Partial<IContent> & WithKey,
 ): IContent & { type: T } => ({
     key,
@@ -39,6 +40,7 @@ const Content = <T extends string>(
     mediaType,
     sportScore,
     isFromPrint: false,
+    internalPageCode: 1,
 })
 
 const Article = ({

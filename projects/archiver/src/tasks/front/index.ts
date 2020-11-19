@@ -3,6 +3,7 @@ import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import {
     frontPath,
+    htmlPath,
     Image,
     ImageSize,
     imageSizes,
@@ -10,7 +11,7 @@ import {
     Issue,
 } from '../../../common'
 import { handleAndNotifyOnError } from '../../services/task-handler'
-import { getFront, getRenderedContent } from '../../utils/backend-client'
+import { getFront } from '../../utils/backend-client'
 import { getBucket, ONE_WEEK, upload } from '../../utils/s3'
 import { IssueParams } from '../issue'
 import {
@@ -81,33 +82,39 @@ export const handler: Handler<
         ),
     )
 
-    // const imageUseUploadActions = imagesWithUses.map(
-    //     ([image, size, use]) => async () =>
-    //         attempt(getAndUploadImageUse(publishedId, image, size, use)),
-    // )
+    const imageUseUploadActions = imagesWithUses.map(
+        ([image, size, use]) => async () =>
+            attempt(getAndUploadImageUse(publishedId, image, size, use)),
+    )
 
-    // const imageUseUploads = await pAll(imageUseUploadActions, {
-    //     concurrency: 20,
-    // })
+    const imageUseUploads = await pAll(imageUseUploadActions, {
+        concurrency: 20,
+    })
 
-    // const failedImageUseUploads = imageUseUploads.filter(hasFailed)
-    // failedImageUseUploads.map(failure => console.error(JSON.stringify(failure)))
-    // console.log('Uploaded images')
+    const failedImageUseUploads = imageUseUploads.filter(hasFailed)
+    failedImageUseUploads.map(failure => console.error(JSON.stringify(failure)))
+    console.log('Uploaded images')
 
-    // const failedImages = failedImageUseUploads.length
-    // const success = failedImages === 0
+    const failedImages = failedImageUseUploads.length
+    const success = failedImages === 0
 
     // server side rendering
+
     const renderedContent = await getHtmlFromFront(maybeFront)
 
-    const result = renderedContent.map(content => {
-        if (hasFailed(content.content)) {
-            const errorMessage = `Failed to render articles for front ${front}`
-            console.error(errorMessage)
-            throw new Error(errorMessage)
-        }
-        uploadRenderedArticle(content.internalPageCode, content.content)
-    })
+    const result = await Promise.all(
+        renderedContent.map(async content => {
+            if (hasFailed(content.content)) {
+                const errorMessage = `Failed to render articles for front ${front}`
+                console.error(errorMessage)
+                throw new Error(errorMessage)
+            }
+            await uploadRenderedArticle(
+                htmlPath(publishedId, content.internalPageCode),
+                content.content,
+            )
+        }),
+    )
 
     const failedHtmlUploads = result.filter(hasFailed)
     if (failedHtmlUploads.length > 0) {
@@ -118,7 +125,7 @@ export const handler: Handler<
     console.log('Uploaded rendered HTML')
     return {
         message: `${front} and images uploaded ${
-            true ? 'succesfully' : 'with some images missing'
+            success ? 'succesfully' : 'with some images missing'
         }.`,
     }
 }, Bucket)

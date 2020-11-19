@@ -177,6 +177,8 @@ export interface Content extends WithKey {
     sportScore?: string
     isFromPrint: boolean
     webUrl?: string
+    displayHint?: string
+    internalPageCode: number
 }
 export interface Article extends Content {
     type: 'article'
@@ -456,6 +458,9 @@ export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
 export const frontPath = (issue: string, frontId: string) =>
     `${issueDir(issue)}/front/${frontId}`
+
+export const htmlPath = (issue: string, internalPageCode: number) =>
+    `${issueDir(issue)}/html/${internalPageCode}.html`
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 

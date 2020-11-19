@@ -23,16 +23,12 @@ const replaceImageUrls = (html: string): string => {
 
 export const renderController = async (req: Request, res: Response) => {
     const path = req.params.path
-    const imageSize = req.query.imageSize
     const renderingUrl = `${process.env.APPS_RENDERING_URL}${path}?editions`
-    console.log(
-        `Fetching ${renderingUrl} from apps rendering. imageSize: ${imageSize}`,
-    )
+    console.log(`Fetching ${renderingUrl} from apps rendering`)
     const renderResponse = await fetchRenderedArticle(renderingUrl)
 
-    const htmlWithImagesReplaced = replaceImageUrls(renderResponse.body)
-
     if (renderResponse.success) {
+        const htmlWithImagesReplaced = replaceImageUrls(renderResponse.body)
         res.setHeader('Content-Type', 'text/html')
         res.send(htmlWithImagesReplaced)
     } else {

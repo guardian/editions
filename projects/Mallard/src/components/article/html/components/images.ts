@@ -186,6 +186,7 @@ const ImageBase = ({
     displayCredit,
     role,
     remotePath,
+    displayCaptionAndCredit,
 }: {
     path: string
     index?: number
@@ -195,8 +196,11 @@ const ImageBase = ({
     displayCredit?: boolean
     role?: ImageElement['role']
     remotePath?: string
+    displayCaptionAndCredit?: boolean
 }) => {
-    const figcaption = renderCaption({ caption, credit, displayCredit })
+    const figcaption =
+        displayCaptionAndCredit &&
+        renderCaption({ caption, credit, displayCredit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
             <img
@@ -222,14 +226,22 @@ const Image = ({
     path,
     index,
     remotePath,
+    displayCaptionAndCredit,
 }: {
     imageElement: ImageElement
     path: string | undefined
     index?: number | undefined
     remotePath?: string
+    displayCaptionAndCredit?: boolean
 }) => {
     if (path) {
-        return ImageBase({ path, index, remotePath, ...imageElement })
+        return ImageBase({
+            path,
+            index,
+            remotePath,
+            displayCaptionAndCredit,
+            ...imageElement,
+        })
     }
     return null
 }

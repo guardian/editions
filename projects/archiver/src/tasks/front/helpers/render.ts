@@ -5,12 +5,8 @@ import { getBucket, ONE_MONTH, upload } from '../../../utils/s3'
 
 // call render function in backend client, store result
 
-export const uploadRenderedArticle = async (
-    internalPageCode: number,
-    html: string,
-) => {
+export const uploadRenderedArticle = async (path: string, html: string) => {
     const Bucket = getBucket('proof')
-    const path = `html/${internalPageCode}.html`
     return upload(path, html, Bucket, 'text/html', ONE_MONTH)
 }
 

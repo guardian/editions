@@ -277,13 +277,18 @@ export const EditionProvider = ({
     useEffect(() => {
         // Get the api url and then make network request to fetch edition list
         getSetting('apiUrl').then(async url => {
-            setApiUrl(editionsEndpoint(url))
-            const ed = await getEditions(apiUrl)
+            const fullUrl = editionsEndpoint(url)
+            setApiUrl(fullUrl)
+
+            // Avoid calling getEditions below by passing `apiUrl` state variable because that
+            // doesn't get updated immediately, it only updates in next render.
+            // Details can be found here: https://stackoverflow.com/questions/54069253/usestate-set-method-not-reflecting-change-immediately
+            const ed = await getEditions(fullUrl)
             if (ed) {
                 setEditionsList(ed)
             }
         })
-    }, [apiUrl])
+    }, [])
 
     /**
      * If a chosen edition is regional, then we mark that as default for future reference
@@ -307,6 +312,7 @@ export const EditionProvider = ({
     useEffect(() => {
         const appChangeEventHandler = async (appState: AppStateStatus) =>
             appState === 'active' &&
+            apiUrl &&
             getEditions(apiUrl).then(ed => ed && setEditionsList(ed))
 
         AppState.addEventListener('change', appChangeEventHandler)
