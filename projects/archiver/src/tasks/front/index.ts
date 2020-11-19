@@ -21,7 +21,10 @@ import {
 } from './helpers/media'
 import pAll = require('p-all')
 import { sleep } from '../../utils/sleep'
-import { getHtmlFromFront, uploadRenderedArticle } from './helpers/render'
+import {
+    getSSRArticlesFromFront,
+    uploadRenderedArticle,
+} from './helpers/render'
 
 export interface FrontTaskInput extends IssueParams {
     issue: Issue
@@ -100,18 +103,18 @@ export const handler: Handler<
 
     // server side rendering
 
-    const renderedContent = await getHtmlFromFront(maybeFront)
+    const ssrArticles = await getSSRArticlesFromFront(maybeFront)
 
     const result = await Promise.all(
-        renderedContent.map(async content => {
-            if (hasFailed(content.content)) {
+        ssrArticles.map(async ssrArticle => {
+            if (hasFailed(ssrArticle.content)) {
                 const errorMessage = `Failed to render articles for front ${front}`
                 console.error(errorMessage)
                 throw new Error(errorMessage)
             }
-            await uploadRenderedArticle(
-                htmlPath(publishedId, content.internalPageCode),
-                content.content,
+            return await uploadRenderedArticle(
+                htmlPath(publishedId, ssrArticle.internalPageCode),
+                ssrArticle.content,
             )
         }),
     )
