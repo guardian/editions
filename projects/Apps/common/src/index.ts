@@ -156,7 +156,6 @@ export type MediaType =
     | 'coverCard'
 
 export interface Content extends WithKey {
-    internalPageCode: number
     type: string
     headline: string
     kicker: string
@@ -214,7 +213,6 @@ export type CAPIArticle =
     | PictureArticle
 export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
 export type ImageSize = typeof imageSizes[number]
-
 
 export const sizeDescriptions: { [k in ImageSize]: number } = {
     phone: 375,
