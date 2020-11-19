@@ -30,6 +30,7 @@ interface ArticleContentProps {
     publishedId: Issue['publishedId'] | null
     imageSize: ImageSize
     getImagePath: GetImagePath
+    displayHint?: string
 }
 
 export enum ArticleTheme {
@@ -65,7 +66,7 @@ const cleanupBullets = (html: string) => {
 
 const renderArticleContent = (
     elements: BlockElement[],
-    { showMedia, publishedId, getImagePath }: ArticleContentProps,
+    { showMedia, publishedId, getImagePath, displayHint }: ArticleContentProps,
 ) => {
     const imagePaths = getLightboxImages(elements).map(i => i.src.path)
     return elements
@@ -88,11 +89,13 @@ const renderArticleContent = (
                 case 'image': {
                     const path = getImagePath(el.src)
                     const index = imagePaths.findIndex(e => e === el.src.path)
+                    const displayCaptionAndCredit = displayHint != 'photoEssay'
                     return publishedId
                         ? Image({
                               imageElement: el,
                               path,
                               index,
+                              displayCaptionAndCredit,
                           })
                         : ''
                 }
@@ -204,11 +207,13 @@ export const renderArticle = (
                           pillar,
                           getImagePath,
                       })
+            const displayHint = article.displayHint
             content = renderArticleContent(elements, {
                 showMedia,
                 publishedId,
                 imageSize,
                 getImagePath,
+                displayHint,
             })
             break
     }

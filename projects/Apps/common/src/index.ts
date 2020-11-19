@@ -177,6 +177,8 @@ export interface Content extends WithKey {
     sportScore?: string
     isFromPrint: boolean
     webUrl?: string
+    displayHint?: string
+    internalPageCode: number
 }
 export interface Article extends Content {
     type: 'article'
@@ -212,6 +214,11 @@ export type CAPIArticle =
     | PictureArticle
 export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
 export type ImageSize = typeof imageSizes[number]
+
+export interface RenderedContent {
+    size: ImageSize
+    html: string
+}
 
 export const sizeDescriptions: { [k in ImageSize]: number } = {
     phone: 375,

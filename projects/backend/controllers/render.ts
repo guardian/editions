@@ -27,9 +27,8 @@ export const renderController = async (req: Request, res: Response) => {
     console.log(`Fetching ${renderingUrl} from apps rendering`)
     const renderResponse = await fetchRenderedArticle(renderingUrl)
 
-    const htmlWithImagesReplaced = replaceImageUrls(renderResponse.body)
-
     if (renderResponse.success) {
+        const htmlWithImagesReplaced = replaceImageUrls(renderResponse.body)
         res.setHeader('Content-Type', 'text/html')
         res.send(htmlWithImagesReplaced)
     } else {

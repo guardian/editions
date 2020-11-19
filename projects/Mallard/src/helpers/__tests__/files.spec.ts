@@ -2,14 +2,14 @@ import { findIssueSummaryByKey } from '../../helpers/files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
 
 describe('helpers/files', () => {
-    describe('matchSummmaryToKey', () => {
+    describe('findIssueSummaryByKey', () => {
         it('should return an IssueSummary if the key matches', () => {
             const key = 'daily-edition/2019-09-18'
             const issueSummary = findIssueSummaryByKey(issueSummaries, key)
             expect(issueSummary).toEqual(issueSummaries[0])
         })
 
-        it('should return null if the key doesnt match', () => {
+        it('should return null if the key does not match', () => {
             const key = 'daily-edition/2019-09-20'
             const issueSummary = findIssueSummaryByKey(issueSummaries, key)
             expect(issueSummary).toEqual(null)
@@ -76,7 +76,7 @@ describe('helpers/files', () => {
             ])
         })
 
-        it("should return an empty array if there isn't any to delete", async () => {
+        it('should return an empty array if there are fewer files to delete', async () => {
             jest.mock('src/helpers/settings', () => ({
                 getSetting: () => 3,
             }))
