@@ -16,7 +16,7 @@ import { Bucket, s3 } from '../../../utils/s3'
 const identifyAssetFiles = (assetKeys: string[]) => {
     return fromPairs(
         assetKeys
-            .map((key): [ImageSize | 'data', string] | null => {
+            .map((key): [ImageSize | 'data' | 'html', string] | null => {
                 //get the name of the zip file by splitting into path segments
                 //taking the last one
                 //and removing the suffix
@@ -25,9 +25,13 @@ const identifyAssetFiles = (assetKeys: string[]) => {
                     .slice(-1)[0]
                     .replace('.zip', '')
 
-                // special case the data bundle
+                // special case the data and html bundle
                 if (filename === 'data') {
                     return ['data', key]
+                }
+
+                if (filename === 'html') {
+                    return ['html', key]
                 }
 
                 // drop any unrecognised asset zips
@@ -88,7 +92,6 @@ export const getIssueSummaryInternal = async (
     name: string,
 ): Promise<IssueSummary | undefined> => {
     const { edition, issueDate } = issuePublication
-
     const publishedIssuePrefix = getPublishedId(issuePublication)
 
     const dateFromIssue = new Date(issueDate)
@@ -97,7 +100,6 @@ export const getIssueSummaryInternal = async (
         console.warn(`Issue with path ${issueDate} is not a valid date`)
         return undefined
     }
-
     //Current asset generation
     const prefix = `zips/${publishedIssuePrefix}/`
     const assetKeys = await getAssestKeysFromBucket(bucket, prefix)
@@ -115,13 +117,13 @@ export const getIssueSummaryInternal = async (
     const assetKeysSSR = await getAssestKeysFromBucket(bucket, prefixSSR)
     const assetFilesSSR = identifyAssetFiles(assetKeysSSR)
 
-    if (assetFilesSSR.data == null) {
-        console.log(`No data in ssr folder for ${issue}`)
+    if (assetFilesSSR.html == null) {
+        console.log(`No html in ssr folder for ${issue}`)
         return undefined
     }
 
     const imagesSSR = makeImageAssetObject(assetFilesSSR)
-    const assetsSSR = { data: assetFilesSSR.data, ...imagesSSR }
+    const assetsSSR = { html: assetFilesSSR.html, ...imagesSSR }
 
     const localId = `${edition}/${issueDate}`
     const key = localId

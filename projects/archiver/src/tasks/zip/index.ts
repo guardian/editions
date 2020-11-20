@@ -9,7 +9,7 @@ import {
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
-import { thumbsDir } from '../../../../Apps/common/src'
+import { htmlPath, thumbsDir } from '../../../../Apps/common/src'
 import { getBucket } from '../../utils/s3'
 import { sleep } from '../../utils/sleep'
 
@@ -59,7 +59,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
         )
         console.log('Media zips uploaded.')
 
-        // Generate image bundle with simpler structure, without imageSize
+        // SSR - generate image bundle with simpler structure, without imageSize
         await Promise.all(
             imageSizes.map(
                 async (size): Promise<[ImageSize, string]> => {
@@ -83,16 +83,16 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
         )
         console.log('Media zips uploaded.')
 
-        // TODO zip upload with SSR article htmls
-        // await zip(
-        //     `${publishedId}/data`,
-        //     [issuePath(publishedId), frontPath(publishedId, '')],
-        //     {
-        //         removeFromOutputPath: [`${version}/`],
-        //     },
-        //     bucket,
-        // )
-        // console.log(`data zip uploaded to: s3://${bucket.name}/${publishedId}`)
+        // SSR - generate 'html' bundle for new app client
+        await zip(
+            `${publishedId}/ssr/html`,
+            [htmlPath(publishedId, '')],
+            {
+                removeFromOutputPath: `${version}/`,
+            },
+            bucket,
+        )
+        console.log(`html zip uploaded to: s3://${bucket.name}/${publishedId}`)
 
         return {
             issuePublication,
