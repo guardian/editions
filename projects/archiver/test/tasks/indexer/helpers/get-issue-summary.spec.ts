@@ -11,6 +11,14 @@ describe('getIssueSummaryInternal', () => {
         'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
     ]
 
+    const assetKeysSSR = [
+        'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/html.zip',
+        'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/phone.zip',
+        'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tablet.zip',
+        'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletL.zip',
+        'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
+    ]
+
     const bucket: Bucket = { name: 'test', context: 'default' }
 
     it('should return IssueSummary', async () => {
@@ -22,7 +30,8 @@ describe('getIssueSummaryInternal', () => {
 
         const actual = await getIssueSummaryInternal(
             issue,
-            bucket,
+            assetKeys,
+            assetKeysSSR,
             'American Edition',
         )
 
@@ -35,6 +44,18 @@ describe('getIssueSummaryInternal', () => {
             assets: {
                 data:
                     'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/data.zip',
+                phone:
+                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/phone.zip',
+                tablet:
+                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tablet.zip',
+                tabletL:
+                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletL.zip',
+                tabletXL:
+                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
+            },
+            assetsSSR: {
+                html:
+                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/html.zip',
                 phone:
                     'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/phone.zip',
                 tablet:
@@ -58,7 +79,8 @@ describe('getIssueSummaryInternal', () => {
 
         const actual = await getIssueSummaryInternal(
             issueWithIncorrectDate,
-            bucket,
+            assetKeys,
+            assetKeysSSR,
             'American Edition',
         )
 
@@ -74,7 +96,8 @@ describe('getIssueSummaryInternal', () => {
 
         const actual = await getIssueSummaryInternal(
             issueWithIncorrectDate,
-            bucket,
+            [],
+            [],
             'American Edition',
         )
 

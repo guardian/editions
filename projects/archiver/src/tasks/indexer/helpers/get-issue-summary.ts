@@ -88,7 +88,8 @@ const getAssestKeysFromBucket = async (
  */
 export const getIssueSummaryInternal = async (
     issuePublication: IssuePublicationIdentifier,
-    bucket: Bucket,
+    assetKeys: string[],
+    assetKeysSSR: string[],
     name: string,
 ): Promise<IssueSummary | undefined> => {
     const { edition, issueDate } = issuePublication
@@ -100,11 +101,9 @@ export const getIssueSummaryInternal = async (
         console.warn(`Issue with path ${issueDate} is not a valid date`)
         return undefined
     }
-    //Current asset generation
-    const prefix = `zips/${publishedIssuePrefix}/`
-    const assetKeys = await getAssestKeysFromBucket(bucket, prefix)
-    const assetFiles = identifyAssetFiles(assetKeys)
 
+    //Asset files for existing app clients
+    const assetFiles = identifyAssetFiles(assetKeys)
     if (assetFiles.data == null) {
         console.log(`No data for ${issue}`)
         return undefined
@@ -112,16 +111,12 @@ export const getIssueSummaryInternal = async (
     const images = makeImageAssetObject(assetFiles)
     const assets = { data: assetFiles.data, ...images }
 
-    //SSR (server side rendering) asset generation
-    const prefixSSR = `zips/${publishedIssuePrefix}/ssr`
-    const assetKeysSSR = await getAssestKeysFromBucket(bucket, prefixSSR)
+    //Asset generation for new app client that are compatible with SSR articles
     const assetFilesSSR = identifyAssetFiles(assetKeysSSR)
-
     if (assetFilesSSR.html == null) {
         console.log(`No html in ssr folder for ${issue}`)
         return undefined
     }
-
     const imagesSSR = makeImageAssetObject(assetFilesSSR)
     const assetsSSR = { html: assetFilesSSR.html, ...imagesSSR }
 
@@ -144,5 +139,18 @@ export const getIssueSummary = async (
     bucket: Bucket,
 ): Promise<IssueSummary | undefined> => {
     const displayName = await getEditionDisplayName(issuePublication.edition)
-    return getIssueSummaryInternal(issuePublication, bucket, displayName)
+    const publishedIssuePrefix = getPublishedId(issuePublication)
+
+    const prefix = `zips/${publishedIssuePrefix}/`
+    const assetKeys = await getAssestKeysFromBucket(bucket, prefix)
+
+    const prefixSSR = `zips/${publishedIssuePrefix}/ssr`
+    const assetKeysSSR = await getAssestKeysFromBucket(bucket, prefixSSR)
+
+    return getIssueSummaryInternal(
+        issuePublication,
+        assetKeys,
+        assetKeysSSR,
+        displayName,
+    )
 }
