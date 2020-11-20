@@ -18,7 +18,7 @@ const fetchRenderedArticle = async (url: string) => {
 
 // TODO: this needs a test once we're happy with the correct format for the paths
 const replaceImageUrls = (html: string): string => {
-    return html.replace(/https:\/\/i.guim.co.uk\/img\//g, `../media/`)
+    return html.replace(/https:\/\/i.guim.co.uk\/img\//g, `../media/images/`)
 }
 
 export const renderController = async (req: Request, res: Response) => {
