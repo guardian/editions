@@ -465,8 +465,7 @@ export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
 export const frontPath = (issue: string, frontId: string) =>
     `${issueDir(issue)}/front/${frontId}`
 
-export const htmlPath = (issue: string, frontId: string) =>
-    `${issueDir(issue)}/html`
+export const htmlDirPath = (issue: string) => `${issueDir(issue)}/html`
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 

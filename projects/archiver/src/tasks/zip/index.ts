@@ -9,7 +9,7 @@ import {
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
-import { htmlPath, thumbsDir } from '../../../../Apps/common/src'
+import { htmlDirPath, thumbsDir } from '../../../../Apps/common/src'
 import { getBucket } from '../../utils/s3'
 import { sleep } from '../../utils/sleep'
 
@@ -86,7 +86,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
         // SSR - generate 'html' bundle for new app client
         await zip(
             `${publishedId}/ssr/html`,
-            [htmlPath(publishedId, '')],
+            [htmlDirPath(publishedId)],
             {
                 removeFromOutputPath: `${version}/`,
             },
