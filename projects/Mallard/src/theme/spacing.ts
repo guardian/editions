@@ -41,7 +41,7 @@ export const metrics = {
     fronts: {
         sides: basicMetrics.horizontal * 1.5,
         marginBottom: basicMetrics.horizontal * 2,
-        cardSize: toSize(540, 520), // height should really be 500
+        cardSize: toSize(540, 510),
         cardSizeTablet: toSize(650, 646),
         circleButtonDiameter: 36,
     },

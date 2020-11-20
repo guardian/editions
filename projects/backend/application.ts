@@ -14,6 +14,7 @@ export interface EditionsBackendControllers {
     issueController: (req: Request, res: Response) => void
     frontController: (req: Request, res: Response) => void
     imageController: (req: Request, res: Response) => void
+    renderController: (req: Request, res: Response) => void
     editionsController: {
         GET: (req: Request, res: Response) => void
         POST: (req: Request, res: Response) => void
@@ -57,6 +58,8 @@ export const createApp = (
         '/' + frontPath(issuePathSegments, '*?'),
         controllers.frontController,
     )
+
+    app.get('/render/:path(*)', controllers.renderController)
 
     app.get(
         '/' +
