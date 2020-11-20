@@ -3,6 +3,7 @@ import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import {
     frontPath,
+    htmlPath,
     Image,
     ImageSize,
     imageSizes,
@@ -20,6 +21,10 @@ import {
 } from './helpers/media'
 import pAll = require('p-all')
 import { sleep } from '../../utils/sleep'
+import {
+    getSSRArticlesFromFront,
+    uploadRenderedArticle,
+} from './helpers/render'
 
 export interface FrontTaskInput extends IssueParams {
     issue: Issue
@@ -96,6 +101,31 @@ export const handler: Handler<
     const failedImages = failedImageUseUploads.length
     const success = failedImages === 0
 
+    // server side rendering
+
+    const ssrArticles = await getSSRArticlesFromFront(maybeFront)
+
+    const result = await Promise.all(
+        ssrArticles.map(async ssrArticle => {
+            if (hasFailed(ssrArticle.content)) {
+                const errorMessage = `Failed to render articles for front ${front}`
+                console.error(errorMessage)
+                throw new Error(errorMessage)
+            }
+            return await uploadRenderedArticle(
+                htmlPath(publishedId, ssrArticle.internalPageCode),
+                ssrArticle.content,
+            )
+        }),
+    )
+
+    const failedHtmlUploads = result.filter(hasFailed)
+    if (failedHtmlUploads.length > 0) {
+        console.warn(
+            `${failedHtmlUploads.length} rendered articles failed to upload`,
+        )
+    }
+    console.log('Uploaded rendered HTML')
     return {
         message: `${front} and images uploaded ${
             success ? 'succesfully' : 'with some images missing'

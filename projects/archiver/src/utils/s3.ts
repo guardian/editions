@@ -28,9 +28,16 @@ const createCMSFrontsS3Client = () => {
     })
 }
 
-export const s3 = new S3({
+const s3DefaultCredentials = new S3({
     region: 'eu-west-1',
 })
+
+const s3FrontendCredentials = new S3({
+    region: 'eu-west-1',
+    credentials: new SharedIniFileCredentials({ profile: 'frontend' }),
+})
+
+export const s3 = process.env.arn ? s3DefaultCredentials : s3FrontendCredentials
 
 export type Bucket = {
     name: string
@@ -106,21 +113,25 @@ function cacheControlHeader(maxAge: number | undefined): string {
     return 'private'
 }
 
+export const ONE_MONTH = 3600 * 24 * 30
 export const ONE_WEEK = 3600 * 24 * 7
 export const ONE_MINUTE = 60
 export const FIVE_SECONDS = 5
 
 export const upload = (
     key: string,
-    body: {} | Buffer,
+    body: {} | Buffer | string,
     bucket: Bucket,
-    mime: 'image/jpeg' | 'application/json' | 'application/zip',
+    mime: 'image/jpeg' | 'application/json' | 'application/zip' | 'text/html',
     maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
-        s3.upload(
+        console.log(
+            `Uploading ${key} to bucket ${bucket.name} with maxAge ${maxAge}`,
+        )
+        return s3.upload(
             {
-                Body: body instanceof Buffer ? body : JSON.stringify(body),
+                Body: mime != 'application/json' ? body : JSON.stringify(body),
                 Bucket: bucket.name,
                 Key: `${key}`,
                 ACL: 'public-read',
