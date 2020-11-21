@@ -26,8 +26,8 @@
         "@guardian/react-crossword": "^0.2.3",
         "chalk": "^3.0.0",
         "kill-port": "^1.6.0",
-        "react": "16.0.0",
-        "react-dom": "16.13.0"
+        "react": "16.14.0",
+        "react-dom": "16.14.0"
     },
     "resolutions": {
         "jsdom": "16.2.1"
