@@ -63,10 +63,10 @@ export const updateListeners = (localId: string, status: DLStatus) => {
 }
 
 const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
-    const { assets, localId } = issue
+    const { assets, assetsSSR, localId } = issue
 
     try {
-        if (!assets) {
+        if (!assets || !assetsSSR) {
             await pushTracking('noAssets', 'complete', Feature.DOWNLOAD)
             return
         }
@@ -96,6 +96,17 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
                         dataDownloadResult.statusCode,
                 )
 
+                const htmlDownloadResult = await downloadNamedIssueArchive({
+                    localIssueId: localId,
+                    assetPath: assetsSSR.html,
+                    filename: 'html.zip',
+                    withProgress: false,
+                })
+                console.log(
+                    'Html download completed with status: ' +
+                        htmlDownloadResult.statusCode,
+                )
+
                 await pushTracking(
                     'attemptDataDownload',
                     'completed',
@@ -110,7 +121,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
                 const dlImg = await downloadNamedIssueArchive({
                     localIssueId: localId,
-                    assetPath: assets[imageSize] as string,
+                    assetPath: assetsSSR[imageSize] as string,
                     filename: 'media.zip',
                     withProgress: true,
                 })
@@ -133,6 +144,10 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
                 await unzipNamedIssueArchive(
                     `${FSPaths.downloadIssueLocation(localId)}/data.zip`,
+                )
+
+                await unzipNamedIssueArchive(
+                    `${FSPaths.downloadIssueLocation(localId)}/html.zip`,
                 )
 
                 await pushTracking('unzipData', 'end', Feature.DOWNLOAD)

@@ -22,10 +22,6 @@ import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Image } from 'src/common'
 import { remoteConfigService } from 'src/services/remote-config'
-import { defaultSettings } from 'src/helpers/settings/defaults'
-import { isSuccessOrRedirect } from './article/helpers'
-import { useApolloClient } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 
 const styles = StyleSheet.create({
     block: {
@@ -123,48 +119,18 @@ const useUpdateWebviewVariable = (
     return valueInWebview
 }
 
-const injectJavascript = (
-    webviewRef: React.MutableRefObject<WebView | null>,
-    script: string,
-): void => {
-    if (webviewRef && webviewRef.current) {
-        webviewRef.current.injectJavaScript(script)
-    }
-}
-
-/**
- * Sometimes the webUrl is empty due to that content not being published at the point the edition
- * was created. However, we still have access to the article path at the time of publication
- * This function checks to see if theguardian.com/<path at publication time> exists
- */
-const checkPathExists = async (articlePath: string) => {
-    const generatedUrl = `${defaultSettings.websiteUrl}${articlePath}`
-    // HEAD request as we only need the status code. If the request fails return null
-    const dotComResult = await fetch(`${generatedUrl}`, {
-        method: 'HEAD',
-    }).catch(() => null)
-
-    return dotComResult && isSuccessOrRedirect(dotComResult.status)
-        ? generatedUrl
-        : null
-}
-
 const Article = ({
     navigation,
     article,
-    path,
     onShouldShowHeaderChange,
     shouldShowHeader,
-    topPadding,
     onIsAtTopChange,
-    origin,
 }: {
     navigation: NavigationScreenProp<{}>
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
     origin: IssueOrigin
 } & HeaderControlProps) => {
-    const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
     const [imagePaths, setImagePaths] = useState([''])
     const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>()
@@ -179,20 +145,6 @@ const Article = ({
     const [, { pillar }] = useArticle()
     const apiUrl = useApiUrl() || ''
     const { issueId } = useIssueSummary()
-
-    // if webUrl is undefined then we attempt to fetch a url to use for sharing
-    const [shareUrl, setShareUrl] = useState(article.webUrl)
-    // we can only attempt to fetch the url if connected
-    const client = useApolloClient()
-    const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
-        query: gql('{ netInfo @client { isConnected @client } }'),
-    })
-    const isConnected = data && data.netInfo.isConnected
-    const shareUrlFetchEnabled =
-        !article.webUrl &&
-        isConnected &&
-        // TODO: remove remote switch once we are happy this feature is stable
-        remoteConfigService.getBoolean('generate_share_url')
 
     useEffect(() => {
         const lbimages = getLightboxImages(article.elements)
@@ -222,62 +174,36 @@ const Article = ({
             )
         }
         fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
-
-        const updateShareUrl = async () => {
-            const url = await checkPathExists(article.key)
-            if (url) {
-                injectJavascript(
-                    ref,
-                    `document.getElementById('share-button').classList.remove('display-none');
-                     document.getElementById('byline-area').classList.remove('display-none');
-                    `,
-                )
-                setShareUrl(url)
-            }
-        }
-
-        shareUrlFetchEnabled && updateShareUrl()
-    }, [
-        apiUrl,
-        article.elements,
-        issueId,
-        article.image,
-        article.type,
-        article.key,
-        shareUrlFetchEnabled,
-    ])
+    }, [apiUrl, article.elements, issueId, article.image, article.type])
 
     return (
         <Fader>
             <WebviewWithArticle
-                type={type}
                 article={article}
-                path={path}
+                issueId={issueId}
                 scrollEnabled={true}
-                useWebKit={false}
                 allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
                 mediaPlaybackRequiresUserAction={false}
                 style={[styles.webview]}
-                _ref={r => {
+                _ref={(r: any) => {
                     ref.current = r
                 }}
-                topPadding={topPadding}
-                origin={origin}
-                onMessage={event => {
+                onMessage={(event: any) => {
                     const parsed = parsePing(event.nativeEvent.data)
-                    if (parsed.type === 'share' && shareUrl) {
+                    if (parsed.type === 'share') {
+                        if (article.webUrl == null) return
                         if (Platform.OS === 'ios') {
                             Share.share({
-                                url: shareUrl,
+                                url: article.webUrl,
                                 message: article.headline,
                             })
                         } else {
                             Share.share(
                                 {
                                     title: article.headline,
-                                    url: shareUrl,
+                                    url: article.webUrl,
                                     // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
-                                    message: shareUrl,
+                                    message: article.webUrl,
                                 },
                                 {
                                     subject: article.headline,
@@ -290,7 +216,6 @@ const Article = ({
                         wasShowingHeader.current = parsed.shouldShowHeader
                         onShouldShowHeaderChange(parsed.shouldShowHeader)
                     }
-
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
                     }
