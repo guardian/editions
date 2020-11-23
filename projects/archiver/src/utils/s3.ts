@@ -37,7 +37,10 @@ const s3FrontendCredentials = new S3({
     credentials: new SharedIniFileCredentials({ profile: 'frontend' }),
 })
 
-export const s3 = process.env.arn ? s3DefaultCredentials : s3FrontendCredentials
+export const s3 =
+    process.env.stage === 'CODE' || process.env.stage === 'PROD'
+        ? s3DefaultCredentials
+        : s3FrontendCredentials
 
 export type Bucket = {
     name: string
