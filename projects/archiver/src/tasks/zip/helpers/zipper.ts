@@ -6,7 +6,7 @@ import { getMatchingObjects } from './lister'
 export const zip = async (
     name: string,
     prefixes: string[],
-    options: { removeFromOutputPath?: string },
+    options: { removeFromOutputPath?: string; replaceImageSize?: string },
     bucket: Bucket,
 ) => {
     const output = new PassThrough()
@@ -35,9 +35,16 @@ export const zip = async (
 
     await Promise.all(
         files.map(async file => {
-            const zipPath = options.removeFromOutputPath
+            const path = options.removeFromOutputPath
                 ? file.replace(`${options.removeFromOutputPath}`, '')
                 : file
+
+            // Remove the image size from the path and replace with a static `images`
+            // It is currently needed for server side rendering html bundle
+            const zipPath = options.replaceImageSize
+                ? path.replace(`/${options.replaceImageSize}/`, '/images/')
+                : path
+
             console.log(`getting ${file}`)
             const s3response = await s3
                 .getObject({ Bucket: bucket.name, Key: file })

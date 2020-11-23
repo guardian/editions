@@ -285,6 +285,9 @@ export interface IssueSummary extends WithKey, IssueCompositeKey {
     assets?: {
         [P in ImageSize]?: string
     } & { data: string }
+    assetsSSR?: {
+        [P in ImageSize]?: string
+    } & { html: string }
 }
 
 export interface Issue extends IssueSummary, WithKey {
@@ -459,6 +462,8 @@ export const frontPath = (issue: string, frontId: string) =>
 
 export const htmlPath = (issue: string, internalPageCode: number) =>
     `${issueDir(issue)}/html/${internalPageCode}.html`
+
+export const htmlDirPath = (issue: string) => `${issueDir(issue)}/html`
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 
