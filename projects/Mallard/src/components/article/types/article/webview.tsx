@@ -32,10 +32,10 @@ const WebviewWithArticle = ({
 
     // Offline rendering
     if (origin === 'filesystem') {
-        const htmlUri = `${FSPaths.issueRoot(localIssueId)}/${
+        const htmlUri = `${FSPaths.issueRoot(localIssueId)}/html/${
             article.internalPageCode
         }.html`
-        uri = Platform.OS === 'android' ? 'file:///' + htmlUri : htmlUri
+        uri = Platform.OS === 'android' ? 'file://' + htmlUri : htmlUri
     }
 
     return (

@@ -63,10 +63,10 @@ export const updateListeners = (localId: string, status: DLStatus) => {
 }
 
 const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
-    const { assets, assetsV2, localId } = issue
+    const { assets, assetsSSR, localId } = issue
 
     try {
-        if (!assets || !assetsV2) {
+        if (!assets || !assetsSSR) {
             await pushTracking('noAssets', 'complete', Feature.DOWNLOAD)
             return
         }
@@ -108,15 +108,15 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
                 await pushTracking(
                     'attemptHTMLDownload',
-                    JSON.stringify({ localId, assets: assetsV2.html }),
+                    JSON.stringify({ localId, assets: assetsSSR.html }),
                     Feature.DOWNLOAD,
                 )
 
                 const htmlDownloadResult = await downloadNamedIssueArchive({
                     localIssueId: localId,
-                    assetPath: assetsV2.html,
+                    assetPath: assetsSSR.html,
                     filename: 'html.zip',
-                    withProgress: true,
+                    withProgress: false,
                 })
                 console.log(
                     'HTML download completed with status: ' +
@@ -133,13 +133,13 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
                 await pushTracking(
                     'attemptMediaDownload',
-                    JSON.stringify({ localId, assets: assetsV2[imageSize] }),
+                    JSON.stringify({ localId, assets: assetsSSR[imageSize] }),
                     Feature.DOWNLOAD,
                 )
 
                 const dlImg = await downloadNamedIssueArchive({
                     localIssueId: localId,
-                    assetPath: assetsV2[imageSize] as string,
+                    assetPath: assetsSSR[imageSize] as string,
                     filename: 'media.zip',
                     withProgress: true,
                 })
