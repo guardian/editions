@@ -10,7 +10,12 @@ export const uploadRenderedArticle = async (path: string, html: string) => {
     return upload(path, html, Bucket, 'text/html', ONE_MONTH)
 }
 
-export const getHtmlFromFront = async (front: Front) => {
+/**
+ * Loop through all the articles of Front object and fetch
+ * server-side-redering (SSR) article content for each article
+ * @param front
+ */
+export const getSSRArticlesFromFront = async (front: Front) => {
     console.log('Getting images for front ' + JSON.stringify(front))
 
     const allCards = unnest(front.collections.map(_ => _.cards))
