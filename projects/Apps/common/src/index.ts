@@ -290,6 +290,9 @@ export interface IssueSummary extends WithKey, IssueCompositeKey {
     assets?: {
         [P in ImageSize]?: string
     } & { data: string }
+    assetsV2?: {
+        [P in ImageSize]?: string
+    } & { html: string }
 }
 
 export interface Issue extends IssueSummary, WithKey {

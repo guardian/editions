@@ -28,14 +28,14 @@ const WebviewWithArticle = ({
     const largeDeviceMemory = useLargeDeviceMemory()
 
     // Online rendering
-    let uri = `${defaultSettings.appsRenderingService}${article.key}?template=editions`
+    let uri = `${defaultSettings.appsRenderingService}${article.internalPageCode}?editions`
 
     // Offline rendering
     if (origin === 'filesystem') {
-        const coreUri = `${FSPaths.issueRoot(localIssueId)}/${
+        const htmlUri = `${FSPaths.issueRoot(localIssueId)}/${
             article.internalPageCode
         }.html`
-        uri = Platform.OS === 'android' ? 'file:///' + coreUri : coreUri
+        uri = Platform.OS === 'android' ? 'file:///' + htmlUri : htmlUri
     }
 
     return (

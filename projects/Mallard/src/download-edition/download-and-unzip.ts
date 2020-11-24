@@ -63,10 +63,10 @@ export const updateListeners = (localId: string, status: DLStatus) => {
 }
 
 const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
-    const { assets, localId } = issue
+    const { assets, assetsV2, localId } = issue
 
     try {
-        if (!assets) {
+        if (!assets || !assetsV2) {
             await pushTracking('noAssets', 'complete', Feature.DOWNLOAD)
             return
         }
@@ -108,18 +108,15 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
                 await pushTracking(
                     'attemptHTMLDownload',
-                    JSON.stringify({ localId, assets: assets.data }),
+                    JSON.stringify({ localId, assets: assetsV2.html }),
                     Feature.DOWNLOAD,
                 )
 
-                // Not sure if we need to update listeners here.
-
                 const htmlDownloadResult = await downloadNamedIssueArchive({
                     localIssueId: localId,
-                    // This needs to change & requires Issue Summary update
-                    assetPath: assets.data,
+                    assetPath: assetsV2.html,
                     filename: 'html.zip',
-                    withProgress: false,
+                    withProgress: true,
                 })
                 console.log(
                     'HTML download completed with status: ' +
@@ -136,13 +133,13 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
                 await pushTracking(
                     'attemptMediaDownload',
-                    JSON.stringify({ localId, assets: assets[imageSize] }),
+                    JSON.stringify({ localId, assets: assetsV2[imageSize] }),
                     Feature.DOWNLOAD,
                 )
 
                 const dlImg = await downloadNamedIssueArchive({
                     localIssueId: localId,
-                    assetPath: assets[imageSize] as string,
+                    assetPath: assetsV2[imageSize] as string,
                     filename: 'media.zip',
                     withProgress: true,
                 })
