@@ -19,6 +19,7 @@ function loadStories() {
 	require('../src/components/SportScore/SportScore.stories');
 	require('../src/components/Stars/Stars.stories');
 	require('../src/components/icons/Icons.stories');
+	require('../src/components/onboarding/new-edition.stories');
 }
 
 const stories = [
@@ -36,7 +37,8 @@ const stories = [
 	'../src/components/Spinner/Spinner.stories',
 	'../src/components/SportScore/SportScore.stories',
 	'../src/components/Stars/Stars.stories',
-	'../src/components/icons/Icons.stories'
+	'../src/components/icons/Icons.stories',
+	'../src/components/onboarding/new-edition.stories'
 ];
 
 module.exports = {
