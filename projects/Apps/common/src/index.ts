@@ -285,6 +285,9 @@ export interface IssueSummary extends WithKey, IssueCompositeKey {
     assets?: {
         [P in ImageSize]?: string
     } & { data: string }
+    assetsSSR?: {
+        [P in ImageSize]?: string
+    } & { html: string }
 }
 
 export interface Issue extends IssueSummary, WithKey {
@@ -456,6 +459,8 @@ export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
 export const frontPath = (issue: string, frontId: string) =>
     `${issueDir(issue)}/front/${frontId}`
+
+export const htmlDirPath = (issue: string) => `${issueDir(issue)}/html`
 
 export const htmlPath = (issue: string, internalPageCode: number) =>
     `${issueDir(issue)}/html/${internalPageCode}.html`
