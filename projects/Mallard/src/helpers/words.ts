@@ -166,6 +166,15 @@ export const ManageDownloads = {
     delete: 'Delete',
 }
 
+export const NewEditionWords = {
+    title: 'This year has changed everything',
+    bodyText: `We’ve got something for you.
+
+In this special edition, women and non-binary people of colour share their experiences and perspectives.
+We hope you enjoy it as much as we enjoyed creating it!`,
+    dismissButtonText: 'Got it, thanks',
+}
+
 export const HomeScreen = {
     issuePickerTitle: 'Recent',
     issuePickerTitleSubtitle: 'Editions',

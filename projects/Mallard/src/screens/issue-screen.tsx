@@ -5,6 +5,7 @@ import React, {
     useEffect,
     useMemo,
     useRef,
+    useState,
 } from 'react'
 import {
     FlatList,
@@ -42,6 +43,7 @@ import {
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
+    NewEditionWords,
 } from 'src/helpers/words'
 import { useQuery } from 'src/hooks/apollo'
 import {
@@ -75,6 +77,8 @@ import {
 } from 'src/hooks/use-edition-provider'
 import RNRestart from 'react-native-restart'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
+import { NewEditionCard } from 'src/components/onboarding/new-edition'
+import { seenEditionsCache } from 'src/helpers/storage'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -468,11 +472,39 @@ const IssueScreenWithPath = React.memo(
 
 export const IssueScreen = () => {
     const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
-    const { selectedEdition } = useEditions()
+    const { selectedEdition, editionsList } = useEditions()
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
     const headerStyle = specialEditionProps && specialEditionProps.headerStyle
+    const [showNewEditionCard, setShowNewEditionCard] = useState(false)
+    const [newEditionHeaderStyle, ...rest] = editionsList.specialEditions.map(
+        e => e.headerStyle,
+    )
+    seenEditionsCache.set([])
+
+    useEffect(() => {
+        seenEditionsCache.get().then(seen => {
+            const unseenEditions = editionsList.specialEditions.filter(
+                e => !seen || !seen.includes(e.edition),
+            )
+            if (unseenEditions.length > 0) {
+                setShowNewEditionCard(true)
+            }
+        })
+    }, [editionsList.specialEditions])
     return (
         <Container>
+            {selectedEdition.editionType !== 'Special' && showNewEditionCard && (
+                <NewEditionCard
+                    headerStyle={newEditionHeaderStyle}
+                    modalText={NewEditionWords}
+                    onDismissThisCard={() => {
+                        seenEditionsCache.set(
+                            editionsList.specialEditions.map(e => e.edition),
+                        )
+                        setShowNewEditionCard(false)
+                    }}
+                />
+            )}
             {issueId ? (
                 <IssueScreenWithPath
                     path={issueId}

@@ -25,10 +25,12 @@ export enum ButtonAppearance {
     apricot,
     skeletonLight,
     skeletonActive,
+    skeletonBlack,
     light,
     dark,
     modal,
     pillar,
+    black,
 }
 
 const height = metrics.buttonHeight
@@ -75,9 +77,9 @@ const getButtonAppearance = (
             background: {
                 backgroundColor: undefined,
                 borderWidth: 1,
-                borderColor: appAppearance.color,
+                borderColor: 'red',
             },
-            text: { color: appAppearance.color },
+            text: { color: 'red' },
         }),
         [ButtonAppearance.skeletonBlue]: StyleSheet.create({
             background: {
@@ -86,6 +88,14 @@ const getButtonAppearance = (
                 borderColor: color.primary,
             },
             text: { color: color.primary },
+        }),
+        [ButtonAppearance.skeletonBlack]: StyleSheet.create({
+            background: {
+                backgroundColor: undefined,
+                borderWidth: 1,
+                borderColor: color.artboardBackground,
+            },
+            text: { color: color.artboardBackground },
         }),
         [ButtonAppearance.skeletonActive]: StyleSheet.create({
             background: {
@@ -109,6 +119,10 @@ const getButtonAppearance = (
         }),
         [ButtonAppearance.dark]: StyleSheet.create({
             background: { backgroundColor: color.primary },
+            text: { color: color.palette.neutral[100] },
+        }),
+        [ButtonAppearance.black]: StyleSheet.create({
+            background: { backgroundColor: color.artboardBackground },
             text: { color: color.palette.neutral[100] },
         }),
         [ButtonAppearance.tomato]: StyleSheet.create({

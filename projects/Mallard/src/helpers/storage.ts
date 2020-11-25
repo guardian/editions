@@ -11,6 +11,7 @@ import {
 import { PushNotificationRegistration } from 'src/notifications/push-notifications'
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { PushToken } from 'src/notifications/notification-service'
+import { EditionId } from '../../../Apps/common/src'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -82,6 +83,8 @@ const showAllEditionsCache = createAsyncCache<boolean>('showAllEditions')
 const defaultEditionCache = createAsyncCache<RegionalEdition>('defaultEdition')
 
 const editionsListCache = createAsyncCache<EditionsList>('editionsList')
+
+const seenEditionsCache = createAsyncCache<EditionId[]>('seenEditions')
 
 const pushRegisteredTokens = createAsyncCache<PushToken[]>(
     'push-registered-tokens',
@@ -159,4 +162,5 @@ export {
     pushRegisteredTokens,
     notificationsEnabledCache,
     showAllEditionsCache,
+    seenEditionsCache,
 }

@@ -1,136 +1,113 @@
 import React from 'react'
-import { View, ViewStyle, StyleProp, StyleSheet, TextStyle } from 'react-native'
-import { TitlepieceText } from '../styled-text'
+import { View, StyleSheet } from 'react-native'
+import { TitlepieceText, UiBodyCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
-import { CloseButton } from '../Button/CloseButton'
 import { ButtonAppearance } from '../Button/Button'
+import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
+import { ModalButton } from '../Button/ModalButton'
 
 export enum CardAppearance {
     apricot,
     blue,
 }
 
-const styles = StyleSheet.create({
-    flexRow: {
-        flexDirection: 'row',
-    },
-    container: {
-        flex: 0,
-        flexDirection: 'column',
-        borderRadius: 5,
-    },
-    top: {
-        alignContent: 'space-between',
-        padding: metrics.horizontal,
-        paddingVertical: metrics.vertical,
-    },
-    dismissIconContainer: {
-        alignItems: 'flex-end',
-        marginBottom: metrics.vertical / 2,
-    },
-    titlePieceContainer: {
-        alignItems: 'flex-start',
-        flex: 1,
-    },
-    wrapper: {
-        borderRadius: 5,
-    },
-    bubbleEdge: {
-        position: 'absolute',
-        top: 0,
-        left: '50%',
-        width: 0,
-        height: 0,
-        borderBottomColor: '#00aabb',
-        marginLeft: -11,
-        marginTop: -22,
-    },
-})
-
-const appearances: {
-    [key in CardAppearance]: {
-        background: StyleProp<ViewStyle>
-        titleText: StyleProp<TextStyle>
-        subtitleText: StyleProp<TextStyle>
-    }
-} = {
-    [CardAppearance.apricot]: StyleSheet.create({
-        background: { backgroundColor: color.ui.apricot },
-        titleText: { color: color.palette.neutral[100] },
-        subtitleText: { color: color.palette.neutral[100] },
-    }),
-    [CardAppearance.blue]: StyleSheet.create({
-        background: { backgroundColor: color.ui.sea },
-        titleText: { color: color.palette.neutral[100] },
-        subtitleText: { color: color.primary },
-    }),
-}
+const modalStyles = (backgroundColor: string, textColor: string) =>
+    StyleSheet.create({
+        flexRow: {
+            flexDirection: 'row',
+        },
+        container: {
+            flex: 0,
+            flexDirection: 'column',
+            borderRadius: 25,
+            width: 500,
+            overflow: 'hidden',
+            padding: 10,
+        },
+        top: {
+            alignContent: 'space-between',
+            padding: metrics.horizontal,
+            paddingVertical: metrics.vertical,
+        },
+        titlePieceContainer: {
+            alignItems: 'flex-start',
+            flex: 1,
+        },
+        wrapper: {
+            position: 'absolute',
+            top: '5%',
+            left: '1%',
+            width: '50%',
+            zIndex: 1,
+        },
+        bubblePointer: {
+            left: 20,
+            width: 0,
+            height: 0,
+            borderLeftWidth: 0,
+            borderRightWidth: 40,
+            borderBottomWidth: 40,
+            borderStyle: 'solid',
+            borderLeftColor: 'transparent',
+            borderRightColor: 'transparent',
+            borderBottomColor: backgroundColor,
+        },
+        buttonWrapper: {
+            alignItems: 'center',
+        },
+        background: { backgroundColor: backgroundColor },
+        titleText: { color: textColor },
+        subtitleText: { color: textColor },
+    })
 
 const NewEditionCard = ({
-    title,
-    subtitle,
     onDismissThisCard,
-    style,
-    size = 'big',
+    headerStyle,
+    modalText,
 }: {
-    title: string
-    subtitle?: string
     onDismissThisCard?: () => void
-    style?: StyleProp<ViewStyle>
-    size?: 'big' | 'medium' | 'small'
+    headerStyle?: SpecialEditionHeaderStyles
+    modalText: { title: string; bodyText: string; dismissButtonText: string }
 }) => {
-    const appearance = CardAppearance.apricot
+    const styles = headerStyle
+        ? modalStyles(headerStyle.backgroundColor, headerStyle.textColorPrimary)
+        : modalStyles(color.ui.sea, color.background)
     return (
         <View style={styles.wrapper}>
-            <View
-                style={[
-                    appearances[appearance].background,
-                    styles.container,
-                    style,
-                ]}
-            >
-                <View style={[styles.top, appearances[appearance].background]}>
+            <View style={[styles.bubblePointer]}></View>
+            <View style={[styles.background, styles.container]}>
+                <View style={[styles.top, styles.background]}>
                     <View style={styles.flexRow}>
                         <View style={styles.titlePieceContainer}>
                             <TitlepieceText
                                 accessibilityRole="header"
                                 style={[
-                                    getFont('titlepiece', 2.5),
+                                    getFont('titlepiece', 2),
                                     { marginBottom: 16 },
-                                    appearances[appearance].titleText,
+                                    styles.titleText,
                                 ]}
                             >
-                                {title}
+                                {modalText.title}
                             </TitlepieceText>
                         </View>
-                        {onDismissThisCard && (
-                            <View style={styles.dismissIconContainer}>
-                                <CloseButton
-                                    onPress={onDismissThisCard}
-                                    accessibilityHint="This will dismiss the onboarding card"
-                                    accessibilityLabel={`Dismiss the ${title} onboarding card`}
-                                    appearance={ButtonAppearance.skeletonBlue}
-                                />
-                            </View>
-                        )}
                     </View>
                     <View>
-                        {subtitle && (
-                            <TitlepieceText
-                                style={[
-                                    getFont('titlepiece', 1.5),
-                                    appearances[appearance].subtitleText,
-                                ]}
-                            >
-                                {subtitle}
-                            </TitlepieceText>
-                        )}
+                        <UiBodyCopy weight="bold">
+                            {modalText.bodyText}
+                        </UiBodyCopy>
                     </View>
                 </View>
+                <View style={styles.buttonWrapper}>
+                    <ModalButton
+                        buttonAppearance={ButtonAppearance.black}
+                        onPress={onDismissThisCard}
+                    >
+                        {modalText.dismissButtonText}
+                    </ModalButton>
+                </View>
             </View>
-            <View style={styles.bubbleEdge}></View>
         </View>
     )
 }

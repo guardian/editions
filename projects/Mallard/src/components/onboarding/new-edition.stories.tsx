@@ -3,14 +3,26 @@ import { storiesOf } from '@storybook/react-native'
 import { withKnobs } from '@storybook/addon-knobs'
 import { NewEditionCard } from './new-edition'
 
+const modalText = {
+    title: 'New edition alert',
+    bodyText: 'This special edition will blow your mind',
+    dismissButtonText: 'Great!',
+}
+
 storiesOf('NewEdiition', module)
     .addDecorator(withKnobs)
-    .add('SportScore - default', () => (
-        <NewEditionCard
-            title={'New Special Edition!'}
-            subtitle={'Gal-Dem Takover'}
-        />
-    ))
-    .add('SportScore - title2', () => (
-        <NewEditionCard title={'New Special Edition!'} />
-    ))
+    .add('NewEdition - default', () => <NewEditionCard modalText={modalText} />)
+    .add('NewEdition - headerStyles', () => {
+        const headerStyles = {
+            backgroundColor: 'red',
+            textColorPrimary: 'black',
+            textColorSecondary: 'green',
+        }
+        return (
+            <NewEditionCard
+                title={'New Special Edition!'}
+                headerStyle={headerStyles}
+                modalText={modalText}
+            />
+        )
+    })
