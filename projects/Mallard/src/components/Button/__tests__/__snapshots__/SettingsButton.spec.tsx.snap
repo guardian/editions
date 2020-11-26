@@ -41,7 +41,7 @@ exports[`SettingsButton should display a SettingsButton 1`] = `
         },
         Object {
           "backgroundColor": undefined,
-          "borderColor": "red",
+          "borderColor": "#121212",
           "borderWidth": 1,
         },
         Object {
@@ -66,7 +66,7 @@ exports[`SettingsButton should display a SettingsButton 1`] = `
           },
           Array [
             Object {
-              "color": "red",
+              "color": "#121212",
             },
             undefined,
           ],

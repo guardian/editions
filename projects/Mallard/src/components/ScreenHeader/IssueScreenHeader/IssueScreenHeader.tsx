@@ -37,7 +37,7 @@ const IssueScreenHeader = withNavigation(
                 leftAction={
                     <EditionsMenuButton
                         onPress={goToEditionsMenu}
-                        darkVersion={!!headerStyles}
+                        darkVersion={!!headerStyles && false}
                     />
                 }
                 headerStyles={headerStyles}
