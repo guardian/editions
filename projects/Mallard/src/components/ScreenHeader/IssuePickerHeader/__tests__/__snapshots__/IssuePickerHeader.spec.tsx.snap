@@ -91,7 +91,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                 },
                 Object {
                   "backgroundColor": undefined,
-                  "borderColor": "#FFFFFF",
+                  "borderColor": "#121212",
                   "borderWidth": 1,
                 },
                 Object {
@@ -116,7 +116,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                   },
                   Array [
                     Object {
-                      "color": "#FFFFFF",
+                      "color": "#121212",
                     },
                     undefined,
                   ],
@@ -418,7 +418,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                 },
                 Object {
                   "backgroundColor": undefined,
-                  "borderColor": "#FFFFFF",
+                  "borderColor": "red",
                   "borderWidth": 1,
                 },
                 Object {
@@ -443,7 +443,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                   },
                   Array [
                     Object {
-                      "color": "#FFFFFF",
+                      "color": "red",
                     },
                     undefined,
                   ],
@@ -741,7 +741,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                 },
                 Object {
                   "backgroundColor": undefined,
-                  "borderColor": "#FFFFFF",
+                  "borderColor": "red",
                   "borderWidth": 1,
                 },
                 Object {
@@ -766,7 +766,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                   },
                   Array [
                     Object {
-                      "color": "#FFFFFF",
+                      "color": "red",
                     },
                     undefined,
                   ],

@@ -19,10 +19,6 @@ storiesOf('NewEdiition', module)
             textColorSecondary: 'green',
         }
         return (
-            <NewEditionCard
-                title={'New Special Edition!'}
-                headerStyle={headerStyles}
-                modalText={modalText}
-            />
+            <NewEditionCard headerStyle={headerStyles} modalText={modalText} />
         )
     })

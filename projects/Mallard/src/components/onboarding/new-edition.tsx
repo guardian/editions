@@ -72,7 +72,10 @@ const NewEditionCard = ({
     modalText: { title: string; bodyText: string; dismissButtonText: string }
 }) => {
     const styles = headerStyle
-        ? modalStyles(headerStyle.backgroundColor, headerStyle.textColorPrimary)
+        ? modalStyles(
+              headerStyle.backgroundColor,
+              headerStyle.textColorPrimary || 'white',
+          )
         : modalStyles(color.ui.sea, color.background)
     return (
         <View style={styles.wrapper}>
@@ -99,14 +102,16 @@ const NewEditionCard = ({
                         </UiBodyCopy>
                     </View>
                 </View>
-                <View style={styles.buttonWrapper}>
-                    <ModalButton
-                        buttonAppearance={ButtonAppearance.black}
-                        onPress={onDismissThisCard}
-                    >
-                        {modalText.dismissButtonText}
-                    </ModalButton>
-                </View>
+                {onDismissThisCard && (
+                    <View style={styles.buttonWrapper}>
+                        <ModalButton
+                            buttonAppearance={ButtonAppearance.black}
+                            onPress={onDismissThisCard}
+                        >
+                            {modalText.dismissButtonText}
+                        </ModalButton>
+                    </View>
+                )}
             </View>
         </View>
     )

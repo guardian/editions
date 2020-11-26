@@ -9,7 +9,7 @@ const Editions = ({
 }: {
     height?: number
     width?: number
-    darkVersion: boolean
+    darkVersion?: boolean
 }) => {
     const circleColors = {
         topLeft: darkVersion ? color.artboardBackground : '#FFBAC8',
