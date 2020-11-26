@@ -58,7 +58,7 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
             borderBottomColor: backgroundColor,
         },
         buttonWrapper: {
-            alignItems: 'center',
+            width: '40%',
         },
         background: { backgroundColor: backgroundColor },
         titleText: { color: textColor },
