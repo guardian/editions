@@ -7,11 +7,14 @@ import { getFont } from 'src/theme/typography'
 import { ButtonAppearance } from '../Button/Button'
 import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 import { ModalButton } from '../Button/ModalButton'
+import DeviceInfo from 'react-native-device-info'
 
 export enum CardAppearance {
     apricot,
     blue,
 }
+
+const isTablet = DeviceInfo.isTablet()
 
 const modalStyles = (backgroundColor: string, textColor: string) =>
     StyleSheet.create({
@@ -22,7 +25,7 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
             flex: 0,
             flexDirection: 'column',
             borderRadius: 25,
-            width: 500,
+            width: isTablet ? 500 : 400,
             overflow: 'hidden',
             padding: 10,
         },
@@ -37,8 +40,8 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
         },
         wrapper: {
             position: 'absolute',
-            top: '5%',
-            left: '1%',
+            top: isTablet ? 70 : 93,
+            left: '2%',
             width: '50%',
             zIndex: 1,
         },
