@@ -476,7 +476,7 @@ export const IssueScreen = () => {
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
     const headerStyle = specialEditionProps && specialEditionProps.headerStyle
     const [showNewEditionCard, setShowNewEditionCard] = useState(false)
-    const [newEditionHeaderStyle, ...rest] = editionsList.specialEditions.map(
+    const [newEditionHeaderStyle] = editionsList.specialEditions.map(
         e => e.headerStyle,
     )
     seenEditionsCache.set([])
