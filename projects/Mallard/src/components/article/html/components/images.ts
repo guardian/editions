@@ -1,31 +1,46 @@
 import { ImageElement } from 'src/common'
 import { Direction } from 'src/common'
+import { useMediaQuery } from 'src/hooks/use-screen'
 import { css, getFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
 import { ArticleType } from '../../../../../../Apps/common/src'
-
 export const renderCaption = ({
     caption,
     credit,
     displayCredit,
 }: Pick<ImageElement, 'caption' | 'credit' | 'displayCredit'>) => {
+
     return displayCredit === true
         ? [caption, credit].filter(s => !!s).join(' ')
         : caption
 }
 
 const breakoutCaption = (role: ImageElement['role']) => css`
-    .image[data-role='${role}'] figcaption {
+    .image[data-role='${role}'] div {
         position: absolute;
         right: ${px(
-            (metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
-        )};
+    (metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
+)};
         top: -0.5em;
-        display: block;
+        display:block;
         width: ${px(metrics.article.rightRail)};
+    }
+
+    .image[data-role='${role}'] figcaption {
+        position:relative;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 15;
+        overflow: hidden;
+    }
+
+    .image[data-role='${role}'] strong {
+        font-family: 'GuardianTextSans-Regular';
+        ${getFontCss('sans', 0.9)}
+
     }
 
     .image[data-role='${role}'] figcaption svg {
@@ -96,8 +111,8 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
                 width: 500px;
                 margin-left: ${px(metrics.article.sides)};
                 margin-right: ${px(
-                    (metrics.article.rightRail + metrics.article.sides) * -1,
-                )};
+        (metrics.article.rightRail + metrics.article.sides) * -1,
+    )};
             }
 
             .image[data-role='supporting'] figcaption {
@@ -109,12 +124,12 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
 
         /*SHOWCASE*/
         @media (min-width: ${px(
-                Breakpoints.tabletVertical,
-            )}) and (max-width: ${px(Breakpoints.tabletLandscape)}) {
+        Breakpoints.tabletVertical,
+    )}) and (max-width: ${px(Breakpoints.tabletLandscape)}) {
             .image[data-role='showcase'] {
                 margin-right: ${px(
-                    (metrics.article.rightRail + metrics.article.sides) * -1,
-                )};
+        (metrics.article.rightRail + metrics.article.sides) * -1,
+    )};
             }
 
             .image[data-role='showcase'] figcaption {
@@ -125,17 +140,17 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
         @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
             .image[data-role='showcase'] img {
                 margin-left: ${px(
-                    ((Breakpoints.tabletLandscape - metrics.article.maxWidth) /
-                        2) *
-                        -1,
-                )};
+        ((Breakpoints.tabletLandscape - metrics.article.maxWidth) /
+            2) *
+        -1,
+    )};
                 width: calc(
                     100% +
                         ${px(
-                            (Breakpoints.tabletLandscape -
-                                metrics.article.maxWidth) /
-                                2,
-                        )}
+        (Breakpoints.tabletLandscape -
+            metrics.article.maxWidth) /
+        2,
+    )}
                 );
             }
             ${breakoutCaption('showcase')}
@@ -145,8 +160,8 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
         @media (min-width: ${px(Breakpoints.tabletVertical)}) {
             .image[data-role='immersive'] {
                 margin-right: ${px(
-                    (metrics.article.rightRail + metrics.article.sides) * -1,
-                )};
+        (metrics.article.rightRail + metrics.article.sides) * -1,
+    )};
             }
             .image[data-role='immersive'] figcaption {
                 width: ${px(metrics.article.rightRail)};
@@ -158,17 +173,17 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
                 width: calc(
                     100% +
                         ${px(
-                            Breakpoints.tabletLandscape -
-                                metrics.article.maxWidth,
-                        )}
+        Breakpoints.tabletLandscape -
+        metrics.article.maxWidth,
+    )}
                 );
                 display: block;
                 background: 'red';
                 margin-left: ${px(
-                    ((Breakpoints.tabletLandscape - metrics.article.maxWidth) /
-                        2) *
-                        -1,
-                )};
+        ((Breakpoints.tabletLandscape - metrics.article.maxWidth) /
+            2) *
+        -1,
+    )};
             }
         }
     `
@@ -198,6 +213,7 @@ const ImageBase = ({
     remotePath?: string
     displayCaptionAndCredit?: boolean
 }) => {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const figcaption =
         displayCaptionAndCredit &&
         renderCaption({ caption, credit, displayCredit })
@@ -212,10 +228,20 @@ const ImageBase = ({
             />
 
             ${figcaption &&
-                html`
+        html`
+                <div>
                     <figcaption>
-                        ${Arrow({ direction: Direction.top })} ${figcaption}
+                        ${Arrow({ direction: Direction.top })} ${figcaption} 
                     </figcaption>
+                    
+                  ${isTablet && 
+                    html`
+                    <strong
+                    onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
+                    >view more</strong>`
+                }
+                 </div>
+                    
                 `}
         </figure>
     `
