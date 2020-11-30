@@ -287,7 +287,7 @@ export interface IssueSummary extends WithKey, IssueCompositeKey {
     } & { data: string }
     assetsSSR?: {
         [P in ImageSize]?: string
-    } & { html: string }
+    } & { html: string } & { data: string }
 }
 
 export interface Issue extends IssueSummary, WithKey {

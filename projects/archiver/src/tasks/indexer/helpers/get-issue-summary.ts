@@ -118,7 +118,11 @@ export const getIssueSummaryInternal = async (
         return undefined
     }
     const imagesSSR = makeImageAssetObject(assetFilesSSR)
-    const assetsSSR = { html: assetFilesSSR.html, ...imagesSSR }
+    const assetsSSR = {
+        data: assetFiles.data,
+        html: assetFilesSSR.html,
+        ...imagesSSR,
+    }
 
     const localId = `${edition}/${issueDate}`
     const key = localId

@@ -54,6 +54,8 @@ describe('getIssueSummaryInternal', () => {
                     'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
             },
             assetsSSR: {
+                data:
+                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/data.zip',
                 html:
                     'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/html.zip',
                 phone:
