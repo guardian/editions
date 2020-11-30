@@ -7,6 +7,7 @@ import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
 import { ArticleType } from '../../../../../../Apps/common/src'
+import { ArticleTheme } from '../article'
 export const renderCaption = ({
     caption,
     credit,
@@ -18,7 +19,7 @@ export const renderCaption = ({
         : caption
 }
 
-const breakoutCaption = (role: ImageElement['role']) => css`
+const breakoutCaption = (role: ImageElement['role'], theme: ArticleTheme) => css`
     .image[data-role='${role}'] div {
         position: absolute;
         right: ${px(
@@ -37,22 +38,20 @@ const breakoutCaption = (role: ImageElement['role']) => css`
         overflow: hidden;
     }
 
-    .image[data-role='${role}'] strong {
+    .image[data-role='${role}'] span {
         font-family: 'GuardianTextSans-Regular';
+        color: ${themeColors(theme).dimText};
         ${getFontCss('sans', 0.9)}
-
+        font-weight: bold;
     }
 
-    .image[data-role='${role}'] figcaption svg {
-        transform: rotate(-90deg);
-    }
 `
 
 const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
     const galleryStyles = css`
         /*INLINE*/
         @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-            ${breakoutCaption('inline')}
+            ${breakoutCaption('inline', theme)}
         }
     `
     const defaultStyles = css`
@@ -153,7 +152,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
     )}
                 );
             }
-            ${breakoutCaption('showcase')}
+            ${breakoutCaption('showcase', theme)}
         }
 
         /*IMMERSIVE*/
@@ -214,6 +213,7 @@ const ImageBase = ({
     displayCaptionAndCredit?: boolean
 }) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    const isInlineTablet = !role && isTablet
     const figcaption =
         displayCaptionAndCredit &&
         renderCaption({ caption, credit, displayCredit })
@@ -231,15 +231,15 @@ const ImageBase = ({
         html`
                 <div>
                     <figcaption>
-                        ${Arrow({ direction: Direction.top })} ${figcaption} 
+                        ${Arrow(isInlineTablet ? { direction: Direction.left } : { direction: Direction.top })} ${figcaption} 
                     </figcaption>
                     
-                  ${isTablet && 
-                    html`
-                    <strong
+                  ${isInlineTablet &&
+            html`
+                    <span
                     onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
-                    >view more</strong>`
-                }
+                    >view more</span>
+                    `}
                  </div>
                     
                 `}
