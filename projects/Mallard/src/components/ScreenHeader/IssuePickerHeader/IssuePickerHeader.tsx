@@ -23,7 +23,7 @@ const IssuePickerHeader = withNavigation(
                     onPress={() => {
                         navigateToSettings(navigation)
                     }}
-                    darkVersion={!!headerStyles && false}
+                    darkVersion={!!headerStyles}
                 />
             }
             onPress={() => navigation.goBack()}

@@ -178,7 +178,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                 stroke={
                   Array [
                     0,
-                    4294967295,
+                    4279374354,
                   ]
                 }
                 strokeDasharray={null}
@@ -199,7 +199,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                 fill={
                   Array [
                     0,
-                    4294949576,
+                    4279374354,
                   ]
                 }
                 fillOpacity={1}
@@ -246,7 +246,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                 fill={
                   Array [
                     0,
-                    4294967295,
+                    4279374354,
                   ]
                 }
                 fillOpacity={1}
@@ -293,7 +293,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                 fill={
                   Array [
                     0,
-                    4287683839,
+                    4279374354,
                   ]
                 }
                 fillOpacity={1}
@@ -340,7 +340,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                 fill={
                   Array [
                     0,
-                    4294934287,
+                    4279374354,
                   ]
                 }
                 fillOpacity={1}
