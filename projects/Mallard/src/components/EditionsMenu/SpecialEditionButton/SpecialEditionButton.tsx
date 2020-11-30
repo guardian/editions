@@ -3,14 +3,7 @@ import { Text, TouchableWithoutFeedback, View, Image } from 'react-native'
 import { SpecialEditionButtonStyles } from 'src/common'
 import { styles } from './styles'
 import { localDate } from 'src/helpers/date'
-import { StyleSheet } from 'react-native'
 
-const imageStyle = StyleSheet.create({
-    background: {
-        height: 134,
-        width: 100,
-    },
-})
 const SpecialEditionButton = ({
     expiry,
     buttonImageUri,
@@ -44,7 +37,7 @@ const SpecialEditionButton = ({
                     <Image
                         key={buttonImageUri}
                         resizeMethod={'resize'}
-                        style={imageStyle.background}
+                        style={defaultStyles.image}
                         source={{ uri: buttonImageUri }}
                     />
                 ) : (
