@@ -21,11 +21,9 @@ const styles = (selected: boolean) =>
 const EditionsMenuButton = ({
     onPress,
     selected = false,
-    darkVersion = false,
 }: {
     onPress: () => void
     selected?: boolean
-    darkVersion?: boolean
 }) => (
     <TouchableOpacity
         accessibilityRole="button"
@@ -33,7 +31,7 @@ const EditionsMenuButton = ({
         onPress={onPress}
         style={styles(selected).button}
     >
-        {selected ? <LeftChevron /> : <Editions darkVersion={darkVersion} />}
+        {selected ? <LeftChevron /> : <Editions />}
     </TouchableOpacity>
 )
 

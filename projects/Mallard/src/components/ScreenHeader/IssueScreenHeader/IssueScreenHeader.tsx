@@ -34,12 +34,7 @@ const IssueScreenHeader = withNavigation(
                 subTitle={date}
                 onPress={goToIssueList}
                 rightAction={<IssueMenuButton onPress={goToIssueList} />}
-                leftAction={
-                    <EditionsMenuButton
-                        onPress={goToEditionsMenu}
-                        darkVersion={!!headerStyles}
-                    />
-                }
+                leftAction={<EditionsMenuButton onPress={goToEditionsMenu} />}
                 headerStyles={headerStyles}
             />
         )

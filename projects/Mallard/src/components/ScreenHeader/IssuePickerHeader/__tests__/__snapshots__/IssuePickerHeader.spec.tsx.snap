@@ -91,7 +91,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                 },
                 Object {
                   "backgroundColor": undefined,
-                  "borderColor": "#121212",
+                  "borderColor": "#FFFFFF",
                   "borderWidth": 1,
                 },
                 Object {
@@ -116,7 +116,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                   },
                   Array [
                     Object {
-                      "color": "#121212",
+                      "color": "#FFFFFF",
                     },
                     undefined,
                   ],

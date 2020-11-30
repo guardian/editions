@@ -1,13 +1,7 @@
 import React from 'react'
 import { Button, ButtonAppearance } from './Button'
 
-const SettingsButton = ({
-    onPress,
-    darkVersion = false,
-}: {
-    onPress: () => void
-    darkVersion?: boolean
-}) => (
+const SettingsButton = ({ onPress }: { onPress: () => void }) => (
     <Button
         accessibilityLabel="Settings button"
         accessibilityHint="Navigates to the settings screen"
@@ -15,11 +9,7 @@ const SettingsButton = ({
         icon={'\uE040'}
         alt="Settings"
         onPress={onPress}
-        appearance={
-            darkVersion
-                ? ButtonAppearance.skeletonBlack
-                : ButtonAppearance.skeleton
-        }
+        appearance={ButtonAppearance.skeleton}
     />
 )
 
