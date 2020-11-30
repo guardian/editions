@@ -479,6 +479,10 @@ export const IssueScreen = () => {
     const [newEditionHeaderStyle] = editionsList.specialEditions.map(
         e => e.headerStyle,
     )
+
+    // TODO: Remove this - this line helps with testing by resetting the edition cache
+    // every time the app loads (so you always see the bubble) - obviously needs removing
+    // long term
     seenEditionsCache.set([])
 
     useEffect(() => {
