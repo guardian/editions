@@ -472,32 +472,16 @@ const IssueScreenWithPath = React.memo(
 
 export const IssueScreen = () => {
     const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
-    const { selectedEdition, editionsList } = useEditions()
+    const { selectedEdition, editionsList, showEditionCard,  setShowNewEditionCard } = useEditions()
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
     const headerStyle = specialEditionProps && specialEditionProps.headerStyle
-    const [showNewEditionCard, setShowNewEditionCard] = useState(false)
     const [newEditionHeaderStyle] = editionsList.specialEditions.map(
         e => e.headerStyle,
     )
 
-    // TODO: Remove this - this line helps with testing by resetting the edition cache
-    // every time the app loads (so you always see the bubble) - obviously needs removing
-    // long term
-    seenEditionsCache.set([])
-
-    useEffect(() => {
-        seenEditionsCache.get().then(seen => {
-            const unseenEditions = editionsList.specialEditions.filter(
-                e => !seen || !seen.includes(e.edition),
-            )
-            if (unseenEditions.length > 0) {
-                setShowNewEditionCard(true)
-            }
-        })
-    }, [editionsList.specialEditions])
     return (
         <Container>
-            {selectedEdition.editionType !== 'Special' && showNewEditionCard && (
+            {selectedEdition.editionType !== 'Special' && showEditionCard && (
                 <NewEditionCard
                     headerStyle={newEditionHeaderStyle}
                     modalText={NewEditionWords}

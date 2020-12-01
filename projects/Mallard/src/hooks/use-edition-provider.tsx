@@ -32,11 +32,14 @@ import moment from 'moment'
 import { EditionsList } from 'src/common'
 import { getEditionIds } from '../../../Apps/common/src/helpers'
 import { getSetting } from 'src/helpers/settings'
+import { seenEditionsCache } from 'src/helpers/storage'
 
 interface EditionState {
     editionsList: EditionsList
     selectedEdition: RegionalEdition | SpecialEdition
     defaultEdition: RegionalEdition
+    showEditionCard: boolean
+    setShowNewEditionCard: (isShown: boolean) => void
     storeSelectedEdition: (
         chosenEdition: RegionalEdition | SpecialEdition,
     ) => void
@@ -73,6 +76,8 @@ const defaultState: EditionState = {
     editionsList: DEFAULT_EDITIONS_LIST,
     selectedEdition: BASE_EDITION, // the current chosen edition
     defaultEdition: BASE_EDITION, // the edition to show on app start
+    showEditionCard: false,
+    setShowNewEditionCard: () => {},
     storeSelectedEdition: () => {},
 }
 
@@ -250,7 +255,7 @@ export const EditionProvider = ({
     const [defaultEdition, setDefaultEdition] = useState<RegionalEdition>(
         BASE_EDITION,
     )
-
+    const [showEditionCard, setShowNewEditionCard] = useState(false)
     const [apiUrl, setApiUrl] = useState('')
 
     /**
@@ -322,13 +327,34 @@ export const EditionProvider = ({
         }
     })
 
+
+
+    //     TODO: Remove this - this line helps with testing by resetting the edition cache
+    // every time the app loads (so you always see the bubble) - obviously needs removing
+    // long term
+    seenEditionsCache.set([])
+
+    useEffect(() => {
+        seenEditionsCache.get().then(seen => {
+            const unseenEditions = editionsList.specialEditions.filter(
+                e => !seen || !seen.includes(e.edition),
+            )
+            if (unseenEditions.length > 0) {
+                setShowNewEditionCard(true)
+            }
+        })
+    }, [editionsList.specialEditions])
+
+
     return (
         <EditionContext.Provider
             value={{
                 editionsList,
                 selectedEdition,
                 defaultEdition,
+                showEditionCard,
                 storeSelectedEdition,
+                setShowNewEditionCard,
             }}
         >
             {children}
