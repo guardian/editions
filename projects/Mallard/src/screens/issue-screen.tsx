@@ -472,7 +472,7 @@ const IssueScreenWithPath = React.memo(
 
 export const IssueScreen = () => {
     const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
-    const { selectedEdition, editionsList, showEditionCard,  setShowNewEditionCard } = useEditions()
+    const { selectedEdition, editionsList, showNewEditionCard,  setShowNewEditionCard } = useEditions()
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
     const headerStyle = specialEditionProps && specialEditionProps.headerStyle
     const [newEditionHeaderStyle] = editionsList.specialEditions.map(
@@ -481,7 +481,7 @@ export const IssueScreen = () => {
 
     return (
         <Container>
-            {selectedEdition.editionType !== 'Special' && showEditionCard && (
+            {selectedEdition.editionType !== 'Special' && showNewEditionCard && (
                 <NewEditionCard
                     headerStyle={newEditionHeaderStyle}
                     modalText={NewEditionWords}

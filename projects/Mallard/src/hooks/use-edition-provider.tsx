@@ -38,7 +38,7 @@ interface EditionState {
     editionsList: EditionsList
     selectedEdition: RegionalEdition | SpecialEdition
     defaultEdition: RegionalEdition
-    showEditionCard: boolean
+    showNewEditionCard: boolean
     setShowNewEditionCard: (isShown: boolean) => void
     storeSelectedEdition: (
         chosenEdition: RegionalEdition | SpecialEdition,
@@ -76,7 +76,7 @@ const defaultState: EditionState = {
     editionsList: DEFAULT_EDITIONS_LIST,
     selectedEdition: BASE_EDITION, // the current chosen edition
     defaultEdition: BASE_EDITION, // the edition to show on app start
-    showEditionCard: false,
+    showNewEditionCard: false,
     setShowNewEditionCard: () => {},
     storeSelectedEdition: () => {},
 }
@@ -255,7 +255,7 @@ export const EditionProvider = ({
     const [defaultEdition, setDefaultEdition] = useState<RegionalEdition>(
         BASE_EDITION,
     )
-    const [showEditionCard, setShowNewEditionCard] = useState(false)
+    const [showNewEditionCard, setShowNewEditionCard] = useState(false)
     const [apiUrl, setApiUrl] = useState('')
 
     /**
@@ -352,7 +352,7 @@ export const EditionProvider = ({
                 editionsList,
                 selectedEdition,
                 defaultEdition,
-                showEditionCard,
+                showNewEditionCard,
                 storeSelectedEdition,
                 setShowNewEditionCard,
             }}

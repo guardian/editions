@@ -27,10 +27,10 @@ const IssueScreenHeader = withNavigation(
         const goToIssueList = () => {
             navigateToIssueList(navigation)
         }
-        const { showEditionCard, setShowNewEditionCard } = useEditions()
+        const { showNewEditionCard, setShowNewEditionCard } = useEditions()
 
         const handleEditionMenuPress = () => {
-            showEditionCard ? setShowNewEditionCard(false) : null
+            showNewEditionCard ? setShowNewEditionCard(false) : null
             navigateToEditionMenu(navigation)
         }
 
