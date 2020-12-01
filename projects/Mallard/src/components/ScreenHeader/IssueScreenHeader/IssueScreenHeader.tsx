@@ -9,6 +9,9 @@ import {
 import { IssueMenuButton } from '../../Button/IssueMenuButton'
 import { EditionsMenuButton } from '../../EditionsMenu/EditionsMenuButton/EditionsMenuButton'
 import { ScreenHeader } from '../ScreenHeader'
+import {
+    useEditions,
+} from 'src/hooks/use-edition-provider'
 
 const IssueScreenHeader = withNavigation(
     ({
@@ -24,17 +27,20 @@ const IssueScreenHeader = withNavigation(
         const goToIssueList = () => {
             navigateToIssueList(navigation)
         }
+        const { showEditionCard, setShowNewEditionCard } = useEditions()
 
-        const goToEditionsMenu = () => {
+        const handleEditionMenuPress = () => {
+            showEditionCard ? setShowNewEditionCard(false) : null
             navigateToEditionMenu(navigation)
         }
+
         return (
             <ScreenHeader
                 title={weekday}
                 subTitle={date}
                 onPress={goToIssueList}
                 rightAction={<IssueMenuButton onPress={goToIssueList} />}
-                leftAction={<EditionsMenuButton onPress={goToEditionsMenu} />}
+                leftAction={<EditionsMenuButton onPress={handleEditionMenuPress} />}
                 headerStyles={headerStyles}
             />
         )
