@@ -8,6 +8,8 @@ import { ButtonAppearance } from '../Button/Button'
 import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 import { ModalButton } from '../Button/ModalButton'
 import DeviceInfo from 'react-native-device-info'
+import { brand } from '@guardian/src-foundations/palette'
+import { headline, textSans } from '@guardian/src-foundations/typography'
 
 export enum CardAppearance {
     apricot,
@@ -18,44 +20,31 @@ const isTablet = DeviceInfo.isTablet()
 
 const modalStyles = (backgroundColor: string, textColor: string) =>
     StyleSheet.create({
-        flexRow: {
-            flexDirection: 'row',
-        },
-        container: {
-            flex: 0,
-            flexDirection: 'column',
-            borderRadius: 25,
-            width: isTablet ? 500 : 400,
-            overflow: 'hidden',
-            padding: 10,
-        },
-        top: {
-            alignContent: 'space-between',
-            padding: metrics.horizontal,
-            paddingVertical: metrics.vertical,
-        },
-        titlePieceContainer: {
-            alignItems: 'flex-start',
-            flex: 1,
-        },
         wrapper: {
             position: 'absolute',
-            top: isTablet ? 70 : 93,
-            left: '2%',
-            width: '50%',
+            top: isTablet ? 80 : '11.5%',
+            left: isTablet ? 12 : '3%',
+            width: isTablet ? '50%' : '77%',
             zIndex: 1,
         },
+        container: {
+            flex: 1,
+            backgroundColor: brand[800],
+            overflow: 'hidden',
+            padding: 10,
+            borderRadius: 5,
+        },
         bubblePointer: {
-            left: 20,
+            left: 12.5,
             width: 0,
             height: 0,
-            borderLeftWidth: 0,
-            borderRightWidth: 40,
-            borderBottomWidth: 40,
+            borderLeftWidth: 11,
+            borderRightWidth: 11,
+            borderBottomWidth: 22,
             borderStyle: 'solid',
             borderLeftColor: 'transparent',
             borderRightColor: 'transparent',
-            borderBottomColor: backgroundColor,
+            borderBottomColor: brand[800],
         },
         buttonWrapper: {
             width: '40%',
@@ -82,29 +71,29 @@ const NewEditionCard = ({
         : modalStyles(color.ui.sea, color.background)
     return (
         <View style={styles.wrapper}>
-            <View style={[styles.bubblePointer]}></View>
+            <View style={[styles.bubblePointer]} />
             <View style={[styles.background, styles.container]}>
-                <View style={[styles.top, styles.background]}>
-                    <View style={styles.flexRow}>
-                        <View style={styles.titlePieceContainer}>
-                            <TitlepieceText
-                                accessibilityRole="header"
-                                style={[
-                                    getFont('titlepiece', 2),
-                                    { marginBottom: 16 },
-                                    styles.titleText,
-                                ]}
-                            >
-                                {modalText.title}
-                            </TitlepieceText>
-                        </View>
-                    </View>
-                    <View>
-                        <UiBodyCopy weight="bold">
-                            {modalText.bodyText}
-                        </UiBodyCopy>
-                    </View>
-                </View>
+                <TitlepieceText
+                    accessibilityRole="header"
+                    style={[
+                        getFont('headline', 1.6, 'bold'),
+                        { marginBottom: 16 },
+                        styles.titleText,
+                    ]}
+                >
+                    {/* QUESTION: SHOULD TITLE BE ON A NEW LINE?*/}
+                    {modalText.title}
+                </TitlepieceText>
+                <UiBodyCopy
+                    weight="regular"
+                    style={[
+                        getFont('text', 1.25, 'regular'),
+                        { marginBottom: 8 },
+                        styles.titleText,
+                    ]}
+                >
+                    {modalText.bodyText}
+                </UiBodyCopy>
                 {onDismissThisCard && (
                     <View style={styles.buttonWrapper}>
                         <ModalButton
