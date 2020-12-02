@@ -12,7 +12,7 @@ import { ScreenHeader } from '../ScreenHeader'
 import {
     useEditions,
 } from 'src/hooks/use-edition-provider'
-
+import { seenEditionsCache } from 'src/helpers/storage'
 const IssueScreenHeader = withNavigation(
     ({
         headerStyles,
@@ -27,10 +27,10 @@ const IssueScreenHeader = withNavigation(
         const goToIssueList = () => {
             navigateToIssueList(navigation)
         }
-        const { showNewEditionCard, setShowNewEditionCard } = useEditions()
-
+        const { setNewEditionSeen } = useEditions()
+        
         const handleEditionMenuPress = () => {
-            showNewEditionCard ? setShowNewEditionCard(false) : null
+            setNewEditionSeen()
             navigateToEditionMenu(navigation)
         }
 
