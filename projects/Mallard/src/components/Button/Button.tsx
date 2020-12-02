@@ -29,6 +29,7 @@ export enum ButtonAppearance {
     dark,
     modal,
     pillar,
+    black
 }
 
 const height = metrics.buttonHeight
@@ -137,6 +138,12 @@ const getButtonAppearance = (
                         : color.palette.brand.main,
             },
             text: { color: 'white' },
+        }),
+        [ButtonAppearance.black]: StyleSheet.create({
+            background: {
+                backgroundColor: 'black',
+            },
+            text: { color: color.palette.neutral[100] },
         }),
     }
 }
