@@ -5,7 +5,6 @@ import React, {
     useEffect,
     useMemo,
     useRef,
-    useState,
 } from 'react'
 import {
     FlatList,
@@ -78,7 +77,6 @@ import {
 import RNRestart from 'react-native-restart'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
 import { NewEditionCard } from 'src/components/onboarding/new-edition'
-import { seenEditionsCache } from 'src/helpers/storage'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
