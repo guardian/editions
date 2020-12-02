@@ -484,7 +484,7 @@ export const IssueScreen = () => {
 
     return (
         <Container>
-            {selectedEdition.editionType !== 'Special' && showNewEditionCard && (
+            {showNewEditionCard && (
                 <NewEditionCard
                     headerStyle={newEditionHeaderStyle}
                     modalText={NewEditionWords}
