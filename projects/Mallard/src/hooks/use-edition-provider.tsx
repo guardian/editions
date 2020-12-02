@@ -23,7 +23,7 @@ import {
     showAllEditionsCache,
 } from 'src/helpers/storage'
 import { errorService } from 'src/services/errors'
-import { defaultRegionalEditions} from '../../../Apps/common/src/editions-defaults'
+import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults'
 import NetInfo from '@react-native-community/netinfo'
 import { AppState, AppStateStatus } from 'react-native'
 import { locale } from 'src/helpers/locale'
@@ -329,12 +329,6 @@ export const EditionProvider = ({
         }
     })
 
-
-    //     TODO: Remove this - this line helps with testing by resetting the edition cache
-    // every time the app loads (so you always see the bubble) - obviously needs removing
-    // long term
-    // seenEditionsCache.set([])
-
     useEffect(() => {
         seenEditionsCache.get().then(seen => {
             const unseenEditions = editionsList.specialEditions.filter(
@@ -346,12 +340,9 @@ export const EditionProvider = ({
         })
     }, [editionsList.specialEditions])
 
-
     const setNewEditionSeen = () => {
         if (!showNewEditionCard) return
-        seenEditionsCache.set(
-            editionsList.specialEditions.map(e => e.edition),
-        )
+        seenEditionsCache.set(editionsList.specialEditions.map(e => e.edition))
         setShowNewEditionCard(false)
     }
 
@@ -373,4 +364,3 @@ export const EditionProvider = ({
 }
 
 export const useEditions = () => useContext(EditionContext)
-

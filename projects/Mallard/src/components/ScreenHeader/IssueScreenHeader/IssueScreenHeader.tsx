@@ -9,10 +9,7 @@ import {
 import { IssueMenuButton } from '../../Button/IssueMenuButton'
 import { EditionsMenuButton } from '../../EditionsMenu/EditionsMenuButton/EditionsMenuButton'
 import { ScreenHeader } from '../ScreenHeader'
-import {
-    useEditions,
-} from 'src/hooks/use-edition-provider'
-import { seenEditionsCache } from 'src/helpers/storage'
+import { useEditions } from 'src/hooks/use-edition-provider'
 const IssueScreenHeader = withNavigation(
     ({
         headerStyles,
@@ -28,7 +25,7 @@ const IssueScreenHeader = withNavigation(
             navigateToIssueList(navigation)
         }
         const { setNewEditionSeen } = useEditions()
-        
+
         const handleEditionMenuPress = () => {
             setNewEditionSeen()
             navigateToEditionMenu(navigation)
@@ -40,7 +37,9 @@ const IssueScreenHeader = withNavigation(
                 subTitle={date}
                 onPress={goToIssueList}
                 rightAction={<IssueMenuButton onPress={goToIssueList} />}
-                leftAction={<EditionsMenuButton onPress={handleEditionMenuPress} />}
+                leftAction={
+                    <EditionsMenuButton onPress={handleEditionMenuPress} />
+                }
                 headerStyles={headerStyles}
             />
         )

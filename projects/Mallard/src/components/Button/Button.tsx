@@ -29,7 +29,7 @@ export enum ButtonAppearance {
     dark,
     modal,
     pillar,
-    black
+    black,
 }
 
 const height = metrics.buttonHeight

@@ -2,14 +2,12 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { TitlepieceText, UiBodyCopy } from '../styled-text'
 import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { ButtonAppearance } from '../Button/Button'
 import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 import { ModalButton } from '../Button/ModalButton'
 import DeviceInfo from 'react-native-device-info'
 import { brand } from '@guardian/src-foundations/palette'
-import { headline, textSans } from '@guardian/src-foundations/typography'
 
 export enum CardAppearance {
     apricot,
