@@ -167,12 +167,10 @@ export const ManageDownloads = {
 }
 
 export const NewEditionWords = {
-    title: 'This year has changed everything',
-    bodyText: `We’ve got something for you.
-
-In this special edition, women and non-binary people of colour share their experiences and perspectives.
-We hope you enjoy it as much as we enjoyed creating it!`,
-    dismissButtonText: 'Got it, thanks',
+    title: `A new special edition is available:
+Best of 2020`,
+    bodyText: `Tap on the editions menu on the top left to read it.`,
+    dismissButtonText: 'Got it',
 }
 
 export const HomeScreen = {
