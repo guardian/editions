@@ -1,12 +1,13 @@
 import { ImageElement } from 'src/common'
 import { Direction } from 'src/common'
+import { useMediaQuery } from 'src/hooks/use-screen'
 import { css, getFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
 import { ArticleType } from '../../../../../../Apps/common/src'
-
+import { ArticleTheme } from '../article'
 export const renderCaption = ({
     caption,
     credit,
@@ -17,27 +18,42 @@ export const renderCaption = ({
         : caption
 }
 
-const breakoutCaption = (role: ImageElement['role']) => css`
-    .image[data-role='${role}'] figcaption {
+const breakoutCaption = (
+    role: ImageElement['role'],
+    theme: ArticleTheme,
+) => css`
+    .image[data-role='${role}'] div {
         position: absolute;
         right: ${px(
             (metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
         )};
         top: -0.5em;
-        display: block;
+        display:block;
         width: ${px(metrics.article.rightRail)};
     }
 
-    .image[data-role='${role}'] figcaption svg {
-        transform: rotate(-90deg);
+    .image[data-role='${role}'] figcaption {
+        position:relative;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 15;
+        overflow: hidden;
     }
+
+    .image[data-role='${role}'] span {
+        font-family: 'GuardianTextSans-Regular';
+        color: ${themeColors(theme).dimText};
+        ${getFontCss('sans', 0.9)}
+        font-weight: bold;
+    }
+
 `
 
 const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
     const galleryStyles = css`
         /*INLINE*/
         @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-            ${breakoutCaption('inline')}
+            ${breakoutCaption('inline', theme)}
         }
     `
     const defaultStyles = css`
@@ -138,7 +154,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
                         )}
                 );
             }
-            ${breakoutCaption('showcase')}
+            ${breakoutCaption('showcase', theme)}
         }
 
         /*IMMERSIVE*/
@@ -198,6 +214,8 @@ const ImageBase = ({
     remotePath?: string
     displayCaptionAndCredit?: boolean
 }) => {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    const isInlineTablet = !role && isTablet
     const figcaption =
         displayCaptionAndCredit &&
         renderCaption({ caption, credit, displayCredit })
@@ -213,9 +231,24 @@ const ImageBase = ({
 
             ${figcaption &&
                 html`
-                    <figcaption>
-                        ${Arrow({ direction: Direction.top })} ${figcaption}
-                    </figcaption>
+                    <div>
+                        <figcaption>
+                            ${Arrow(
+                                isInlineTablet
+                                    ? { direction: Direction.left }
+                                    : { direction: Direction.top },
+                            )}
+                            ${figcaption}
+                        </figcaption>
+                        ${isInlineTablet &&
+                            html`
+                                <span
+                                    onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
+                                >
+                                    view more
+                                </span>
+                            `}
+                    </div>
                 `}
         </figure>
     `
