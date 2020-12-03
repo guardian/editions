@@ -1,6 +1,6 @@
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Platform, StyleSheet, View } from 'react-native'
+import { Animated, Platform } from 'react-native'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
@@ -16,7 +16,6 @@ import {
     SliderHeaderHighEnd,
     HEADER_HIGH_END_HEIGHT,
 } from './SliderHeaderHighEnd'
-import { HEADER_LOW_END_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { PreviewControls } from 'src/components/article/preview-controls'
@@ -27,13 +26,6 @@ import { sendPageViewEvent } from 'src/services/ophan'
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
 }
-
-const styles = StyleSheet.create({
-    androidPager: {
-        flexGrow: 1,
-        width: '100%',
-    },
-})
 
 /**
  * We keep track of which articles are scrolled or not so that when we swipe
@@ -170,65 +162,6 @@ const ArticleSlider = React.memo(
             if (frontId === flattenedArticles[current].front) return
             setNavPosition({ frontId, articleIndex: 0 })
         }
-
-        if (Platform.OS === 'android')
-            return (
-                <>
-                    <ViewPagerAndroid
-                        style={styles.androidPager}
-                        initialPage={startingPoint}
-                        ref={viewPager => {
-                            viewPagerRef.current = viewPager
-                        }}
-                        onPageSelected={(ev: any) => {
-                            onShouldShowHeaderChange(true)
-                            const newIndex = ev.nativeEvent.position
-                            sendPageViewEvent({
-                                path: flattenedArticles[newIndex].article,
-                            })
-                            setCurrent(newIndex)
-                            slideToFrontFor(newIndex)
-                            setPosition(newIndex)
-                        }}
-                    >
-                        {flattenedArticles.map((item, index) => (
-                            <View key={index}>
-                                {index >= current - 1 &&
-                                index <= current + 1 ? (
-                                    <ArticleScreenBody
-                                        navigation={navigation}
-                                        width={width}
-                                        path={item}
-                                        pillar={getAppearancePillar(
-                                            item.appearance,
-                                        )}
-                                        position={index}
-                                        onShouldShowHeaderChange={
-                                            onShouldShowHeaderChange
-                                        }
-                                        shouldShowHeader={shouldShowHeader}
-                                        topPadding={HEADER_LOW_END_HEIGHT}
-                                        onIsAtTopChange={onIsAtTopChange}
-                                    />
-                                ) : null}
-                            </View>
-                        ))}
-                    </ViewPagerAndroid>
-
-                    <SliderHeaderLowEnd
-                        isShown={shouldShowHeader}
-                        isAtTop={isAtTop}
-                        sliderDetails={sliderDetails}
-                    />
-
-                    {preview && (
-                        <PreviewControls
-                            goNext={goNext}
-                            goPrevious={goPrevious}
-                        />
-                    )}
-                </>
-            )
 
         return (
             <>

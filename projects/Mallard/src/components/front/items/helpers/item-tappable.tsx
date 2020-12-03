@@ -16,7 +16,6 @@ import {
 } from 'react-navigation'
 import { CAPIArticle, Issue, ItemSizes } from 'src/common'
 import { ariaHidden } from 'src/helpers/a11y'
-import { supportsTransparentCards } from 'src/helpers/features'
 import { navigateToArticle } from 'src/navigation/helpers/base'
 import {
     setScreenPositionFromView,
@@ -124,7 +123,7 @@ const ItemTappable = withNavigation(
 
                 <TouchableHighlight
                     onPress={() => {
-                        supportsTransparentCards() && fade(opacity, 'out')
+                        fade(opacity, 'out')
                         navigateToArticle(navigation, {
                             path,
                             articleNavigator,
