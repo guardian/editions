@@ -86,7 +86,6 @@ const NewEditionCard = ({
                         { marginBottom: 5 },
                     ]}
                 >
-                    {/* QUESTION: SHOULD TITLE BE ON A NEW LINE?*/}
                     {modalText.title}
                 </TitlepieceText>
                 <UiBodyCopy
