@@ -478,15 +478,11 @@ export const IssueScreen = () => {
     } = useEditions()
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
     const headerStyle = specialEditionProps && specialEditionProps.headerStyle
-    const [newEditionHeaderStyle] = editionsList.specialEditions.map(
-        e => e.headerStyle,
-    )
 
     return (
         <Container>
             {showNewEditionCard && (
                 <NewEditionCard
-                    headerStyle={newEditionHeaderStyle}
                     modalText={NewEditionWords}
                     onDismissThisCard={setNewEditionSeen}
                 />
