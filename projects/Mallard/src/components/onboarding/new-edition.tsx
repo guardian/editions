@@ -20,7 +20,13 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
     StyleSheet.create({
         wrapper: {
             position: 'absolute',
-            top: isTablet ? (Platform.OS === 'android'? '6%': 80) : (Platform.OS === 'android'? '8%':'11.5%'),
+            top: isTablet
+                ? Platform.OS === 'android'
+                    ? '6%'
+                    : 80
+                : Platform.OS === 'android'
+                ? '8%'
+                : '11.5%',
             left: isTablet ? 12 : '3%',
             width: isTablet ? 365 : 300,
             zIndex: 1,
@@ -77,7 +83,7 @@ const NewEditionCard = ({
                     style={[
                         getFont('headline', 1.6, 'bold'),
                         styles.titleText,
-                        {marginBottom: 5}
+                        { marginBottom: 5 },
                     ]}
                 >
                     {/* QUESTION: SHOULD TITLE BE ON A NEW LINE?*/}
@@ -86,7 +92,7 @@ const NewEditionCard = ({
                 <UiBodyCopy
                     weight="regular"
                     style={[
-                        getFont('text', 1.25, ),
+                        getFont('text', 1.25),
                         { marginBottom: 18 },
                         styles.titleText,
                     ]}
@@ -99,7 +105,6 @@ const NewEditionCard = ({
                             buttonAppearance={ButtonAppearance.black}
                             onPress={onDismissThisCard}
                             textStyles={getFont('sans', 1.5, 'bold')}
-
                         >
                             {modalText.dismissButtonText}
                         </ModalButton>

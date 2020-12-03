@@ -472,7 +472,6 @@ export const IssueScreen = () => {
     const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
     const {
         selectedEdition,
-        editionsList,
         showNewEditionCard,
         setNewEditionSeen,
     } = useEditions()
