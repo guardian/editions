@@ -80,6 +80,16 @@ const scale = {
                 lineHeight: 21,
             },
         },
+        1.5: {
+            [Breakpoints.smallPhone]: {
+                fontSize: 15,
+                lineHeight: 22,
+            },
+            [Breakpoints.phone]: {
+                fontSize: 20,
+                lineHeight: 23,
+            },
+        },
     },
     text: {
         0.9: {
@@ -217,7 +227,7 @@ const scale = {
                 lineHeight: 22,
             },
             [Breakpoints.phone]: {
-                fontSize: 30,
+                fontSize: 29,
                 lineHeight: 32,
             },
             [Breakpoints.tabletVertical]: {

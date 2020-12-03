@@ -166,6 +166,12 @@ export const ManageDownloads = {
     delete: 'Delete',
 }
 
+export const NewEditionWords = {
+    title: `A new special edition is available`,
+    bodyText: `Tap on the edition menu icon on the top left to read it.`,
+    dismissButtonText: 'Got it',
+}
+
 export const HomeScreen = {
     issuePickerTitle: 'Recent',
     issuePickerTitleSubtitle: 'Editions',

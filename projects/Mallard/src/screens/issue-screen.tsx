@@ -42,6 +42,7 @@ import {
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
+    NewEditionWords,
 } from 'src/helpers/words'
 import { useQuery } from 'src/hooks/apollo'
 import {
@@ -75,6 +76,7 @@ import {
 } from 'src/hooks/use-edition-provider'
 import RNRestart from 'react-native-restart'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
+import { NewEditionCard } from 'src/components/onboarding/new-edition'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -468,11 +470,22 @@ const IssueScreenWithPath = React.memo(
 
 export const IssueScreen = () => {
     const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
-    const { selectedEdition } = useEditions()
+    const {
+        selectedEdition,
+        showNewEditionCard,
+        setNewEditionSeen,
+    } = useEditions()
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
     const headerStyle = specialEditionProps && specialEditionProps.headerStyle
+
     return (
         <Container>
+            {showNewEditionCard && (
+                <NewEditionCard
+                    modalText={NewEditionWords}
+                    onDismissThisCard={setNewEditionSeen}
+                />
+            )}
             {issueId ? (
                 <IssueScreenWithPath
                     path={issueId}
