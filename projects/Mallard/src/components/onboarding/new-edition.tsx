@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import { TitlepieceText, UiBodyCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
@@ -7,7 +7,7 @@ import { ButtonAppearance } from '../Button/Button'
 import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 import { ModalButton } from '../Button/ModalButton'
 import DeviceInfo from 'react-native-device-info'
-import { brand } from '@guardian/src-foundations/palette'
+import { lifestyle } from '@guardian/src-foundations/palette'
 
 export enum CardAppearance {
     apricot,
@@ -20,20 +20,21 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
     StyleSheet.create({
         wrapper: {
             position: 'absolute',
-            top: isTablet ? 80 : '11.5%',
+            top: isTablet ? (Platform.OS === 'android'? '6%': 80) : (Platform.OS === 'android'? '8%':'11.5%'),
             left: isTablet ? 12 : '3%',
-            width: isTablet ? '50%' : '77%',
+            width: isTablet ? 365 : 300,
             zIndex: 1,
         },
         container: {
             flex: 1,
-            backgroundColor: brand[800],
+            backgroundColor: lifestyle[300],
             overflow: 'hidden',
-            padding: 10,
+            padding: 12,
             borderRadius: 5,
         },
         bubblePointer: {
             left: 12.5,
+            top: 1,
             width: 0,
             height: 0,
             borderLeftWidth: 11,
@@ -42,7 +43,7 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
             borderStyle: 'solid',
             borderLeftColor: 'transparent',
             borderRightColor: 'transparent',
-            borderBottomColor: brand[800],
+            borderBottomColor: lifestyle[300],
         },
         buttonWrapper: {
             width: '40%',
@@ -75,8 +76,8 @@ const NewEditionCard = ({
                     accessibilityRole="header"
                     style={[
                         getFont('headline', 1.6, 'bold'),
-                        { marginBottom: 16 },
                         styles.titleText,
+                        {marginBottom: 5}
                     ]}
                 >
                     {/* QUESTION: SHOULD TITLE BE ON A NEW LINE?*/}
@@ -85,8 +86,8 @@ const NewEditionCard = ({
                 <UiBodyCopy
                     weight="regular"
                     style={[
-                        getFont('text', 1.25, 'regular'),
-                        { marginBottom: 8 },
+                        getFont('text', 1.25, ),
+                        { marginBottom: 18 },
                         styles.titleText,
                     ]}
                 >
@@ -97,6 +98,8 @@ const NewEditionCard = ({
                         <ModalButton
                             buttonAppearance={ButtonAppearance.black}
                             onPress={onDismissThisCard}
+                            textStyles={getFont('sans', 1.5, 'bold')}
+
                         >
                             {modalText.dismissButtonText}
                         </ModalButton>
