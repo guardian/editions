@@ -19,8 +19,6 @@ describe('getIssueSummaryInternal', () => {
         'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
     ]
 
-    const bucket: Bucket = { name: 'test', context: 'default' }
-
     it('should return IssueSummary', async () => {
         const issue: IssuePublicationIdentifier = {
             edition: 'american-edition',

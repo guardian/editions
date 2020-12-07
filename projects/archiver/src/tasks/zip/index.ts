@@ -89,6 +89,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             [htmlDirPath(publishedId)],
             {
                 removeFromOutputPath: `${version}/`,
+                replaceImagePathInDataBundle: true,
             },
             bucket,
         )

@@ -456,7 +456,6 @@ export const issueDir = (issueId: string) => {
 
 export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
 
-// const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
 export const frontPath = (issue: string, frontId: string) =>
     `${issueDir(issue)}/front/${frontId}`
 
