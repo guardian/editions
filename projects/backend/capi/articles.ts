@@ -1,12 +1,9 @@
 import { attempt, hasFailed, hasSucceeded } from '../utils/try'
-import {
-    SearchResponseCodec,
-    ContentType,
-    ICapiDateTime as CapiDateTime64,
-    IContent,
-    IBlocks,
-    ElementType,
-} from '@guardian/capi-ts'
+import { Content } from '@guardian/content-api-models/v1/content'
+import { Blocks } from '@guardian/content-api-models/v1/blocks'
+import { ElementType } from '@guardian/content-api-models/v1/elementType'
+import { ContentType } from '@guardian/content-api-models/v1/contentType'
+import { CapiDateTime } from '@guardian/content-api-models/v1/capiDateTime'
 import {
     Article,
     GalleryArticle,
@@ -16,10 +13,6 @@ import {
     MediaAtomElement,
     TrailImage,
 } from '../common'
-import {
-    BufferedTransport,
-    CompactProtocol,
-} from '@creditkarma/thrift-server-core'
 import { elementParser } from './elements'
 import fetch from 'node-fetch'
 import { fromPairs } from 'ramda'
@@ -30,6 +23,7 @@ import { articleTypePicker, headerTypePicker } from './articleTypePicker'
 import { getImages } from './articleImgPicker'
 import { RequestSigner } from 'aws4'
 import { SharedIniFileCredentials, STS } from 'aws-sdk'
+import { capiSearchDecoder } from './decoders'
 
 type NotInCAPI =
     | 'key'
@@ -61,7 +55,7 @@ export type CCrossword = Omit<CrosswordArticle, NotInCAPI | OptionalInCAPI> &
 
 export type CAPIContent = CArticle | CGallery | CCrossword | CPicture
 
-const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
+const truncateDateTime = (date: CapiDateTime): CapiDateTime32 => ({
     iso8601: date.iso8601,
     dateTime: date.dateTime.toNumber(),
 })
@@ -73,7 +67,7 @@ const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
  * https://embed.theguardian.com/embed/atom/media/1c35effc-5275-45b1-802b-719ec45f0087
  */
 const getMainMediaAtom = (
-    capiBlocks?: IBlocks,
+    capiBlocks?: Blocks,
 ): MediaAtomElement | undefined => {
     if (capiBlocks == null) return
     const { main } = capiBlocks
@@ -87,7 +81,7 @@ const getMainMediaAtom = (
 }
 
 const parseArticleResult = async (
-    result: IContent,
+    result: Content,
     isFromPrint: boolean,
 ): Promise<[number, CAPIContent]> => {
     const path = result.id
@@ -227,7 +221,7 @@ const parseArticleResult = async (
             const entries = crossword64.entries.map(entry => {
                 const separatorLocations =
                     entry.separatorLocations &&
-                    fromPairs([...entry.separatorLocations.entries()])
+                    fromPairs(Object.entries(entry.separatorLocations))
                 return { ...entry, separatorLocations }
             })
 
@@ -383,7 +377,7 @@ const isScheduledInNext30Days = (dateiso8601: string): boolean => {
     return date < oneMonthAway
 }
 
-const removeUnscheduledDraftContent = (content: IContent[]): IContent[] => {
+const removeUnscheduledDraftContent = (content: Content[]): Content[] => {
     return content.filter(
         c =>
             c.fields &&
@@ -429,14 +423,9 @@ export const getArticles = async (
     if (resp.status != 200) {
         console.warn(`Non 200 status code: ${resp.status} ${resp.statusText}`)
     }
-    const buffer = await resp.arrayBuffer()
-
-    const receiver: BufferedTransport = BufferedTransport.receiver(
-        Buffer.from(buffer),
-    )
-    const input = new CompactProtocol(receiver)
-    const data = SearchResponseCodec.decode(input)
-    const results: IContent[] = data.results
+    const buffer = await resp.buffer()
+    const data = await capiSearchDecoder(buffer)
+    const results: Content[] = data.results
     const filteredResults =
         capi === 'preview' ? removeUnscheduledDraftContent(results) : results
     const articlePromises = await Promise.all(

@@ -1,8 +1,9 @@
 import { Lambda, SharedIniFileCredentials } from 'aws-sdk'
 import { awsToString } from '../parser'
-import { IAtoms, IContentAtomElementFields } from '@guardian/capi-ts'
+import { Atoms } from '@guardian/content-api-models/v1/atoms'
+import { Atom } from '@guardian/content-atom-model/atom'
+import { ContentAtomElementFields } from '@guardian/content-api-models/v1/contentAtomElementFields'
 import { BlockElement } from '../../Apps/common/src'
-import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 import { attempt, hasFailed } from '../utils/try'
 
 import { oc } from 'ts-optchain'
@@ -20,7 +21,7 @@ const lambda = new Lambda({
     region: 'eu-west-1',
     ...creds,
 })
-export const rationaliseAtoms = (atoms?: IAtoms) => ({
+export const rationaliseAtoms = (atoms?: Atoms) => ({
     audio: (atoms && atoms.audios) || [],
     chart: (atoms && atoms.charts) || [],
     commonsdivision: (atoms && atoms.commonsdivisions) || [],
@@ -34,7 +35,6 @@ export const rationaliseAtoms = (atoms?: IAtoms) => ({
     quiz: (atoms && atoms.quizzes) || [],
     recipe: (atoms && atoms.recipes) || [],
     review: (atoms && atoms.reviews) || [],
-    storyquestions: (atoms && atoms.storyquestions) || [],
     timeline: (atoms && atoms.timelines) || [],
     viewpoint: (atoms && atoms.viewpoints) || [],
 })
@@ -63,8 +63,8 @@ const renderAtom = async (
 }
 
 export const renderAtomElement = async (
-    data: IContentAtomElementFields | undefined,
-    atoms: { [key: string]: IAtom[] },
+    data: ContentAtomElementFields | undefined,
+    atoms: { [key: string]: Atom[] },
 ): Promise<BlockElement> => {
     if (data == null) {
         console.error('No atom data found in element.')
@@ -78,17 +78,17 @@ export const renderAtomElement = async (
         console.error('Atom not found in CAPI response.')
         throw new Error('Atom not found in CAPI response.')
     }
-    if (atomType === 'media' && atom !== null) {
-        const imageURL = oc(atom).data.media.posterImage.master.file()
+    if (atomType === 'media' && atom !== null && atom.data.kind === 'media') {
+        const imageURL = atom.data.media.posterImage?.master?.file
         const image = getImageFromURL(imageURL)
-        const activeVersion64 = oc(atom).data.media.activeVersion
+        const activeVersion64 = atom.data.media.activeVersion
         const activeVersion =
             (activeVersion64 &&
                 activeVersion64.buffer &&
                 activeVersion64.toNumber()) ||
             -1
-        const latestAsset = oc(atom)
-            .data.media.assets([])
+        const latestAsset = atom
+            .data.media.assets
             .find(_ => _.version.toNumber() === activeVersion)
 
         const platform = getPlatformName(oc(latestAsset).platform())
