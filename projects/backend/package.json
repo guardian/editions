@@ -31,7 +31,6 @@
     "dependencies": {
         "@creditkarma/thrift-server-core": "^0.14.1",
         "@guardian/capi-ts": "^0.2.0",
-        "@guardian/apps-rendering-api-models": "^0.11.0",
         "@types/aws-lambda": "^8.10.31",
         "@types/aws4": "^1.5.1",
         "@types/jest": "^24.0.17",
