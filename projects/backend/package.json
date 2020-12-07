@@ -17,7 +17,7 @@
         "ts-jest": "^24.0.2",
         "ts-node": "^8.3.0",
         "ts-node-dev": "^1.0.0-pre.63",
-        "typescript": "^3.7.5"
+        "typescript": "^3.5.3"
     },
     "scripts": {
         "build": "ncc build backend.ts -o dist -m -e aws-sdk",

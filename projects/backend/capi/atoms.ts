@@ -3,6 +3,7 @@ import { awsToString } from '../parser'
 import { Atoms } from '@guardian/content-api-models/v1/atoms'
 import { Atom } from '@guardian/content-atom-model/atom'
 import { ContentAtomElementFields } from '@guardian/content-api-models/v1/contentAtomElementFields'
+import { MediaAtom } from '@guardian/content-atom-model/media/mediaAtom'
 import { BlockElement } from '../../Apps/common/src'
 import { attempt, hasFailed } from '../utils/try'
 
@@ -62,6 +63,14 @@ const renderAtom = async (
     }
 }
 
+const posterImageUrl = (mediaAtom: MediaAtom): string | undefined => {
+    if (mediaAtom.posterImage && mediaAtom.posterImage.master) {
+        return mediaAtom.posterImage.master.file
+    }
+
+    return undefined
+}
+
 export const renderAtomElement = async (
     data: ContentAtomElementFields | undefined,
     atoms: { [key: string]: Atom[] },
@@ -79,7 +88,7 @@ export const renderAtomElement = async (
         throw new Error('Atom not found in CAPI response.')
     }
     if (atomType === 'media' && atom !== null && atom.data.kind === 'media') {
-        const imageURL = atom.data.media.posterImage?.master?.file
+        const imageURL = posterImageUrl(atom.data.media)
         const image = getImageFromURL(imageURL)
         const activeVersion64 = atom.data.media.activeVersion
         const activeVersion =
@@ -87,9 +96,9 @@ export const renderAtomElement = async (
                 activeVersion64.buffer &&
                 activeVersion64.toNumber()) ||
             -1
-        const latestAsset = atom
-            .data.media.assets
-            .find(_ => _.version.toNumber() === activeVersion)
+        const latestAsset = atom.data.media.assets.find(
+            _ => _.version.toNumber() === activeVersion,
+        )
 
         const platform = getPlatformName(oc(latestAsset).platform())
         const assetId = oc(latestAsset).id()
