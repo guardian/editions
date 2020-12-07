@@ -1,29 +1,17 @@
 import { Request, Response } from 'express'
 import fetch from 'node-fetch'
+import {
+    CAPIEndpoint,
+    generateCapiEndpoint,
+    getPreviewHeaders,
+} from '../utils/article'
 import { attempt, hasFailed } from '../utils/try'
-import {
-    RenderingRequest,
-    RenderingRequestSerde,
-} from '@guardian/apps-rendering-api-models/renderingRequest'
-import {
-    BufferedTransport,
-    CompactProtocol,
-} from '@creditkarma/thrift-server-core'
-import {
-    TProtocol,
-    TCompactProtocol,
-    TBinaryProtocol,
-    TBufferedTransport,
-    TFramedTransport,
-} from 'thrift'
-import { IContent, SearchResponseCodec } from '@guardian/capi-ts'
 
-const fetchRenderedArticle = async (url: string) => {
+const fetchRenderedArticle = async (url: string, buffer: ArrayBuffer) => {
     const response = await fetch(url, {
-        headers: {
-            Accept:
-                'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        },
+        method: 'post',
+        headers: { 'Content-Type': 'application/octet-stream' },
+        body: buffer,
     })
     const responseBody = await response.text()
     return {
@@ -33,80 +21,75 @@ const fetchRenderedArticle = async (url: string) => {
     }
 }
 
-// TODO: this needs a test once we're happy with the correct format for the paths
-const replaceImageUrls = (html: string): string => {
-    return html.replace(/https:\/\/i.guim.co.uk\/img\//g, `../media/`)
-}
+const fetchCapiArticle = async (
+    internalPageCode: number,
+    capi: CAPIEndpoint,
+): Promise<ArrayBuffer | undefined> => {
+    try {
+        const endpoint = generateCapiEndpoint([internalPageCode], capi)
+        const headers =
+            capi === 'preview' ? await getPreviewHeaders(endpoint) : {}
+        console.log('Making CAPI query', endpoint)
+        console.log('Debug link:', endpoint.replace(/thrift/g, 'json'))
+        const resp = await attempt(fetch(endpoint, { headers }))
 
-type CAPIEndpoint = 'preview' | 'printsent' | 'live'
-const getEndpoint = (capi: CAPIEndpoint, paths: string[]): string => {
-    const queryString = `?ids=${paths.join(',')}&api-key=${
-        process.env.CAPI_KEY
-    }&format=thrift&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&page-size=100`
+        if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
 
-    switch (capi) {
-        case 'printsent':
-            return `${process.env.psurl}/search${queryString}`
-        case 'live':
-            return `https://content.guardianapis.com/search${queryString}`
-        case 'preview':
-            return `${process.env.capiPreviewUrl}/search${queryString}`
-        default:
-            return ''
+        if (resp.status != 200) {
+            console.warn(
+                `Non 200 status code: ${resp.status} ${resp.statusText}`,
+            )
+        }
+
+        return await resp.arrayBuffer()
+    } catch (error) {
+        console.warn(
+            `Failed to fetch article from capi (${capi}) for internalPageCode=${internalPageCode}`,
+        )
+        return undefined
     }
 }
 
 export const renderController = async (req: Request, res: Response) => {
-    const pageCode = 8251844 //TODO
-    const capi = 'live' //TODO
-    const paths = [`internal-code/page/${pageCode}`]
-    const isFromPrint = false //capi === 'printsent'
-    const endpoint = getEndpoint(capi, paths)
-    // const headers = capi === 'preview' ? await getPreviewHeaders(endpoint) : {}
-    const headers = {}
-    console.log('Making CAPI query', endpoint)
-    console.log('Debug link:', endpoint.replace(/thrift/g, 'json'))
-    const resp = await attempt(fetch(endpoint, { headers }))
-
-    if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
-    if (resp.status != 200) {
-        console.warn(`Non 200 status code: ${resp.status} ${resp.statusText}`)
+    const pageCode = req.params.internalPageCode
+    //The article we are looking for could be in any environment, need to
+    //make an attempt to fetch from all three environment
+    console.log(`Trying to fetch article from capi (live)`)
+    let capiResponse = await fetchCapiArticle(pageCode, 'live')
+    if (!capiResponse) {
+        console.log(
+            `Article was not found in capi (live), trying to fetch from printsent`,
+        )
+        capiResponse = await fetchCapiArticle(pageCode, 'printsent')
     }
-    const buffer = await resp.arrayBuffer()
-    const receiver: BufferedTransport = BufferedTransport.receiver(
-        Buffer.from(buffer),
-    )
-    const input = new CompactProtocol(receiver)
-    const data = SearchResponseCodec.decode(input)
-    const results: IContent[] = data.results
+    if (!capiResponse) {
+        console.log(
+            `Article was not found in capi (printsent), trying to fetch from preview`,
+        )
+        capiResponse = await fetchCapiArticle(pageCode, 'preview')
+    }
 
-    const rr: RenderingRequest = {
-        content: results[0],
-    } as RenderingRequest
+    if (!capiResponse) {
+        const message = `Failed to fetch article from capi (print, live & preview) for ${pageCode}`
+        console.error(`${message}`)
+        res.status(400).send(message)
+        return
+    }
 
-    const newBuffer = new TBufferedTransport()
-    const protocol = new TCompactProtocol(newBuffer)
-    RenderingRequestSerde.write(protocol, rr)
+    const stage = process.env.stage || 'dev'
+    const renderingUrl =
+        stage == 'dev'
+            ? 'http://localhost:8080/render-edition-article'
+            : `${process.env.APPS_RENDERING_URL}`
 
-    const response = await fetch('http://localhost:8080/edition-article', {
-        method: 'post',
-        body: protocol.readBinary(),
-    })
+    const response = await fetchRenderedArticle(renderingUrl, capiResponse)
 
-    res.send('OK')
-
-    // const path = req.params.path
-    // const renderingUrl = `${process.env.APPS_RENDERING_URL}${path}?editions`
-    // console.log(`Fetching ${renderingUrl} from apps rendering`)
-    // const renderResponse = await fetchRenderedArticle(renderingUrl)
-
-    // if (renderResponse.success) {
-    //     const htmlWithImagesReplaced = replaceImageUrls(renderResponse.body)
-    //     res.setHeader('Content-Type', 'text/html')
-    //     res.send(htmlWithImagesReplaced)
-    // } else {
-    //     const message = `Failed to fetch story from ${renderingUrl}. Response: ${renderResponse.body}`
-    //     console.error(`${message}`)
-    //     res.status(renderResponse.status).send(message)
-    // }
+    if (response.success) {
+        res.setHeader('Content-Type', 'text/html')
+        res.send(response.body)
+    } else {
+        const message = `Failed to fetch story from ${renderingUrl}. Response: ${response.body}`
+        console.error(`${message}`)
+        res.status(response.status).send(message)
+    }
 }
