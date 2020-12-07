@@ -251,8 +251,8 @@ PODS:
     - React
   - react-native-splash-screen (3.2.0):
     - React
-  - react-native-viewpager (2.0.1):
-    - React
+  - react-native-viewpager (4.2.1):
+    - React-Core
   - react-native-webview (6.11.1):
     - React
   - React-RCTActionSheet (0.61.5):
@@ -570,7 +570,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-viewpager: f41b42bba71407e916654d64e87ff2680edecc92
+  react-native-viewpager: 40876e00dbd7bcee4c627cf5a9640e6593a019b4
   react-native-webview: 0658813bcc4b6c22f3cbb035a2227aa896a8cbc0
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -607,4 +607,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8d92f415d03217ee793df7622da32623f2af7aff
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0
