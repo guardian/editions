@@ -731,24 +731,10 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             ArticleType.Interview
         }"] span h1 .header-top-headline {
             line-height: 62px;
-            padding-top: 5px;
+            padding-top: 6px;
             padding-bottom: 10px;
         }
         
-        @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-            .header-container[data-type="${ArticleType.Interview}"] span h1 {
-                padding-left: ${
-                    Dimensions.get('window').width > metrics.article.maxWidth
-                        ? px(metrics.article.sides * 0.7)
-                        : px(metrics.article.sides * 1.7)
-                };
-            }
-        }
-        @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
-            .header-container[data-type="${ArticleType.Interview}"] span h1 {
-                padding-left: ${px(metrics.article.sides - 5)};
-            }
-        }
 
         .header-container[data-type="${ArticleType.Interview}"] .header-kicker {
             background-color: ${colors.main};
@@ -756,6 +742,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             font-family: ${families.headline.bold};
             margin-left: 0;
             padding: 10px;
+            border: none;
         }
 
         .interview-tablet .header-bottom {
@@ -1329,8 +1316,8 @@ const HeaderInterviewTablet = ({
                 </div>
             </div>
             <div class="header-bottom" data-type="${type}">
-                <div class="header-container-line-wrap">
-                    <div class="header-container wrapper" data-type="${type}">
+                <div>
+                    <div class="header-container wrapper interview-tablet-wrapper" data-type="${type}">
                         <span>
                             ${getHeadline(headerType, type, headerProps)}
                         </span>
