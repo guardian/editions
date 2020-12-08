@@ -1316,12 +1316,10 @@ const HeaderInterviewTablet = ({
                 </div>
             </div>
             <div class="header-bottom" data-type="${type}">
-                <div>
-                    <div class="header-container wrapper interview-tablet-wrapper" data-type="${type}">
-                        <span>
-                            ${getHeadline(headerType, type, headerProps)}
-                        </span>
-                    </div>
+                <div class="header-container wrapper interview-tablet-wrapper" data-type="${type}">
+                    <span>
+                        ${getHeadline(headerType, type, headerProps)}
+                    </span>
                 </div>
                 <section
                     class="interview-tablet-standfirst interview-tablet-wrapper"
