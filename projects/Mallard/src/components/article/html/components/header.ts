@@ -80,20 +80,20 @@ const shareButtonColor = ({ colors, theme }: CssProps) => {
 }
 
 const threeLines = `
-background-image: repeating-linear-gradient(
-    to bottom,
-    ${color.dimLine},
-    ${color.dimLine} 1px,
-    transparent 1px,
-    transparent 4px
-);
-background-repeat: repeat-x;
-background-position: bottom;
-background-size: 1px 16px;
-content: '';
-display: block;
-height: 16px;
-margin: 0;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        ${color.dimLine},
+        ${color.dimLine} 1px,
+        transparent 1px,
+        transparent 4px
+    );
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-size: 1px 16px;
+    content: '';
+    display: block;
+    height: 16px;
+    margin: 0;
 `
 
 export const headerStyles = ({ colors, theme }: CssProps) => css`
@@ -101,7 +101,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header a {
         pointer-events: none;
     }
-
     .header:after, .header-immersive-video:after {
         ${threeLines}
     }
@@ -130,7 +129,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-right: ${px(metrics.article.sides)};
         }
     }
-
 
     .header-bg {
         left: -50em;
@@ -189,6 +187,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
+
     .header h1, .header-immersive-video h1 {
         font-size: 30px;
         font-family: ${families.headline.regular};
@@ -258,6 +257,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         left: ${px(metrics.article.sides * -1)};
         right: ${px(metrics.article.sides * -1)};
     }
+
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header-byline:not(:empty):after {
             left: 0;
@@ -483,7 +483,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
 
     /*gallery*/
-    .header-container[data-type='${ArticleType.Gallery
+    .header-container[data-type='${
+        ArticleType.Gallery
     }'] .header-byline  > span > a {
         color: ${themeColors(theme).text};
     }
@@ -565,13 +566,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-right: 10px;
         }
 
-        .header-container[data-type='${ArticleType.Interview
-    }'] .header-byline button{
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header-byline button{
             margin-right: 10px;
         }
 
-        .header-container[data-type='${ArticleType.Interview
-    }'] .header-byline span {
+        .header-container[data-type='${
+            ArticleType.Interview
+        }'] .header-byline span {
             padding-left: 10px;
         }
 
@@ -623,7 +626,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         padding-right: 25px;
         margin-bottom: 12px;
     }
-    .header-container[data-type='${ArticleType.Interview
+    .header-container[data-type='${
+        ArticleType.Interview
     }'] .header h1 .header-top-headline {
         background-color: ${color.palette.neutral[7]};
         box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]},
@@ -638,7 +642,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin-left: 0;
         padding-left: 10px;
     }
-    .header-container[data-type='${ArticleType.Interview
+    .header-container[data-type='${
+        ArticleType.Interview
     }'] .header-byline:before {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -659,12 +664,14 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         padding: 0em 0 1.25em 0em;
         color: ${color.palette.neutral[7]};
     }
-    .header-container[data-type='${ArticleType.Interview
+    .header-container[data-type='${
+        ArticleType.Interview
     }'] .header-byline button{
         margin-right: 20px;
         margin-top: 0px;
     }
-    .header-container[data-type='${ArticleType.Interview
+    .header-container[data-type='${
+        ArticleType.Interview
     }'] .header-byline span {
         margin-top: 4px;
         display: block;
@@ -682,8 +689,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             position: relative;
          }
 
-        .header-image-container--interview .header-container[data-type="${ArticleType.Interview
-    }"] {
+        .header-image-container--interview .header-container[data-type="${
+            ArticleType.Interview
+        }"] {
             position: absolute;
             bottom: 0;
             z-index: 250;
@@ -705,8 +713,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             fill: white;
         }
 
-        .header-container[data-type="${ArticleType.Interview
-    }"] h1 .header-top-headline {
+        .header-container[data-type="${
+            ArticleType.Interview
+        }"] h1 .header-top-headline {
             background-color: ${color.palette.neutral[7]};
             box-shadow: 0.5rem 0 0 ${color.palette.neutral[7]},
                 -10px 0 0 ${color.palette.neutral[7]};
@@ -718,26 +727,29 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-right: 25px;
         }
 
-        .header-container[data-type="${ArticleType.Interview
-    }"] span h1 .header-top-headline {
+        .header-container[data-type="${
+            ArticleType.Interview
+        }"] span h1 .header-top-headline {
             line-height: 62px;
             padding-top: 5px;
             padding-bottom: 10px;
         }
         
         @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-
-            .header-container[data-type="${ArticleType.Interview
-    }"] span h1 {
-                padding-left: ${Dimensions.get('window').width > metrics.article.maxWidth ? px(metrics.article.sides * 0.7) : px(metrics.article.sides * 1.7)};
+            .header-container[data-type="${ArticleType.Interview}"] span h1 {
+                padding-left: ${
+                    Dimensions.get('window').width > metrics.article.maxWidth
+                        ? px(metrics.article.sides * 0.7)
+                        : px(metrics.article.sides * 1.7)
+                };
             }
-    }
-    @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
-        .header-container[data-type="${ArticleType.Interview
-    }"] span h1 {
-            padding-left: ${px(metrics.article.sides - 5)};
         }
-    }
+        @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+            .header-container[data-type="${ArticleType.Interview}"] span h1 {
+                padding-left: ${px(metrics.article.sides - 5)};
+            }
+        }
+
         .header-container[data-type="${ArticleType.Interview}"] .header-kicker {
             background-color: ${colors.main};
             color: ${color.textOverDarkBackground};
@@ -768,30 +780,33 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
 
         .app[data-type='${ArticleType.Interview}'] .content-wrap {
-            padding-left: ${Dimensions.get('window').width > metrics.article.maxWidth
-        ? px(metrics.article.sides)
-        : px(metrics.article.sides * 2)
-    }
+            padding-left: ${
+                Dimensions.get('window').width > metrics.article.maxWidth
+                    ? px(metrics.article.sides)
+                    : px(metrics.article.sides * 2)
+            }
         }
 
         .interview-tablet-wrapper {
-            margin-left: ${Dimensions.get('window').width > metrics.article.maxWidth
-        ? px(
-            (Dimensions.get('window').width -
-                metrics.article.maxWidth) /
-            2,
-        )
-        : px(metrics.article.sides * 2)
-    };
-            margin-right: ${Dimensions.get('window').width > metrics.article.maxWidth
-        ? px(
-            (Dimensions.get('window').width -
-                metrics.article.maxWidth) /
-            2 +
-            metrics.article.rightRail,
-        )
-        : px(metrics.article.rightRail + metrics.article.sides)
-    };
+            margin-left: ${
+                Dimensions.get('window').width > metrics.article.maxWidth
+                    ? px(
+                          (Dimensions.get('window').width -
+                              metrics.article.maxWidth) /
+                              2,
+                      )
+                    : px(metrics.article.sides * 2)
+            };
+            margin-right: ${
+                Dimensions.get('window').width > metrics.article.maxWidth
+                    ? px(
+                          (Dimensions.get('window').width -
+                              metrics.article.maxWidth) /
+                              2 +
+                              metrics.article.rightRail,
+                      )
+                    : px(metrics.article.rightRail + metrics.article.sides)
+            };
         }
 
         .interview-tablet .standfirst--interview p {
@@ -807,8 +822,9 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             font-size: 40px;
         }
 
-        .interview-tablet .header-image-container--interview .header-container[data-type="${ArticleType.Interview
-    }"] h1 .header-top-headline {
+        .interview-tablet .header-image-container--interview .header-container[data-type="${
+            ArticleType.Interview
+        }"] h1 .header-top-headline {
             line-height: 50px;
         }
 
@@ -889,8 +905,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         .header-image--showcase {
             margin-right: 0;
             margin-left: ${(Dimensions.get('window').width -
-        metrics.article.maxWidth) /
-    2};
+                metrics.article.maxWidth) /
+                2};
         }
 
         .header-container[data-type='${ArticleType.Showcase}'] .standfirst {
@@ -898,13 +914,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             line-height: 25px;
         }
 
-        .header-container[data-type='${ArticleType.Showcase
-    }'] .share-touch-zone {
+        .header-container[data-type='${
+            ArticleType.Showcase
+        }'] .share-touch-zone {
             margin: -8px 0 0 0;
         }
 
-        .header-container[data-type='${ArticleType.Showcase
-    }'] .header-byline:not(:empty):after {
+        .header-container[data-type='${
+            ArticleType.Showcase
+        }'] .header-byline:not(:empty):after {
             right: 4px;
         }
 
@@ -991,11 +1009,11 @@ const MainMediaImage = ({
                 data-preserve-ratio="${preserveRatio || 'false'}"
                 style="background-image: url(${path}), url(${remotePath}); "
                 ${!isGallery &&
-        `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
+                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
                 data-open="false"
             >
                 ${preserveRatio &&
-        html`
+                    html`
                         <img
                             class="image-as-bg__img"
                             src="${path}"
@@ -1043,8 +1061,8 @@ const getStandFirstText = ({
     return html`
         <p
             ${type === ArticleType.Interview &&
-        `class=interview-standfirst` &&
-        `style=color:${interviewColor};`}
+                `class=interview-standfirst` &&
+                `style=color:${interviewColor};`}
         >
             ${standfirst}
         </p>
@@ -1069,13 +1087,13 @@ const getStandFirst = (
                 <div class="${cutout && `header-opinion-flex`}">
                     ${getHeadline(articleHeaderType, type, headerProps)}
                     ${publishedId &&
-            cutout &&
-            html`
+                        cutout &&
+                        html`
                             <div>
                                 ${Image({
-                image: cutout,
-                getImagePath,
-            })}
+                                    image: cutout,
+                                    getImagePath,
+                                })}
                             </div>
                         `}
                 </div>
@@ -1086,12 +1104,12 @@ const getStandFirst = (
             <section class="header-top">
                 ${getHeadline(articleHeaderType, type, headerProps)}
                 ${articleHeaderType === HeaderType.RegularByline &&
-            headerProps.standfirst &&
-            getStandFirstText({
-                standfirst: headerProps.standfirst,
-                type,
-                pillar,
-            })}
+                    headerProps.standfirst &&
+                    getStandFirstText({
+                        standfirst: headerProps.standfirst,
+                        type,
+                        pillar,
+                    })}
             </section>
         `
     }
@@ -1177,90 +1195,90 @@ const Header = ({
         type === ArticleType.Article || type === ArticleType.Review
     return html`
         ${immersive &&
-        headerProps.image &&
-        publishedId &&
-        MainMediaImage({
-            image: headerProps.image,
-            isGallery: isGallery,
-            className:
-                type === ArticleType.Interview
-                    ? 'header-image--interview'
-                    : 'header-image--immersive',
-            getImagePath,
-        })}
+            headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                image: headerProps.image,
+                isGallery: isGallery,
+                className:
+                    type === ArticleType.Interview
+                        ? 'header-image--interview'
+                        : 'header-image--immersive',
+                getImagePath,
+            })}
         ${!immersive &&
-        displayWideImage &&
-        headerProps.image &&
-        publishedId &&
-        MainMediaImage({
-            articleType: type,
-            className: 'header-image--wide',
-            image: headerProps.image,
-            isGallery: isGallery,
-            preserveRatio: true,
-            children: headerProps.starRating
-                ? Rating(headerProps)
-                : headerProps.sportScore
+            displayWideImage &&
+            headerProps.image &&
+            publishedId &&
+            MainMediaImage({
+                articleType: type,
+                className: 'header-image--wide',
+                image: headerProps.image,
+                isGallery: isGallery,
+                preserveRatio: true,
+                children: headerProps.starRating
+                    ? Rating(headerProps)
+                    : headerProps.sportScore
                     ? SportScore({
-                        sportScore: headerProps.sportScore,
-                    })
+                          sportScore: headerProps.sportScore,
+                      })
                     : undefined,
-            getImagePath,
-        })}
+                getImagePath,
+            })}
         <div class="header-container-line-wrap">
             ${type !== ArticleType.Interview && Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
                 ${!immersive &&
-        !displayWideImage &&
-        headerProps.image &&
-        publishedId &&
-        MainMediaImage({
-            articleType: type,
-            className: 'header-image--standard',
-            image: headerProps.image,
-            isGallery: isGallery,
-            preserveRatio: true,
-            children: headerProps.starRating
-                ? Rating(headerProps)
-                : headerProps.sportScore
-                    ? SportScore({
-                        sportScore: headerProps.sportScore,
-                    })
-                    : undefined,
-            getImagePath,
-        })}
+                    !displayWideImage &&
+                    headerProps.image &&
+                    publishedId &&
+                    MainMediaImage({
+                        articleType: type,
+                        className: 'header-image--standard',
+                        image: headerProps.image,
+                        isGallery: isGallery,
+                        preserveRatio: true,
+                        children: headerProps.starRating
+                            ? Rating(headerProps)
+                            : headerProps.sportScore
+                            ? SportScore({
+                                  sportScore: headerProps.sportScore,
+                              })
+                            : undefined,
+                        getImagePath,
+                    })}
                 <header
                     class=${immersive &&
-            headerProps.mainMedia &&
-            headerProps.showMedia
-            ? 'header-immersive-video'
-            : 'header'}
+                    headerProps.mainMedia &&
+                    headerProps.showMedia
+                        ? 'header-immersive-video'
+                        : 'header'}
                 >
                     ${headerProps.mainMedia &&
-        (headerProps.showMedia
-            ? renderMediaAtom(headerProps.mainMedia)
-            : null)}
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
                     ${headerProps.kicker &&
-        html`
+                        html`
                             <span class="header-kicker"
                                 >${headerProps.kicker}</span
                             >
                         `}
                     ${getStandFirst(
-            headerType,
-            type,
-            headerProps,
-            publishedId,
-            getImagePath,
-            pillar,
-        )}
+                        headerType,
+                        type,
+                        headerProps,
+                        publishedId,
+                        getImagePath,
+                        pillar,
+                    )}
                 </header>
                 ${getByLine(
-            headerType,
-            headerProps as ArticleHeaderProps,
-            type,
-            webUrl,
-        )}
+                    headerType,
+                    headerProps as ArticleHeaderProps,
+                    type,
+                    webUrl,
+                )}
                 <div class="header-bg"></div>
             </div>
         </div>
@@ -1288,22 +1306,22 @@ const HeaderInterviewTablet = ({
         <div class="interview-tablet">
             <div class="header-image-container--interview">
                 ${headerProps.image &&
-        publishedId &&
-        MainMediaImage({
-            image: headerProps.image,
-            className: 'header-image--interview',
-            getImagePath,
-        })}
+                    publishedId &&
+                    MainMediaImage({
+                        image: headerProps.image,
+                        className: 'header-image--interview',
+                        getImagePath,
+                    })}
                 <div
                     class="header-container interview-tablet-wrapper"
                     data-type="${type}"
                 >
                     ${headerProps.mainMedia &&
-        (headerProps.showMedia
-            ? renderMediaAtom(headerProps.mainMedia)
-            : null)}
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
                     ${headerProps.kicker &&
-        html`
+                        html`
                             <span class="header-kicker"
                                 >${headerProps.kicker}</span
                             >
@@ -1322,22 +1340,22 @@ const HeaderInterviewTablet = ({
                     class="interview-tablet-standfirst interview-tablet-wrapper"
                 >
                     ${headerProps.standfirst &&
-        getStandFirstText({
-            standfirst: headerProps.standfirst,
-            type,
-            pillar,
-        })}
+                        getStandFirstText({
+                            standfirst: headerProps.standfirst,
+                            type,
+                            pillar,
+                        })}
                 </section>
                 <div
                     class="byline-container interview-tablet-wrapper"
                     data-type="${type}"
                 >
                     ${getByLine(
-            headerType,
-            headerProps as ArticleHeaderProps,
-            type,
-            webUrl,
-        )}
+                        headerType,
+                        headerProps as ArticleHeaderProps,
+                        type,
+                        webUrl,
+                    )}
                     <div class="header-bg"></div>
                 </div>
             </div>
@@ -1370,7 +1388,7 @@ const HeaderInterviewMobile = ({
                     image: headerProps.image,
                     className: 'header-image--interview',
                     getImagePath,
-            })}
+                })}
             <div class="header-container-line-wrap">
                 <div class="header-container wrapper" data-type="${type}">
                     <header class="header">
