@@ -56,16 +56,6 @@ const BasicCardWrapper = ({
     )
 }
 
-const wrapInBasicCard: NavigatorWrapper = Navigator => {
-    const Wrapper = ({ navigation }: NavigationInjectedProps) => (
-        <BasicCardWrapper navigator={Navigator} navigation={navigation} />
-    )
-    return addStaticRouterWithPosition(
-        addStaticRouter(Navigator, Wrapper),
-        () => new Animated.Value(1),
-    )
-}
-
 const styles = StyleSheet.create({
     root: {
         ...StyleSheet.absoluteFillObject,

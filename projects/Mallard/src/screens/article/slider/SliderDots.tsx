@@ -49,9 +49,12 @@ const SliderDots = React.memo(
         const isTablet = DeviceInfo.isTablet()
         const appliedStyle = styles(color, location, isTablet)
 
-        const newPos: any = startIndex
-            ? Animated.subtract(position, startIndex)
-            : position
+        const newPos: any =
+            Platform.OS === 'android' && startIndex
+                ? Number(position) - startIndex
+                : startIndex
+                ? Animated.subtract(position, startIndex)
+                : position
 
         const largeDeviceMemory = useLargeDeviceMemory()
         const range = (i: number) =>
@@ -72,11 +75,15 @@ const SliderDots = React.memo(
                   }
 
         for (let i = 0; i < numOfItems; i++) {
-            console.log(newPos)
-            const backgroundColor = newPos.interpolate({
-                ...range(i),
-                extrapolate: 'clamp',
-            })
+            const backgroundColor =
+                location === 'article'
+                    ? i === newPos
+                        ? color
+                        : '#DCDCDC'
+                    : newPos.interpolate({
+                          ...range(i),
+                          extrapolate: 'clamp',
+                      })
 
             dots.push(
                 <Animated.View
