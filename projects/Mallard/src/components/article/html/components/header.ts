@@ -727,6 +727,14 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-right: 25px;
         }
 
+        .header-container[data-type="${
+            ArticleType.Interview
+        }"] span h1 .header-top-headline {
+            line-height: 62px;
+            padding-top: 5px;
+            padding-bottom: 10px;
+        }
+
         .header-container[data-type="${ArticleType.Interview}"] .header-kicker {
             background-color: ${colors.main};
             color: ${color.textOverDarkBackground};
@@ -1303,12 +1311,16 @@ const HeaderInterviewTablet = ({
                                 >${headerProps.kicker}</span
                             >
                         `}
-                    <header>
-                        ${getHeadline(headerType, type, headerProps)}
-                    </header>
                 </div>
             </div>
             <div class="header-bottom" data-type="${type}">
+                <div class="header-container-line-wrap">
+                    <div class="header-container wrapper" data-type="${type}">
+                        <span>
+                            ${getHeadline(headerType, type, headerProps)}
+                        </span>
+                    </div>
+                </div>
                 <section
                     class="interview-tablet-standfirst interview-tablet-wrapper"
                 >
