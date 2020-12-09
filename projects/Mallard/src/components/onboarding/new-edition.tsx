@@ -7,7 +7,7 @@ import { ButtonAppearance } from '../Button/Button'
 import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 import { ModalButton } from '../Button/ModalButton'
 import DeviceInfo from 'react-native-device-info'
-import { lifestyle } from '@guardian/src-foundations/palette'
+import { brand } from '@guardian/src-foundations/palette'
 
 const isTablet = DeviceInfo.isTablet()
 
@@ -28,7 +28,7 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
         },
         container: {
             flex: 1,
-            backgroundColor: lifestyle[300],
+            backgroundColor: backgroundColor,
             overflow: 'hidden',
             padding: 12,
             borderRadius: 5,
@@ -44,7 +44,7 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
             borderStyle: 'solid',
             borderLeftColor: 'transparent',
             borderRightColor: 'transparent',
-            borderBottomColor: lifestyle[300],
+            borderBottomColor: backgroundColor,
         },
         buttonWrapper: {
             width: '40%',
@@ -68,7 +68,7 @@ const NewEditionCard = ({
               headerStyle.backgroundColor,
               headerStyle.textColorPrimary || 'white',
           )
-        : modalStyles(color.ui.sea, color.background)
+        : modalStyles(brand[800], color.text)
     return (
         <View style={styles.wrapper}>
             <View style={[styles.bubblePointer]} />
