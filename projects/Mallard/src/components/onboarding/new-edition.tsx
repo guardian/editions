@@ -9,11 +9,6 @@ import { ModalButton } from '../Button/ModalButton'
 import DeviceInfo from 'react-native-device-info'
 import { lifestyle } from '@guardian/src-foundations/palette'
 
-export enum CardAppearance {
-    apricot,
-    blue,
-}
-
 const isTablet = DeviceInfo.isTablet()
 
 const modalStyles = (backgroundColor: string, textColor: string) =>
