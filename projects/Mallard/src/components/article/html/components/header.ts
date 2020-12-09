@@ -1316,7 +1316,10 @@ const HeaderInterviewTablet = ({
                 </div>
             </div>
             <div class="header-bottom" data-type="${type}">
-                <div class="header-container wrapper interview-tablet-wrapper" data-type="${type}">
+                <div
+                    class="header-container wrapper interview-tablet-wrapper"
+                    data-type="${type}"
+                >
                     <span>
                         ${getHeadline(headerType, type, headerProps)}
                     </span>
