@@ -731,8 +731,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             ArticleType.Interview
         }"] span h1 .header-top-headline {
             line-height: 50px;
-            padding-top: 5px;
-            padding-bottom: 5px;
         }
         
 
