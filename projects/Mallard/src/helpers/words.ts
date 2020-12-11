@@ -167,8 +167,8 @@ export const ManageDownloads = {
 }
 
 export const NewEditionWords = {
-    title: `A new special edition is available`,
-    bodyText: `Tap on the edition icon above to access it.`,
+    title: 'A new special edition is available',
+    bodyText: 'Tap on the edition icon above to access it',
     dismissButtonText: 'Got it',
 }
 
