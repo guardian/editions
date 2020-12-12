@@ -16,6 +16,12 @@ const getScaleForArticle = (width: LayoutRectangle['width']) => {
 }
 
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
+    if (Platform.OS === 'android') {
+        return {
+            overflow: 'hidden',
+        }
+    }
+
     // FIXME - iOS13 and above hack for dodgy background scale issue
     const majorVersionIOS =
         Platform.OS === 'ios' ? parseInt(Platform.Version as string, 10) : 0

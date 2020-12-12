@@ -143,7 +143,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -154,7 +154,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -165,7 +165,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -219,7 +219,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -230,7 +230,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -241,7 +241,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -307,7 +307,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with t
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -318,7 +318,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with t
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -329,7 +329,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with t
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -560,7 +560,7 @@ exports[`SliderTitle - iOS - Tablet should display an default SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -571,7 +571,7 @@ exports[`SliderTitle - iOS - Tablet should display an default SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(0, 0, 0, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
@@ -582,7 +582,7 @@ exports[`SliderTitle - iOS - Tablet should display an default SliderTitle with a
     <View
       style={
         Object {
-          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
           "marginRight": 2,
