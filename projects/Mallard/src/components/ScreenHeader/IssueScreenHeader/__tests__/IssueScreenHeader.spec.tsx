@@ -3,10 +3,6 @@ import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { IssueScreenHeader } from '../IssueScreenHeader'
 import { IssueOrigin } from '../../../../../../Apps/common/src'
 
-jest.mock('react-navigation', () => ({
-    withNavigation: (child: any) => child,
-}))
-
 const issue = {
     name: 'Daily Edition',
     date: '2020-06-25',

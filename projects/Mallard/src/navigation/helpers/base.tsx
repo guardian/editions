@@ -87,13 +87,11 @@ const getArticleNavigationProps = (
 }
 
 const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.IssueList, { from: navigation.state.params })
+    navigation.navigate(routeNames.IssueList)
 }
 
 const navigateToEditionMenu = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.EditionsMenu, {
-        from: navigation.state.params,
-    })
+    navigation.navigate(routeNames.EditionsMenu)
 }
 
 export interface IssueNavigationProps {

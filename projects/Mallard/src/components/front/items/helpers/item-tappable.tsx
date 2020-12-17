@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { ReactNode, useRef, useState } from 'react'
 import {
     Animated,
@@ -8,12 +9,7 @@ import {
     View,
     ViewStyle,
 } from 'react-native'
-import {
-    AnimatedValue,
-    NavigationEvents,
-    NavigationInjectedProps,
-    withNavigation,
-} from 'react-navigation'
+import { AnimatedValue, NavigationEvents } from 'react-navigation'
 import { CAPIArticle, Issue, ItemSizes } from 'src/common'
 import { ariaHidden } from 'src/helpers/a11y'
 import { navigateToArticle } from 'src/navigation/helpers/base'
@@ -77,89 +73,81 @@ const fade = (opacity: AnimatedValue, direction: 'in' | 'out') =>
               useNativeDriver: true,
           }).start()
 
-const ItemTappable = withNavigation(
-    ({
-        children,
-        articleNavigator,
-        style,
-        article,
-        path,
-        navigation,
-        hasPadding = true,
-    }: {
-        children: ReactNode
-        hasPadding?: boolean
-    } & TappablePropTypes &
-        NavigationInjectedProps) => {
-        const tappableRef = useRef<View>()
-        const [opacity] = useState(() => new Animated.Value(1))
-        return (
-            <Animated.View
-                style={[style]}
-                ref={(view: any) => {
-                    if (view) tappableRef.current = view._component as View
+const ItemTappable = ({
+    children,
+    articleNavigator,
+    style,
+    article,
+    path,
+    hasPadding = true,
+}: {
+    children: ReactNode
+    hasPadding?: boolean
+} & TappablePropTypes) => {
+    const navigation = useNavigation()
+    const tappableRef = useRef<View>()
+    const [opacity] = useState(() => new Animated.Value(1))
+    return (
+        <Animated.View
+            style={[style]}
+            ref={(view: any) => {
+                if (view) tappableRef.current = view._component as View
+            }}
+            onLayout={(ev: any) => {
+                setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
+                tappableRef.current &&
+                    setScreenPositionFromView(article.key, tappableRef.current)
+            }}
+            onTouchStart={() => {
+                tappableRef.current &&
+                    setScreenPositionFromView(article.key, tappableRef.current)
+            }}
+        >
+            {/** @TODO - FIND OUT WHAT THIS DOES! */}
+            {/* <NavigationEvents
+                onWillFocus={() => {
+                    fade(opacity, 'in')
                 }}
-                onLayout={(ev: any) => {
-                    setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
-                    tappableRef.current &&
-                        setScreenPositionFromView(
-                            article.key,
-                            tappableRef.current,
-                        )
+            /> */}
+
+            <TouchableHighlight
+                onPress={() => {
+                    fade(opacity, 'out')
+                    navigateToArticle(navigation, {
+                        path,
+                        articleNavigator,
+                        prefersFullScreen: article.type === 'crossword',
+                    })
                 }}
-                onTouchStart={() => {
-                    tappableRef.current &&
-                        setScreenPositionFromView(
-                            article.key,
-                            tappableRef.current,
-                        )
-                }}
+                activeOpacity={0.95}
             >
-                <NavigationEvents
-                    onWillFocus={() => {
-                        fade(opacity, 'in')
-                    }}
-                />
-
-                <TouchableHighlight
-                    onPress={() => {
-                        fade(opacity, 'out')
-                        navigateToArticle(navigation, {
-                            path,
-                            articleNavigator,
-                            prefersFullScreen: article.type === 'crossword',
-                        })
-                    }}
-                    activeOpacity={0.95}
-                >
-                    <View
-                        style={[
-                            tappableStyles.root,
-                            hasPadding && tappableStyles.padding,
-                            useCardBackgroundStyle(),
-                        ]}
-                    >
-                        {children}
-                    </View>
-                </TouchableHighlight>
-
-                <Animated.View
-                    {...ariaHidden}
-                    pointerEvents="none"
+                <View
                     style={[
-                        StyleSheet.absoluteFill,
-                        {
-                            backgroundColor: color.dimBackground,
-                            opacity: opacity.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [1, 0],
-                            }),
-                        },
+                        tappableStyles.root,
+                        hasPadding && tappableStyles.padding,
+                        useCardBackgroundStyle(),
                     ]}
-                ></Animated.View>
-            </Animated.View>
-        )
-    },
-)
+                >
+                    {children}
+                </View>
+            </TouchableHighlight>
+
+            <Animated.View
+                {...ariaHidden}
+                pointerEvents="none"
+                style={[
+                    StyleSheet.absoluteFill,
+                    {
+                        backgroundColor: color.dimBackground,
+                        opacity: opacity.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [1, 0],
+                        }),
+                    },
+                ]}
+            ></Animated.View>
+        </Animated.View>
+    )
+}
 
 export { ItemTappable }

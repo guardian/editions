@@ -10,12 +10,12 @@ import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 import gql from 'graphql-tag'
 import { Button, ButtonAppearance } from './Button/Button'
-import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
 import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 import DeviceInfo from 'react-native-device-info'
+import { useNavigation } from '@react-navigation/native'
 
 type Weather = {
     locationName: string
@@ -209,31 +209,27 @@ const WeatherIconView = ({
     )
 }
 
-const SetLocationButton = withNavigation(
-    ({ navigation }: NavigationInjectedProps) => {
-        const onSetLocation = useCallback(() => {
-            navigation.navigate(routeNames.WeatherGeolocationConsent)
-        }, [navigation])
+const SetLocationButton = () => {
+    const navigation = useNavigation()
+    const onSetLocation = useCallback(() => {
+        navigation.navigate(routeNames.WeatherGeolocationConsent)
+    }, [navigation])
 
-        return (
-            <Button
-                accessibilityLabel="Use location button"
-                accessibilityHint="Double tap to open a device location consent screen"
-                accessibilityRole="button"
-                onPress={onSetLocation}
-                appearance={ButtonAppearance.skeleton}
-                style={[
-                    styles.locationNameContainer,
-                    styles.setLocationButtonWrap,
-                ]}
-                buttonStyles={styles.setLocationButton}
-                textStyles={styles.setLocationText}
-            >
-                Use location
-            </Button>
-        )
-    },
-)
+    return (
+        <Button
+            accessibilityLabel="Use location button"
+            accessibilityHint="Double tap to open a device location consent screen"
+            accessibilityRole="button"
+            onPress={onSetLocation}
+            appearance={ButtonAppearance.skeleton}
+            style={[styles.locationNameContainer, styles.setLocationButtonWrap]}
+            buttonStyles={styles.setLocationButton}
+            textStyles={styles.setLocationText}
+        >
+            Use location
+        </Button>
+    )
+}
 
 const LocationName = ({
     isLocationPrecise,

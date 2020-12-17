@@ -2,10 +2,6 @@ import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { IssuePickerHeader } from '../IssuePickerHeader'
 
-jest.mock('react-navigation', () => ({
-    withNavigation: (child: any) => child,
-}))
-
 describe('IssuePickerHeader', () => {
     it('should match the default style', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(

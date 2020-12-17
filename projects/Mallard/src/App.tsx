@@ -43,6 +43,8 @@ import { EditionProvider } from './hooks/use-edition-provider'
 import { apolloClient } from './services/apollo-singleton'
 import { eventEmitter } from 'src/helpers/event-emitter'
 import { weatherHider } from 'src/helpers/weather-hider'
+import { RootStack } from './AppNavigation'
+import { NavigationContainer } from '@react-navigation/native'
 
 // Log Intitialisation
 if (!__DEV__) {
@@ -191,13 +193,16 @@ export default class App extends React.Component<{}, {}> {
                                     backgroundColor="#041f4a"
                                 />
                                 <View style={styles.appContainer}>
-                                    <RootNavigator
+                                    {/* <RootNavigator
                                         {...rootNavigationProps}
                                         enableURLHandling={__DEV__}
                                         onNavigationStateChange={
                                             onNavigationStateChange
                                         }
-                                    />
+                                    /> */}
+                                    <NavigationContainer>
+                                        <RootStack />
+                                    </NavigationContainer>
                                     <NetInfoAutoToast />
                                 </View>
                                 <ModalRenderer />

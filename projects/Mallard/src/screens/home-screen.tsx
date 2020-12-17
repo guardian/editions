@@ -12,8 +12,8 @@ import {
     NavigationParams,
     NavigationRoute,
     NavigationScreenProp,
-    withNavigation,
 } from 'react-navigation'
+import { useNavigation } from '@react-navigation/native'
 import { IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import {
@@ -220,125 +220,120 @@ const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
     return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
 }
 
-const IssueListView = withNavigation(
-    React.memo(
-        ({
-            issueList,
-            currentIssue,
-            navigation,
-            setIssueId,
-        }: {
-            issueList: IssueSummary[]
-            currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> }
-            setIssueId: Dispatch<PathToIssue>
-        } & NavigationInjectedProps) => {
-            const {
-                localIssueId: localId,
-                publishedIssueId: publishedId,
-            } = currentIssue.id
-            const { details } = currentIssue
+const IssueListView = React.memo(
+    ({
+        issueList,
+        currentIssue,
+        setIssueId,
+    }: {
+        issueList: IssueSummary[]
+        currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> }
+        setIssueId: Dispatch<PathToIssue>
+    }) => {
+        const navigation = useNavigation()
+        const {
+            localIssueId: localId,
+            publishedIssueId: publishedId,
+        } = currentIssue.id
+        const { details } = currentIssue
 
-            // We want to scroll to the current issue.
-            const currentIssueIndex = issueList.findIndex(
-                issue =>
-                    issue.localId === localId &&
-                    issue.publishedId === publishedId,
-            )
+        // We want to scroll to the current issue.
+        const currentIssueIndex = issueList.findIndex(
+            issue =>
+                issue.localId === localId && issue.publishedId === publishedId,
+        )
 
-            // Scroll to the relevant item if the current issue index has
-            // changed (likely because the selected issue has changed itself).
-            const listRef = useRef<FlatList<IssueSummary>>()
-            const prevCurrentIndexRef = useRef<number>(currentIssueIndex)
-            useEffect(() => {
-                if (listRef.current == null || currentIssueIndex < 0) {
-                    return
-                }
+        // Scroll to the relevant item if the current issue index has
+        // changed (likely because the selected issue has changed itself).
+        const listRef = useRef<FlatList<IssueSummary>>()
+        const prevCurrentIndexRef = useRef<number>(currentIssueIndex)
+        useEffect(() => {
+            if (listRef.current == null || currentIssueIndex < 0) {
+                return
+            }
 
-                if (prevCurrentIndexRef.current === currentIssueIndex) return
-                prevCurrentIndexRef.current = currentIssueIndex
+            if (prevCurrentIndexRef.current === currentIssueIndex) return
+            prevCurrentIndexRef.current = currentIssueIndex
 
-                /* @types/react doesn't know about scroll functions */
-                ;(listRef.current as any).scrollToIndex({
-                    index: currentIssueIndex,
-                })
-            }, [currentIssueIndex])
+            /* @types/react doesn't know about scroll functions */
+            ;(listRef.current as any).scrollToIndex({
+                index: currentIssueIndex,
+            })
+        }, [currentIssueIndex])
 
-            // We pass down the issue details only for the selected issue.
-            const renderItem = useCallback(
-                ({ item, index }) => (
-                    <IssueRowContainer
-                        setIssueId={setIssueId}
-                        issue={item}
-                        issueDetails={
-                            index === currentIssueIndex ? details : null
-                        }
-                        navigation={navigation}
-                    />
-                ),
-                [currentIssueIndex, details, navigation, setIssueId],
-            )
-
-            // Height of the fronts so we can provide this to `getItemLayout`.
-            const frontRowsHeight = getFrontRowsHeight(details)
-
-            // Changing the current issue will affect the layout, so that's
-            // indeed a dependency of the callback.
-            const getItemLayout = useCallback(
-                (_, index) => {
-                    return {
-                        length:
-                            ISSUE_ROW_HEADER_HEIGHT +
-                            (index === currentIssueIndex ? frontRowsHeight : 0),
-                        offset:
-                            index * ISSUE_ROW_HEIGHT +
-                            (currentIssueIndex >= 0 && index > currentIssueIndex
-                                ? frontRowsHeight
-                                : 0),
-                        index,
-                    }
-                },
-                [currentIssueIndex, frontRowsHeight],
-            )
-
-            const footer = useMemo(
-                () => (
-                    <View>
-                        <Separator />
-                        <IssueListFooter navigation={navigation} />
-                    </View>
-                ),
-                [navigation],
-            )
-
-            const refFn = useCallback(
-                (ref: FlatList<IssueSummary>) => {
-                    listRef.current = ref
-                },
-                [listRef],
-            )
-
-            return (
-                <FlatList
-                    // Only render 4 because the fronts list will take up most
-                    // space on the screen. This improves performance.
-                    initialNumToRender={4}
-                    ItemSeparatorComponent={Separator}
-                    ListFooterComponent={footer}
-                    style={styles.issueList}
-                    data={issueList}
-                    initialScrollIndex={
-                        currentIssueIndex >= 0 ? currentIssueIndex : undefined
-                    }
-                    renderItem={renderItem}
-                    // Necessary to make sure we re-render visible
-                    // items when details changes.
-                    extraData={details}
-                    getItemLayout={getItemLayout}
-                    ref={refFn}
+        // We pass down the issue details only for the selected issue.
+        const renderItem = useCallback(
+            ({ item, index }) => (
+                <IssueRowContainer
+                    setIssueId={setIssueId}
+                    issue={item}
+                    issueDetails={index === currentIssueIndex ? details : null}
+                    navigation={navigation}
                 />
-            )
-        },
-    ),
+            ),
+            [currentIssueIndex, details, navigation, setIssueId],
+        )
+
+        // Height of the fronts so we can provide this to `getItemLayout`.
+        const frontRowsHeight = getFrontRowsHeight(details)
+
+        // Changing the current issue will affect the layout, so that's
+        // indeed a dependency of the callback.
+        const getItemLayout = useCallback(
+            (_, index) => {
+                return {
+                    length:
+                        ISSUE_ROW_HEADER_HEIGHT +
+                        (index === currentIssueIndex ? frontRowsHeight : 0),
+                    offset:
+                        index * ISSUE_ROW_HEIGHT +
+                        (currentIssueIndex >= 0 && index > currentIssueIndex
+                            ? frontRowsHeight
+                            : 0),
+                    index,
+                }
+            },
+            [currentIssueIndex, frontRowsHeight],
+        )
+
+        const footer = useMemo(
+            () => (
+                <View>
+                    <Separator />
+                    <IssueListFooter navigation={navigation} />
+                </View>
+            ),
+            [navigation],
+        )
+
+        const refFn = useCallback(
+            (ref: FlatList<IssueSummary>) => {
+                listRef.current = ref
+            },
+            [listRef],
+        )
+
+        return (
+            <FlatList
+                // Only render 4 because the fronts list will take up most
+                // space on the screen. This improves performance.
+                initialNumToRender={4}
+                ItemSeparatorComponent={Separator}
+                ListFooterComponent={footer}
+                style={styles.issueList}
+                data={issueList}
+                initialScrollIndex={
+                    currentIssueIndex >= 0 ? currentIssueIndex : undefined
+                }
+                renderItem={renderItem}
+                // Necessary to make sure we re-render visible
+                // items when details changes.
+                extraData={details}
+                getItemLayout={getItemLayout}
+                ref={refFn}
+            />
+        )
+    },
 )
 
 const IssueListViewWithDelay = ({

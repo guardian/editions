@@ -3,7 +3,6 @@ import gql from 'graphql-tag'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Alert, Clipboard, View } from 'react-native'
 import { Switch } from 'react-native-gesture-handler'
-import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
@@ -31,6 +30,7 @@ import {
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens, showAllEditionsCache } from 'src/helpers/storage'
+import { useNavigation } from '@react-navigation/native'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -52,7 +52,8 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
     )
 }
 
-const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
+const DevZone = () => {
+    const navigation = useNavigation()
     const {
         isDevButtonShown: showNetInfoButton,
         setIsDevButtonShown: setShowNetInfoButton,
@@ -364,6 +365,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             />
         </>
     )
-})
+}
 
 export { DevZone }

@@ -1,11 +1,11 @@
-import { Button, ButtonAppearance } from 'src/components/Button/Button'
-import { withNavigation } from 'react-navigation'
-import { NavigationInjectedProps } from 'react-navigation'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { Header } from 'src/components/layout/header/header'
 
-export const BasicArticleHeader = withNavigation(
-    ({ navigation }: NavigationInjectedProps) => (
+export const BasicArticleHeader = () => {
+    const navigation = useNavigation()
+    return (
         <Header
             theme="light"
             leftAction={
@@ -20,5 +20,5 @@ export const BasicArticleHeader = withNavigation(
         >
             {null}
         </Header>
-    ),
-)
+    )
+}
