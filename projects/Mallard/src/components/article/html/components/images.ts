@@ -203,6 +203,7 @@ const ImageBase = ({
     role,
     remotePath,
     displayCaptionAndCredit,
+    articleType,
 }: {
     path: string
     index?: number
@@ -213,9 +214,11 @@ const ImageBase = ({
     role?: ImageElement['role']
     remotePath?: string
     displayCaptionAndCredit?: boolean
+    articleType?: string,
 }) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const isInlineTablet = !role && isTablet
+    const showViewMore = isInlineTablet && articleType === ArticleType.Gallery
     const figcaption =
         displayCaptionAndCredit &&
         renderCaption({ caption, credit, displayCredit })
@@ -240,7 +243,7 @@ const ImageBase = ({
                             )}
                             ${figcaption}
                         </figcaption>
-                        ${isInlineTablet &&
+                        ${showViewMore &&
                             html`
                                 <span
                                     onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
@@ -260,12 +263,14 @@ const Image = ({
     index,
     remotePath,
     displayCaptionAndCredit,
+    articleType,
 }: {
     imageElement: ImageElement
     path: string | undefined
     index?: number | undefined
     remotePath?: string
     displayCaptionAndCredit?: boolean
+    articleType?: string,
 }) => {
     if (path) {
         return ImageBase({
@@ -273,6 +278,7 @@ const Image = ({
             index,
             remotePath,
             displayCaptionAndCredit,
+            articleType,
             ...imageElement,
         })
     }
