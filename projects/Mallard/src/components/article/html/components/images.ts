@@ -214,7 +214,7 @@ const ImageBase = ({
     role?: ImageElement['role']
     remotePath?: string
     displayCaptionAndCredit?: boolean
-    articleType?: string,
+    articleType?: string
 }) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const isInlineTablet = !role && isTablet
@@ -270,7 +270,7 @@ const Image = ({
     index?: number | undefined
     remotePath?: string
     displayCaptionAndCredit?: boolean
-    articleType?: string,
+    articleType?: string
 }) => {
     if (path) {
         return ImageBase({

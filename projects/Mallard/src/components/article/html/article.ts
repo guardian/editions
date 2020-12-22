@@ -93,12 +93,12 @@ const renderArticleContent = (
                     const displayCaptionAndCredit = displayHint != 'photoEssay'
                     return publishedId
                         ? Image({
-                            imageElement: el,
-                            path,
-                            index,
-                            displayCaptionAndCredit,
-                            articleType,
-                        })
+                              imageElement: el,
+                              path,
+                              index,
+                              displayCaptionAndCredit,
+                              articleType,
+                          })
                         : ''
                 }
                 case 'pullquote':
@@ -171,52 +171,60 @@ export const renderArticle = (
                 getImagePath,
                 pillar,
             })
-            content = renderArticleContent(elements, {
-                showMedia,
-                publishedId,
-                imageSize,
-                getImagePath,
-            }, article.type)
+            content = renderArticleContent(
+                elements,
+                {
+                    showMedia,
+                    publishedId,
+                    imageSize,
+                    getImagePath,
+                },
+                article.type,
+            )
             break
         default:
             header =
                 type === ArticleType.Showcase
                     ? HeaderShowcase({
-                        ...article,
-                        type,
-                        headerType,
-                        publishedId,
-                        showMedia,
-                        pillar,
-                        getImagePath,
-                    })
+                          ...article,
+                          type,
+                          headerType,
+                          publishedId,
+                          showMedia,
+                          pillar,
+                          getImagePath,
+                      })
                     : type === ArticleType.Interview
-                        ? HeaderInterview({
-                            ...article,
-                            type,
-                            headerType,
-                            publishedId,
-                            showMedia,
-                            pillar,
-                            getImagePath,
-                        })
-                        : Header({
-                            ...article,
-                            type,
-                            headerType,
-                            publishedId,
-                            showMedia,
-                            pillar,
-                            getImagePath,
-                        })
+                    ? HeaderInterview({
+                          ...article,
+                          type,
+                          headerType,
+                          publishedId,
+                          showMedia,
+                          pillar,
+                          getImagePath,
+                      })
+                    : Header({
+                          ...article,
+                          type,
+                          headerType,
+                          publishedId,
+                          showMedia,
+                          pillar,
+                          getImagePath,
+                      })
             const displayHint = article.displayHint
-            content = renderArticleContent(elements, {
-                showMedia,
-                publishedId,
-                imageSize,
-                getImagePath,
-                displayHint,
-            }, article.type)
+            content = renderArticleContent(
+                elements,
+                {
+                    showMedia,
+                    publishedId,
+                    imageSize,
+                    getImagePath,
+                    displayHint,
+                },
+                article.type,
+            )
             break
     }
 
