@@ -67,6 +67,7 @@ const cleanupBullets = (html: string) => {
 const renderArticleContent = (
     elements: BlockElement[],
     { showMedia, publishedId, getImagePath, displayHint }: ArticleContentProps,
+    articleType: string,
 ) => {
     const imagePaths = getLightboxImages(elements).map(i => i.src.path)
     return elements
@@ -96,6 +97,7 @@ const renderArticleContent = (
                               path,
                               index,
                               displayCaptionAndCredit,
+                              articleType,
                           })
                         : ''
                 }
@@ -169,12 +171,16 @@ export const renderArticle = (
                 getImagePath,
                 pillar,
             })
-            content = renderArticleContent(elements, {
-                showMedia,
-                publishedId,
-                imageSize,
-                getImagePath,
-            })
+            content = renderArticleContent(
+                elements,
+                {
+                    showMedia,
+                    publishedId,
+                    imageSize,
+                    getImagePath,
+                },
+                article.type,
+            )
             break
         default:
             header =
@@ -208,13 +214,17 @@ export const renderArticle = (
                           getImagePath,
                       })
             const displayHint = article.displayHint
-            content = renderArticleContent(elements, {
-                showMedia,
-                publishedId,
-                imageSize,
-                getImagePath,
-                displayHint,
-            })
+            content = renderArticleContent(
+                elements,
+                {
+                    showMedia,
+                    publishedId,
+                    imageSize,
+                    getImagePath,
+                    displayHint,
+                },
+                article.type,
+            )
             break
     }
 
