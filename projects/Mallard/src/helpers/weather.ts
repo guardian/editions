@@ -9,6 +9,7 @@ import { RESULTS } from 'react-native-permissions'
 import gql from 'graphql-tag'
 import * as RNLocalize from 'react-native-localize'
 import { locale } from './locale'
+import { useApolloClient } from '@apollo/react-hooks'
 
 class CannotFetchError extends Error {}
 
@@ -212,10 +213,11 @@ const { resolveWeather, refreshWeather } = (() => {
         return weather
     }
 
-    const refreshWeather = async (client: ApolloClient<object>) => {
+    const refreshWeather = async () => {
         if (weather == null) return
-        client.writeQuery({ query: QUERY, data: { weather: null } })
-        await update(client, null)
+        const apolloClient = useApolloClient()
+        apolloClient.writeQuery({ query: QUERY, data: { weather: null } })
+        await update(apolloClient, null)
     }
 
     return { resolveWeather, refreshWeather }
