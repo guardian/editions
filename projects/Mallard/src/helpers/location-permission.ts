@@ -5,7 +5,6 @@ import {
     PermissionStatus,
 } from 'react-native-permissions'
 import { Platform } from 'react-native'
-import { ApolloClient } from 'apollo-client'
 import { refreshWeather } from './weather'
 
 const LOCATION_PERMISSION = Platform.select({
@@ -22,17 +21,10 @@ const { resolveLocationPermissionStatus, requestLocationPermission } = (() => {
         return promise
     }
 
-    const requestLocationPermission = async (
-        apolloClient: ApolloClient<object>,
-    ): Promise<PermissionStatus> => {
+    const requestLocationPermission = async (): Promise<PermissionStatus> => {
         promise = request(LOCATION_PERMISSION)
         const result = await promise
-        apolloClient.writeData({
-            data: {
-                locationPermissionStatus: result,
-            },
-        })
-        refreshWeather(apolloClient)
+        refreshWeather()
         return result
     }
 
