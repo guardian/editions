@@ -50,12 +50,6 @@ const breakoutCaption = (
 `
 
 const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
-    const galleryStyles = css`
-        /*INLINE*/
-        @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-            ${breakoutCaption('inline', theme)}
-        }
-    `
     const defaultStyles = css`
         .image {
             position: relative;
@@ -187,10 +181,12 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
                 )};
             }
         }
+
+        @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+            ${breakoutCaption('inline', theme)}
+        }
     `
-    return contentType !== ArticleType.Gallery
-        ? defaultStyles + galleryStyles
-        : defaultStyles
+    return defaultStyles
 }
 
 const ImageBase = ({
@@ -216,8 +212,9 @@ const ImageBase = ({
     displayCaptionAndCredit?: boolean
     articleType?: string
 }) => {
+    console.log(role, path)
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
-    const isInlineTablet = !role && isTablet
+    const isInlineTablet = (!role) && isTablet
     const showViewMore = isInlineTablet && articleType === ArticleType.Gallery
     const figcaption =
         displayCaptionAndCredit &&
