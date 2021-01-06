@@ -209,7 +209,6 @@ const ImageBase = ({
     displayCaptionAndCredit?: boolean
     articleType?: string
 }) => {
-    console.log(role, path)
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const isInlineTablet = !role && isTablet
     const showViewMore = isInlineTablet && articleType === ArticleType.Gallery
