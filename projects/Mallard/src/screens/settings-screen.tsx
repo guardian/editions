@@ -27,7 +27,6 @@ import {
 } from 'src/authentication/AccessContext'
 import DeviceInfo from 'react-native-device-info'
 import {
-    setIsWeatherShown,
     setIsUsingProdDevtools,
 } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
@@ -39,11 +38,11 @@ import { DualButton } from 'src/components/lists/DualButton'
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
 import { Copy } from 'src/helpers/words'
 import { useNotificationsEnabled } from 'src/hooks/use-config-provider'
-
+import { useIsWeatherShown } from 'src/hooks/use-weather-provider'
 const MiscSettingsList = React.memo(
     (props: {
-        isWeatherShown: boolean
-        client: ApolloClient<object>
+        isWeatherShown: boolean,
+        setIsWeatherShown: (setting: boolean) => void,
         navigation: NavigationScreenProp<
             NavigationRoute<NavigationParams>,
             NavigationParams
@@ -59,7 +58,7 @@ const MiscSettingsList = React.memo(
         ] = useState(notificationsEnabled)
 
         const onWeatherChange = () =>
-            setIsWeatherShown(props.client, !props.isWeatherShown)
+            props.setIsWeatherShown(!props.isWeatherShown)
 
         const onNotificationChange = () => {
             const setting = !settingNotificationsEnabled
@@ -115,11 +114,10 @@ const MiscSettingsList = React.memo(
     },
 )
 
-type QueryData = { isWeatherShown: boolean; isUsingProdDevtools: boolean }
+type QueryData = { isUsingProdDevtools: boolean }
 
 const QUERY = gql`
     {
-        isWeatherShown @client
         isUsingProdDevtools @client
     }
 `
@@ -159,12 +157,13 @@ const SignInButton = ({
         />
     )
 
-const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
+const SettingsScreen =  ({ navigation }: NavigationInjectedProps) => {
     const query = useQuery<QueryData>(QUERY)
     const identityData = useIdentity()
     const canAccess = useAccess()
     const [, setVersionClickedTimes] = useState(0)
     const { signOutIdentity, iapData } = useContext(AccessContext)
+    const {isWeatherShown, setIsWeatherShown} = useIsWeatherShown()
 
     const versionNumber = DeviceInfo.getVersion()
     const isLoggedInWithIdentity = identityData
@@ -176,7 +175,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
 
     if (query.loading) return null
     const { client } = query
-    const { isUsingProdDevtools, isWeatherShown } = query.data
+    const { isUsingProdDevtools } = query.data
 
     const versionClickHandler = identityData
         ? () => {
@@ -250,8 +249,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 <List data={signInListItems} />
                 <Heading>{``}</Heading>
                 <MiscSettingsList
-                    client={client}
                     isWeatherShown={isWeatherShown}
+                    setIsWeatherShown={setIsWeatherShown}
                     navigation={navigation}
                 />
                 <Heading>{``}</Heading>
