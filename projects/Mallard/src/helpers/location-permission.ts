@@ -27,11 +27,6 @@ const { resolveLocationPermissionStatus, requestLocationPermission } = (() => {
     ): Promise<PermissionStatus> => {
         promise = request(LOCATION_PERMISSION)
         const result = await promise
-        apolloClient.writeData({
-            data: {
-                locationPermissionStatus: result,
-            },
-        })
         refreshWeather(apolloClient)
         return result
     }
