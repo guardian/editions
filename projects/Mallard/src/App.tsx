@@ -43,6 +43,7 @@ import { EditionProvider } from './hooks/use-edition-provider'
 import { apolloClient } from './services/apollo-singleton'
 import { eventEmitter } from 'src/helpers/event-emitter'
 import { weatherHider } from 'src/helpers/weather-hider'
+import { WeatherProvider } from './hooks/use-weather-provider'
 
 // Log Intitialisation
 if (!__DEV__) {
@@ -130,6 +131,7 @@ const WithProviders = nestProviders(
     NavPositionProvider,
     ConfigProvider,
     EditionProvider,
+    WeatherProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
