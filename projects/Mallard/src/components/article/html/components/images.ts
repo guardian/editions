@@ -49,8 +49,7 @@ const breakoutCaption = (
 
 `
 
-const imageStyles = ({ colors, theme }: CssProps) => {
-    const defaultStyles = css`
+const imageStyles = ({ colors, theme }: CssProps) => css`
         .image {
             position: relative;
             clear: right;
@@ -186,8 +185,6 @@ const imageStyles = ({ colors, theme }: CssProps) => {
             ${breakoutCaption('inline', theme)}
         }
     `
-    return defaultStyles
-}
 
 const ImageBase = ({
     path,
