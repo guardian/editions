@@ -30,6 +30,8 @@ export const WeatherProvider = ({
     }
 
     useEffect(() => {
+        // Purpose: To hide the weahter on the first load unless the user turns it on
+        // Intended for use on lower powered devices and for users who do not use the UK Daily edition as their default edition
         async function shouldWeatherBeShown() {
             const weatherLowRamCheck = await AsyncStorage.getItem(KEY)
             const editionWeatherCheck = await AsyncStorage.getItem(
