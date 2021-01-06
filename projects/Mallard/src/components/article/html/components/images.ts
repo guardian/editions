@@ -49,7 +49,7 @@ const breakoutCaption = (
 
 `
 
-const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
+const imageStyles = ({ colors, theme }: CssProps) => {
     const defaultStyles = css`
         .image {
             position: relative;
