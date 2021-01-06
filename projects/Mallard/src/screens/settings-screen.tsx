@@ -26,18 +26,12 @@ import {
     useAccess,
 } from 'src/authentication/AccessContext'
 import DeviceInfo from 'react-native-device-info'
-import {
-    setIsUsingProdDevtools,
-} from 'src/helpers/settings/setters'
-import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
-import ApolloClient from 'apollo-client'
 import { NavigationScreenProp } from 'react-navigation'
 import { FullButton } from 'src/components/lists/FullButton'
 import { DualButton } from 'src/components/lists/DualButton'
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
 import { Copy } from 'src/helpers/words'
-import { useNotificationsEnabled } from 'src/hooks/use-config-provider'
+import { useIsUsingProdDevTools, useNotificationsEnabled } from 'src/hooks/use-config-provider'
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider'
 const MiscSettingsList = React.memo(
     (props: {
@@ -114,14 +108,6 @@ const MiscSettingsList = React.memo(
     },
 )
 
-type QueryData = { isUsingProdDevtools: boolean }
-
-const QUERY = gql`
-    {
-        isUsingProdDevtools @client
-    }
-`
-
 const SignInButton = ({
     username,
     navigation,
@@ -158,12 +144,12 @@ const SignInButton = ({
     )
 
 const SettingsScreen =  ({ navigation }: NavigationInjectedProps) => {
-    const query = useQuery<QueryData>(QUERY)
     const identityData = useIdentity()
     const canAccess = useAccess()
     const [, setVersionClickedTimes] = useState(0)
     const { signOutIdentity, iapData } = useContext(AccessContext)
     const {isWeatherShown, setIsWeatherShown} = useIsWeatherShown()
+    const { isUsingProdDevTools, setIsUsingProdDevTools } = useIsUsingProdDevTools()
 
     const versionNumber = DeviceInfo.getVersion()
     const isLoggedInWithIdentity = identityData
@@ -173,13 +159,9 @@ const SettingsScreen =  ({ navigation }: NavigationInjectedProps) => {
     const canDisplayBetaButton = !iapData && isLoggedInWithIdentity
     const buildNumber = DeviceInfo.getBuildNumber()
 
-    if (query.loading) return null
-    const { client } = query
-    const { isUsingProdDevtools } = query.data
-
     const versionClickHandler = identityData
         ? () => {
-              if (!isUsingProdDevtools && isStaffMember(identityData))
+              if (!isUsingProdDevTools && isStaffMember(identityData))
                   setVersionClickedTimes(t => {
                       if (t < 7) return t + 1
                       Alert.alert(
@@ -190,7 +172,7 @@ const SettingsScreen =  ({ navigation }: NavigationInjectedProps) => {
                                   text: 'Enable',
                                   style: 'destructive',
                                   onPress: () => {
-                                      setIsUsingProdDevtools(client, true)
+                                      setIsUsingProdDevTools(true)
                                   },
                               },
                               {
@@ -320,7 +302,7 @@ const SettingsScreen =  ({ navigation }: NavigationInjectedProps) => {
                     <BetaButtonOption navigation={navigation} />
                 )}
 
-                {isUsingProdDevtools && <DevZone />}
+                {isUsingProdDevTools && <DevZone />}
             </ScrollContainer>
         </WithAppAppearance>
     )
