@@ -4,8 +4,9 @@ import DeviceInfo from 'react-native-device-info'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { notificationsEnabledCache } from 'src/helpers/storage'
 import { errorService } from 'src/services/errors'
-
+import AsyncStorage from '@react-native-community/async-storage'
 const oneGB = 1073741824
+const USE_PRODDEVTOOL_KEY = '@use_proddevtool'
 
 interface ConfigState {
     largeDeviceMemeory: boolean
@@ -64,6 +65,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 
     const setIsUsingProdDevTools = (setting: boolean) => {
         setUsingProdDevTools(setting)
+        AsyncStorage.setItem(USE_PRODDEVTOOL_KEY,
+            JSON.stringify(setting),
+        )
     }
 
     const setNotifications = async (setting: boolean) => {
@@ -76,6 +80,14 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
             errorService.captureException(e)
         }
     }
+
+    useEffect(() => {
+        async function getProdDevToolSetting() {
+            const result = await AsyncStorage.getItem(USE_PRODDEVTOOL_KEY)
+            if (result) setUsingProdDevTools(JSON.parse(result))
+        }
+        getProdDevToolSetting()
+    }, [])
 
     useEffect(() => {
         notificationsAreEnabled().then(setting =>
