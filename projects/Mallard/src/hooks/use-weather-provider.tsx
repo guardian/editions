@@ -4,8 +4,8 @@ import { eventEmitter } from 'src/helpers/event-emitter'
 import { getDefaultEditionSlug } from 'src/hooks/use-edition-provider'
 import { largeDeviceMemory } from 'src/hooks/use-config-provider'
 
-const KEY = '@weatherLowRAMCheck'
-const EDITIONCHECKKEY = '@weatherEditionCheck'
+const LOW_RAM_KEY = '@weatherLowRAMCheck'
+const EDITION_CHECK_KEY = '@weatherEditionCheck'
 
 interface WeatherState {
     isWeatherShown: boolean
@@ -33,14 +33,14 @@ export const WeatherProvider = ({
         // Purpose: To hide the weather on the first load unless the user turns it on
         // Intended for use on lower powered devices and for users who do not use the UK Daily edition as their default edition
         async function shouldWeatherBeShown() {
-            const weatherLowRamCheck = await AsyncStorage.getItem(KEY)
+            const lowRamWeatherCheck = await AsyncStorage.getItem(LOW_RAM_KEY)
             const editionWeatherCheck = await AsyncStorage.getItem(
-                EDITIONCHECKKEY,
+                EDITION_CHECK_KEY,
             )
             const defaultEdition = await getDefaultEditionSlug()
-            if (!weatherLowRamCheck) {
+            if (!lowRamWeatherCheck) {
                 const largeRAM = await largeDeviceMemory()
-                await AsyncStorage.setItem(KEY, 'true')
+                await AsyncStorage.setItem(LOW_RAM_KEY, 'true')
                 !largeRAM && setIsWeatherShown(false)
             }
             if (
@@ -48,7 +48,7 @@ export const WeatherProvider = ({
                 defaultEdition &&
                 defaultEdition !== 'daily-edition'
             ) {
-                await AsyncStorage.setItem(EDITIONCHECKKEY, 'true')
+                await AsyncStorage.setItem(EDITION_CHECK_KEY, 'true')
                 setIsWeatherShown(false)
             }
         }
