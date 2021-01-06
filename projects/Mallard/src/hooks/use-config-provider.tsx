@@ -17,8 +17,8 @@ interface ConfigState {
     }
     notificationsEnabled: boolean
     setNotifications: (setting: boolean) => Promise<void>
-    isUsingProdDevtools: boolean
-    setIsUsingProdDevtools: (setting: boolean) => void
+    isUsingProdDevTools: boolean
+    setIsUsingProdDevTools: (setting: boolean) => void
 }
 
 const notificationInitialState = () =>
@@ -34,8 +34,8 @@ const initialState: ConfigState = {
     },
     notificationsEnabled: notificationInitialState(),
     setNotifications: () => Promise.resolve(),
-    isUsingProdDevtools: false,
-    setIsUsingProdDevtools: () => {},
+    isUsingProdDevTools: false,
+    setIsUsingProdDevTools: () => {},
 }
 
 const ConfigContext = createContext(initialState)
@@ -57,13 +57,13 @@ export const notificationsAreEnabled = async () => {
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     const [largeDeviceMemeory, setLargeDeviceMemory] = useState(false)
     const [dimensions, setDimensions] = useState(Dimensions.get('window'))
-    const [isUsingProdDevtools, setUsingProdDevtools] = useState(false)
+    const [isUsingProdDevTools, setUsingProdDevTools] = useState(false)
     const [notificationsEnabled, setNotificationsEnabled] = useState(
         notificationInitialState(),
     )
 
-    const setIsUsingProdDevtools = (setting: boolean) => {
-        setUsingProdDevtools(setting)
+    const setIsUsingProdDevTools = (setting: boolean) => {
+        setUsingProdDevTools(setting)
     }
 
     const setNotifications = async (setting: boolean) => {
@@ -88,7 +88,6 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
             setLargeDeviceMemory(deviceMemory),
         )
     }, [])
-
     useEffect(() => {
         const listener = (
             ev: Parameters<
@@ -127,8 +126,8 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
                 dimensions,
                 notificationsEnabled,
                 setNotifications,
-                isUsingProdDevtools,
-                setIsUsingProdDevtools,
+                isUsingProdDevTools,
+                setIsUsingProdDevTools,
             }}
         >
             {children}
@@ -146,7 +145,7 @@ export const useNotificationsEnabled = () => ({
     setNotifications: useContext(ConfigContext).setNotifications,
 })
 
-export const useIsUsingProdDevtools = () => ({
-    isUsingProdDevtools: useContext(ConfigContext).isUsingProdDevtools,
-    setIsUsingProdDevtools: useContext(ConfigContext).setIsUsingProdDevtools,
+export const useIsUsingProdDevTools = () => ({
+    isUsingProdDevTools: useContext(ConfigContext).isUsingProdDevTools,
+    setIsUsingProdDevTools: useContext(ConfigContext).setIsUsingProdDevTools,
 })
