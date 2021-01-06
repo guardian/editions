@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const MOCK_QUERY = gql('{ isUsingProdDevtools @client }')
+const MOCK_QUERY = gql('{ wifiOnlyDownloads @client }')
 
 const checkWeatherShown = () => {
     const {isWeatherShown} = useIsWeatherShown()
