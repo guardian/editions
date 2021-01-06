@@ -1,6 +1,6 @@
 import { AccuWeatherLocation, Forecast } from 'src/common'
 import { AppState, Platform } from 'react-native'
-import ApolloClient from 'apollo-client'
+import {ApolloClient} from 'apollo-client'
 import Geolocation, {
     GeolocationResponse,
 } from '@react-native-community/geolocation'
@@ -213,11 +213,10 @@ const { resolveWeather, refreshWeather } = (() => {
         return weather
     }
 
-    const refreshWeather = async () => {
+    const refreshWeather = async (client: ApolloClient<object>) => {
         if (weather == null) return
-        const apolloClient = useApolloClient()
-        apolloClient.writeQuery({ query: QUERY, data: { weather: null } })
-        await update(apolloClient, null)
+        client.writeQuery({ query: QUERY, data: { weather: null } })
+        await update(client, null)
     }
 
     return { resolveWeather, refreshWeather }
