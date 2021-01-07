@@ -6,6 +6,7 @@ import { largeDeviceMemory } from 'src/hooks/use-config-provider'
 
 const LOW_RAM_KEY = '@weatherLowRAMCheck'
 const EDITION_CHECK_KEY = '@weatherEditionCheck'
+const IS_WEATHER_SHOWN_KEY = '@isWeatherShown'
 
 interface WeatherState {
     isWeatherShown: boolean
@@ -27,7 +28,20 @@ export const WeatherProvider = ({
     const [isWeatherShown, setWeatherShown] = useState<boolean>(true)
     const setIsWeatherShown = (setting: boolean) => {
         setWeatherShown(setting)
+        AsyncStorage.setItem(IS_WEATHER_SHOWN_KEY,
+            JSON.stringify(setting),
+        )
     }
+
+    useEffect(() => {
+        async function getPersistedState() {
+            const result = await AsyncStorage.getItem(IS_WEATHER_SHOWN_KEY)
+            if (result) setIsWeatherShown(JSON.parse(result))
+        }
+        getPersistedState()
+    }, [])
+
+    useEffect
 
     useEffect(() => {
         // Purpose: To hide the weather on the first load unless the user turns it on
