@@ -232,13 +232,10 @@ export const renderArticle = (
         ? ArticleTheme.Dark
         : ArticleTheme.Default
 
-    const styles = makeCss(
-        {
-            colors: getPillarColors(pillar),
-            theme,
-        },
-        type,
-    )
+    const styles = makeCss({
+        colors: getPillarColors(pillar),
+        theme,
+    })
     const body = html`
         ${showWebHeader && article && header}
         <div class="content-wrap">
