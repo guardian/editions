@@ -139,18 +139,49 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@creditkarma/thrift-server-core@^0.14.1":
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/@creditkarma/thrift-server-core/-/thrift-server-core-0.14.1.tgz#30705a03d6a6164b1c17bfc9f2513640b5b2238f"
-  integrity sha512-N0knWvGFx6i3X3vQ/OFOypAD1TV4xGMJeF0SDA+dL8q6H/fdac4nb2TtkdOYM4ppMWVYgXrQq5h0Jh8rdUDZ2Q==
+"@guardian/content-api-models@^15.9.6":
+  version "15.9.6"
+  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-15.9.6.tgz#ebe3b51cb636f22118fda2196491c4d1b8c8a440"
+  integrity sha512-TpeMPgUSBI/jaKpgzVm0Spzm7p8+t7AxXn4UkpH8cgH4V3vF7o4q+SChPq7cgtr50MnZD9Ej8UGbq7rAKqchUA==
   dependencies:
-    "@types/lodash" "^4.14.136"
-    lodash "^4.17.15"
+    "@guardian/content-atom-model" "^3.2.4"
+    "@guardian/content-entity-model" "^2.0.6"
+    "@guardian/story-packages-model" "^2.0.4"
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.9"
+    node-int64 "^0.4.0"
+    thrift "^0.12.0"
 
-"@guardian/capi-ts@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@guardian/capi-ts/-/capi-ts-0.2.0.tgz#d701143615db78e48b5fe19ea59c1c051f8db4b7"
-  integrity sha512-UA+2YPuFVf7WvS4mV69G0cz+cRwyNIeH0wKTKPnMbhzVvcuSqBNVHIVk50+b7YUKZsH3o7wgFXhMv6q4dTmizg==
+"@guardian/content-atom-model@^3.2.4":
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/@guardian/content-atom-model/-/content-atom-model-3.2.4.tgz#5ba9db208b3acb8a30f67e284696f20fa8f69393"
+  integrity sha512-XJ1jleNm5et+1tVxHwDOz94ODn1MLrchwAQKb3XXEX6jnguLLTKKcHPP5UQ4WqgJuuEoEo5ZLpgOXcCDE0HN5A==
+  dependencies:
+    "@guardian/content-entity-model" "^2.0.6"
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.9"
+    node-int64 "^0.4.0"
+    thrift "^0.12.0"
+
+"@guardian/content-entity-model@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@guardian/content-entity-model/-/content-entity-model-2.0.6.tgz#5a5a3dec91f6f4744a2c04843eb0272424e54f81"
+  integrity sha512-mcRxXqJY9jAJWjv/xANQ6wuwwN76IV8WYLDWhCB0dQB/BpQm9VZIs81el4nWGOUTTOw/7Ls5TdERWvBDzadvwQ==
+  dependencies:
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.9"
+    node-int64 "^0.4.0"
+    thrift "^0.12.0"
+
+"@guardian/story-packages-model@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@guardian/story-packages-model/-/story-packages-model-2.0.4.tgz#f05f73c5c0e1eb6d6658f5d3c29cf30260e63328"
+  integrity sha512-i16vtZqYkNYGIr3VUdnpcIDphMRqfWhHzEKaB//idEPUlFJuSqhDoJIo2CkBQYWQYN9XmEJInkcUZSNhJz7CcA==
+  dependencies:
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.9"
+    node-int64 "^0.4.0"
+    thrift "^0.12.0"
 
 "@jest/console@^24.7.1":
   version "24.7.1"
@@ -436,11 +467,6 @@
   dependencies:
     "@types/jest-diff" "*"
 
-"@types/lodash@^4.14.136":
-  version "4.14.136"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.136.tgz#413e85089046b865d960c9ff1d400e04c31ab60f"
-  integrity sha512-0GJhzBdvsW2RUccNHOBkabI8HZVdOXmXbXhuKlDEd5Vv12P7oAVGfomGp3Ne21o5D/qu1WmthlNKFaoZJJeErA==
-
 "@types/mime@*":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
@@ -453,10 +479,22 @@
   dependencies:
     "@types/node" "*"
 
+"@types/node-int64@*", "@types/node-int64@^0.4.29":
+  version "0.4.29"
+  resolved "https://registry.yarnpkg.com/@types/node-int64/-/node-int64-0.4.29.tgz#8c7c16a7c1195ae4f8beaa903b0018ac66291d16"
+  integrity sha512-rHXvenLTj/CcsmNAebaBOhxQ2MqEGl3yXZZcZ21XYR+gzGTTcpOy2N4IxpvTCz48loyQNatHvfn6GhIbbZ1R3Q==
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*":
   version "12.6.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.3.tgz#44d507c5634f85e7164707ca36bba21b5213d487"
   integrity sha512-7TEYTQT1/6PP53NftXXabIZDaZfaoBdeBm8Md/i7zsWRoBe0YwOXguyK8vhHs8ehgB/w9U4K/6EWuTyp0W6nIA==
+
+"@types/q@*":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
+  integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
 
 "@types/ramda@^0.26.19":
   version "0.26.19"
@@ -500,6 +538,15 @@
   dependencies:
     "@types/cookiejar" "*"
     "@types/node" "*"
+
+"@types/thrift@^0.10.9":
+  version "0.10.10"
+  resolved "https://registry.yarnpkg.com/@types/thrift/-/thrift-0.10.10.tgz#f90f6c84c8b003c79f54463f909b0a12a993029d"
+  integrity sha512-sEhRbmmQgiTn+JdophEPiuTFkc9QRl7R/Kxs/le5GXZAc2K1/VCHauW734nCwpu1cFI8jL1niyrqk7E4tGL92w==
+  dependencies:
+    "@types/node" "*"
+    "@types/node-int64" "*"
+    "@types/q" "*"
 
 "@types/yargs@^12.0.2", "@types/yargs@^12.0.9":
   version "12.0.12"
@@ -2813,11 +2860,6 @@ lodash@^4.17.11, lodash@^4.17.13:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
 
-lodash@^4.17.15:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
-
 loose-envify@^1.0.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -3576,6 +3618,11 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+q@^1.5.0:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
+  integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
+
 qs@6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
@@ -4267,6 +4314,15 @@ test-exclude@^5.2.3:
     read-pkg-up "^4.0.0"
     require-main-filename "^2.0.0"
 
+thrift@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/thrift/-/thrift-0.12.0.tgz#67678beba655ca40dd30744b65455f2b9f8e9912"
+  integrity sha512-qE9PZi4XSbSQLz/sNxj6+ZiiFQYgbM4GmlO3CS/EVJBjCVfd46Zw0aiVIqOvVn74M7XUGyjOs2chAOwK4d4/hQ==
+  dependencies:
+    node-int64 "^0.4.0"
+    q "^1.5.0"
+    ws "^5.0.0"
+
 throat@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-4.1.0.tgz#89037cbc92c56ab18926e6ba4cbb200e15672a6a"
@@ -4674,7 +4730,7 @@ write-file-atomic@2.4.1:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
 
-ws@^5.2.0:
+ws@^5.0.0, ws@^5.2.0:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/ws/-/ws-5.2.2.tgz#dffef14866b8e8dc9133582514d1befaf96e980f"
   integrity sha512-jaHFD6PFv6UgoIVda6qZllptQsMlDEJkTQcybzzXDYM1XO9Y8em691FGMPmM46WGyLU4z9KMgQN+qrux/nhlHA==
