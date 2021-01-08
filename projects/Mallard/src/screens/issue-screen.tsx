@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 const MOCK_QUERY = gql('{ wifiOnlyDownloads @client }')
 
 const checkWeatherShown = () => {
-    const {isWeatherShown} = useIsWeatherShown()
+    const { isWeatherShown } = useIsWeatherShown()
     const weatherResult = useQuery<WeatherQueryData>(
         // query must contain at least 1 item, even if we don't need it
         isWeatherShown ? FULL_WEATHER_QUERY : MOCK_QUERY,
@@ -274,9 +274,7 @@ const IssueFronts = ({
                 length: card.height + SLIDER_FRONT_HEIGHT,
                 offset:
                     (card.height + SLIDER_FRONT_HEIGHT) * index +
-                    (isWeatherShown
-                        ? WEATHER_HEIGHT
-                        : EMPTY_WEATHER_HEIGHT),
+                    (isWeatherShown ? WEATHER_HEIGHT : EMPTY_WEATHER_HEIGHT),
                 index,
             })}
             keyExtractor={item => item.key}
@@ -348,7 +346,7 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
     a.publishedIssueId === b.publishedIssueId
 
 const WeatherHeader = () => {
-    const {isWeatherShown} = useIsWeatherShown()
+    const { isWeatherShown } = useIsWeatherShown()
     if (!isWeatherShown) {
         return <View style={styles.emptyWeatherSpace} />
     }

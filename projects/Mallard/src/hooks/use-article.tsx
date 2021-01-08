@@ -45,7 +45,7 @@ const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
 }
 
 export const WithArticle = (props: PropTypes) => {
-    const {isUsingProdDevTools} = useIsUsingProdDevTools()
+    const { isUsingProdDevTools } = useIsUsingProdDevTools()
     if (isUsingProdDevTools) return <ProvidersAndDevtools {...props} />
     return <Providers {...props} />
 }

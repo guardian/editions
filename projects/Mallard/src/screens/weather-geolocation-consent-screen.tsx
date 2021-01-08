@@ -34,7 +34,7 @@ const WeatherGeolocationConsentScreen = ({
     navigation,
 }: NavigationInjectedProps) => {
     const apolloClient = useApolloClient()
-    const {setIsWeatherShown} = useIsWeatherShown()
+    const { setIsWeatherShown } = useIsWeatherShown()
     const onConsentPress = async () => {
         const result = await requestLocationPermission(apolloClient)
         if (result === RESULTS.BLOCKED) {

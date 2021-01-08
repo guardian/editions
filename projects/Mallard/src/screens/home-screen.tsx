@@ -168,7 +168,7 @@ const IssueRowContainer = React.memo(
 )
 
 const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
-    const {isUsingProdDevTools} = useIsUsingProdDevTools()
+    const { isUsingProdDevTools } = useIsUsingProdDevTools()
     const { setIssueId } = useIssueSummary()
 
     return (

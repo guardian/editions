@@ -1,6 +1,6 @@
 import { AccuWeatherLocation, Forecast } from 'src/common'
 import { AppState, Platform } from 'react-native'
-import {ApolloClient} from 'apollo-client'
+import { ApolloClient } from 'apollo-client'
 import Geolocation, {
     GeolocationResponse,
 } from '@react-native-community/geolocation'
@@ -9,7 +9,6 @@ import { RESULTS } from 'react-native-permissions'
 import gql from 'graphql-tag'
 import * as RNLocalize from 'react-native-localize'
 import { locale } from './locale'
-import { useApolloClient } from '@apollo/react-hooks'
 
 class CannotFetchError extends Error {}
 

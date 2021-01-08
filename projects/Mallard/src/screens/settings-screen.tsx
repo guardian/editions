@@ -31,12 +31,15 @@ import { FullButton } from 'src/components/lists/FullButton'
 import { DualButton } from 'src/components/lists/DualButton'
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
 import { Copy } from 'src/helpers/words'
-import { useIsUsingProdDevTools, useNotificationsEnabled } from 'src/hooks/use-config-provider'
+import {
+    useIsUsingProdDevTools,
+    useNotificationsEnabled,
+} from 'src/hooks/use-config-provider'
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider'
 const MiscSettingsList = React.memo(
     (props: {
-        isWeatherShown: boolean,
-        setIsWeatherShown: (setting: boolean) => void,
+        isWeatherShown: boolean
+        setIsWeatherShown: (setting: boolean) => void
         navigation: NavigationScreenProp<
             NavigationRoute<NavigationParams>,
             NavigationParams
@@ -143,13 +146,16 @@ const SignInButton = ({
         />
     )
 
-const SettingsScreen =  ({ navigation }: NavigationInjectedProps) => {
+const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const identityData = useIdentity()
     const canAccess = useAccess()
     const [, setVersionClickedTimes] = useState(0)
     const { signOutIdentity, iapData } = useContext(AccessContext)
-    const {isWeatherShown, setIsWeatherShown} = useIsWeatherShown()
-    const { isUsingProdDevTools, setIsUsingProdDevTools } = useIsUsingProdDevTools()
+    const { isWeatherShown, setIsWeatherShown } = useIsWeatherShown()
+    const {
+        isUsingProdDevTools,
+        setIsUsingProdDevTools,
+    } = useIsUsingProdDevTools()
 
     const versionNumber = DeviceInfo.getVersion()
     const isLoggedInWithIdentity = identityData

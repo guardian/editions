@@ -116,7 +116,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
     )
     if (query.loading) return null
-    const { data, client } = query
+    const { data } = query
     const { apiUrl } = data
     if (typeof apiUrl !== 'string') throw new Error('expected string')
 
