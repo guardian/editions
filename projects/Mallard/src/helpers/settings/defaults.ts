@@ -134,9 +134,7 @@ export const defaultSettings: Settings = {
     logging: __DEV__
         ? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
         : 'https://editions-logging.guardianapis.com/log/mallard',
-    appsRenderingService: __DEV__
-        ? appsRenderingService.code
-        : appsRenderingService.prod,
+    appsRenderingService: appsRenderingService.code
 }
 
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
