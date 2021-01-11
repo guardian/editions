@@ -101,6 +101,10 @@ const storeDetails = {
     ios: 'itms-apps://itunes.apple.com/app/id452707806',
     android: 'market://details?id=com.guardian.editions',
 }
+const appsRenderingService = {
+    prod: 'https://mobile.guardianapis.com/rendered-items/',
+    code: 'http://mobile.code.dev-guardianapis.com/rendered-items/',
+}
 
 export const defaultSettings: Settings = {
     apiUrl,
@@ -129,6 +133,9 @@ export const defaultSettings: Settings = {
     logging: __DEV__
         ? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
         : 'https://editions-logging.guardianapis.com/log/mallard',
+    appsRenderingService: __DEV__
+        ? appsRenderingService.code
+        : appsRenderingService.prod,
 }
 
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
