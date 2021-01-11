@@ -151,7 +151,6 @@ export const Settings = {
     version: 'Version',
     betaProgrammeFAQs: 'Beta Programme FAQs',
     isSSR: 'Show Articles from Editions Rendering',
-
 }
 
 export const ManageDownloads = {

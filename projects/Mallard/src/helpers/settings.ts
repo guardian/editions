@@ -79,8 +79,8 @@ export interface DevSettings {
     websiteUrl: string
     issuesPath: string
     senderId: string
-    logging: string,
-    appsRenderingService: string,
+    logging: string
+    appsRenderingService: string
     isSSR: boolean
 }
 

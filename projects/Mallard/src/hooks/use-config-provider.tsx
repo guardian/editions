@@ -157,5 +157,5 @@ export const useNotificationsEnabled = () => ({
 
 export const useIsSSR = () => ({
     isSSR: useContext(ConfigContext).isSSR,
-    setIsSSR: useContext(ConfigContext).storeIsSSR
+    setIsSSR: useContext(ConfigContext).storeIsSSR,
 })

@@ -222,9 +222,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         proxy: (
                             <Switch
                                 accessible={true}
-                                accessibilityLabel={
-                                    Copy.settings.isSSR
-                                }
+                                accessibilityLabel={Copy.settings.isSSR}
                                 accessibilityRole="switch"
                                 value={isSSR}
                                 onValueChange={setIsSSR}
