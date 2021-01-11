@@ -96,7 +96,7 @@ const WebviewWithArticle = ({
         getImagePath,
     })
 
-    const isSSR = useIsSSR()
+    const {isSSR} = useIsSSR()
     const source = {
         html,
         baseUrl:
