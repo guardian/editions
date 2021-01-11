@@ -4,9 +4,10 @@ import DeviceInfo from 'react-native-device-info'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { notificationsEnabledCache } from 'src/helpers/storage'
 import { errorService } from 'src/services/errors'
+import AsyncStorage from '@react-native-community/async-storage'
 
 const oneGB = 1073741824
-
+const IS_SSR_KEY = '@isSSR'
 interface ConfigState {
     largeDeviceMemeory: boolean
     dimensions: {
@@ -17,6 +18,8 @@ interface ConfigState {
     }
     notificationsEnabled: boolean
     setNotifications: (setting: boolean) => Promise<void>
+    isSSR: boolean
+    storeIsSSR: (setting: boolean) => void
 }
 
 const notificationInitialState = () =>
@@ -32,6 +35,8 @@ const initialState: ConfigState = {
     },
     notificationsEnabled: notificationInitialState(),
     setNotifications: () => Promise.resolve(),
+    isSSR: false,
+    storeIsSSR: () => {},
 }
 
 const ConfigContext = createContext(initialState)
@@ -56,6 +61,12 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     const [notificationsEnabled, setNotificationsEnabled] = useState(
         notificationInitialState(),
     )
+    const [isSSR, setIsSSR] = useState(false)
+
+    const storeIsSSR = (setting: boolean) => {
+        setIsSSR(setting)
+        AsyncStorage.setItem(IS_SSR_KEY, JSON.stringify(setting))
+    }
 
     const setNotifications = async (setting: boolean) => {
         try {
@@ -110,6 +121,14 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [])
 
+    useEffect(() => {
+        async function getIsSSR() {
+            const result = await AsyncStorage.getItem(IS_SSR_KEY)
+            if (result) setIsSSR(JSON.parse(result))
+        }
+        getIsSSR()
+    }, [])
+
     return (
         <ConfigContext.Provider
             value={{
@@ -117,6 +136,8 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
                 dimensions,
                 notificationsEnabled,
                 setNotifications,
+                isSSR,
+                storeIsSSR,
             }}
         >
             {children}
