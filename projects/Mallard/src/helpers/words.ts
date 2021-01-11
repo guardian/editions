@@ -150,6 +150,8 @@ export const Settings = {
     termsAndConditions: 'Terms and conditions',
     version: 'Version',
     betaProgrammeFAQs: 'Beta Programme FAQs',
+    useSSR: 'Show Articles from Editions Rendering',
+
 }
 
 export const ManageDownloads = {
