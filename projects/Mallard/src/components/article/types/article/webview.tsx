@@ -12,7 +12,8 @@ import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
-
+import { defaultSettings } from 'src/helpers/settings/defaults'
+import {useIsSSR} from 'src/hooks/use-config-provider'
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`
     {
@@ -95,17 +96,24 @@ const WebviewWithArticle = ({
         getImagePath,
     })
 
+    const isSSR = useIsSSR()
+    const source = {
+        html,
+        baseUrl:
+            '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
+    }
+
+    const editions_rendered_source = {
+        uri: `${defaultSettings.appsRenderingService}${article.key}?editions`,
+    }
+
     return (
         <WebView
             {...webViewProps}
             bounces={largeDeviceMemory ? true : false}
             originWhitelist={['*']}
             scrollEnabled={true}
-            source={{
-                html,
-                baseUrl:
-                    '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
-            }}
+            source={isSSR ? editions_rendered_source : source}
             ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
             allowFileAccess={true}

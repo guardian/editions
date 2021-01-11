@@ -154,3 +154,5 @@ export const useNotificationsEnabled = () => ({
     notificationsEnabled: useContext(ConfigContext).notificationsEnabled,
     setNotifications: useContext(ConfigContext).setNotifications,
 })
+
+export const useIsSSR = () => useContext(ConfigContext).isSSR
