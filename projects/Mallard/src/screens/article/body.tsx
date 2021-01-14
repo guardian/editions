@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
         backgroundColor: 'aqua',
         textAlign: 'center',
-    }
+    },
 })
 
 export type OnIsAtTopChange = (isAtTop: boolean, articleKey: string) => void
@@ -84,11 +84,10 @@ const ArticleScreenBody = React.memo<
                             )}
 
                             {isSSR && (
-                                <UiBodyCopy
-                                    style={styles.ssrBanner}
-                                >
+                                <UiBodyCopy style={styles.ssrBanner}>
                                     EDITIONS RENDERED CONTENT:{' '}
-                                    {article.article.articleType || "TYPE UNKNOWN"}
+                                    {article.article.articleType ||
+                                        'TYPE UNKNOWN'}
                                 </UiBodyCopy>
                             )}
 
