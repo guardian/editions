@@ -48,6 +48,7 @@ const WebviewWithArticle = ({
     const [isConnected] = useState(
         data != null ? data.netInfo.isConnected : false,
     )
+    const { isSSR } = useIsSSR()
 
     // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()
@@ -96,16 +97,17 @@ const WebviewWithArticle = ({
         getImagePath,
     })
 
-    const { isSSR } = useIsSSR()
-    const source = {
+    const clientRenderedSource = {
         html,
         baseUrl:
             '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
     }
 
-    const editions_rendered_source = {
+    const serverRenderedSource = {
         uri: `${defaultSettings.appsRenderingService}${article.key}?editions`,
     }
+
+    const source = isSSR ? serverRenderedSource : clientRenderedSource
 
     return (
         <WebView
@@ -113,7 +115,7 @@ const WebviewWithArticle = ({
             bounces={largeDeviceMemory ? true : false}
             originWhitelist={['*']}
             scrollEnabled={true}
-            source={isSSR ? editions_rendered_source : source}
+            source={source}
             ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
             allowFileAccess={true}
