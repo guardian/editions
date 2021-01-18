@@ -128,7 +128,7 @@ export const defaultSettings: Settings = {
     senderId: __DEV__ ? senderId.code : senderId.prod,
     isWeatherShown: true,
     wifiOnlyDownloads: false,
-    isSSR: false,
+    isAppsRendering: false,
     maxAvailableEditions: 7,
     websiteUrl: 'https://www.theguardian.com/',
     logging: __DEV__

@@ -11,7 +11,7 @@ import { PathToArticle } from 'src/paths'
 import { color } from 'src/theme/color'
 import { HeaderControlInnerProps } from 'src/components/article/types/article'
 import { NavigationScreenProp } from 'react-navigation'
-import { useIsSSR } from 'src/hooks/use-config-provider'
+import { useisAppsRendering } from 'src/hooks/use-config-provider'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -58,7 +58,7 @@ const ArticleScreenBody = React.memo<
             // eslint-disable-next-line react-hooks/exhaustive-deps
             [onIsAtTopChange],
         )
-        const { isSSR } = useIsSSR()
+        const { isAppsRendering } = useisAppsRendering()
         // First time it's mounted, we make sure to report we're at the top.
         // eslint-disable-next-line react-hooks/exhaustive-deps
         useEffect(() => handleIsAtTopChange(true), [])
@@ -83,7 +83,7 @@ const ArticleScreenBody = React.memo<
                                 <UiBodyCopy>{previewNotice}</UiBodyCopy>
                             )}
 
-                            {isSSR && (
+                            {isAppsRendering && (
                                 <UiBodyCopy style={styles.ssrBanner}>
                                     EDITIONS RENDERED CONTENT:{' '}
                                     {article.article.articleType ||

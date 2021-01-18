@@ -13,7 +13,7 @@ import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 import { defaultSettings } from 'src/helpers/settings/defaults'
-import { useIsSSR } from 'src/hooks/use-config-provider'
+import { useisAppsRendering } from 'src/hooks/use-config-provider'
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`
     {
@@ -48,7 +48,7 @@ const WebviewWithArticle = ({
     const [isConnected] = useState(
         data != null ? data.netInfo.isConnected : false,
     )
-    const { isSSR } = useIsSSR()
+    const { isAppsRendering } = useisAppsRendering()
 
     // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()
@@ -107,7 +107,7 @@ const WebviewWithArticle = ({
         uri: `${defaultSettings.appsRenderingService}${article.key}?editions`,
     }
 
-    const source = isSSR ? serverRenderedSource : clientRenderedSource
+    const source = isAppsRendering ? serverRenderedSource : clientRenderedSource
 
     return (
         <WebView

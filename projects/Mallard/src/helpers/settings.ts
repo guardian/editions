@@ -81,7 +81,7 @@ export interface DevSettings {
     senderId: string
     logging: string
     appsRenderingService: string
-    isSSR: boolean
+    isAppsRendering: boolean
 }
 
 interface UserSettings {
