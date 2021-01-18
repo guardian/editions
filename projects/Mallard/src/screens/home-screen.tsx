@@ -50,6 +50,7 @@ import {
     getSpecialEditionProps,
 } from 'src/hooks/use-edition-provider'
 import { Copy } from 'src/helpers/words'
+import { ScreenFiller } from './editions-menu-screen'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -440,28 +441,30 @@ export const HomeScreen = () => {
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
     return (
         <WithAppAppearance value={'tertiary'}>
-            <IssuePickerHeader
-                title={selectedEdition.header.title}
-                subTitle={selectedEdition.header.subTitle}
-                headerStyles={
-                    specialEditionProps && specialEditionProps.headerStyle
-                }
-            />
-            {issueSummary ? (
-                <IssueListFetchContainer />
-            ) : error ? (
-                <FlexErrorMessage
-                    style={styles.issueList}
-                    debugMessage={error}
-                    title={CONNECTION_FAILED_ERROR}
-                    message={CONNECTION_FAILED_AUTO_RETRY}
+            <ScreenFiller direction="end">
+                <IssuePickerHeader
+                    title={selectedEdition.header.title}
+                    subTitle={selectedEdition.header.subTitle}
+                    headerStyles={
+                        specialEditionProps && specialEditionProps.headerStyle
+                    }
                 />
-            ) : (
-                <FlexCenter>
-                    <Spinner></Spinner>
-                </FlexCenter>
-            )}
-            <ApiState />
+                {issueSummary ? (
+                    <IssueListFetchContainer />
+                ) : error ? (
+                    <FlexErrorMessage
+                        style={styles.issueList}
+                        debugMessage={error}
+                        title={CONNECTION_FAILED_ERROR}
+                        message={CONNECTION_FAILED_AUTO_RETRY}
+                    />
+                ) : (
+                    <FlexCenter>
+                        <Spinner></Spinner>
+                    </FlexCenter>
+                )}
+                <ApiState />
+            </ScreenFiller>
         </WithAppAppearance>
     )
 }
