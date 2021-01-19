@@ -12,7 +12,8 @@ import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
-
+import { defaultSettings } from 'src/helpers/settings/defaults'
+import { useIsAppsRendering } from 'src/hooks/use-config-provider'
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`
     {
@@ -47,6 +48,7 @@ const WebviewWithArticle = ({
     const [isConnected] = useState(
         data != null ? data.netInfo.isConnected : false,
     )
+    const { isAppsRendering } = useIsAppsRendering()
 
     // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()
@@ -95,17 +97,25 @@ const WebviewWithArticle = ({
         getImagePath,
     })
 
+    const clientRenderingSource = {
+        html,
+        baseUrl:
+            '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
+    }
+
+    const appsRenderingSource = {
+        uri: `${defaultSettings.appsRenderingService}${article.key}?editions`,
+    }
+
+    const source = isAppsRendering ? appsRenderingSource : clientRenderingSource
+
     return (
         <WebView
             {...webViewProps}
             bounces={largeDeviceMemory ? true : false}
             originWhitelist={['*']}
             scrollEnabled={true}
-            source={{
-                html,
-                baseUrl:
-                    '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
-            }}
+            source={source}
             ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
             allowFileAccess={true}
