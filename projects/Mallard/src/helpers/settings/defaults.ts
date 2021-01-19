@@ -134,7 +134,8 @@ export const defaultSettings: Settings = {
     logging: __DEV__
         ? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
         : 'https://editions-logging.guardianapis.com/log/mallard',
-    appsRenderingService: appsRenderingService.code,
+    // this currently points exclusively to PROD so that we don't require a VPN to access the endpoint.
+    appsRenderingService: appsRenderingService.prod,
 }
 
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
