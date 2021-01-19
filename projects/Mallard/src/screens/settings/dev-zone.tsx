@@ -222,7 +222,9 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         proxy: (
                             <Switch
                                 accessible={true}
-                                accessibilityLabel={Copy.settings.isAppsRendering}
+                                accessibilityLabel={
+                                    Copy.settings.isAppsRendering
+                                }
                                 accessibilityRole="switch"
                                 value={isAppsRendering}
                                 onValueChange={setIsAppsRendering}
