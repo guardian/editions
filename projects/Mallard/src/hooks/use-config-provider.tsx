@@ -4,10 +4,11 @@ import DeviceInfo from 'react-native-device-info'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { notificationsEnabledCache } from 'src/helpers/storage'
 import { errorService } from 'src/services/errors'
-import AsyncStorage from '@react-native-community/async-storage'
+import { getSetting, storeSetting } from 'src/helpers/settings'
 
 const oneGB = 1073741824
 const IS_APPS_RENDERING = 'isAppsRendering'
+
 interface ConfigState {
     largeDeviceMemeory: boolean
     dimensions: {
@@ -63,9 +64,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     )
     const [isAppsRendering, setisAppsRendering] = useState(false)
 
-    const storeisAppsRendering = (setting: boolean) => {
+    const storeisAppsRendering = async (setting: boolean) => {
+        await storeSetting(IS_APPS_RENDERING, setting)
         setisAppsRendering(setting)
-        AsyncStorage.setItem(IS_SSR_KEY, JSON.stringify(setting))
     }
 
     const setNotifications = async (setting: boolean) => {
@@ -122,11 +123,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     }, [])
 
     useEffect(() => {
-        async function getisAppsRendering() {
-            const result = await AsyncStorage.getItem(IS_SSR_KEY)
-            if (result) setisAppsRendering(JSON.parse(result))
-        }
-        getisAppsRendering()
+        getSetting(IS_APPS_RENDERING).then(result => {
+            setisAppsRendering(result)
+        })
     }, [])
 
     return (
