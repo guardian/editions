@@ -11,7 +11,7 @@ import { PathToArticle } from 'src/paths'
 import { color } from 'src/theme/color'
 import { HeaderControlInnerProps } from 'src/components/article/types/article'
 import { NavigationScreenProp } from 'react-navigation'
-import { useisAppsRendering } from 'src/hooks/use-config-provider'
+import { useIsAppsRendering } from 'src/hooks/use-config-provider'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -58,7 +58,7 @@ const ArticleScreenBody = React.memo<
             // eslint-disable-next-line react-hooks/exhaustive-deps
             [onIsAtTopChange],
         )
-        const { isAppsRendering } = useisAppsRendering()
+        const { isAppsRendering } = useIsAppsRendering()
         // First time it's mounted, we make sure to report we're at the top.
         // eslint-disable-next-line react-hooks/exhaustive-deps
         useEffect(() => handleIsAtTopChange(true), [])

@@ -62,11 +62,11 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     const [notificationsEnabled, setNotificationsEnabled] = useState(
         notificationInitialState(),
     )
-    const [isAppsRendering, setisAppsRendering] = useState(false)
+    const [isAppsRendering, setIsAppsRendering] = useState(false)
 
     const storeisAppsRendering = async (setting: boolean) => {
         await storeSetting(IS_APPS_RENDERING, setting)
-        setisAppsRendering(setting)
+        setIsAppsRendering(setting)
     }
 
     const setNotifications = async (setting: boolean) => {
@@ -124,7 +124,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         getSetting(IS_APPS_RENDERING).then(result => {
-            setisAppsRendering(result)
+            setIsAppsRendering(result)
         })
     }, [])
 
@@ -154,7 +154,7 @@ export const useNotificationsEnabled = () => ({
     setNotifications: useContext(ConfigContext).setNotifications,
 })
 
-export const useisAppsRendering = () => ({
+export const useIsAppsRendering = () => ({
     isAppsRendering: useContext(ConfigContext).isAppsRendering,
-    setisAppsRendering: useContext(ConfigContext).storeisAppsRendering,
+    setIsAppsRendering: useContext(ConfigContext).storeisAppsRendering,
 })
