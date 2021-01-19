@@ -7,7 +7,7 @@ import { errorService } from 'src/services/errors'
 import AsyncStorage from '@react-native-community/async-storage'
 
 const oneGB = 1073741824
-const IS_SSR_KEY = '@isAppsRendering'
+const IS_APPS_RENDERING = 'isAppsRendering'
 interface ConfigState {
     largeDeviceMemeory: boolean
     dimensions: {
