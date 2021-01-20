@@ -19,7 +19,7 @@ const fetchRenderedArticle = async (url: string) => {
 export const appsRenderingController = async (req: Request, res: Response) => {
     const path = req.params.path
     const renderingUrl = `${process.env.APPS_RENDERING_URL}${path}?editions`
-    console.log(`Fetching rendered HTML from AppsRendering URL: ${renderingUrl}`)
+    console.log(`Fetching HTML from AppsRendering URL: ${renderingUrl}`)
     const renderResponse = await fetchRenderedArticle(renderingUrl)
 
     if (renderResponse.success) {
