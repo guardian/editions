@@ -22,7 +22,7 @@ The following guides allow you to run the app locally on device emulators, or on
 If you're starting from scratch, we recommend starting out with Android Studio because it takes less time to download. Once you've downloaded
 android studio, open the project `/projects/Mallard/android` then open up the 'virtual device manager' and install at least one device.
 
-You will also need `frontend` credentials form Janus in order to fetch the `.env` file for local development. This will run as part of either `run-ios` or `run-android` and in order to get the latest environment variables you will need to ensure you have frontend credentials when running at various points in the future.
+To run Mallard you will need `CMS Fronts`, `frontend` and `mobile` credentials from Janus. This ensures you can fetch the `.env` file for local development. This will run as part of either `run-ios` or `run-android` and in order to get the latest environment variables you will need to ensure you have frontend credentials when running at various points in the future.
 
 ## Usage
 
