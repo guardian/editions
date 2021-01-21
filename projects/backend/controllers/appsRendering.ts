@@ -9,12 +9,13 @@ export const appsRenderingController = async (req: Request, res: Response) => {
         headers: { Accept: 'text/html' },
     })
 
-    if (renderResponse.ok) {
-        res.setHeader('Content-Type', 'text/html')
-        renderResponse.body.pipe(res)
-    } else {
+    if (!renderResponse.ok) {
         const message = `Failed to fetch AppsRendered HTML from ${renderingUrl}. Response: ${renderResponse.statusText}`
         console.error(`${message}`)
         res.status(renderResponse.status).send(message)
+        return
     }
+
+    res.setHeader('Content-Type', 'text/html')
+    renderResponse.body.pipe(res)
 }
