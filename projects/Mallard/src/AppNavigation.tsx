@@ -1,11 +1,15 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+    CardStyleInterpolators,
+    createStackNavigator,
+} from '@react-navigation/stack'
 
 import { routeNames } from './navigation/routes'
 import { HomeScreen } from './screens/home-screen'
 import { IssueScreen } from './screens/issue-screen'
 import { EditionsMenuScreen } from './screens/editions-menu-screen'
 import { Animated } from 'react-native'
+import { ArticleScreen } from './screens/article-screen'
 
 const Stack = createStackNavigator()
 
@@ -72,6 +76,19 @@ const RootStack = () => {
                     cardStyle: { backgroundColor: 'transparent' },
                     cardOverlayEnabled: true,
                     cardStyleInterpolator,
+                }}
+            />
+            <Stack.Screen
+                name={routeNames.Article}
+                component={ArticleScreen}
+                options={{
+                    cardStyleInterpolator: props => {
+                        return {
+                            ...CardStyleInterpolators.forModalPresentationIOS(
+                                props,
+                            ),
+                        }
+                    },
                 }}
             />
         </Stack.Navigator>
