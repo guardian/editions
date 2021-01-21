@@ -3,14 +3,11 @@ import fetch from 'node-fetch'
 
 const fetchRenderedArticle = async (url: string) => {
     const response = await fetch(url, {
-        headers: {
-            Accept:
-                'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        },
+        headers: {Accept: 'text/html',},
     })
     const responseBody = await response.text()
     return {
-        success: response.statusText === 'OK',
+        success: response.ok,
         status: response.status,
         body: responseBody,
     }
