@@ -12,6 +12,7 @@ import { color } from 'src/theme/color'
 import { HeaderControlInnerProps } from 'src/components/article/types/article'
 import { NavigationScreenProp } from 'react-navigation'
 import { useIsAppsRendering } from 'src/hooks/use-config-provider'
+import { brandAltBackground } from '@guardian/src-foundations/palette'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 10,
         marginTop: 40,
-        backgroundColor: 'aqua',
+        backgroundColor: brandAltBackground.primary,
         textAlign: 'center',
     },
 })
@@ -85,9 +86,7 @@ const ArticleScreenBody = React.memo<
 
                             {isAppsRendering && (
                                 <UiBodyCopy style={styles.ssrBanner}>
-                                    EDITIONS RENDERED CONTENT:{' '}
-                                    {article.article.articleType ||
-                                        'TYPE UNKNOWN'}
+                                    EDITIONS RENDERED CONTENT
                                 </UiBodyCopy>
                             )}
 
