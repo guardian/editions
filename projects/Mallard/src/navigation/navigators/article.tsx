@@ -22,6 +22,7 @@ import { routeNames } from '../routes'
 import { articleScreenMotion, screenInterpolator } from './article/transition'
 import { safeInterpolation, safeValue } from 'src/helpers/math'
 import { BasicArticleHeader } from 'src/screens/article/header'
+import { ArticleScreen } from 'src/screens/article-screen'
 
 const Dismissable = ({
     navigator,
@@ -211,5 +212,17 @@ const createArticleNavigator = (
         transitionConfig,
     })
 }
+
+export const SlideCardJames = ({ navigation, route }) =>
+    route.params.prefersFullScreen ? (
+        <>
+            <BasicArticleHeader />
+            <ArticleScreen navigation={navigation} route={route} />
+        </>
+    ) : (
+        <SlideCard>
+            <ArticleScreen navigation={navigation} route={route} />
+        </SlideCard>
+    )
 
 export { createArticleNavigator }

@@ -9,7 +9,7 @@ import { HomeScreen } from './screens/home-screen'
 import { IssueScreen } from './screens/issue-screen'
 import { EditionsMenuScreen } from './screens/editions-menu-screen'
 import { Animated } from 'react-native'
-import { ArticleScreen } from './screens/article-screen'
+import { SlideCardJames } from './navigation/navigators/article'
 
 const Stack = createStackNavigator()
 
@@ -80,7 +80,7 @@ const RootStack = () => {
             />
             <Stack.Screen
                 name={routeNames.Article}
-                component={ArticleScreen}
+                component={SlideCardJames}
                 options={{
                     cardStyleInterpolator: props => {
                         return {

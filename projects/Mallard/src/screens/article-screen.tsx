@@ -16,6 +16,7 @@ import { PathToArticle } from 'src/paths'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { articlePillars } from '../../../Apps/common/src'
 import { ArticleScreenBody } from './article/body'
 import { ArticleSlider } from './article/slider'
 
@@ -113,9 +114,9 @@ export const ArticleScreenWithProps = ({
 }: Required<ArticleNavigationProps> & {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
 }) => {
-    // const current = getArticleDataFromNavigator(articleNavigator, path)
+    const current = getArticleDataFromNavigator(articleNavigator, path)
     // TODO use `getData` for this
-    // const pillar = getAppearancePillar(current.appearance)
+    const pillar = getAppearancePillar(current.appearance)
     const viewRef = useRef<View>()
     const { width } = useDimensions()
     useEffect(() => {
@@ -141,19 +142,19 @@ export const ArticleScreenWithProps = ({
                             navigation={navigation}
                             path={path}
                             width={width}
-                            // pillar={pillar}
+                            pillar={pillar}
                             onShouldShowHeaderChange={() => {}}
                             shouldShowHeader={true}
                             topPadding={0}
                         />
                     </>
-                ) : null
-                // <ArticleSlider
-                //     navigation={navigation}
-                //     path={path}
-                //     articleNavigator={articleNavigator}
-                // />
-                }
+                ) : (
+                    <ArticleSlider
+                        navigation={navigation}
+                        path={path}
+                        articleNavigator={articleNavigator}
+                    />
+                )}
             </View>
         </ArticleScreenLoginOverlay>
     )
@@ -161,28 +162,25 @@ export const ArticleScreenWithProps = ({
 
 export const ArticleScreen = ({
     navigation,
+    route,
 }: {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
-}) => {
-    // if (props.path && props.path.article) {
-    //     sendPageViewEvent({ path: props.path.article })
-    // }
-    return <ArticleScreenWithProps {...{ navigation }} />
-}
-// getArticleNavigationProps(navigation, {
-//     error: () => (
-//         <FlexErrorMessage
-//             title={ERR_404_MISSING_PROPS}
-//             style={{ backgroundColor: color.background }}
-//         />
-//     ),
-//     success: props => {
-//         if (props.path && props.path.article) {
-//             sendPageViewEvent({ path: props.path.article })
-//         }
-//         return <ArticleScreenWithProps {...{ navigation }} {...props} />
-//     },
-// })
+    route: any
+}) =>
+    getArticleNavigationProps(route.params, {
+        error: () => (
+            <FlexErrorMessage
+                title={ERR_404_MISSING_PROPS}
+                style={{ backgroundColor: color.background }}
+            />
+        ),
+        success: props => {
+            if (props.path && props.path.article) {
+                sendPageViewEvent({ path: props.path.article })
+            }
+            return <ArticleScreenWithProps {...{ navigation }} {...props} />
+        },
+    })
 
 ArticleScreen.navigationOptions = ({
     navigation,

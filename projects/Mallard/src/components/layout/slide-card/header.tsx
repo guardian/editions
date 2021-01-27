@@ -5,6 +5,7 @@ import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { safeInterpolation } from 'src/helpers/math'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
+import { useNavigation } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -29,13 +30,15 @@ const styles = StyleSheet.create({
 
 const Header = () => {
     const { panResponder, scrollY, onDismiss } = useDismissArticle()
+    const navigation = useNavigation()
     return (
         <Animated.View
             {...panResponder.panHandlers}
             style={[styles.headerContainer]}
         >
             <TouchableWithoutFeedback
-                onPress={onDismiss}
+                // onPress={onDismiss}
+                onPress={navigation.goBack}
                 accessibilityHint="Go back"
             >
                 <Animated.View

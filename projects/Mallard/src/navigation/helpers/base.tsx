@@ -56,7 +56,7 @@ const navigateToArticle = (
     navigation.navigate(routeNames.Article, navigationProps)
 }
 const getArticleNavigationProps = (
-    navigation: NavigationScreenProp<{}, ArticleNavigationProps>,
+    routeParams: any,
     {
         error,
         success,
@@ -65,9 +65,9 @@ const getArticleNavigationProps = (
         success: (props: Required<ArticleNavigationProps>) => ReactElement
     },
 ) => {
-    const path = navigation.getParam('path')
-    const prefersFullScreen = navigation.getParam('prefersFullScreen', false)
-    const articleNavigator = navigation.getParam('articleNavigator', [])
+    const path = routeParams.path
+    const prefersFullScreen = routeParams.prefersFullScreen || false
+    const articleNavigator = routeParams.articleNavigator || []
 
     if (
         !path ||
