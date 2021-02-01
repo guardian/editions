@@ -19,6 +19,7 @@ import {
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
     IOS_BETA_EMAIL,
+    USER_EMAIL_BODY_INTRO,
 } from './words'
 import { OnCompletionToast } from 'src/screens/settings/help-screen'
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider'
@@ -173,12 +174,17 @@ const createMailtoHandler = (
             text: 'Include',
             onPress: async () => {
                 const diagnostics = await getDiagnosticInfo(client, authAttempt)
-                openSupportMailto(text, releaseURL, diagnostics)
+                openSupportMailto(
+                    text,
+                    releaseURL,
+                    ` ${USER_EMAIL_BODY_INTRO} \n \n${diagnostics}`,
+                )
             },
         },
         {
             text: `Don't include`,
-            onPress: () => openSupportMailto(text, releaseURL),
+            onPress: () =>
+                openSupportMailto(text, releaseURL, `${USER_EMAIL_BODY_INTRO}`),
         },
     ])
 

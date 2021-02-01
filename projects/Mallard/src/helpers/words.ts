@@ -6,7 +6,6 @@ export const REQUEST_INVALID_RESPONSE_VALIDATION = 'Failed to parse data'
 export const LOCAL_JSON_INVALID_RESPONSE_VALIDATION =
     'Failed to parse local data'
 
-export const FEEDBACK_EMAIL = 'editions.feedback@theguardian.com'
 export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies'
 export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy'
 export const IOS_BETA_EMAIL = 'editions.ios.beta@theguardian.com'
@@ -22,7 +21,7 @@ export const CONNECTION_FAILED_AUTO_RETRY =
     'Next time you go online, we will download your issue'
 export const GENERIC_ERROR = `Sorry! This didn't work`
 export const GENERIC_AUTH_ERROR = `Something went wrong`
-export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at ${FEEDBACK_EMAIL} and tell us what happened?`
+export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at ${APPS_FEEDBACK_EMAIL} and tell us what happened?`
 export const NOT_CONNECTED = 'You are not connected to the internet'
 export const MANAGE_EDITIONS_TITLE = 'Manage Downloads'
 export const WIFI_ONLY_DOWNLOAD = `You must be connected to wifi to download, you can change this under '${MANAGE_EDITIONS_TITLE}'`
@@ -52,6 +51,8 @@ export const BETA_PROGRAMME_FAQ_HEADER_TITLE = 'Beta Programme FAQ'
 export const REFRESH_BUTTON_TEXT = 'Refresh'
 export const DOWNLOAD_ISSUE_MESSAGE_OFFLINE = `You're currently offline. You can download it when you go online`
 export const CUSTOMER_HELP_EMAIL = 'customer.help@theguardian.com'
+
+export const USER_EMAIL_BODY_INTRO = `\n \nThanks for taking the time to send us feedback or report an issue.\n \nIf you are reporting a bug in the app, it will be very helpful if you could describe what you were doing in the app and let us know which screen you were on when the issue occurred. Is this an issue you have seen previously? The more detail you can provide the better and screenshots of these issues are always appreciated.\n \nIf you need a hand with taking a screenshot on your device, you can use this guide: http://www.take-a-screenshot.org/ \n \nThe Guardian Editions team`
 
 // Sign in modal
 const SignIn = {
