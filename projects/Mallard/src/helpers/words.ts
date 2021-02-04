@@ -1,7 +1,6 @@
 import { isInBeta } from './release-stream'
 import { Platform } from 'react-native'
 
-
 export const IOS_BETA_EMAIL = 'editions.ios.beta@theguardian.com'
 export const ANDROID_BETA_EMAIL = 'editions.android.beta@theguardian.com'
 export const ISSUE_EMAIL = 'editions.feedback@theguardian.com'
