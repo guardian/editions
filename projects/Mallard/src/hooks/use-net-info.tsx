@@ -53,7 +53,8 @@ type CommonState = {
 }
 
 const __typename = 'NetInfo'
-export type NetInfo = CommonState & {
+
+type NetInfo = CommonState & {
     __typename: 'NetInfo'
     type: NetInfoStateType
     isConnected: boolean
@@ -247,4 +248,4 @@ const useNetInfo = (() => {
     }
 })()
 
-export { useNetInfo }
+export { useNetInfo, NetInfo }
