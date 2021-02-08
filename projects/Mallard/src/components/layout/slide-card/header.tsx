@@ -32,10 +32,7 @@ const Header = () => {
     const { panResponder, scrollY, onDismiss } = useDismissArticle()
     const navigation = useNavigation()
     return (
-        <Animated.View
-            {...panResponder.panHandlers}
-            style={[styles.headerContainer]}
-        >
+        <Animated.View style={[styles.headerContainer]}>
             <TouchableWithoutFeedback
                 // onPress={onDismiss}
                 onPress={navigation.goBack}

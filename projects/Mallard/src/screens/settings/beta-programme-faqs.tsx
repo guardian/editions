@@ -2,6 +2,7 @@ import React from 'react'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 import { BETA_PROGRAMME_FAQ_HEADER_TITLE } from 'src/helpers/words'
 import { html } from 'src/helpers/webview'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 // const bugButton = BugButtonSvg.
 const bugButtonSvg = () => html`
@@ -227,3 +228,12 @@ export const BetaProgrammeFAQsScreen = () => (
 BetaProgrammeFAQsScreen.navigationOptions = {
     title: BETA_PROGRAMME_FAQ_HEADER_TITLE,
 }
+
+export const BetaProgrammeFAQsScreenWithHeader = () => (
+    <HeaderScreenContainer
+        title={BETA_PROGRAMME_FAQ_HEADER_TITLE}
+        actionLeft={true}
+    >
+        <BetaProgrammeFAQsScreen />
+    </HeaderScreenContainer>
+)

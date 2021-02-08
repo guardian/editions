@@ -72,12 +72,16 @@ const styles = StyleSheet.create({
     basicCard: { backgroundColor: color.background, overflow: 'hidden' },
 })
 
-const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
+export const wrapInSlideCard: NavigatorWrapper = (
+    navigator,
+    getPosition,
+    route,
+) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
-    const Wrapper = ({ navigation }: NavigationInjectedProps) => {
+    const Wrapper = ({ navigation, route }: NavigationInjectedProps) => {
         const position = getPosition()
         const originalPosition = getScreenPositionOfItem(
-            navigation.getParam('path').article,
+            route.params.path.article,
         )
         const window = useDimensions()
 
@@ -94,7 +98,7 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
             window,
         })
 
-        if (navigation.getParam('prefersFullScreen', false)) {
+        if (route.params.prefersFullScreen) {
             return (
                 <Animated.View
                     style={[
@@ -175,6 +179,8 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
     )
 }
 
+// ANY WAY WE CAN REUSE THIS???
+// PERHAPS... create a Stack.screen out of the "front" and "article" inputs
 const createArticleNavigator = (
     front: NavigationRouteConfig,
     article: NavigationRouteConfig,
@@ -224,5 +230,100 @@ export const SlideCardJames = ({ navigation, route }) =>
             <ArticleScreen navigation={navigation} route={route} />
         </SlideCard>
     )
+
+export const ArticleWrapper = ({
+    navigation,
+    route,
+}: NavigationInjectedProps) => {
+    const position = new Animated.Value(0)
+    const originalPosition = getScreenPositionOfItem(route.params.path.article)
+    const window = useDimensions()
+
+    const { height } = originalPosition
+    const {
+        opacity,
+        opacityOuter,
+        scaler,
+        transform,
+        borderRadius,
+    } = articleScreenMotion({
+        position,
+        originalPosition,
+        window,
+    })
+
+    console.log(opacity, opacityOuter, scaler, transform, borderRadius)
+
+    if (route.params.prefersFullScreen) {
+        return (
+            <Animated.View
+                style={[
+                    StyleSheet.absoluteFillObject,
+                    styles.basicCard,
+                    {
+                        transform: [
+                            {
+                                translateY: position.interpolate({
+                                    inputRange: safeInterpolation([0, 1]),
+                                    outputRange: safeInterpolation([200, 0]),
+                                }),
+                            },
+                        ],
+                    },
+                    {
+                        opacity: position.interpolate({
+                            inputRange: safeInterpolation([0, 0.5]),
+                            outputRange: safeInterpolation([0, 1]),
+                        }),
+                    },
+                ]}
+            >
+                {/* <BasicCardWrapper
+                    navigator={Navigator}
+                    navigation={navigation}
+                /> */}
+            </Animated.View>
+        )
+    }
+    return (
+        // <Animated.View
+        //     style={[
+        //         styles.root,
+        //         {
+        //             transform,
+        //         },
+
+        //     ]}
+        // >
+        //     <ClipFromTop easing={position} from={height / scaler}>
+        //         <Animated.View
+        //             style={[
+        //                 styles.inner,
+        //                 {
+        //                     opacity: opacityOuter,
+        //                     borderRadius,
+        //                     minHeight: safeValue(height / scaler, 1000),
+        //                 },
+        //             ]}
+        //         >
+        //             <Animated.View
+        //                 style={[
+        //                     StyleSheet.absoluteFillObject,
+        //                     {
+        //                         height:
+        //                             window.height - metrics.slideCardSpacing,
+        //                     },
+        //                     { opacity },
+        //                 ]}
+        //             >
+        <SlideCard>
+            <ArticleScreen navigation={navigation} route={route} />
+        </SlideCard>
+        //             </Animated.View>
+        //         </Animated.View>
+        //     </ClipFromTop>
+        // </Animated.View>
+    )
+}
 
 export { createArticleNavigator }

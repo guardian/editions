@@ -31,6 +31,7 @@ import {
 } from 'src/helpers/settings'
 import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters'
 import { storeSetting, getSetting } from 'src/helpers/settings'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 interface GdprConfig {
     gdprAllowPerformance: ThreeWaySwitchValue
@@ -285,6 +286,17 @@ const GdprConsentScreen = ({ navigation }: NavigationInjectedProps) => (
     </WithAppAppearance>
 )
 
+const GdprConsentScreenWithHeader = ({
+    navigation,
+}: NavigationInjectedProps) => (
+    <HeaderScreenContainer
+        title={PRIVACY_SETTINGS_HEADER_TITLE}
+        actionLeft={true}
+    >
+        <GdprConsentScreen navigation={navigation} />
+    </HeaderScreenContainer>
+)
+
 const GdprConsentScreenForOnboarding = ({
     navigation,
 }: NavigationInjectedProps) => (
@@ -301,4 +313,9 @@ GdprConsentScreen.navigationOptions = {
     title: PRIVACY_SETTINGS_HEADER_TITLE,
 }
 
-export { GdprConsent, GdprConsentScreenForOnboarding, GdprConsentScreen }
+export {
+    GdprConsent,
+    GdprConsentScreenForOnboarding,
+    GdprConsentScreen,
+    GdprConsentScreenWithHeader,
+}

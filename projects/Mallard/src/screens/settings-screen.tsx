@@ -39,6 +39,8 @@ import { DualButton } from 'src/components/lists/DualButton'
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
 import { Copy } from 'src/helpers/words'
 import { useNotificationsEnabled } from 'src/hooks/use-config-provider'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
+import { useNavigation } from '@react-navigation/native'
 
 const MiscSettingsList = React.memo(
     (props: {
@@ -126,18 +128,17 @@ const QUERY = gql`
 
 const SignInButton = ({
     username,
-    navigation,
     signOutIdentity,
     accessible = true,
     accessibilityRole = 'button',
 }: {
     username?: string
-    navigation: NavigationScreenProp<NavigationRoute>
     signOutIdentity: () => void
     accessible: boolean
     accessibilityRole: AccessibilityRole
-}) =>
-    username ? (
+}) => {
+    const navigation = useNavigation()
+    return username ? (
         <DualButton
             accessible={accessible}
             accessibilityRole={accessibilityRole}
@@ -158,8 +159,10 @@ const SignInButton = ({
             onPress={() => navigation.navigate(routeNames.SignIn)}
         />
     )
+}
 
-const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
+const SettingsScreen = () => {
+    const navigation = useNavigation()
     const query = useQuery<QueryData>(QUERY)
     const identityData = useIdentity()
     const canAccess = useAccess()
@@ -333,4 +336,10 @@ SettingsScreen.navigationOptions = {
     showHeaderRight: true,
 }
 
-export { SettingsScreen }
+const SettingsScreenWithHeader = () => (
+    <HeaderScreenContainer title="Settings" actionLeft={true}>
+        <SettingsScreen />
+    </HeaderScreenContainer>
+)
+
+export { SettingsScreen, SettingsScreenWithHeader }

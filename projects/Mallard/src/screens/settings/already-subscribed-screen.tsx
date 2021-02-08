@@ -13,6 +13,7 @@ import { isValid, isError } from 'src/authentication/lib/Attempt'
 import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { Copy } from 'src/helpers/words'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
@@ -124,4 +125,15 @@ AlreadySubscribedScreen.navigationOptions = {
     title: <Text style={{ fontSize: 20 }}>{Copy.alreadySubscribed.title}</Text>,
 }
 
-export { AlreadySubscribedScreen }
+const AlreadySubscribedScreenWithHeader = ({
+    navigation,
+}: NavigationInjectedProps) => (
+    <HeaderScreenContainer
+        title={Copy.alreadySubscribed.title}
+        actionLeft={true}
+    >
+        <AlreadySubscribedScreen navigation={navigation} />
+    </HeaderScreenContainer>
+)
+
+export { AlreadySubscribedScreen, AlreadySubscribedScreenWithHeader }

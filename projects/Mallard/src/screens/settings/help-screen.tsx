@@ -20,6 +20,7 @@ import {
 import { AccessContext } from 'src/authentication/AccessContext'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useToast } from 'src/hooks/use-toast'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 export interface OnCompletionToast {
     (msg: string): void
@@ -99,4 +100,10 @@ HelpScreen.navigationOptions = {
     title: 'Help',
 }
 
-export { HelpScreen }
+const HelpScreenWithHeader = ({ navigation }: NavigationInjectedProps) => (
+    <HeaderScreenContainer title="Help" actionLeft={true}>
+        <HelpScreen navigation={navigation} />
+    </HeaderScreenContainer>
+)
+
+export { HelpScreen, HelpScreenWithHeader }

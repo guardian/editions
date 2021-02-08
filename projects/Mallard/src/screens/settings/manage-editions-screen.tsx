@@ -14,6 +14,7 @@ import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { MANAGE_EDITIONS_TITLE } from 'src/helpers/words'
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions'
 import { Copy } from 'src/helpers/words'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 const buttonStyles = StyleSheet.create({
     background: {
@@ -209,4 +210,15 @@ ManageEditionScreenFromIssuePicker.navigationOptions = {
     showHeaderRight: true,
 }
 
-export { ManageEditionsScreen, ManageEditionScreenFromIssuePicker }
+// @TODO - two routes here require different header configurations.
+const ManageEditionsScreenWithHeader = () => (
+    <HeaderScreenContainer title={MANAGE_EDITIONS_TITLE} actionLeft={true}>
+        <ManageEditionsScreen />
+    </HeaderScreenContainer>
+)
+
+export {
+    ManageEditionsScreen,
+    ManageEditionScreenFromIssuePicker,
+    ManageEditionsScreenWithHeader,
+}

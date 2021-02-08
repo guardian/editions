@@ -1,6 +1,7 @@
 import React from 'react'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 import { html } from 'src/helpers/webview'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 const burgerMenuSVG = () => html`
     <svg
@@ -453,4 +454,11 @@ FAQScreen.navigationOptions = {
     title: 'FAQ',
 }
 
-export { FAQScreen }
+//@TODO HeaderScreenContainer is samey, could have a better treatment for less code
+const FAQScreenWithHeader = () => (
+    <HeaderScreenContainer title="FAQ" actionLeft={true}>
+        <FAQScreen />
+    </HeaderScreenContainer>
+)
+
+export { FAQScreen, FAQScreenWithHeader }

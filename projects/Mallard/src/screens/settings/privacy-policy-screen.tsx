@@ -4,6 +4,7 @@ import { LoginHeader } from 'src/components/login/login-layout'
 import { PRIVACY_POLICY_HEADER_TITLE } from 'src/helpers/words'
 import { NavigationInjectedProps } from 'react-navigation'
 import { html } from 'src/helpers/webview'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 const privacyPolicyHtml = html`
     <h2><strong>About this privacy policy</strong></h2>
@@ -487,6 +488,15 @@ PrivacyPolicyScreen.navigationOptions = {
     title: PRIVACY_POLICY_HEADER_TITLE,
 }
 
+const PrivacyPolicyScreenWithHeader = () => (
+    <HeaderScreenContainer
+        title={PRIVACY_POLICY_HEADER_TITLE}
+        actionLeft={true}
+    >
+        <PrivacyPolicyScreen />
+    </HeaderScreenContainer>
+)
+
 const PrivacyPolicyScreenForOnboarding = ({
     navigation,
 }: NavigationInjectedProps) => (
@@ -498,4 +508,8 @@ const PrivacyPolicyScreenForOnboarding = ({
     </>
 )
 
-export { PrivacyPolicyScreen, PrivacyPolicyScreenForOnboarding }
+export {
+    PrivacyPolicyScreen,
+    PrivacyPolicyScreenForOnboarding,
+    PrivacyPolicyScreenWithHeader,
+}

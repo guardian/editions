@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 
 const CreditsScreen = () => {
@@ -15,4 +16,11 @@ CreditsScreen.navigationOptions = {
     title: 'Credits',
 }
 
-export { CreditsScreen }
+// @TODO: Move these titles to the language files
+const CreditsScreenWithHeader = () => (
+    <HeaderScreenContainer title="Credits" actionLeft={true}>
+        <CreditsScreen />
+    </HeaderScreenContainer>
+)
+
+export { CreditsScreen, CreditsScreenWithHeader }
