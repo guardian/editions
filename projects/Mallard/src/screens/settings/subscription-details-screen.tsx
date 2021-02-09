@@ -10,6 +10,7 @@ import { CASExpiry } from '../../../../Apps/common/src/cas-expiry'
 import { Heading } from 'src/components/layout/ui/row'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 import { Copy } from 'src/helpers/words'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
 
 const keyValueItem = (key: string, value: string) =>
     ({
@@ -134,4 +135,13 @@ SubscriptionDetailsScreen.navigationOptions = {
     ),
 }
 
-export { SubscriptionDetailsScreen }
+const SubscriptionDetailsScreenWithHeader = () => (
+    <HeaderScreenContainer
+        title={Copy.subscriptionDetails.title}
+        actionLeft={true}
+    >
+        <SubscriptionDetailsScreen />
+    </HeaderScreenContainer>
+)
+
+export { SubscriptionDetailsScreen, SubscriptionDetailsScreenWithHeader }

@@ -9,53 +9,29 @@ import { HomeScreen } from './screens/home-screen'
 import { IssueScreen } from './screens/issue-screen'
 import { EditionsMenuScreen } from './screens/editions-menu-screen'
 import { Animated } from 'react-native'
-import {
-    ArticleWrapper,
-    SlideCardJames,
-    wrapInSlideCard,
-} from './navigation/navigators/article'
-import { ArticleScreen } from './screens/article-screen'
-import {
-    SettingsScreen,
-    SettingsScreenWithHeader,
-} from './screens/settings-screen'
+import { ArticleWrapper } from './navigation/navigators/article'
+import { SettingsScreenWithHeader } from './screens/settings-screen'
 import { AuthSwitcherScreen } from './screens/identity-login-screen'
 import { OnboardingConsentScreen } from './screens/onboarding-screen'
 import {
-    GdprConsentScreen,
     GdprConsentScreenForOnboarding,
     GdprConsentScreenWithHeader,
 } from './screens/settings/gdpr-consent-screen'
 import {
-    PrivacyPolicyScreen,
     PrivacyPolicyScreenForOnboarding,
     PrivacyPolicyScreenWithHeader,
 } from './screens/settings/privacy-policy-screen'
-import {
-    AlreadySubscribedScreen,
-    AlreadySubscribedScreenWithHeader,
-} from './screens/settings/already-subscribed-screen'
+import { AlreadySubscribedScreenWithHeader } from './screens/settings/already-subscribed-screen'
 import { CasSignInScreen } from './screens/settings/cas-sign-in-screen'
 import { ManageEditionsScreenWithHeader } from './screens/settings/manage-editions-screen'
-import {
-    BetaProgrammeFAQsScreen,
-    BetaProgrammeFAQsScreenWithHeader,
-} from './screens/settings/beta-programme-faqs'
-import {
-    CreditsScreen,
-    CreditsScreenWithHeader,
-} from './screens/settings/credits-screen'
+import { BetaProgrammeFAQsScreenWithHeader } from './screens/settings/beta-programme-faqs'
+import { CreditsScreenWithHeader } from './screens/settings/credits-screen'
 import { EditionsScreen } from './screens/settings/editions-screen'
-import { FAQScreen, FAQScreenWithHeader } from './screens/settings/faq-screen'
-import {
-    HelpScreen,
-    HelpScreenWithHeader,
-} from './screens/settings/help-screen'
-import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen'
-import {
-    TermsAndConditionsScreen,
-    TermsAndConditionsScreenWithHeader,
-} from './screens/settings/terms-and-conditions-screen'
+import { FAQScreenWithHeader } from './screens/settings/faq-screen'
+import { HelpScreenWithHeader } from './screens/settings/help-screen'
+import { SubscriptionDetailsScreenWithHeader } from './screens/settings/subscription-details-screen'
+import { TermsAndConditionsScreenWithHeader } from './screens/settings/terms-and-conditions-screen'
+import { ApiScreenWithHeader } from './screens/settings/api-screen'
 
 const Stack = createStackNavigator()
 
@@ -92,8 +68,6 @@ const cardStyleInterpolator = props => {
         },
     }
 }
-
-let animatedValue = new Animated.Value(0)
 
 const RootStack = () => {
     return (
@@ -221,7 +195,11 @@ const RootStack = () => {
             />
             <Stack.Screen
                 name={routeNames.SubscriptionDetails}
-                component={SubscriptionDetailsScreen}
+                component={SubscriptionDetailsScreenWithHeader}
+            />
+            <Stack.Screen
+                name={routeNames.Endpoints}
+                component={ApiScreenWithHeader}
             />
             {/* Turned off to remove Promise rejection error on Android */}
             {/* <Stack.Screen

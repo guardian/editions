@@ -12,6 +12,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { setApiUrl } from 'src/helpers/settings/setters'
 import { useApolloClient } from '@apollo/react-hooks'
+import { HeaderScreenContainer } from 'src/components/Header/Header'
+import { useNavigation } from '@react-navigation/native'
 
 const ApiState = () => {
     const apiUrl = useApiUrl()
@@ -25,13 +27,10 @@ const ApiState = () => {
     )
 }
 
-const ApiScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
+const ApiScreen = () => {
     const client = useApolloClient()
     const apiUrl = useApiUrl()
+    const navigation = useNavigation()
 
     return (
         <ScrollContainer>
@@ -67,7 +66,13 @@ const ApiScreen = ({
     )
 }
 ApiScreen.navigationOptions = {
-    title: 'API Endpoint',
+    title: 'API Endpoints',
 }
 
-export { ApiScreen, ApiState }
+const ApiScreenWithHeader = () => (
+    <HeaderScreenContainer title="API Endpoints" actionLeft={true}>
+        <ApiScreen />
+    </HeaderScreenContainer>
+)
+
+export { ApiScreen, ApiState, ApiScreenWithHeader }
