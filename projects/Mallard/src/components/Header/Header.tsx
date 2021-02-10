@@ -7,9 +7,14 @@ import { Header } from '../layout/header/header'
 
 const HeaderScreenContainer = ({
     actionLeft,
-    actionRight,
+    actionRight = false,
     children,
     title,
+}: {
+    actionLeft: boolean
+    actionRight?: boolean
+    children: React.ReactNode
+    title: string
 }) => {
     const navigation = useNavigation()
     return (

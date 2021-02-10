@@ -18,20 +18,20 @@ import {
     GdprConsentScreenWithHeader,
 } from './screens/settings/gdpr-consent-screen'
 import {
+    PrivacyPolicyScreen,
     PrivacyPolicyScreenForOnboarding,
-    PrivacyPolicyScreenWithHeader,
 } from './screens/settings/privacy-policy-screen'
 import { AlreadySubscribedScreenWithHeader } from './screens/settings/already-subscribed-screen'
 import { CasSignInScreen } from './screens/settings/cas-sign-in-screen'
 import { ManageEditionsScreenWithHeader } from './screens/settings/manage-editions-screen'
 import { BetaProgrammeFAQsScreenWithHeader } from './screens/settings/beta-programme-faqs'
-import { CreditsScreenWithHeader } from './screens/settings/credits-screen'
+import { CreditsScreen } from './screens/settings/credits-screen'
 import { EditionsScreen } from './screens/settings/editions-screen'
-import { FAQScreenWithHeader } from './screens/settings/faq-screen'
-import { HelpScreenWithHeader } from './screens/settings/help-screen'
-import { SubscriptionDetailsScreenWithHeader } from './screens/settings/subscription-details-screen'
+import { FAQScreen } from './screens/settings/faq-screen'
+import { HelpScreen } from './screens/settings/help-screen'
+import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen'
 import { TermsAndConditionsScreenWithHeader } from './screens/settings/terms-and-conditions-screen'
-import { ApiScreenWithHeader } from './screens/settings/api-screen'
+import { ApiScreen } from './screens/settings/api-screen'
 
 const Stack = createStackNavigator()
 
@@ -165,7 +165,7 @@ const RootStack = () => {
             />
             <Stack.Screen
                 name={routeNames.PrivacyPolicy}
-                component={PrivacyPolicyScreenWithHeader}
+                component={PrivacyPolicyScreen}
             />
 
             {/* ==== Inspect from here === */}
@@ -181,26 +181,14 @@ const RootStack = () => {
                 name={routeNames.BetaProgrammeFAQs}
                 component={BetaProgrammeFAQsScreenWithHeader}
             />
-            <Stack.Screen
-                name={routeNames.Help}
-                component={HelpScreenWithHeader}
-            />
-            <Stack.Screen
-                name={routeNames.Credits}
-                component={CreditsScreenWithHeader}
-            />
-            <Stack.Screen
-                name={routeNames.FAQ}
-                component={FAQScreenWithHeader}
-            />
+            <Stack.Screen name={routeNames.Help} component={HelpScreen} />
+            <Stack.Screen name={routeNames.Credits} component={CreditsScreen} />
+            <Stack.Screen name={routeNames.FAQ} component={FAQScreen} />
             <Stack.Screen
                 name={routeNames.SubscriptionDetails}
-                component={SubscriptionDetailsScreenWithHeader}
+                component={SubscriptionDetailsScreen}
             />
-            <Stack.Screen
-                name={routeNames.Endpoints}
-                component={ApiScreenWithHeader}
-            />
+            <Stack.Screen name={routeNames.Endpoints} component={ApiScreen} />
             {/* Turned off to remove Promise rejection error on Android */}
             {/* <Stack.Screen
                 name={routeNames.Storybook}

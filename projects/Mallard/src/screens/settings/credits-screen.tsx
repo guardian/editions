@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { HeaderScreenContainer } from 'src/components/Header/Header'
+import { CREDITS_HEADER_TITLE } from 'src/helpers/words'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 
 const CreditsScreen = () => {
@@ -9,18 +10,11 @@ const CreditsScreen = () => {
         setHtmlData(require('src/constants/settings/credits.json').bodyHtml)
     }, [])
 
-    return <DefaultInfoTextWebview html={htmlData} />
+    return (
+        <HeaderScreenContainer title={CREDITS_HEADER_TITLE} actionLeft={true}>
+            <DefaultInfoTextWebview html={htmlData} />
+        </HeaderScreenContainer>
+    )
 }
 
-CreditsScreen.navigationOptions = {
-    title: 'Credits',
-}
-
-// @TODO: Move these titles to the language files
-const CreditsScreenWithHeader = () => (
-    <HeaderScreenContainer title="Credits" actionLeft={true}>
-        <CreditsScreen />
-    </HeaderScreenContainer>
-)
-
-export { CreditsScreen, CreditsScreenWithHeader }
+export { CreditsScreen }

@@ -52,6 +52,10 @@ export const BETA_PROGRAMME_FAQ_HEADER_TITLE = 'Beta Programme FAQ'
 export const REFRESH_BUTTON_TEXT = 'Refresh'
 export const DOWNLOAD_ISSUE_MESSAGE_OFFLINE = `You're currently offline. You can download it when you go online`
 export const CUSTOMER_HELP_EMAIL = 'customer.help@theguardian.com'
+export const CREDITS_HEADER_TITLE = 'Credits'
+export const FAQS_HEADER_TITLE = 'FAQ'
+export const ENDPOINTS_HEADER_TITLE = 'API Endpoints'
+export const HELP_HEADER_TITLE = 'Help'
 
 // Sign in modal
 const SignIn = {

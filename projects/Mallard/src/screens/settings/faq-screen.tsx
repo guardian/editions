@@ -2,6 +2,7 @@ import React from 'react'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 import { html } from 'src/helpers/webview'
 import { HeaderScreenContainer } from 'src/components/Header/Header'
+import { FAQS_HEADER_TITLE } from 'src/helpers/words'
 
 const burgerMenuSVG = () => html`
     <svg
@@ -448,17 +449,10 @@ const faqHtml = html`
     <p>No, we don’t publish an issue on Christmas Day.</p>
 `
 
-const FAQScreen = () => <DefaultInfoTextWebview html={faqHtml} />
-
-FAQScreen.navigationOptions = {
-    title: 'FAQ',
-}
-
-//@TODO HeaderScreenContainer is samey, could have a better treatment for less code
-const FAQScreenWithHeader = () => (
-    <HeaderScreenContainer title="FAQ" actionLeft={true}>
-        <FAQScreen />
+const FAQScreen = () => (
+    <HeaderScreenContainer title={FAQS_HEADER_TITLE} actionLeft={true}>
+        <DefaultInfoTextWebview html={faqHtml} />
     </HeaderScreenContainer>
 )
 
-export { FAQScreen, FAQScreenWithHeader }
+export { FAQScreen }

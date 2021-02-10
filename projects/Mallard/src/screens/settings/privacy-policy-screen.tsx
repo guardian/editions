@@ -481,19 +481,11 @@ const privacyPolicyHtml = html`
 `
 
 const PrivacyPolicyScreen = () => (
-    <DefaultInfoTextWebview html={privacyPolicyHtml} />
-)
-
-PrivacyPolicyScreen.navigationOptions = {
-    title: PRIVACY_POLICY_HEADER_TITLE,
-}
-
-const PrivacyPolicyScreenWithHeader = () => (
     <HeaderScreenContainer
         title={PRIVACY_POLICY_HEADER_TITLE}
         actionLeft={true}
     >
-        <PrivacyPolicyScreen />
+        <DefaultInfoTextWebview html={privacyPolicyHtml} />
     </HeaderScreenContainer>
 )
 
@@ -508,8 +500,4 @@ const PrivacyPolicyScreenForOnboarding = ({
     </>
 )
 
-export {
-    PrivacyPolicyScreen,
-    PrivacyPolicyScreenForOnboarding,
-    PrivacyPolicyScreenWithHeader,
-}
+export { PrivacyPolicyScreen, PrivacyPolicyScreenForOnboarding }
