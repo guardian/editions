@@ -237,109 +237,101 @@ const SettingsScreen = () => {
     ]
 
     return (
-        <WithAppAppearance value={'settings'}>
-            <ScrollContainer>
-                <SignInButton
-                    accessible={true}
-                    accessibilityRole="button"
-                    navigation={navigation}
-                    username={
-                        identityData
-                            ? identityData.userDetails.primaryEmailAddress
-                            : undefined
-                    }
-                    signOutIdentity={signOutIdentity}
-                />
-                <List data={signInListItems} />
-                <Heading>{``}</Heading>
-                <MiscSettingsList
-                    client={client}
-                    isWeatherShown={isWeatherShown}
-                    navigation={navigation}
-                />
-                <Heading>{``}</Heading>
-                <List
-                    data={[
-                        {
-                            key: 'Privacy settings',
-                            title: Copy.settings.privacySettings,
-                            proxy: rightChevronIcon,
-                            onPress: () => {
-                                navigation.navigate(routeNames.GdprConsent)
+        <HeaderScreenContainer title="Settings" actionLeft={true}>
+            <WithAppAppearance value={'settings'}>
+                <ScrollContainer>
+                    <SignInButton
+                        accessible={true}
+                        accessibilityRole="button"
+                        navigation={navigation}
+                        username={
+                            identityData
+                                ? identityData.userDetails.primaryEmailAddress
+                                : undefined
+                        }
+                        signOutIdentity={signOutIdentity}
+                    />
+                    <List data={signInListItems} />
+                    <Heading>{``}</Heading>
+                    <MiscSettingsList
+                        client={client}
+                        isWeatherShown={isWeatherShown}
+                        navigation={navigation}
+                    />
+                    <Heading>{``}</Heading>
+                    <List
+                        data={[
+                            {
+                                key: 'Privacy settings',
+                                title: Copy.settings.privacySettings,
+                                proxy: rightChevronIcon,
+                                onPress: () => {
+                                    navigation.navigate(routeNames.GdprConsent)
+                                },
                             },
-                        },
-                        {
-                            key: 'Privacy policy',
-                            title: Copy.settings.privacyPolicy,
-                            proxy: rightChevronIcon,
-                            onPress: () => {
-                                navigation.navigate(routeNames.PrivacyPolicy)
+                            {
+                                key: 'Privacy policy',
+                                title: Copy.settings.privacyPolicy,
+                                proxy: rightChevronIcon,
+                                onPress: () => {
+                                    navigation.navigate(
+                                        routeNames.PrivacyPolicy,
+                                    )
+                                },
                             },
-                        },
-                        {
-                            key: 'Terms and conditions',
-                            title: Copy.settings.termsAndConditions,
-                            onPress: () => {
-                                navigation.navigate(
-                                    routeNames.TermsAndConditions,
-                                )
+                            {
+                                key: 'Terms and conditions',
+                                title: Copy.settings.termsAndConditions,
+                                onPress: () => {
+                                    navigation.navigate(
+                                        routeNames.TermsAndConditions,
+                                    )
+                                },
+                                proxy: rightChevronIcon,
                             },
-                            proxy: rightChevronIcon,
-                        },
-                    ]}
-                />
-                <Heading>{``}</Heading>
-                <List
-                    data={[
-                        {
-                            key: 'Help',
-                            title: Copy.settings.help,
-                            onPress: () => {
-                                navigation.navigate(routeNames.Help)
+                        ]}
+                    />
+                    <Heading>{``}</Heading>
+                    <List
+                        data={[
+                            {
+                                key: 'Help',
+                                title: Copy.settings.help,
+                                onPress: () => {
+                                    navigation.navigate(routeNames.Help)
+                                },
+                                proxy: rightChevronIcon,
                             },
-                            proxy: rightChevronIcon,
-                        },
-                        {
-                            key: 'Credits',
-                            title: Copy.settings.credits,
-                            onPress: () => {
-                                navigation.navigate(routeNames.Credits)
+                            {
+                                key: 'Credits',
+                                title: Copy.settings.credits,
+                                onPress: () => {
+                                    navigation.navigate(routeNames.Credits)
+                                },
+                                proxy: rightChevronIcon,
                             },
-                            proxy: rightChevronIcon,
-                        },
-                        {
-                            key: 'Version',
-                            title: Copy.settings.version,
-                            onPress: versionClickHandler,
-                            proxy: (
-                                <Text>
-                                    {versionNumber} ({buildNumber})
-                                </Text>
-                            ),
-                        },
-                    ]}
-                />
+                            {
+                                key: 'Version',
+                                title: Copy.settings.version,
+                                onPress: versionClickHandler,
+                                proxy: (
+                                    <Text>
+                                        {versionNumber} ({buildNumber})
+                                    </Text>
+                                ),
+                            },
+                        ]}
+                    />
 
-                {canDisplayBetaButton && (
-                    <BetaButtonOption navigation={navigation} />
-                )}
+                    {canDisplayBetaButton && (
+                        <BetaButtonOption navigation={navigation} />
+                    )}
 
-                {isUsingProdDevtools && <DevZone />}
-            </ScrollContainer>
-        </WithAppAppearance>
+                    {isUsingProdDevtools && <DevZone />}
+                </ScrollContainer>
+            </WithAppAppearance>
+        </HeaderScreenContainer>
     )
 }
 
-SettingsScreen.navigationOptions = {
-    title: 'Settings',
-    showHeaderLeft: false,
-    showHeaderRight: true,
-}
-
-const SettingsScreenWithHeader = () => (
-    <HeaderScreenContainer title="Settings" actionLeft={true}>
-        <SettingsScreen />
-    </HeaderScreenContainer>
-)
-
-export { SettingsScreen, SettingsScreenWithHeader }
+export { SettingsScreen }

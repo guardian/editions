@@ -276,24 +276,18 @@ const GdprConsent = ({
 }
 
 const GdprConsentScreen = ({ navigation }: NavigationInjectedProps) => (
-    <WithAppAppearance value={'settings'}>
-        <ScrollContainer>
-            <GdprConsent
-                navigation={navigation}
-                continueText={'Enable all'}
-            ></GdprConsent>
-        </ScrollContainer>
-    </WithAppAppearance>
-)
-
-const GdprConsentScreenWithHeader = ({
-    navigation,
-}: NavigationInjectedProps) => (
     <HeaderScreenContainer
         title={PRIVACY_SETTINGS_HEADER_TITLE}
         actionLeft={true}
     >
-        <GdprConsentScreen navigation={navigation} />
+        <WithAppAppearance value={'settings'}>
+            <ScrollContainer>
+                <GdprConsent
+                    navigation={navigation}
+                    continueText={'Enable all'}
+                ></GdprConsent>
+            </ScrollContainer>
+        </WithAppAppearance>
     </HeaderScreenContainer>
 )
 
@@ -309,13 +303,4 @@ const GdprConsentScreenForOnboarding = ({
     </WithAppAppearance>
 )
 
-GdprConsentScreen.navigationOptions = {
-    title: PRIVACY_SETTINGS_HEADER_TITLE,
-}
-
-export {
-    GdprConsent,
-    GdprConsentScreenForOnboarding,
-    GdprConsentScreen,
-    GdprConsentScreenWithHeader,
-}
+export { GdprConsent, GdprConsentScreenForOnboarding, GdprConsentScreen }

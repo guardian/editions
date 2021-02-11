@@ -10,27 +10,27 @@ import { IssueScreen } from './screens/issue-screen'
 import { EditionsMenuScreen } from './screens/editions-menu-screen'
 import { Animated } from 'react-native'
 import { ArticleWrapper } from './navigation/navigators/article'
-import { SettingsScreenWithHeader } from './screens/settings-screen'
+import { SettingsScreen } from './screens/settings-screen'
 import { AuthSwitcherScreen } from './screens/identity-login-screen'
 import { OnboardingConsentScreen } from './screens/onboarding-screen'
 import {
     GdprConsentScreenForOnboarding,
-    GdprConsentScreenWithHeader,
+    GdprConsentScreen,
 } from './screens/settings/gdpr-consent-screen'
 import {
     PrivacyPolicyScreen,
     PrivacyPolicyScreenForOnboarding,
 } from './screens/settings/privacy-policy-screen'
-import { AlreadySubscribedScreenWithHeader } from './screens/settings/already-subscribed-screen'
+import { AlreadySubscribedScreen } from './screens/settings/already-subscribed-screen'
 import { CasSignInScreen } from './screens/settings/cas-sign-in-screen'
 import { ManageEditionsScreenWithHeader } from './screens/settings/manage-editions-screen'
-import { BetaProgrammeFAQsScreenWithHeader } from './screens/settings/beta-programme-faqs'
+import { BetaProgrammeFAQsScreen } from './screens/settings/beta-programme-faqs'
 import { CreditsScreen } from './screens/settings/credits-screen'
 import { EditionsScreen } from './screens/settings/editions-screen'
 import { FAQScreen } from './screens/settings/faq-screen'
 import { HelpScreen } from './screens/settings/help-screen'
 import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen'
-import { TermsAndConditionsScreenWithHeader } from './screens/settings/terms-and-conditions-screen'
+import { TermsAndConditionsScreen } from './screens/settings/terms-and-conditions-screen'
 import { ApiScreen } from './screens/settings/api-screen'
 
 const Stack = createStackNavigator()
@@ -125,7 +125,7 @@ const RootStack = () => {
             /> */}
             <Stack.Screen
                 name={routeNames.Settings}
-                component={SettingsScreenWithHeader}
+                component={SettingsScreen}
             />
             <Stack.Screen
                 name={routeNames.SignIn}
@@ -148,7 +148,7 @@ const RootStack = () => {
             />
             <Stack.Screen
                 name={routeNames.AlreadySubscribed}
-                component={AlreadySubscribedScreenWithHeader}
+                component={AlreadySubscribedScreen}
             />
             <Stack.Screen
                 name={routeNames.CasSignIn}
@@ -161,7 +161,7 @@ const RootStack = () => {
             {/** @TODO Fix the enable all button */}
             <Stack.Screen
                 name={routeNames.GdprConsent}
-                component={GdprConsentScreenWithHeader}
+                component={GdprConsentScreen}
             />
             <Stack.Screen
                 name={routeNames.PrivacyPolicy}
@@ -175,11 +175,11 @@ const RootStack = () => {
             />
             <Stack.Screen
                 name={routeNames.TermsAndConditions}
-                component={TermsAndConditionsScreenWithHeader}
+                component={TermsAndConditionsScreen}
             />
             <Stack.Screen
                 name={routeNames.BetaProgrammeFAQs}
-                component={BetaProgrammeFAQsScreenWithHeader}
+                component={BetaProgrammeFAQsScreen}
             />
             <Stack.Screen name={routeNames.Help} component={HelpScreen} />
             <Stack.Screen name={routeNames.Credits} component={CreditsScreen} />

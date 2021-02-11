@@ -56,6 +56,7 @@ export const CREDITS_HEADER_TITLE = 'Credits'
 export const FAQS_HEADER_TITLE = 'FAQ'
 export const ENDPOINTS_HEADER_TITLE = 'API Endpoints'
 export const HELP_HEADER_TITLE = 'Help'
+export const TERMS_HEADER_TITLE = 'Terms &amp; Conditions'
 
 // Sign in modal
 const SignIn = {

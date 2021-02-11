@@ -6,17 +6,9 @@ const termsAndConditionsHtml = require('src/constants/settings/terms-of-service.
     .bodyHtml
 
 const TermsAndConditionsScreen = () => (
-    <DefaultInfoTextWebview html={termsAndConditionsHtml} />
-)
-
-const TermsAndConditionsScreenWithHeader = () => (
     <HeaderScreenContainer title="Terms &amp; Conditions" actionLeft={true}>
-        <TermsAndConditionsScreen />
+        <DefaultInfoTextWebview html={termsAndConditionsHtml} />
     </HeaderScreenContainer>
 )
 
-TermsAndConditionsScreen.navigationOptions = {
-    title: 'Terms & Conditions',
-}
-
-export { TermsAndConditionsScreen, TermsAndConditionsScreenWithHeader }
+export { TermsAndConditionsScreen }

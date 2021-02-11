@@ -221,19 +221,13 @@ const betaProgrammeFAQsHtml = html`
     </p>
 `
 
-export const BetaProgrammeFAQsScreen = () => (
-    <DefaultInfoTextWebview html={betaProgrammeFAQsHtml} />
-)
-
-BetaProgrammeFAQsScreen.navigationOptions = {
-    title: BETA_PROGRAMME_FAQ_HEADER_TITLE,
-}
-
-export const BetaProgrammeFAQsScreenWithHeader = () => (
+const BetaProgrammeFAQsScreen = () => (
     <HeaderScreenContainer
         title={BETA_PROGRAMME_FAQ_HEADER_TITLE}
         actionLeft={true}
     >
-        <BetaProgrammeFAQsScreen />
+        <DefaultInfoTextWebview html={betaProgrammeFAQsHtml} />
     </HeaderScreenContainer>
 )
+
+export { BetaProgrammeFAQsScreen }
