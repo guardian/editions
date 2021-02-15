@@ -29,7 +29,7 @@
         "test:watch": "jest --watch"
     },
     "dependencies": {
-        "@guardian/content-api-models": "^15.9.6",
+        "@guardian/content-api-models": "^15.9.16",
         "@guardian/content-atom-model": "^3.2.4",
         "@types/aws-lambda": "^8.10.31",
         "@types/aws4": "^1.5.1",

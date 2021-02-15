@@ -139,10 +139,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@guardian/content-api-models@^15.9.6":
-  version "15.9.6"
-  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-15.9.6.tgz#ebe3b51cb636f22118fda2196491c4d1b8c8a440"
-  integrity sha512-TpeMPgUSBI/jaKpgzVm0Spzm7p8+t7AxXn4UkpH8cgH4V3vF7o4q+SChPq7cgtr50MnZD9Ej8UGbq7rAKqchUA==
+"@guardian/content-api-models@^15.9.16":
+  version "15.9.16"
+  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-15.9.16.tgz#76bd2a3c05c1c0dddd1c8695fd2a94ff76412ee8"
+  integrity sha512-vlC4IGfv+W62OklszZZRFKc87jbgvOuczrefloKRuU9C4UqlylwTB2FIPI4G39DlyOkeLUdNRrRjdzySCo3Kgw==
   dependencies:
     "@guardian/content-atom-model" "^3.2.4"
     "@guardian/content-entity-model" "^2.0.6"
@@ -487,9 +487,9 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "12.6.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.3.tgz#44d507c5634f85e7164707ca36bba21b5213d487"
-  integrity sha512-7TEYTQT1/6PP53NftXXabIZDaZfaoBdeBm8Md/i7zsWRoBe0YwOXguyK8vhHs8ehgB/w9U4K/6EWuTyp0W6nIA==
+  version "14.14.27"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.27.tgz#c7127f8da0498993e13b1a42faf1303d3110d2f2"
+  integrity sha512-Ecfmo4YDQPwuqTCl1yBxLV5ihKfRlkBmzUEDcfIRvDxOTGQEeikr317Ln7Gcv0tjA8dVgKI3rniqW2G1OyKDng==
 
 "@types/q@*":
   version "1.5.4"
