@@ -3,7 +3,6 @@
 exports[`EditionsMenu should display a EditionsMenu with correct styling and alternative Regional Buttons 1`] = `
 <RCTScrollView>
   <View>
-    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
       data={
@@ -68,8 +67,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           <View
             style={
               Object {
-                "backgroundColor": "#121212",
-                "height": 1,
+                "height": 10,
               }
             }
           />
@@ -89,7 +87,6 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
 exports[`EditionsMenu should display a EditionsMenu with correct styling default Regional Buttons and a Special Edition Button 1`] = `
 <RCTScrollView>
   <View>
-    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
       data={
@@ -156,8 +153,7 @@ Saturday by 6 am (AEST)",
           <View
             style={
               Object {
-                "backgroundColor": "#121212",
-                "height": 1,
+                "height": 10,
               }
             }
           />
@@ -170,7 +166,6 @@ Saturday by 6 am (AEST)",
         </View>
       </View>
     </RCTScrollView>
-    EditionsMenuHeader
     <RCTScrollView
       data={
         Array [
@@ -255,7 +250,6 @@ Monthly",
 exports[`EditionsMenu should display a default EditionsMenu with correct styling and default Regional Buttons 1`] = `
 <RCTScrollView>
   <View>
-    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
       data={
@@ -322,8 +316,7 @@ Saturday by 6 am (AEST)",
           <View
             style={
               Object {
-                "backgroundColor": "#121212",
-                "height": 1,
+                "height": 10,
               }
             }
           />

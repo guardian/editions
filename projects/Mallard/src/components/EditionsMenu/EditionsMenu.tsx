@@ -2,7 +2,6 @@ import React from 'react'
 import { FlatList, ScrollView } from 'react-native'
 import { EditionId, RegionalEdition, SpecialEdition } from 'src/common'
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults'
-import { EditionsMenuHeader } from './Header/Header'
 import { ItemSeperator } from './ItemSeperator/ItemSeperator'
 import { RegionButton } from './RegionButton/RegionButton'
 import { SpecialEditionButton } from './SpecialEditionButton/SpecialEditionButton'
@@ -26,7 +25,6 @@ const EditionsMenu = ({
 }) => {
     return (
         <ScrollView>
-            <EditionsMenuHeader>Regions</EditionsMenuHeader>
             <FlatList
                 data={regionalEditions || defaultRegionalEditions}
                 renderItem={({ item }: { item: RegionalEdition }) => {
@@ -48,7 +46,6 @@ const EditionsMenu = ({
             />
             {specialEditions && specialEditions.length > 0 && (
                 <>
-                    <EditionsMenuHeader>Special Editions</EditionsMenuHeader>
                     <FlatList
                         data={specialEditions}
                         renderItem={({ item }: { item: SpecialEdition }) => {

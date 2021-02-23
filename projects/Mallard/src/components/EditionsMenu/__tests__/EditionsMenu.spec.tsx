@@ -18,10 +18,6 @@ jest.mock(
     }),
 )
 
-jest.mock('src/components/EditionsMenu/Header/Header', () => ({
-    EditionsMenuHeader: () => 'EditionsMenuHeader',
-}))
-
 const props = {
     navigationPress: () => {},
     selectedEdition: editions.daily,
