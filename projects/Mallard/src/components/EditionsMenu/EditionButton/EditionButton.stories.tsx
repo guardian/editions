@@ -11,7 +11,7 @@ const specialProps = {
     title: 'Food Monthly',
     subTitle: 'The best food of the month',
     titleColor: '#FEEEF7',
-    isSpecial: true
+    isSpecial: true,
 }
 
 storiesOf('EditionsMenu', module)
@@ -32,7 +32,9 @@ storiesOf('EditionsMenu', module)
         />
     ))
 
-    .add('SpecialEditionButton - default', () => <EditionButton {...specialProps} />)
+    .add('SpecialEditionButton - default', () => (
+        <EditionButton {...specialProps} />
+    ))
     .add('SpecialEditionButton - selected', () => (
         <EditionButton selected {...specialProps} />
     ))
