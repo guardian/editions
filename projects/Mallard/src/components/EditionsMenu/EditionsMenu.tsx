@@ -79,12 +79,14 @@ const EditionsMenu = ({
                 data={regionalEditions || defaultRegionalEditions}
                 renderItem={renderRegionalItem}
                 ItemSeparatorComponent={() => <ItemSeperator />}
+                ListFooterComponent={() => <ItemSeperator />}
             />
             {specialEditions && specialEditions.length > 0 && (
                 <>
                     <FlatList
                         data={specialEditions}
                         renderItem={renderSpecialItem}
+                        ItemSeparatorComponent={() => <ItemSeperator />}
                     />
                 </>
             )}
