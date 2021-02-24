@@ -1,5 +1,6 @@
 import { brand, neutral } from '@guardian/src-foundations'
 import { StyleSheet } from 'react-native'
+import { families } from 'src/theme/typography'
 
 export const EDITIONS_MENU_TEXT_LEFT_PADDING = 96
 const imageWidth = 67
@@ -24,7 +25,9 @@ const styles = (selected: boolean, special: boolean, titleColor: string) => {
         title: {
             fontSize: special ? 32 : 20,
             lineHeight: special ? 34 : 20,
-            fontWeight: special ? '400' : '700',
+            fontFamily: special
+                ? families.headline.regular
+                : families.titlepiece.regular,
             marginBottom: 5,
             color: titleColor,
         },

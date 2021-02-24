@@ -49,8 +49,8 @@ exports[`RegionButton should display a default RegionButton with correct styling
           },
           Object {
             "color": "#052962",
+            "fontFamily": "GTGuardianTitlepiece-Bold",
             "fontSize": 20,
-            "fontWeight": "700",
             "lineHeight": 20,
             "marginBottom": 5,
           },
@@ -134,8 +134,8 @@ exports[`RegionButton should display a selected RegionButton with correct stylin
           },
           Object {
             "color": "#052962",
+            "fontFamily": "GTGuardianTitlepiece-Bold",
             "fontSize": 20,
-            "fontWeight": "700",
             "lineHeight": 20,
             "marginBottom": 5,
           },
@@ -220,8 +220,8 @@ Monthly - Edition Button"
           },
           Object {
             "color": "#FEEEF7",
+            "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 32,
-            "fontWeight": "400",
             "lineHeight": 34,
             "marginBottom": 5,
           },
@@ -330,8 +330,8 @@ Monthly - Edition Button"
           },
           Object {
             "color": "#FEEEF7",
+            "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 32,
-            "fontWeight": "400",
             "lineHeight": 34,
             "marginBottom": 5,
           },

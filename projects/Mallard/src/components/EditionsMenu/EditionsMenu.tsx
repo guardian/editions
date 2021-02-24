@@ -62,7 +62,7 @@ const EditionsMenu = ({
             />
         )
     }
- 
+
     return (
         <ScrollView
             style={{ paddingTop: 17, paddingHorizontal: metrics.horizontal }}
