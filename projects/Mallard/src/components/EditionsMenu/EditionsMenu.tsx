@@ -42,7 +42,6 @@ const EditionsMenu = ({
 
     const renderSpecialItem = ({ item }: { item: SpecialEdition }) => {
         const { buttonStyle, buttonImageUri, expiry, title, subTitle } = item
-
         const handlePress = () => {
             storeSelectedEdition(item)
             navigationPress()
@@ -63,7 +62,7 @@ const EditionsMenu = ({
             />
         )
     }
-
+ 
     return (
         <ScrollView
             style={{ paddingTop: 17, paddingHorizontal: metrics.horizontal }}
