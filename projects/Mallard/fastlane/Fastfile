@@ -19,6 +19,8 @@
 #  git_pull
 # end
 
+fastlane_require 'base64'
+
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
