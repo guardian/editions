@@ -11,13 +11,14 @@ import { SpecialEditionHeaderStyles } from '../../../../Apps/common/src'
 const splitStyles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         width: '100%',
         alignSelf: 'flex-end',
     },
     inner: {
         flexDirection: 'row',
-        flex: 0,
+        flex: 1,
+        justifyContent: 'flex-start',
     },
 })
 
@@ -51,7 +52,7 @@ const GridRowSplit = ({
         innerStyle?: ViewStyle
     }) => (
         <View style={[splitStyles.container, style, innerStyle]}>
-            {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
+            {proxy && <View>{proxy}</View>}
             <View style={[splitStyles.inner, { width }]}>{children}</View>
         </View>
     )
@@ -92,6 +93,8 @@ export interface IssueTitleProps {
     subtitle?: string
     style?: StyleProp<ViewStyle>
     overwriteStyles?: SpecialEditionHeaderStyles
+    titleStyle?: StyleProp<ViewStyle>
+    subtitleStyle?: StyleProp<ViewStyle>
 }
 
 const appearances: {
@@ -122,12 +125,15 @@ const IssueTitle = React.memo(
         appearance = IssueTitleAppearance.default,
         overwriteStyles,
         style,
+        titleStyle,
+        subtitleStyle,
     }: IssueTitleProps & { appearance?: IssueTitleAppearance }) => (
         <View style={style}>
             <IssueTitleText
                 style={[
                     styles.text,
                     appearances[appearance].title,
+                    titleStyle,
                     overwriteStyles && overwriteStyles.textColorPrimary
                         ? {
                               color: overwriteStyles.textColorPrimary,
@@ -142,6 +148,7 @@ const IssueTitle = React.memo(
                     style={[
                         styles.text,
                         appearances[appearance].subtitle,
+                        subtitleStyle,
                         overwriteStyles && overwriteStyles.textColorSecondary
                             ? {
                                   color: overwriteStyles.textColorSecondary,

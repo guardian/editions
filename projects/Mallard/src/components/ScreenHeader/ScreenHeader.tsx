@@ -10,6 +10,7 @@ export const ScreenHeader = ({
     rightAction,
     title,
     subTitle,
+    alignment
 }: {
     headerStyles?: SpecialEditionHeaderStyles
     leftAction?: React.ReactElement | null
@@ -17,12 +18,14 @@ export const ScreenHeader = ({
     rightAction?: React.ReactElement | null
     subTitle?: string
     title?: string
+    alignment?: 'drawer'
 }) => (
     <Header
         onPress={onPress}
         action={rightAction}
         leftAction={leftAction}
         headerStyles={headerStyles}
+        alignment={alignment ? alignment : null}
     >
         {title ? (
             <IssueTitle
