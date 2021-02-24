@@ -1,10 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditionsMenu should display a EditionsMenu with correct styling and alternative Regional Buttons 1`] = `
-<RCTScrollView>
+<RCTScrollView
+  style={
+    Object {
+      "paddingHorizontal": 14,
+      "paddingTop": 17,
+    }
+  }
+>
   <View>
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
+      ListFooterComponent={[Function]}
       data={
         Array [
           Object {
@@ -63,7 +71,88 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          <View
+            accessibilityLabel="UK Daily - Edition Button"
+            accessibilityRole="button"
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "borderColor": "#052962",
+                "borderRadius": 3,
+                "borderWidth": 4,
+                "flexDirection": "row",
+                "paddingBottom": 32,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "width": 96,
+                }
+              }
+            />
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GTGuardianTitlepiece-Bold",
+                      "fontSize": 30,
+                      "lineHeight": 33,
+                    },
+                    Object {
+                      "color": "#052962",
+                      "fontSize": 20,
+                      "fontWeight": "700",
+                      "lineHeight": 20,
+                      "marginBottom": 5,
+                    },
+                  ]
+                }
+              >
+                UK Daily
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Published every day by 12am (GMT)
+              </Text>
+            </View>
+          </View>
           <View
             style={
               Object {
@@ -76,7 +165,99 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          <View
+            accessibilityLabel="Australia Daily - Edition Button"
+            accessibilityRole="button"
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "borderColor": "#DCDCDC",
+                "borderRadius": 3,
+                "borderWidth": 1,
+                "flexDirection": "row",
+                "paddingBottom": 32,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "width": 96,
+                }
+              }
+            />
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GTGuardianTitlepiece-Bold",
+                      "fontSize": 30,
+                      "lineHeight": 33,
+                    },
+                    Object {
+                      "color": "#052962",
+                      "fontSize": 20,
+                      "fontWeight": "700",
+                      "lineHeight": 20,
+                      "marginBottom": 5,
+                    },
+                  ]
+                }
+              >
+                Australia Daily
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Published every day by 9:30am (AEST)
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          onLayout={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "height": 10,
+              }
+            }
+          />
         </View>
       </View>
     </RCTScrollView>
@@ -85,10 +266,18 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
 `;
 
 exports[`EditionsMenu should display a EditionsMenu with correct styling default Regional Buttons and a Special Edition Button 1`] = `
-<RCTScrollView>
+<RCTScrollView
+  style={
+    Object {
+      "paddingHorizontal": 14,
+      "paddingTop": 17,
+    }
+  }
+>
   <View>
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
+      ListFooterComponent={[Function]}
       data={
         Array [
           Object {
@@ -149,7 +338,89 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          <View
+            accessibilityLabel="UK Daily - Edition Button"
+            accessibilityRole="button"
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "borderColor": "#052962",
+                "borderRadius": 3,
+                "borderWidth": 4,
+                "flexDirection": "row",
+                "paddingBottom": 32,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "width": 96,
+                }
+              }
+            />
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GTGuardianTitlepiece-Bold",
+                      "fontSize": 30,
+                      "lineHeight": 33,
+                    },
+                    Object {
+                      "color": "#052962",
+                      "fontSize": 20,
+                      "fontWeight": "700",
+                      "lineHeight": 20,
+                      "marginBottom": 5,
+                    },
+                  ]
+                }
+              >
+                UK Daily
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Published from London every 
+morning by 6am (GMT)
+              </Text>
+            </View>
+          </View>
           <View
             style={
               Object {
@@ -162,11 +433,105 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          <View
+            accessibilityLabel="Australia Weekend - Edition Button"
+            accessibilityRole="button"
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "borderColor": "#DCDCDC",
+                "borderRadius": 3,
+                "borderWidth": 1,
+                "flexDirection": "row",
+                "paddingBottom": 32,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "width": 96,
+                }
+              }
+            />
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GTGuardianTitlepiece-Bold",
+                      "fontSize": 30,
+                      "lineHeight": 33,
+                    },
+                    Object {
+                      "color": "#052962",
+                      "fontSize": 20,
+                      "fontWeight": "700",
+                      "lineHeight": 20,
+                      "marginBottom": 5,
+                    },
+                  ]
+                }
+              >
+                Australia Weekend
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Published from Sydney every 
+Saturday by 6 am (AEST)
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          onLayout={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "height": 10,
+              }
+            }
+          />
         </View>
       </View>
     </RCTScrollView>
     <RCTScrollView
+      ItemSeparatorComponent={[Function]}
       data={
         Array [
           Object {
@@ -239,7 +604,128 @@ Monthly",
           onLayout={[Function]}
           style={null}
         >
-          SpecialEditionButton
+          <View
+            accessibilityLabel="Food
+Monthly - Edition Button"
+            accessibilityRole="button"
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "borderColor": "#DCDCDC",
+                "borderRadius": 3,
+                "borderWidth": 1,
+                "flexDirection": "row",
+                "paddingBottom": 32,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "width": 96,
+                }
+              }
+            >
+              <Image
+                resizeMethod="resize"
+                source={
+                  Object {
+                    "uri": "https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png",
+                  }
+                }
+                style={
+                  Object {
+                    "height": 134,
+                    "width": 67,
+                  }
+                }
+              />
+            </View>
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GTGuardianTitlepiece-Bold",
+                      "fontSize": 30,
+                      "lineHeight": 33,
+                    },
+                    Object {
+                      "color": "#FEEEF7",
+                      "fontSize": 32,
+                      "fontWeight": "400",
+                      "lineHeight": 34,
+                      "marginBottom": 5,
+                    },
+                  ]
+                }
+              >
+                Food
+Monthly
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Store cupboard special: 20 quick and easy lockdown suppers
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Available until 
+                2/1/1998
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
     </RCTScrollView>
@@ -248,10 +734,18 @@ Monthly",
 `;
 
 exports[`EditionsMenu should display a default EditionsMenu with correct styling and default Regional Buttons 1`] = `
-<RCTScrollView>
+<RCTScrollView
+  style={
+    Object {
+      "paddingHorizontal": 14,
+      "paddingTop": 17,
+    }
+  }
+>
   <View>
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
+      ListFooterComponent={[Function]}
       data={
         Array [
           Object {
@@ -312,7 +806,89 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          <View
+            accessibilityLabel="UK Daily - Edition Button"
+            accessibilityRole="button"
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "borderColor": "#052962",
+                "borderRadius": 3,
+                "borderWidth": 4,
+                "flexDirection": "row",
+                "paddingBottom": 32,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "width": 96,
+                }
+              }
+            />
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GTGuardianTitlepiece-Bold",
+                      "fontSize": 30,
+                      "lineHeight": 33,
+                    },
+                    Object {
+                      "color": "#052962",
+                      "fontSize": 20,
+                      "fontWeight": "700",
+                      "lineHeight": 20,
+                      "marginBottom": 5,
+                    },
+                  ]
+                }
+              >
+                UK Daily
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Published from London every 
+morning by 6am (GMT)
+              </Text>
+            </View>
+          </View>
           <View
             style={
               Object {
@@ -325,7 +901,100 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          <View
+            accessibilityLabel="Australia Weekend - Edition Button"
+            accessibilityRole="button"
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "borderColor": "#DCDCDC",
+                "borderRadius": 3,
+                "borderWidth": 1,
+                "flexDirection": "row",
+                "paddingBottom": 32,
+                "paddingTop": 10,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "width": 96,
+                }
+              }
+            />
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GTGuardianTitlepiece-Bold",
+                      "fontSize": 30,
+                      "lineHeight": 33,
+                    },
+                    Object {
+                      "color": "#052962",
+                      "fontSize": 20,
+                      "fontWeight": "700",
+                      "lineHeight": 20,
+                      "marginBottom": 5,
+                    },
+                  ]
+                }
+              >
+                Australia Weekend
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "flexShrink": 0,
+                      "fontFamily": "GuardianTextSans-Regular",
+                      "fontSize": 15,
+                      "lineHeight": 18,
+                    },
+                    Object {
+                      "color": "#333333",
+                    },
+                    Object {
+                      "color": "#121212",
+                      "flexWrap": "wrap",
+                      "paddingRight": 20,
+                    },
+                  ]
+                }
+              >
+                Published from Sydney every 
+Saturday by 6 am (AEST)
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          onLayout={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "height": 10,
+              }
+            }
+          />
         </View>
       </View>
     </RCTScrollView>
