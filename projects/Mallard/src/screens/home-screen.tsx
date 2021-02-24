@@ -443,11 +443,16 @@ export const HomeScreen = () => {
     const { selectedEdition } = useEditions()
 
     const specialEditionProps = getSpecialEditionProps(selectedEdition)
+    const issueHeaderData =
+    selectedEdition.editionType === 'Special'
+        ? { title: '', subTitle: '' }
+        : { title: selectedEdition.title, subTitle: 'Recent Editions' }
+
     return (
         <WithAppAppearance value={'tertiary'}>
             <IssuePickerHeader
-                title={selectedEdition.header.title}
-                subTitle={selectedEdition.header.subTitle}
+                title={issueHeaderData.title}
+                subTitle={issueHeaderData.subTitle}
                 headerStyles={
                     specialEditionProps && specialEditionProps.headerStyle
                 }
