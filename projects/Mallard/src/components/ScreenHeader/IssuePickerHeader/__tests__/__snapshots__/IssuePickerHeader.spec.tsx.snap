@@ -22,7 +22,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
         Object {
           "alignSelf": "flex-end",
           "flexDirection": "row",
-          "justifyContent": "flex-end",
+          "justifyContent": "space-between",
           "width": "100%",
         },
         Array [
@@ -37,17 +37,13 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
       ]
     }
   >
-    <View
-      style={
-        Object {
-          "flexGrow": 1,
-        }
-      }
-    >
+    <View>
       <View
         style={
           Object {
             "paddingLeft": 14,
+            "width": 90,
+            "zIndex": 2,
           }
         }
       >
@@ -133,8 +129,9 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
       style={
         Array [
           Object {
-            "flex": 0,
+            "flex": 1,
             "flexDirection": "row",
+            "justifyContent": "flex-start",
           },
           Object {
             "width": 0,
@@ -146,9 +143,11 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
         style={
           Array [
             Object {
-              "alignItems": "flex-start",
+              "flex": 1,
               "flexDirection": "row",
-              "flexGrow": 1,
+            },
+            Object {
+              "justifyContent": "space-between",
             },
           ]
         }
@@ -156,9 +155,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
         <View
           style={
             Object {
-              "flexGrow": 1,
-              "flexShrink": 0,
-              "paddingHorizontal": 14,
+              "marginRight": 14,
             }
           }
         >
@@ -203,6 +200,12 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                         },
                         undefined,
                         Object {
+                          "flexShrink": 0,
+                          "fontFamily": "GHGuardianHeadline-Regular",
+                          "fontSize": 24,
+                          "lineHeight": 26,
+                        },
+                        Object {
                           "color": "#007ABC",
                         },
                       ],
@@ -228,6 +231,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                         Object {
                           "color": "#ffe500",
                         },
+                        undefined,
                         Object {
                           "color": "#F3C100",
                         },
@@ -349,7 +353,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
         Object {
           "alignSelf": "flex-end",
           "flexDirection": "row",
-          "justifyContent": "flex-end",
+          "justifyContent": "space-between",
           "width": "100%",
         },
         Array [
@@ -364,17 +368,13 @@ exports[`IssuePickerHeader should match the default style 1`] = `
       ]
     }
   >
-    <View
-      style={
-        Object {
-          "flexGrow": 1,
-        }
-      }
-    >
+    <View>
       <View
         style={
           Object {
             "paddingLeft": 14,
+            "width": 90,
+            "zIndex": 2,
           }
         }
       >
@@ -460,8 +460,9 @@ exports[`IssuePickerHeader should match the default style 1`] = `
       style={
         Array [
           Object {
-            "flex": 0,
+            "flex": 1,
             "flexDirection": "row",
+            "justifyContent": "flex-start",
           },
           Object {
             "width": 0,
@@ -473,9 +474,11 @@ exports[`IssuePickerHeader should match the default style 1`] = `
         style={
           Array [
             Object {
-              "alignItems": "flex-start",
+              "flex": 1,
               "flexDirection": "row",
-              "flexGrow": 1,
+            },
+            Object {
+              "justifyContent": "space-between",
             },
           ]
         }
@@ -483,9 +486,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
         <View
           style={
             Object {
-              "flexGrow": 1,
-              "flexShrink": 0,
-              "paddingHorizontal": 14,
+              "marginRight": 14,
             }
           }
         >
@@ -529,6 +530,12 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                           "marginTop": -2,
                         },
                         undefined,
+                        Object {
+                          "flexShrink": 0,
+                          "fontFamily": "GHGuardianHeadline-Regular",
+                          "fontSize": 24,
+                          "lineHeight": 26,
+                        },
                         Object {},
                       ],
                     ]
@@ -553,6 +560,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                         Object {
                           "color": "#ffe500",
                         },
+                        undefined,
                         Object {},
                       ],
                     ]
@@ -672,7 +680,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
         Object {
           "alignSelf": "flex-end",
           "flexDirection": "row",
-          "justifyContent": "flex-end",
+          "justifyContent": "space-between",
           "width": "100%",
         },
         Array [
@@ -687,17 +695,13 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
       ]
     }
   >
-    <View
-      style={
-        Object {
-          "flexGrow": 1,
-        }
-      }
-    >
+    <View>
       <View
         style={
           Object {
             "paddingLeft": 14,
+            "width": 90,
+            "zIndex": 2,
           }
         }
       >
@@ -783,8 +787,9 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
       style={
         Array [
           Object {
-            "flex": 0,
+            "flex": 1,
             "flexDirection": "row",
+            "justifyContent": "flex-start",
           },
           Object {
             "width": 0,
@@ -796,9 +801,11 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
         style={
           Array [
             Object {
-              "alignItems": "flex-start",
+              "flex": 1,
               "flexDirection": "row",
-              "flexGrow": 1,
+            },
+            Object {
+              "justifyContent": "space-between",
             },
           ]
         }
@@ -806,9 +813,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
         <View
           style={
             Object {
-              "flexGrow": 1,
-              "flexShrink": 0,
-              "paddingHorizontal": 14,
+              "marginRight": 14,
             }
           }
         >
@@ -852,6 +857,12 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                           "marginTop": -2,
                         },
                         undefined,
+                        Object {
+                          "flexShrink": 0,
+                          "fontFamily": "GHGuardianHeadline-Regular",
+                          "fontSize": 24,
+                          "lineHeight": 26,
+                        },
                         Object {},
                       ],
                     ]
@@ -876,6 +887,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                         Object {
                           "color": "#ffe500",
                         },
+                        undefined,
                         Object {},
                       ],
                     ]

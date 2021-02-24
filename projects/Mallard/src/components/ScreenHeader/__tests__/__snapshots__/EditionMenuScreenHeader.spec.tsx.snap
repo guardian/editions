@@ -41,6 +41,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
         style={
           Object {
             "paddingLeft": 14,
+            "width": 90,
             "zIndex": 2,
           }
         }
@@ -121,6 +122,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
                     "color": "#FFFFFF",
                     "marginTop": -2,
                   },
+                  undefined,
                   undefined,
                   Object {},
                 ],
