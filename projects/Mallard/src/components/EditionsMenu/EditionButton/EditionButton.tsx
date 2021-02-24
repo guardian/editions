@@ -16,7 +16,7 @@ interface Props {
     isSpecial?: boolean
 }
 
-const IssueButton: React.FC<Props> = ({
+const EditionButton: React.FC<Props> = ({
     title,
     subTitle,
     imageUri,
@@ -66,4 +66,4 @@ const IssueButton: React.FC<Props> = ({
     )
 }
 
-export { IssueButton }
+export { EditionButton }
