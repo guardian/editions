@@ -34,14 +34,6 @@ export const styles = StyleSheet.create({
         flexShrink: 0,
         ...getFont('titlepiece', 1.25),
     },
-    // issueTitleText: {
-    //     flexShrink: 0,
-    //     ...getFont('titlepiece', 1.25),
-    // },
-    specialEditionTitle: {
-        flexShrink: 0,
-        ...getFont('headline', 1.75, 'light'),
-    },
     titlepieceText: {
         flexShrink: 0,
         ...getFont('titlepiece', 1.5),
@@ -97,7 +89,7 @@ export const IssueTitleText = ({
     children: string
     style?: StyleProp<TextStyle>
 } & TextProps) => {
-    return <Text {...props} style={[styles.issueTitleText, style]} />
+    return <Text {...props} style={[styles.issueHeavyText, style]} />
 }
 
 export type HeadlineTextProps = {
