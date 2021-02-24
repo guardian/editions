@@ -60,7 +60,6 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "alignItems": "center",
               "backgroundColor": "#90dcff",
               "borderRadius": 24,
               "height": 42,
@@ -73,6 +72,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
           <Text
             style={
               Object {
+                "alignSelf": "center",
                 "color": "#333333",
                 "fontFamily": "GuardianIcons-Regular",
                 "fontSize": 20,
