@@ -40,6 +40,8 @@ import {
     stopListeningToExistingDownload,
     maybeListenToExistingDownload,
 } from 'src/download-edition/download-and-unzip'
+import { useEditions } from 'src/hooks/use-edition-provider'
+import { styles as textStyles } from 'src/components/styled-text'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -293,10 +295,29 @@ const IssueRowHeader = React.memo(
         onPress: () => void
         onGoToSettings: () => void
     }) => {
+        const { selectedEdition } = useEditions()
+        const isSpecialEdition = (editionType: string) => {
+            return editionType === 'Special'
+        }
         const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
             issue.date,
         ])
-
+        const getTitles = () => {
+            if (isSpecialEdition(selectedEdition.editionType)) {
+                const splitTitle = selectedEdition.title.split('\n')
+                return {
+                    title: splitTitle[0],
+                    subTitle: splitTitle[1],
+                    subtitleStyle: textStyles.issueHeavyText,
+                }
+            }
+            return {
+                title: weekday,
+                subTitle: date,
+                subtitleStyle: textStyles.issueLightText,
+            }
+        }
+        const { title, subTitle, subtitleStyle } = getTitles()
         return (
             <GridRowSplit
                 proxy={
@@ -311,8 +332,9 @@ const IssueRowHeader = React.memo(
                     <Highlight onPress={onPress}>
                         <IssueTitle
                             style={styles.issueTitle}
-                            title={weekday}
-                            subtitle={date}
+                            title={title}
+                            subtitle={subTitle}
+                            subtitleStyle={subtitleStyle}
                             appearance={IssueTitleAppearance.tertiary}
                         />
                     </Highlight>
