@@ -23,19 +23,17 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
 
-    lane :make_appstore_connect_key do
-      encoded_api_key = ENV["APPSTORE_CONNECT_API_KEY"]
-      decoded_api_key = Base64.strict_decode64(encoded_api_key)
-      path_to_api_key_file = "api_key.p8"
-      File.open("../" + path_to_api_key_file, "w") { |f| f.write decoded_api_key }
-      app_store_connect_api_key(
-          key_id: ENV["APPSTORE_CONNECT_KEY_ID"],
-          issuer_id: ENV["APPSTORE_CONNECT_ISSUER_ID"],
-          key_filepath: path_to_api_key_file,
-          duration: 1200, # optional
-          in_house: false # optional but may be required if using match/sigh
-      )
-    end
+    encoded_api_key = ENV["APPSTORE_CONNECT_API_KEY"]
+    decoded_api_key = Base64.strict_decode64(encoded_api_key)
+    path_to_api_key_file = "api_key.p8"
+    File.open("../" + path_to_api_key_file, "w") { |f| f.write decoded_api_key }
+    appstore_api_key = app_store_connect_api_key(
+        key_id: ENV["APPSTORE_CONNECT_KEY_ID"],
+        issuer_id: ENV["APPSTORE_CONNECT_ISSUER_ID"],
+        key_filepath: path_to_api_key_file,
+        duration: 1200, # optional
+        in_house: false # optional but may be required if using match/sigh
+    )
     
     create_keychain(
       name: "CI",
@@ -60,7 +58,6 @@ platform :ios do
       path: "ios/Mallard.xcodeproj",
     )
 
-    appstore_api_key = make_appstore_connect_key
     currentNumber = latest_testflight_build_number(api_key: appstore_api_key)
 
     increment_build_number(
