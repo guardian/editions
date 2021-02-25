@@ -40,6 +40,8 @@ import {
     stopListeningToExistingDownload,
     maybeListenToExistingDownload,
 } from 'src/download-edition/download-and-unzip'
+import { useEditions } from 'src/hooks/use-edition-provider'
+import { styles as textStyles } from 'src/components/styled-text'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
         backgroundColor: color.dimmerBackground,
         borderTopWidth: 1,
         borderTopColor: color.line,
+        paddingLeft: 90,
     },
     errorMessage: {
         height: ISSUE_FRONT_ERROR_HEIGHT,
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
     frontTitle: {
         height: '100%',
         paddingTop: ISSUE_FRONT_ROW_HEIGHT * 0.1,
-        paddingHorizontal: metrics.horizontal,
     },
     frontTitleText: {
         flexShrink: 0,
@@ -82,7 +84,6 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: color.line,
         flex: 1,
-        marginLeft: metrics.horizontal,
     },
 
     issueButtonContainer: {
@@ -90,13 +91,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexGrow: 1,
         paddingHorizontal: metrics.horizontal,
+        width: 90,
     },
     issueTitleWrap: {
         flex: 1,
         height: ISSUE_ROW_HEADER_HEIGHT,
     },
     issueTitle: {
-        paddingHorizontal: metrics.horizontal,
+        paddingRight: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
 })
@@ -293,10 +295,29 @@ const IssueRowHeader = React.memo(
         onPress: () => void
         onGoToSettings: () => void
     }) => {
+        const { selectedEdition } = useEditions()
+        const isSpecialEdition = (editionType: string) => {
+            return editionType === 'Special'
+        }
         const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
             issue.date,
         ])
-
+        const getTitles = () => {
+            if (isSpecialEdition(selectedEdition.editionType)) {
+                const splitTitle = selectedEdition.title.split('\n')
+                return {
+                    title: splitTitle[0],
+                    subTitle: splitTitle[1],
+                    subtitleStyle: textStyles.issueHeavyText,
+                }
+            }
+            return {
+                title: weekday,
+                subTitle: date,
+                subtitleStyle: textStyles.issueLightText,
+            }
+        }
+        const { title, subTitle, subtitleStyle } = getTitles()
         return (
             <GridRowSplit
                 proxy={
@@ -311,8 +332,9 @@ const IssueRowHeader = React.memo(
                     <Highlight onPress={onPress}>
                         <IssueTitle
                             style={styles.issueTitle}
-                            title={weekday}
-                            subtitle={date}
+                            title={title}
+                            subtitle={subTitle}
+                            subtitleStyle={subtitleStyle}
                             appearance={IssueTitleAppearance.tertiary}
                         />
                     </Highlight>
