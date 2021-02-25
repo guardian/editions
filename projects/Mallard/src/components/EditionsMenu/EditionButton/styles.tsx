@@ -27,7 +27,7 @@ const styles = (selected: boolean, special: boolean, titleColor: string) => {
             fontSize: special ? 32 : 20,
             lineHeight: special ? 34 : 20,
             fontFamily: special
-                ? families.headline.regular
+                ? families.headline.medium
                 : families.titlepiece.regular,
             marginBottom: 5,
             color: titleColor,
