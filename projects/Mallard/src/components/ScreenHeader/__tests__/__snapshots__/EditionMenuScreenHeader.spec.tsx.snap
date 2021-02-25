@@ -106,7 +106,14 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
           }
         }
       >
-        <View>
+        <View
+          style={
+            Object {
+              "alignSelf": "flex-start",
+              "paddingLeft": 110,
+            }
+          }
+        >
           <Text
             style={
               Array [

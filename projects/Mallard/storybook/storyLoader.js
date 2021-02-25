@@ -5,11 +5,9 @@
 
 function loadStories() {
 	require('../src/components/Button/Button.stories');
+	require('../src/components/EditionsMenu/EditionButton/EditionButton.stories');
 	require('../src/components/EditionsMenu/EditionsMenu.stories');
 	require('../src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton.stories');
-	require('../src/components/EditionsMenu/Header/Header.stories');
-	require('../src/components/EditionsMenu/RegionButton/RegionButton.stories');
-	require('../src/components/EditionsMenu/SpecialEditionButton/SpecialEditionButton.stories');
 	require('../src/components/Lightbox/LightboxCaption.stories');
 	require('../src/components/ScreenHeader/IssuePickerHeader/IssuePickerHeader.stories');
 	require('../src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader.stories');
@@ -24,11 +22,9 @@ function loadStories() {
 
 const stories = [
 	'../src/components/Button/Button.stories',
+	'../src/components/EditionsMenu/EditionButton/EditionButton.stories',
 	'../src/components/EditionsMenu/EditionsMenu.stories',
 	'../src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton.stories',
-	'../src/components/EditionsMenu/Header/Header.stories',
-	'../src/components/EditionsMenu/RegionButton/RegionButton.stories',
-	'../src/components/EditionsMenu/SpecialEditionButton/SpecialEditionButton.stories',
 	'../src/components/Lightbox/LightboxCaption.stories',
 	'../src/components/ScreenHeader/IssuePickerHeader/IssuePickerHeader.stories',
 	'../src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader.stories',

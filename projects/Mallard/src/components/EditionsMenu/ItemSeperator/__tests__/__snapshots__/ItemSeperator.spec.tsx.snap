@@ -4,8 +4,7 @@ exports[`ItemSeperator should display a default ItemSeperator with correct styli
 <View
   style={
     Object {
-      "backgroundColor": "#121212",
-      "height": 1,
+      "height": 10,
     }
   }
 />
