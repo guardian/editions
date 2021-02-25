@@ -13,7 +13,7 @@ const styles = (selected: boolean, special: boolean, titleColor: string) => {
             borderWidth: selected ? 4 : 1,
             borderRadius: 3,
             paddingBottom: 32,
-            paddingTop: 10,
+            paddingTop: special ? 14 : 10,
             flexDirection: 'row',
         },
         imageContainer: {
