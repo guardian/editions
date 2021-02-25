@@ -27,9 +27,11 @@ platform :ios do
   lane :beta do
 
     encoded_api_key = ENV["APPSTORE_CONNECT_API_KEY"]
+    puts '** envs **'
     puts encoded_api_key
     puts ENV["APPSTORE_CONNECT_KEY_ID"]
     puts ENV["APPSTORE_CONNECT_ISSUER_ID"]
+    puts ENV["FASTLANE_PASSWORD"]
 
     decoded_api_key = Base64.strict_decode64(encoded_api_key)
     path_to_api_key_file = "api_key.p8"
