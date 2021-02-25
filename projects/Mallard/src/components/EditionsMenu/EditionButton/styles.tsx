@@ -18,7 +18,7 @@ const styles = (selected: boolean, special: boolean, titleColor: string) => {
         },
         imageContainer: {
             width: EDITIONS_MENU_TEXT_LEFT_PADDING,
-            paddingHorizontal: 12,
+            marginRight: 13,
         },
         textContainer: {
             flex: 1,
