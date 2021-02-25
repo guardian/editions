@@ -27,8 +27,8 @@ exports[`RegionButton should display a default RegionButton with correct styling
   <View
     style={
       Object {
-        "paddingHorizontal": 12,
-        "width": 96,
+        "marginRight": 13,
+        "width": 75,
       }
     }
   />
@@ -113,8 +113,8 @@ exports[`RegionButton should display a selected RegionButton with correct stylin
   <View
     style={
       Object {
-        "paddingHorizontal": 12,
-        "width": 96,
+        "marginRight": 13,
+        "width": 75,
       }
     }
   />
@@ -193,15 +193,15 @@ Monthly - Edition Button"
       "borderWidth": 1,
       "flexDirection": "row",
       "paddingBottom": 32,
-      "paddingTop": 10,
+      "paddingTop": 14,
     }
   }
 >
   <View
     style={
       Object {
-        "paddingHorizontal": 12,
-        "width": 96,
+        "marginRight": 13,
+        "width": 75,
       }
     }
   />
@@ -223,7 +223,7 @@ Monthly - Edition Button"
           },
           Object {
             "color": "#FEEEF7",
-            "fontFamily": "GHGuardianHeadline-Regular",
+            "fontFamily": "GHGuardianHeadline-Medium",
             "fontSize": 32,
             "lineHeight": 34,
             "marginBottom": 5,
@@ -304,15 +304,15 @@ Monthly - Edition Button"
       "borderWidth": 4,
       "flexDirection": "row",
       "paddingBottom": 32,
-      "paddingTop": 10,
+      "paddingTop": 14,
     }
   }
 >
   <View
     style={
       Object {
-        "paddingHorizontal": 12,
-        "width": 96,
+        "marginRight": 13,
+        "width": 75,
       }
     }
   />
@@ -334,7 +334,7 @@ Monthly - Edition Button"
           },
           Object {
             "color": "#FEEEF7",
-            "fontFamily": "GHGuardianHeadline-Regular",
+            "fontFamily": "GHGuardianHeadline-Medium",
             "fontSize": 32,
             "lineHeight": 34,
             "marginBottom": 5,
