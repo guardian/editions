@@ -111,7 +111,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
           style={
             Object {
               "alignSelf": "flex-start",
-              "paddingLeft": 110,
+              "paddingLeft": 100,
             }
           }
         >

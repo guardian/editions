@@ -5,7 +5,7 @@ import { IssueTitle } from 'src/components/issue/issue-title'
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
-    title: { paddingLeft: 110, alignSelf: 'flex-start' },
+    title: { paddingLeft: 100, alignSelf: 'flex-start' },
 })
 
 export const EditionsMenuScreenHeader = ({
