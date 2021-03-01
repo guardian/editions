@@ -12,7 +12,7 @@ const styles = (selected: boolean, special: boolean, titleColor: string) => {
             borderColor: selected ? brand[400] : neutral[86],
             borderWidth: selected ? 4 : 1,
             borderRadius: 3,
-            paddingBottom: 32,
+            paddingBottom: special ? 8 : 30,
             paddingTop: special ? 14 : 10,
             flexDirection: 'row',
         },
@@ -36,6 +36,11 @@ const styles = (selected: boolean, special: boolean, titleColor: string) => {
             flexWrap: 'wrap',
             paddingRight: 20,
             color: neutral[7],
+        },
+        expiry: {
+            flexWrap: 'wrap',
+            paddingRight: 20,
+            color: neutral[46],
         },
         image: {
             width: imageWidth,
