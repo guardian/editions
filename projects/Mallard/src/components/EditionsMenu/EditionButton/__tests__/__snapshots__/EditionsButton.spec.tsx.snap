@@ -19,7 +19,7 @@ exports[`RegionButton should display a default RegionButton with correct styling
       "borderRadius": 3,
       "borderWidth": 1,
       "flexDirection": "row",
-      "paddingBottom": 32,
+      "paddingBottom": 30,
       "paddingTop": 10,
     }
   }
@@ -105,7 +105,7 @@ exports[`RegionButton should display a selected RegionButton with correct stylin
       "borderRadius": 3,
       "borderWidth": 4,
       "flexDirection": "row",
-      "paddingBottom": 32,
+      "paddingBottom": 30,
       "paddingTop": 10,
     }
   }
@@ -192,7 +192,7 @@ Monthly - Edition Button"
       "borderRadius": 3,
       "borderWidth": 1,
       "flexDirection": "row",
-      "paddingBottom": 32,
+      "paddingBottom": 8,
       "paddingTop": 14,
     }
   }
@@ -269,7 +269,7 @@ Monthly
             "color": "#333333",
           },
           Object {
-            "color": "#121212",
+            "color": "#767676",
             "flexWrap": "wrap",
             "paddingRight": 20,
           },
@@ -303,7 +303,7 @@ Monthly - Edition Button"
       "borderRadius": 3,
       "borderWidth": 4,
       "flexDirection": "row",
-      "paddingBottom": 32,
+      "paddingBottom": 8,
       "paddingTop": 14,
     }
   }
@@ -380,7 +380,7 @@ Monthly
             "color": "#333333",
           },
           Object {
-            "color": "#121212",
+            "color": "#767676",
             "flexWrap": "wrap",
             "paddingRight": 20,
           },
