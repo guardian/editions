@@ -56,7 +56,7 @@ const EditionButton: React.FC<Props> = ({
                         {subTitle}
                     </UiExplainerCopy>
                     {expiry && (
-                        <UiExplainerCopy style={defaultStyles.subTitle}>
+                        <UiExplainerCopy style={defaultStyles.expiry}>
                             Available until {localDate(expiry)}
                         </UiExplainerCopy>
                     )}
