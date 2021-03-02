@@ -26,6 +26,7 @@ import { defaultSettings } from 'src/helpers/settings/defaults'
 import { isSuccessOrRedirect } from './article/helpers'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { useIsAppsRendering } from 'src/hooks/use-config-provider'
 
 const styles = StyleSheet.create({
     block: {
@@ -246,6 +247,7 @@ const Article = ({
         article.key,
         shareUrlFetchEnabled,
     ])
+    const {isAppsRendering} = useIsAppsRendering()
 
     return (
         <Fader>
@@ -257,7 +259,7 @@ const Article = ({
                 useWebKit={false}
                 allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
                 mediaPlaybackRequiresUserAction={false}
-                style={[styles.webview]}
+                style={[styles.webview, , isAppsRendering ? {marginTop: 40} : null]}
                 _ref={r => {
                     ref.current = r
                 }}
