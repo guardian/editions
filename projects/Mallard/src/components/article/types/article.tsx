@@ -247,7 +247,7 @@ const Article = ({
         article.key,
         shareUrlFetchEnabled,
     ])
-    const {isAppsRendering} = useIsAppsRendering()
+    const { isAppsRendering } = useIsAppsRendering()
 
     return (
         <Fader>
@@ -259,7 +259,10 @@ const Article = ({
                 useWebKit={false}
                 allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
                 mediaPlaybackRequiresUserAction={false}
-                style={[styles.webview, , isAppsRendering ? {marginTop: 40} : null]}
+                style={[
+                    styles.webview,
+                    isAppsRendering ? { marginTop: 40 } : null,
+                ]}
                 _ref={r => {
                     ref.current = r
                 }}
