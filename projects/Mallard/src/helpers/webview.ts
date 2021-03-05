@@ -7,7 +7,7 @@ import {
     getScaledFont,
     getFont,
 } from 'src/theme/typography'
-
+import {Message} from '@guardian/renditions'
 export type WebViewPing =
     | {
           type: 'shouldShowHeaderChange'
@@ -124,6 +124,7 @@ export const getBundleUri = (
 }
 
 export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
+export const parseAppsRenderingPing = (data: string) => JSON.parse(data) as Message
 
 const makeJavaScript = (topPadding: number) => html`
     <script>
