@@ -3,7 +3,6 @@ import {
     CardStyleInterpolators,
     createStackNavigator,
 } from '@react-navigation/stack'
-
 import { routeNames } from './navigation/routes'
 import { HomeScreen } from './screens/home-screen'
 import { IssueScreen } from './screens/issue-screen'
@@ -37,7 +36,7 @@ const Stack = createStackNavigator()
 
 const { multiply } = Animated
 
-const cardStyleInterpolator = props => {
+const cardStyleInterpolator = (props: any) => {
     const translateX = multiply(
         props.current.progress.interpolate({
             inputRange: [0, 1],
@@ -46,7 +45,6 @@ const cardStyleInterpolator = props => {
         }),
         props.inverted,
     )
-    console.log(props.inverted)
 
     return {
         // ...CardStyleInterpolators.forHorizontalIOS(props),
@@ -110,19 +108,6 @@ const RootStack = () => {
                     gestureDirection: 'vertical',
                 }}
             />
-            {/* <Stack.Screen
-                name={routeNames.Article}
-                component={SlideCardJames}
-                options={{
-                    cardStyleInterpolator: props => {
-                        return {
-                            ...CardStyleInterpolators.forModalPresentationIOS(
-                                props,
-                            ),
-                        }
-                    },
-                }}
-            /> */}
             <Stack.Screen
                 name={routeNames.Settings}
                 component={SettingsScreen}

@@ -76,7 +76,7 @@ const addStaticRouterWithHeader = (
                 >
                     <IssueTitle title={title} />
                 </Header>
-                <Navigator navigation={navigation} />
+                <Navigator />
             </>
         )
     }

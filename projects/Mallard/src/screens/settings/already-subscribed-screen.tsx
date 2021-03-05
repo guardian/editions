@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
-
 import { List } from 'src/components/lists/list'
 import { Heading } from 'src/components/layout/ui/row'
 import { ScrollContainer } from 'src/components/layout/ui/container'
@@ -85,13 +84,13 @@ const AlreadySubscribedScreen = () => {
                                                 accessAttempt,
                                             } = await authIAP()
                                             if (isValid(accessAttempt)) {
-                                                open(close => (
+                                                open((close) => (
                                                     <SubFoundModalCard
                                                         close={close}
                                                     />
                                                 ))
                                             } else if (isError(accessAttempt)) {
-                                                open(close => (
+                                                open((close) => (
                                                     <MissingIAPModalCard
                                                         title={
                                                             Copy
@@ -108,7 +107,7 @@ const AlreadySubscribedScreen = () => {
                                                     />
                                                 ))
                                             } else {
-                                                open(close => (
+                                                open((close) => (
                                                     <MissingIAPModalCard
                                                         title={
                                                             Copy

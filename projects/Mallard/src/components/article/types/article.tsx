@@ -9,14 +9,12 @@ import { WebviewWithArticle } from './article/webview'
 import { Article as ArticleT, PictureArticle, GalleryArticle } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
-import { NavigationScreenProp } from 'react-navigation'
 import {
     IssueOrigin,
     BlockElement,
     ImageElement,
     CreditedImage,
 } from '../../../../../Apps/common/src'
-import { navigateToLightbox } from 'src/navigation/helpers/base'
 import { selectImagePath } from 'src/hooks/use-image-paths'
 import { useApiUrl } from 'src/hooks/use-settings'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
@@ -26,6 +24,8 @@ import { defaultSettings } from 'src/helpers/settings/defaults'
 import { isSuccessOrRedirect } from './article/helpers'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { useNavigation } from '@react-navigation/native'
+import { routeNames } from 'src/navigation/routes'
 
 const styles = StyleSheet.create({
     block: {
@@ -86,7 +86,7 @@ export const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
 export const getCreditedImages = (
     elements: ImageElement[],
 ): CreditedImage[] => {
-    const creditedImages: CreditedImage[] = elements.map(e => {
+    const creditedImages: CreditedImage[] = elements.map((e) => {
         return {
             source: e.src.source,
             path: e.src.path,
@@ -150,7 +150,6 @@ const checkPathExists = async (articlePath: string) => {
 }
 
 const Article = ({
-    navigation,
     article,
     path,
     onShouldShowHeaderChange,
@@ -159,11 +158,11 @@ const Article = ({
     onIsAtTopChange,
     origin,
 }: {
-    navigation: NavigationScreenProp<{}>
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
     origin: IssueOrigin
 } & HeaderControlProps) => {
+    const navigation = useNavigation()
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
     const [imagePaths, setImagePaths] = useState([''])
@@ -218,10 +217,10 @@ const Article = ({
         }
         const fetchImagePaths = async () => {
             return await Promise.all(
-                lbCreditedImages.map(image => getImagePathFromImage(image)),
+                lbCreditedImages.map((image) => getImagePathFromImage(image)),
             )
         }
-        fetchImagePaths().then(imagePaths => setImagePaths(imagePaths))
+        fetchImagePaths().then((imagePaths) => setImagePaths(imagePaths))
 
         const updateShareUrl = async () => {
             const url = await checkPathExists(article.key)
@@ -258,12 +257,12 @@ const Article = ({
                 allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
                 mediaPlaybackRequiresUserAction={false}
                 style={[styles.webview]}
-                _ref={r => {
+                _ref={(r) => {
                     ref.current = r
                 }}
                 topPadding={topPadding}
                 origin={origin}
-                onMessage={event => {
+                onMessage={(event) => {
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share' && shareUrl) {
                         if (Platform.OS === 'ios') {
@@ -305,14 +304,11 @@ const Article = ({
                         ) {
                             index++
                         }
-                        navigateToLightbox({
-                            navigation,
-                            navigationProps: {
-                                images: lightboxImages,
-                                imagePaths: imagePaths,
-                                index,
-                                pillar,
-                            },
+                        navigation.navigate(routeNames.Lightbox, {
+                            images: lightboxImages,
+                            imagePaths: imagePaths,
+                            index,
+                            pillar,
                         })
                     }
                 }}

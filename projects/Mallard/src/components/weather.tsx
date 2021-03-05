@@ -11,7 +11,6 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import gql from 'graphql-tag'
 import { Button, ButtonAppearance } from './Button/Button'
 import { routeNames } from 'src/navigation/routes'
-import { NavigationInjectedProps } from 'react-navigation'
 import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 import DeviceInfo from 'react-native-device-info'
@@ -211,6 +210,7 @@ const WeatherIconView = ({
 
 const SetLocationButton = () => {
     const navigation = useNavigation()
+
     const onSetLocation = useCallback(() => {
         navigation.navigate(routeNames.WeatherGeolocationConsent)
     }, [navigation])
@@ -255,10 +255,10 @@ const WeatherForecast = ({ weather }: { weather: Weather }) => {
     const { forecasts, locationName, isLocationPrecise } = weather
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
-        const intervals = [8, 6, 4, 2, 0].map(idx => forecasts[idx])
+        const intervals = [8, 6, 4, 2, 0].map((idx) => forecasts[idx])
         return (
             <View style={styles.weatherContainer}>
-                {intervals.map(forecast => {
+                {intervals.map((forecast) => {
                     return (
                         <WeatherIconView
                             key={forecast.EpochDateTime}

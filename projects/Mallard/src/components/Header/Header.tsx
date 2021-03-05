@@ -25,6 +25,7 @@ const HeaderScreenContainer = ({
                         <Button
                             icon={'\uE00A'}
                             alt="Back"
+                            // is this correct?
                             onPress={() => navigation.goBack()}
                         ></Button>
                     ) : null
@@ -34,6 +35,7 @@ const HeaderScreenContainer = ({
                         <CloseButton
                             accessibilityLabel={`Close the ${title} screen`}
                             accessibilityHint="Closes the current screen"
+                            // is this correct?
                             onPress={() => navigation.goBack()}
                         />
                     ) : null

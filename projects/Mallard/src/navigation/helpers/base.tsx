@@ -7,11 +7,7 @@ import {
 import { routeNames } from 'src/navigation/routes'
 import { PathToArticle, PathToIssue } from 'src/paths'
 import { ArticleNavigator } from 'src/screens/article-screen'
-import {
-    Issue,
-    CreditedImage,
-    ArticlePillar,
-} from '../../../../Apps/common/src'
+import { Issue } from '../../../../Apps/common/src'
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 
 type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
@@ -49,12 +45,6 @@ export interface ArticleNavigationProps {
     prefersFullScreen?: boolean
 }
 
-const navigateToArticle = (
-    navigation: NavigationScreenProp<{}>,
-    navigationProps: ArticleNavigationProps,
-): void => {
-    navigation.navigate(routeNames.Article, navigationProps)
-}
 const getArticleNavigationProps = (
     routeParams: any,
     {
@@ -86,14 +76,6 @@ const getArticleNavigationProps = (
     }
 }
 
-const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.IssueList)
-}
-
-const navigateToEditionMenu = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.EditionsMenu)
-}
-
 export interface IssueNavigationProps {
     path?: PathToIssue
     issue?: Issue
@@ -101,7 +83,7 @@ export interface IssueNavigationProps {
 }
 
 interface NavigateToIssueProps {
-    navigation: NavigationScreenProp<{}>
+    navigation: any
     navigationProps: IssueNavigationProps
     setIssueId: (path: PathToIssue, initialFrontKey?: string | null) => void
 }
@@ -114,9 +96,11 @@ const navigateToIssue = ({
     navigation.navigate(routeNames.Issue, {
         ...navigationProps,
     })
+
     if (navigationProps.path) {
         setIssueId(navigationProps.path, navigationProps.initialFrontKey)
     }
+
     sendComponentEvent({
         componentType: ComponentType.appButton,
         action: Action.click,
@@ -124,35 +108,4 @@ const navigateToIssue = ({
     })
 }
 
-const navigateToSettings = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.Settings)
-}
-
-export interface LightboxNavigationProps {
-    images?: CreditedImage[]
-    imagePaths?: string[]
-    index?: number
-    pillar?: ArticlePillar
-}
-
-interface LightboxProps {
-    navigation: NavigationScreenProp<{}>
-    navigationProps: LightboxNavigationProps
-}
-
-const navigateToLightbox = ({ navigation, navigationProps }: LightboxProps) => {
-    navigation.navigate(routeNames.Lightbox, {
-        ...navigationProps,
-    })
-}
-
-export {
-    mapNavigationToProps,
-    navigateToArticle,
-    navigateToIssueList,
-    getArticleNavigationProps,
-    navigateToIssue,
-    navigateToSettings,
-    navigateToLightbox,
-    navigateToEditionMenu,
-}
+export { mapNavigationToProps, getArticleNavigationProps, navigateToIssue }

@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { NavigationScreenProp } from 'react-navigation'
 import DeviceInfo from 'react-native-device-info'
 import { EditionsMenu } from 'src/components/EditionsMenu/EditionsMenu'
 import { EditionsMenuScreenHeader } from 'src/components/ScreenHeader/EditionMenuScreenHeader'
@@ -9,6 +8,7 @@ import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { ApiState } from './settings/api-screen'
 import { sidebarWidth } from 'src/navigation/navigators/sidebar/positions'
+import { useNavigation } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
     screenFiller: {
@@ -35,11 +35,8 @@ export const ScreenFiller = ({
     </View>
 )
 
-export const EditionsMenuScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
+export const EditionsMenuScreen = () => {
+    const navigation = useNavigation()
     const {
         editionsList: { regionalEditions, specialEditions },
         selectedEdition,
@@ -49,22 +46,24 @@ export const EditionsMenuScreen = ({
     return (
         <WithAppAppearance value="default">
             <ScreenFiller>
-                <EditionsMenuScreenHeader
-                    leftActionPress={() =>
-                        navigation.navigate(routeNames.Issue)
-                    }
-                />
+                <>
+                    <EditionsMenuScreenHeader
+                        leftActionPress={() =>
+                            navigation.navigate(routeNames.Issue)
+                        }
+                    />
 
-                <EditionsMenu
-                    navigationPress={() =>
-                        navigation.navigate(routeNames.Issue)
-                    }
-                    regionalEditions={regionalEditions}
-                    specialEditions={specialEditions}
-                    selectedEdition={selectedEdition.edition}
-                    storeSelectedEdition={storeSelectedEdition}
-                />
-                <ApiState />
+                    <EditionsMenu
+                        navigationPress={() =>
+                            navigation.navigate(routeNames.Issue)
+                        }
+                        regionalEditions={regionalEditions}
+                        specialEditions={specialEditions}
+                        selectedEdition={selectedEdition.edition}
+                        storeSelectedEdition={storeSelectedEdition}
+                    />
+                    <ApiState />
+                </>
             </ScreenFiller>
         </WithAppAppearance>
     )

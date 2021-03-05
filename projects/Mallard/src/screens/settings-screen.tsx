@@ -7,11 +7,6 @@ import {
     AccessibilityRole,
     Platform,
 } from 'react-native'
-import {
-    NavigationInjectedProps,
-    NavigationRoute,
-    NavigationParams,
-} from 'react-navigation'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Heading } from 'src/components/layout/ui/row'
@@ -33,7 +28,6 @@ import {
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
-import { NavigationScreenProp } from 'react-navigation'
 import { FullButton } from 'src/components/lists/FullButton'
 import { DualButton } from 'src/components/lists/DualButton'
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button'
@@ -43,14 +37,8 @@ import { HeaderScreenContainer } from 'src/components/Header/Header'
 import { useNavigation } from '@react-navigation/native'
 
 const MiscSettingsList = React.memo(
-    (props: {
-        isWeatherShown: boolean
-        client: ApolloClient<object>
-        navigation: NavigationScreenProp<
-            NavigationRoute<NavigationParams>,
-            NavigationParams
-        >
-    }) => {
+    (props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
+        const navigation = useNavigation()
         const {
             notificationsEnabled,
             setNotifications,
@@ -103,9 +91,7 @@ const MiscSettingsList = React.memo(
                 key: 'manageEditions',
                 title: Copy.settings.manageDownloads,
                 onPress: () =>
-                    props.navigation.navigate(
-                        routeNames.ManageEditionsSettings,
-                    ),
+                    navigation.navigate(routeNames.ManageEditionsSettings),
                 proxy: <RightChevron />,
             },
         ]
@@ -184,7 +170,7 @@ const SettingsScreen = () => {
     const versionClickHandler = identityData
         ? () => {
               if (!isUsingProdDevtools && isStaffMember(identityData))
-                  setVersionClickedTimes(t => {
+                  setVersionClickedTimes((t) => {
                       if (t < 7) return t + 1
                       Alert.alert(
                           'Enable Developer Mode',
@@ -243,7 +229,6 @@ const SettingsScreen = () => {
                     <SignInButton
                         accessible={true}
                         accessibilityRole="button"
-                        navigation={navigation}
                         username={
                             identityData
                                 ? identityData.userDetails.primaryEmailAddress
@@ -256,7 +241,6 @@ const SettingsScreen = () => {
                     <MiscSettingsList
                         client={client}
                         isWeatherShown={isWeatherShown}
-                        navigation={navigation}
                     />
                     <Heading>{``}</Heading>
                     <List
@@ -323,9 +307,7 @@ const SettingsScreen = () => {
                         ]}
                     />
 
-                    {canDisplayBetaButton && (
-                        <BetaButtonOption navigation={navigation} />
-                    )}
+                    {canDisplayBetaButton && <BetaButtonOption />}
 
                     {isUsingProdDevtools && <DevZone />}
                 </ScrollContainer>

@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
 })
 
 const Header = () => {
-    const { panResponder, scrollY, onDismiss } = useDismissArticle()
     const navigation = useNavigation()
+    const { panResponder, scrollY, onDismiss } = useDismissArticle()
     return (
         <Animated.View style={[styles.headerContainer]}>
             <TouchableWithoutFeedback

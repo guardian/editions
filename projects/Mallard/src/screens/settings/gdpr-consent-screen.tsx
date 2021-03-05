@@ -22,7 +22,6 @@ import {
 import { WithAppAppearance } from 'src/theme/appearance'
 import { useToast } from 'src/hooks/use-toast'
 import { LoginHeader } from 'src/components/login/login-layout'
-import { NavigationInjectedProps } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import {
     gdprAllowFunctionalityKey,
@@ -32,6 +31,7 @@ import {
 import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters'
 import { storeSetting, getSetting } from 'src/helpers/settings'
 import { HeaderScreenContainer } from 'src/components/Header/Header'
+import { useNavigation } from '@react-navigation/native'
 
 interface GdprConfig {
     gdprAllowPerformance: ThreeWaySwitchValue
@@ -64,21 +64,21 @@ export const setConsent = (
     value: ThreeWaySwitchValue,
 ) => {
     storeSetting(consentBucketKey, value)
-    GdprBuckets[consentBucketKey].forEach(key => {
+    GdprBuckets[consentBucketKey].forEach((key) => {
         storeSetting(key, value)
     })
     setGDPRCurrentVersion()
 }
 
 const consentToAll = () => {
-    gdprSwitchSettings.forEach(sw => {
+    gdprSwitchSettings.forEach((sw) => {
         setConsent(sw, true)
     })
     setGDPRCurrentVersion()
 }
 
 export const resetAll = () => {
-    gdprSwitchSettings.forEach(sw => {
+    gdprSwitchSettings.forEach((sw) => {
         setConsent(sw, null)
     })
     setGDPRCurrentVersion()
@@ -86,12 +86,12 @@ export const resetAll = () => {
 
 const GdprConsent = ({
     shouldShowDismissableHeader = false,
-    navigation,
     continueText,
 }: {
     shouldShowDismissableHeader?: boolean
     continueText: string
-} & NavigationInjectedProps) => {
+}) => {
+    const navigation = useNavigation()
     const { showToast } = useToast()
 
     const [updateFlag, setDataUpdated] = useState(false)
@@ -242,7 +242,7 @@ const GdprConsent = ({
                             explainer={item.description}
                             proxy={
                                 <ThreeWaySwitch
-                                    onValueChange={value => {
+                                    onValueChange={(value) => {
                                         setConsentAndUpdate(item.key, value)
                                         showToast(PREFS_SAVED_MSG)
                                     }}
@@ -275,30 +275,24 @@ const GdprConsent = ({
     )
 }
 
-const GdprConsentScreen = ({ navigation }: NavigationInjectedProps) => (
+const GdprConsentScreen = () => (
     <HeaderScreenContainer
         title={PRIVACY_SETTINGS_HEADER_TITLE}
         actionLeft={true}
     >
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
-                <GdprConsent
-                    navigation={navigation}
-                    continueText={'Enable all'}
-                ></GdprConsent>
+                <GdprConsent continueText={'Enable all'}></GdprConsent>
             </ScrollContainer>
         </WithAppAppearance>
     </HeaderScreenContainer>
 )
 
-const GdprConsentScreenForOnboarding = ({
-    navigation,
-}: NavigationInjectedProps) => (
+const GdprConsentScreenForOnboarding = () => (
     <WithAppAppearance value={'settings'}>
         <GdprConsent
             shouldShowDismissableHeader={true}
             continueText={'Enable all and continue'}
-            navigation={navigation}
         ></GdprConsent>
     </WithAppAppearance>
 )

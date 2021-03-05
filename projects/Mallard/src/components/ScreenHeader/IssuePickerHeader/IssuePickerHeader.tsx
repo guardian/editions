@@ -1,10 +1,10 @@
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { SpecialEditionHeaderStyles } from 'src/common'
-import { navigateToSettings } from 'src/navigation/helpers/base'
 import { ScreenHeader } from '../ScreenHeader'
 import { CloseButton } from 'src/components/Button/CloseButton'
 import { SettingsButton } from 'src/components/Button/SettingsButton'
+import { routeNames } from 'src/navigation/routes'
 
 const IssuePickerHeader = ({
     headerStyles,
@@ -21,7 +21,7 @@ const IssuePickerHeader = ({
             leftAction={
                 <SettingsButton
                     onPress={() => {
-                        navigateToSettings(navigation)
+                        navigation.navigate(routeNames.Settings)
                     }}
                 />
             }

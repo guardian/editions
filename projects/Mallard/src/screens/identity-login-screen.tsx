@@ -4,7 +4,6 @@ import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
 import { getErrorString } from 'src/authentication/services/apple'
 import { appleAuthWithDeepRedirect } from 'src/authentication/services/apple-oauth'
 import { appleNativeAuth } from 'src/authentication/services/apple'
-import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
 import { SignInFailedModalCard } from 'src/components/SignInFailedModalCard'
 import { routeNames } from 'src/navigation/routes'
@@ -18,25 +17,18 @@ import { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
 import { Copy } from 'src/helpers/words'
+import { StackActions, useNavigation } from '@react-navigation/native'
 
-const useRandomState = () =>
-    useState(
-        Math.random()
-            .toString()
-            .split('.')[1],
-    )[0]
+const useRandomState = () => useState(Math.random().toString().split('.')[1])[0]
 
-const AuthSwitcherScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
+const AuthSwitcherScreen = () => {
+    const navigation = useNavigation()
     const [isLoading, setIsLoading] = useState(false)
 
     const [error, setError] = useState<string | null>(null)
 
     const email = useFormField('', {
-        validator: email =>
+        validator: (email) =>
             email
                 ? isEmail(email)
                     ? null
@@ -45,7 +37,7 @@ const AuthSwitcherScreen = ({
         onSet: () => setError(null),
     })
     const password = useFormField('', {
-        validator: password =>
+        validator: (password) =>
             password ? null : Copy.authSwitcherScreen.invalidPassword,
         onSet: () => setError(null),
     })
@@ -75,13 +67,17 @@ const AuthSwitcherScreen = ({
                         if (isValid(attempt)) {
                             setIsLoading(false)
                             if (!isValid(accessAttempt)) {
-                                open(close => (
+                                open((close) => (
                                     <SignInFailedModalCard
                                         email={
                                             attempt.data.userDetails
                                                 .primaryEmailAddress
                                         }
-                                        onDismiss={() => navigation.popToTop()}
+                                        onDismiss={() =>
+                                            navigation.dispatch(
+                                                StackActions.popToTop(),
+                                            )
+                                        }
                                         onOpenCASLogin={() =>
                                             navigation.navigate(
                                                 routeNames.CasSignIn,
@@ -99,7 +95,7 @@ const AuthSwitcherScreen = ({
                                     />
                                 ))
                             } else {
-                                open(close => (
+                                open((close) => (
                                     <SubFoundModalCard close={close} />
                                 ))
                             }
@@ -148,7 +144,7 @@ const AuthSwitcherScreen = ({
                 handleAuthClick(
                     () =>
                         facebookAuthWithDeepRedirect(validatorString).then(
-                            token => ({
+                            (token) => ({
                                 'facebook-access-token': token,
                             }),
                         ),
@@ -159,7 +155,7 @@ const AuthSwitcherScreen = ({
                 handleAuthClick(
                     () =>
                         googleAuthWithDeepRedirect(validatorString).then(
-                            token => ({
+                            (token) => ({
                                 'google-access-token': token,
                             }),
                         ),
@@ -170,7 +166,7 @@ const AuthSwitcherScreen = ({
                 handleAuthClick(
                     () =>
                         appleAuthWithDeepRedirect(validatorString).then(
-                            token => {
+                            (token) => {
                                 return {
                                     'apple-sign-in-token': token,
                                 }

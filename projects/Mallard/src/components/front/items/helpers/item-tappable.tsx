@@ -9,14 +9,14 @@ import {
     View,
     ViewStyle,
 } from 'react-native'
-import { AnimatedValue, NavigationEvents } from 'react-navigation'
+import { AnimatedValue } from 'react-navigation'
 import { CAPIArticle, Issue, ItemSizes } from 'src/common'
 import { ariaHidden } from 'src/helpers/a11y'
-import { navigateToArticle } from 'src/navigation/helpers/base'
 import {
     setScreenPositionFromView,
     setScreenPositionOfItem,
 } from 'src/navigation/navigators/article/positions'
+import { routeNames } from 'src/navigation/routes'
 import { PathToArticle } from 'src/paths'
 import { ArticleNavigator } from 'src/screens/article-screen'
 import { color } from 'src/theme/color'
@@ -87,6 +87,7 @@ const ItemTappable = ({
     const navigation = useNavigation()
     const tappableRef = useRef<View>()
     const [opacity] = useState(() => new Animated.Value(1))
+
     return (
         <Animated.View
             style={[style]}
@@ -113,7 +114,7 @@ const ItemTappable = ({
             <TouchableHighlight
                 onPress={() => {
                     fade(opacity, 'out')
-                    navigateToArticle(navigation, {
+                    navigation.navigate(routeNames.Article, {
                         path,
                         articleNavigator,
                         prefersFullScreen: article.type === 'crossword',

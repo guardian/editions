@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
-import { NavigationScreenProp } from 'react-navigation'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { LoginInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
@@ -10,6 +9,7 @@ import { useModal } from 'src/components/modal'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
+import { useNavigation } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
     image: { height: 200, width: undefined },
@@ -17,11 +17,8 @@ const styles = StyleSheet.create({
     casExplainerBody: { ...getFont('headline', 1, 'regular') },
 })
 
-const CasSignInScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
+const CasSignInScreen = () => {
+    const navigation = useNavigation()
     const { authCAS } = useContext(AccessContext)
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -31,11 +28,12 @@ const CasSignInScreen = ({
     const [shouldShowError, setShouldShowError] = useState(false)
 
     const subscriberID = useFormField('', {
-        validator: subId => (subId ? null : 'Please enter a subscriber ID'),
+        validator: (subId) => (subId ? null : 'Please enter a subscriber ID'),
         onSet: () => setErrorMessage(null),
     })
+
     const password = useFormField('', {
-        validator: password =>
+        validator: (password) =>
             password ? null : 'Please enter a postcode or surname',
         onSet: () => setErrorMessage(null),
     })
@@ -51,7 +49,7 @@ const CasSignInScreen = ({
         )
         if (isValid(accessAttempt)) {
             navigation.goBack()
-            open(close => <SubFoundModalCard close={close} />)
+            open((close) => <SubFoundModalCard close={close} />)
         } else {
             setErrorMessage(accessAttempt.reason || 'Something went wrong')
         }
@@ -91,7 +89,6 @@ const CasSignInScreen = ({
                     confirmation email. If you collect your paper, your
                     subscriber ID is on your voucher.
                 </Text>
-
                 <Image
                     resizeMode="contain"
                     style={styles.image}

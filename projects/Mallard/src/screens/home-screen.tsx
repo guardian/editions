@@ -7,12 +7,6 @@ import React, {
     useState,
 } from 'react'
 import { FlatList, Platform, StyleSheet, View } from 'react-native'
-import {
-    NavigationInjectedProps,
-    NavigationParams,
-    NavigationRoute,
-    NavigationScreenProp,
-} from 'react-navigation'
 import { useNavigation } from '@react-navigation/native'
 import { IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/Button/Button'
@@ -37,7 +31,6 @@ import { useIssueResponse } from 'src/hooks/use-issue'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { useSetNavPosition } from 'src/hooks/use-nav-position'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
-import { navigateToIssue } from 'src/navigation/helpers/base'
 import { routeNames } from 'src/navigation/routes'
 import { PathToIssue } from 'src/paths'
 import { WithAppAppearance } from 'src/theme/appearance'
@@ -51,6 +44,7 @@ import {
 } from 'src/hooks/use-edition-provider'
 import { Copy } from 'src/helpers/words'
 import { ScreenFiller } from './editions-menu-screen'
+import { navigateToIssue } from 'src/navigation/helpers/base'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -76,16 +70,12 @@ const IssueRowContainer = React.memo(
         setIssueId: setLocalIssueId,
         issue,
         issueDetails,
-        navigation,
     }: {
         setIssueId: Dispatch<PathToIssue>
         issue: IssueSummary
         issueDetails: Loaded<IssueWithFronts> | null
-        navigation: NavigationScreenProp<
-            NavigationRoute<NavigationParams>,
-            NavigationParams
-        >
     }) => {
+        const navigation = useNavigation()
         const { issueId, setIssueId } = useIssueSummary()
         const { localId, publishedId } = issue
         const setNavPosition = useSetNavPosition()
@@ -136,7 +126,7 @@ const IssueRowContainer = React.memo(
         ])
 
         const onPressFront = useCallback(
-            frontKey => {
+            (frontKey) => {
                 if (
                     issueId != null &&
                     issueId.publishedIssueId === publishedId &&
@@ -168,7 +158,8 @@ const IssueRowContainer = React.memo(
     },
 )
 
-const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
+const IssueListFooter = () => {
+    const navigation = useNavigation()
     const isUsingProdDevtools = useIsUsingProdDevtools()
     const { setIssueId } = useIssueSummary()
 
@@ -240,7 +231,7 @@ const IssueListView = React.memo(
 
         // We want to scroll to the current issue.
         const currentIssueIndex = issueList.findIndex(
-            issue =>
+            (issue) =>
                 issue.localId === localId && issue.publishedId === publishedId,
         )
 
@@ -269,7 +260,6 @@ const IssueListView = React.memo(
                     setIssueId={setIssueId}
                     issue={item}
                     issueDetails={index === currentIssueIndex ? details : null}
-                    navigation={navigation}
                 />
             ),
             [currentIssueIndex, details, navigation, setIssueId],
@@ -301,7 +291,7 @@ const IssueListView = React.memo(
             () => (
                 <View>
                     <Separator />
-                    <IssueListFooter navigation={navigation} />
+                    <IssueListFooter />
                 </View>
             ),
             [navigation],
@@ -442,28 +432,31 @@ export const HomeScreen = () => {
     return (
         <WithAppAppearance value={'tertiary'}>
             <ScreenFiller direction="end">
-                <IssuePickerHeader
-                    title={selectedEdition.header.title}
-                    subTitle={selectedEdition.header.subTitle}
-                    headerStyles={
-                        specialEditionProps && specialEditionProps.headerStyle
-                    }
-                />
-                {issueSummary ? (
-                    <IssueListFetchContainer />
-                ) : error ? (
-                    <FlexErrorMessage
-                        style={styles.issueList}
-                        debugMessage={error}
-                        title={CONNECTION_FAILED_ERROR}
-                        message={CONNECTION_FAILED_AUTO_RETRY}
+                <>
+                    <IssuePickerHeader
+                        title={selectedEdition.header.title}
+                        subTitle={selectedEdition.header.subTitle}
+                        headerStyles={
+                            specialEditionProps &&
+                            specialEditionProps.headerStyle
+                        }
                     />
-                ) : (
-                    <FlexCenter>
-                        <Spinner></Spinner>
-                    </FlexCenter>
-                )}
-                <ApiState />
+                    {issueSummary ? (
+                        <IssueListFetchContainer />
+                    ) : error ? (
+                        <FlexErrorMessage
+                            style={styles.issueList}
+                            debugMessage={error}
+                            title={CONNECTION_FAILED_ERROR}
+                            message={CONNECTION_FAILED_AUTO_RETRY}
+                        />
+                    ) : (
+                        <FlexCenter>
+                            <Spinner></Spinner>
+                        </FlexCenter>
+                    )}
+                    <ApiState />
+                </>
             </ScreenFiller>
         </WithAppAppearance>
     )

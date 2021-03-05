@@ -2,9 +2,9 @@ import React from 'react'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 import { LoginHeader } from 'src/components/login/login-layout'
 import { PRIVACY_POLICY_HEADER_TITLE } from 'src/helpers/words'
-import { NavigationInjectedProps } from 'react-navigation'
 import { html } from 'src/helpers/webview'
 import { HeaderScreenContainer } from 'src/components/Header/Header'
+import { useNavigation } from '@react-navigation/native'
 
 const privacyPolicyHtml = html`
     <h2><strong>About this privacy policy</strong></h2>
@@ -489,15 +489,17 @@ const PrivacyPolicyScreen = () => (
     </HeaderScreenContainer>
 )
 
-const PrivacyPolicyScreenForOnboarding = ({
-    navigation,
-}: NavigationInjectedProps) => (
-    <>
-        <LoginHeader onDismiss={() => navigation.goBack()}>
-            {PRIVACY_POLICY_HEADER_TITLE}
-        </LoginHeader>
-        <DefaultInfoTextWebview html={privacyPolicyHtml} />
-    </>
-)
+const PrivacyPolicyScreenForOnboarding = () => {
+    const navigation = useNavigation()
+
+    return (
+        <>
+            <LoginHeader onDismiss={() => navigation.goBack()}>
+                {PRIVACY_POLICY_HEADER_TITLE}
+            </LoginHeader>
+            <DefaultInfoTextWebview html={privacyPolicyHtml} />
+        </>
+    )
+}
 
 export { PrivacyPolicyScreen, PrivacyPolicyScreenForOnboarding }

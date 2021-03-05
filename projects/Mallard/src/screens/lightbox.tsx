@@ -11,12 +11,12 @@ import {
     getNewWindowStart,
 } from 'src/components/article/progress-indicator'
 import { palette } from '@guardian/pasteup/palette'
-import { NavigationScreenProp } from 'react-navigation'
 import { StatusBar } from 'react-native'
-import { LightboxNavigationProps } from 'src/navigation/helpers/base'
 import { useDimensions } from 'src/hooks/use-config-provider'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import { ButtonAppearance } from 'src/components/Button/Button'
+import { useNavigation } from '@react-navigation/native'
+
 const styles = StyleSheet.create({
     lightboxPage: {
         width: '100%',
@@ -71,11 +71,8 @@ const styles = StyleSheet.create({
     },
 })
 
-const LightboxScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}, LightboxNavigationProps>
-}) => {
+const LightboxScreen = () => {
+    const navigation = useNavigation()
     const imagePaths = navigation.getParam('imagePaths', [])
     const images = navigation.getParam('images', [])
     const index = navigation.getParam('index', 0)
@@ -160,7 +157,7 @@ const LightboxScreen = ({
                         renderIndicator={() => <View />} // empty indicator
                         onClick={focusOnImageComponent}
                         onMove={handleScrollStartEvent}
-                        onChange={index => handleOnMoveEvent(index || 0)} // seems that first index is nil?
+                        onChange={(index) => handleOnMoveEvent(index || 0)} // seems that first index is nil?
                         saveToLocalByLongPress={false}
                         maxOverflow={width}
                         enablePreload={true}

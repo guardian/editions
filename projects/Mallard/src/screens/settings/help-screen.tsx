@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { List } from 'src/components/lists/list'
-import { NavigationInjectedProps } from 'react-navigation'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
@@ -22,12 +21,14 @@ import { AccessContext } from 'src/authentication/AccessContext'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useToast } from 'src/hooks/use-toast'
 import { HeaderScreenContainer } from 'src/components/Header/Header'
+import { useNavigation } from '@react-navigation/native'
 
 export interface OnCompletionToast {
     (msg: string): void
 }
 
-const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
+const HelpScreen = () => {
+    const navigation = useNavigation()
     const { showToast } = useToast()
     const { attempt } = useContext(AccessContext)
     const client = useApolloClient()

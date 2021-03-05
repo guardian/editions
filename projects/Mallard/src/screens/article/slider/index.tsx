@@ -20,8 +20,8 @@ import { SliderSection } from './types'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { PreviewControls } from 'src/components/article/preview-controls'
 import { issueDateFromId } from './slider-helpers'
-import { NavigationScreenProp } from 'react-navigation'
 import { sendPageViewEvent } from 'src/services/ophan'
+import { useNavigation } from '@react-navigation/native'
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
@@ -59,20 +59,20 @@ const ArticleSlider = React.memo(
     ({
         path,
         articleNavigator,
-        navigation,
     }: {
         path: PathToArticle
         articleNavigator: ArticleNavigator
-        navigation: NavigationScreenProp<{}>
     }) => {
+        const navigation = useNavigation()
         const {
             startingPoint,
             flattenedArticles,
         } = getArticleDataFromNavigator(articleNavigator, path)
         const [current, setCurrent] = useState(startingPoint)
-        const [position, setPosition] = useState<
-            Animated.AnimatedInterpolation
-        >(new Animated.Value(0))
+        const [
+            position,
+            setPosition,
+        ] = useState<Animated.AnimatedInterpolation>(new Animated.Value(0))
 
         const { width } = useDimensions()
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -112,7 +112,7 @@ const ArticleSlider = React.memo(
 
         const getFrontNameAndPosition = () => {
             const displaySection = sliderSections.filter(
-                section =>
+                (section) =>
                     section.startIndex <= current &&
                     section.startIndex + section.items > current,
             )
@@ -174,7 +174,7 @@ const ArticleSlider = React.memo(
                 <ViewPagerAndroid
                     style={styles.androidPager}
                     initialPage={startingPoint}
-                    ref={viewPager => {
+                    ref={(viewPager) => {
                         viewPagerRef.current = viewPager
                     }}
                     onPageSelected={(ev: any) => {
@@ -192,7 +192,6 @@ const ArticleSlider = React.memo(
                         <View key={index}>
                             {index >= current - 1 && index <= current + 1 ? (
                                 <ArticleScreenBody
-                                    navigation={navigation}
                                     width={width}
                                     path={item}
                                     pillar={getAppearancePillar(

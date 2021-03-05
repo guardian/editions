@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, View, Alert, Platform, Linking } from 'react-native'
-import { NavigationInjectedProps } from 'react-navigation'
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview'
 import { useApolloClient } from '@apollo/react-hooks'
 import { metrics } from 'src/theme/spacing'
@@ -11,6 +10,7 @@ import { requestLocationPermission } from 'src/helpers/location-permission'
 import { RESULTS } from 'react-native-permissions'
 import { getGeolocation } from 'src/helpers/weather'
 import { Copy } from 'src/helpers/words'
+import { useNavigation } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
     button: {
@@ -30,9 +30,8 @@ const showIsDisabledAlert = () => {
     )
 }
 
-const WeatherGeolocationConsentScreen = ({
-    navigation,
-}: NavigationInjectedProps) => {
+const WeatherGeolocationConsentScreen = () => {
+    const navigation = useNavigation()
     const apolloClient = useApolloClient()
     const onConsentPress = async () => {
         const result = await requestLocationPermission(apolloClient)
@@ -62,20 +61,20 @@ const WeatherGeolocationConsentScreen = ({
                 showIsDisabledAlert()
                 return
             }
-            navigation.dismiss()
+            // is this correct?
+            navigation.goBack()
         }
     }
     const onHidePress = () => {
         setIsWeatherShown(apolloClient, false)
-        navigation.dismiss()
+        // is this correct?
+        navigation.goBack()
     }
 
     return (
         <>
             <DefaultInfoTextWebview
-                html={html`
-                    ${Copy.weatherConsentHtml.content}
-                `}
+                html={html` ${Copy.weatherConsentHtml.content} `}
             />
             <View style={styles.buttons}>
                 <Button

@@ -5,6 +5,7 @@ import { Header } from 'src/components/layout/header/header'
 
 export const BasicArticleHeader = () => {
     const navigation = useNavigation()
+
     return (
         <Header
             theme="light"

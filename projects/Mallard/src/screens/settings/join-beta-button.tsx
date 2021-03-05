@@ -8,13 +8,13 @@ import { isInBeta } from 'src/helpers/release-stream'
 import { remoteConfigService } from 'src/services/remote-config'
 import { metrics } from 'src/theme/spacing'
 import { RightChevron } from 'src/components/icons/RightChevron'
-import {
-    NavigationScreenProp,
-    NavigationRoute,
-    NavigationParams,
-} from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { Copy } from 'src/helpers/words'
+import {
+    NavigationProp,
+    ParamListBase,
+    useNavigation,
+} from '@react-navigation/native'
 
 const betaButtonStyle = StyleSheet.create({
     thanksText: {
@@ -23,71 +23,59 @@ const betaButtonStyle = StyleSheet.create({
     },
 })
 
-const betaProgrammeFAQs = (
-    navigation: NavigationScreenProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >,
-) => ({
-    key: 'Beta Programme FAQs',
-    title: Copy.settings.betaProgrammeFAQs,
-    onPress: () => {
-        navigation.navigate(routeNames.BetaProgrammeFAQs)
-    },
-    proxy: <RightChevron />,
-})
+const betaProgrammeFAQs = (navigation: NavigationProp<ParamListBase>) => {
+    return {
+        key: 'Beta Programme FAQs',
+        title: Copy.settings.betaProgrammeFAQs,
+        onPress: () => {
+            navigation.navigate(routeNames.BetaProgrammeFAQs)
+        },
+        proxy: <RightChevron />,
+    }
+}
 
-const betaThanks = (
-    navigation: NavigationScreenProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >,
-) => (
-    <>
-        <Heading>{``}</Heading>
-        <List data={[betaProgrammeFAQs(navigation)]}></List>
-        <UiBodyCopy style={betaButtonStyle.thanksText}>
-            Thank you for being a beta tester 🙌
-        </UiBodyCopy>
-        <Heading>{``}</Heading>
-    </>
-)
+const betaThanks = () => {
+    const navigation = useNavigation()
 
-const joinBetaMenuButton = (
-    navigation: NavigationScreenProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >,
-) => (
-    <>
-        <Heading>{``}</Heading>
-        <List
-            data={[
-                {
-                    key: 'Become a beta tester 🙌',
-                    title: 'Become a beta tester 🙌',
-                    onPress: () => {
-                        Linking.openURL(JOIN_BETA_LINK) //what to catch here?
+    return (
+        <>
+            <Heading>{``}</Heading>
+            <List data={[betaProgrammeFAQs(navigation)]}></List>
+            <UiBodyCopy style={betaButtonStyle.thanksText}>
+                Thank you for being a beta tester 🙌
+            </UiBodyCopy>
+            <Heading>{``}</Heading>
+        </>
+    )
+}
+
+const joinBetaMenuButton = () => {
+    const navigation = useNavigation()
+
+    return (
+        <>
+            <Heading>{``}</Heading>
+            <List
+                data={[
+                    {
+                        key: 'Become a beta tester 🙌',
+                        title: 'Become a beta tester 🙌',
+                        onPress: () => {
+                            Linking.openURL(JOIN_BETA_LINK) //what to catch here?
+                        },
+                        proxy: <RightChevron />,
                     },
-                    proxy: <RightChevron />,
-                },
-                betaProgrammeFAQs(navigation),
-            ]}
-        />
-        <Heading>{``}</Heading>
-    </>
-)
+                    betaProgrammeFAQs(navigation),
+                ]}
+            />
+            <Heading>{``}</Heading>
+        </>
+    )
+}
 
-const BetaButtonOption = (props: {
-    navigation: NavigationScreenProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >
-}) => {
+const BetaButtonOption = () => {
     if (remoteConfigService.getBoolean('join_beta_button_enabled')) {
-        return isInBeta()
-            ? betaThanks(props.navigation)
-            : joinBetaMenuButton(props.navigation)
+        return isInBeta() ? betaThanks() : joinBetaMenuButton()
     } else {
         return <></>
     }

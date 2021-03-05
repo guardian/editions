@@ -30,9 +30,7 @@ const Dismissable = ({
 }: {
     navigator: NavigationContainer
 } & NavigationInjectedProps) => {
-    const Navigator = (navigator as unknown) as FunctionComponent<
-        NavigationInjectedProps
-    >
+    const Navigator = (navigator as unknown) as FunctionComponent<NavigationInjectedProps>
 
     return (
         <SlideCard>
@@ -219,18 +217,6 @@ const createArticleNavigator = (
     })
 }
 
-export const SlideCardJames = ({ navigation, route }) =>
-    route.params.prefersFullScreen ? (
-        <>
-            <BasicArticleHeader />
-            <ArticleScreen navigation={navigation} route={route} />
-        </>
-    ) : (
-        <SlideCard>
-            <ArticleScreen navigation={navigation} route={route} />
-        </SlideCard>
-    )
-
 export const ArticleWrapper = ({
     navigation,
     route,
@@ -317,7 +303,7 @@ export const ArticleWrapper = ({
         //                 ]}
         //             >
         <SlideCard>
-            <ArticleScreen navigation={navigation} route={route} />
+            <ArticleScreen route={route} />
         </SlideCard>
         //             </Animated.View>
         //         </Animated.View>

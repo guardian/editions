@@ -10,7 +10,6 @@ import { useIsPreview } from 'src/hooks/use-settings'
 import { PathToArticle } from 'src/paths'
 import { color } from 'src/theme/color'
 import { HeaderControlInnerProps } from 'src/components/article/types/article'
-import { NavigationScreenProp } from 'react-navigation'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -21,7 +20,6 @@ export type OnIsAtTopChange = (isAtTop: boolean, articleKey: string) => void
 
 const ArticleScreenBody = React.memo<
     {
-        navigation: NavigationScreenProp<{}>
         path: PathToArticle
         pillar: ArticlePillar
         width: number
@@ -30,7 +28,6 @@ const ArticleScreenBody = React.memo<
     } & HeaderControlInnerProps
 >(
     ({
-        navigation,
         path,
         pillar,
         width,
@@ -69,7 +66,7 @@ const ArticleScreenBody = React.memo<
                             style={{ backgroundColor: color.background }}
                         />
                     ),
-                    success: article => (
+                    success: (article) => (
                         <>
                             {previewNotice && (
                                 <UiBodyCopy>{previewNotice}</UiBodyCopy>
@@ -85,7 +82,6 @@ const ArticleScreenBody = React.memo<
                                 )}
                             >
                                 <ArticleController
-                                    navigation={navigation}
                                     {...headerControlProps}
                                     path={path}
                                     article={article.article}

@@ -7,15 +7,8 @@ import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
 import { AppState, StatusBar, StyleSheet, View } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
-import { NavigationState } from 'react-navigation'
 import { NavPositionProvider } from 'src/hooks/use-nav-position'
-import { RootNavigator } from 'src/navigation'
-import {
-    ScreenTracking,
-    ScreenTrackingMapping,
-    sendAppScreenEvent,
-    setUserId,
-} from 'src/services/ophan'
+import { setUserId } from 'src/services/ophan'
 import { AccessProvider } from './authentication/AccessContext'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
@@ -66,63 +59,6 @@ const styles = StyleSheet.create({
 
 const persistenceKey = 'dev-nav-key-232asfdffgdfg1asdffgfdgfdga3413'
 
-const persistNavigationState = async (navState: any) => {
-    try {
-        await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
-    } catch (e) {
-        console.log('Unable to persist state')
-    }
-}
-
-const loadNavigationState = async () => {
-    try {
-        const jsonString = await AsyncStorage.getItem(persistenceKey)
-        return jsonString && JSON.parse(jsonString)
-    } catch (e) {
-        console.log('Unable to load the navigation state')
-    }
-}
-
-const rootNavigationProps = null && {
-    persistNavigationState,
-    loadNavigationState,
-}
-
-function getActiveRouteName(
-    navigationState: NavigationState,
-): ScreenTrackingMapping | null {
-    if (!navigationState) {
-        return null
-    }
-    const route = navigationState.routes[navigationState.index]
-    // dive into nested navigators
-    if (route.routes) {
-        return getActiveRouteName(route as NavigationState)
-    }
-    return route.routeName as ScreenTrackingMapping
-}
-
-const onNavigationStateChange = (
-    prevState: NavigationState,
-    currentState: NavigationState,
-) => {
-    const prevScreen: ScreenTrackingMapping | null = getActiveRouteName(
-        prevState,
-    )
-    const currentScreen: ScreenTrackingMapping | null = getActiveRouteName(
-        currentState,
-    )
-    if (
-        currentScreen &&
-        ScreenTracking[currentScreen] &&
-        currentScreen !== prevScreen
-    ) {
-        sendAppScreenEvent({
-            screenName: ScreenTracking[currentScreen],
-        })
-    }
-}
-
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
@@ -151,7 +87,7 @@ export default class App extends React.Component<{}, {}> {
         shouldHavePushFailsafe(apolloClient)
         loggingService.postLogs()
 
-        AppState.addEventListener('change', async appState => {
+        AppState.addEventListener('change', async (appState) => {
             if (appState === 'active') {
                 prepareAndDownloadTodaysIssue(apolloClient)
                 loggingService.postLogs()
@@ -193,13 +129,6 @@ export default class App extends React.Component<{}, {}> {
                                     backgroundColor="#041f4a"
                                 />
                                 <View style={styles.appContainer}>
-                                    {/* <RootNavigator
-                                        {...rootNavigationProps}
-                                        enableURLHandling={__DEV__}
-                                        onNavigationStateChange={
-                                            onNavigationStateChange
-                                        }
-                                    /> */}
                                     <NavigationContainer>
                                         <RootStack />
                                     </NavigationContainer>
