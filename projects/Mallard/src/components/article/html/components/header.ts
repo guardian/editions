@@ -80,20 +80,20 @@ const shareButtonColor = ({ colors, theme }: CssProps) => {
 }
 
 const threeLines = `
-background-image: repeating-linear-gradient(
-    to bottom,
-    ${color.dimLine},
-    ${color.dimLine} 1px,
-    transparent 1px,
-    transparent 4px
-);
-background-repeat: repeat-x;
-background-position: bottom;
-background-size: 1px 16px;
-content: '';
-display: block;
-height: 16px;
-margin: 0;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        ${color.dimLine},
+        ${color.dimLine} 1px,
+        transparent 1px,
+        transparent 4px
+    );
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-size: 1px 16px;
+    content: '';
+    display: block;
+    height: 16px;
+    margin: 0;
 `
 
 export const headerStyles = ({ colors, theme }: CssProps) => css`
@@ -101,7 +101,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header a {
         pointer-events: none;
     }
-
     .header:after, .header-immersive-video:after {
         ${threeLines}
     }
@@ -130,7 +129,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-right: ${px(metrics.article.sides)};
         }
     }
-
 
     .header-bg {
         left: -50em;
@@ -189,6 +187,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
+
     .header h1, .header-immersive-video h1 {
         font-size: 30px;
         font-family: ${families.headline.regular};
@@ -258,6 +257,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         left: ${px(metrics.article.sides * -1)};
         right: ${px(metrics.article.sides * -1)};
     }
+
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header-byline:not(:empty):after {
             left: 0;
@@ -727,12 +727,20 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
             padding-right: 25px;
         }
 
+        .header-container[data-type="${
+            ArticleType.Interview
+        }"] span h1 .header-top-headline {
+            line-height: 50px;
+        }
+        
+
         .header-container[data-type="${ArticleType.Interview}"] .header-kicker {
             background-color: ${colors.main};
             color: ${color.textOverDarkBackground};
             font-family: ${families.headline.bold};
             margin-left: 0;
             padding: 10px;
+            border: none;
         }
 
         .interview-tablet .header-bottom {
@@ -1303,12 +1311,17 @@ const HeaderInterviewTablet = ({
                                 >${headerProps.kicker}</span
                             >
                         `}
-                    <header>
-                        ${getHeadline(headerType, type, headerProps)}
-                    </header>
                 </div>
             </div>
             <div class="header-bottom" data-type="${type}">
+                <div
+                    class="header-container wrapper interview-tablet-wrapper"
+                    data-type="${type}"
+                >
+                    <span>
+                        ${getHeadline(headerType, type, headerProps)}
+                    </span>
+                </div>
                 <section
                     class="interview-tablet-standfirst interview-tablet-wrapper"
                 >

@@ -20,6 +20,9 @@ const slideCardSpacing = () => {
         return 40
     } else if (Platform.OS === 'ios') {
         return spacing[5]
+        // Not sure about this line, but should remove the final else if we keep it after multi device testing
+    } else if (Platform.OS === 'android') {
+        return 20
     } else {
         return StatusBar.currentHeight || spacing[5] + spacing[5]
     }

@@ -1,13 +1,14 @@
 import React from 'react'
 import { Editions } from 'src/components/icons/Editions'
-import { TouchableOpacity, StyleSheet } from 'react-native'
+import { TouchableOpacity, StyleSheet, Text, View } from 'react-native'
 import { color } from 'src/theme/color'
 import { LeftChevron } from 'src/components/icons/LeftChevron'
+import { getFont } from 'src/theme/typography'
+import { metrics } from 'src/theme/spacing'
 
 const styles = (selected: boolean) =>
     StyleSheet.create({
         button: {
-            alignItems: 'center',
             backgroundColor: selected
                 ? color.palette.sport.pastel
                 : 'transparent',
@@ -15,6 +16,19 @@ const styles = (selected: boolean) =>
             justifyContent: 'center',
             height: 42,
             width: 42,
+        },
+        iconContainer: {
+            flex: 1,
+            justifyContent: 'space-around',
+            width: 55,
+            marginRight: metrics.horizontal,
+        },
+        label: {
+            color: 'white',
+            ...getFont('sans', 0.5),
+            fontSize: 12,
+            lineHeight: 14.75,
+            top: 8,
         },
     })
 
@@ -31,7 +45,15 @@ const EditionsMenuButton = ({
         onPress={onPress}
         style={styles(selected).button}
     >
-        {selected ? <LeftChevron /> : <Editions />}
+        {selected ? (
+            <LeftChevron />
+        ) : (
+            <View style={styles(selected).iconContainer}>
+                <Editions />
+
+                <Text style={styles(selected).label}>Editions</Text>
+            </View>
+        )}
     </TouchableOpacity>
 )
 

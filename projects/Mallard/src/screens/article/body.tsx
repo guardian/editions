@@ -11,6 +11,8 @@ import { PathToArticle } from 'src/paths'
 import { color } from 'src/theme/color'
 import { HeaderControlInnerProps } from 'src/components/article/types/article'
 import { NavigationScreenProp } from 'react-navigation'
+import { useIsAppsRendering } from 'src/hooks/use-config-provider'
+import { useToast } from 'src/hooks/use-toast'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -50,12 +52,14 @@ const ArticleScreenBody = React.memo<
             // eslint-disable-next-line react-hooks/exhaustive-deps
             [onIsAtTopChange],
         )
+        const { isAppsRendering } = useIsAppsRendering()
+        const { showToast } = useToast()
         // First time it's mounted, we make sure to report we're at the top.
         // eslint-disable-next-line react-hooks/exhaustive-deps
         useEffect(() => handleIsAtTopChange(true), [])
-
         return (
             <View style={[styles.container, { width }]}>
+                {isAppsRendering && showToast('EDITIONS RENDERED CONTENT')}
                 {articleResponse({
                     error: ({ message }) => (
                         <FlexErrorMessage
@@ -74,6 +78,7 @@ const ArticleScreenBody = React.memo<
                             {previewNotice && (
                                 <UiBodyCopy>{previewNotice}</UiBodyCopy>
                             )}
+
                             <WithArticle
                                 type={
                                     article.article.articleType ||

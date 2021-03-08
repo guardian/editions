@@ -1,8 +1,8 @@
-import { TagType } from '@guardian/capi-ts'
-import { IContent } from '@guardian/capi-ts/dist/Content'
-import { ITag } from '@guardian/capi-ts/dist/Tag'
+import { TagType } from '@guardian/content-api-models/v1/tagType'
+import { Content } from '@guardian/content-api-models/v1/content'
+import { Tag } from '@guardian/content-api-models/v1/tag'
 
-const tagTitleIsAlreadyInHeadline = (tag: ITag, headline: string) =>
+const tagTitleIsAlreadyInHeadline = (tag: Tag, headline: string) =>
     headline.toLowerCase().includes(tag.webTitle.toLowerCase())
 
 /*
@@ -14,7 +14,7 @@ const tagTitleIsAlreadyInHeadline = (tag: ITag, headline: string) =>
  - Use second tag if top tag features in the headline
  - Otherwise use top tag
  */
-const kickerPicker = (article: IContent, headline: string) => {
+const kickerPicker = (article: Content, headline: string) => {
     const byline = article.fields && article.fields.byline
     const seriesTag = article.tags.find(tag => tag.type === TagType.SERIES)
     const toneTag = article.tags.find(tag => tag.type === TagType.TONE)
@@ -40,8 +40,8 @@ const kickerPicker = (article: IContent, headline: string) => {
         if (toneTag.id === 'tone/comment') return byline
     }
 
-    const topTag: ITag | undefined = article.tags[0]
-    const secondTag: ITag | undefined = article.tags[1]
+    const topTag: Tag | undefined = article.tags[0]
+    const secondTag: Tag | undefined = article.tags[1]
 
     if (!topTag) return
 

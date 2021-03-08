@@ -79,7 +79,7 @@ const makeFontsCss = () => css`
 const dropCapFontSizeMultiplier = Platform.OS === 'ios' ? 5.25 : 5.75
 const dropCapLineHeightMultiplier = Platform.OS === 'ios' ? 4.1 : 4.6
 
-const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
+const makeCss = ({ colors, theme }: CssProps) => css`
     ${makeFontsCss()}
 
     :root {
@@ -221,7 +221,7 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
         colors,
         theme,
     })}
-    ${imageStyles({ colors, theme }, contentType)}
+    ${imageStyles({ colors, theme })}
     ${lineStyles({ colors, theme })}
     ${starRatingStyles({ colors, theme })}
     ${sportScoreStyles({ colors, theme })}

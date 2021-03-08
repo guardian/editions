@@ -37,7 +37,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
 
     public RNOphanModule(@Nonnull ReactApplicationContext reactContext) {
         super(reactContext);
-        recordStoreDir = new File(reactContext.getCacheDir(), "ophan");
+        recordStoreDir = new File(reactContext.getFilesDir(), "ophan");
         if (reactContext.getResources().getBoolean(R.bool.is_tablet)) {
             deviceClass = DeviceClass.TABLET;
         } else {

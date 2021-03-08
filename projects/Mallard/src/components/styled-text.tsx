@@ -4,7 +4,7 @@ import { useAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     headlineText: {
         flexShrink: 0,
         ...getFont('headline', 1.6),
@@ -26,7 +26,11 @@ const styles = StyleSheet.create({
         ...getFont('headline', 1.5, 'light'),
         color: color.text,
     },
-    issueTitleText: {
+    issueLightText: {
+        flexShrink: 0,
+        ...getFont('headline', 1.2),
+    },
+    issueHeavyText: {
         flexShrink: 0,
         ...getFont('titlepiece', 1.25),
     },
@@ -85,7 +89,7 @@ export const IssueTitleText = ({
     children: string
     style?: StyleProp<TextStyle>
 } & TextProps) => {
-    return <Text {...props} style={[styles.issueTitleText, style]} />
+    return <Text {...props} style={[styles.issueHeavyText, style]} />
 }
 
 export type HeadlineTextProps = {

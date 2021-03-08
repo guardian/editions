@@ -31,6 +31,8 @@ import {
 import { metrics } from 'src/theme/spacing'
 import { useEditions } from 'src/hooks/use-edition-provider'
 import { pushRegisteredTokens, showAllEditionsCache } from 'src/helpers/storage'
+import { Copy } from 'src/helpers/words'
+import { useIsAppsRendering } from 'src/hooks/use-config-provider'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -76,7 +78,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [imageSize, setImageSize] = useState('fetching...')
     const [pushTokens, setPushTokens] = useState('fetching...')
     const [downloadedIssues, setDownloadedIssues] = useState('fetching...')
-
+    const { isAppsRendering, setIsAppsRendering } = useIsAppsRendering()
     // initialise local showAllEditions property
     useEffect(() => {
         showAllEditionsCache.get().then(v => v != null && setShowAllEditions(v))
@@ -211,8 +213,24 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     Clear caches
                 </Button>
             </ButtonList>
+
             <List
                 data={[
+                    {
+                        key: 'isAppsRendering',
+                        title: Copy.settings.isAppsRendering,
+                        proxy: (
+                            <Switch
+                                accessible={true}
+                                accessibilityLabel={
+                                    Copy.settings.isAppsRendering
+                                }
+                                accessibilityRole="switch"
+                                value={isAppsRendering}
+                                onValueChange={setIsAppsRendering}
+                            />
+                        ),
+                    },
                     {
                         key: 'Endpoints',
                         title: 'API Endpoint',

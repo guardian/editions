@@ -3,33 +3,31 @@ import {
     ImageAndTrailImage,
     getImageRole,
 } from '../articleImgPicker'
-import {
-    IContent,
-    IBlocks,
-    IBlockElement,
-    ElementType,
-    IAsset,
-    AssetType,
-    ContentType,
-} from '@guardian/capi-ts'
+import { Asset } from '@guardian/content-api-models/v1/asset'
+import { AssetType } from '@guardian/content-api-models/v1/assetType'
+import { BlockElement } from '@guardian/content-api-models/v1/blockElement'
+import { Content } from '@guardian/content-api-models/v1/content'
+import { Blocks } from '@guardian/content-api-models/v1/blocks'
+import { ElementType } from '@guardian/content-api-models/v1/elementType'
+import { ContentType } from '@guardian/content-api-models/v1/contentType'
 import { articleTypePicker } from '../articleTypePicker'
 import { ArticleType } from '../../../Apps/common/src'
 
-const masterAsset: IAsset = {
+const masterAsset: Asset = {
     type: AssetType.IMAGE,
     typeData: { isMaster: true },
     file: 'https://test/master/asset.com',
 }
-const thumbnailAsset: IAsset = {
+const thumbnailAsset: Asset = {
     type: AssetType.IMAGE,
     file: 'https://test/thumbnail/asset.com',
 }
-const blockImgEleme: IBlockElement = {
+const blockImgEleme: BlockElement = {
     type: ElementType.IMAGE,
     assets: [masterAsset],
 }
 
-const blocks: IBlocks = {
+const blocks: Blocks = {
     main: {
         id: '1',
         bodyHtml: '',
@@ -77,7 +75,7 @@ const articleType = articleTypePicker(sharedGiven)
 
 describe('articleImgPicker.getImages', () => {
     it('should extract both images', () => {
-        const given: IContent = {
+        const given: Content = {
             ...sharedGiven,
             blocks: blocks,
             elements: [thumbnailElem],
@@ -101,7 +99,7 @@ describe('articleImgPicker.getImages', () => {
     })
 
     it('should extract only trail image', () => {
-        const given: IContent = {
+        const given: Content = {
             ...sharedGiven,
             elements: [thumbnailElem],
         }
@@ -124,7 +122,7 @@ describe('articleImgPicker.getImages', () => {
     })
 
     it('should extract only main image', () => {
-        const given: IContent = {
+        const given: Content = {
             ...sharedGiven,
             blocks: blocks,
         }
@@ -140,7 +138,7 @@ describe('articleImgPicker.getImages', () => {
     })
 
     it('should extract no images', () => {
-        const given: IContent = {
+        const given: Content = {
             ...sharedGiven,
         }
 

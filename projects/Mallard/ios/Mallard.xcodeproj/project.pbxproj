@@ -913,7 +913,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				KOTLIN_BUILD_TYPE = DEBUG;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 7.2;
+				MARKETING_VERSION = 7.8;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = "Guardian Editions";
@@ -944,7 +944,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				KOTLIN_BUILD_TYPE = RELEASE;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 7.2;
+				MARKETING_VERSION = 7.8;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = "Guardian Editions";

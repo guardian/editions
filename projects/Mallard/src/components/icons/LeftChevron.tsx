@@ -12,6 +12,7 @@ const LeftChevron = ({
         icon: {
             ...getFont('icon', 1),
             color: fill,
+            alignSelf: 'center',
         },
     })
 
