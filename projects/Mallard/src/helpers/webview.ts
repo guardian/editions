@@ -10,9 +10,9 @@ import {
 import { LightboxMessage, ShareMessage } from '@guardian/renditions'
 export type WebViewPing =
     | {
-        kind: 'shouldShowHeaderChange'
-        shouldShowHeader: boolean
-    }
+          kind: 'shouldShowHeaderChange'
+          shouldShowHeader: boolean
+      }
     | { kind: 'isAtTopChange'; isAtTop: boolean }
     | ShareMessage
     | LightboxMessage
@@ -86,7 +86,7 @@ export const generateAssetsFontCss = ({
             src: url("${fileName}")
         }
         ${variant &&
-        css`@font-face {
+            css`@font-face {
                 font-family: '${variant.showsAsFamily}';
                 font-weight: ${variant.weight};
                 font-style: ${variant.style};
@@ -103,8 +103,8 @@ export const getBundleUri = (
         dev:
             (Platform.OS === 'android'
                 ? // 10.0.2.2 is a special IP directing to the host dev machine
-                // from within the emulator
-                'http://10.0.2.2:'
+                  // from within the emulator
+                  'http://10.0.2.2:'
                 : 'http://localhost:') + bundles[key].watchPort,
         prod:
             (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
@@ -118,7 +118,6 @@ export const getBundleUri = (
 }
 
 export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
-
 
 const makeJavaScript = (topPadding: number) => html`
     <script>
