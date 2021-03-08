@@ -994,7 +994,7 @@ const MainMediaImage = ({
                 data-preserve-ratio="${preserveRatio || 'false'}"
                 style="background-image: url(${path}), url(${remotePath}); "
                 ${!isGallery &&
-                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
+                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({kind: 'Lightbox', index: ${0}, isMainImage: true}))"`}
                 data-open="false"
             >
                 ${preserveRatio &&
@@ -1133,7 +1133,7 @@ const getByLine = (
         <button
             name="Share button"
             class="share-touch-zone"
-            onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
+            onclick="window.ReactNativeWebView.postMessage(JSON.stringify({kind: 'Share'}))"
         >
             <div class="share-button">
                 <div class="share-icon">

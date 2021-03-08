@@ -7,21 +7,15 @@ import {
     getScaledFont,
     getFont,
 } from 'src/theme/typography'
-import {Message} from '@guardian/renditions'
+import { LightboxMessage, ShareMessage } from '@guardian/renditions'
 export type WebViewPing =
     | {
-          type: 'shouldShowHeaderChange'
-          shouldShowHeader: boolean
-      }
-    | { type: 'isAtTopChange'; isAtTop: boolean }
-    | {
-          type: 'share'
-      }
-    | {
-          type: 'openLightbox'
-          index: number
-          isMainImage: string
-      }
+        kind: 'shouldShowHeaderChange'
+        shouldShowHeader: boolean
+    }
+    | { kind: 'isAtTopChange'; isAtTop: boolean }
+    | ShareMessage
+    | LightboxMessage
 
 /*
 this tricks vs code into thinking
@@ -92,7 +86,7 @@ export const generateAssetsFontCss = ({
             src: url("${fileName}")
         }
         ${variant &&
-            css`@font-face {
+        css`@font-face {
                 font-family: '${variant.showsAsFamily}';
                 font-weight: ${variant.weight};
                 font-style: ${variant.style};
@@ -109,8 +103,8 @@ export const getBundleUri = (
         dev:
             (Platform.OS === 'android'
                 ? // 10.0.2.2 is a special IP directing to the host dev machine
-                  // from within the emulator
-                  'http://10.0.2.2:'
+                // from within the emulator
+                'http://10.0.2.2:'
                 : 'http://localhost:') + bundles[key].watchPort,
         prod:
             (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
@@ -124,7 +118,7 @@ export const getBundleUri = (
 }
 
 export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
-export const parseAppsRenderingPing = (data: string) => JSON.parse(data) as Message
+
 
 const makeJavaScript = (topPadding: number) => html`
     <script>
@@ -199,7 +193,7 @@ const makeJavaScript = (topPadding: number) => html`
                 // though a message.
                 window.ReactNativeWebView.postMessage(
                     JSON.stringify({
-                        type: 'shouldShowHeaderChange',
+                        kind: 'shouldShowHeaderChange',
                         shouldShowHeader: window.shouldShowHeader,
                     }),
                 )
@@ -211,7 +205,7 @@ const makeJavaScript = (topPadding: number) => html`
 
                 window.ReactNativeWebView.postMessage(
                     JSON.stringify({
-                        type: 'isAtTopChange',
+                        kind: 'isAtTopChange',
                         isAtTop: window.isAtTop,
                     }),
                 )
