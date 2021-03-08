@@ -1,6 +1,5 @@
 import { IssuePublicationIdentifier, IssueSummary } from '../../../../common'
 import { getIssueSummaryInternal } from '../../../../src/tasks/indexer/helpers/get-issue-summary'
-import { Bucket } from '../../../../src/utils/s3'
 
 describe('getIssueSummaryInternal', () => {
     const assetKeys = [

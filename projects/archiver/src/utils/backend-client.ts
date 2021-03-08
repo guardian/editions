@@ -87,9 +87,9 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
 }
 
 export const getRenderedContent = async (
-    contentPath: string,
+    internalPageCode: number,
 ): Promise<Attempt<string>> => {
-    const path = `${URL}render/${contentPath}`
+    const path = `${URL}render/${internalPageCode}`
     console.log(`Attempting to fetch rendered html for ${path}`)
     const response = await fetch(path)
     const maybeRenderedContent = await attempt(response.text())

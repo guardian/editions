@@ -24,7 +24,7 @@ export const getSSRArticlesFromFront = async (front: Front) => {
         content.map(async c => {
             return {
                 internalPageCode: c.internalPageCode,
-                content: await getRenderedContent(c.key),
+                content: await getRenderedContent(c.internalPageCode),
             }
         }),
     )
