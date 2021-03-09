@@ -261,7 +261,7 @@ const Article = ({
                 mediaPlaybackRequiresUserAction={false}
                 style={[
                     styles.webview,
-                    isAppsRendering ? { marginTop: 40 } : null,
+                    isAppsRendering ? { marginTop: 52 } : null,
                 ]}
                 _ref={r => {
                     ref.current = r
