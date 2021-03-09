@@ -66,10 +66,14 @@ export const createApp = (
 
     app.get(
         '/' +
-            mediaPath(issuePathSegments, ':size' as ImageSize, {
-                source: ':source',
-                path: '*?',
-            }),
+            mediaPath(
+                issuePathSegments,
+                {
+                    source: ':source',
+                    path: '*?',
+                },
+                ':size' as ImageSize,
+            ),
         controllers.imageController,
     )
 
@@ -77,9 +81,9 @@ export const createApp = (
         '/' +
             thumbsPath(
                 issuePathSegments,
-                ':size' as ImageSize,
                 { source: ':source', path: '*?' },
                 ':use' as ImageThumbnailUse,
+                ':size' as ImageSize,
             ),
         controllers.imageController,
     )

@@ -466,13 +466,19 @@ export const htmlPath = (issue: string, internalPageCode: number) =>
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 
-export const mediaDir = (issue: string, size: ImageSize) =>
-    `${issueDir(issue)}/media/${size}/`
+export const mediaDir = (issue: string, size?: ImageSize) => {
+    // `size` only used to contstruct web url
+    if (size) {
+        return `${issueDir(issue)}/media/${size}/`
+    } else {
+        return `${issueDir(issue)}/media/images/`
+    }
+}
 
 export const mediaPath = (
     issue: string,
-    size: ImageSize,
     { source, path }: Image,
+    size?: ImageSize,
 ) => `${mediaDir(issue, size)}${source}/${path}`
 
 export const issueSummaryPath = (edition: string) => `${edition}/issues`
@@ -502,24 +508,28 @@ export const imageRoles = [
     'halfWidth',
 ] as const
 export type ImageRole = typeof imageRoles[number]
-
 export interface ImageDeviceUses {
     mobile: ImageUse
     tablet: ImageUse
 }
-
 export interface TrailImage extends Image {
     use: ImageDeviceUses
 }
 
-export const thumbsDir = (issue: string, size: ImageSize) =>
-    `${issueDir(issue)}/thumbs/${size}/`
+export const thumbsDir = (issue: string, size?: ImageSize) => {
+    // `size` only used to contstruct web url
+    if (size) {
+        return `${issueDir(issue)}/thumbs/${size}/`
+    } else {
+        return `${issueDir(issue)}/thumbs/images/`
+    }
+}
 
 export const thumbsPath = (
     issue: string,
-    size: ImageSize,
     image: Image,
     use: ImageThumbnailUse,
+    size?: ImageSize,
 ) => `${thumbsDir(issue, size)}${use}/${image.source}/${image.path}`
 
 export const getImageQueryString = (image: Image) =>
@@ -527,14 +537,14 @@ export const getImageQueryString = (image: Image) =>
 
 export const imagePath = (
     issue: string,
-    size: ImageSize,
     image: Image,
     use: ImageUse = 'full-size',
+    size?: ImageSize,
 ) => {
     const baseUrl =
         use == 'full-size'
-            ? mediaPath(issue, size, image)
-            : thumbsPath(issue, size, image, use)
+            ? mediaPath(issue, image, size)
+            : thumbsPath(issue, image, use, size)
     return `${baseUrl}${getImageQueryString(image)}`
 }
 

@@ -1,5 +1,5 @@
 import { Linking, Platform } from 'react-native'
-import { EMBED_DOMAIN } from '../../html/components/media-atoms'
+import { EMBED_DOMAIN } from 'src/helpers/settings/defaults'
 
 const urlIsNotAnEmbed = (url: string) =>
     !(

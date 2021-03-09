@@ -63,22 +63,24 @@ export const updateListeners = (localId: string, status: DLStatus) => {
 }
 
 const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
-    const { assets, localId } = issue
+    const { assets, assetsSSR, localId } = issue
 
     try {
-        if (!assets) {
+        if (!assets || !assetsSSR) {
             await pushTracking('noAssets', 'complete', Feature.DOWNLOAD)
             return
         }
 
-        await pushTracking(
-            'attemptDataDownload',
-            JSON.stringify({ localId, assets: assets.data }),
-            Feature.DOWNLOAD,
-        )
-
         await retry(
             async () => {
+                // --- Data Download ---
+
+                await pushTracking(
+                    'attemptDataDownload',
+                    JSON.stringify({ localId, assets: assets.data }),
+                    Feature.DOWNLOAD,
+                )
+
                 // We are not asking for progress update during Data bundle download (to avoid false visual completion)
                 // So, instead we are artificially triggering a small progress update to render some visual change
                 updateListeners(localId, {
@@ -102,15 +104,42 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
                     Feature.DOWNLOAD,
                 )
 
+                // --- HTML Download ---
+
+                await pushTracking(
+                    'attemptHTMLDownload',
+                    JSON.stringify({ localId, assets: assetsSSR.html }),
+                    Feature.DOWNLOAD,
+                )
+
+                const htmlDownloadResult = await downloadNamedIssueArchive({
+                    localIssueId: localId,
+                    assetPath: assetsSSR.html,
+                    filename: 'html.zip',
+                    withProgress: false,
+                })
+                console.log(
+                    'HTML download completed with status: ' +
+                        htmlDownloadResult.statusCode,
+                )
+
+                await pushTracking(
+                    'attemptHTMLDownload',
+                    'completed',
+                    Feature.DOWNLOAD,
+                )
+
+                // --- Media Download ---
+
                 await pushTracking(
                     'attemptMediaDownload',
-                    JSON.stringify({ localId, assets: assets[imageSize] }),
+                    JSON.stringify({ localId, assets: assetsSSR[imageSize] }),
                     Feature.DOWNLOAD,
                 )
 
                 const dlImg = await downloadNamedIssueArchive({
                     localIssueId: localId,
-                    assetPath: assets[imageSize] as string,
+                    assetPath: assetsSSR[imageSize] as string,
                     filename: 'media.zip',
                     withProgress: true,
                 })
@@ -129,6 +158,8 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
                     data: 'start',
                 })
 
+                // --- Data Unzip ---
+
                 await pushTracking('unzipData', 'start', Feature.DOWNLOAD)
 
                 await unzipNamedIssueArchive(
@@ -136,6 +167,18 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
                 )
 
                 await pushTracking('unzipData', 'end', Feature.DOWNLOAD)
+
+                // --- HTML Unzip ---
+
+                await pushTracking('unzipHTML', 'start', Feature.DOWNLOAD)
+
+                await unzipNamedIssueArchive(
+                    `${FSPaths.downloadIssueLocation(localId)}/html.zip`,
+                )
+
+                await pushTracking('unzipHTML', 'end', Feature.DOWNLOAD)
+
+                // --- Image Unzip ---
 
                 await pushTracking('unzipImages', 'start', Feature.DOWNLOAD)
 

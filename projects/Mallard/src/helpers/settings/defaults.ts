@@ -47,6 +47,8 @@ export const backends = [
     preview: boolean
 }[]
 
+export const EMBED_DOMAIN = 'https://embed.theguardian.com'
+
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
     code: 'https://notifications.code.dev-guardianapis.com/device/register',
@@ -134,8 +136,9 @@ export const defaultSettings: Settings = {
     logging: __DEV__
         ? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
         : 'https://editions-logging.guardianapis.com/log/mallard',
-    // this currently points exclusively to PROD so that we don't require a VPN to access the endpoint.
-    appsRenderingService: appsRenderingService.prod,
+    appsRenderingService: __DEV__
+        ? appsRenderingService.code
+        : appsRenderingService.prod,
 }
 
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>

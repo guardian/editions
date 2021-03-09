@@ -53,7 +53,7 @@ export const getImageUse = async (
     size: ImageSize,
     use: ImageUse,
 ): Promise<[string, Attempt<Buffer>]> => {
-    const path = imagePath(publishedId, size, image, use)
+    const path = imagePath(publishedId, image, use, size)
 
     const url = `${URL}/${path}`
     const resp = attempt(fetch(url))
