@@ -30,7 +30,7 @@ const WebviewWithArticle = ({
 
     useEffect(() => {
         setIsReady(true)
-    },[isReady])
+    }, [isReady])
 
     // Online rendering
     let uri = `${defaultSettings.appsRenderingService}${article.internalPageCode}?editions`

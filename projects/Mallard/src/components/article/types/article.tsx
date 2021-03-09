@@ -156,7 +156,6 @@ const Article = ({
     path,
     onShouldShowHeaderChange,
     shouldShowHeader,
-    topPadding,
     onIsAtTopChange,
     origin,
 }: {
