@@ -278,7 +278,10 @@ const Article = ({
 
     const handleLightbox = (parsed: LightboxMessage) => {
         let index = parsed.index
+
+        //following if statement can be removed once ER is in production
         if (
+            !isAppsRendering &&
             article.type !== 'gallery' &&
             article.image &&
             parsed.isMainImage === false &&
