@@ -32,6 +32,7 @@ import {
     PlatformMessage,
     LightboxMessage,
     pingEditionsRenderingJsString,
+    MessageKind
 } from '@guardian/renditions'
 
 const styles = StyleSheet.create({
@@ -303,7 +304,7 @@ const Article = ({
 
     const handlePing = (event: string) => {
         const parsed = parsePing(event)
-        if (parsed.kind === 'Share' && shareUrl) {
+        if (parsed.kind === MessageKind.Share && shareUrl) {
             handleShare(shareUrl)
         }
         if (parsed.kind === 'shouldShowHeaderChange') {
@@ -314,7 +315,7 @@ const Article = ({
         if (parsed.kind === 'isAtTopChange') {
             onIsAtTopChange(parsed.isAtTop)
         }
-        if (lightboxEnabled && parsed.kind === 'Lightbox') {
+        if (lightboxEnabled && parsed.kind === MessageKind.Lightbox) {
             handleLightbox(parsed)
         }
     }
@@ -322,7 +323,7 @@ const Article = ({
     const getPlatform = (): PlatformMessage => {
         const value =
             Platform.OS === 'ios' ? PlatformType.IOS : PlatformType.Android
-        return { kind: 'Platform', value }
+        return { kind: MessageKind.Platform, value }
     }
     const platform = getPlatform()
 
