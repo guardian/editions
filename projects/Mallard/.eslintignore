@@ -1,0 +1,7 @@
+node_modules
+*.test.ts
+ios
+android
+fastlane
+.vscode
+html
