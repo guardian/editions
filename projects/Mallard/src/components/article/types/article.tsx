@@ -32,7 +32,7 @@ import {
     PlatformMessage,
     LightboxMessage,
     pingEditionsRenderingJsString,
-    MessageKind
+    MessageKind,
 } from '@guardian/renditions'
 
 const styles = StyleSheet.create({
