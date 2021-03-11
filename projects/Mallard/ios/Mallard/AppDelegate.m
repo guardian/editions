@@ -14,6 +14,7 @@
 #import <React/RCTLinkingManager.h>
 #import <RNCPushNotificationIOS.h>
 #import "RNSplashScreen.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation AppDelegate
 
@@ -35,6 +36,8 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [RNSplashScreen show];
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+
   return YES;
 }
 
