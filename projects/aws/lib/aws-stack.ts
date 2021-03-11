@@ -4,8 +4,8 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
-import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
-import acm = require('@aws-cdk/aws-certificatemanager')
+import { Duration, Tag } from '@aws-cdk/core'
+// import acm = require('@aws-cdk/aws-certificatemanager')
 import { Effect } from '@aws-cdk/aws-iam'
 import { constructTriggeredStepFunction } from './listener'
 
@@ -106,7 +106,12 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Proof Archive Bucket',
-                allowedValues: ['editions-proof-prod', 'editions-proof-code'],
+                allowedValues: [
+                    'editions-proof-prod',
+                    'editions-proof-code',
+                    'editions-proofed-prod',
+                    'editions-proofed-code',
+                ],
             },
         )
 
@@ -116,7 +121,12 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Publish Archive Bucket',
-                allowedValues: ['editions-store-prod', 'editions-store-code'],
+                allowedValues: [
+                    'editions-store-prod',
+                    'editions-store-code',
+                    'editions-published-code',
+                    'editions-published-prod',
+                ],
             },
         )
 
@@ -168,25 +178,25 @@ export class EditionsStack extends cdk.Stack {
             description: 'lambda access',
         })
 
-        const previewHostname = new cdk.CfnParameter(this, 'preview-hostname', {
-            type: 'String',
-            description: 'Hostname of the preview endpoint',
-        })
+        // const previewHostname = new cdk.CfnParameter(this, 'preview-hostname', {
+        //     type: 'String',
+        //     description: 'Hostname of the preview endpoint',
+        // })
 
-        const previewCertificateArn = new cdk.CfnParameter(
-            this,
-            'preview-certificate-arn',
-            {
-                type: 'String',
-                description: 'ARN of ACM certificate for preview endpoint',
-            },
-        )
+        // const previewCertificateArn = new cdk.CfnParameter(
+        //     this,
+        //     'preview-certificate-arn',
+        //     {
+        //         type: 'String',
+        //         description: 'ARN of ACM certificate for preview endpoint',
+        //     },
+        // )
 
-        const previewCertificate = acm.Certificate.fromCertificateArn(
-            this,
-            'preview-certificate',
-            previewCertificateArn.valueAsString,
-        )
+        // const previewCertificate = acm.Certificate.fromCertificateArn(
+        //     this,
+        //     'preview-certificate',
+        //     previewCertificateArn.valueAsString,
+        // )
 
         const backendFunction = (publicationStage: 'preview' | 'published') => {
             const titleCasePublicationStage =
@@ -269,7 +279,7 @@ export class EditionsStack extends cdk.Stack {
         })
         previewApiIpAccessPolicyStatement.addAnyPrincipal()
 
-        const previewApi = new apigateway.LambdaRestApi(
+        new apigateway.LambdaRestApi(
             this,
             'editions-preview-backend-apigateway',
             {
@@ -281,22 +291,22 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
-        const previewDomainName = new apigateway.DomainName(
-            this,
-            'preview-domain-name',
-            {
-                domainName: previewHostname.valueAsString,
-                certificate: previewCertificate,
-                endpointType: apigateway.EndpointType.REGIONAL,
-            },
-        )
+        // const previewDomainName = new apigateway.DomainName(
+        //     this,
+        //     'preview-domain-name',
+        //     {
+        //         domainName: previewHostname.valueAsString,
+        //         certificate: previewCertificate,
+        //         endpointType: apigateway.EndpointType.REGIONAL,
+        //     },
+        // )
 
-        previewDomainName.addBasePathMapping(previewApi)
+        // previewDomainName.addBasePathMapping(previewApi)
 
-        new CfnOutput(this, 'Preview-Api-Target-Hostname', {
-            description: 'hostname',
-            value: `${previewDomainName.domainNameAliasDomainName}`,
-        })
+        // new CfnOutput(this, 'Preview-Api-Target-Hostname', {
+        //     description: 'hostname',
+        //     value: `${previewDomainName.domainNameAliasDomainName}`,
+        // })
 
         const publishedApi = new apigateway.LambdaRestApi(
             this,
