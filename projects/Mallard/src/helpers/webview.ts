@@ -7,21 +7,15 @@ import {
     getScaledFont,
     getFont,
 } from 'src/theme/typography'
-
+import { LightboxMessage, ShareMessage } from '@guardian/renditions'
 export type WebViewPing =
     | {
-          type: 'shouldShowHeaderChange'
+          kind: 'shouldShowHeaderChange'
           shouldShowHeader: boolean
       }
-    | { type: 'isAtTopChange'; isAtTop: boolean }
-    | {
-          type: 'share'
-      }
-    | {
-          type: 'openLightbox'
-          index: number
-          isMainImage: string
-      }
+    | { kind: 'isAtTopChange'; isAtTop: boolean }
+    | ShareMessage
+    | LightboxMessage
 
 /*
 this tricks vs code into thinking
@@ -198,7 +192,7 @@ const makeJavaScript = (topPadding: number) => html`
                 // though a message.
                 window.ReactNativeWebView.postMessage(
                     JSON.stringify({
-                        type: 'shouldShowHeaderChange',
+                        kind: 'shouldShowHeaderChange',
                         shouldShowHeader: window.shouldShowHeader,
                     }),
                 )
@@ -210,7 +204,7 @@ const makeJavaScript = (topPadding: number) => html`
 
                 window.ReactNativeWebView.postMessage(
                     JSON.stringify({
-                        type: 'isAtTopChange',
+                        kind: 'isAtTopChange',
                         isAtTop: window.isAtTop,
                     }),
                 )

@@ -216,7 +216,7 @@ const ImageBase = ({
         <figure class="image" data-role="${role || 'inline'}">
             <img
                 src="${path}"
-                onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
+                onclick="window.ReactNativeWebView.postMessage(JSON.stringify({kind: 'Lightbox', index: ${index}, isMainImage: false}))"
                 alt="${alt}"
                 id="img-${index}"
                 onerror="this.src='${remotePath}'"
@@ -236,7 +236,7 @@ const ImageBase = ({
                         ${showViewMore &&
                             html`
                                 <span
-                                    onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
+                                    onclick="window.ReactNativeWebView.postMessage(JSON.stringify({kind: 'Lightbox', index: ${index}, isMainImage: false}))"
                                 >
                                     view more
                                 </span>
