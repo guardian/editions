@@ -4,7 +4,6 @@
         "source.fixAll.eslint": true
     },
     "editor.formatOnSave": true,
-    "javascript.format.enable": false,
     "eslint.alwaysShowStatus": true,
     "eslint.options": {
         "extensions": [".html", ".js", ".jsx", ".ts", ".tsx"]
