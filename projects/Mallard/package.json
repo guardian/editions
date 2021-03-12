@@ -27,8 +27,10 @@
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
         "install-pods": "cd ios && pod install",
         "prestorybook": "rnstl",
-        "lint": "node_modules/eslint/bin/eslint.js src/**/*.{ts,tsx}",
-        "prettier": "prettier --write src/**/*.{ts,tsx}"
+        "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.{ts,tsx}'",
+        "lint:fix": "node_modules/eslint/bin/eslint.js 'src/**/*.{ts,tsx}' --fix",
+        "prettier": "prettier . --write",
+        "prettier:check": "prettier . --check"
     },
     "rnpm": {
         "assets": [
