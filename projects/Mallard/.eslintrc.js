@@ -1,4 +1,5 @@
 module.exports = {
+    parser: "@typescript-eslint/parser",
     extends: [
         "plugin:react/recommended",
         "plugin:jsx-a11y/recommended",
@@ -16,8 +17,9 @@ module.exports = {
             jsx: true,
         },
         tsconfigRootDir: __dirname,
-        project: "tsconfig.json",
+        project: ["./tsconfig.json"],
     },
+    ignorePatterns: [".eslintrc.js"],
     rules: {
         "prettier/prettier": "error",
         // Triple-equals equality in JS
