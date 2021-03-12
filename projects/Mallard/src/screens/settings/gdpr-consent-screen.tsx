@@ -9,27 +9,25 @@ import { ThreeWaySwitch } from 'src/components/layout/ui/switch';
 import { LinkNav } from 'src/components/link';
 import { LoginHeader } from 'src/components/login/login-layout';
 import { UiBodyCopy } from 'src/components/styled-text';
-import type {
-	GdprSwitchSettings} from 'src/helpers/settings';
+import type { GdprSwitchSettings } from 'src/helpers/settings';
 import {
 	CURRENT_CONSENT_VERSION,
-	GdprBuckets,
-	gdprSwitchSettings,
-
 	gdprAllowFunctionalityKey,
 	gdprAllowPerformanceKey,
+	GdprBuckets,
 	gdprConsentVersionKey,
-, getSetting, storeSetting } from 'src/helpers/settings';
+	gdprSwitchSettings,
+	getSetting,
+	storeSetting,
+} from 'src/helpers/settings';
+import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters';
 import {
 	PREFS_SAVED_MSG,
 	PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words';
-import { WithAppAppearance } from 'src/theme/appearance';
 import { useToast } from 'src/hooks/use-toast';
 import { routeNames } from 'src/navigation/routes';
-
-import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters';
-
+import { WithAppAppearance } from 'src/theme/appearance';
 
 interface GdprConfig {
 	gdprAllowPerformance: ThreeWaySwitchValue;
