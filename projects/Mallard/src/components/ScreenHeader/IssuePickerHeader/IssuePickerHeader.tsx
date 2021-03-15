@@ -3,10 +3,10 @@ import React from 'react';
 import type { SpecialEditionHeaderStyles } from 'src/common';
 import { CloseButton } from 'src/components/Button/CloseButton';
 import { SettingsButton } from 'src/components/Button/SettingsButton';
-import { navigateToSettings } from 'src/navigation/helpers/base';
+import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
-import { IssueTitle } from 'src/components/issue/issue-title';
+import { navigateToSettings } from 'src/navigation/helpers/base';
 
 const IssuePickerHeader = ({
 	headerStyles,

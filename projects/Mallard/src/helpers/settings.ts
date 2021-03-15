@@ -92,10 +92,10 @@ interface UserSettings {
 
 export interface Settings
 	extends GdprSwitchSettings,
-	GdprDefaultSettings,
-	GdprSettings,
-	UserSettings,
-	DevSettings { }
+		GdprDefaultSettings,
+		GdprSettings,
+		UserSettings,
+		DevSettings {}
 
 /*
 we can only store strings to memory

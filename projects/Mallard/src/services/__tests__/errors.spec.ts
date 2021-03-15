@@ -7,9 +7,9 @@ jest.mock('src/helpers/release-stream', () => ({
 }));
 jest.mock('@sentry/react-native', () => ({
 	init: jest.fn(),
-	captureException: jest.fn(() => { }),
-	setTag: jest.fn(() => { }),
-	setExtra: jest.fn(() => { }),
+	captureException: jest.fn(() => {}),
+	setTag: jest.fn(() => {}),
+	setExtra: jest.fn(() => {}),
 }));
 
 const QUERY = gql('{ gdprAllowPerformance @client }');

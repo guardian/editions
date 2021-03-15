@@ -6,7 +6,7 @@ import type { AuthResult } from '../Result';
 import { InvalidResult, ValidResult } from '../Result';
 
 class AsyncStorage<T> {
-	constructor(private data: T | null = null) { }
+	constructor(private data: T | null = null) {}
 	async get() {
 		return this.data;
 	}

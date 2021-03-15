@@ -25,8 +25,8 @@ const breakoutCaption = (
 	.image[data-role='${role}'] div {
 		position: absolute;
 		right: ${px(
-	(metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
-)};
+			(metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
+		)};
 		top: -0.5em;
 		display: block;
 		width: ${px(metrics.article.rightRail)};
@@ -104,8 +104,8 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 			width: 500px;
 			margin-left: ${px(metrics.article.sides)};
 			margin-right: ${px(
-	(metrics.article.rightRail + metrics.article.sides) * -1,
-)};
+				(metrics.article.rightRail + metrics.article.sides) * -1,
+			)};
 		}
 
 		.image[data-role='supporting'] figcaption {
@@ -117,12 +117,12 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 
 	/*SHOWCASE*/
 	@media (min-width: ${px(Breakpoints.tabletVertical)}) and (max-width: ${px(
-	Breakpoints.tabletLandscape,
-)}) {
+			Breakpoints.tabletLandscape,
+		)}) {
 		.image[data-role='showcase'] {
 			margin-right: ${px(
-	(metrics.article.rightRail + metrics.article.sides) * -1,
-)};
+				(metrics.article.rightRail + metrics.article.sides) * -1,
+			)};
 		}
 
 		.image[data-role='showcase'] figcaption {
@@ -133,16 +133,16 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 	@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
 		.image[data-role='showcase'] img {
 			margin-left: ${px(
-	((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
-	-1,
-)};
+				((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+					-1,
+			)};
 			width: calc(
 				100% +
 					${px(
-	(Breakpoints.tabletLandscape -
-		metrics.article.maxWidth) /
-	2,
-)}
+						(Breakpoints.tabletLandscape -
+							metrics.article.maxWidth) /
+							2,
+					)}
 			);
 		}
 		${breakoutCaption('showcase', theme)}
@@ -152,8 +152,8 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
 		.image[data-role='immersive'] {
 			margin-right: ${px(
-	(metrics.article.rightRail + metrics.article.sides) * -1,
-)};
+				(metrics.article.rightRail + metrics.article.sides) * -1,
+			)};
 		}
 		.image[data-role='immersive'] figcaption {
 			width: ${px(metrics.article.rightRail)};
@@ -165,15 +165,15 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 			width: calc(
 				100% +
 					${px(
-	Breakpoints.tabletLandscape - metrics.article.maxWidth,
-)}
+						Breakpoints.tabletLandscape - metrics.article.maxWidth,
+					)}
 			);
 			display: block;
 			background: 'red';
 			margin-left: ${px(
-	((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
-	-1,
-)};
+				((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+					-1,
+			)};
 		}
 	}
 
@@ -224,18 +224,18 @@ const ImageBase = ({
 			/>
 
 			${figcaption &&
-		html`
+			html`
 				<div>
 					<figcaption>
 						${Arrow(
-			isInlineTablet
-				? { direction: Direction.left }
-				: { direction: Direction.top },
-		)}
+							isInlineTablet
+								? { direction: Direction.left }
+								: { direction: Direction.top },
+						)}
 						${figcaption}
 					</figcaption>
 					${showViewMore &&
-			html`
+					html`
 						<span
 							onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
 						>

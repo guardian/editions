@@ -124,4 +124,4 @@ it('should fetch real location if available', async () => {
 });
 
 // make it a valid ES6 module
-export { };
+export {};

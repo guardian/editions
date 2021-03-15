@@ -29,7 +29,7 @@ const createInAppBrowser = ({
 			if (result == null) throw new Error('missing result');
 			return res(result);
 		}),
-	closeAuth: jest.fn(() => { }),
+	closeAuth: jest.fn(() => {}),
 	isAvailable: () => Promise.resolve(available),
 });
 

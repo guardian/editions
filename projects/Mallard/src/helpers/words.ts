@@ -30,17 +30,18 @@ export const MANAGE_EDITIONS_TITLE = 'Manage Downloads';
 export const WIFI_ONLY_DOWNLOAD = `You must be connected to wifi to download, you can change this under '${MANAGE_EDITIONS_TITLE}'`;
 
 export const DIAGNOSTICS_TITLE = 'Found a bug?';
-export const DIAGNOSTICS_REQUEST = `Would you like us to include diagnostic information to help answer your query?${isInBeta()
+export const DIAGNOSTICS_REQUEST = `Would you like us to include diagnostic information to help answer your query?${
+	isInBeta()
 		? `
 
 ${Platform.select({
-			ios:
-				'If you would like to switch back from this beta back to the general app you can delete this app and reinstall it from the app store.',
-			android:
-				'If you would like to switch back from this beta back to the general app you can find this app on the Play Store, leave the beta from the Play Store page, uninstall the app and then reinstall the app.',
-		})}`
+	ios:
+		'If you would like to switch back from this beta back to the general app you can delete this app and reinstall it from the app store.',
+	android:
+		'If you would like to switch back from this beta back to the general app you can find this app on the Play Store, leave the beta from the Play Store page, uninstall the app and then reinstall the app.',
+})}`
 		: ``
-	}`;
+}`;
 
 export const CREDITS_HEADER_TITLE = 'Credits';
 export const FAQS_HEADER_TITLE = 'FAQ';

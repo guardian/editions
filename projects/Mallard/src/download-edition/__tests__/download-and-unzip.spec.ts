@@ -29,7 +29,7 @@ describe('download', () => {
 				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
-				() => { },
+				() => {},
 				() => Promise.resolve(),
 				// the above promise is the main downloader that drives the outer promise
 				// and also updates the progress handler
@@ -39,7 +39,7 @@ describe('download', () => {
 			await expect(p).resolves.toBeUndefined();
 		});
 		it('should not set any statuses without the passed promise calling an updater', async () => {
-			const updateStatus = jest.fn(() => { });
+			const updateStatus = jest.fn(() => {});
 			const p = downloadAndUnzipIssue(
 				apolloClientMock,
 				createIssueSummary('1'),
@@ -56,14 +56,14 @@ describe('download', () => {
 				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
-				() => { },
+				() => {},
 				() => Promise.resolve(),
 			);
 			const p2 = downloadAndUnzipIssue(
 				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
-				() => { },
+				() => {},
 				() => Promise.resolve(),
 			);
 			await Promise.all([p1, p2]);
@@ -71,7 +71,7 @@ describe('download', () => {
 				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
-				() => { },
+				() => {},
 				() => Promise.resolve(),
 			);
 			expect(p3).not.toBe(p2);
