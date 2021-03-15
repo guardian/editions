@@ -107,14 +107,9 @@ class Logging extends AsyncQueue {
 		} = await this.getExternalInfo();
 
 		// User Data and Subscription
-		const userId =
-			(userData && userData.userDetails && userData.userDetails.id) || '';
+		const userId = userData?.userDetails.id || '';
 		const digitalSub =
-			(userData &&
-				userData.membershipData &&
-				userData.membershipData.contentAccess &&
-				userData.membershipData.contentAccess.digitalPack) ||
-			false;
+			userData?.membershipData.contentAccess.digitalPack || false;
 		const iAP = iapReceipt ? true : false;
 		const selectedEdition = await getSelectedEditionSlug();
 		const defaultEdition = await getDefaultEditionSlug();
