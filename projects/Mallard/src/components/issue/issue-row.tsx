@@ -160,8 +160,8 @@ const IssueButton = ({
 		if (isConnected) {
 			if (!dlStatus) {
 				sendComponentEvent({
-					componentType: ComponentType.appButton,
-					action: Action.click,
+					componentType: ComponentType.AppButton,
+					action: Action.Click,
 					value: 'issues_list_issue_clicked',
 				});
 				const imageSize = await imageForScreenSize();

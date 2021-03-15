@@ -40,6 +40,8 @@ const fetchCasSubscription = async (
 	if (res.status !== 200) {
 		const casErrorRes: CasErrorResponse = json;
 		throw new Error(
+			/* disabled as not enough time to test if it is unnecessary*/
+			/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- linting */
 			casErrorRes.error
 				? casErrorRes.error.message
 				: 'Something went wrong',
