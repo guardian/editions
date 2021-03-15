@@ -1,0 +1,18 @@
+{
+  "files.autoSave": "onFocusChange",
+  "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.options": {
+      "extensions": [".html", ".js", ".jsx", ".ts", ".tsx"]
+  },
+  "eslint.validate": [
+      "html",
+      "javascript",
+      "typescript",
+      "javascriptreact",
+      "typescriptreact"
+  ]
+}

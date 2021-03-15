@@ -18,6 +18,18 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@guardian/eslint-config-typescript@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@guardian/eslint-config-typescript/-/eslint-config-typescript-0.5.0.tgz#362b79da6440fc77d9c25b77ef9cfae18988ac5b"
+  integrity sha512-bCLWYgjNUNzppF+kD2IWmWnvvPSZRMHnNU1Yku9nHqlDOgE8HdEkdfrMc6fWuD/I/HyWW9p5UJweeGfgRSypVw==
+  dependencies:
+    "@guardian/eslint-config" "^0.5.0"
+
+"@guardian/eslint-config@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@guardian/eslint-config/-/eslint-config-0.5.0.tgz#ece14ec90b372932c7bf01992fc6d8ce58f7f26e"
+  integrity sha512-THJn0wg7i9YjSVM9ofobsJgS+WH9ybrZH1+0CXLAebp0T53RGtgZUkek82mDg1h3DidsM+f7HSZqoQyrCbPzPw==
+
 "@guardian/node-riffraff-artifact@0.0.15":
   version "0.0.15"
   resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.0.15.tgz#1a248e7a96fbf799172e18691ea8c2a20eda01ae"
@@ -26,6 +38,11 @@
     "@mojotech/json-type-validation" "^3.1.0"
     archiver "^3.0.0"
     aws-sdk "^2.481.0"
+
+"@guardian/prettier@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-0.5.0.tgz#d8ea25cc396f31bd4baedb8f6d7d3727a9af1fa7"
+  integrity sha512-IYXMdqW6vg9mVnAXbbWCm0R9AZfWlAjfJ668TnCx3ypX5/u4AYAXdOfrWWX+uWvFvs3Ulub+E8vEm+eUkxi6rQ==
 
 "@mojotech/json-type-validation@^3.1.0":
   version "3.1.0"
