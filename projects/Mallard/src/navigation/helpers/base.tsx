@@ -1,29 +1,32 @@
-import React, { ReactElement } from 'react'
-import {
-    NavigationContainer,
-    NavigationInjectedProps,
-    NavigationScreenProp,
-} from 'react-navigation'
-import { routeNames } from 'src/navigation/routes'
-import { PathToArticle, PathToIssue } from 'src/paths'
-import { ArticleNavigator } from 'src/screens/article-screen'
-import {
-    Issue,
-    CreditedImage,
-    ArticlePillar,
-} from '../../../../Apps/common/src'
-import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
+import type { ReactElement } from 'react';
+import React from 'react';
+import type {
+	NavigationContainer,
+	NavigationInjectedProps,
+	NavigationScreenProp,
+} from 'react-navigation';
+import { routeNames } from 'src/navigation/routes';
+import type { PathToArticle, PathToIssue } from 'src/paths';
+import type { ArticleNavigator } from 'src/screens/article-screen';
+import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
+import type {
+	ArticlePillar,
+	CreditedImage,
+	Issue,
+} from '../../../../Apps/common/src';
 
-type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
+type NavigatorWrapper = ({
+	navigation,
+}: NavigationInjectedProps) => JSX.Element;
 export const addStaticRouter = (
-    navigator: NavigationContainer,
-    wrapper: NavigatorWrapper,
+	navigator: NavigationContainer,
+	wrapper: NavigatorWrapper,
 ): NavigationContainer => {
-    const wrapperWithRouter = wrapper as NavigatorWrapper & NavigationContainer
-    wrapperWithRouter.router = navigator.router
+	const wrapperWithRouter = wrapper as NavigatorWrapper & NavigationContainer;
+	wrapperWithRouter.router = navigator.router;
 
-    return wrapperWithRouter as NavigationContainer
-}
+	return wrapperWithRouter as NavigationContainer;
+};
 
 /**
  *
@@ -33,126 +36,126 @@ export const addStaticRouter = (
  * Much like `mapDispatchToProps` in `redux`. Means we can decouple out components from navigation.
  */
 const mapNavigationToProps = <T extends {}, P extends {}>(
-    Component: React.ComponentType<T>,
-    mapper: (navigation: NavigationScreenProp<P>) => Partial<T>,
+	Component: React.ComponentType<T>,
+	mapper: (navigation: NavigationScreenProp<P>) => Partial<T>,
 ) => (props: T & { navigation: NavigationScreenProp<P> }) => (
-    <Component {...props} {...mapper(props.navigation)} />
-)
+	<Component {...props} {...mapper(props.navigation)} />
+);
 
 export interface ArticleNavigationProps {
-    path: PathToArticle
-    articleNavigator?: ArticleNavigator
-    /*
+	path: PathToArticle;
+	articleNavigator?: ArticleNavigator;
+	/*
     some article types (crosswords) don't want a
     navigator or a card and would rather go fullscreen
     */
-    prefersFullScreen?: boolean
+	prefersFullScreen?: boolean;
 }
 
 const navigateToArticle = (
-    navigation: NavigationScreenProp<{}>,
-    navigationProps: ArticleNavigationProps,
+	navigation: NavigationScreenProp<{}>,
+	navigationProps: ArticleNavigationProps,
 ): void => {
-    navigation.navigate(routeNames.Article, navigationProps)
-}
+	navigation.navigate(routeNames.Article, navigationProps);
+};
 const getArticleNavigationProps = (
-    routeParams: any,
-    {
-        error,
-        success,
-    }: {
-        error: () => ReactElement
-        success: (props: Required<ArticleNavigationProps>) => ReactElement
-    },
+	routeParams: any,
+	{
+		error,
+		success,
+	}: {
+		error: () => ReactElement;
+		success: (props: Required<ArticleNavigationProps>) => ReactElement;
+	},
 ) => {
-    const path = routeParams.path
-    const prefersFullScreen = routeParams.prefersFullScreen || false
-    const articleNavigator = routeParams.articleNavigator || []
+	const path = routeParams.path;
+	const prefersFullScreen = routeParams.prefersFullScreen || false;
+	const articleNavigator = routeParams.articleNavigator || [];
 
-    if (
-        !path ||
-        !path.article ||
-        !path.collection ||
-        !path.localIssueId ||
-        !path.publishedIssueId
-    ) {
-        return error()
-    } else {
-        return success({
-            path,
-            articleNavigator,
-            prefersFullScreen,
-        })
-    }
-}
+	if (
+		!path ||
+		!path.article ||
+		!path.collection ||
+		!path.localIssueId ||
+		!path.publishedIssueId
+	) {
+		return error();
+	} else {
+		return success({
+			path,
+			articleNavigator,
+			prefersFullScreen,
+		});
+	}
+};
 
 const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.IssueList)
-}
+	navigation.navigate(routeNames.IssueList);
+};
 
 const navigateToEditionMenu = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.EditionsMenu)
-}
+	navigation.navigate(routeNames.EditionsMenu);
+};
 
 export interface IssueNavigationProps {
-    path?: PathToIssue
-    issue?: Issue
-    initialFrontKey?: string | null
+	path?: PathToIssue;
+	issue?: Issue;
+	initialFrontKey?: string | null;
 }
 
 interface NavigateToIssueProps {
-    navigation: NavigationScreenProp<{}>
-    navigationProps: IssueNavigationProps
-    setIssueId: (path: PathToIssue, initialFrontKey?: string | null) => void
+	navigation: NavigationScreenProp<{}>;
+	navigationProps: IssueNavigationProps;
+	setIssueId: (path: PathToIssue, initialFrontKey?: string | null) => void;
 }
 
 const navigateToIssue = ({
-    navigation,
-    navigationProps,
-    setIssueId,
+	navigation,
+	navigationProps,
+	setIssueId,
 }: NavigateToIssueProps) => {
-    navigation.navigate(routeNames.Issue, {
-        ...navigationProps,
-    })
-    if (navigationProps.path) {
-        setIssueId(navigationProps.path, navigationProps.initialFrontKey)
-    }
-    sendComponentEvent({
-        componentType: ComponentType.appButton,
-        action: Action.click,
-        value: 'issues_list_issue_clicked',
-    })
-}
+	navigation.navigate(routeNames.Issue, {
+		...navigationProps,
+	});
+	if (navigationProps.path) {
+		setIssueId(navigationProps.path, navigationProps.initialFrontKey);
+	}
+	sendComponentEvent({
+		componentType: ComponentType.appButton,
+		action: Action.click,
+		value: 'issues_list_issue_clicked',
+	});
+};
 
 const navigateToSettings = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.Settings)
-}
+	navigation.navigate(routeNames.Settings);
+};
 
 export interface LightboxNavigationProps {
-    images?: CreditedImage[]
-    imagePaths?: string[]
-    index?: number
-    pillar?: ArticlePillar
+	images?: CreditedImage[];
+	imagePaths?: string[];
+	index?: number;
+	pillar?: ArticlePillar;
 }
 
 interface LightboxProps {
-    navigation: NavigationScreenProp<{}>
-    navigationProps: LightboxNavigationProps
+	navigation: NavigationScreenProp<{}>;
+	navigationProps: LightboxNavigationProps;
 }
 
 const navigateToLightbox = ({ navigation, navigationProps }: LightboxProps) => {
-    navigation.navigate(routeNames.Lightbox, {
-        ...navigationProps,
-    })
-}
+	navigation.navigate(routeNames.Lightbox, {
+		...navigationProps,
+	});
+};
 
 export {
-    mapNavigationToProps,
-    navigateToArticle,
-    navigateToIssueList,
-    getArticleNavigationProps,
-    navigateToIssue,
-    navigateToSettings,
-    navigateToLightbox,
-    navigateToEditionMenu,
-}
+	mapNavigationToProps,
+	navigateToArticle,
+	navigateToIssueList,
+	getArticleNavigationProps,
+	navigateToIssue,
+	navigateToSettings,
+	navigateToLightbox,
+	navigateToEditionMenu,
+};

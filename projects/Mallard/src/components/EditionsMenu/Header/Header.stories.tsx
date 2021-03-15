@@ -1,12 +1,12 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react-native'
-import { withKnobs, text } from '@storybook/addon-knobs'
-import { EditionsMenuHeader } from './Header'
+import { text, withKnobs } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react-native';
+import React from 'react';
+import { EditionsMenuHeader } from './Header';
 
 storiesOf('EditionsMenu', module)
-    .addDecorator(withKnobs)
-    .add('EditionsMenuHeader - default', () => (
-        <EditionsMenuHeader>
-            {text('Header Text', 'Regions')}
-        </EditionsMenuHeader>
-    ))
+	.addDecorator(withKnobs)
+	.add('EditionsMenuHeader - default', () => (
+		<EditionsMenuHeader>
+			{text('Header Text', 'Regions')}
+		</EditionsMenuHeader>
+	));
