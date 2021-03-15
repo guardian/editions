@@ -1,14 +1,12 @@
-import React from 'react'
-import { View } from 'react-native'
-import { color } from 'src/theme/color'
+import React from 'react';
+import { View } from 'react-native';
 
 const ItemSeperator = () => (
-    <View
-        style={{
-            backgroundColor: color.palette.neutral[7],
-            height: 1,
-        }}
-    ></View>
-)
+	<View
+		style={{
+			height: 10,
+		}}
+	></View>
+);
 
-export { ItemSeperator }
+export { ItemSeperator };

@@ -2,3 +2,4 @@
 !types/*.d.ts
 coverage
 yarn-error.log
+.env

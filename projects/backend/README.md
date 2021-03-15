@@ -29,4 +29,4 @@ yarn preview
 
 You can now access the backend on `https://localhost:3131/`
 
-The routing is done in `index.ts` - go and find some routes to hit!
+The routing is done in `application.ts` - go and find some routes to hit!

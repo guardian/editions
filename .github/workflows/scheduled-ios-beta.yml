@@ -38,6 +38,9 @@ jobs:
                   cd projects/Mallard
                   make beta-ios
               env:
+                  APPSTORE_CONNECT_KEY_ID: ${{ secrets.APPSTORE_CONNECT_KEY_ID }}
+                  APPSTORE_CONNECT_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_ISSUER_ID }}
+                  APPSTORE_CONNECT_API_KEY: ${{ secrets.APPSTORE_CONNECT_API_KEY }}
                   ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
                   ID_API_URL: ${{ secrets.ID_API_URL }}
                   LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}

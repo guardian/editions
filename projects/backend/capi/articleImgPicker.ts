@@ -1,4 +1,4 @@
-import { IContent } from '@guardian/capi-ts'
+import { Content } from '@guardian/content-api-models/v1/content'
 import {
     CreditedImage,
     TrailImage,
@@ -8,7 +8,7 @@ import {
 import { oc } from 'ts-optchain'
 import { getImage, getCreditedImage } from './assets'
 import { ArticleType } from '../../Apps/common/src'
-import { ContentType } from '@guardian/capi-ts'
+import { ContentType } from '@guardian/content-api-models/v1/contentType'
 
 /**
  * This function exploits the 'role'field that is passed to the backend when generating image urls
@@ -35,7 +35,7 @@ export const getImageRole = (
 }
 
 const getMainImage = (
-    result: IContent,
+    result: Content,
     articleType: ArticleType,
 ): CreditedImage | undefined => {
     const maybeMainElement = oc(result).blocks.main.elements[0]()
@@ -61,7 +61,7 @@ const getMainImage = (
 }
 
 const getTrailImage = (
-    result: IContent,
+    result: Content,
     articleType: ArticleType,
 ): TrailImage | undefined => {
     const maybeThumbnailElement =
@@ -95,7 +95,7 @@ interface ImageAndTrailImage {
 }
 
 const getImages = (
-    result: IContent,
+    result: Content,
     articleType: ArticleType,
 ): ImageAndTrailImage => {
     const images = {

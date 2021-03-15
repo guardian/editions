@@ -1,43 +1,53 @@
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { SpecialEditionHeaderStyles } from 'src/common'
-import { navigateToSettings } from 'src/navigation/helpers/base'
-import { ScreenHeader } from '../ScreenHeader'
-import { CloseButton } from 'src/components/Button/CloseButton'
-import { SettingsButton } from 'src/components/Button/SettingsButton'
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import type { SpecialEditionHeaderStyles } from 'src/common';
+import { CloseButton } from 'src/components/Button/CloseButton';
+import { SettingsButton } from 'src/components/Button/SettingsButton';
+import { IssueTitle } from 'src/components/issue/issue-title';
+import { Header } from 'src/components/layout/header/header';
+import { styles } from 'src/components/styled-text';
+import { navigateToSettings } from 'src/navigation/helpers/base';
 
 const IssuePickerHeader = ({
-    headerStyles,
-    subTitle,
-    title,
+	headerStyles,
+	subTitle,
+	title,
 }: {
-    headerStyles?: SpecialEditionHeaderStyles
-    subTitle?: string
-    title: string
+	headerStyles?: SpecialEditionHeaderStyles;
+	subTitle?: string;
+	title: string;
 }) => {
-    const navigation = useNavigation()
-    return (
-        <ScreenHeader
-            leftAction={
-                <SettingsButton
-                    onPress={() => {
-                        navigateToSettings(navigation)
-                    }}
-                />
-            }
-            onPress={() => navigation.goBack()}
-            rightAction={
-                <CloseButton
-                    accessibilityLabel="Close button"
-                    accessibilityHint="Returns to the edition"
-                    onPress={() => navigation.goBack()}
-                />
-            }
-            title={title}
-            subTitle={subTitle}
-            headerStyles={headerStyles}
-        />
-    )
-}
+	const navigation = useNavigation();
+	return (
+		<Header
+			alignment={'drawer'}
+			onPress={() => navigation.goBack()}
+			action={
+				<CloseButton
+					accessibilityLabel="Close button"
+					accessibilityHint="Returns to the edition"
+					onPress={() => navigation.goBack()}
+				/>
+			}
+			leftAction={
+				<SettingsButton
+					onPress={() => {
+						navigateToSettings(navigation);
+					}}
+				/>
+			}
+			headerStyles={headerStyles}
+		>
+			{title ? (
+				<IssueTitle
+					title={title}
+					subtitle={subTitle}
+					titleStyle={styles.issueLightText}
+					overwriteStyles={headerStyles}
+				/>
+			) : null}
+		</Header>
+	);
+};
 
-export { IssuePickerHeader }
+export { IssuePickerHeader };
