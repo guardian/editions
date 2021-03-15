@@ -25,13 +25,13 @@ export const useQuery = <Data, Variables = undefined>(
 	const { loading, error, data, client } = useApolloQuery(query, {
 		variables,
 	});
-	if (error != null) {
+	if (error !== undefined) {
 		throw error;
 	}
 	if (loading) {
 		return { loading: true, client };
 	}
-	if (data == null) {
+	if (data === null) {
 		throw new Error(
 			'Data returned by Apollo is empty, but it has finished loading. ' +
 				'This happens when trying to fetch a @client field that ' +
