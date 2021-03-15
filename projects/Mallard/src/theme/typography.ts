@@ -39,11 +39,11 @@ Think of these as ems
 const scale = {
 	icon: {
 		[1]: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 20,
 				lineHeight: 20,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 20,
 				lineHeight: 20,
 			},
@@ -51,41 +51,41 @@ const scale = {
 	},
 	sans: {
 		[0.5]: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 11,
 				lineHeight: 11,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 13,
 				lineHeight: 13,
 			},
 		},
 		[0.9]: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 13,
 				lineHeight: 16,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 15,
 				lineHeight: 18,
 			},
 		},
 		1: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 14,
 				lineHeight: 19,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 17,
 				lineHeight: 21,
 			},
 		},
 		1.5: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 15,
 				lineHeight: 22,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 20,
 				lineHeight: 23,
 			},
@@ -93,43 +93,43 @@ const scale = {
 	},
 	text: {
 		0.9: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 14,
 				lineHeight: 15,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 15,
 				lineHeight: 17,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 17,
 				lineHeight: 19.5,
 			},
 		},
 		1: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 14,
 				lineHeight: 18,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 18,
 				lineHeight: 23,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 18,
 				lineHeight: 22,
 			},
 		},
 		1.25: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 15,
 				lineHeight: 19,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 18,
 				lineHeight: 22,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 20,
 				lineHeight: 24,
 			},
@@ -137,149 +137,149 @@ const scale = {
 	},
 	headline: {
 		0.5: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 12,
 				lineHeight: 14,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 12,
 				lineHeight: 14,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 16,
 				lineHeight: 17,
 			},
 		},
 		0.75: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 18,
 				lineHeight: 20,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 18,
 				lineHeight: 20,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 21,
 				lineHeight: 22,
 			},
 		},
 		// this block defies the design system - size 22 isn't a thing normally but we need it
 		0.9: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 18,
 				lineHeight: 20,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 18,
 				lineHeight: 20,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 22,
 				lineHeight: 25,
 			},
 		},
 		1: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 15,
 				lineHeight: 17,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 17,
 				lineHeight: 20,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 24,
 				lineHeight: 27,
 			},
 		},
 		1.2: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 20,
 				lineHeight: 22,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 24,
 				lineHeight: 26,
 			},
 		},
 		1.25: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 20,
 				lineHeight: 23,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 24,
 				lineHeight: 26,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 28,
 				lineHeight: 30,
 			},
 		},
 		1.5: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 20,
 				lineHeight: 22,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 24,
 				lineHeight: 26,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 36,
 				lineHeight: 38,
 			},
 		},
 		1.6: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 21,
 				lineHeight: 22,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 29,
 				lineHeight: 32,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 36,
 				lineHeight: 38,
 			},
 		},
 		1.75: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 30,
 				lineHeight: 32,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 32,
 				lineHeight: 34,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 40,
 				lineHeight: 44,
 			},
 		},
 		2: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 40,
 				lineHeight: 44,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 40,
 				lineHeight: 44,
 			},
 		},
 		// currently only used by journal cards. not in design system
 		2.5: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 32,
 				lineHeight: 37,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 32,
 				lineHeight: 37,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 50,
 				lineHeight: 58,
 			},
@@ -287,95 +287,95 @@ const scale = {
 	},
 	titlepiece: {
 		1: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 16,
 				lineHeight: 18,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 16,
 				lineHeight: 18,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 18,
 				lineHeight: 20,
 			},
 		},
 		// 1.1 is NOT in the design system - for use only in SliderTitle
 		1.1: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 18,
 				lineHeight: 20,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 20,
 				lineHeight: 22,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 30,
 				lineHeight: 33,
 			},
 		},
 		1.25: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 20,
 				lineHeight: 22,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 24,
 				lineHeight: 26,
 			},
 		},
 		// 1.4 is NOT in the design system - for use only in SliderTitle
 		1.4: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 24,
 				lineHeight: 26,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 28,
 				lineHeight: 32,
 			},
-			[Breakpoints.tabletVertical]: {
+			[Breakpoints.TabletVertical]: {
 				fontSize: 38,
 				lineHeight: 42,
 			},
 		},
 		1.5: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 25,
 				lineHeight: 28,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 30,
 				lineHeight: 33,
 			},
 		},
 		2: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 38,
 				lineHeight: 43,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 45,
 				lineHeight: 50,
 			},
 		},
 		2.25: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 38,
 				lineHeight: 42,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 50,
 				lineHeight: 55,
 			},
 		},
 		2.5: {
-			[Breakpoints.smallPhone]: {
+			[Breakpoints.SmallPhone]: {
 				fontSize: 50,
 				lineHeight: 56,
 			},
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 60,
 				lineHeight: 58,
 			},
@@ -383,7 +383,7 @@ const scale = {
 	},
 	daily: {
 		1: {
-			[Breakpoints.phone]: {
+			[Breakpoints.Phone]: {
 				fontSize: 20,
 				lineHeight: 25,
 			},

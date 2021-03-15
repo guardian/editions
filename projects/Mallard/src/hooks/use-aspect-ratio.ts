@@ -5,7 +5,7 @@ import { Breakpoints } from 'src/theme/breakpoints';
 
 const useAspectRatio = (path?: string) => {
 	const isLandscape = useMediaQuery(
-		(width) => width >= Breakpoints.tabletLandscape,
+		(width) => width >= Breakpoints.TabletLandscape,
 	);
 
 	const [ratio, setRatio] = useState(isLandscape ? 2 : 1.5);
@@ -18,10 +18,10 @@ const useAspectRatio = (path?: string) => {
 				(w, h) => {
 					localSetRatio(w / h);
 				},
-				() => {},
+				() => { },
 			);
 		}
-		return () => void (localSetRatio = () => {});
+		return () => void (localSetRatio = () => { });
 	}, [path]);
 
 	return ratio;

@@ -65,7 +65,7 @@ const GridRowSplit = ({
 				0: ({ width }) => (
 					<Inner width={metrics.gridRowSplit.narrow(width)} />
 				),
-				[Breakpoints.tabletVertical]: () => (
+				[Breakpoints.TabletVertical]: () => (
 					<Inner
 						width={metrics.gridRowSplit.wide}
 						// -iOS12 and Android style to make the menu look palatable

@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 
 const Toast = ({ title, subtitle }: ToastProps) => {
 	const isTablet = useMediaQuery(
-		(width) => width >= Breakpoints.tabletVertical,
+		(width) => width >= Breakpoints.TabletVertical,
 	);
 	const [position] = useState(() => new Animated.Value(0));
 	useEffect(() => {
