@@ -52,7 +52,7 @@ const sendAppScreenEvent = async ({
 	screenName,
 	value,
 }: TrackScreen): Promise<boolean> =>
-	NativeModules.Ophan.sendAppScreenEvent(screenName, value);
+	await NativeModules.Ophan.sendAppScreenEvent(screenName, value);
 
 const sendComponentEvent = ({
 	componentType,
