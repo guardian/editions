@@ -109,6 +109,8 @@ export class ErrorServiceImpl implements ErrorService {
 
 		this.crashlytics.setAttributes({
 			signedIn: String(data.signedIn),
+			/* disabled as not enough time to test if it is unnecessary*/
+			/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- linting */
 			hasCasCode: String(data.casCode !== null || data.casCode !== ''),
 			hasDigiSub: String(data.digitalSub),
 			networkStatus: data.networkStatus,
