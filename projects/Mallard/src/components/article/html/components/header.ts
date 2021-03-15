@@ -774,29 +774,29 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
 		.app[data-type='${ArticleType.Interview}'] .content-wrap {
 			padding-left: ${Dimensions.get('window').width >
-		metrics.article.maxWidth
-		? px(metrics.article.sides)
-		: px(metrics.article.sides * 2)};
+			metrics.article.maxWidth
+				? px(metrics.article.sides)
+				: px(metrics.article.sides * 2)};
 		}
 
 		.interview-tablet-wrapper {
 			margin-left: ${Dimensions.get('window').width >
-		metrics.article.maxWidth
-		? px(
-			(Dimensions.get('window').width -
-				metrics.article.maxWidth) /
-			2,
-		)
-		: px(metrics.article.sides * 2)};
+			metrics.article.maxWidth
+				? px(
+						(Dimensions.get('window').width -
+							metrics.article.maxWidth) /
+							2,
+				  )
+				: px(metrics.article.sides * 2)};
 			margin-right: ${Dimensions.get('window').width >
-		metrics.article.maxWidth
-		? px(
-			(Dimensions.get('window').width -
-				metrics.article.maxWidth) /
-			2 +
-			metrics.article.rightRail,
-		)
-		: px(metrics.article.rightRail + metrics.article.sides)};
+			metrics.article.maxWidth
+				? px(
+						(Dimensions.get('window').width -
+							metrics.article.maxWidth) /
+							2 +
+							metrics.article.rightRail,
+				  )
+				: px(metrics.article.rightRail + metrics.article.sides)};
 		}
 
 		.interview-tablet .standfirst--interview p {
@@ -897,8 +897,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		.header-image--showcase {
 			margin-right: 0;
 			margin-left: ${(Dimensions.get('window').width -
-		metrics.article.maxWidth) /
-	2};
+				metrics.article.maxWidth) /
+			2};
 		}
 
 		.header-container[data-type='${ArticleType.Showcase}'] .standfirst {
@@ -1000,11 +1000,11 @@ const MainMediaImage = ({
 				data-preserve-ratio="${preserveRatio || 'false'}"
 				style="background-image: url(${path}), url(${remotePath}); "
 				${!isGallery &&
-		`onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
+				`onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
 				data-open="false"
 			>
 				${preserveRatio &&
-		html`
+				html`
 					<img
 						class="image-as-bg__img"
 						src="${path}"
@@ -1052,8 +1052,8 @@ const getStandFirstText = ({
 	return html`
 		<p
 			${type === ArticleType.Interview &&
-		`class=interview-standfirst` &&
-		`style=color:${interviewColor};`}
+			`class=interview-standfirst` &&
+			`style=color:${interviewColor};`}
 		>
 			${standfirst}
 		</p>
@@ -1078,13 +1078,13 @@ const getStandFirst = (
 				<div class="${cutout && `header-opinion-flex`}">
 					${getHeadline(articleHeaderType, type, headerProps)}
 					${publishedId &&
-			cutout &&
-			html`
+					cutout &&
+					html`
 						<div>
 							${Image({
-				image: cutout,
-				getImagePath,
-			})}
+								image: cutout,
+								getImagePath,
+							})}
 						</div>
 					`}
 				</div>
@@ -1095,12 +1095,12 @@ const getStandFirst = (
 			<section class="header-top">
 				${getHeadline(articleHeaderType, type, headerProps)}
 				${articleHeaderType === HeaderType.RegularByline &&
-			headerProps.standfirst &&
-			getStandFirstText({
-				standfirst: headerProps.standfirst,
-				type,
-				pillar,
-			})}
+				headerProps.standfirst &&
+				getStandFirstText({
+					standfirst: headerProps.standfirst,
+					type,
+					pillar,
+				})}
 			</section>
 		`;
 	}
@@ -1204,64 +1204,64 @@ const Header = ({
 			children: headerProps.starRating
 				? Rating(headerProps)
 				: headerProps.sportScore
-					? SportScore({
+				? SportScore({
 						sportScore: headerProps.sportScore,
-					})
-					: undefined,
+				  })
+				: undefined,
 			getImagePath,
 		})}
 		<div class="header-container-line-wrap">
 			${type !== ArticleType.Interview && Line({ zIndex: 10 })}
 			<div class="header-container wrapper" data-type="${type}">
 				${!immersive &&
-		!displayWideImage &&
-		headerProps.image &&
-		publishedId &&
-		MainMediaImage({
-			articleType: type,
-			className: 'header-image--standard',
-			image: headerProps.image,
-			isGallery: isGallery,
-			preserveRatio: true,
-			children: headerProps.starRating
-				? Rating(headerProps)
-				: headerProps.sportScore
-					? SportScore({
-						sportScore: headerProps.sportScore,
-					})
-					: undefined,
-			getImagePath,
-		})}
+				!displayWideImage &&
+				headerProps.image &&
+				publishedId &&
+				MainMediaImage({
+					articleType: type,
+					className: 'header-image--standard',
+					image: headerProps.image,
+					isGallery: isGallery,
+					preserveRatio: true,
+					children: headerProps.starRating
+						? Rating(headerProps)
+						: headerProps.sportScore
+						? SportScore({
+								sportScore: headerProps.sportScore,
+						  })
+						: undefined,
+					getImagePath,
+				})}
 				<header
 					class=${immersive &&
-			headerProps.mainMedia &&
-			headerProps.showMedia
-			? 'header-immersive-video'
-			: 'header'}
+					headerProps.mainMedia &&
+					headerProps.showMedia
+						? 'header-immersive-video'
+						: 'header'}
 				>
 					${headerProps.mainMedia &&
-		(headerProps.showMedia
-			? renderMediaAtom(headerProps.mainMedia)
-			: null)}
+					(headerProps.showMedia
+						? renderMediaAtom(headerProps.mainMedia)
+						: null)}
 					${headerProps.kicker &&
-		html`
+					html`
 						<span class="header-kicker">${headerProps.kicker}</span>
 					`}
 					${getStandFirst(
-			headerType,
-			type,
-			headerProps,
-			publishedId,
-			getImagePath,
-			pillar,
-		)}
+						headerType,
+						type,
+						headerProps,
+						publishedId,
+						getImagePath,
+						pillar,
+					)}
 				</header>
 				${getByLine(
-			headerType,
-			headerProps as ArticleHeaderProps,
-			type,
-			webUrl,
-		)}
+					headerType,
+					headerProps as ArticleHeaderProps,
+					type,
+					webUrl,
+				)}
 				<div class="header-bg"></div>
 			</div>
 		</div>
@@ -1289,22 +1289,22 @@ const HeaderInterviewTablet = ({
 		<div class="interview-tablet">
 			<div class="header-image-container--interview">
 				${headerProps.image &&
-		publishedId &&
-		MainMediaImage({
-			image: headerProps.image,
-			className: 'header-image--interview',
-			getImagePath,
-		})}
+				publishedId &&
+				MainMediaImage({
+					image: headerProps.image,
+					className: 'header-image--interview',
+					getImagePath,
+				})}
 				<div
 					class="header-container interview-tablet-wrapper"
 					data-type="${type}"
 				>
 					${headerProps.mainMedia &&
-		(headerProps.showMedia
-			? renderMediaAtom(headerProps.mainMedia)
-			: null)}
+					(headerProps.showMedia
+						? renderMediaAtom(headerProps.mainMedia)
+						: null)}
 					${headerProps.kicker &&
-		html`
+					html`
 						<span class="header-kicker">${headerProps.kicker}</span>
 					`}
 				</div>
@@ -1320,22 +1320,22 @@ const HeaderInterviewTablet = ({
 					class="interview-tablet-standfirst interview-tablet-wrapper"
 				>
 					${headerProps.standfirst &&
-		getStandFirstText({
-			standfirst: headerProps.standfirst,
-			type,
-			pillar,
-		})}
+					getStandFirstText({
+						standfirst: headerProps.standfirst,
+						type,
+						pillar,
+					})}
 				</section>
 				<div
 					class="byline-container interview-tablet-wrapper"
 					data-type="${type}"
 				>
 					${getByLine(
-			headerType,
-			headerProps as ArticleHeaderProps,
-			type,
-			webUrl,
-		)}
+						headerType,
+						headerProps as ArticleHeaderProps,
+						type,
+						webUrl,
+					)}
 					<div class="header-bg"></div>
 				</div>
 			</div>
@@ -1363,40 +1363,40 @@ const HeaderInterviewMobile = ({
 	return html`
 		<div class="interview-mobile">
 			${headerProps.image &&
-		publishedId &&
-		MainMediaImage({
-			image: headerProps.image,
-			className: 'header-image--interview',
-			getImagePath,
-		})}
+			publishedId &&
+			MainMediaImage({
+				image: headerProps.image,
+				className: 'header-image--interview',
+				getImagePath,
+			})}
 			<div class="header-container-line-wrap">
 				<div class="header-container wrapper" data-type="${type}">
 					<header class="header">
 						${headerProps.mainMedia &&
-		(headerProps.showMedia
-			? renderMediaAtom(headerProps.mainMedia)
-			: null)}
+						(headerProps.showMedia
+							? renderMediaAtom(headerProps.mainMedia)
+							: null)}
 						${headerProps.kicker &&
-		html`
+						html`
 							<span class="header-kicker"
 								>${headerProps.kicker}</span
 							>
 						`}
 						${getStandFirst(
-			headerType,
-			type,
-			headerProps,
-			publishedId,
-			getImagePath,
-			pillar,
-		)}
+							headerType,
+							type,
+							headerProps,
+							publishedId,
+							getImagePath,
+							pillar,
+						)}
 					</header>
 					${getByLine(
-			headerType,
-			headerProps as ArticleHeaderProps,
-			type,
-			webUrl,
-		)}
+						headerType,
+						headerProps as ArticleHeaderProps,
+						type,
+						webUrl,
+					)}
 					<div class="header-bg"></div>
 				</div>
 			</div>
@@ -1427,23 +1427,23 @@ const HeaderInterview = ({
 } & ArticleHeaderProps) => {
 	return html`
 		${HeaderInterviewMobile({
-		publishedId,
-		type,
-		headerType,
-		getImagePath,
-		pillar,
-		webUrl,
-		...headerProps,
-	})}
+			publishedId,
+			type,
+			headerType,
+			getImagePath,
+			pillar,
+			webUrl,
+			...headerProps,
+		})}
 		${HeaderInterviewTablet({
-		publishedId,
-		type,
-		headerType,
-		getImagePath,
-		pillar,
-		webUrl,
-		...headerProps,
-	})}
+			publishedId,
+			type,
+			headerType,
+			getImagePath,
+			pillar,
+			webUrl,
+			...headerProps,
+		})}
 	`;
 };
 
@@ -1470,7 +1470,7 @@ const HeaderShowcase = ({
 			<div class="header-container wrapper" data-type="${type}">
 				<header class="header">
 					${headerProps.kicker &&
-		html`
+					html`
 						<span class="header-kicker">${headerProps.kicker}</span>
 					`}
 					${getHeadline(headerType, type, headerProps, pillar)}
@@ -1488,10 +1488,10 @@ const HeaderShowcase = ({
 			children: headerProps.starRating
 				? Rating(headerProps)
 				: headerProps.sportScore
-					? SportScore({
+				? SportScore({
 						sportScore: headerProps.sportScore,
-					})
-					: undefined,
+				  })
+				: undefined,
 			getImagePath,
 		})}
 		<div class="header-container-line-wrap">
@@ -1499,16 +1499,16 @@ const HeaderShowcase = ({
 			<div class="header-container wrapper" data-type="${type}">
 				<div class="standfirst">
 					${getStandFirstText({
-			standfirst: headerProps.standfirst,
-			type,
-		})}
+						standfirst: headerProps.standfirst,
+						type,
+					})}
 				</div>
 				${getByLine(
-			headerType,
-			headerProps as ArticleHeaderProps,
-			type,
-			webUrl,
-		)}
+					headerType,
+					headerProps as ArticleHeaderProps,
+					type,
+					webUrl,
+				)}
 			</div>
 		</div>
 	`;

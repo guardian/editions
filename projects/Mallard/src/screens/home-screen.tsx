@@ -9,7 +9,6 @@ import React, {
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import type {
 	NavigationInjectedProps,
-	NavigationParams,
 	NavigationRoute,
 	NavigationScreenProp,
 } from 'react-navigation';
@@ -114,7 +113,7 @@ const IssueRowContainer = React.memo(
 		);
 
 		const onPress = useCallback(() => {
-			if (issueDetails != null) {
+			if (issueDetails !== null) {
 				setNavPosition(null);
 				navToIssue(null);
 				return;
@@ -135,7 +134,7 @@ const IssueRowContainer = React.memo(
 		const onPressFront = useCallback(
 			(frontKey) => {
 				if (
-					issueId != null &&
+					issueId !== null &&
 					issueId.publishedIssueId === publishedId &&
 					issueId.localIssueId === localId
 				) {
@@ -213,7 +212,7 @@ const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + StyleSheet.hairlineWidth;
 
 const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
 	if (issue.isLoading) return 0;
-	if (issue.error != null) return ISSUE_FRONT_ERROR_HEIGHT + 1;
+	if (issue.error !== undefined) return ISSUE_FRONT_ERROR_HEIGHT + 1;
 	const { fronts } = issue.value;
 	return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1);
 };
@@ -248,15 +247,14 @@ const IssueListView = withNavigation(
 			const listRef = useRef<FlatList<IssueSummary>>();
 			const prevCurrentIndexRef = useRef<number>(currentIssueIndex);
 			useEffect(() => {
-				if (listRef.current == null || currentIssueIndex < 0) {
+				if (listRef.current === undefined || currentIssueIndex < 0) {
 					return;
 				}
 
 				if (prevCurrentIndexRef.current === currentIssueIndex) return;
 				prevCurrentIndexRef.current = currentIssueIndex;
 
-				/* @types/react doesn't know about scroll functions */
-				(listRef.current as any).scrollToIndex({
+				listRef.current.scrollToIndex({
 					index: currentIssueIndex,
 				});
 			}, [currentIssueIndex]);
@@ -383,8 +381,8 @@ const NO_ISSUES: IssueSummary[] = [];
 const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
 const IssueListFetchContainer = () => {
 	const data = useIssueSummary();
-	const issueSummary = data.issueSummary || NO_ISSUES;
-	const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID);
+	const issueSummary = data.issueSummary ?? NO_ISSUES;
+	const [issueId, setIssueId] = useState(data.issueId ?? EMPTY_ISSUE_ID);
 	const [isShown, setIsShown] = useState(
 		// on iOS there is bug that causes wrong rendering of the scroll bar
 		// if this is enabled. See below description of this mechanism.
@@ -451,9 +449,7 @@ export const HomeScreen = () => {
 			<IssuePickerHeader
 				title={issueHeaderData.title}
 				subTitle={issueHeaderData.subTitle}
-				headerStyles={
-					specialEditionProps && specialEditionProps.headerStyle
-				}
+				headerStyles={specialEditionProps?.headerStyle}
 			/>
 			{issueSummary ? (
 				<IssueListFetchContainer />

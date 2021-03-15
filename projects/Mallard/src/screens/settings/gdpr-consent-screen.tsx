@@ -155,8 +155,8 @@ const GdprConsent = ({
 
 	const onDismiss = () => {
 		if (
-			gdprData.gdprAllowFunctionality != null &&
-			gdprData.gdprAllowPerformance != null &&
+			gdprData.gdprAllowFunctionality !== null &&
+			gdprData.gdprAllowPerformance !== null &&
 			gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION
 		) {
 			showToast(PREFS_SAVED_MSG);

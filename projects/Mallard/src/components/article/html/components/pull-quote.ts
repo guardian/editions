@@ -101,9 +101,9 @@ const quoteStyles = ({ colors }: CssProps) => css`
 		blockquote[data-role='showcase'] {
 			width: 60%;
 			margin-left: ${px(
-	((Breakpoints.TabletLandscape - metrics.article.maxWidth) / 2) *
-	-1,
-)};
+				((Breakpoints.TabletLandscape - metrics.article.maxWidth) / 2) *
+					-1,
+			)};
 		}
 	}
 `;

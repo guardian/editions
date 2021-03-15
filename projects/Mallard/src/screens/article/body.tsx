@@ -51,15 +51,12 @@ const ArticleScreenBody = React.memo<
 			: undefined;
 
 		const handleIsAtTopChange = useCallback(
-			(value: boolean) =>
-				onIsAtTopChange && onIsAtTopChange(value, path.article),
-			// eslint-disable-next-line react-hooks/exhaustive-deps
+			(value: boolean) => onIsAtTopChange?.(value, path.article),
 			[onIsAtTopChange],
 		);
 		const { isAppsRendering } = useIsAppsRendering();
 		const { showToast } = useToast();
 		// First time it's mounted, we make sure to report we're at the top.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		useEffect(() => handleIsAtTopChange(true), []);
 		return (
 			<View style={[styles.container, { width }]}>
@@ -85,7 +82,7 @@ const ArticleScreenBody = React.memo<
 
 							<WithArticle
 								type={
-									article.article.articleType ||
+									article.article.articleType ??
 									ArticleType.Article
 								}
 								pillar={getCollectionPillarOverride(

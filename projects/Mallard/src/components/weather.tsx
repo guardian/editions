@@ -156,9 +156,9 @@ const WeatherIconView = ({
 				ellipsizeMode="clip"
 				style={styles.temperature}
 			>
-				{Math.round(forecast.Temperature.Value) +
-					'°' +
-					forecast.Temperature.Unit}
+				{`${Math.round(forecast.Temperature.Value)}°${' '}${
+					forecast.Temperature.Unit
+				}`}
 			</Text>
 			<Text
 				allowFontScaling={false}
@@ -258,7 +258,7 @@ const LocationName = ({
 
 const WeatherForecast = ({ weather }: { weather: Weather }) => {
 	const { forecasts, locationName, isLocationPrecise } = weather;
-	if (forecasts && forecasts.length >= 9) {
+	if (forecasts.length >= 9) {
 		/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
 		const intervals = [8, 6, 4, 2, 0].map((idx) => forecasts[idx]);
 		return (
@@ -284,7 +284,7 @@ const WeatherForecast = ({ weather }: { weather: Weather }) => {
 export const getValidWeatherData = (result: QueryResult<WeatherQueryData>) => {
 	if (
 		!result.loading &&
-		result.data.weather != null &&
+		result.data.weather !== null &&
 		result.data.weather.forecasts.length >= 9
 	)
 		return result.data.weather;
@@ -294,7 +294,7 @@ export const getValidWeatherData = (result: QueryResult<WeatherQueryData>) => {
 const WeatherWidget = React.memo(() => {
 	const query = useQuery<WeatherQueryData>(WEATHER_QUERY);
 	const weather = getValidWeatherData(query);
-	if (weather == null) {
+	if (weather === undefined) {
 		return <View style={styles.emptyWeatherSpace} />;
 	}
 

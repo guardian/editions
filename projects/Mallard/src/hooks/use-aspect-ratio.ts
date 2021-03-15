@@ -18,10 +18,10 @@ const useAspectRatio = (path?: string) => {
 				(w, h) => {
 					localSetRatio(w / h);
 				},
-				() => { },
+				() => {},
 			);
 		}
-		return () => void (localSetRatio = () => { });
+		return () => void (localSetRatio = () => {});
 	}, [path]);
 
 	return ratio;

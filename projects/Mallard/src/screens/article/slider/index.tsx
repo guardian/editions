@@ -82,12 +82,11 @@ const ArticleSlider = React.memo(
 		const preview = useIsPreview();
 
 		useEffect(() => {
-			flatListRef.current &&
-				flatListRef.current._component.scrollToIndex({
-					index: current,
-					animated: false,
-				});
-		}, [width, navigation.isFocused()]); // eslint-disable-line react-hooks/exhaustive-deps
+			flatListRef.current?._component.scrollToIndex({
+				index: current,
+				animated: false,
+			});
+		}, [width, navigation.isFocused()]);
 
 		const { panResponder } = useDismissArticle();
 
@@ -136,14 +135,14 @@ const ArticleSlider = React.memo(
 
 		const scroller = (index: number) => {
 			if (Platform.OS === 'ios') {
-				if (flatListRef && flatListRef.current) {
+				if (flatListRef.current) {
 					flatListRef.current._component.scrollToIndex({
 						index,
 						animated: true,
 					});
 				}
 			} else {
-				if (viewPagerRef && viewPagerRef.current) {
+				if (viewPagerRef.current) {
 					viewPagerRef.current.setPage(index);
 				}
 			}

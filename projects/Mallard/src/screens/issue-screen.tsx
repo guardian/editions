@@ -96,7 +96,7 @@ const useIsWeatherActuallyShown = () => {
 		// query must contain at least 1 item, even if we don't need it
 		isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
 	);
-	return getValidWeatherData(weatherResult) != null;
+	return getValidWeatherData(weatherResult) !== undefined;
 };
 
 type FrontWithCards = Array<TFront & { cards: FlatCard[] }>;
@@ -130,7 +130,7 @@ const useScrollToFrontBehavior = (
 	// animations because these will happen in the background, after pressing an
 	// item on the Editions list.
 	const scrollTo = (scrollIndex: number) => {
-		if (!(ref && ref.current && ref.current.scrollToOffset)) return;
+		if (!ref.current?.scrollToOffset) return;
 
 		if (scrollIndex < 0) {
 			ref.current.scrollToOffset({ animated: false, offset: 0 });
@@ -147,7 +147,7 @@ const useScrollToFrontBehavior = (
 	// Case (1). We listen to the "nav position" handler and navigate to
 	// whichever front is requested.
 	useNavPositionChange(
-		(position) => scrollTo(findFrontIndex(position && position.frontId)),
+		(position) => scrollTo(findFrontIndex(position?.frontId as any)),
 		[frontWithCards],
 	);
 
@@ -158,8 +158,7 @@ const useScrollToFrontBehavior = (
 	// because we want to run this side-effect only when `frontWithCards`
 	// changes and nothing else.
 	//
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(() => scrollTo(findFrontIndex(initialFrontKey)), [
+	useEffect(() => scrollTo(findFrontIndex(initialFrontKey ?? null)), [
 		frontWithCards,
 	]);
 };
@@ -214,7 +213,7 @@ const IssueFronts = ({
 					if (specs.length > 0) {
 						acc.frontSpecs.push({
 							appearance: front.appearance,
-							frontName: front.displayName || '',
+							frontName: front.displayName ?? '',
 							articleSpecs: specs,
 						});
 					}
@@ -251,15 +250,13 @@ const IssueFronts = ({
 			ListFooterComponent={() => (
 				<>
 					<View style={[styles.illustrationPosition]}>
-						{selectedEdition &&
-							selectedEdition.edition ===
-								BASE_EDITION.edition && (
-								<Image
-									style={styles.illustrationImage}
-									resizeMode={'contain'}
-									source={require('src/assets/images/privacy.png')}
-								/>
-							)}
+						{selectedEdition.edition === BASE_EDITION.edition && (
+							<Image
+								style={styles.illustrationImage}
+								resizeMode={'contain'}
+								source={require('src/assets/images/privacy.png')}
+							/>
+						)}
 					</View>
 					<View style={{ height: container.height / 3 }} />
 				</>
@@ -467,7 +464,7 @@ export const IssueScreen = () => {
 		setNewEditionSeen,
 	} = useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
-	const headerStyle = specialEditionProps && specialEditionProps.headerStyle;
+	const headerStyle = specialEditionProps?.headerStyle;
 
 	return (
 		<Container>
