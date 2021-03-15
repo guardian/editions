@@ -70,7 +70,7 @@ const quoteStyles = ({ colors }: CssProps) => css`
 		color: ${color.text};
 	}
 
-	@media (max-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (max-width: ${px(Breakpoints.TabletVertical)}) {
 		blockquote[data-role='inline'],
 		blockquote[data-role='supporting'] {
 			width: 50%;
@@ -79,7 +79,7 @@ const quoteStyles = ({ colors }: CssProps) => css`
 		}
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		blockquote[data-role='inline'],
 		blockquote[data-role='supporting'] {
 			position: absolute;
@@ -89,7 +89,7 @@ const quoteStyles = ({ colors }: CssProps) => css`
 		}
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		blockquote[data-role='showcase'] {
 			width: 50%;
 			float: left;
@@ -97,13 +97,13 @@ const quoteStyles = ({ colors }: CssProps) => css`
 		}
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+	@media (min-width: ${px(Breakpoints.TabletLandscape)}) {
 		blockquote[data-role='showcase'] {
 			width: 60%;
 			margin-left: ${px(
-				((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
-					-1,
-			)};
+	((Breakpoints.TabletLandscape - metrics.article.maxWidth) / 2) *
+	-1,
+)};
 		}
 	}
 `;
