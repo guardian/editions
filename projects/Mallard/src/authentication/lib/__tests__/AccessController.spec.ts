@@ -1,10 +1,12 @@
-import { Authorizer, AsyncCache } from '../Authorizer';
 import { AccessController } from '../AccessController';
-import { AnyAttempt } from '../Attempt';
-import { AuthResult, ValidResult, InvalidResult } from '../Result';
+import type { AnyAttempt } from '../Attempt';
+import type { AsyncCache } from '../Authorizer';
+import { Authorizer } from '../Authorizer';
+import type { AuthResult } from '../Result';
+import { InvalidResult, ValidResult } from '../Result';
 
 class AsyncStorage<T> {
-	constructor(private data: T | null = null) {}
+	constructor(private data: T | null = null) { }
 	async get() {
 		return this.data;
 	}
@@ -54,7 +56,7 @@ const createSimpleAccessController = ({
 			a: new Authorizer({
 				name: 'a',
 				userDataCache: cache,
-				authCaches: [] as AsyncCache<any>[],
+				authCaches: [] as Array<AsyncCache<any>>,
 				auth: invalidFromLiveCredentials
 					? getInvalidUserData
 					: getValidUserData,
@@ -101,7 +103,7 @@ describe('AccessController', () => {
 				a: new Authorizer({
 					name: 'a',
 					userDataCache: cache,
-					authCaches: [] as AsyncCache<any>[],
+					authCaches: [] as Array<AsyncCache<any>>,
 					auth: async () => {
 						throw new Error();
 					},
@@ -240,7 +242,7 @@ describe('AccessController', () => {
 					a: new Authorizer({
 						name: 'a',
 						userDataCache: cache,
-						authCaches: [] as AsyncCache<any>[],
+						authCaches: [] as Array<AsyncCache<any>>,
 						auth: async ([a]: [string]) => {
 							arg = a;
 							return ValidResult({

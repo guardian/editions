@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	buttonPrimary: {
-		maxWidth: DeviceInfo.isTablet
+		maxWidth: DeviceInfo.isTablet()
 			? 300
 			: Dimensions.get('screen').width * 0.75,
 	},

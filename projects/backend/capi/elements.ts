@@ -1,12 +1,13 @@
-import { IBlockElement, ElementType } from '@guardian/capi-ts'
-import { BlockElement } from '../common'
+import { BlockElement } from '@guardian/content-api-models/v1/blockElement'
+import { ElementType } from '@guardian/content-api-models/v1/elementType'
+import { Atom } from '@guardian/content-atom-model/atom'
+import { BlockElement as EditionsBlockElement } from '../common'
 import { getImage } from './assets'
 import { renderAtomElement } from './atoms'
-import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 
 const parseImageElement = (
-    element: IBlockElement,
-): BlockElement | undefined => {
+    element: BlockElement,
+): EditionsBlockElement | undefined => {
     const image = getImage(element.assets)
     if (element.imageTypeData && image) {
         return {
@@ -22,9 +23,9 @@ const parseImageElement = (
     }
 }
 
-const elementParser = (id: string, atoms: { [key: string]: IAtom[] }) => async (
-    element: IBlockElement,
-): Promise<BlockElement> => {
+const elementParser = (id: string, atoms: { [key: string]: Atom[] }) => async (
+    element: BlockElement,
+): Promise<EditionsBlockElement> => {
     switch (element.type) {
         case ElementType.TEXT:
             if (element.textTypeData && element.textTypeData.html) {

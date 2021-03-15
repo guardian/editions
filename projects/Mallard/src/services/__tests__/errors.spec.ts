@@ -1,15 +1,15 @@
-import { ErrorServiceImpl } from '../errors';
 import gql from 'graphql-tag';
 import Observable from 'zen-observable';
+import type { ErrorServiceImpl } from '../errors';
 
 jest.mock('src/helpers/release-stream', () => ({
 	isInBeta: () => false,
 }));
 jest.mock('@sentry/react-native', () => ({
 	init: jest.fn(),
-	captureException: jest.fn(() => {}),
-	setTag: jest.fn(() => {}),
-	setExtra: jest.fn(() => {}),
+	captureException: jest.fn(() => { }),
+	setTag: jest.fn(() => { }),
+	setExtra: jest.fn(() => { }),
 }));
 
 const QUERY = gql('{ gdprAllowPerformance @client }');

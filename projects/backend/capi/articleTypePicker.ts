@@ -1,16 +1,18 @@
-import { IContent } from '@guardian/capi-ts/dist/Content'
+import { Content } from '@guardian/content-api-models/v1/content'
 import { ArticleType, HeaderType } from '../../Apps/common/src/index'
-import { TagType, IElement, ElementType } from '@guardian/capi-ts'
+import { ElementType } from '@guardian/content-api-models/v1/elementType'
+import { Element } from '@guardian/content-api-models/v1/element'
+import { TagType } from '@guardian/content-api-models/v1/tagType'
 
-const doesTagExist = (article: IContent, tagId: string): boolean => {
+const doesTagExist = (article: Content, tagId: string): boolean => {
     return article.tags.find(tag => tag.id === tagId) != undefined
 }
 
-const doesTypeExist = (article: IContent, tagType: TagType): boolean => {
+const doesTypeExist = (article: Content, tagType: TagType): boolean => {
     return article.tags.find(tag => tag.type === tagType) != undefined
 }
 
-const showCaseMainMedia = (elements: IElement[]): boolean => {
+const showCaseMainMedia = (elements: Element[]): boolean => {
     const mainImage = elements.find(
         e => e.relation === 'main' && e.type === ElementType.IMAGE,
     )
@@ -21,7 +23,7 @@ const showCaseMainMedia = (elements: IElement[]): boolean => {
         : false
 }
 
-const articleTypePicker = (article: IContent): ArticleType => {
+const articleTypePicker = (article: Content): ArticleType => {
     const isTagPresent = (tagId: string): boolean =>
         doesTagExist(article, tagId)
 
@@ -137,7 +139,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
     }
 }
 
-const headerTypePicker = (article: IContent): HeaderType => {
+const headerTypePicker = (article: Content): HeaderType => {
     const isTagPresent = (tagId: string): boolean =>
         doesTagExist(article, tagId)
 

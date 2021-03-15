@@ -41,6 +41,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
         style={
           Object {
             "paddingLeft": 14,
+            "width": 90,
             "zIndex": 2,
           }
         }
@@ -60,7 +61,6 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
           onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "alignItems": "center",
               "backgroundColor": "#90dcff",
               "borderRadius": 24,
               "height": 42,
@@ -73,6 +73,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
           <Text
             style={
               Object {
+                "alignSelf": "center",
                 "color": "#333333",
                 "fontFamily": "GuardianIcons-Regular",
                 "fontSize": 20,
@@ -106,7 +107,14 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
           }
         }
       >
-        <View>
+        <View
+          style={
+            Object {
+              "alignSelf": "flex-start",
+              "paddingLeft": 100,
+            }
+          }
+        >
           <Text
             style={
               Array [
@@ -121,6 +129,7 @@ exports[`Edition Menu Screen Header Edition menu screen Header should render wit
                     "color": "#FFFFFF",
                     "marginTop": -2,
                   },
+                  undefined,
                   undefined,
                   Object {},
                 ],

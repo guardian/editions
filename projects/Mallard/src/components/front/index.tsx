@@ -149,7 +149,6 @@ export const Front = React.memo(
 					showsHorizontalScrollIndicator={false}
 					// These three props are responsible for the majority of
 					// performance improvements
-					initialNumToRender={2}
 					{...flatListOptimisationProps}
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={1}

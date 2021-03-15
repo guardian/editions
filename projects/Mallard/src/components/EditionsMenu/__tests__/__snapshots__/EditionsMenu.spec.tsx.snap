@@ -1,11 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditionsMenu should display a EditionsMenu with correct styling and alternative Regional Buttons 1`] = `
-<RCTScrollView>
+<RCTScrollView
+  style={
+    Object {
+      "paddingHorizontal": 14,
+      "paddingTop": 17,
+    }
+  }
+>
   <View>
-    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
+      ListFooterComponent={[Function]}
       data={
         Array [
           Object {
@@ -64,12 +71,11 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          EditionButton
           <View
             style={
               Object {
-                "backgroundColor": "#121212",
-                "height": 1,
+                "height": 10,
               }
             }
           />
@@ -78,7 +84,18 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          EditionButton
+        </View>
+        <View
+          onLayout={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "height": 10,
+              }
+            }
+          />
         </View>
       </View>
     </RCTScrollView>
@@ -87,11 +104,18 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
 `;
 
 exports[`EditionsMenu should display a EditionsMenu with correct styling default Regional Buttons and a Special Edition Button 1`] = `
-<RCTScrollView>
+<RCTScrollView
+  style={
+    Object {
+      "paddingHorizontal": 14,
+      "paddingTop": 17,
+    }
+  }
+>
   <View>
-    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
+      ListFooterComponent={[Function]}
       data={
         Array [
           Object {
@@ -152,12 +176,11 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          EditionButton
           <View
             style={
               Object {
-                "backgroundColor": "#121212",
-                "height": 1,
+                "height": 10,
               }
             }
           />
@@ -166,12 +189,23 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          EditionButton
+        </View>
+        <View
+          onLayout={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "height": 10,
+              }
+            }
+          />
         </View>
       </View>
     </RCTScrollView>
-    EditionsMenuHeader
     <RCTScrollView
+      ItemSeparatorComponent={[Function]}
       data={
         Array [
           Object {
@@ -244,7 +278,7 @@ Monthly",
           onLayout={[Function]}
           style={null}
         >
-          SpecialEditionButton
+          EditionButton
         </View>
       </View>
     </RCTScrollView>
@@ -253,11 +287,18 @@ Monthly",
 `;
 
 exports[`EditionsMenu should display a default EditionsMenu with correct styling and default Regional Buttons 1`] = `
-<RCTScrollView>
+<RCTScrollView
+  style={
+    Object {
+      "paddingHorizontal": 14,
+      "paddingTop": 17,
+    }
+  }
+>
   <View>
-    EditionsMenuHeader
     <RCTScrollView
       ItemSeparatorComponent={[Function]}
+      ListFooterComponent={[Function]}
       data={
         Array [
           Object {
@@ -318,12 +359,11 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          EditionButton
           <View
             style={
               Object {
-                "backgroundColor": "#121212",
-                "height": 1,
+                "height": 10,
               }
             }
           />
@@ -332,7 +372,18 @@ Saturday by 6 am (AEST)",
           onLayout={[Function]}
           style={null}
         >
-          RegionButton
+          EditionButton
+        </View>
+        <View
+          onLayout={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "height": 10,
+              }
+            }
+          />
         </View>
       </View>
     </RCTScrollView>

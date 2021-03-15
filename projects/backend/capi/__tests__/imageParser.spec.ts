@@ -1,23 +1,24 @@
 import { parseImageElement } from '../elements'
+import { ElementType } from '@guardian/content-api-models/v1/elementType'
+import { ImageElementFields } from '@guardian/content-api-models/v1/imageElementFields'
+import { Asset } from '@guardian/content-api-models/v1/asset'
+import { AssetType } from '@guardian/content-api-models/v1/assetType'
+import { BlockElement } from '@guardian/content-api-models/v1/blockElement'
 import {
-    ElementType,
-    AssetType,
-    IBlockElement,
-    IAsset,
-    IImageElementFields,
-} from '@guardian/capi-ts'
-import { BlockElement, ImageElement } from '../../../Apps/common/src'
+    BlockElement as EditionsBlockElement,
+    ImageElement,
+} from '../../../Apps/common/src'
 
-const createImageAssetLike: IAsset = {
+const createImageAssetLike: Asset = {
     type: AssetType.IMAGE,
     mimeType: 'image/jpeg',
     file: 'https://test/image/asset.comg',
 }
 
-const createImageElementFields: IImageElementFields = {
+const createImageElementFields: ImageElementFields = {
     caption: `£price <a href"http://gallerylink.com"> guardian.com</a>"`,
 }
-const createImageBlockElementLike: IBlockElement = {
+const createImageBlockElementLike: BlockElement = {
     type: ElementType.IMAGE,
     assets: [createImageAssetLike],
     imageTypeData: createImageElementFields,
@@ -25,7 +26,7 @@ const createImageBlockElementLike: IBlockElement = {
 
 describe('imageParser', () => {
     it('the parsed image element contains a href link', () => {
-        const parsed: BlockElement | undefined = parseImageElement(
+        const parsed: EditionsBlockElement | undefined = parseImageElement(
             createImageBlockElementLike,
         )
         expect((parsed as ImageElement).caption).toContain(

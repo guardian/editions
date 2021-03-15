@@ -24,7 +24,9 @@ import {
 	pushRegisteredTokens,
 	showAllEditionsCache,
 } from 'src/helpers/storage';
+import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
+import { useIsAppsRendering } from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info';
 import { useToast } from 'src/hooks/use-toast';
@@ -82,6 +84,7 @@ const DevZone = () => {
 	const [imageSize, setImageSize] = useState('fetching...');
 	const [pushTokens, setPushTokens] = useState('fetching...');
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
+	const { isAppsRendering, setIsAppsRendering } = useIsAppsRendering();
 
 	// initialise local showAllEditions property
 	useEffect(() => {
@@ -221,6 +224,21 @@ const DevZone = () => {
 			</ButtonList>
 			<List
 				data={[
+					{
+						key: 'isAppsRendering',
+						title: Copy.settings.isAppsRendering,
+						proxy: (
+							<Switch
+								accessible={true}
+								accessibilityLabel={
+									Copy.settings.isAppsRendering
+								}
+								accessibilityRole="switch"
+								value={isAppsRendering}
+								onValueChange={setIsAppsRendering}
+							/>
+						),
+					},
 					{
 						key: 'Endpoints',
 						title: 'API Endpoint',

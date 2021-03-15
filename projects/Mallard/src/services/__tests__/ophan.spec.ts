@@ -1,13 +1,13 @@
+import { NativeModules } from 'react-native';
 import {
-	setUserId,
+	Action,
+	ComponentType,
+	ScreenTracking,
 	sendAppScreenEvent,
 	sendComponentEvent,
 	sendPageViewEvent,
-	ComponentType,
-	Action,
-	ScreenTracking,
+	setUserId,
 } from '../ophan';
-import { NativeModules } from 'react-native';
 
 jest.mock('react-native/Libraries/BatchedBridge/NativeModules', () => ({
 	Ophan: {

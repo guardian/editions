@@ -16,11 +16,14 @@ export const getEditionDisplayName = async (editionId: EditionId) => {
 
     const editionTitle =
         getTitle(maybeEditionsList.regionalEditions, editionId) ||
-        getTitle(maybeEditionsList.specialEditions, editionId)
+        getTitle(maybeEditionsList.specialEditions, editionId) ||
+        getTitle(maybeEditionsList.trainingEditions, editionId)
 
     if (!editionTitle) {
         throw new Error(
-            `${editionId} missing in editionToName mapping. Editions List: ${maybeEditionsList}`,
+            `${editionId} missing in editionToName mapping. Editions List: ${JSON.stringify(
+                maybeEditionsList,
+            )}`,
         )
     }
 

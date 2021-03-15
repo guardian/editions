@@ -1,5 +1,5 @@
-import { getUserName, detectAuthType } from '../IdentityAuthorizer';
 import { locale } from 'src/helpers/locale';
+import { detectAuthType, getUserName } from '../IdentityAuthorizer';
 
 describe('IdentityAuthorizer', () => {
 	describe('getUserName', () => {

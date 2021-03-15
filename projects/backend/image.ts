@@ -1,13 +1,13 @@
 import { createHash } from 'crypto'
 import { ImageUse, imageUseSizes } from '../Apps/common/src'
 import { Image, ImageSize, ImageRole, imageRoles } from './common'
-import { IAssetFields } from '@guardian/capi-ts'
+import { AssetFields } from '@guardian/content-api-models/v1/assetFields'
 
 const salt = process.env.IMAGE_SALT
 
 export const getImageFromURL = (
     url?: string,
-    typeData?: IAssetFields,
+    typeData?: AssetFields,
 ): Image | undefined => {
     if (url === undefined) return undefined
     try {

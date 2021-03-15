@@ -25,8 +25,8 @@ const breakoutCaption = (
 	.image[data-role='${role}'] div {
 		position: absolute;
 		right: ${px(
-			(metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
-		)};
+	(metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
+)};
 		top: -0.5em;
 		display: block;
 		width: ${px(metrics.article.rightRail)};
@@ -48,149 +48,139 @@ const breakoutCaption = (
 	}
 `;
 
-const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
-	const galleryStyles = css`
-		/*INLINE*/
-		@media (min-width: ${px(Breakpoints.tabletVertical)}) {
-			${breakoutCaption('inline', theme)}
-		}
-	`;
-	const defaultStyles = css`
-		.image {
-			position: relative;
-			clear: right;
-			z-index: 10000;
-		}
-		.image img {
-			display: block;
-			width: 100%;
-			height: auto;
-		}
+const imageStyles = ({ colors, theme }: CssProps) => css`
+	.image {
+		position: relative;
+		clear: right;
+		z-index: 10000;
+	}
+	.image img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	.image figcaption {
+		font-family: 'GuardianTextSans-Regular';
+		color: ${themeColors(theme).dimText};
+		${getFontCss('sans', 0.5)}
+		position: relative;
+		margin-top: 0.5em;
+	}
+	.image figcaption svg {
+		width: 1.2em;
+		position: relative;
+	}
+	.image figcaption svg path {
+		fill: ${theme === 'dark' ? colors.bright : colors.main};
+	}
+
+	/* Tablet captions */
+	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
 		.image figcaption {
-			font-family: 'GuardianTextSans-Regular';
-			color: ${themeColors(theme).dimText};
-			${getFontCss('sans', 0.5)}
-			position: relative;
-			margin-top: 0.5em;
+			${getFontCss('sans', 0.9)}
 		}
-		.image figcaption svg {
-			width: 1.2em;
-			position: relative;
+	}
+
+	/*THUMBS*/
+	@media (max-width: ${px(Breakpoints.tabletVertical)}) {
+		.image[data-role='thumbnail'] {
+			width: 40%;
+			float: left;
+			margin-right: ${px(metrics.article.sides)};
 		}
-		.image figcaption svg path {
-			fill: ${theme === 'dark' ? colors.bright : colors.main};
+	}
+	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+		.image[data-role='thumbnail'] {
+			width: ${px(metrics.article.rightRail)};
+			position: absolute;
+			right: 0;
+		}
+	}
+
+	/*SUPPORTING*/
+	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+		.image[data-role='supporting'] {
+			float: right;
+			width: 500px;
+			margin-left: ${px(metrics.article.sides)};
+			margin-right: ${px(
+	(metrics.article.rightRail + metrics.article.sides) * -1,
+)};
 		}
 
-		/* Tablet captions */
-		@media (min-width: ${px(Breakpoints.tabletVertical)}) {
-			.image figcaption {
-				${getFontCss('sans', 0.9)}
-			}
+		.image[data-role='supporting'] figcaption {
+			width: ${px(metrics.article.rightRail - metrics.article.sides)};
+			position: absolute;
+			right: 0;
+		}
+	}
+
+	/*SHOWCASE*/
+	@media (min-width: ${px(Breakpoints.tabletVertical)}) and (max-width: ${px(
+	Breakpoints.tabletLandscape,
+)}) {
+		.image[data-role='showcase'] {
+			margin-right: ${px(
+	(metrics.article.rightRail + metrics.article.sides) * -1,
+)};
 		}
 
-		/*THUMBS*/
-		@media (max-width: ${px(Breakpoints.tabletVertical)}) {
-			.image[data-role='thumbnail'] {
-				width: 40%;
-				float: left;
-				margin-right: ${px(metrics.article.sides)};
-			}
+		.image[data-role='showcase'] figcaption {
+			width: ${px(metrics.article.rightRail)};
+			float: right;
 		}
-		@media (min-width: ${px(Breakpoints.tabletVertical)}) {
-			.image[data-role='thumbnail'] {
-				width: ${px(metrics.article.rightRail)};
-				position: absolute;
-				right: 0;
-			}
+	}
+	@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+		.image[data-role='showcase'] img {
+			margin-left: ${px(
+	((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+	-1,
+)};
+			width: calc(
+				100% +
+					${px(
+	(Breakpoints.tabletLandscape -
+		metrics.article.maxWidth) /
+	2,
+)}
+			);
 		}
+		${breakoutCaption('showcase', theme)}
+	}
 
-		/*SUPPORTING*/
-		@media (min-width: ${px(Breakpoints.tabletVertical)}) {
-			.image[data-role='supporting'] {
-				float: right;
-				width: 500px;
-				margin-left: ${px(metrics.article.sides)};
-				margin-right: ${px(
-					(metrics.article.rightRail + metrics.article.sides) * -1,
-				)};
-			}
+	/*IMMERSIVE*/
+	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+		.image[data-role='immersive'] {
+			margin-right: ${px(
+	(metrics.article.rightRail + metrics.article.sides) * -1,
+)};
+		}
+		.image[data-role='immersive'] figcaption {
+			width: ${px(metrics.article.rightRail)};
+			float: right;
+		}
+	}
+	@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+		.image[data-role='immersive'] img {
+			width: calc(
+				100% +
+					${px(
+	Breakpoints.tabletLandscape - metrics.article.maxWidth,
+)}
+			);
+			display: block;
+			background: 'red';
+			margin-left: ${px(
+	((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+	-1,
+)};
+		}
+	}
 
-			.image[data-role='supporting'] figcaption {
-				width: ${px(metrics.article.rightRail - metrics.article.sides)};
-				position: absolute;
-				right: 0;
-			}
-		}
-
-		/*SHOWCASE*/
-		@media (min-width: ${px(
-				Breakpoints.tabletVertical,
-			)}) and (max-width: ${px(Breakpoints.tabletLandscape)}) {
-			.image[data-role='showcase'] {
-				margin-right: ${px(
-					(metrics.article.rightRail + metrics.article.sides) * -1,
-				)};
-			}
-
-			.image[data-role='showcase'] figcaption {
-				width: ${px(metrics.article.rightRail)};
-				float: right;
-			}
-		}
-		@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
-			.image[data-role='showcase'] img {
-				margin-left: ${px(
-					((Breakpoints.tabletLandscape - metrics.article.maxWidth) /
-						2) *
-						-1,
-				)};
-				width: calc(
-					100% +
-						${px(
-							(Breakpoints.tabletLandscape -
-								metrics.article.maxWidth) /
-								2,
-						)}
-				);
-			}
-			${breakoutCaption('showcase', theme)}
-		}
-
-		/*IMMERSIVE*/
-		@media (min-width: ${px(Breakpoints.tabletVertical)}) {
-			.image[data-role='immersive'] {
-				margin-right: ${px(
-					(metrics.article.rightRail + metrics.article.sides) * -1,
-				)};
-			}
-			.image[data-role='immersive'] figcaption {
-				width: ${px(metrics.article.rightRail)};
-				float: right;
-			}
-		}
-		@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
-			.image[data-role='immersive'] img {
-				width: calc(
-					100% +
-						${px(
-							Breakpoints.tabletLandscape -
-								metrics.article.maxWidth,
-						)}
-				);
-				display: block;
-				background: 'red';
-				margin-left: ${px(
-					((Breakpoints.tabletLandscape - metrics.article.maxWidth) /
-						2) *
-						-1,
-				)};
-			}
-		}
-	`;
-	return contentType !== ArticleType.Gallery
-		? defaultStyles + galleryStyles
-		: defaultStyles;
-};
+	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+		${breakoutCaption('inline', theme)}
+	}
+`;
 
 const ImageBase = ({
 	path,
@@ -202,6 +192,7 @@ const ImageBase = ({
 	role,
 	remotePath,
 	displayCaptionAndCredit,
+	articleType,
 }: {
 	path: string;
 	index?: number;
@@ -212,11 +203,13 @@ const ImageBase = ({
 	role?: ImageElement['role'];
 	remotePath?: string;
 	displayCaptionAndCredit?: boolean;
+	articleType?: string;
 }) => {
 	const isTablet = useMediaQuery(
 		(width) => width >= Breakpoints.tabletVertical,
 	);
 	const isInlineTablet = !role && isTablet;
+	const showViewMore = isInlineTablet && articleType === ArticleType.Gallery;
 	const figcaption =
 		displayCaptionAndCredit &&
 		renderCaption({ caption, credit, displayCredit });
@@ -231,18 +224,18 @@ const ImageBase = ({
 			/>
 
 			${figcaption &&
-			html`
+		html`
 				<div>
 					<figcaption>
 						${Arrow(
-							isInlineTablet
-								? { direction: Direction.left }
-								: { direction: Direction.top },
-						)}
+			isInlineTablet
+				? { direction: Direction.left }
+				: { direction: Direction.top },
+		)}
 						${figcaption}
 					</figcaption>
-					${isInlineTablet &&
-					html`
+					${showViewMore &&
+			html`
 						<span
 							onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
 						>
@@ -261,12 +254,14 @@ const Image = ({
 	index,
 	remotePath,
 	displayCaptionAndCredit,
+	articleType,
 }: {
 	imageElement: ImageElement;
 	path: string | undefined;
 	index?: number | undefined;
 	remotePath?: string;
 	displayCaptionAndCredit?: boolean;
+	articleType?: string;
 }) => {
 	if (path) {
 		return ImageBase({
@@ -274,6 +269,7 @@ const Image = ({
 			index,
 			remotePath,
 			displayCaptionAndCredit,
+			articleType,
 			...imageElement,
 		});
 	}

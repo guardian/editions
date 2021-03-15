@@ -24,62 +24,62 @@ const makeFontsCss = () => css`
 	/* text */
 	${generateAssetsFontCss({ fontFamily: families.text.regular })}
 	${generateAssetsFontCss({
-		fontFamily: families.text.bold,
-		variant: {
-			showsAsFamily: families.text.regular,
-			weight: 700,
-			style: 'normal',
-		},
-	})}
+	fontFamily: families.text.bold,
+	variant: {
+		showsAsFamily: families.text.regular,
+		weight: 700,
+		style: 'normal',
+	},
+})}
     ${generateAssetsFontCss({
-		fontFamily: families.text.regularItalic,
-		variant: {
-			showsAsFamily: families.text.regular,
-			weight: 400,
-			style: 'italic',
-		},
-	})}
+	fontFamily: families.text.regularItalic,
+	variant: {
+		showsAsFamily: families.text.regular,
+		weight: 400,
+		style: 'italic',
+	},
+})}
 
     /*headline*/
     ${generateAssetsFontCss({ fontFamily: families.headline.regular })}
     ${generateAssetsFontCss({
-		fontFamily: families.headline.light,
-		variant: {
-			showsAsFamily: families.headline.regular,
-			weight: 200,
-			style: 'normal',
-		},
-	})}
+	fontFamily: families.headline.light,
+	variant: {
+		showsAsFamily: families.headline.regular,
+		weight: 200,
+		style: 'normal',
+	},
+})}
     ${generateAssetsFontCss({
-		fontFamily: families.headline.bold,
-		variant: {
-			showsAsFamily: families.headline.regular,
-			weight: 700,
-			style: 'normal',
-		},
-	})}
+	fontFamily: families.headline.bold,
+	variant: {
+		showsAsFamily: families.headline.regular,
+		weight: 700,
+		style: 'normal',
+	},
+})}
     ${generateAssetsFontCss({
-		fontFamily: families.headline.medium,
-		variant: {
-			showsAsFamily: families.headline.regular,
-			weight: 500,
-			style: 'normal',
-		},
-	})}
+	fontFamily: families.headline.medium,
+	variant: {
+		showsAsFamily: families.headline.regular,
+		weight: 500,
+		style: 'normal',
+	},
+})}
 
     /* other fonts */
     ${generateAssetsFontCss({ fontFamily: families.sans.regular })}
     ${generateAssetsFontCss({ fontFamily: families.titlepiece.regular })}
     ${generateAssetsFontCss({
-		fontFamily: families.icon.regular,
-		extension: 'otf',
-	})}
+	fontFamily: families.icon.regular,
+	extension: 'otf',
+})}
 `;
 
 const dropCapFontSizeMultiplier = Platform.OS === 'ios' ? 5.25 : 5.75;
 const dropCapLineHeightMultiplier = Platform.OS === 'ios' ? 4.1 : 4.6;
 
-const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
+const makeCss = ({ colors, theme }: CssProps) => css`
 	${makeFontsCss()}
 
 	:root {
@@ -103,11 +103,11 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
 		color: ${colors.main};
 		float: left;
 		font-size: ${px(
-			getScaledFont('text', 1).lineHeight * dropCapFontSizeMultiplier,
-		)};
+	getScaledFont('text', 1).lineHeight * dropCapFontSizeMultiplier,
+)};
 		line-height: ${px(
-			getScaledFont('text', 1).lineHeight * dropCapLineHeightMultiplier,
-		)};
+	getScaledFont('text', 1).lineHeight * dropCapLineHeightMultiplier,
+)};
 		display: inline-block;
 		font-variant: normal;
 		font-weight: normal;
@@ -136,8 +136,8 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
 		main,
 		.wrapper {
 			margin-right: ${px(
-				metrics.article.rightRail + metrics.article.sides,
-			)};
+	metrics.article.rightRail + metrics.article.sides,
+)};
 		}
 	}
 	.app p,
@@ -147,8 +147,8 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
 	.app a {
 		color: ${theme == 'dark' ? colors.bright : colors.main};
 		text-decoration-color: ${theme == 'dark'
-			? colors.bright
-			: colors.pastel};
+		? colors.bright
+		: colors.pastel};
 	}
 	* {
 		margin: 0;
@@ -214,14 +214,14 @@ const makeCss = ({ colors, theme }: CssProps, contentType: ArticleType) => css`
 	${listStyles(colors)}
 
 	${quoteStyles({
-		colors,
-		theme,
-	})}
+			colors,
+			theme,
+		})}
     ${headerStyles({
-		colors,
-		theme,
-	})}
-    ${imageStyles({ colors, theme }, contentType)}
+			colors,
+			theme,
+		})}
+    ${imageStyles({ colors, theme })}
     ${lineStyles({ colors, theme })}
     ${starRatingStyles({ colors, theme })}
     ${sportScoreStyles({ colors, theme })}

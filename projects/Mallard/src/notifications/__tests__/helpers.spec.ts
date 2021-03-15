@@ -1,6 +1,6 @@
-import { shouldReRegister } from '../helpers';
 import moment from 'moment';
-import { PushToken } from '../notification-service';
+import { shouldReRegister } from '../helpers';
+import type { PushToken } from '../notification-service';
 
 const _today = moment();
 const today = () => _today.clone();

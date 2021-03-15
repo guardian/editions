@@ -10,7 +10,6 @@ import React, {
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import type {
 	NavigationInjectedProps,
-	NavigationParams,
 	NavigationRoute,
 	NavigationScreenProp,
 } from 'react-navigation';
@@ -57,6 +56,7 @@ const styles = StyleSheet.create({
 		padding: metrics.horizontal,
 		paddingTop: metrics.vertical * 2,
 		paddingBottom: metrics.vertical * 8,
+		paddingLeft: 90,
 	},
 	issueListFooterGrid: {
 		marginBottom: metrics.vertical,
@@ -436,12 +436,17 @@ export const HomeScreen = () => {
 	const { selectedEdition } = useEditions();
 
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
+	const issueHeaderData =
+		selectedEdition.editionType === 'Special'
+			? { title: '', subTitle: '' }
+			: { title: selectedEdition.title, subTitle: 'Recent Editions' };
+
 	return (
 		<WithAppAppearance value={'tertiary'}>
 			<ScreenFiller direction="end">
 				<IssuePickerHeader
-					title={selectedEdition.header.title}
-					subTitle={selectedEdition.header.subTitle}
+					title={issueHeaderData.title}
+					subTitle={issueHeaderData.subTitle}
 					headerStyles={
 						specialEditionProps && specialEditionProps.headerStyle
 					}

@@ -1,9 +1,9 @@
-import { authWithDeepRedirect } from '../deep-link-auth';
 import { EventEmitter } from 'events';
-import {
-	RedirectResult,
+import type {
 	BrowserResult,
+	RedirectResult,
 } from 'react-native-inappbrowser-reborn';
+import { authWithDeepRedirect } from '../deep-link-auth';
 
 const createListener = (): EventEmitter & {
 	addEventListener: EventEmitter['addListener'];
@@ -29,7 +29,7 @@ const createInAppBrowser = ({
 			if (result == null) throw new Error('missing result');
 			return res(result);
 		}),
-	closeAuth: jest.fn(() => {}),
+	closeAuth: jest.fn(() => { }),
 	isAvailable: () => Promise.resolve(available),
 });
 

@@ -3,8 +3,9 @@ import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { Highlight } from 'src/components/highlight';
 import { GridRowSplit } from 'src/components/issue/issue-title';
-import { useInsets } from 'src/hooks/use-screen';
+import { useInsets, useMediaQuery } from 'src/hooks/use-screen';
 import { WithAppAppearance } from 'src/theme/appearance';
+import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
@@ -33,13 +34,10 @@ const styles = StyleSheet.create({
 	},
 	headerSplit: {
 		flexDirection: 'row',
-		alignItems: 'flex-start',
-		flexGrow: 1,
+		flex: 1,
 	},
 	headerTitle: {
-		flexGrow: 1,
-		flexShrink: 0,
-		paddingHorizontal: metrics.horizontal,
+		marginRight: metrics.horizontal,
 	},
 
 	centerWrapper: {
@@ -55,6 +53,7 @@ const styles = StyleSheet.create({
 		zIndex: 1,
 	},
 	leftAction: {
+		width: 90,
 		zIndex: 2,
 		paddingLeft: metrics.horizontal,
 	},
@@ -74,6 +73,7 @@ type HeaderProps = {
 	action?: ReactNode;
 	leftAction?: ReactNode;
 	layout?: 'issue' | 'center';
+	alignment?: 'drawer' | null;
 	children: ReactNode;
 } & TouchableHeaderProps;
 
@@ -83,11 +83,18 @@ const Header = ({
 	headerStyles,
 	leftAction,
 	layout = 'issue',
+	alignment = null,
 	children,
 	...otherProps
 }: HeaderProps) => {
 	const { top: marginTop } = useInsets();
 	const bg = theme === 'light' ? styles.backgroundWhite : styles.background;
+	const isTablet = useMediaQuery(
+		(width) => width >= Breakpoints.tabletVertical,
+	);
+	const headerSplitFlex =
+		isTablet && alignment !== 'drawer' ? 'flex-end' : 'space-between';
+
 	return (
 		<WithAppAppearance value={theme === 'light' ? 'default' : 'primary'}>
 			{theme === 'light' && (
@@ -104,13 +111,16 @@ const Header = ({
 				{layout === 'issue' ? (
 					<GridRowSplit
 						proxy={
-							<View style={{ paddingLeft: metrics.horizontal }}>
-								{leftAction}
-							</View>
+							<View style={styles.leftAction}>{leftAction}</View>
 						}
 						style={[{ marginTop }, styles.height]}
 					>
-						<View style={[styles.headerSplit]}>
+						<View
+							style={[
+								styles.headerSplit,
+								{ justifyContent: headerSplitFlex },
+							]}
+						>
 							<View style={styles.headerTitle}>
 								{'onPress' in otherProps ? (
 									<Highlight

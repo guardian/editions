@@ -80,6 +80,8 @@ export interface DevSettings {
 	issuesPath: string;
 	senderId: string;
 	logging: string;
+	appsRenderingService: string;
+	isAppsRendering: boolean;
 }
 
 interface UserSettings {
@@ -90,10 +92,10 @@ interface UserSettings {
 
 export interface Settings
 	extends GdprSwitchSettings,
-		GdprDefaultSettings,
-		GdprSettings,
-		UserSettings,
-		DevSettings {}
+	GdprDefaultSettings,
+	GdprSettings,
+	UserSettings,
+	DevSettings { }
 
 /*
 we can only store strings to memory

@@ -8,19 +8,8 @@ import {
 } from '../../../../../Apps/common/src/__tests__/fixtures/editions-fixtures';
 import { EditionsMenu } from '../EditionsMenu';
 
-jest.mock('src/components/EditionsMenu/RegionButton/RegionButton', () => ({
-	RegionButton: () => 'RegionButton',
-}));
-
-jest.mock(
-	'src/components/EditionsMenu/SpecialEditionButton/SpecialEditionButton',
-	() => ({
-		SpecialEditionButton: () => 'SpecialEditionButton',
-	}),
-);
-
-jest.mock('src/components/EditionsMenu/Header/Header', () => ({
-	EditionsMenuHeader: () => 'EditionsMenuHeader',
+jest.mock('src/components/EditionsMenu/EditionButton/EditionButton', () => ({
+	EditionButton: () => 'EditionButton',
 }));
 
 const props = {

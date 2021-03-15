@@ -67,6 +67,7 @@ const cleanupBullets = (html: string) => {
 const renderArticleContent = (
 	elements: BlockElement[],
 	{ showMedia, publishedId, getImagePath, displayHint }: ArticleContentProps,
+	articleType: string,
 ) => {
 	const imagePaths = getLightboxImages(elements).map((i) => i.src.path);
 	return elements
@@ -90,11 +91,12 @@ const renderArticleContent = (
 					const displayCaptionAndCredit = displayHint != 'photoEssay';
 					return publishedId
 						? Image({
-								imageElement: el,
-								path,
-								index,
-								displayCaptionAndCredit,
-						  })
+							imageElement: el,
+							path,
+							index,
+							displayCaptionAndCredit,
+							articleType,
+						})
 						: '';
 				}
 				case 'pullquote':
@@ -167,27 +169,31 @@ export const renderArticle = (
 				getImagePath,
 				pillar,
 			});
-			content = renderArticleContent(elements, {
-				showMedia,
-				publishedId,
-				imageSize,
-				getImagePath,
-			});
+			content = renderArticleContent(
+				elements,
+				{
+					showMedia,
+					publishedId,
+					imageSize,
+					getImagePath,
+				},
+				article.type,
+			);
 			break;
 		default:
 			header =
 				type === ArticleType.Showcase
 					? HeaderShowcase({
-							...article,
-							type,
-							headerType,
-							publishedId,
-							showMedia,
-							pillar,
-							getImagePath,
-					  })
+						...article,
+						type,
+						headerType,
+						publishedId,
+						showMedia,
+						pillar,
+						getImagePath,
+					})
 					: type === ArticleType.Interview
-					? HeaderInterview({
+						? HeaderInterview({
 							...article,
 							type,
 							headerType,
@@ -195,8 +201,8 @@ export const renderArticle = (
 							showMedia,
 							pillar,
 							getImagePath,
-					  })
-					: Header({
+						})
+						: Header({
 							...article,
 							type,
 							headerType,
@@ -204,15 +210,19 @@ export const renderArticle = (
 							showMedia,
 							pillar,
 							getImagePath,
-					  });
+						});
 			const displayHint = article.displayHint;
-			content = renderArticleContent(elements, {
-				showMedia,
-				publishedId,
-				imageSize,
-				getImagePath,
-				displayHint,
-			});
+			content = renderArticleContent(
+				elements,
+				{
+					showMedia,
+					publishedId,
+					imageSize,
+					getImagePath,
+					displayHint,
+				},
+				article.type,
+			);
 			break;
 	}
 
@@ -220,13 +230,10 @@ export const renderArticle = (
 		? ArticleTheme.Dark
 		: ArticleTheme.Default;
 
-	const styles = makeCss(
-		{
-			colors: getPillarColors(pillar),
-			theme,
-		},
-		type,
-	);
+	const styles = makeCss({
+		colors: getPillarColors(pillar),
+		theme,
+	});
 	const body = html`
 		${showWebHeader && article && header}
 		<div class="content-wrap">

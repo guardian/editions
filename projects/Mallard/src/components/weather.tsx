@@ -4,7 +4,6 @@ import Moment from 'moment';
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { NavigationInjectedProps } from 'react-navigation';
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary';
 import type { QueryResult } from 'src/hooks/apollo';
 import { useQuery } from 'src/hooks/apollo';

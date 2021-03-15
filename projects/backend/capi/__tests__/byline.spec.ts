@@ -1,5 +1,7 @@
 import { getBylineImages } from '../byline'
-import { TagType, IContent, ContentType } from '@guardian/capi-ts'
+import { TagType } from '@guardian/content-api-models/v1/tagType'
+import { Content } from '@guardian/content-api-models/v1/content'
+import { ContentType } from '@guardian/content-api-models/v1/contentType'
 interface TagSpec {
     id: string
     type: TagType
@@ -25,7 +27,7 @@ const createTag = ({
     bylineLargeImageUrl,
 })
 
-const createArticleLike = (tagSpecs: TagSpec[], byline: string): IContent => ({
+const createArticleLike = (tagSpecs: TagSpec[], byline: string): Content => ({
     id: 'id',
     type: ContentType.ARTICLE,
     fields: {

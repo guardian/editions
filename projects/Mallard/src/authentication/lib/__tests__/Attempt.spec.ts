@@ -1,9 +1,5 @@
-import {
-	TErrorAttempt,
-	TInvalidAttempt,
-	isValid,
-	TValidAttempt,
-} from '../Attempt';
+import type { TErrorAttempt, TInvalidAttempt, TValidAttempt } from '../Attempt';
+import { isValid } from '../Attempt';
 
 describe('Attempt', () => {
 	describe('isValid', () => {

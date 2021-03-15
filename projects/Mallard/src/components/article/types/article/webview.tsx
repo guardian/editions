@@ -14,9 +14,13 @@ import type {
 	IssueOrigin,
 	PictureArticle,
 } from 'src/common';
+import { defaultSettings } from 'src/helpers/settings/defaults';
 import { useQuery } from 'src/hooks/apollo';
 import { useArticle } from 'src/hooks/use-article';
-import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
+import {
+	useIsAppsRendering,
+	useLargeDeviceMemory,
+} from 'src/hooks/use-config-provider';
 import type { PathToArticle } from 'src/paths';
 import { APIPaths, FSPaths } from 'src/paths';
 import { renderArticle } from '../../html/article';
@@ -56,6 +60,7 @@ const WebviewWithArticle = ({
 	const [isConnected] = useState(
 		data != null ? data.netInfo.isConnected : false,
 	);
+	const { isAppsRendering } = useIsAppsRendering();
 
 	// FIXME: pass this as article data instead so it's never out-of-sync?
 	const [, { pillar }] = useArticle();
@@ -104,17 +109,27 @@ const WebviewWithArticle = ({
 		getImagePath,
 	});
 
+	const clientRenderingSource = {
+		html,
+		baseUrl:
+			'' /* required as per https://stackoverflow.com/a/51931187/609907 */,
+	};
+
+	const appsRenderingSource = {
+		uri: `${defaultSettings.appsRenderingService}${article.key}?editions`,
+	};
+
+	const source = isAppsRendering
+		? appsRenderingSource
+		: clientRenderingSource;
+
 	return (
 		<WebView
 			{...webViewProps}
 			bounces={largeDeviceMemory ? true : false}
 			originWhitelist={['*']}
 			scrollEnabled={true}
-			source={{
-				html,
-				baseUrl:
-					'' /* required as per https://stackoverflow.com/a/51931187/609907 */,
-			}}
+			source={source}
 			ref={_ref}
 			onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
 			allowFileAccess={true}

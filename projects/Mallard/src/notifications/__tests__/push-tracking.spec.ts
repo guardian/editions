@@ -1,6 +1,6 @@
+import { NetInfoStateType } from '@react-native-community/netinfo';
 import MockDate from 'mockdate';
 import { findLastXDaysPushTracking } from '../push-tracking';
-import { NetInfoStateType } from '@react-native-community/netinfo';
 
 const fixtures = [
 	{

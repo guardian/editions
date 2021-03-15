@@ -1,9 +1,10 @@
-import { IContent, TagType } from '@guardian/capi-ts'
+import { Content } from '@guardian/content-api-models/v1/content'
+import { TagType } from '@guardian/content-api-models/v1/tagType'
 import { getImageFromURL } from '../image'
 import { Image } from '../common'
 
 export const getBylineImages = (
-    article: IContent,
+    article: Content,
 ): { cutout?: Image } | undefined => {
     const byline = article.fields && article.fields.byline
     if (byline == null) return undefined

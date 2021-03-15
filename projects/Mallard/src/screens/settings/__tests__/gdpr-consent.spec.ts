@@ -1,10 +1,10 @@
-import { setConsent, resetAll } from '../gdpr-consent-screen';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
+	gdprAllowFunctionalityKey,
 	gdprAllowPerformanceKey,
 	SETTINGS_KEY_PREFIX,
-	gdprAllowFunctionalityKey,
 } from 'src/helpers/settings';
+import { resetAll, setConsent } from '../gdpr-consent-screen';
 
 const getperf = async () =>
 	await AsyncStorage.getItem(SETTINGS_KEY_PREFIX + gdprAllowPerformanceKey);

@@ -10,7 +10,6 @@ import {
 	View,
 } from 'react-native';
 import type { AnimatedValue } from 'react-navigation';
-import { NavigationEvents } from 'react-navigation';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
 import { navigateToArticle } from 'src/navigation/helpers/base';

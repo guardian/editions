@@ -26,6 +26,7 @@ import {
 	ANDROID_BETA_EMAIL,
 	DIAGNOSTICS_REQUEST,
 	IOS_BETA_EMAIL,
+	USER_EMAIL_BODY_INTRO,
 } from './words';
 
 const getGDPREntries = () =>
@@ -120,8 +121,8 @@ Device Type: ${deviceId}
 Device Id: ${uniqueId}
 Network availability: ${netInfo.type}
 Privacy settings: ${gdprEntries
-		.map(([key, value]) => `${key}:${value}`)
-		.join(' ')}
+			.map(([key, value]) => `${key}:${value}`)
+			.join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
 Total Disk Space (Mb): ${bytesToMb(totalDiskCapacity)}
 Available Disk Spce (Mb): ${bytesToMb(freeDiskStorage)}
@@ -130,9 +131,8 @@ Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
 -User / Supporter Info-
 Signed In: ${isValid(authAttempt)}
 Digital Pack subscription: ${idData && canViewEdition(idData)}
-Apple IAP Transaction Details: ${
-		receiptData && `\n${JSON.stringify(receiptData, null, 2)}`
-	}
+Apple IAP Transaction Details: ${receiptData && `\n${JSON.stringify(receiptData, null, 2)}`
+		}
 Subscriber ID: ${casCode}
 
 -Registered Push Tokens-
@@ -156,13 +156,11 @@ const openSupportMailto = async (
 	const version = DeviceInfo.getVersion();
 	const buildNumber = DeviceInfo.getBuildNumber();
 
-	const subject = `${text} - ${Platform.OS} Editions ${
-		isInBeta() ? 'Beta' : ''
-	} App, ${version} ${buildNumber}`;
+	const subject = `${text} - ${Platform.OS} Editions ${isInBeta() ? 'Beta' : ''
+		} App, ${version} ${buildNumber}`;
 
 	return Linking.openURL(
-		`mailto:${email}?subject=${encodeURIComponent(subject)}${
-			body ? `&body=${encodeURIComponent(body)}` : ''
+		`mailto:${email}?subject=${encodeURIComponent(subject)}${body ? `&body=${encodeURIComponent(body)}` : ''
 		}`,
 	);
 };
@@ -174,22 +172,27 @@ const createMailtoHandler = (
 	authAttempt: AnyAttempt<string>,
 	dialogTitle = '',
 ) => () =>
-	runActionSheet(dialogTitle, DIAGNOSTICS_REQUEST, [
-		{
-			text: 'Include',
-			onPress: async () => {
-				const diagnostics = await getDiagnosticInfo(
-					client,
-					authAttempt,
-				);
-				openSupportMailto(text, releaseURL, diagnostics);
+		runActionSheet(dialogTitle, DIAGNOSTICS_REQUEST, [
+			{
+				text: 'Include',
+				onPress: async () => {
+					const diagnostics = await getDiagnosticInfo(
+						client,
+						authAttempt,
+					);
+					openSupportMailto(
+						text,
+						releaseURL,
+						` ${USER_EMAIL_BODY_INTRO} \n \n${diagnostics}`,
+					);
+				},
 			},
-		},
-		{
-			text: `Don't include`,
-			onPress: () => openSupportMailto(text, releaseURL),
-		},
-	]);
+			{
+				text: `Don't include`,
+				onPress: () =>
+					openSupportMailto(text, releaseURL, `${USER_EMAIL_BODY_INTRO}`),
+			},
+		]);
 
 const copyDiagnosticInfoToClipboard = (
 	client: ApolloClient<object>,

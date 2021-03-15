@@ -14,6 +14,7 @@ import type {
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import { parsePing } from 'src/helpers/webview';
 import { useArticle } from 'src/hooks/use-article';
+import { useIsAppsRendering } from 'src/hooks/use-config-provider';
 import { selectImagePath } from 'src/hooks/use-image-paths';
 import { useIssueSummary } from 'src/hooks/use-issue-summary';
 import { useApiUrl } from 'src/hooks/use-settings';
@@ -250,6 +251,7 @@ const Article = ({
 		article.key,
 		shareUrlFetchEnabled,
 	]);
+	const { isAppsRendering } = useIsAppsRendering();
 
 	return (
 		<Fader>
@@ -261,7 +263,10 @@ const Article = ({
 				useWebKit={false}
 				allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
 				mediaPlaybackRequiresUserAction={false}
-				style={[styles.webview]}
+				style={[
+					styles.webview,
+					isAppsRendering ? { marginTop: 52 } : null,
+				]}
 				_ref={(r) => {
 					ref.current = r;
 				}}

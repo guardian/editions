@@ -6,18 +6,18 @@ import { getFont, getScaledFont } from 'src/theme/typography';
 
 export type WebViewPing =
 	| {
-			type: 'shouldShowHeaderChange';
-			shouldShowHeader: boolean;
-	  }
+		type: 'shouldShowHeaderChange';
+		shouldShowHeader: boolean;
+	}
 	| { type: 'isAtTopChange'; isAtTop: boolean }
 	| {
-			type: 'share';
-	  }
+		type: 'share';
+	}
 	| {
-			type: 'openLightbox';
-			index: number;
-			isMainImage: string;
-	  };
+		type: 'openLightbox';
+		index: number;
+		isMainImage: string;
+	};
 
 /*
 this tricks vs code into thinking
@@ -107,8 +107,8 @@ export const getBundleUri = (
 		dev:
 			(Platform.OS === 'android'
 				? // 10.0.2.2 is a special IP directing to the host dev machine
-				  // from within the emulator
-				  'http://10.0.2.2:'
+				// from within the emulator
+				'http://10.0.2.2:'
 				: 'http://localhost:') + bundles[key].watchPort,
 		prod:
 			(Platform.OS === 'android' ? 'file:///android_asset/' : '') +
@@ -244,6 +244,7 @@ export const makeHtml = ({
 				name="viewport"
 				content="width=device-width, initial-scale=1"
 			/>
+			<meta name="format-detection" content="telephone=no" />
 		</head>
 		<body style="padding-top:${px(topPadding)}">
 			<div id="app" class="app" data-type="${type}">${body}</div>

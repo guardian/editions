@@ -4,7 +4,9 @@ import type { SpecialEditionHeaderStyles } from 'src/common';
 import { CloseButton } from 'src/components/Button/CloseButton';
 import { SettingsButton } from 'src/components/Button/SettingsButton';
 import { navigateToSettings } from 'src/navigation/helpers/base';
-import { ScreenHeader } from '../ScreenHeader';
+import { Header } from 'src/components/layout/header/header';
+import { styles } from 'src/components/styled-text';
+import { IssueTitle } from 'src/components/issue/issue-title';
 
 const IssuePickerHeader = ({
 	headerStyles,
@@ -17,7 +19,16 @@ const IssuePickerHeader = ({
 }) => {
 	const navigation = useNavigation();
 	return (
-		<ScreenHeader
+		<Header
+			alignment={'drawer'}
+			onPress={() => navigation.goBack()}
+			action={
+				<CloseButton
+					accessibilityLabel="Close button"
+					accessibilityHint="Returns to the edition"
+					onPress={() => navigation.goBack()}
+				/>
+			}
 			leftAction={
 				<SettingsButton
 					onPress={() => {
@@ -25,18 +36,17 @@ const IssuePickerHeader = ({
 					}}
 				/>
 			}
-			onPress={() => navigation.goBack()}
-			rightAction={
-				<CloseButton
-					accessibilityLabel="Close button"
-					accessibilityHint="Returns to the edition"
-					onPress={() => navigation.goBack()}
-				/>
-			}
-			title={title}
-			subTitle={subTitle}
 			headerStyles={headerStyles}
-		/>
+		>
+			{title ? (
+				<IssueTitle
+					title={title}
+					subtitle={subTitle}
+					titleStyle={styles.issueLightText}
+					overwriteStyles={headerStyles}
+				/>
+			) : null}
+		</Header>
 	);
 };
 

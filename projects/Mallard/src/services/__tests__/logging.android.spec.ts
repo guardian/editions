@@ -1,5 +1,5 @@
-import { Level, Logging } from '../logging';
 import MockDate from 'mockdate';
+import { Level, Logging } from '../logging';
 
 MockDate.set('2019-08-21');
 jest.mock('src/helpers/release-stream', () => ({

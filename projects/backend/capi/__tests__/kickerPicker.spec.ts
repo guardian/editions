@@ -1,5 +1,6 @@
 import { kickerPicker } from '../kickerPicker'
-import { TagType, ContentType } from '@guardian/capi-ts'
+import { TagType } from '@guardian/content-api-models/v1/tagType'
+import { ContentType } from '@guardian/content-api-models/v1/contentType'
 
 type Spec = [TagType, string, string]
 

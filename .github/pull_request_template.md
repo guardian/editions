@@ -1,24 +1,19 @@
-## Summary
+## Why are you doing this?
 
 <!--
-Why are we doing this?
-
-Explain the scope of the change and how that fits within the bug or the feature
-being worked on. Link the corresponding Trello Card below.
+Remember, PRs are documentation for future contributors.
 
 If this PR is a fix, please include a link to the original PR that introduced
-the breakage, if any, for reference.
+the breakage for reference.
 -->
 
-[**Trello Card ->**](https://trello.com)
+## Changes
 
-## Test Plan
+- Change 1
+- Change 2
 
-<!--
-Describe what steps where followed to reproduce the bug and/or to access the
-feature, and what observation confirms it works as expected.
+## Screenshots
 
-Please try to add visuals!
-This is worthwhile for historical reasons as well as to allow other
-contributors who aren't developers to collaborate.
--->
+| Before | After |
+| --- | --- |
+| <img src="" width="300px" /> | <img src="" width="300px" /> |
