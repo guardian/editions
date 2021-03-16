@@ -53,10 +53,11 @@ type CommonState = {
 	setIsDevButtonShown: Dispatch<boolean>;
 };
 
-const typeName = 'NetInfo';
+// eslint-disable-next-line @typescript-eslint/naming-convention -- apollo convention
+const __typename = 'NetInfo';
 
 type NetInfo = CommonState & {
-	typeName: 'NetInfo';
+	__typename: 'NetInfo';
 	type: NetInfoStateType;
 	isConnected: boolean;
 	details: unknown;
@@ -103,7 +104,7 @@ const assembleNetInfo = (state: InternalState): NetInfo => {
 			: false;
 	const internetUnreachable = isInternetReachable === false;
 	return {
-		typeName,
+		__typename,
 		type,
 		isConnected: isConnected && !internetUnreachable,
 		details,
@@ -230,7 +231,7 @@ export const createNetInfoResolver = () => {
  */
 const useNetInfo = (() => {
 	const LOADING: NetInfo = {
-		typeName,
+		__typename,
 		type: NetInfoStateType.unknown,
 		isConnected: false,
 		details: null,

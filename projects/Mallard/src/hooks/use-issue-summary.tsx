@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq -- needs in depth testing*/
 import type ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import type { Dispatch } from 'react';
@@ -12,7 +13,7 @@ import { getSetting } from '../helpers/settings';
 import { useQuery } from './apollo';
 
 interface IssueSummaryState {
-	typeName: 'IssueSummary';
+	__typename: 'IssueSummary';
 	isFromAPI: boolean;
 	issueSummary: IssueSummary[] | null;
 	issueId: PathToIssue | null;
@@ -48,7 +49,8 @@ const issueSummaryToLatestPath = (issueSummary: IssueSummary[]): PathToIssue =>
 		publishedIssueId: issueSummary[0].publishedId,
 	};
 
-const typeName = 'IssueSummary';
+// eslint-disable-next-line @typescript-eslint/naming-convention -- apollo convention
+const __typename = 'IssueSummary';
 
 type QueryValue = { issueSummary: IssueSummaryState };
 const QUERY = gql`
@@ -105,6 +107,7 @@ const refetch = async (
 		// irrelevant for end users; instead errors should be coded (ex. with
 		// numeric error code, each of which has a corresponding UI message).
 		if (error instanceof Error) {
+			// eslint-disable-next-line no-ex-assign -- needs further testing
 			error = error.message;
 		}
 
@@ -160,7 +163,7 @@ const refetch = async (
 };
 
 const EMPTY_ISSUE_SUMMARY: IssueSummaryState = {
-	typeName,
+	__typename,
 	isFromAPI: false,
 	issueSummary: null,
 	issueId: null,
