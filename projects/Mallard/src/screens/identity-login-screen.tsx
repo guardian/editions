@@ -53,7 +53,7 @@ const AuthSwitcherScreen = ({
 	const { authIdentity } = useContext(AccessContext);
 	const { open } = useModal();
 
-	const handleAuthClick = async (
+	const handleAuthClick = (
 		runGetIdentityAuthParams: () => Promise<AuthParams>,
 		{
 			requiresFunctionalConsent,
@@ -117,11 +117,11 @@ const AuthSwitcherScreen = ({
 					Alert.alert(
 						Copy.authSwitcherScreen.socialSignInDisabledTitle.replace(
 							'%signInName%',
-							signInName || 'Social',
+							signInName ?? 'Social',
 						),
 						Copy.authSwitcherScreen.socialSignInDisabledSubtitle.replace(
 							'%signInName%',
-							signInName || 'social',
+							signInName ?? 'social',
 						),
 					);
 				},

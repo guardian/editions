@@ -53,9 +53,9 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => {
 					 * rather than in this webview itself.
 					 */
 					if (
-						event.url != 'about:blank' &&
+						event.url !== 'about:blank' &&
 						!event.url.startsWith('file:///') &&
-						ref.current != null
+						ref.current !== undefined
 					) {
 						Linking.openURL(event.url);
 						return false;

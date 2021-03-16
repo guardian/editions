@@ -70,12 +70,12 @@ const holderStyles = StyleSheet.create({
 	},
 });
 
-const ToastRootHolder = ({}) => {
+const ToastRootHolder = () => {
 	const toasts = useToastList();
 	return (
 		<View style={holderStyles.root}>
 			{toasts.map((toast, i) => (
-				<Toast {...toast} key={i + toast.title} />
+				<Toast {...toast} key={`${i}-${toast.title}`} />
 			))}
 		</View>
 	);

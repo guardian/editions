@@ -14,7 +14,8 @@ const getSliderHeight = (): number => {
 	}
 };
 
-// SLIDER_FRONT_HEIGHT isn't actually used in this file but is important for calculating the layout of fronts in issue-screen.
+// SLIDER_FRONT_HEIGHT isn't actually used in this file but
+// is important for calculating the layout of fronts in issue-screen.
 // the 'jump to section' feature from the nav depends on this value being accurate
 const SLIDER_FRONT_HEIGHT = getSliderHeight();
 
@@ -86,7 +87,8 @@ const SliderTitle = React.memo(
 			subtitle && subtitle.split(':')[subtitle.split(':').length - 1];
 		const showSubtitle =
 			transformedSubtitle !== title &&
-			// this check (and associated editionDate prop) can be removed one month after HIDE_SUBTITLE_BEFORE
+			// this check (and associated editionDate prop)
+			// can be removed one month after HIDE_SUBTITLE_BEFORE
 			// this is to hide subtitles on past issues created before subtitles were a thing
 			(!editionDate || editionDate.getTime() > FIRST_SUBTITLE_DATE);
 

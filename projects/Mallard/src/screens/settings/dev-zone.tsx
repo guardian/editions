@@ -89,7 +89,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 	useEffect(() => {
 		showAllEditionsCache
 			.get()
-			.then((v) => v != null && setShowAllEditions(v));
+			.then((v) => v !== null && setShowAllEditions(v));
 	}, []);
 
 	useEffect(() => {
@@ -117,9 +117,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 	}, []);
 
 	useEffect(() => {
-		imageForScreenSize().then(
-			(imageSize) => imageSize && setImageSize(imageSize),
-		);
+		imageForScreenSize().then((imageSize) => setImageSize(imageSize));
 	}, []);
 
 	const query = useQuery<Record<string, unknown>>(
@@ -376,7 +374,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 					.map(([title, explainer]) => ({
 						key: title,
 						title,
-						explainer: explainer ? explainer + '' : 'false',
+						explainer: explainer ? `${explainer}${' '}` : 'false',
 					}))
 					.concat([
 						{

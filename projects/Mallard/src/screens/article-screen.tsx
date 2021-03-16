@@ -120,8 +120,7 @@ const ArticleScreenWithProps = ({
 		if (viewRef.current) {
 			viewRef.current.setNativeProps({ opacity: 0 });
 			setTimeout(() => {
-				viewRef.current &&
-					viewRef.current.setNativeProps({ opacity: 1 });
+				viewRef.current?.setNativeProps({ opacity: 1 });
 			}, 600);
 		}
 	}, [width]);
@@ -170,7 +169,7 @@ export const ArticleScreen = ({
 			/>
 		),
 		success: (props) => {
-			if (props.path && props.path.article) {
+			if (props.path.article) {
 				sendPageViewEvent({ path: props.path.article });
 			}
 			return <ArticleScreenWithProps {...{ navigation }} {...props} />;
