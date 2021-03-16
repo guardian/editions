@@ -101,8 +101,14 @@ module.exports = {
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/ban-types": "off",
-        "react/display-name": "off"
-
+        "react/display-name": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/require-await": "off",
+        "@typescript-eslint/restrict-template-expressions": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "jsx-a11y/accessible-emoji": "off",
+        "@typescript-eslint/no-explicit-any"
     },
     settings: {
         react: {
