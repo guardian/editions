@@ -130,7 +130,22 @@ module.exports = {
         "max-len": "off",
         "eqeqeq": "off",
         "no-fallthrough": "off",
-        "no-async-promise-executor": "off"
+        "no-async-promise-executor": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "eslint-comments/no-unused-disable": "off",
+        "@typescript-eslint/no-unnecessary-condition": "off",
+        "eqeqeq": "off",
+        "@typescript-eslint/prefer-nullish-coalescing": "off",
+        "eslint-comments/require-description": "off",
+        "@typescript-eslint/prefer-optional-chain": "off",
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/await-thenable": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/prefer-regexp-exe": "off",
     },
     settings: {
         react: {
