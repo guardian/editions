@@ -12,7 +12,7 @@ import { getSetting } from '../helpers/settings';
 import { useQuery } from './apollo';
 
 interface IssueSummaryState {
-	__typename: 'IssueSummary';
+	typeName: 'IssueSummary';
 	isFromAPI: boolean;
 	issueSummary: IssueSummary[] | null;
 	issueId: PathToIssue | null;
@@ -48,7 +48,7 @@ const issueSummaryToLatestPath = (issueSummary: IssueSummary[]): PathToIssue =>
 		publishedIssueId: issueSummary[0].publishedId,
 	};
 
-const __typename = 'IssueSummary';
+const typeName = 'IssueSummary';
 
 type QueryValue = { issueSummary: IssueSummaryState };
 const QUERY = gql`
@@ -160,7 +160,7 @@ const refetch = async (
 };
 
 const EMPTY_ISSUE_SUMMARY: IssueSummaryState = {
-	__typename,
+	typeName,
 	isFromAPI: false,
 	issueSummary: null,
 	issueId: null,
