@@ -165,7 +165,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 			width: calc(
 				100% +
 					${px(
-						Breakpoints.TabletLandscape - metrics.article.maxWidth,
+					 	Breakpoints.TabletLandscape - metrics.article.maxWidth,
 					)}
 			);
 			display: block;
