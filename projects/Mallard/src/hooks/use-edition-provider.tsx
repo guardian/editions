@@ -221,21 +221,11 @@ export const defaultEditionDecider = async (
 	} else {
 		// Get the correct edition for the device locale
 		const autoDetectedEdition = localeToEdition(locale, editionsList);
-
-		if (autoDetectedEdition) {
-			await setEdition(
-				autoDetectedEdition,
-				setDefaultEdition,
-				setSelectedEdition,
-			);
-		} else {
-			// auto detected edition was not possible, set default edition
-			await setEdition(
-				BASE_EDITION,
-				setDefaultEdition,
-				setSelectedEdition,
-			);
-		}
+		await setEdition(
+			autoDetectedEdition,
+			setDefaultEdition,
+			setSelectedEdition,
+		);
 	}
 };
 
