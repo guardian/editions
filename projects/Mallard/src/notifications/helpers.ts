@@ -14,22 +14,19 @@ const BASE_PUSH_TOKEN = [{ name: 'uk', type: 'editions' }] as PushToken[];
 const getTopicName = async (): Promise<PushToken[]> => {
 	const defaultEdition = await getDefaultEdition();
 	if (defaultEdition) {
-		return (
-			([
-				{ name: defaultEdition.topic, type: 'editions' },
-			] as PushToken[]) || BASE_PUSH_TOKEN
-		);
+		return [
+			{ name: defaultEdition.topic, type: 'editions' },
+		] as PushToken[];
 	}
 	return BASE_PUSH_TOKEN;
 };
 
 const objectsEqual = (token1: PushToken, token2: PushToken) =>
 	Object.keys(token1).length === Object.keys(token2).length &&
-	token1.name === token2.name &&
-	token2.type === token2.type;
+	token1.name === token2.name;
 
 const isSameTopics = (t1: PushToken[] | null, t2: PushToken[]) => {
-	if (t1 == null || t1.length != t2.length) return false;
+	if (t1 === null || t1.length !== t2.length) return false;
 
 	for (let index = 0; index < t1.length; index++) {
 		if (!objectsEqual(t1[index], t2[index])) return false;
@@ -69,9 +66,6 @@ const maybeRegister = async (
 ) => {
 	let should: boolean;
 	const newTopics = await getTopicName();
-	if (!newTopics) {
-		return false;
-	}
 
 	try {
 		const currentTopics = await pushRegisteredTokens.get();

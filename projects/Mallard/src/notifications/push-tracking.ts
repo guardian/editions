@@ -112,9 +112,8 @@ export const findLastXDaysPushTracking = (
 	days = 7,
 ) => {
 	const daysToKeep = lastNDays(days);
-	return pushTracking.filter(
-		(log: Tracking) =>
-			daysToKeep.some((day) => log.time.includes(day)) && log,
+	return pushTracking.filter((log: Tracking) =>
+		daysToKeep.some((day) => log.time.includes(day)),
 	);
 };
 
