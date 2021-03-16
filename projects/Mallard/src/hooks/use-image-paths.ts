@@ -77,15 +77,12 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
 				use,
 			).then((newPath) => localSetPath(newPath));
 		}
-		return () => void (localSetPath = () => {});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		return () => void (localSetPath = () => { });
 	}, [
 		apiUrl,
 		image,
 		use,
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		issueId ? issueId.publishedIssueId : undefined, // Why isn't this just issueId?
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		issueId ? issueId.localIssueId : undefined,
 	]);
 	if (image === undefined) return undefined;
