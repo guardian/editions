@@ -108,7 +108,10 @@ module.exports = {
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-var-requires": "off",
         "jsx-a11y/accessible-emoji": "off",
-        "@typescript-eslint/no-explicit-any": 'off'
+        "@typescript-eslint/no-explicit-any": 'off',
+        "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/no-unnecessary-condition": "off",
+        "@typescript-eslint/await-thenable": "off"
     },
     settings: {
         react: {
