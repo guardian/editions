@@ -53,7 +53,7 @@ export const notificationsAreEnabled = async () => {
 		return false;
 	}
 	const isEnabled = await notificationsEnabledCache.get();
-	return isEnabled || false;
+	return isEnabled ?? false;
 };
 
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
