@@ -53,10 +53,10 @@ type CommonState = {
 	setIsDevButtonShown: Dispatch<boolean>;
 };
 
-const __typename = 'NetInfo';
+const typeName = 'NetInfo';
 
 type NetInfo = CommonState & {
-	__typename: 'NetInfo';
+	typeName: 'NetInfo';
 	type: NetInfoStateType;
 	isConnected: boolean;
 	details: unknown;
@@ -103,7 +103,7 @@ const assembleNetInfo = (state: InternalState): NetInfo => {
 			: false;
 	const internetUnreachable = isInternetReachable === false;
 	return {
-		__typename,
+		typeName,
 		type,
 		isConnected: isConnected && !internetUnreachable,
 		details,
@@ -230,7 +230,7 @@ export const createNetInfoResolver = () => {
  */
 const useNetInfo = (() => {
 	const LOADING: NetInfo = {
-		__typename,
+		typeName,
 		type: NetInfoStateType.unknown,
 		isConnected: false,
 		details: null,
