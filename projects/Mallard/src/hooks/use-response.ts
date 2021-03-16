@@ -21,7 +21,7 @@ update the response. Ej:
 const [response, {onSuccess, onError}] = useResponse()
 
 useEffect(()=>{
-    Promise().then(onSuccess).catch(onError)
+	Promise().then(onSuccess).catch(onError)
 })
 ```
 (If you call useResponse with an initial value it'll
@@ -106,11 +106,11 @@ a bit like this:
 
 ```
 const fetchValue = ({onSuccess, onError}) => {
-    Promise().then(onSuccess).catch(onError)
+	Promise().then(onSuccess).catch(onError)
 }
 const response = useFetchableResponse<T>(
-    null,
-    (isInitial, {onSuccess, onError}) => fetchValue({onSuccess, onError}),
+	null,
+	(isInitial, {onSuccess, onError}) => fetchValue({onSuccess, onError}),
 )
 ```
 */
@@ -137,7 +137,7 @@ const useFetchableResponse = <T>(
 			responseHookCallbacks.onSuccess(initial);
 		}
 		fetcher(true, responseHookCallbacks);
-	}, effectDependencies); // eslint-disable-line react-hooks/exhaustive-deps
+	}, effectDependencies);
 
 	return {
 		...response,

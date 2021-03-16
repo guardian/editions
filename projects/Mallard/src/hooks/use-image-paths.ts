@@ -77,7 +77,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
 				use,
 			).then((newPath) => localSetPath(newPath));
 		}
-		return () => void (localSetPath = () => { });
+		return () => void (localSetPath = () => {});
 	}, [
 		apiUrl,
 		image,

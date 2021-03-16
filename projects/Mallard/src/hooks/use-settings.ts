@@ -24,7 +24,7 @@ export const useEdition = () => {
 export const useIsPreview = () => {
 	const apiUrl = useApiUrl();
 	// FIXME: upstream code should be handling the loading status
-	return apiUrl != null && isPreview(apiUrl);
+	return apiUrl !== null && isPreview(apiUrl);
 };
 
 export const useIsProof = () => {
