@@ -101,14 +101,21 @@ module.exports = {
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/ban-types": "off",
-        "react/display-name": "off",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unnecessary-condition": "off",
+        "@typescript-eslint/await-thenable": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "import/no-named-as-default": "off",
         "jsx-a11y/accessible-emoji": "off",
-        "@typescript-eslint/no-explicit-any": "off"
+        "react/display-name": "off",
+        "import/no-named-as-default": "off",
+        "import/namespace": "off"
     },
     settings: {
         react: {

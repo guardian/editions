@@ -29,7 +29,7 @@ const passthrough = (
 	...placeholders: any[]
 ): string =>
 	literals.reduce((acc, literal, i) => {
-		if (placeholders[i] != null && placeholders[i] !== false) {
+		if (placeholders[i] !== null && placeholders[i] !== false) {
 			return acc + literal + String(placeholders[i]);
 		}
 		return acc + literal;
@@ -55,7 +55,7 @@ export const getScaledFontCss = <F extends FontFamily>(
 	level: FontSizes<F>,
 ) => {
 	const font = getScaledFont(family, level);
-	const adjustment = Platform.OS == 'android' ? 2 : 0;
+	const adjustment = Platform.OS === 'android' ? 2 : 0;
 	return css`
 		font-size: ${px(font.fontSize + adjustment)};
 		line-height: ${px(font.lineHeight + adjustment)};
@@ -104,12 +104,13 @@ export const getBundleUri = (
 	use?: 'dev' | 'prod',
 ): string => {
 	const uris = {
-		dev:
-			(Platform.OS === 'android'
+		dev: `${
+			Platform.OS === 'android'
 				? // 10.0.2.2 is a special IP directing to the host dev machine
 				  // from within the emulator
 				  'http://10.0.2.2:'
-				: 'http://localhost:') + bundles[key].watchPort,
+				: 'http://localhost:'
+		}${bundles[key].watchPort}`,
 		prod:
 			(Platform.OS === 'android' ? 'file:///android_asset/' : '') +
 			bundles[key].key +

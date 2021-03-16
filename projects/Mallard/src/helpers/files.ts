@@ -135,7 +135,7 @@ export const getIssuesCountStrings = async () => {
 		const dir = editionDirList[i];
 		const files = await RNFS.readdir(dir);
 		const issueFiles = files.filter(
-			(file) => file.match(ISSUE_DATE_REGEX) != null,
+			(file) => file.match(ISSUE_DATE_REGEX) !== null,
 		);
 		result.push(`${dir.split('/').pop()}: ${issueFiles.length} issues`);
 	}
@@ -160,7 +160,7 @@ export const getIssuesToDelete = async (files: string[]) => {
 	let keepIssues = 0;
 
 	for (let i = 0; i < totalIssues; i++) {
-		const isAnIssue = files[i].match(ISSUE_DATE_REGEX) != null;
+		const isAnIssue = files[i].match(ISSUE_DATE_REGEX) !== null;
 		if (isAnIssue && keepIssues < maxAvailableEditions) {
 			keepIssues++;
 			continue;

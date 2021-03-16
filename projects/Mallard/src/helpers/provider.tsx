@@ -29,7 +29,7 @@ const useContextAsHook = <C extends unknown>(
 	const ctx = useContext(Context);
 	if (ctx === null) {
 		console.error(Context);
-		throw 'Missing context provider for ' + Context;
+		throw `Missing context provider for ${Context}`;
 	}
 	return ctx;
 };
@@ -57,7 +57,6 @@ const createProviderFromHook = <G, S>(
 	}: ProviderHook<G, S> & {
 		children: React.ReactNode;
 	}) => {
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		const memoizedSetter = useMemo(() => setter, []);
 		return (
 			<SetterCtx.Provider value={memoizedSetter}>
@@ -90,7 +89,8 @@ const createMixedProviderHook__SLOW = <T extends {}>(hook: () => T | null) => {
 	const Provider = ({ children }: { children: React.ReactNode }) => {
 		const value = hook();
 		return (
-			// @TODO: do we need to render a loading state here, it's so quick that we probably don't?
+			// @TODO: do we need to render a loading state here,
+			// it's so quick that we probably don't?
 			value && (
 				<Context.Provider value={value}>{children}</Context.Provider>
 			)

@@ -134,7 +134,8 @@ export const defaultSettings: Settings = {
 	logging: __DEV__
 		? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
 		: 'https://editions-logging.guardianapis.com/log/mallard',
-	// this currently points exclusively to PROD so that we don't require a VPN to access the endpoint.
+	// this currently points exclusively to PROD
+	//so that we don't require a VPN to access the endpoint.
 	appsRenderingService: appsRenderingService.prod,
 };
 
@@ -143,5 +144,5 @@ export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
 	const backend = backends.find((backend) => backend.value === apiUrl);
-	return (backend && backend.preview) || false;
+	return backend?.preview ?? false;
 };

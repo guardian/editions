@@ -115,7 +115,8 @@ const fetchCacheClear = async (): Promise<boolean> => {
 		}
 
 		if (cacheNumberStorage !== cacheNumber.cacheClear) {
-			// Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
+			// Deletes downloaded issues and the cache clear
+			// - login and GDPR settings need to be kept
 			await deleteIssueFiles();
 			await cacheClearCache.reset();
 			// Server number doesnt match, which means we are making an attempt to clear the cache.

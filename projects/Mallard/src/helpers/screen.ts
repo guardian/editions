@@ -49,8 +49,8 @@ const IMAGE_SIZE_KEY = '@image_size';
 
 export const imageForScreenSize = async (): Promise<ImageSize> => {
 	const persisted = await AsyncStorage.getItem(IMAGE_SIZE_KEY);
-	const persistedSize = imageSizes.find((_) => _ == persisted);
-	if (persistedSize != undefined) {
+	const persistedSize = imageSizes.find((_) => _ === persisted);
+	if (persistedSize !== undefined) {
 		return persistedSize;
 	}
 
