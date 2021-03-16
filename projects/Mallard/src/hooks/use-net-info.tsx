@@ -138,7 +138,7 @@ export const createNetInfoResolver = () => {
 		 * resolved), so return that. We pass it through `assembleNetInfo`
 		 * because we don't expose our entire internal state.
 		 */
-		if (statePromise != null) {
+		if (statePromise) {
 			return statePromise.then(assembleNetInfo);
 		}
 
@@ -152,7 +152,7 @@ export const createNetInfoResolver = () => {
 		const update = async (
 			reducer: (_: InternalState) => Promise<InternalState>,
 		) => {
-			if (statePromise == null) return;
+			if (!statePromise) return;
 			statePromise = reducer(await statePromise);
 			const state = await statePromise;
 			const netInfo = assembleNetInfo(state);
@@ -166,7 +166,7 @@ export const createNetInfoResolver = () => {
 		 * because NetInfo sends the initial value to its event listeners).
 		 */
 		NetInfo.addEventListener(async (netInfo) => {
-			if (statePromise == null) return;
+			if (!statePromise) return;
 			const state = await statePromise;
 			if (isEqual(netInfo, state.netInfo)) return;
 			update(async (prevState) => ({ ...prevState, netInfo }));
