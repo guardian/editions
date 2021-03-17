@@ -105,7 +105,6 @@ module.exports = {
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-var-requires": "off",
-<<<<<<< HEAD
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
@@ -132,40 +131,6 @@ module.exports = {
         "eqeqeq": "off",
         "no-fallthrough": "off",
         "no-async-promise-executor": "off",
-=======
->>>>>>> 2daf30d6 (CHORE: add more rules)
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/naming-convention": "off",
-        "@typescript-eslint/no-unnecessary-condition": "off",
-        "@typescript-eslint/prefer-nullish-coalescing": "off",
-        "@typescript-eslint/prefer-optional-chain": "off",
-        "@typescript-eslint/restrict-plus-operands": "off",
-        "@typescript-eslint/no-misused-promises": "off",
-        "@typescript-eslint/ban-ts-ignore": "off",
-        "@typescript-eslint/await-thenable": "off",
-<<<<<<< HEAD
-        "react-hooks/exhaustive-deps": "off",
-        "@typescript-eslint/ban-ts-ignore": "off",
-        "@typescript-eslint/prefer-regexp-exe": "off",
-=======
-        "@typescript-eslint/ban-ts-ignore": "off",
-        "@typescript-eslint/prefer-regexp-exe": "off",
-        "@typescript-eslint/prefer-regexp-exec": "off",
-        "import/no-named-as-default-member": "off",
-        "import/no-named-as-default": "off",
-        "react-hooks/exhaustive-deps": "off",
-        "react/display-name": "off",
-        "jsx-a11y/accessible-emoji": "off",
-        "eslint-comments/require-description": "off",
-        "eslint-comments/no-unused-disable": "off",
-        "import/no-default-export": "off",
-        "import/default": "off",
-        "import/namespace": "off",
-        "max-len": "off",
-        "eqeqeq": "off",
-        "no-fallthrough": "off",
-        "no-async-promise-executor": "off"
->>>>>>> 2daf30d6 (CHORE: add more rules)
     },
     settings: {
         react: {
