@@ -32,7 +32,6 @@ validate-Mallard:
 	cd projects/Mallard && yarn lint
 	@echo "\n👟🚂 $@ TSC 🦆\n"
 	cd projects/Mallard && yarn tsc --noEmit --skipLibCheck
-	
 #
 # Project commands
 #
