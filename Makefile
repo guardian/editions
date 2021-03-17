@@ -29,9 +29,15 @@ build-Mallard:
 
 validate-Mallard:
 	@echo "\n👟🧶 $@ ESLINT 🦆\n"
+<<<<<<< HEAD
 	cd projects/Mallard && yarn lint
 	@echo "\n👟🚂 $@ TSC 🦆\n"
 	cd projects/Mallard && yarn tsc --noEmit --skipLibCheck
+=======
+	cd projects/$* && yarn run lint
+	@echo "\n👟🚂 $@ TSC 🦆\n"
+	cd projects/$* && yarn tsc --noEmit --skipLibCheck
+>>>>>>> 2daf30d6 (CHORE: add more rules)
 
 #
 # Project commands
