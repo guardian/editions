@@ -13,7 +13,6 @@ import {
 } from 'src/navigation/helpers/base'
 import { routeNames } from 'src/navigation/routes'
 import { PathToArticle } from 'src/paths'
-import { sendPageViewEvent } from 'src/services/ophan'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from './article/body'
@@ -170,7 +169,7 @@ export const ArticleScreen = ({
                 style={{ backgroundColor: color.background }}
             />
         ),
-        success: props => {            
+        success: props => {
             return <ArticleScreenWithProps {...{ navigation }} {...props} />
         },
     })
