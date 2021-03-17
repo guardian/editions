@@ -70,6 +70,7 @@ const ArticleSlider = React.memo(
             flattenedArticles,
         } = getArticleDataFromNavigator(articleNavigator, path)
         const [current, setCurrent] = useState(startingPoint)
+        const [lastTrackedIndex, setLastTrackedIndex] = useState(-1)
         const [position, setPosition] = useState<
             Animated.AnimatedInterpolation
         >(new Animated.Value(0))
@@ -180,9 +181,15 @@ const ArticleSlider = React.memo(
                     onPageSelected={(ev: any) => {
                         onShouldShowHeaderChange(true)
                         const newIndex = ev.nativeEvent.position
-                        sendPageViewEvent({
-                            path: flattenedArticles[newIndex].article,
-                        })
+                        // onPageSelected get called twice for the first time, to avoid duplicate tracking
+                        // we are manually checking the last tracked index
+                        if(lastTrackedIndex != newIndex) {                            
+                            sendPageViewEvent({
+                                path: flattenedArticles[newIndex].article,
+                            })
+                            setLastTrackedIndex(newIndex)
+                        }
+                                                
                         setCurrent(newIndex)
                         slideToFrontFor(newIndex)
                         setPosition(newIndex)

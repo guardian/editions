@@ -170,10 +170,7 @@ export const ArticleScreen = ({
                 style={{ backgroundColor: color.background }}
             />
         ),
-        success: props => {
-            if (props.path && props.path.article) {
-                sendPageViewEvent({ path: props.path.article })
-            }
+        success: props => {            
             return <ArticleScreenWithProps {...{ navigation }} {...props} />
         },
     })
