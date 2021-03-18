@@ -78,7 +78,7 @@ const getButtonAppearance = (
 			},
 			text: { color: appAppearance.color },
 		}),
-		[ButtonAppearance.skeletonBlue]: StyleSheet.create({
+		[ButtonAppearance.SkeletonBlue]: StyleSheet.create({
 			background: {
 				backgroundColor: undefined,
 				borderWidth: 1,

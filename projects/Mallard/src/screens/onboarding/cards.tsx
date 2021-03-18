@@ -78,7 +78,7 @@ const OnboardingConsent = ({
 										onOpenGdprConsent();
 									}}
 									buttonAppearance={
-										ButtonAppearance.skeletonBlue
+										ButtonAppearance.SkeletonBlue
 									}
 								>
 									{Copy.consentOnboarding.optionsButton}

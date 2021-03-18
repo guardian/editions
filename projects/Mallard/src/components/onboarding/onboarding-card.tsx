@@ -144,7 +144,7 @@ const OnboardingCard = ({
 								onPress={onDismissThisCard}
 								accessibilityHint="This will dismiss the onboarding card"
 								accessibilityLabel={`Dismiss the ${title} onboarding card`}
-								appearance={ButtonAppearance.skeletonBlue}
+								appearance={ButtonAppearance.SkeletonBlue}
 							/>
 						</View>
 					)}
