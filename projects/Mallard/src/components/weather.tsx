@@ -190,7 +190,7 @@ const WeatherIconView = ({
 						<View style={styles.forecastText}>{info}</View>
 					</View>
 				),
-				[Breakpoints.tabletVertical]: () => (
+				[Breakpoints.TabletVertical]: () => (
 					<View
 						style={[styles.forecastItem, styles.forecastItemWide]}
 					>

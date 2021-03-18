@@ -66,7 +66,7 @@ const outieHeader = (type: ArticleType) => css`
 	.header-container[data-type='${type}'] {
 		padding-top: 1px;
 	}
-	@media (max-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (max-width: ${px(Breakpoints.TabletVertical)}) {
 		.header-container[data-type='${type}'] .header {
 			margin-right: 60px;
 		}
@@ -107,7 +107,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 	.header-immersive-video:after {
 		${threeLines}
 	}
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.header:after,
 		.header-immersive-video:after {
 			margin-right: ${px(metrics.article.sides * -1)};
@@ -127,7 +127,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
 		margin: auto;
 	}
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.header-container-line-wrap {
 			padding-left: ${px(metrics.article.sides)};
 			padding-right: ${px(metrics.article.sides)};
@@ -171,13 +171,13 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		padding-top: 100%;
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+	@media (min-width: ${px(Breakpoints.TabletLandscape)}) {
 		.header-image--immersive {
 			padding-top: 59.6%;
 		}
 	}
 
-	@media (max-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (max-width: ${px(Breakpoints.TabletVertical)}) {
 		.header-image--immersive {
 			padding-top: 167%;
 			height: 65%;
@@ -204,7 +204,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		word-wrap: none;
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.header h1 {
 			font-size: 40px;
 		}
@@ -265,7 +265,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		right: ${px(metrics.article.sides * -1)};
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.header-byline:not(:empty):after {
 			left: 0;
 		}
@@ -279,7 +279,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		margin-bottom: 0.875em;
 		font-size: 18px;
 	}
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.header-top p,
 		.header-immersive-video p {
 			font-size: 18px;
@@ -567,7 +567,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		padding-top: 59.6%;
 	}
 
-	@media (max-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (max-width: ${px(Breakpoints.TabletVertical)}) {
 		${outieHeader(ArticleType.Interview)}
 		.interview-tablet {
 			display: none;
@@ -695,7 +695,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		padding: 0 !important;
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.header-image-container--interview {
 			position: relative;
 		}
@@ -881,7 +881,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 		${threeLines}
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.app[data-type='${ArticleType.Showcase}'] {
 			padding-left: 0;
 			padding-right: 0;
