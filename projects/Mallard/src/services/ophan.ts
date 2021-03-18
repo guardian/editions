@@ -8,8 +8,8 @@ enum ComponentType {
 }
 
 enum Action {
-	click = 'CLICK',
-	view = 'VIEW',
+	Click = 'CLICK',
+	View = 'VIEW',
 }
 
 interface TrackScreen {

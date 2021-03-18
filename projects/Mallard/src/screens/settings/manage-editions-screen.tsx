@@ -130,7 +130,7 @@ const ManageEditionsScreen = () => {
 												sendComponentEvent({
 													componentType:
 														ComponentType.AppButton,
-													action: Action.click,
+													action: Action.Click,
 													componentId:
 														'manageEditionsWifiDownload',
 													value: val.toString(),
@@ -158,7 +158,7 @@ const ManageEditionsScreen = () => {
 												sendComponentEvent({
 													componentType:
 														ComponentType.AppButton,
-													action: Action.click,
+													action: Action.Click,
 													componentId:
 														'manageEditionsAvailableEditions',
 													value: n.toString(),
@@ -193,7 +193,7 @@ const ManageEditionsScreen = () => {
 							);
 							sendComponentEvent({
 								componentType: ComponentType.AppButton,
-								action: Action.click,
+								action: Action.Click,
 								value: 'deleteAllDownload',
 								componentId: 'manageEditions',
 							});
