@@ -120,11 +120,11 @@ const fetchActiveIOSSubscriptionReceipt = async (): Promise<
 
 const TEST_PRODUCT_ID = 'uk.co.guardian.gce.sevenday.1monthsub2';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+// eslint-disable-next-line @typescript-eslint/naming-convention -- DEV keyword
 const DEV_getLegacyIAPReceipt = () =>
 	isInBeta() &&
 	InAppUtils.loadProducts([TEST_PRODUCT_ID], () => {
-		InAppUtils.purchaseProduct(TEST_PRODUCT_ID, () => { });
+		InAppUtils.purchaseProduct(TEST_PRODUCT_ID, () => {});
 	});
 
 export {
