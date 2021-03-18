@@ -27,7 +27,7 @@ const EditionButton: React.FC<Props> = ({
 	onPress,
 }) => {
 	const [pressed, setPressed] = useState(false);
-	const defaultStyles = styles(selected || pressed, isSpecial, titleColor);
+	const defaultStyles = styles(selected ?? pressed, isSpecial, titleColor);
 
 	return (
 		<TouchableWithoutFeedback

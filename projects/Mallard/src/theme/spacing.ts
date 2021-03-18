@@ -24,7 +24,7 @@ const slideCardSpacing = () => {
 	} else if (Platform.OS === 'android') {
 		return 20;
 	} else {
-		return StatusBar.currentHeight || spacing[5] + spacing[5];
+		return StatusBar.currentHeight ?? spacing[5] + spacing[5];
 	}
 };
 

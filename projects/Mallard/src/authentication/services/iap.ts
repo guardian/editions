@@ -67,7 +67,7 @@ const findValidReceiptFromLatestInfo = (receipt: ReceiptValidationResponse) => {
 
 const findValidReceipt = (receipt: ReceiptValidationResponse) =>
 	hasLatestReceiptInfo(receipt)
-		? findValidReceiptFromLatestInfo(receipt) || null
+		? findValidReceiptFromLatestInfo(receipt) ?? null
 		: null;
 
 /**

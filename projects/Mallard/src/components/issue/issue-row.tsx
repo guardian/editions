@@ -174,7 +174,7 @@ const IssueButton = ({
 
 	return (
 		<ProgressCircle
-			percent={dlStatus ? getStatusPercentage(dlStatus) || 100 : 100}
+			percent={dlStatus ? getStatusPercentage(dlStatus) ?? 100 : 100}
 			radius={20}
 			bgColor={
 				isOnDevice === ExistsStatus.doesExist

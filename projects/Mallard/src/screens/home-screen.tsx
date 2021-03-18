@@ -383,8 +383,8 @@ const NO_ISSUES: IssueSummary[] = [];
 const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
 const IssueListFetchContainer = () => {
 	const data = useIssueSummary();
-	const issueSummary = data.issueSummary || NO_ISSUES;
-	const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID);
+	const issueSummary = data.issueSummary ?? NO_ISSUES;
+	const [issueId, setIssueId] = useState(data.issueId ?? EMPTY_ISSUE_ID);
 	const [isShown, setIsShown] = useState(
 		// on iOS there is bug that causes wrong rendering of the scroll bar
 		// if this is enabled. See below description of this mechanism.
