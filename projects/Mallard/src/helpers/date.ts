@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { languageLocale } from './locale';
 
 const londonTime = (time?: string | number) => {
-	if (time != null) return moment.tz(time, 'Europe/London');
+	if (!time) return moment.tz(time, 'Europe/London');
 	return moment.tz('Europe/London');
 };
 

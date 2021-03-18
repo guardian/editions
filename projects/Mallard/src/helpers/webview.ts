@@ -24,7 +24,7 @@ const passthrough = (
 	...placeholders: any[]
 ): string =>
 	literals.reduce((acc, literal, i) => {
-		if (placeholders[i] != null && placeholders[i] !== false) {
+		if (placeholders[i]) {
 			return acc + literal + String(placeholders[i]);
 		}
 		return acc + literal;
@@ -50,7 +50,7 @@ export const getScaledFontCss = <F extends FontFamily>(
 	level: FontSizes<F>,
 ) => {
 	const font = getScaledFont(family, level);
-	const adjustment = Platform.OS == 'android' ? 2 : 0;
+	const adjustment = Platform.OS === 'android' ? 2 : 0;
 	return css`
 		font-size: ${px(font.fontSize + adjustment)};
 		line-height: ${px(font.lineHeight + adjustment)};

@@ -63,7 +63,7 @@ const getIpBasedLocation = async () => {
 	const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation | null>(
 		`locations/v1/cities/ipAddress?q=${ip}&details=false`,
 	);
-	if (accuLoc == null) {
+	if (!accuLoc) {
 		throw new CannotFetchError('Couldn\t identify location from latlong');
 	}
 	return { accuLoc, isPrecise: false };
@@ -84,7 +84,7 @@ const getCurrentLocation = async () => {
 	const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation | null>(
 		`locations/v1/cities/geoposition/search?q=${latLong}&details=false`,
 	);
-	if (accuLoc == null) {
+	if (!accuLoc) {
 		throw new CannotFetchError('Couldn\t identify location from latlong');
 	}
 	return { accuLoc, isPrecise: true };
@@ -146,7 +146,7 @@ const getWeather = async (
 		return makeWeatherObject(accuLoc, isPrecise, forecasts);
 	} catch (error) {
 		if (!(error instanceof CannotFetchError)) throw error;
-		if (fallback != null) return fallback;
+		if (fallback) return fallback;
 		return null;
 	}
 };
@@ -175,12 +175,12 @@ const { resolveWeather, refreshWeather } = (() => {
 		client: ApolloClient<object>,
 		fallback: Weather | null,
 	) => {
-		if (weather == null) return;
+		if (!weather) return;
 		const newWeather = (weather = getWeather(fallback));
 		const value = await weather;
 		// `weather` might have changed while we were awaiting, in which case
 		// we don't want to update the cache with stale data.
-		if (weather == newWeather)
+		if (weather === newWeather)
 			client.writeQuery({ query: QUERY, data: { weather: value } });
 	};
 
@@ -188,9 +188,9 @@ const { resolveWeather, refreshWeather } = (() => {
 	// location). Once that resolves we update the cache with the correct value,
 	// which updates any view showing the weather.
 	const onAppGoesForeground = async (client: ApolloClient<object>) => {
-		if (weather == null) return;
+		if (!weather) return;
 		const value = await weather;
-		if (value != null && Date.now() < value.lastUpdated + ONE_HOUR) return;
+		if (value && Date.now() < value.lastUpdated + ONE_HOUR) return;
 		update(client, value);
 	};
 
@@ -212,7 +212,7 @@ const { resolveWeather, refreshWeather } = (() => {
 	};
 
 	const refreshWeather = async (client: ApolloClient<object>) => {
-		if (weather == null) return;
+		if (!weather) return;
 		client.writeQuery({ query: QUERY, data: { weather: null } });
 		await update(client, null);
 	};

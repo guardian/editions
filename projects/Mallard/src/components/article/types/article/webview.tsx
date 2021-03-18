@@ -57,9 +57,7 @@ const WebviewWithArticle = ({
 	const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
 		query: gql('{ netInfo @client { isConnected @client } }'),
 	});
-	const [isConnected] = useState(
-		data != null ? data.netInfo.isConnected : false,
-	);
+	const [isConnected] = useState(data ? data.netInfo.isConnected : false);
 	const { isAppsRendering } = useIsAppsRendering();
 
 	// FIXME: pass this as article data instead so it's never out-of-sync?
@@ -78,7 +76,7 @@ const WebviewWithArticle = ({
 		use: ImageUse = 'full-size',
 		forceRemotePath = false,
 	) => {
-		if (image == null) return undefined;
+		if (!image) return undefined;
 
 		const issueId = publishedIssueId;
 

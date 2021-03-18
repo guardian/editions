@@ -9,11 +9,11 @@ import { getPageLayoutSizeXY } from '../../helpers/helpers';
 export const getImageHeight = ({ story, layout }: ItemSizes) => {
 	if (layout === PageLayoutSizes.tablet) {
 		// 1 story main
-		if (story.height == 4 && story.width === 3) {
+		if (story.height === 4 && story.width === 3) {
 			return '66.66%';
 		}
 		// 3 story main
-		if (story.height === 4 && story.width == 2) {
+		if (story.height === 4 && story.width === 2) {
 			return '50%';
 		}
 		// 2 story main
@@ -40,11 +40,11 @@ export const getImageHeight = ({ story, layout }: ItemSizes) => {
 			return '66%';
 		}
 		// 3/4/5 story secondary
-		if (story.height == 3) {
+		if (story.height === 3) {
 			return '51%';
 		}
 		// 2 story secondary
-		if (story.height == 2) {
+		if (story.height === 2) {
 			return '98%';
 		}
 		return '50%';

@@ -128,7 +128,6 @@ module.exports = {
         "import/default": "off",
         "import/namespace": "off",
         "max-len": "off",
-        "eqeqeq": "off",
         "no-fallthrough": "off",
         "no-async-promise-executor": "off",
     },

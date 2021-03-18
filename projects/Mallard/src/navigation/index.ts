@@ -185,10 +185,10 @@ type OnboardingQueryData = {
 };
 
 const hasOnboarded = (data: OnboardingQueryData) =>
-	data.gdprAllowEssential != null &&
-	data.gdprAllowFunctionality != null &&
-	data.gdprAllowPerformance != null &&
-	data.gdprConsentVersion == CURRENT_CONSENT_VERSION;
+	data.gdprAllowEssential &&
+	data.gdprAllowFunctionality &&
+	data.gdprAllowPerformance &&
+	data.gdprConsentVersion === CURRENT_CONSENT_VERSION;
 
 const RootNavigator = createAppContainer(
 	createStackNavigator(

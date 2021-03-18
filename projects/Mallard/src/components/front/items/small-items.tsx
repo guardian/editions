@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 });
 
 const StarsWrapper = ({ article }: { article: CAPIArticle }) => {
-	if (article.type != 'article' || article.starRating == null) return null;
+	if (article.type !== 'article' || !article.starRating) return null;
 	return (
 		<View style={styles.starsAndSportScoreWrapper}>
 			<Stars position="inline" rating={article.starRating} />
@@ -28,7 +28,7 @@ const StarsWrapper = ({ article }: { article: CAPIArticle }) => {
 };
 
 const SportsWrapper = ({ article }: { article: CAPIArticle }) => {
-	if (article.type != 'article' || article.sportScore == null) return null;
+	if (article.type !== 'article' || !article.sportScore) return null;
 	return (
 		<View style={styles.starsAndSportScoreWrapper}>
 			<SportScore type="smallItems" sportScore={article.sportScore} />

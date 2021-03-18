@@ -141,7 +141,7 @@ const refetch = async (
 	// Update to latest issue if there is a new latest issue, and clear up the
 	// initial Fronts key as we want to show the issue scrolled to the very top.
 	if (
-		issueId == null ||
+		issueId === null ||
 		!previousLatest ||
 		(previousLatest.localIssueId !== newLatest.localIssueId &&
 			previousLatest.publishedIssueId !== newLatest.publishedIssueId)
@@ -187,7 +187,7 @@ export const createIssueSummaryResolver = () => {
 	) => {
 		// We're already in the process of fetching or updating the summary, so
 		// let's return that.
-		if (result != null) return result;
+		if (result) return result;
 
 		/**
 		 * This is called whenever we want to update the "issue summary" in response
@@ -205,7 +205,7 @@ export const createIssueSummaryResolver = () => {
 		const update = async (
 			reducer: (_: IssueSummaryState) => Promise<IssueSummaryState>,
 		) => {
-			if (result == null) return;
+			if (!result) return;
 			const prevIssueSummary = await result;
 			result = reducer(prevIssueSummary);
 			const issueSummary = await result;
@@ -267,7 +267,7 @@ export const createIssueSummaryResolver = () => {
 			update(async (prevIssueSummary) => ({
 				...prevIssueSummary,
 				issueId,
-				initialFrontKey: frontKey != null ? frontKey : null,
+				initialFrontKey: frontKey ? frontKey : null,
 			}));
 		};
 

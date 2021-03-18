@@ -184,7 +184,7 @@ const ArticleSlider = React.memo(
 						const newIndex = ev.nativeEvent.position;
 						// onPageSelected get called twice for the first time, to avoid duplicate tracking
 						// we are manually checking the last tracked index
-						if (lastTrackedIndex != newIndex) {
+						if (lastTrackedIndex !== newIndex) {
 							sendPageViewEvent({
 								path: flattenedArticles[newIndex].article,
 							});

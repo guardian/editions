@@ -96,7 +96,7 @@ const useIsWeatherActuallyShown = () => {
 		// query must contain at least 1 item, even if we don't need it
 		isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
 	);
-	return getValidWeatherData(weatherResult) != null;
+	return getValidWeatherData(weatherResult) !== null;
 };
 
 type FrontWithCards = Array<TFront & { cards: FlatCard[] }>;

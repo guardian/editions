@@ -29,7 +29,7 @@ const objectsEqual = (token1: PushToken, token2: PushToken) =>
 	token2.type === token2.type;
 
 const isSameTopics = (t1: PushToken[] | null, t2: PushToken[]) => {
-	if (t1 == null || t1.length != t2.length) return false;
+	if (!t1 || t1.length !== t2.length) return false;
 
 	for (let index = 0; index < t1.length; index++) {
 		if (!objectsEqual(t1[index], t2[index])) return false;

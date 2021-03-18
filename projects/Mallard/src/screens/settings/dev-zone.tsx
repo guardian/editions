@@ -89,7 +89,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 	useEffect(() => {
 		showAllEditionsCache
 			.get()
-			.then((v) => v != null && setShowAllEditions(v));
+			.then((v) => v !== null && setShowAllEditions(v));
 	}, []);
 
 	useEffect(() => {

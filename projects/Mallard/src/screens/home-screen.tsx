@@ -9,7 +9,6 @@ import React, {
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import type {
 	NavigationInjectedProps,
-	NavigationParams,
 	NavigationRoute,
 	NavigationScreenProp,
 } from 'react-navigation';
@@ -114,7 +113,7 @@ const IssueRowContainer = React.memo(
 		);
 
 		const onPress = useCallback(() => {
-			if (issueDetails != null) {
+			if (issueDetails !== null) {
 				setNavPosition(null);
 				navToIssue(null);
 				return;
@@ -135,7 +134,7 @@ const IssueRowContainer = React.memo(
 		const onPressFront = useCallback(
 			(frontKey) => {
 				if (
-					issueId != null &&
+					issueId !== null &&
 					issueId.publishedIssueId === publishedId &&
 					issueId.localIssueId === localId
 				) {
@@ -213,9 +212,12 @@ const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + StyleSheet.hairlineWidth;
 
 const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
 	if (issue.isLoading) return 0;
-	if (issue.error != null) return ISSUE_FRONT_ERROR_HEIGHT + 1;
-	const { fronts } = issue.value;
-	return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1);
+	if (issue.error) return ISSUE_FRONT_ERROR_HEIGHT + 1;
+	if (issue.value) {
+		const { fronts } = issue.value;
+		return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1);
+	}
+	return 0;
 };
 
 const IssueListView = withNavigation(
@@ -248,7 +250,7 @@ const IssueListView = withNavigation(
 			const listRef = useRef<FlatList<IssueSummary>>();
 			const prevCurrentIndexRef = useRef<number>(currentIssueIndex);
 			useEffect(() => {
-				if (listRef.current == null || currentIssueIndex < 0) {
+				if (listRef.current === null || currentIssueIndex < 0) {
 					return;
 				}
 
@@ -283,6 +285,8 @@ const IssueListView = withNavigation(
 			// indeed a dependency of the callback.
 			const getItemLayout = useCallback(
 				(_, index) => {
+					const height =
+						index === currentIssueIndex ? frontRowsHeight : 0;
 					return {
 						length:
 							ISSUE_ROW_HEADER_HEIGHT +

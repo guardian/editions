@@ -43,7 +43,7 @@ export const TrailImageView = ({
 	);
 
 	const { trailImage: image } = article;
-	if (image == null) {
+	if (!image) {
 		return null;
 	}
 	const use: ImageUse =

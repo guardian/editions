@@ -284,7 +284,7 @@ const WeatherForecast = ({ weather }: { weather: Weather }) => {
 export const getValidWeatherData = (result: QueryResult<WeatherQueryData>) => {
 	if (
 		!result.loading &&
-		result.data.weather != null &&
+		result.data.weather &&
 		result.data.weather.forecasts.length >= 9
 	)
 		return result.data.weather;
@@ -294,7 +294,7 @@ export const getValidWeatherData = (result: QueryResult<WeatherQueryData>) => {
 const WeatherWidget = React.memo(() => {
 	const query = useQuery<WeatherQueryData>(WEATHER_QUERY);
 	const weather = getValidWeatherData(query);
-	if (weather == null) {
+	if (!weather) {
 		return <View style={styles.emptyWeatherSpace} />;
 	}
 

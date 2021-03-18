@@ -125,7 +125,7 @@ const useUpdateWebviewVariable = (
 ) => {
 	const valueInWebview = useRef(true);
 	useEffect(() => {
-		if (webviewRef.current == null) return;
+		if (!webviewRef.current) return;
 		if (value === valueInWebview.current) return;
 		valueInWebview.current = value;
 		webviewRef.current.injectJavaScript(`window.${name} = ${value};`);
