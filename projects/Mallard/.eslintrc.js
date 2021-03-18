@@ -106,7 +106,6 @@ module.exports = {
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
         "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/prefer-optional-chain": "off",
