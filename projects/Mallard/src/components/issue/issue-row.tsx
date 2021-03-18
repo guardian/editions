@@ -340,7 +340,7 @@ const IssueRowHeader = React.memo(
 							title={title}
 							subtitle={subTitle}
 							subtitleStyle={subtitleStyle}
-							appearance={IssueTitleAppearance.tertiary}
+							appearance={IssueTitleAppearance.Tertiary}
 						/>
 					</Highlight>
 				</View>

@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
 });
 
 export enum IssueTitleAppearance {
-	default,
-	ocean,
-	tertiary,
+	Default,
+	Ocean,
+	Tertiary,
 }
 
 export interface IssueTitleProps {
@@ -105,13 +105,13 @@ const appearances: {
 		subtitle: StyleProp<TextStyle>;
 	};
 } = {
-	[IssueTitleAppearance.default]: StyleSheet.create({
+	[IssueTitleAppearance.Default]: StyleSheet.create({
 		subtitle: { color: color.palette.highlight.main },
 	}),
-	[IssueTitleAppearance.ocean]: StyleSheet.create({
+	[IssueTitleAppearance.Ocean]: StyleSheet.create({
 		subtitle: { color: color.palette.sport.bright },
 	}),
-	[IssueTitleAppearance.tertiary]: StyleSheet.create({
+	[IssueTitleAppearance.Tertiary]: StyleSheet.create({
 		title: { color: color.palette.brand.main },
 		subtitle: {
 			color: color.palette.brand.main,
@@ -124,7 +124,7 @@ const IssueTitle = React.memo(
 	({
 		title,
 		subtitle,
-		appearance = IssueTitleAppearance.default,
+		appearance = IssueTitleAppearance.Default,
 		overwriteStyles,
 		style,
 		titleStyle,
