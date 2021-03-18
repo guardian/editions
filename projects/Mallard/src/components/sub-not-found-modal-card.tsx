@@ -55,7 +55,7 @@ const SubNotFoundModalCard = ({
                             )
                         }
                     }}
-                    buttonAppearance={ButtonAppearance.dark}
+                    buttonAppearance={ButtonAppearance.Dark}
                 >
                     {Platform.OS === 'ios'
                         ? 'Learn more'

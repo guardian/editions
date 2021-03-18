@@ -16,18 +16,18 @@ import { getFont } from 'src/theme/typography';
 import { UiBodyCopy } from '../styled-text';
 
 export enum ButtonAppearance {
-	default,
-	skeleton,
-	skeletonBlue,
-	tomato,
-	apricot,
-	skeletonLight,
-	skeletonActive,
-	light,
-	dark,
-	modal,
-	pillar,
-	black,
+	Default,
+	Skeleton,
+	SkeletonBlue,
+	Tomato,
+	Apricot,
+	SkeletonLight,
+	SkeletonActive,
+	Light,
+	Dark,
+	Modal,
+	Pillar,
+	Black,
 }
 
 const height = metrics.buttonHeight;
@@ -66,11 +66,11 @@ const getButtonAppearance = (
 } => {
 	const pillarColors = pillar ? getPillarColors(pillar) : null;
 	return {
-		[ButtonAppearance.default]: StyleSheet.create({
+		[ButtonAppearance.Default]: StyleSheet.create({
 			background: { backgroundColor: color.palette.highlight.main },
 			text: { color: color.palette.neutral[7] },
 		}),
-		[ButtonAppearance.skeleton]: StyleSheet.create({
+		[ButtonAppearance.Skeleton]: StyleSheet.create({
 			background: {
 				backgroundColor: undefined,
 				borderWidth: 1,
@@ -86,7 +86,7 @@ const getButtonAppearance = (
 			},
 			text: { color: color.primary },
 		}),
-		[ButtonAppearance.skeletonActive]: StyleSheet.create({
+		[ButtonAppearance.SkeletonActive]: StyleSheet.create({
 			background: {
 				backgroundColor: appAppearance.color,
 				borderWidth: 1,
@@ -94,7 +94,7 @@ const getButtonAppearance = (
 			},
 			text: { color: appAppearance.cardBackgroundColor },
 		}),
-		[ButtonAppearance.skeletonLight]: StyleSheet.create({
+		[ButtonAppearance.SkeletonLight]: StyleSheet.create({
 			background: {
 				backgroundColor: undefined,
 				borderWidth: 1,
@@ -102,28 +102,28 @@ const getButtonAppearance = (
 			},
 			text: { color: color.palette.neutral[100] },
 		}),
-		[ButtonAppearance.light]: StyleSheet.create({
+		[ButtonAppearance.Light]: StyleSheet.create({
 			background: { backgroundColor: color.palette.neutral[100] },
 			text: { color: color.primary },
 		}),
-		[ButtonAppearance.dark]: StyleSheet.create({
+		[ButtonAppearance.Dark]: StyleSheet.create({
 			background: { backgroundColor: color.primary },
 			text: { color: color.palette.neutral[100] },
 		}),
-		[ButtonAppearance.tomato]: StyleSheet.create({
+		[ButtonAppearance.Tomato]: StyleSheet.create({
 			background: { backgroundColor: color.ui.tomato },
 			text: { color: color.palette.neutral[100] },
 		}),
-		[ButtonAppearance.apricot]: StyleSheet.create({
+		[ButtonAppearance.Apricot]: StyleSheet.create({
 			background: { backgroundColor: color.ui.apricot },
 			text: { color: color.palette.neutral[100] },
 		}),
 		// Waiting on the correct colour references
-		[ButtonAppearance.modal]: StyleSheet.create({
+		[ButtonAppearance.Modal]: StyleSheet.create({
 			background: { backgroundColor: '#41A9E0' },
 			text: { color: 'white' },
 		}),
-		[ButtonAppearance.pillar]: StyleSheet.create({
+		[ButtonAppearance.Pillar]: StyleSheet.create({
 			background: {
 				backgroundColor: pillarColors
 					? pillarColors.main
@@ -137,7 +137,7 @@ const getButtonAppearance = (
 			},
 			text: { color: 'white' },
 		}),
-		[ButtonAppearance.black]: StyleSheet.create({
+		[ButtonAppearance.Black]: StyleSheet.create({
 			background: {
 				backgroundColor: 'black',
 			},
@@ -241,7 +241,7 @@ const Button = ({
 	);
 };
 Button.defaultProps = {
-	appearance: ButtonAppearance.default,
+	appearance: ButtonAppearance.Default,
 };
 
 export { Button };

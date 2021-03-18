@@ -90,7 +90,7 @@ const OnboardingConsent = ({
 										enableNulls();
 										onContinue();
 									}}
-									buttonAppearance={ButtonAppearance.dark}
+									buttonAppearance={ButtonAppearance.Dark}
 								>
 									{Copy.consentOnboarding.okayButton}
 								</ModalButton>

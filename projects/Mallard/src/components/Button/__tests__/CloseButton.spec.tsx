@@ -21,7 +21,7 @@ describe('CloseButton', () => {
 				onPress={() => {}}
 				accessibilityHint="Accessibility Hint"
 				accessibilityLabel="Accessibility Label"
-				appearance={ButtonAppearance.modal}
+				appearance={ButtonAppearance.Modal}
 			/>,
 		).toJSON();
 		expect(component).toMatchSnapshot();

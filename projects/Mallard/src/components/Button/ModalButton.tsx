@@ -24,7 +24,7 @@ const ModalButton = (props: {
 		style={styles.button}
 		buttonStyles={props.buttonStyles}
 		textStyles={props.textStyles}
-		appearance={props.buttonAppearance || ButtonAppearance.light}
+		appearance={props.buttonAppearance || ButtonAppearance.Light}
 	/>
 );
 

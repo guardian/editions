@@ -42,7 +42,7 @@ export const DevTools = ({
 	return (
 		<View style={styles.devTools}>
 			<Button
-				appearance={ButtonAppearance.skeletonActive}
+				appearance={ButtonAppearance.SkeletonActive}
 				alt={'open devtools'}
 				style={{ transform: [{ scale: 0.5 }] }}
 				onPress={() => {

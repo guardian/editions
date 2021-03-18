@@ -9,7 +9,7 @@ const SettingsButton = ({ onPress }: { onPress: () => void }) => (
 		icon={'\uE040'}
 		alt="Settings"
 		onPress={onPress}
-		appearance={ButtonAppearance.skeleton}
+		appearance={ButtonAppearance.Skeleton}
 	/>
 );
 

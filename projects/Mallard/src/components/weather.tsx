@@ -222,7 +222,7 @@ const SetLocationButton = withNavigation(
 				accessibilityHint="Double tap to open a device location consent screen"
 				accessibilityRole="button"
 				onPress={onSetLocation}
-				appearance={ButtonAppearance.skeleton}
+				appearance={ButtonAppearance.Skeleton}
 				style={[
 					styles.locationNameContainer,
 					styles.setLocationButtonWrap,

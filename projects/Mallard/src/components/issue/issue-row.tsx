@@ -194,7 +194,7 @@ const IssueButton = ({
 					isOnDevice === ExistsStatus.doesExist ? '\uE062' : '\uE077'
 				}
 				alt={'Download'}
-				appearance={ButtonAppearance.skeleton}
+				appearance={ButtonAppearance.Skeleton}
 				textStyles={{
 					color:
 						isOnDevice !== ExistsStatus.doesExist

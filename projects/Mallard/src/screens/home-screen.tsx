@@ -175,7 +175,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 				<Button
 					accessibilityLabel="Manage downloads button"
 					accessibilityHint="Navigates to the manage downloads screen"
-					appearance={ButtonAppearance.skeleton}
+					appearance={ButtonAppearance.Skeleton}
 					onPress={() => {
 						navigation.navigate({
 							routeName: routeNames.ManageEditions,
@@ -190,7 +190,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 					<Button
 						accessibilityLabel="Go to the latest edition button"
 						accessibilityHint="Navigates to the latest edition"
-						appearance={ButtonAppearance.skeleton}
+						appearance={ButtonAppearance.Skeleton}
 						onPress={() => {
 							navigateToIssue({
 								navigation,

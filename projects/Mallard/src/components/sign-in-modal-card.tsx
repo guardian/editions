@@ -72,7 +72,7 @@ const SignInModalCard = ({
 									'https://support.theguardian.com/uk/subscribe/digital',
 								);
 							}}
-							buttonAppearance={ButtonAppearance.dark}
+							buttonAppearance={ButtonAppearance.Dark}
 						>
 							{Copy.signIn.freeTrial}
 						</ModalButton>
@@ -86,7 +86,7 @@ const SignInModalCard = ({
                             )
                         }
                     }}
-                    buttonAppearance={ButtonAppearance.dark}
+                    buttonAppearance={ButtonAppearance.Dark}
                 >
                     {Platform.OS === 'ios'
                         ? 'Learn more'
