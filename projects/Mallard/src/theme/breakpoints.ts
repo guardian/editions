@@ -24,8 +24,8 @@ export const pickClosestBreakpoint = <T>(
 	size: number,
 ) =>
 	breakpoints[
-	getClosestBreakpoint(
-		(Object.keys(breakpoints) as unknown[]) as number[],
-		size,
-	)
+		getClosestBreakpoint(
+			(Object.keys(breakpoints) as unknown[]) as number[],
+			size,
+		)
 	];
