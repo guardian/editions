@@ -125,6 +125,7 @@ const casCredentialsKeychain = createServiceTokenStore('CASCredentials');
  * to write to if from the application and additionally, the token is set in a JSON object
  * in the old app so we need to fetch that out in the `getLegacyUserAccessToken` helper.
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const _legacyUserAccessTokenKeychain = createServiceTokenStore('AccessToken');
 
 const legacyUserAccessTokenKeychain = {
