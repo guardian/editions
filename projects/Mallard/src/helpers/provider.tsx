@@ -29,7 +29,7 @@ const useContextAsHook = <C extends unknown>(
 	const ctx = useContext(Context);
 	if (ctx === null) {
 		console.error(Context);
-		throw 'Missing context provider for ' + Context;
+		throw `Missing context provider for ${Context}`;
 	}
 	return ctx;
 };

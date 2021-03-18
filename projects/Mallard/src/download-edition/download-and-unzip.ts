@@ -94,8 +94,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					withProgress: false,
 				});
 				console.log(
-					'Data download completed with status: ' +
-						dataDownloadResult.statusCode,
+					`Data download completed with status:${dataDownloadResult.statusCode}`,
 				);
 
 				await pushTracking(
@@ -117,7 +116,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					withProgress: true,
 				});
 				console.log(
-					'Image download completed with status: ' + dlImg.statusCode,
+					`Image download completed with status: ${dlImg.statusCode}`,
 				);
 
 				await pushTracking(

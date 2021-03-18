@@ -36,7 +36,7 @@ interface IssueDate {
 export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
 	const date = londonTime(dateString);
 	return {
-		date: date.date() + ' ' + months[date.month()],
+		date: `${date.date()} ${months[date.month()]}`,
 		weekday: days[date.day()],
 	};
 };
@@ -51,7 +51,7 @@ export const useIssueDate = (issue?: {
 	);
 
 const dateToFolderConvert = (date: Date): string => {
-	const pad = (n: number) => (n < 10 ? '0' + n : n);
+	const pad = (n: number) => (n < 10 ? `0${n}` : n);
 	return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(
 		date.getUTCDate(),
 	)}`;

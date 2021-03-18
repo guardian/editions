@@ -75,7 +75,7 @@ const ToastRootHolder = () => {
 	return (
 		<View style={holderStyles.root}>
 			{toasts.map((toast, i) => (
-				<Toast {...toast} key={i + toast.title} />
+				<Toast {...toast} key={`${i}${toast.title}`} />
 			))}
 		</View>
 	);

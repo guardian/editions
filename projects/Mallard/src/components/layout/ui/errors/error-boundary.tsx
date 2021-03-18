@@ -37,7 +37,7 @@ class ErrorBoundary extends Component<
 			return (
 				<FlexErrorMessage
 					title={GENERIC_FATAL_ERROR}
-					message={`Here's some details; ` + this.state.message}
+					message={`Here's some details; ${this.state.message}`}
 				></FlexErrorMessage>
 			);
 		}

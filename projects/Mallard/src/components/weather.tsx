@@ -156,9 +156,9 @@ const WeatherIconView = ({
 				ellipsizeMode="clip"
 				style={styles.temperature}
 			>
-				{Math.round(forecast.Temperature.Value) +
-					'°' +
-					forecast.Temperature.Unit}
+				{`${Math.round(forecast.Temperature.Value)}°${
+					forecast.Temperature.Unit
+				}`}
 			</Text>
 			<Text
 				allowFontScaling={false}
