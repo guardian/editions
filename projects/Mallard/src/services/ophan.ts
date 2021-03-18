@@ -5,7 +5,6 @@ import { NativeModules } from 'react-native';
 enum ComponentType {
 	AppButton = 'APP_BUTTON',
 	AppVideo = 'APP_VIDEO',
-	appAudio = 'APP_AUDIO',
 }
 
 enum Action {
