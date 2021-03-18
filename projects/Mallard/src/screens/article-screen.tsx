@@ -12,7 +12,6 @@ import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
 import { routeNames } from 'src/navigation/routes';
 import type { PathToArticle } from 'src/paths';
-import { sendPageViewEvent } from 'src/services/ophan';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { ArticleScreenBody } from './article/body';
@@ -170,9 +169,6 @@ export const ArticleScreen = ({
 			/>
 		),
 		success: (props) => {
-			if (props.path && props.path.article) {
-				sendPageViewEvent({ path: props.path.article });
-			}
 			return <ArticleScreenWithProps {...{ navigation }} {...props} />;
 		},
 	});
