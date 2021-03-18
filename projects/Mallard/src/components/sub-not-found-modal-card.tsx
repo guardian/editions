@@ -16,7 +16,7 @@ const SubNotFoundModalCard = ({
 }) => (
 	<OnboardingCard
 		title={Copy.subNotFound.title}
-		appearance={CardAppearance.blue}
+		appearance={CardAppearance.Blue}
 		size="small"
 		explainerTitle={Copy.subNotFound.explainer}
 		onDismissThisCard={() => {

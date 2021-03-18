@@ -33,7 +33,7 @@ const SignInModalCard = ({
 			onDismissThisCard={onDismiss}
 			title={Copy.signIn.title}
 			subtitle={Copy.signIn.subtitle}
-			appearance={CardAppearance.blue}
+			appearance={CardAppearance.Blue}
 			size="medium"
 			bottomContent={
 				<>

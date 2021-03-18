@@ -10,9 +10,9 @@ import { CloseButton } from '../Button/CloseButton';
 import { TitlepieceText, UiExplainerCopy } from '../styled-text';
 
 export enum CardAppearance {
-	tomato,
-	apricot,
-	blue,
+	Tomato,
+	Apricot,
+	Blue,
 }
 
 const styles = StyleSheet.create({
@@ -61,17 +61,17 @@ const appearances: {
 		subtitleText: StyleProp<TextStyle>;
 	};
 } = {
-	[CardAppearance.tomato]: StyleSheet.create({
+	[CardAppearance.Tomato]: StyleSheet.create({
 		background: { backgroundColor: color.ui.tomato },
 		titleText: { color: color.palette.neutral[100] },
 		subtitleText: { color: color.palette.neutral[100] },
 	}),
-	[CardAppearance.apricot]: StyleSheet.create({
+	[CardAppearance.Apricot]: StyleSheet.create({
 		background: { backgroundColor: color.ui.apricot },
 		titleText: { color: color.palette.neutral[100] },
 		subtitleText: { color: color.palette.neutral[100] },
 	}),
-	[CardAppearance.blue]: StyleSheet.create({
+	[CardAppearance.Blue]: StyleSheet.create({
 		background: { backgroundColor: color.ui.sea },
 		titleText: { color: color.palette.neutral[100] },
 		subtitleText: { color: color.primary },
@@ -207,7 +207,7 @@ const OnboardingCard = ({
 };
 
 OnboardingCard.defaultProps = {
-	appearance: CardAppearance.tomato,
+	appearance: CardAppearance.Tomato,
 };
 
 export { OnboardingCard };

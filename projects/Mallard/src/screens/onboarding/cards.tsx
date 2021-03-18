@@ -66,7 +66,7 @@ const OnboardingConsent = ({
 	return (
 		<Aligner>
 			<OnboardingCard
-				appearance={CardAppearance.blue}
+				appearance={CardAppearance.Blue}
 				title={Copy.consentOnboarding.title}
 				explainerTitle={Copy.consentOnboarding.explainerTitle}
 				bottomExplainerContent={
