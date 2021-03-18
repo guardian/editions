@@ -137,7 +137,7 @@ const injectJavascript = (
 	webviewRef: React.MutableRefObject<WebView | null>,
 	script: string,
 ): void => {
-	if (webviewRef && webviewRef.current) {
+	if (webviewRef?.current) {
 		webviewRef.current.injectJavaScript(script);
 	}
 };
@@ -197,7 +197,7 @@ const Article = ({
 	const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
 		query: gql('{ netInfo @client { isConnected @client } }'),
 	});
-	const isConnected = data && data.netInfo.isConnected;
+	const isConnected = data?.netInfo?.isConnected;
 	const shareUrlFetchEnabled =
 		!article.webUrl &&
 		isConnected &&

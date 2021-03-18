@@ -119,8 +119,7 @@ const ArticleScreenWithProps = ({
 		if (viewRef.current) {
 			viewRef.current.setNativeProps({ opacity: 0 });
 			setTimeout(() => {
-				viewRef.current &&
-					viewRef.current.setNativeProps({ opacity: 1 });
+				viewRef?.current?.setNativeProps({ opacity: 1 });
 			}, 600);
 		}
 	}, [width]);

@@ -136,7 +136,7 @@ const IssueTitle = React.memo(
 					styles.text,
 					appearances[appearance].title,
 					titleStyle,
-					overwriteStyles && overwriteStyles.textColorPrimary
+					overwriteStyles?.textColorPrimary
 						? {
 								color: overwriteStyles.textColorPrimary,
 						  }
@@ -151,7 +151,7 @@ const IssueTitle = React.memo(
 						styles.text,
 						appearances[appearance].subtitle,
 						subtitleStyle,
-						overwriteStyles && overwriteStyles.textColorSecondary
+						overwriteStyles?.textColorSecondary
 							? {
 									color: overwriteStyles.textColorSecondary,
 							  }
