@@ -43,7 +43,7 @@ const SignInModalCard = ({
 								close();
 								onLoginPress();
 								sendComponentEvent({
-									componentType: ComponentType.appButton,
+									componentType: ComponentType.AppButton,
 									action: Action.click,
 									value: 'sign_in_continue_clicked',
 								});

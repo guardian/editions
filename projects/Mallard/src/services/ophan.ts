@@ -3,8 +3,8 @@
 import { NativeModules } from 'react-native';
 
 enum ComponentType {
-	appButton = 'APP_BUTTON',
-	appVideo = 'APP_VIDEO',
+	AppButton = 'APP_BUTTON',
+	AppVideo = 'APP_VIDEO',
 	appAudio = 'APP_AUDIO',
 }
 

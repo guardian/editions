@@ -55,7 +55,7 @@ describe('services/ophan', () => {
 	describe('sendComponentEvent', () => {
 		it('should use the correct native module function with basic values', () => {
 			sendComponentEvent({
-				componentType: ComponentType.appVideo,
+				componentType: ComponentType.AppVideo,
 				action: Action.view,
 			});
 			expect(NativeModules.Ophan.sendComponentEvent).toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('services/ophan', () => {
 
 		it('should use the correct native module function with optional values', () => {
 			sendComponentEvent({
-				componentType: ComponentType.appVideo,
+				componentType: ComponentType.AppVideo,
 				action: Action.view,
 				value: 'youtube/politicalvideo',
 				componentId: '12345qwerty',
