@@ -1,4 +1,6 @@
-import { AppRegistry, YellowBox, Text } from 'react-native'
+import './wdyr';
+
+import { AppRegistry, Text, YellowBox } from 'react-native'
 import { name as appName } from './app.json'
 import App from './src/App'
 
