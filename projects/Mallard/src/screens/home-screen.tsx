@@ -9,7 +9,6 @@ import React, {
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import type {
 	NavigationInjectedProps,
-	NavigationParams,
 	NavigationRoute,
 	NavigationScreenProp,
 } from 'react-navigation';
