@@ -15,7 +15,6 @@ export const baseTests = ({
 }) =>
 	describe(`${env} endpoint - ${platform}`, () => {
 		beforeEach(() => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 			// @ts-expect-error: Cannot overide constant __DEV__ but need to for the test
 			__DEV__ = env === 'CODE' ? true : false;
 		});

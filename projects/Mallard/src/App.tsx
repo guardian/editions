@@ -17,7 +17,6 @@ import {
 	largeDeviceMemory,
 } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
-import { RootNavigator } from 'src/navigation';
 import type { ScreenTrackingMapping } from 'src/services/ophan';
 import {
 	ScreenTracking,

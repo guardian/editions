@@ -158,7 +158,7 @@ const useScrollToFrontBehavior = (
 	// because we want to run this side-effect only when `frontWithCards`
 	// changes and nothing else.
 	//
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+
 	useEffect(() => scrollTo(findFrontIndex(initialFrontKey)), [
 		frontWithCards,
 	]);
