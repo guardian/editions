@@ -57,7 +57,6 @@ const createProviderFromHook = <G, S>(
 	}: ProviderHook<G, S> & {
 		children: React.ReactNode;
 	}) => {
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		const memoizedSetter = useMemo(() => setter, []);
 		return (
 			<SetterCtx.Provider value={memoizedSetter}>

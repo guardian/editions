@@ -1,4 +1,10 @@
 import { useApolloClient } from '@apollo/react-hooks';
+import type { LightboxMessage, PlatformMessage } from '@guardian/renditions';
+import {
+	MessageKind,
+	pingEditionsRenderingJsString,
+	Platform as PlatformType,
+} from '@guardian/renditions';
 import gql from 'graphql-tag';
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform, Share, StyleSheet } from 'react-native';
@@ -123,7 +129,6 @@ const useUpdateWebviewVariable = (
 		if (value === valueInWebview.current) return;
 		valueInWebview.current = value;
 		webviewRef.current.injectJavaScript(`window.${name} = ${value};`);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value]);
 	return valueInWebview;
 };
@@ -253,6 +258,78 @@ const Article = ({
 	]);
 	const { isAppsRendering } = useIsAppsRendering();
 
+	const handleShare = (shareUrl: string) => {
+		if (Platform.OS === 'ios') {
+			Share.share({
+				url: shareUrl,
+				message: article.headline,
+			});
+		} else {
+			Share.share(
+				{
+					title: article.headline,
+					url: shareUrl,
+					// 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
+					message: shareUrl,
+				},
+				{
+					subject: article.headline,
+				},
+			);
+		}
+		return;
+	};
+
+	const handleLightbox = (parsed: LightboxMessage) => {
+		let index = parsed.index;
+
+		//following if statement can be removed once ER is in production
+		if (
+			!isAppsRendering &&
+			article.type !== 'gallery' &&
+			article.image &&
+			!parsed.isMainImage &&
+			lightboxImages &&
+			lightboxImages.length > 1
+		) {
+			index++;
+		}
+		navigateToLightbox({
+			navigation,
+			navigationProps: {
+				images: lightboxImages,
+				imagePaths: imagePaths,
+				index,
+				pillar,
+			},
+		});
+	};
+
+	const handlePing = (event: string) => {
+		const parsed = parsePing(event);
+		if (parsed.kind === MessageKind.Share && shareUrl) {
+			handleShare(shareUrl);
+		}
+		if (parsed.kind === 'shouldShowHeaderChange') {
+			wasShowingHeader.current = parsed.shouldShowHeader;
+			onShouldShowHeaderChange(parsed.shouldShowHeader);
+		}
+
+		if (parsed.kind === 'isAtTopChange') {
+			onIsAtTopChange(parsed.isAtTop);
+		}
+		if (lightboxEnabled && parsed.kind === MessageKind.Lightbox) {
+			handleLightbox(parsed);
+		}
+	};
+
+	const getPlatform = (): PlatformMessage => {
+		const value =
+			Platform.OS === 'ios' ? PlatformType.IOS : PlatformType.Android;
+		return { kind: MessageKind.Platform, value };
+	};
+	const platform = getPlatform();
+
 	return (
 		<Fader>
 			<WebviewWithArticle
@@ -272,58 +349,9 @@ const Article = ({
 				}}
 				topPadding={topPadding}
 				origin={origin}
+				injectedJavaScript={pingEditionsRenderingJsString(platform)}
 				onMessage={(event) => {
-					const parsed = parsePing(event.nativeEvent.data);
-					if (parsed.type === 'share' && shareUrl) {
-						if (Platform.OS === 'ios') {
-							Share.share({
-								url: shareUrl,
-								message: article.headline,
-							});
-						} else {
-							Share.share(
-								{
-									title: article.headline,
-									url: shareUrl,
-									// 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
-									message: shareUrl,
-								},
-								{
-									subject: article.headline,
-								},
-							);
-						}
-						return;
-					}
-					if (parsed.type === 'shouldShowHeaderChange') {
-						wasShowingHeader.current = parsed.shouldShowHeader;
-						onShouldShowHeaderChange(parsed.shouldShowHeader);
-					}
-
-					if (parsed.type === 'isAtTopChange') {
-						onIsAtTopChange(parsed.isAtTop);
-					}
-					if (lightboxEnabled && parsed.type === 'openLightbox') {
-						let index = parsed.index;
-						if (
-							article.type !== 'gallery' &&
-							article.image &&
-							parsed.isMainImage === 'false' &&
-							lightboxImages &&
-							lightboxImages.length > 1
-						) {
-							index++;
-						}
-						navigateToLightbox({
-							navigation,
-							navigationProps: {
-								images: lightboxImages,
-								imagePaths: imagePaths,
-								index,
-								pillar,
-							},
-						});
-					}
+					handlePing(event.nativeEvent.data);
 				}}
 			/>
 		</Fader>

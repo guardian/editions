@@ -1,15 +1,6 @@
 import { Platform } from 'react-native';
 import { isInBeta } from './release-stream';
 
-export const REQUEST_INVALID_RESPONSE_STATE = 'Request failed';
-export const REQUEST_INVALID_RESPONSE_VALIDATION = 'Failed to parse data';
-export const LOCAL_JSON_INVALID_RESPONSE_VALIDATION =
-	'Failed to parse local data';
-
-export const FEEDBACK_EMAIL = 'editions.feedback@theguardian.com';
-export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies';
-export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy';
-
 export const IOS_BETA_EMAIL = 'editions.ios.beta@theguardian.com';
 export const ANDROID_BETA_EMAIL = 'editions.android.beta@theguardian.com';
 export const ISSUE_EMAIL = 'editions.feedback@theguardian.com';

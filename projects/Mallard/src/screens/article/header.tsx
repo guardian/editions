@@ -13,7 +13,7 @@ export const BasicArticleHeader = () => {
 					appearance={ButtonAppearance.skeleton}
 					icon={'\uE00A'}
 					alt="Back"
-					onPress={() => navigation.goBack(null)}
+					onPress={() => navigation.goBack()}
 				></Button>
 			}
 			layout="center"

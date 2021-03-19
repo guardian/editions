@@ -117,6 +117,7 @@ module.exports = {
         "@typescript-eslint/prefer-regexp-exe": "off",
         "@typescript-eslint/prefer-regexp-exec": "off",
         "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/unbound-method": "off",
         "import/no-named-as-default-member": "off",
         "import/no-named-as-default": "off",
         "react-hooks/exhaustive-deps": "off",

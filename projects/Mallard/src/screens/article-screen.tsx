@@ -12,10 +12,8 @@ import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
 import { routeNames } from 'src/navigation/routes';
 import type { PathToArticle } from 'src/paths';
-import { sendPageViewEvent } from 'src/services/ophan';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
-import { articlePillars } from '../../../Apps/common/src';
 import { ArticleScreenBody } from './article/body';
 import { ArticleSlider } from './article/slider';
 
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
 	refView: { flex: 1 },
 });
 
-export const ArticleScreenWithProps = ({
+const ArticleScreenWithProps = ({
 	path,
 	articleNavigator,
 	navigation,
@@ -161,12 +159,10 @@ export const ArticleScreenWithProps = ({
 
 export const ArticleScreen = ({
 	navigation,
-	route,
 }: {
 	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
-	route: any;
 }) =>
-	getArticleNavigationProps(route.params, {
+	getArticleNavigationProps(navigation, {
 		error: () => (
 			<FlexErrorMessage
 				title={ERR_404_MISSING_PROPS}
@@ -174,9 +170,6 @@ export const ArticleScreen = ({
 			/>
 		),
 		success: (props) => {
-			if (props.path && props.path.article) {
-				sendPageViewEvent({ path: props.path.article });
-			}
 			return <ArticleScreenWithProps {...{ navigation }} {...props} />;
 		},
 	});

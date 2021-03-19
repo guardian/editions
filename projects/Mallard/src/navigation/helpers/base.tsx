@@ -58,6 +58,7 @@ const navigateToArticle = (
 ): void => {
 	navigation.navigate(routeNames.Article, navigationProps);
 };
+
 const getArticleNavigationProps = (
 	routeParams: any,
 	{

@@ -5,12 +5,7 @@ import React, { useContext, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
 import { Alert, Linking, Platform, Switch, Text } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { NavigationParams } from 'react-navigation';
-import type {
-	NavigationInjectedProps,
-	NavigationRoute,
-	NavigationScreenProp,
-} from 'react-navigation';
+import type { NavigationRoute, NavigationScreenProp } from 'react-navigation';
 import {
 	AccessContext,
 	useAccess,

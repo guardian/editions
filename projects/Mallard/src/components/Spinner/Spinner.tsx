@@ -88,13 +88,11 @@ const Spinner = () => {
 		new Animated.Value(0),
 		new Animated.Value(0),
 	]);
-	/* eslint-disable react-hooks/exhaustive-deps */
 
 	useEffect(() => {
 		Animated.parallel(jumps.map((j, i) => animateJumps(j, i))).start();
 	}, []);
 	// Ignored linter rule because we don't want to interfere with the animation
-	/* eslint-enable react-hooks/exhaustive-deps */
 	return (
 		<View accessibilityLabel={'Loading content'}>
 			{visible && (

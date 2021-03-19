@@ -1,3 +1,4 @@
+import type { LightboxMessage, ShareMessage } from '@guardian/renditions';
 import { Platform } from 'react-native';
 import type { ArticleType } from 'src/common';
 import { bundles } from 'src/html-bundle-info.json';
@@ -6,18 +7,12 @@ import { getFont, getScaledFont } from 'src/theme/typography';
 
 export type WebViewPing =
 	| {
-			type: 'shouldShowHeaderChange';
+			kind: 'shouldShowHeaderChange';
 			shouldShowHeader: boolean;
 	  }
-	| { type: 'isAtTopChange'; isAtTop: boolean }
-	| {
-			type: 'share';
-	  }
-	| {
-			type: 'openLightbox';
-			index: number;
-			isMainImage: string;
-	  };
+	| { kind: 'isAtTopChange'; isAtTop: boolean }
+	| ShareMessage
+	| LightboxMessage;
 
 /*
 this tricks vs code into thinking
@@ -121,7 +116,7 @@ export const getBundleUri = (
 	return uris[use];
 };
 
-export const parsePing = (data: string) => JSON.parse(data) as WebViewPing;
+export const parsePing = (data: string) => JSON.parse(data);
 
 const makeJavaScript = (topPadding: number) => html`
 	<script>
@@ -196,7 +191,7 @@ const makeJavaScript = (topPadding: number) => html`
 				// though a message.
 				window.ReactNativeWebView.postMessage(
 					JSON.stringify({
-						type: 'shouldShowHeaderChange',
+						kind: 'shouldShowHeaderChange',
 						shouldShowHeader: window.shouldShowHeader,
 					}),
 				);
@@ -208,7 +203,7 @@ const makeJavaScript = (topPadding: number) => html`
 
 				window.ReactNativeWebView.postMessage(
 					JSON.stringify({
-						type: 'isAtTopChange',
+						kind: 'isAtTopChange',
 						isAtTop: window.isAtTop,
 					}),
 				);

@@ -56,6 +56,5 @@ export const useNavPositionChange = (
 			throw new Error('cannot subscribe to nav position change twice');
 		state.current = handler;
 		return () => (state.current = undefined);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state, ...deps]);
 };

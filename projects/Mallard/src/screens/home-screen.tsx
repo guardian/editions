@@ -439,39 +439,32 @@ export const HomeScreen = () => {
 	const issueHeaderData =
 		selectedEdition.editionType === 'Special'
 			? { title: '', subTitle: '' }
-			: { title: selectedEdition.title, subTitle: 'Recent Editions' };
+			: { title: selectedEdition.title, subTitle: 'Recent Issues' };
 
 	return (
 		<WithAppAppearance value={'tertiary'}>
-			<ScreenFiller direction="end">
-				<IssuePickerHeader
-					title={issueHeaderData.title}
-					subTitle={issueHeaderData.subTitle}
-					headerStyles={
-						specialEditionProps && specialEditionProps.headerStyle
-					}
+			<IssuePickerHeader
+				title={issueHeaderData.title}
+				subTitle={issueHeaderData.subTitle}
+				headerStyles={
+					specialEditionProps && specialEditionProps.headerStyle
+				}
+			/>
+			{issueSummary ? (
+				<IssueListFetchContainer />
+			) : error ? (
+				<FlexErrorMessage
+					style={styles.issueList}
+					debugMessage={error}
+					title={CONNECTION_FAILED_ERROR}
+					message={CONNECTION_FAILED_AUTO_RETRY}
 				/>
-				{issueSummary ? (
-					<IssueListFetchContainer />
-				) : error ? (
-					<FlexErrorMessage
-						style={styles.issueList}
-						debugMessage={error}
-						title={CONNECTION_FAILED_ERROR}
-						message={CONNECTION_FAILED_AUTO_RETRY}
-					/>
-				) : (
-					<FlexCenter>
-						<Spinner></Spinner>
-					</FlexCenter>
-				)}
-				<ApiState />
-			</ScreenFiller>
+			) : (
+				<FlexCenter>
+					<Spinner></Spinner>
+				</FlexCenter>
+			)}
+			<ApiState />
 		</WithAppAppearance>
 	);
-};
-
-HomeScreen.navigationOptions = {
-	title: 'Home',
-	header: null,
 };

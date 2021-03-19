@@ -35,7 +35,6 @@ const Header = () => {
 		<Animated.View style={[styles.headerContainer]}>
 			<TouchableWithoutFeedback
 				// onPress={onDismiss}
-				// eslint-disable-next-line @typescript-eslint/unbound-method
 				onPress={navigation.goBack}
 				accessibilityHint="Go back"
 			>

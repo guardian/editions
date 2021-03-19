@@ -15,7 +15,7 @@ const NetInfoAutoToast = () => {
 		return () => {
 			clearTimeout(time);
 		};
-	}, [isConnected]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [isConnected]);
 	return null;
 };
 

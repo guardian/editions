@@ -53,7 +53,6 @@ const ArticleScreenBody = React.memo<
 		const handleIsAtTopChange = useCallback(
 			(value: boolean) =>
 				onIsAtTopChange && onIsAtTopChange(value, path.article),
-			// eslint-disable-next-line react-hooks/exhaustive-deps
 			[onIsAtTopChange],
 		);
 

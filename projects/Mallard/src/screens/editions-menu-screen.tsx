@@ -50,22 +50,24 @@ export const EditionsMenuScreen = ({
 	return (
 		<WithAppAppearance value="default">
 			<ScreenFiller>
-				<EditionsMenuScreenHeader
-					leftActionPress={() =>
-						navigation.navigate(routeNames.Issue)
-					}
-				/>
+				<>
+					<EditionsMenuScreenHeader
+						leftActionPress={() =>
+							navigation.navigate(routeNames.Issue)
+						}
+					/>
 
-				<EditionsMenu
-					navigationPress={() =>
-						navigation.navigate(routeNames.Issue)
-					}
-					regionalEditions={regionalEditions}
-					specialEditions={specialEditions}
-					selectedEdition={selectedEdition.edition}
-					storeSelectedEdition={storeSelectedEdition}
-				/>
-				<ApiState />
+					<EditionsMenu
+						navigationPress={() =>
+							navigation.navigate(routeNames.Issue)
+						}
+						regionalEditions={regionalEditions}
+						specialEditions={specialEditions}
+						selectedEdition={selectedEdition.edition}
+						storeSelectedEdition={storeSelectedEdition}
+					/>
+					<ApiState />
+				</>
 			</ScreenFiller>
 		</WithAppAppearance>
 	);
