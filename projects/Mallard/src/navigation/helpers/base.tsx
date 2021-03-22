@@ -1,11 +1,5 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactElement } from 'react';
-import React from 'react';
-import type {
-	NavigationContainer,
-	NavigationInjectedProps,
-	NavigationScreenProp,
-} from 'react-navigation';
 import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle, PathToIssue } from 'src/paths';
@@ -17,33 +11,19 @@ import type {
 	Issue,
 } from '../../../../Apps/common/src';
 
-type NavigatorWrapper = ({
-	navigation,
-}: NavigationInjectedProps) => JSX.Element;
-
-export const addStaticRouter = (
-	navigator: NavigationContainer,
-	wrapper: NavigatorWrapper,
-): NavigationContainer => {
-	const wrapperWithRouter = wrapper as NavigatorWrapper & NavigationContainer;
-	wrapperWithRouter.router = navigator.router;
-
-	return wrapperWithRouter as NavigationContainer;
-};
-
 /**
  *
  * @param Component - component that doesn't want to have navigation as a dependency
  * @param mapper - function to generate props from navigation
  *
  * Much like `mapDispatchToProps` in `redux`. Means we can decouple out components from navigation.
- */
-const mapNavigationToProps = <T extends {}, P extends {}>(
-	Component: React.ComponentType<T>,
-	mapper: (navigation: NavigationScreenProp<P>) => Partial<T>,
-) => (props: T & { navigation: NavigationScreenProp<P> }) => (
-	<Component {...props} {...mapper(props.navigation)} />
-);
+//  */
+// const mapNavigationToProps = <T extends {}, P extends {}>(
+// 	Component: React.ComponentType<T>,
+// 	mapper: (navigation: NavigationScreenProp<P>) => Partial<T>,
+// ) => (props: T & { navigation: NavigationScreenProp<P> }) => (
+// 	<Component {...props} {...mapper(props.navigation)} />
+// );
 
 export interface ArticleNavigationProps {
 	path: PathToArticle;
@@ -54,13 +34,6 @@ export interface ArticleNavigationProps {
     */
 	prefersFullScreen?: boolean;
 }
-
-const navigateToArticle = (
-	navigation: StackNavigationProp<RootStackParamList>,
-	navigationProps: ArticleNavigationProps,
-): void => {
-	navigation.navigate(RouteNames.Article, navigationProps);
-};
 
 const getArticleNavigationProps = (
 	routeParams: ArticleNavigationProps,
@@ -130,9 +103,4 @@ export interface LightboxNavigationProps {
 	pillar?: ArticlePillar;
 }
 
-export {
-	mapNavigationToProps,
-	navigateToArticle,
-	getArticleNavigationProps,
-	navigateToIssue,
-};
+export { getArticleNavigationProps, navigateToIssue };

@@ -13,8 +13,8 @@ import {
 import type { AnimatedValue } from 'react-navigation';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
-import { navigateToArticle } from 'src/navigation/helpers/base';
 import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import {
 	setScreenPositionFromView,
 	setScreenPositionOfItem,
@@ -115,7 +115,7 @@ const ItemTappable = ({
 			<TouchableHighlight
 				onPress={() => {
 					fade(opacity, 'out');
-					navigateToArticle(navigation, {
+					navigation.navigate(RouteNames.Article, {
 						path,
 						articleNavigator,
 						prefersFullScreen: article.type === 'crossword',
