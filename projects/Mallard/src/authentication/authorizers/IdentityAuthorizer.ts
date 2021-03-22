@@ -137,7 +137,7 @@ export default new Authorizer({
 			lutc.get(),
 			mtc.get(),
 		]);
-		const utoken = nutoken || lutoken;
+		const utoken = nutoken ?? lutoken;
 		if (!utoken || !mtoken) return InvalidResult();
 		return authWithTokens(utoken.password, mtoken.password);
 	},

@@ -63,7 +63,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
 	const [path, setPath] = useState<string | undefined>();
 
 	// FIXME: we should handle the loading status correctly.
-	const apiUrl = useApiUrl() || '';
+	const apiUrl = useApiUrl() ?? '';
 
 	useEffect(() => {
 		let localSetPath = setPath;

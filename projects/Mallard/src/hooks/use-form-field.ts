@@ -26,7 +26,7 @@ const useFormField = (
 	return {
 		value,
 		setValue: (value) => {
-			onSet && onSet(value);
+			onSet?.(value);
 			setValue(value);
 		},
 		error,

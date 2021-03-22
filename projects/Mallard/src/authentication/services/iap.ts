@@ -54,11 +54,7 @@ const isReceiptValid = (receipt: ReceiptIOS) => {
 };
 
 const hasLatestReceiptInfo = (receipt: ReceiptValidationResponse) => {
-	return (
-		receipt &&
-		receipt.latest_receipt_info &&
-		(receipt.latest_receipt_info as ReceiptIOS[]).length > 0
-	);
+	return (receipt?.latest_receipt_info as ReceiptIOS[])?.length > 0;
 };
 
 const findValidReceiptFromLatestInfo = (receipt: ReceiptValidationResponse) => {
@@ -67,7 +63,7 @@ const findValidReceiptFromLatestInfo = (receipt: ReceiptValidationResponse) => {
 
 const findValidReceipt = (receipt: ReceiptValidationResponse) =>
 	hasLatestReceiptInfo(receipt)
-		? findValidReceiptFromLatestInfo(receipt) || null
+		? findValidReceiptFromLatestInfo(receipt) ?? null
 		: null;
 
 /**
@@ -120,6 +116,7 @@ const fetchActiveIOSSubscriptionReceipt = async (): Promise<
 
 const TEST_PRODUCT_ID = 'uk.co.guardian.gce.sevenday.1monthsub2';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- DEV keyword
 const DEV_getLegacyIAPReceipt = () =>
 	isInBeta() &&
 	InAppUtils.loadProducts([TEST_PRODUCT_ID], () => {

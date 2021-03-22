@@ -16,7 +16,7 @@ const MissingIAPModalCard = ({
 	<OnboardingCard
 		title={title}
 		subtitle={subtitle}
-		appearance={CardAppearance.blue}
+		appearance={CardAppearance.Blue}
 		size="small"
 		onDismissThisCard={() => {
 			close();

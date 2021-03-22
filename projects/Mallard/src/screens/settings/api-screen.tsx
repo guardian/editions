@@ -49,7 +49,7 @@ const ApiScreen = () => {
 							setApiUrl(client, value);
 						}
 					}}
-					value={apiUrl || ''}
+					value={apiUrl ?? ''}
 				/>
 				<Heading>Presets</Heading>
 				<List

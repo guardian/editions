@@ -212,7 +212,7 @@ const GdprConsent = ({
 					}
 					proxy={
 						<Button
-							appearance={ButtonAppearance.skeleton}
+							appearance={ButtonAppearance.Skeleton}
 							onPress={() => onEnableAllAndContinue()}
 						>
 							{continueText}

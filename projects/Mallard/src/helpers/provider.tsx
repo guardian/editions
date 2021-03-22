@@ -29,7 +29,7 @@ const useContextAsHook = <C extends unknown>(
 	const ctx = useContext(Context);
 	if (ctx === null) {
 		console.error(Context);
-		throw 'Missing context provider for ' + Context;
+		throw `Missing context provider for ${Context}`;
 	}
 	return ctx;
 };
@@ -80,25 +80,4 @@ const createProviderFromHook = <G, S>(
 	return { Provider, useAsGetterHook, useAsSetterHook };
 };
 
-/*
-Do not use this, filesystem uses it because it's hard to refactor,
-TODO: refactor filesystem into two providers
-*/
-const createMixedProviderHook__SLOW = <T extends {}>(hook: () => T | null) => {
-	const Context = createContext<T | null>(null);
-	const Provider = ({ children }: { children: React.ReactNode }) => {
-		const value = hook();
-		return (
-			// @TODO: do we need to render a loading state here, it's so quick that we probably don't?
-			value && (
-				<Context.Provider value={value}>{children}</Context.Provider>
-			)
-		);
-	};
-
-	const useAsHook = (): T => useContextAsHook(Context);
-
-	return { Provider, useAsHook };
-};
-
-export { createProviderFromHook, createMixedProviderHook__SLOW };
+export { createProviderFromHook };

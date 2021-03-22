@@ -79,7 +79,7 @@ const productIdPrettyLabels: Record<string, string> = {
 };
 
 const getIAPType = (iapData: ReceiptIOS) =>
-	productIdPrettyLabels[iapData.product_id] || iapData.name || 'Unknown';
+	(productIdPrettyLabels[iapData.product_id] || iapData.name) ?? 'Unknown';
 
 const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
 	<>

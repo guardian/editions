@@ -131,15 +131,11 @@ export const Front = React.memo(
 			<FrontWrapper
 				scrubber={
 					<SliderTitle
-						title={frontData.displayName || 'News'}
+						title={frontData.displayName ?? 'News'}
 						numOfItems={stops}
 						color={color}
 						location="front"
-						subtitle={
-							cards[cardIndex] &&
-							cards[cardIndex].collection &&
-							cards[cardIndex].collection.key
-						}
+						subtitle={cards[cardIndex]?.collection?.key}
 						position={position}
 						editionDate={issueDateFromId(publishedIssueId)}
 					/>
@@ -164,7 +160,7 @@ export const Front = React.memo(
 						index,
 					})}
 					keyExtractor={(item: FlatCard, index: number) =>
-						index + item.collection.key
+						`${index}${item.collection.key}`
 					}
 					ListFooterComponent={
 						<View

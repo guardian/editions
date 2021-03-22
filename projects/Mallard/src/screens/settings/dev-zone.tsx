@@ -376,7 +376,7 @@ const DevZone = () => {
 					.map(([title, explainer]) => ({
 						key: title,
 						title,
-						explainer: explainer ? explainer + '' : 'false',
+						explainer: explainer ? `${explainer} ` : 'false',
 					}))
 					.concat([
 						{

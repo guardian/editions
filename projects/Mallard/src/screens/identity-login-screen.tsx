@@ -117,11 +117,11 @@ const AuthSwitcherScreen = ({
 					Alert.alert(
 						Copy.authSwitcherScreen.socialSignInDisabledTitle.replace(
 							'%signInName%',
-							signInName || 'Social',
+							signInName ?? 'Social',
 						),
 						Copy.authSwitcherScreen.socialSignInDisabledSubtitle.replace(
 							'%signInName%',
-							signInName || 'social',
+							signInName ?? 'social',
 						),
 					);
 				},
