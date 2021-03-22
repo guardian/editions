@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/react-hooks';
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-import type { NavigationInjectedProps } from 'react-navigation';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
@@ -27,7 +27,8 @@ export interface OnCompletionToast {
 	(msg: string): void;
 }
 
-const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
+const HelpScreen = () => {
+	const navigation = useNavigation();
 	const { showToast } = useToast();
 	const { attempt } = useContext(AccessContext);
 	const client = useApolloClient();
