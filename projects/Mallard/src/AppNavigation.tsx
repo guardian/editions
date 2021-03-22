@@ -11,6 +11,7 @@ import { EditionsMenuScreen } from './screens/editions-menu-screen';
 import { HomeScreen } from './screens/home-screen';
 import { AuthSwitcherScreen } from './screens/identity-login-screen';
 import { IssueScreen } from './screens/issue-screen';
+import { LightboxScreen } from './screens/lightbox';
 import { OnboardingConsentScreen } from './screens/onboarding-screen';
 import { SettingsScreen } from './screens/settings-screen';
 import { AlreadySubscribedScreen } from './screens/settings/already-subscribed-screen';
@@ -153,7 +154,10 @@ const RootStack = () => {
 				name={RouteNames.PrivacyPolicy}
 				component={PrivacyPolicyScreen}
 			/>
-
+			<Stack.Screen
+				name={RouteNames.Lightbox}
+				component={LightboxScreen}
+			/>
 			{/* ==== Inspect from here === */}
 			<Stack.Screen
 				name={RouteNames.Edition}
