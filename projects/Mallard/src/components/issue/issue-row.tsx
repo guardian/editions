@@ -379,15 +379,13 @@ export const IssueRow = React.memo(
 				issue={issue}
 				onGoToSettings={onGoToSettings}
 			/>
-			{issueDetails != null && issueDetails.value != null && (
+			{issueDetails?.value && (
 				<IssueFrontsSelector
 					fronts={issueDetails.value.fronts}
 					onPressFront={onPressFront}
 				/>
 			)}
-			{issueDetails != null && issueDetails.error != null && (
-				<IssueFrontsError />
-			)}
+			{issueDetails?.error && <IssueFrontsError />}
 		</>
 	),
 );

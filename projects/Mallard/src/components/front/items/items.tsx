@@ -84,19 +84,12 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 	const cardImage: Image =
 		size.layout === PageLayoutSizes.mobile
 			? {
-					source:
-						(article.cardImage && article.cardImage.source) || '',
-					path: (article.cardImage && article.cardImage.path) || '',
+					source: article?.cardImage?.source || '',
+					path: article?.cardImage?.path || '',
 			  }
 			: {
-					source:
-						(article.cardImageTablet &&
-							article.cardImageTablet.source) ||
-						'',
-					path:
-						(article.cardImageTablet &&
-							article.cardImageTablet.path) ||
-						'',
+					source: article?.cardImageTablet?.source || '',
+					path: article?.cardImageTablet?.path || '',
 			  };
 
 	return (
