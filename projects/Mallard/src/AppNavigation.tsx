@@ -109,19 +109,6 @@ const RootStack = () => {
 					gestureDirection: 'vertical',
 				}}
 			/>
-			{/* <Stack.Screen
-                name={RouteNames.Article}
-                component={SlideCardJames}
-                options={{
-                    cardStyleInterpolator: props => {
-                        return {
-                            ...CardStyleInterpolators.forModalPresentationIOS(
-                                props,
-                            ),
-                        }
-                    },
-                }}
-            /> */}
 			<Stack.Screen
 				name={RouteNames.Settings}
 				component={SettingsScreen}
