@@ -18,6 +18,7 @@ b) animations in react in general are always a
    on screen?
 */
 
+/**  @TODO - THE BELOW CODE IS BEING USED ONLY IN ITEM-TAPPABLE - IS IT NEEDED?? */
 export type ScreenPosition = LayoutRectangle;
 
 const positions: Record<string, ScreenPosition> = {};
