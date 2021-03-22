@@ -227,7 +227,6 @@ const SettingsScreen = () => {
 					<SignInButton
 						accessible={true}
 						accessibilityRole="button"
-						navigation={navigation}
 						username={
 							identityData
 								? identityData.userDetails.primaryEmailAddress
@@ -240,7 +239,6 @@ const SettingsScreen = () => {
 					<MiscSettingsList
 						client={client}
 						isWeatherShown={isWeatherShown}
-						navigation={navigation}
 					/>
 					<Heading>{``}</Heading>
 					<List
