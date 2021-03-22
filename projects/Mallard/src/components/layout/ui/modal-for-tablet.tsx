@@ -41,7 +41,7 @@ const ModalForTablet = ({
 		<WithBreakpoints>
 			{{
 				[0]: () => <>{children}</>,
-				[Breakpoints.tabletVertical]: () => (
+				[Breakpoints.TabletVertical]: () => (
 					<View style={[modalStyles.root]}>
 						<View style={modalStyles.modal}>{children}</View>
 						<Animated.View

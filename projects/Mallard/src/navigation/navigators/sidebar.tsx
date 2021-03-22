@@ -69,7 +69,7 @@ const bottomStyles = StyleSheet.create({
 const addViewsForSidebarLayer: NavigatorWrapper = (navigator, getPosition) => {
 	const Navigator = addStaticRouterWithPosition(navigator, getPosition);
 	const isTablet =
-		Dimensions.get('window').width >= Breakpoints.tabletVertical;
+		Dimensions.get('window').width >= Breakpoints.TabletVertical;
 
 	/*
     on this bottom layer we wanna add a 'touchable' that goes back
@@ -134,7 +134,7 @@ export const createSidebarNavigator = (
 	};
 
 	const { width } = Dimensions.get('window');
-	const isTablet = width >= Breakpoints.tabletVertical;
+	const isTablet = width >= Breakpoints.TabletVertical;
 
 	return createStackNavigator(navigation, {
 		initialRouteName: '_',

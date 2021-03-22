@@ -39,7 +39,7 @@ export const TrailImageView = ({
 	style: StyleProp<{ width?: string; height?: string; marginLeft?: number }>;
 }) => {
 	const isTablet = useMediaQuery(
-		(width) => width >= Breakpoints.tabletVertical,
+		(width) => width >= Breakpoints.TabletVertical,
 	);
 
 	const { trailImage: image } = article;

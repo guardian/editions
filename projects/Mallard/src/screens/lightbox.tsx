@@ -148,7 +148,7 @@ const LightboxScreen = ({
 							}}
 							accessibilityLabel="Close Image Gallery"
 							accessibilityHint="This will close the Image Gallery which is currently open"
-							appearance={ButtonAppearance.pillar}
+							appearance={ButtonAppearance.Pillar}
 							pillar={pillar}
 						/>
 					)}

@@ -96,7 +96,7 @@ const NewEditionCard = ({
 				{onDismissThisCard && (
 					<View style={styles.buttonWrapper}>
 						<ModalButton
-							buttonAppearance={ButtonAppearance.black}
+							buttonAppearance={ButtonAppearance.Black}
 							onPress={onDismissThisCard}
 							textStyles={getFont('sans', 1.5, 'bold')}
 						>

@@ -33,7 +33,7 @@ const SignInModalCard = ({
 			onDismissThisCard={onDismiss}
 			title={Copy.signIn.title}
 			subtitle={Copy.signIn.subtitle}
-			appearance={CardAppearance.blue}
+			appearance={CardAppearance.Blue}
 			size="medium"
 			bottomContent={
 				<>
@@ -43,8 +43,8 @@ const SignInModalCard = ({
 								close();
 								onLoginPress();
 								sendComponentEvent({
-									componentType: ComponentType.appButton,
-									action: Action.click,
+									componentType: ComponentType.AppButton,
+									action: Action.Click,
 									value: 'sign_in_continue_clicked',
 								});
 							}}
@@ -72,7 +72,7 @@ const SignInModalCard = ({
 									'https://support.theguardian.com/uk/subscribe/digital',
 								);
 							}}
-							buttonAppearance={ButtonAppearance.dark}
+							buttonAppearance={ButtonAppearance.Dark}
 						>
 							{Copy.signIn.freeTrial}
 						</ModalButton>
@@ -86,7 +86,7 @@ const SignInModalCard = ({
                             )
                         }
                     }}
-                    buttonAppearance={ButtonAppearance.dark}
+                    buttonAppearance={ButtonAppearance.Dark}
                 >
                     {Platform.OS === 'ios'
                         ? 'Learn more'

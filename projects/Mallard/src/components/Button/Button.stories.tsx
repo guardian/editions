@@ -18,7 +18,7 @@ storiesOf('Buttons', module)
 		return (
 			<CloseButton
 				onPress={() => {}}
-				appearance={ButtonAppearance.default}
+				appearance={ButtonAppearance.Default}
 				accessibilityHint="Accesibility Hint"
 				accessibilityLabel="Accesibility Label"
 			/>
@@ -28,7 +28,7 @@ storiesOf('Buttons', module)
 		return (
 			<CloseButton
 				onPress={() => {}}
-				appearance={ButtonAppearance.modal}
+				appearance={ButtonAppearance.Modal}
 				accessibilityHint="Accesibility Hint"
 				accessibilityLabel="Accesibility Label"
 			/>

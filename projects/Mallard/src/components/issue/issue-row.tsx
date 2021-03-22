@@ -143,7 +143,7 @@ const IssueButton = ({
 	}, [issue, handleUpdate]);
 
 	const onDownloadIssue = async () => {
-		if (isOnDevice !== ExistsStatus.doesNotExist) return;
+		if (isOnDevice !== ExistsStatus.DoesNotExist) return;
 		switch (downloadBlocked) {
 			case DownloadBlockedStatus.Offline: {
 				Alert.alert('Unable to download', NOT_CONNECTED);
@@ -160,8 +160,8 @@ const IssueButton = ({
 		if (isConnected) {
 			if (!dlStatus) {
 				sendComponentEvent({
-					componentType: ComponentType.appButton,
-					action: Action.click,
+					componentType: ComponentType.AppButton,
+					action: Action.Click,
 					value: 'issues_list_issue_clicked',
 				});
 				const imageSize = await imageForScreenSize();
@@ -177,7 +177,7 @@ const IssueButton = ({
 			percent={dlStatus ? getStatusPercentage(dlStatus) ?? 100 : 100}
 			radius={20}
 			bgColor={
-				isOnDevice === ExistsStatus.doesExist
+				isOnDevice === ExistsStatus.DoesExist
 					? color.primary
 					: undefined
 			}
@@ -191,13 +191,13 @@ const IssueButton = ({
 				accessibilityRole="button"
 				onPress={onDownloadIssue}
 				icon={
-					isOnDevice === ExistsStatus.doesExist ? '\uE062' : '\uE077'
+					isOnDevice === ExistsStatus.DoesExist ? '\uE062' : '\uE077'
 				}
 				alt={'Download'}
-				appearance={ButtonAppearance.skeleton}
+				appearance={ButtonAppearance.Skeleton}
 				textStyles={{
 					color:
-						isOnDevice !== ExistsStatus.doesExist
+						isOnDevice !== ExistsStatus.DoesExist
 							? color.primary
 							: color.palette.neutral[100],
 				}}
@@ -340,7 +340,7 @@ const IssueRowHeader = React.memo(
 							title={title}
 							subtitle={subTitle}
 							subtitleStyle={subtitleStyle}
-							appearance={IssueTitleAppearance.tertiary}
+							appearance={IssueTitleAppearance.Tertiary}
 						/>
 					</Highlight>
 				</View>

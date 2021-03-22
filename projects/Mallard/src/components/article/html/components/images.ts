@@ -75,21 +75,21 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 	}
 
 	/* Tablet captions */
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.image figcaption {
 			${getFontCss('sans', 0.9)}
 		}
 	}
 
 	/*THUMBS*/
-	@media (max-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (max-width: ${px(Breakpoints.TabletVertical)}) {
 		.image[data-role='thumbnail'] {
 			width: 40%;
 			float: left;
 			margin-right: ${px(metrics.article.sides)};
 		}
 	}
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.image[data-role='thumbnail'] {
 			width: ${px(metrics.article.rightRail)};
 			position: absolute;
@@ -98,7 +98,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 	}
 
 	/*SUPPORTING*/
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.image[data-role='supporting'] {
 			float: right;
 			width: 500px;
@@ -116,8 +116,8 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 	}
 
 	/*SHOWCASE*/
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) and (max-width: ${px(
-			Breakpoints.tabletLandscape,
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) and (max-width: ${px(
+			Breakpoints.TabletLandscape,
 		)}) {
 		.image[data-role='showcase'] {
 			margin-right: ${px(
@@ -130,16 +130,16 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 			float: right;
 		}
 	}
-	@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+	@media (min-width: ${px(Breakpoints.TabletLandscape)}) {
 		.image[data-role='showcase'] img {
 			margin-left: ${px(
-				((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+				((Breakpoints.TabletLandscape - metrics.article.maxWidth) / 2) *
 					-1,
 			)};
 			width: calc(
 				100% +
 					${px(
-						(Breakpoints.tabletLandscape -
+						(Breakpoints.TabletLandscape -
 							metrics.article.maxWidth) /
 							2,
 					)}
@@ -149,7 +149,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 	}
 
 	/*IMMERSIVE*/
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.image[data-role='immersive'] {
 			margin-right: ${px(
 				(metrics.article.rightRail + metrics.article.sides) * -1,
@@ -160,24 +160,24 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
 			float: right;
 		}
 	}
-	@media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+	@media (min-width: ${px(Breakpoints.TabletLandscape)}) {
 		.image[data-role='immersive'] img {
 			width: calc(
 				100% +
 					${px(
-						Breakpoints.tabletLandscape - metrics.article.maxWidth,
+						Breakpoints.TabletLandscape - metrics.article.maxWidth,
 					)}
 			);
 			display: block;
 			background: 'red';
 			margin-left: ${px(
-				((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+				((Breakpoints.TabletLandscape - metrics.article.maxWidth) / 2) *
 					-1,
 			)};
 		}
 	}
 
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		${breakoutCaption('inline', theme)}
 	}
 `;
@@ -206,7 +206,7 @@ const ImageBase = ({
 	articleType?: string;
 }) => {
 	const isTablet = useMediaQuery(
-		(width) => width >= Breakpoints.tabletVertical,
+		(width) => width >= Breakpoints.TabletVertical,
 	);
 	const isInlineTablet = !role && isTablet;
 	const showViewMore = isInlineTablet && articleType === ArticleType.Gallery;

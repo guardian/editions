@@ -19,7 +19,7 @@ const CloseButton = ({
 		<Button
 			icon={'\uE04F'}
 			alt="Dismiss"
-			appearance={appearance ?? ButtonAppearance.default}
+			appearance={appearance ?? ButtonAppearance.Default}
 			onPress={onPress}
 			accessibilityLabel={accessibilityLabel}
 			accessibilityRole="button"

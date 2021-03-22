@@ -129,8 +129,8 @@ const ManageEditionsScreen = () => {
 												);
 												sendComponentEvent({
 													componentType:
-														ComponentType.appButton,
-													action: Action.click,
+														ComponentType.AppButton,
+													action: Action.Click,
 													componentId:
 														'manageEditionsWifiDownload',
 													value: val.toString(),
@@ -157,8 +157,8 @@ const ManageEditionsScreen = () => {
 												getIssueSummary(false);
 												sendComponentEvent({
 													componentType:
-														ComponentType.appButton,
-													action: Action.click,
+														ComponentType.AppButton,
+													action: Action.Click,
 													componentId:
 														'manageEditionsAvailableEditions',
 													value: n.toString(),
@@ -192,8 +192,8 @@ const ManageEditionsScreen = () => {
 								{ cancelable: false },
 							);
 							sendComponentEvent({
-								componentType: ComponentType.appButton,
-								action: Action.click,
+								componentType: ComponentType.AppButton,
+								action: Action.Click,
 								value: 'deleteAllDownload',
 								componentId: 'manageEditions',
 							});

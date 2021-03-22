@@ -4,7 +4,7 @@ import { metrics } from 'src/theme/spacing';
 import { CssProps, themeColors } from '../helpers/css';
 
 export const lineStyles = ({ theme }: CssProps) => css`
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.line {
 			position: absolute;
 			width: 1px;

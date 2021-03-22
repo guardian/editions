@@ -10,7 +10,7 @@ export const BasicArticleHeader = withNavigation(
 			theme="light"
 			leftAction={
 				<Button
-					appearance={ButtonAppearance.skeleton}
+					appearance={ButtonAppearance.Skeleton}
 					icon={'\uE00A'}
 					alt="Back"
 					onPress={() => navigation.goBack(null)}

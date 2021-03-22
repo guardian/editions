@@ -1,11 +1,11 @@
 export enum Breakpoints {
-	smallPhone = 0,
-	phone = 375,
-	tabletVertical = 690,
-	tabletLandscape = 1000,
+	SmallPhone = 0,
+	Phone = 375,
+	TabletVertical = 690,
+	TabletLandscape = 1000,
 }
 
-export const MINIMUM_BREAKPOINT: number = Breakpoints.smallPhone;
+export const MINIMUM_BREAKPOINT: number = Breakpoints.SmallPhone;
 
 export type BreakpointList<T> = Record<number, T>;
 

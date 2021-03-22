@@ -9,7 +9,7 @@ const SubFoundModalCard = ({ close }: { close: () => void }) => (
 			close();
 		}}
 		subtitle={Copy.subFound.subtitle}
-		appearance={CardAppearance.blue}
+		appearance={CardAppearance.Blue}
 		size="small"
 		bottomContent={<></>}
 	/>

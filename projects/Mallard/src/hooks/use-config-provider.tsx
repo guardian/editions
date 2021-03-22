@@ -111,7 +111,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
             */
 			if (
 				Math.min(ev.window.width, ev.window.height) >=
-				Breakpoints.tabletVertical
+				Breakpoints.TabletVertical
 			) {
 				setDimensions(ev.window);
 			}

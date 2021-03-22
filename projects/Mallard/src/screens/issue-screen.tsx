@@ -422,7 +422,7 @@ const IssueScreenWithPath = React.memo(
 										)}
 									</WithLayoutRectangle>
 								),
-								[Breakpoints.tabletVertical]: () => (
+								[Breakpoints.TabletVertical]: () => (
 									<View
 										style={{
 											flexDirection: 'row',

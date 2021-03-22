@@ -30,8 +30,8 @@ const ThreeWaySwitch = ({
 				onPress={() => onValueChange(true)}
 				appearance={
 					value === true
-						? ButtonAppearance.skeletonActive
-						: ButtonAppearance.skeleton
+						? ButtonAppearance.SkeletonActive
+						: ButtonAppearance.Skeleton
 				}
 			>
 				On
@@ -42,8 +42,8 @@ const ThreeWaySwitch = ({
 				onPress={() => onValueChange(false)}
 				appearance={
 					value === false
-						? ButtonAppearance.skeletonActive
-						: ButtonAppearance.skeleton
+						? ButtonAppearance.SkeletonActive
+						: ButtonAppearance.Skeleton
 				}
 			>
 				Off

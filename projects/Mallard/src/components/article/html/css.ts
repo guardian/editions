@@ -132,7 +132,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
 		animation-name: fade;
 		animation-fill-mode: both;
 	}
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		main,
 		.wrapper {
 			margin-right: ${px(
@@ -186,7 +186,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
 		font-family: ${families.text.bold};
 	}
 
-	@media (min-width: ${px(Breakpoints.phone)}) {
+	@media (min-width: ${px(Breakpoints.Phone)}) {
 		.app[data-type='${ArticleType.Immersive}'] h2 {
 			font-size: 28px;
 			line-height: 28px;
@@ -204,7 +204,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
 		position: relative;
 		padding-top: ${px(metrics.vertical)};
 	}
-	@media (min-width: ${px(Breakpoints.tabletVertical)}) {
+	@media (min-width: ${px(Breakpoints.TabletVertical)}) {
 		.content-wrap {
 			padding-left: ${px(metrics.article.sides)};
 			padding-right: ${px(metrics.article.sides)};
