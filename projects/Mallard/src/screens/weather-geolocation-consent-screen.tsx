@@ -1,4 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { RESULTS } from 'react-native-permissions';
@@ -30,9 +31,8 @@ const showIsDisabledAlert = () => {
 	);
 };
 
-const WeatherGeolocationConsentScreen = ({
-	navigation,
-}: NavigationInjectedProps) => {
+const WeatherGeolocationConsentScreen = () => {
+	const navigation = useNavigation();
 	const apolloClient = useApolloClient();
 	const onConsentPress = async () => {
 		const result = await requestLocationPermission(apolloClient);
@@ -93,12 +93,6 @@ const WeatherGeolocationConsentScreen = ({
 			</View>
 		</>
 	);
-};
-
-WeatherGeolocationConsentScreen.navigationOptions = {
-	title: ' ',
-	showHeaderLeft: false,
-	showHeaderRight: true,
 };
 
 export { WeatherGeolocationConsentScreen };
