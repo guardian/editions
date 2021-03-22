@@ -135,7 +135,7 @@ const uploadEditionsList = async (
 ) => {
     // write to s3 bucket for both proof/store(published)
     await s3Put(
-        { key: 'editions', bucket: getEditionsBucket('proof') },
+        { key: 'editions', bucket: getEditionsBucket('proofed') },
         JSON.stringify(proofList),
     )
     await s3Put(
