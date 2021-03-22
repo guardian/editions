@@ -1,19 +1,19 @@
 import { Handler } from 'aws-lambda'
-import { StepFunctions } from 'aws-sdk'
-import { randomBytes } from 'crypto'
+// import { StepFunctions } from 'aws-sdk'
+// import { randomBytes } from 'crypto'
 import {
     Attempt,
-    attempt,
+    // attempt,
     Failure,
     hasFailed,
     hasSucceeded,
-    withFailureMessage,
+    // withFailureMessage,
     IssuePublicationIdentifier,
     IssuePublicationActionIdentifier,
     EditionListPublicationAction,
 } from '../../common'
-import { IssueParams } from '../tasks/issue'
-import { fetchfromCMSFrontsS3, GetS3ObjParams } from '../utils/s3'
+// import { IssueParams } from '../tasks/issue'
+import { GetS3ObjParams } from '../utils/s3'
 import { parseIssueActionRecord, parseEditionListActionRecord } from './parser'
 import { URL } from '../utils/backend-client'
 import fetch from 'node-fetch'
@@ -23,47 +23,47 @@ export interface Record {
     eventTime: string
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
 
-const sf = new StepFunctions({
-    region: 'eu-west-1',
-})
+// const sf = new StepFunctions({
+//     region: 'eu-west-1',
+// })
 
-const getRuntimeInvokeStateMachineFunction = (stateMachineArn: string) => {
-    return async (
-        issuePublication: IssuePublicationActionIdentifier,
-    ): Promise<IssuePublicationIdentifier | Failure> => {
-        const invoke: IssueParams = {
-            issuePublication,
-        }
-        const run = await attempt(
-            sf
-                .startExecution({
-                    stateMachineArn,
-                    input: JSON.stringify(invoke),
-                    name: `issue ${invoke.issuePublication.issueDate} ${
-                        invoke.issuePublication.version
-                    } ${randomBytes(2).toString('hex')}`.replace(
-                        /\W/g,
-                        '-', // see character restrictions
-                        //https://docs.aws.amazon.com/step-functions/latest/apireference/API_StartExecution.html
-                    ),
-                })
-                .promise(),
-        )
-        if (hasFailed(run)) {
-            const msg = `⚠️ Invocation of ${JSON.stringify(
-                issuePublication,
-            )} failed.`
-            console.error(msg)
-            return withFailureMessage(run, msg)
-        }
-        console.log(
-            `Invocation of step function for ${JSON.stringify(
-                issuePublication,
-            )} successful`,
-        )
-        return issuePublication
-    }
-}
+// const getRuntimeInvokeStateMachineFunction = (stateMachineArn: string) => {
+//     return async (
+//         issuePublication: IssuePublicationActionIdentifier,
+//     ): Promise<IssuePublicationIdentifier | Failure> => {
+//         const invoke: IssueParams = {
+//             issuePublication,
+//         }
+//         const run = await attempt(
+//             sf
+//                 .startExecution({
+//                     stateMachineArn,
+//                     input: JSON.stringify(invoke),
+//                     name: `issue ${invoke.issuePublication.issueDate} ${
+//                         invoke.issuePublication.version
+//                     } ${randomBytes(2).toString('hex')}`.replace(
+//                         /\W/g,
+//                         '-', // see character restrictions
+//                         //https://docs.aws.amazon.com/step-functions/latest/apireference/API_StartExecution.html
+//                     ),
+//                 })
+//                 .promise(),
+//         )
+//         if (hasFailed(run)) {
+//             const msg = `⚠️ Invocation of ${JSON.stringify(
+//                 issuePublication,
+//             )} failed.`
+//             console.error(msg)
+//             return withFailureMessage(run, msg)
+//         }
+//         console.log(
+//             `Invocation of step function for ${JSON.stringify(
+//                 issuePublication,
+//             )} successful`,
+//         )
+//         return issuePublication
+//     }
+// }
 
 export interface InvokerDependencies {
     proofStateMachineInvoke: (
