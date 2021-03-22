@@ -1,8 +1,7 @@
 import type { RouteProp } from '@react-navigation/native';
-import { Rout, useRoute, useRouteeProp } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import type { NavigationRouteConfig } from 'react-navigation';
 import { safeInterpolation } from 'src/helpers/math';
 import { ArticleScreen } from 'src/screens/article-screen';
 import { color } from 'src/theme/color';
