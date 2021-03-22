@@ -1,5 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import type { NavigationInjectedProps } from 'react-navigation';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { LoginHeader } from 'src/components/login/login-layout';
 import { html } from 'src/helpers/webview';
@@ -489,15 +489,16 @@ const PrivacyPolicyScreen = () => (
 	</HeaderScreenContainer>
 );
 
-const PrivacyPolicyScreenForOnboarding = ({
-	navigation,
-}: NavigationInjectedProps) => (
-	<>
-		<LoginHeader onDismiss={() => navigation.goBack()}>
-			{PRIVACY_POLICY_HEADER_TITLE}
-		</LoginHeader>
-		<DefaultInfoTextWebview html={privacyPolicyHtml} />
-	</>
-);
+const PrivacyPolicyScreenForOnboarding = () => {
+	const navigation = useNavigation();
+	return (
+		<>
+			<LoginHeader onDismiss={() => navigation.goBack()}>
+				{PRIVACY_POLICY_HEADER_TITLE}
+			</LoginHeader>
+			<DefaultInfoTextWebview html={privacyPolicyHtml} />
+		</>
+	);
+};
 
 export { PrivacyPolicyScreen, PrivacyPolicyScreenForOnboarding };
