@@ -1,3 +1,4 @@
+import type { RouteProp } from '@react-navigation/native';
 import type { FunctionComponent } from 'react';
 import React from 'react';
 import { Animated, Easing, StyleSheet } from 'react-native';
@@ -5,6 +6,7 @@ import type {
 	NavigationContainer,
 	NavigationInjectedProps,
 	NavigationRouteConfig,
+	NavigationScreenProp,
 	NavigationTransitionProps,
 } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation';
@@ -17,6 +19,7 @@ import { BasicArticleHeader } from 'src/screens/article/header';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { SlideCard } from '../../components/layout/slide-card/index';
+import type { ArticleNavigationProps } from '../helpers/base';
 import { addStaticRouter } from '../helpers/base';
 import type { NavigatorWrapper } from '../helpers/transition';
 import { addStaticRouterWithPosition } from '../helpers/transition';
@@ -69,13 +72,19 @@ const styles = StyleSheet.create({
 	basicCard: { backgroundColor: color.background, overflow: 'hidden' },
 });
 
-export const wrapInSlideCard: NavigatorWrapper = (
-	navigator,
-	getPosition,
-	route,
-) => {
+type ArticleScreenParams = {
+	ArticleScreen: ArticleNavigationProps;
+};
+
+export const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
 	const Navigator = addStaticRouterWithPosition(navigator, getPosition);
-	const Wrapper = ({ navigation, route }: NavigationInjectedProps) => {
+	const Wrapper = ({
+		navigation,
+		route,
+	}: {
+		navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
+		route: RouteProp<ArticleScreenParams, 'ArticleScreen'>;
+	}) => {
 		const position = getPosition();
 		const originalPosition = getScreenPositionOfItem(
 			route.params.path.article,
@@ -231,7 +240,7 @@ export const SlideCardJames = ({ navigation, route }) =>
 export const ArticleWrapper = ({
 	navigation,
 	route,
-}: NavigationInjectedProps) => {
+}: NavigationRouteConfig) => {
 	const position = new Animated.Value(0);
 	const originalPosition = getScreenPositionOfItem(route.params.path.article);
 	const window = useDimensions();

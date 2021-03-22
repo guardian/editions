@@ -60,7 +60,7 @@ const navigateToArticle = (
 };
 
 const getArticleNavigationProps = (
-	routeParams: any,
+	routeParams: ArticleNavigationProps,
 	{
 		error,
 		success,

@@ -1,3 +1,4 @@
+import type { RouteProp } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -156,12 +157,18 @@ const ArticleScreenWithProps = ({
 	);
 };
 
+type ArticleScreenParams = {
+	ArticleScreen: ArticleNavigationProps;
+};
+
 export const ArticleScreen = ({
 	navigation,
+	route,
 }: {
 	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
-}) =>
-	getArticleNavigationProps(navigation, {
+	route: RouteProp<ArticleScreenParams, 'ArticleScreen'>;
+}) => {
+	return getArticleNavigationProps(route.params, {
 		error: () => (
 			<FlexErrorMessage
 				title={ERR_404_MISSING_PROPS}
@@ -172,7 +179,7 @@ export const ArticleScreen = ({
 			return <ArticleScreenWithProps {...{ navigation }} {...props} />;
 		},
 	});
-
+};
 ArticleScreen.navigationOptions = ({
 	navigation,
 }: {
