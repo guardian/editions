@@ -120,7 +120,7 @@ const useScrollToFrontBehavior = (
 	ref: MutableRefObject<FlatList<any> | null>,
 ) => {
 	// Linear search to find the right index to scroll to, front count is bound.
-	const findFrontIndex = (frontKey: string | null) =>
+	const findFrontIndex = (frontKey: string | null | undefined) =>
 		frontWithCards.findIndex((front) => front.key === frontKey);
 
 	// Helper to scroll to a particular Front index. When the front is not
@@ -130,7 +130,7 @@ const useScrollToFrontBehavior = (
 	// animations because these will happen in the background, after pressing an
 	// item on the Editions list.
 	const scrollTo = (scrollIndex: number) => {
-		if (!(ref && ref.current && ref.current.scrollToOffset)) return;
+		if (!ref?.current?.scrollToOffset) return;
 
 		if (scrollIndex < 0) {
 			ref.current.scrollToOffset({ animated: false, offset: 0 });
@@ -147,7 +147,7 @@ const useScrollToFrontBehavior = (
 	// Case (1). We listen to the "nav position" handler and navigate to
 	// whichever front is requested.
 	useNavPositionChange(
-		(position) => scrollTo(findFrontIndex(position && position.frontId)),
+		(position) => scrollTo(findFrontIndex(position?.frontId)),
 		[frontWithCards],
 	);
 
@@ -372,6 +372,7 @@ const IssueScreenWithPath = React.memo(
 				sendPageViewEvent({
 					path: `editions/uk/daily/${issue.key}`,
 				});
+
 				return (
 					<>
 						<PreviewReloadButton
@@ -467,7 +468,7 @@ export const IssueScreen = () => {
 		setNewEditionSeen,
 	} = useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
-	const headerStyle = specialEditionProps && specialEditionProps.headerStyle;
+	const headerStyle = specialEditionProps?.headerStyle;
 
 	return (
 		<Container>

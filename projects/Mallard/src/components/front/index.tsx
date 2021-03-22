@@ -135,11 +135,7 @@ export const Front = React.memo(
 						numOfItems={stops}
 						color={color}
 						location="front"
-						subtitle={
-							cards[cardIndex] &&
-							cards[cardIndex].collection &&
-							cards[cardIndex].collection.key
-						}
+						subtitle={cards[cardIndex]?.collection?.key}
 						position={position}
 						editionDate={issueDateFromId(publishedIssueId)}
 					/>

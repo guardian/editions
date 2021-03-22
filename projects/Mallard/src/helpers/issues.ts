@@ -47,7 +47,7 @@ export const useIssueDate = (issue?: {
 }): IssueDate =>
 	useMemo(
 		() => (issue ? renderIssueDate(issue.date) : { date: '', weekday: '' }),
-		[issue && issue.key, issue],
+		[issue?.key, issue],
 	);
 
 const dateToFolderConvert = (date: Date): string => {

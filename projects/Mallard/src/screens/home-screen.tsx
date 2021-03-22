@@ -88,7 +88,7 @@ const IssueRowContainer = React.memo(
 		const setNavPosition = useSetNavPosition();
 
 		const navToIssue = useCallback(
-			(initialFrontKey: string | null) => {
+			(initialFrontKey: string | null | undefined) => {
 				// Are we within the same edition? If so no need to navigate
 				if (
 					issueId &&
@@ -114,7 +114,7 @@ const IssueRowContainer = React.memo(
 		);
 
 		const onPress = useCallback(() => {
-			if (issueDetails != null) {
+			if (issueDetails !== undefined) {
 				setNavPosition(null);
 				navToIssue(null);
 				return;
@@ -451,9 +451,7 @@ export const HomeScreen = () => {
 			<IssuePickerHeader
 				title={issueHeaderData.title}
 				subTitle={issueHeaderData.subTitle}
-				headerStyles={
-					specialEditionProps && specialEditionProps.headerStyle
-				}
+				headerStyles={specialEditionProps?.headerStyle}
 			/>
 			{issueSummary ? (
 				<IssueListFetchContainer />
