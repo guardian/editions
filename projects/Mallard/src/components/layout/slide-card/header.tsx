@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 });
 
 const Header = () => {
-	const { panResponder, scrollY, onDismiss } = useDismissArticle();
+	const { scrollY } = useDismissArticle();
 	const navigation = useNavigation();
 	return (
 		<Animated.View style={[styles.headerContainer]}>

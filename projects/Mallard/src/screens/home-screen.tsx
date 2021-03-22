@@ -48,7 +48,6 @@ import { WithAppAppearance } from 'src/theme/appearance';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import type { IssueWithFronts } from '../../../Apps/common/src';
-import { ScreenFiller } from './editions-menu-screen';
 import { ApiState } from './settings/api-screen';
 
 const styles = StyleSheet.create({

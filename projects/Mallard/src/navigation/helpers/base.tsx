@@ -70,8 +70,8 @@ const getArticleNavigationProps = (
 	},
 ) => {
 	const path = routeParams.path;
-	const prefersFullScreen = routeParams.prefersFullScreen || false;
-	const articleNavigator = routeParams.articleNavigator || [];
+	const prefersFullScreen = routeParams.prefersFullScreen ?? false;
+	const articleNavigator = routeParams.articleNavigator ?? [];
 
 	if (
 		!path ||

@@ -245,7 +245,6 @@ export const ArticleWrapper = ({
 	const originalPosition = getScreenPositionOfItem(route.params.path.article);
 	const window = useDimensions();
 
-	const { height } = originalPosition;
 	const {
 		opacity,
 		opacityOuter,
