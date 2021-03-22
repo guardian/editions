@@ -1,5 +1,4 @@
 import type { LayoutRectangle, View } from 'react-native';
-import { Dimensions } from 'react-native';
 import type { Article } from 'src/common';
 
 /*
@@ -41,19 +40,4 @@ const setScreenPositionFromView = (key: Article['key'], item: View) => {
 	});
 };
 
-const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
-	if (positions[item]) return positions[item];
-	const { height, width } = Dimensions.get('window');
-	return {
-		x: 0,
-		y: height * 0.9,
-		width,
-		height,
-	};
-};
-
-export {
-	getScreenPositionOfItem,
-	setScreenPositionOfItem,
-	setScreenPositionFromView,
-};
+export { setScreenPositionOfItem, setScreenPositionFromView };
