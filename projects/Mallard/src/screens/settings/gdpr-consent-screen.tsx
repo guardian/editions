@@ -1,6 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, ScrollView, Text, View } from 'react-native';
-import type { NavigationInjectedProps } from 'react-navigation';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { ScrollContainer } from 'src/components/layout/ui/container';
@@ -83,12 +83,12 @@ export const resetAll = () => {
 
 const GdprConsent = ({
 	shouldShowDismissableHeader = false,
-	navigation,
 	continueText,
 }: {
 	shouldShowDismissableHeader?: boolean;
 	continueText: string;
-} & NavigationInjectedProps) => {
+}) => {
+	const navigation = useNavigation();
 	const { showToast } = useToast();
 
 	const [updateFlag, setDataUpdated] = useState(false);
@@ -180,12 +180,10 @@ const GdprConsent = ({
 
 	return (
 		<View style={{ flex: 1 }}>
-			{shouldShowDismissableHeader ? (
+			{shouldShowDismissableHeader && (
 				<LoginHeader onDismiss={onDismiss}>
 					{PRIVACY_SETTINGS_HEADER_TITLE}
 				</LoginHeader>
-			) : (
-				<></>
 			)}
 			<ScrollView>
 				<TallRow
@@ -271,30 +269,24 @@ const GdprConsent = ({
 	);
 };
 
-const GdprConsentScreen = ({ navigation }: NavigationInjectedProps) => (
+const GdprConsentScreen = () => (
 	<HeaderScreenContainer
 		title={PRIVACY_SETTINGS_HEADER_TITLE}
 		actionLeft={true}
 	>
 		<WithAppAppearance value={'settings'}>
 			<ScrollContainer>
-				<GdprConsent
-					navigation={navigation}
-					continueText={'Enable all'}
-				></GdprConsent>
+				<GdprConsent continueText={'Enable all'}></GdprConsent>
 			</ScrollContainer>
 		</WithAppAppearance>
 	</HeaderScreenContainer>
 );
 
-const GdprConsentScreenForOnboarding = ({
-	navigation,
-}: NavigationInjectedProps) => (
+const GdprConsentScreenForOnboarding = () => (
 	<WithAppAppearance value={'settings'}>
 		<GdprConsent
 			shouldShowDismissableHeader={true}
 			continueText={'Enable all and continue'}
-			navigation={navigation}
 		></GdprConsent>
 	</WithAppAppearance>
 );

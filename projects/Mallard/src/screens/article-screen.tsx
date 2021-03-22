@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import type { Appearance } from 'src/common';
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
 import { LoginOverlay } from 'src/components/login/login-overlay';
@@ -15,7 +14,6 @@ import { getArticleNavigationProps } from 'src/navigation/helpers/base';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
 import { ArticleScreenBody } from './article/body';
 import { ArticleSlider } from './article/slider';
 
@@ -171,14 +169,3 @@ export const ArticleScreen = ({
 		},
 	});
 };
-ArticleScreen.navigationOptions = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => ({
-	title: navigation.getParam('title', 'Loading'),
-	gesturesEnabled: true,
-	gestureResponseDistance: {
-		vertical: metrics.headerHeight + metrics.slideCardSpacing,
-	},
-});

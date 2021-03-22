@@ -1,6 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { Alert } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import { AccessContext } from 'src/authentication/AccessContext';
 import type { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer';
 import { isValid } from 'src/authentication/lib/Attempt';
@@ -24,11 +24,8 @@ import { Login } from './log-in';
 const useRandomState = () =>
 	useState(Math.random().toString().split('.')[1])[0];
 
-const AuthSwitcherScreen = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => {
+const AuthSwitcherScreen = () => {
+	const navigation = useNavigation();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [error, setError] = useState<string | null>(null);
