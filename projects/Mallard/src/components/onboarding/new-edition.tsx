@@ -66,7 +66,7 @@ const NewEditionCard = ({
 	const styles = headerStyle
 		? modalStyles(
 				headerStyle.backgroundColor,
-				headerStyle.textColorPrimary || 'white',
+				headerStyle.textColorPrimary ?? 'white',
 		  )
 		: modalStyles(brand[800], color.text);
 	return (

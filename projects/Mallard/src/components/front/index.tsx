@@ -131,7 +131,7 @@ export const Front = React.memo(
 			<FrontWrapper
 				scrubber={
 					<SliderTitle
-						title={frontData.displayName || 'News'}
+						title={frontData.displayName ?? 'News'}
 						numOfItems={stops}
 						color={color}
 						location="front"

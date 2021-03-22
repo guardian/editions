@@ -214,7 +214,7 @@ const IssueFronts = ({
 					if (specs.length > 0) {
 						acc.frontSpecs.push({
 							appearance: front.appearance,
-							frontName: front.displayName || '',
+							frontName: front.displayName ?? '',
 							articleSpecs: specs,
 						});
 					}
