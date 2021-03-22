@@ -23,7 +23,7 @@ import type { ArticleNavigationProps } from '../helpers/base';
 import { addStaticRouter } from '../helpers/base';
 import type { NavigatorWrapper } from '../helpers/transition';
 import { addStaticRouterWithPosition } from '../helpers/transition';
-import { routeNames } from '../routes';
+import { RouteNames } from '../NavigationModels';
 import { articleScreenMotion, screenInterpolator } from './article/transition';
 
 const Dismissable = ({
@@ -194,11 +194,11 @@ const createArticleNavigator = (
 	let animatedValue = new Animated.Value(0);
 
 	const navigation: Record<string, NavigationContainer> = {
-		[routeNames.Issue]: addStaticRouterWithPosition(
+		[RouteNames.Issue]: addStaticRouterWithPosition(
 			front,
 			() => animatedValue,
 		),
-		[routeNames.Article]: wrapInSlideCard(article, () => animatedValue),
+		[RouteNames.Article]: wrapInSlideCard(article, () => animatedValue),
 	};
 
 	const transitionConfig = (transitionProps: NavigationTransitionProps) => {
@@ -213,7 +213,7 @@ const createArticleNavigator = (
 	};
 
 	return createStackNavigator(navigation, {
-		initialRouteName: routeNames.Issue,
+		initialRouteName: RouteNames.Issue,
 		defaultNavigationOptions: {
 			gesturesEnabled: false,
 		},
@@ -282,12 +282,7 @@ export const ArticleWrapper = ({
 						}),
 					},
 				]}
-			>
-				{/* <BasicCardWrapper
-                    navigator={Navigator}
-                    navigation={navigation}
-                /> */}
-			</Animated.View>
+			></Animated.View>
 		);
 	}
 	return (

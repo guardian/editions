@@ -1,3 +1,4 @@
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactElement } from 'react';
 import React from 'react';
 import type {
@@ -5,7 +6,8 @@ import type {
 	NavigationInjectedProps,
 	NavigationScreenProp,
 } from 'react-navigation';
-import { routeNames } from 'src/navigation/routes';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle, PathToIssue } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
@@ -53,10 +55,10 @@ export interface ArticleNavigationProps {
 }
 
 const navigateToArticle = (
-	navigation: NavigationScreenProp<{}>,
+	navigation: StackNavigationProp<RootStackParamList>,
 	navigationProps: ArticleNavigationProps,
 ): void => {
-	navigation.navigate(routeNames.Article, navigationProps);
+	navigation.navigate(RouteNames.Article, navigationProps);
 };
 
 const getArticleNavigationProps = (
@@ -90,14 +92,6 @@ const getArticleNavigationProps = (
 	}
 };
 
-const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
-	navigation.navigate(routeNames.IssueList);
-};
-
-const navigateToEditionMenu = (navigation: NavigationScreenProp<{}>): void => {
-	navigation.navigate(routeNames.EditionsMenu);
-};
-
 export interface IssueNavigationProps {
 	path?: PathToIssue;
 	issue?: Issue;
@@ -115,7 +109,7 @@ const navigateToIssue = ({
 	navigationProps,
 	setIssueId,
 }: NavigateToIssueProps) => {
-	navigation.navigate(routeNames.Issue, {
+	navigation.navigate(RouteNames.Issue, {
 		...navigationProps,
 	});
 	if (navigationProps.path) {
@@ -126,10 +120,6 @@ const navigateToIssue = ({
 		action: Action.Click,
 		value: 'issues_list_issue_clicked',
 	});
-};
-
-const navigateToSettings = (navigation: NavigationScreenProp<{}>): void => {
-	navigation.navigate(routeNames.Settings);
 };
 
 export interface LightboxNavigationProps {
@@ -145,7 +135,7 @@ interface LightboxProps {
 }
 
 const navigateToLightbox = ({ navigation, navigationProps }: LightboxProps) => {
-	navigation.navigate(routeNames.Lightbox, {
+	navigation.navigate(RouteNames.Lightbox, {
 		...navigationProps,
 	});
 };
@@ -153,10 +143,7 @@ const navigateToLightbox = ({ navigation, navigationProps }: LightboxProps) => {
 export {
 	mapNavigationToProps,
 	navigateToArticle,
-	navigateToIssueList,
 	getArticleNavigationProps,
 	navigateToIssue,
-	navigateToSettings,
 	navigateToLightbox,
-	navigateToEditionMenu,
 };
