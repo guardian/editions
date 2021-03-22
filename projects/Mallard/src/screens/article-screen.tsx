@@ -1,4 +1,5 @@
 import type { RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -83,22 +84,19 @@ export const getArticleDataFromNavigator = (
 	};
 };
 
-const ArticleScreenLoginOverlay = ({
-	navigation,
-	children,
-}: {
-	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
-	children: ReactNode;
-}) => (
-	<LoginOverlay
-		isFocused={() => navigation.isFocused()}
-		onLoginPress={() => navigation.navigate(RouteNames.SignIn)}
-		onOpenCASLogin={() => navigation.navigate(RouteNames.CasSignIn)}
-		onDismiss={() => navigation.goBack()}
-	>
-		{children}
-	</LoginOverlay>
-);
+const ArticleScreenLoginOverlay = ({ children }: { children: ReactNode }) => {
+	const navigation = useNavigation();
+	return (
+		<LoginOverlay
+			isFocused={() => navigation.isFocused()}
+			onLoginPress={() => navigation.navigate(RouteNames.SignIn)}
+			onOpenCASLogin={() => navigation.navigate(RouteNames.CasSignIn)}
+			onDismiss={() => navigation.goBack()}
+		>
+			{children}
+		</LoginOverlay>
+	);
+};
 
 const styles = StyleSheet.create({
 	refView: { flex: 1 },
@@ -107,11 +105,8 @@ const styles = StyleSheet.create({
 const ArticleScreenWithProps = ({
 	path,
 	articleNavigator,
-	navigation,
 	prefersFullScreen,
-}: Required<ArticleNavigationProps> & {
-	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
-}) => {
+}: Required<ArticleNavigationProps> & {}) => {
 	const current = getArticleDataFromNavigator(articleNavigator, path);
 	// TODO use `getData` for this
 	const pillar = getAppearancePillar(current.appearance);
@@ -126,7 +121,7 @@ const ArticleScreenWithProps = ({
 		}
 	}, [width]);
 	return (
-		<ArticleScreenLoginOverlay navigation={navigation}>
+		<ArticleScreenLoginOverlay>
 			<View
 				style={styles.refView}
 				ref={(r) => {
@@ -136,7 +131,6 @@ const ArticleScreenWithProps = ({
 				{prefersFullScreen ? (
 					<>
 						<ArticleScreenBody
-							navigation={navigation}
 							path={path}
 							width={width}
 							pillar={pillar}
@@ -147,7 +141,6 @@ const ArticleScreenWithProps = ({
 					</>
 				) : (
 					<ArticleSlider
-						navigation={navigation}
 						path={path}
 						articleNavigator={articleNavigator}
 					/>
@@ -162,10 +155,8 @@ type ArticleScreenParams = {
 };
 
 export const ArticleScreen = ({
-	navigation,
 	route,
 }: {
-	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
 	route: RouteProp<ArticleScreenParams, 'ArticleScreen'>;
 }) => {
 	return getArticleNavigationProps(route.params, {
@@ -176,7 +167,7 @@ export const ArticleScreen = ({
 			/>
 		),
 		success: (props) => {
-			return <ArticleScreenWithProps {...{ navigation }} {...props} />;
+			return <ArticleScreenWithProps {...props} />;
 		},
 	});
 };

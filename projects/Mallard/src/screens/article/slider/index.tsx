@@ -1,7 +1,7 @@
 import ViewPagerAndroid from '@react-native-community/viewpager';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import { PreviewControls } from 'src/components/article/preview-controls';
 import type { AnimatedFlatListRef } from 'src/components/front/helpers/helpers';
 import { getColor } from 'src/helpers/transform';
@@ -59,12 +59,11 @@ const ArticleSlider = React.memo(
 	({
 		path,
 		articleNavigator,
-		navigation,
 	}: {
 		path: PathToArticle;
 		articleNavigator: ArticleNavigator;
-		navigation: NavigationScreenProp<{}>;
 	}) => {
+		const navigation = useNavigation();
 		const {
 			startingPoint,
 			flattenedArticles,
@@ -198,7 +197,6 @@ const ArticleSlider = React.memo(
 						<View key={index}>
 							{index >= current - 1 && index <= current + 1 ? (
 								<ArticleScreenBody
-									navigation={navigation}
 									width={width}
 									path={item}
 									pillar={getAppearancePillar(

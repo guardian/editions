@@ -130,21 +130,9 @@ export interface LightboxNavigationProps {
 	pillar?: ArticlePillar;
 }
 
-interface LightboxProps {
-	navigation: NavigationScreenProp<{}>;
-	navigationProps: LightboxNavigationProps;
-}
-
-const navigateToLightbox = ({ navigation, navigationProps }: LightboxProps) => {
-	navigation.navigate(RouteNames.Lightbox, {
-		...navigationProps,
-	});
-};
-
 export {
 	mapNavigationToProps,
 	navigateToArticle,
 	getArticleNavigationProps,
 	navigateToIssue,
-	navigateToLightbox,
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import type { NavigationScreenProp } from 'react-navigation';
 import type { CAPIArticle } from 'src/common';
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
 import type { PathToArticle } from 'src/paths';
@@ -16,13 +15,11 @@ it gets everything it needs from its route
 */
 
 const ArticleController = ({
-	navigation,
 	article,
 	path,
 	origin,
 	...headerControlProps
 }: {
-	navigation: NavigationScreenProp<{}>;
 	article: CAPIArticle;
 	path: PathToArticle;
 	origin: IssueOrigin;
@@ -41,7 +38,6 @@ const ArticleController = ({
 			}
 		>
 			<Article
-				navigation={navigation}
 				article={article}
 				path={path}
 				origin={origin}

@@ -27,7 +27,6 @@ export type OnIsAtTopChange = (isAtTop: boolean, articleKey: string) => void;
 
 const ArticleScreenBody = React.memo<
 	{
-		navigation: NavigationScreenProp<{}>;
 		path: PathToArticle;
 		pillar: ArticlePillar;
 		width: number;
@@ -36,7 +35,6 @@ const ArticleScreenBody = React.memo<
 	} & HeaderControlInnerProps
 >(
 	({
-		navigation,
 		path,
 		pillar,
 		width,
@@ -93,7 +91,6 @@ const ArticleScreenBody = React.memo<
 								)}
 							>
 								<ArticleController
-									navigation={navigation}
 									{...headerControlProps}
 									path={path}
 									article={article.article}
