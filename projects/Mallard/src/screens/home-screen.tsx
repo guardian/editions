@@ -9,7 +9,6 @@ import React, {
 	useState,
 } from 'react';
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
-import type { NavigationInjectedProps } from 'react-navigation';
 import type { IssueSummary } from 'src/common';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import {
@@ -154,16 +153,15 @@ const IssueRowContainer = React.memo(
 				issue={issue}
 				issueDetails={issueDetails}
 				onGoToSettings={() =>
-					navigation.navigate({
-						routeName: RouteNames.ManageEditions,
-					})
+					navigation.navigate(RouteNames.ManageEditions)
 				}
 			/>
 		);
 	},
 );
 
-const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
+const IssueListFooter = () => {
+	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 	const isUsingProdDevtools = useIsUsingProdDevtools();
 	const { setIssueId } = useIssueSummary();
 
@@ -175,9 +173,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 					accessibilityHint="Navigates to the manage downloads screen"
 					appearance={ButtonAppearance.Skeleton}
 					onPress={() => {
-						navigation.navigate({
-							routeName: RouteNames.ManageEditions,
-						});
+						navigation.navigate(RouteNames.ManageEditions);
 					}}
 				>
 					{Copy.issueListFooter.manageDownloads}

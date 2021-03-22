@@ -56,5 +56,3 @@ export const ArticleWrapper = ({ route }: NavigationRouteConfig) => {
 		</SlideCard>
 	);
 };
-
-// export { createArticleNavigator };

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import type { ArticlePillar } from 'src/common';
 import { ArticleType } from 'src/common';
 import { ArticleController } from 'src/components/article';

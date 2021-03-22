@@ -100,7 +100,7 @@ export interface IssueNavigationProps {
 }
 
 interface NavigateToIssueProps {
-	navigation: NavigationScreenProp<{}>;
+	navigation: StackNavigationProp<RootStackParamList>;
 	navigationProps: IssueNavigationProps;
 	setIssueId: (path: PathToIssue, initialFrontKey?: string | null) => void;
 }
