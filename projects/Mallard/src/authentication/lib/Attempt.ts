@@ -74,7 +74,7 @@ const ValidAttemptCons = <T>(
 	time,
 });
 
-const ErrorAttemptCons = <T>(
+const ErrorAttemptCons = (
 	connectivity: Connectivity,
 	reason?: string,
 	time = Date.now(),

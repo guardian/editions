@@ -1,5 +1,4 @@
 import { AppState, Linking } from 'react-native';
-import type { RedirectResult } from 'react-native-inappbrowser-reborn';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 interface Emitter<T> {
