@@ -156,9 +156,9 @@ const WeatherIconView = ({
 				ellipsizeMode="clip"
 				style={styles.temperature}
 			>
-				{Math.round(forecast.Temperature.Value) +
-					'°' +
-					forecast.Temperature.Unit}
+				{`${Math.round(forecast.Temperature.Value)}°${
+					forecast.Temperature.Unit
+				}`}
 			</Text>
 			<Text
 				allowFontScaling={false}
@@ -190,7 +190,7 @@ const WeatherIconView = ({
 						<View style={styles.forecastText}>{info}</View>
 					</View>
 				),
-				[Breakpoints.tabletVertical]: () => (
+				[Breakpoints.TabletVertical]: () => (
 					<View
 						style={[styles.forecastItem, styles.forecastItemWide]}
 					>
@@ -222,7 +222,7 @@ const SetLocationButton = withNavigation(
 				accessibilityHint="Double tap to open a device location consent screen"
 				accessibilityRole="button"
 				onPress={onSetLocation}
-				appearance={ButtonAppearance.skeleton}
+				appearance={ButtonAppearance.Skeleton}
 				style={[
 					styles.locationNameContainer,
 					styles.setLocationButtonWrap,

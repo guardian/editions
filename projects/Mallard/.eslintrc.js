@@ -105,17 +105,13 @@ module.exports = {
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
-        "@typescript-eslint/prefer-nullish-coalescing": "off",
-        "@typescript-eslint/prefer-optional-chain": "off",
-        "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/no-misused-promises": "off",
         "@typescript-eslint/ban-ts-ignore": "off",
         "@typescript-eslint/await-thenable": "off",
+        "@typescript-eslint/ban-ts-ignore": "off",
         "@typescript-eslint/prefer-regexp-exe": "off",
         "@typescript-eslint/prefer-regexp-exec": "off",
-        "@typescript-eslint/no-explicit-any": "off",
         "import/no-named-as-default-member": "off",
         "import/no-named-as-default": "off",
         "react-hooks/exhaustive-deps": "off",
@@ -129,7 +125,7 @@ module.exports = {
         "max-len": "off",
         "eqeqeq": "off",
         "no-fallthrough": "off",
-        "no-async-promise-executor": "off",
+        "no-async-promise-executor": "off"
     },
     settings: {
         react: {

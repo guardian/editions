@@ -66,7 +66,7 @@ const NewEditionCard = ({
 	const styles = headerStyle
 		? modalStyles(
 				headerStyle.backgroundColor,
-				headerStyle.textColorPrimary || 'white',
+				headerStyle.textColorPrimary ?? 'white',
 		  )
 		: modalStyles(brand[800], color.text);
 	return (
@@ -96,7 +96,7 @@ const NewEditionCard = ({
 				{onDismissThisCard && (
 					<View style={styles.buttonWrapper}>
 						<ModalButton
-							buttonAppearance={ButtonAppearance.black}
+							buttonAppearance={ButtonAppearance.Black}
 							onPress={onDismissThisCard}
 							textStyles={getFont('sans', 1.5, 'bold')}
 						>

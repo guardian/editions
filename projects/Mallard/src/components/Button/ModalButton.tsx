@@ -20,11 +20,11 @@ const ModalButton = (props: {
 }) => (
 	<Button
 		{...props}
-		alt={props.alt || props.children}
+		alt={props.alt ?? props.children}
 		style={styles.button}
 		buttonStyles={props.buttonStyles}
 		textStyles={props.textStyles}
-		appearance={props.buttonAppearance || ButtonAppearance.light}
+		appearance={props.buttonAppearance ?? ButtonAppearance.Light}
 	/>
 );
 

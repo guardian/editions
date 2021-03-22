@@ -87,7 +87,7 @@ const IssueRowContainer = React.memo(
 		const setNavPosition = useSetNavPosition();
 
 		const navToIssue = useCallback(
-			(initialFrontKey: string | null) => {
+			(initialFrontKey: string | null | undefined) => {
 				// Are we within the same edition? If so no need to navigate
 				if (
 					issueId &&
@@ -113,7 +113,7 @@ const IssueRowContainer = React.memo(
 		);
 
 		const onPress = useCallback(() => {
-			if (issueDetails != null) {
+			if (issueDetails !== undefined) {
 				setNavPosition(null);
 				navToIssue(null);
 				return;
@@ -174,7 +174,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 				<Button
 					accessibilityLabel="Manage downloads button"
 					accessibilityHint="Navigates to the manage downloads screen"
-					appearance={ButtonAppearance.skeleton}
+					appearance={ButtonAppearance.Skeleton}
 					onPress={() => {
 						navigation.navigate({
 							routeName: routeNames.ManageEditions,
@@ -189,7 +189,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 					<Button
 						accessibilityLabel="Go to the latest edition button"
 						accessibilityHint="Navigates to the latest edition"
-						appearance={ButtonAppearance.skeleton}
+						appearance={ButtonAppearance.Skeleton}
 						onPress={() => {
 							navigateToIssue({
 								navigation,
@@ -382,8 +382,8 @@ const NO_ISSUES: IssueSummary[] = [];
 const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
 const IssueListFetchContainer = () => {
 	const data = useIssueSummary();
-	const issueSummary = data.issueSummary || NO_ISSUES;
-	const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID);
+	const issueSummary = data.issueSummary ?? NO_ISSUES;
+	const [issueId, setIssueId] = useState(data.issueId ?? EMPTY_ISSUE_ID);
 	const [isShown, setIsShown] = useState(
 		// on iOS there is bug that causes wrong rendering of the scroll bar
 		// if this is enabled. See below description of this mechanism.
@@ -450,9 +450,7 @@ export const HomeScreen = () => {
 			<IssuePickerHeader
 				title={issueHeaderData.title}
 				subTitle={issueHeaderData.subTitle}
-				headerStyles={
-					specialEditionProps && specialEditionProps.headerStyle
-				}
+				headerStyles={specialEditionProps?.headerStyle}
 			/>
 			{issueSummary ? (
 				<IssueListFetchContainer />

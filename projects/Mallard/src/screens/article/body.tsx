@@ -51,8 +51,7 @@ const ArticleScreenBody = React.memo<
 			: undefined;
 
 		const handleIsAtTopChange = useCallback(
-			(value: boolean) =>
-				onIsAtTopChange && onIsAtTopChange(value, path.article),
+			(value: boolean) => onIsAtTopChange?.(value, path.article),
 
 			[onIsAtTopChange],
 		);
@@ -85,7 +84,7 @@ const ArticleScreenBody = React.memo<
 
 							<WithArticle
 								type={
-									article.article.articleType ||
+									article.article.articleType ??
 									ArticleType.Article
 								}
 								pillar={getCollectionPillarOverride(

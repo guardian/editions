@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 
 const Toast = ({ title, subtitle }: ToastProps) => {
 	const isTablet = useMediaQuery(
-		(width) => width >= Breakpoints.tabletVertical,
+		(width) => width >= Breakpoints.TabletVertical,
 	);
 	const [position] = useState(() => new Animated.Value(0));
 	useEffect(() => {
@@ -75,7 +75,7 @@ const ToastRootHolder = () => {
 	return (
 		<View style={holderStyles.root}>
 			{toasts.map((toast, i) => (
-				<Toast {...toast} key={i + toast.title} />
+				<Toast {...toast} key={`${i}${toast.title}`} />
 			))}
 		</View>
 	);

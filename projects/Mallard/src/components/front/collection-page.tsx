@@ -148,7 +148,7 @@ const Item = React.memo(
 			layout,
 		};
 		return (
-			<WithArticleType value={article.articleType || ArticleType.Article}>
+			<WithArticleType value={article.articleType ?? ArticleType.Article}>
 				<View
 					style={[
 						styles.itemHolder,

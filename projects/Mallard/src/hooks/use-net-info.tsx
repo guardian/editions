@@ -53,6 +53,7 @@ type CommonState = {
 	setIsDevButtonShown: Dispatch<boolean>;
 };
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- apollo convention
 const __typename = 'NetInfo';
 
 type NetInfo = CommonState & {

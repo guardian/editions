@@ -90,7 +90,7 @@ const Header = ({
 	const { top: marginTop } = useInsets();
 	const bg = theme === 'light' ? styles.backgroundWhite : styles.background;
 	const isTablet = useMediaQuery(
-		(width) => width >= Breakpoints.tabletVertical,
+		(width) => width >= Breakpoints.TabletVertical,
 	);
 	const headerSplitFlex =
 		isTablet && alignment !== 'drawer' ? 'flex-end' : 'space-between';

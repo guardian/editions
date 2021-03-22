@@ -14,10 +14,10 @@ const mapCredentials = (
 	const familyName = fullName ? fullName.familyName : '';
 
 	return {
-		authorizationCode: authorizationCode || '',
-		givenName: givenName || '',
-		familyName: familyName || '',
-		idToken: identityToken || '',
+		authorizationCode: authorizationCode ?? '',
+		givenName: givenName ?? '',
+		familyName: familyName ?? '',
+		idToken: identityToken ?? '',
 	};
 };
 

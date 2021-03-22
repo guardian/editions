@@ -65,7 +65,7 @@ const localeToEdition = (
 	return (
 		editionsList.regionalEditions.find(
 			(edition) => edition.locale === locale,
-		) || BASE_EDITION
+		) ?? BASE_EDITION
 	);
 };
 

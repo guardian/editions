@@ -77,14 +77,14 @@ const WeatherGeolocationConsentScreen = ({
 			/>
 			<View style={styles.buttons}>
 				<Button
-					appearance={ButtonAppearance.skeletonBlue}
+					appearance={ButtonAppearance.SkeletonBlue}
 					onPress={onConsentPress}
 					style={styles.button}
 				>
 					{Copy.weather.acceptLocationButton}
 				</Button>
 				<Button
-					appearance={ButtonAppearance.skeletonBlue}
+					appearance={ButtonAppearance.SkeletonBlue}
 					onPress={onHidePress}
 					style={styles.button}
 				>
