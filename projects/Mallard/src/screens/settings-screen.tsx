@@ -309,9 +309,7 @@ const SettingsScreen = () => {
 						]}
 					/>
 
-					{canDisplayBetaButton && (
-						<BetaButtonOption navigation={navigation} />
-					)}
+					{canDisplayBetaButton && <BetaButtonOption />}
 
 					{isUsingProdDevtools && <DevZone />}
 				</ScrollContainer>
