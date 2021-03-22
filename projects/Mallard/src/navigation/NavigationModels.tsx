@@ -31,6 +31,7 @@ export type RootStackParamList = {
 	EditionsMenu: undefined;
 	OnboardingConsent: undefined;
 	PrivacyPolicyInline: undefined;
+	OnboardingConsentInline: undefined;
 };
 
 export enum RouteNames {
