@@ -7,9 +7,10 @@ import { EditionsMenu } from 'src/components/EditionsMenu/EditionsMenu';
 import { EditionsMenuScreenHeader } from 'src/components/ScreenHeader/EditionMenuScreenHeader';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
-import { sidebarWidth } from 'src/navigation/navigators/sidebar/positions';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { ApiState } from './settings/api-screen';
+
+const sidebarWidth = 360;
 
 const styles = StyleSheet.create({
 	screenFiller: {
