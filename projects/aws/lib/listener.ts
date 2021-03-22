@@ -5,7 +5,6 @@ import { IBucket } from '@aws-cdk/aws-s3'
 import { proofArchiverStepFunction } from './proof-step-function'
 import { publishArchiverStepFunction } from './publish-step-function'
 import iam = require('@aws-cdk/aws-iam')
-import { LambdaFunction } from '@aws-cdk/aws-events-targets'
 
 export const s3EventListenerFunction = (
     scope: Construct,
@@ -111,24 +110,24 @@ export const constructTriggeredStepFunction = (
     )
 
     // Read events from cloudwatch event bus and send to listener lambda
-    const x = new Rule(this, 'cmsFronts-editions-events', {
-        eventPattern: {
-            source: ['aws.s3'],
-            detailType: ['AWS API Call via CloudTrail'],
-            account: [cmsFrontsAccountIdParameter.valueAsString],
-            detail: {
-                eventSource: ['s3.amazonaws.com'],
-                eventName: ['PutObject'],
-                requestParameters: {
-                    bucketName: [
-                        publishedEditionsBucketnameParameter.valueAsString,
-                    ],
-                },
-            },
-        },
-        // targets: [],
-    })
-    const funct = new LambdaFunction(archiveS3EventListener)
+    // const x = new Rule(this, 'cmsFronts-editions-events', {
+    //     eventPattern: {
+    //         source: ['aws.s3'],
+    //         detailType: ['AWS API Call via CloudTrail'],
+    //         account: [cmsFrontsAccountIdParameter.valueAsString],
+    //         detail: {
+    //             eventSource: ['s3.amazonaws.com'],
+    //             eventName: ['PutObject'],
+    //             requestParameters: {
+    //                 bucketName: [
+    //                     publishedEditionsBucketnameParameter.valueAsString,
+    //                 ],
+    //             },
+    //         },
+    //     },
+    //     // targets: [],
+    // })
+    // const funct = new LambdaFunction(archiveS3EventListener)
 
     new CfnOutput(scope, 'archiver-s3-event-listener-arn', {
         description: 'ARN for proof-archiver state machine trigger lambda',

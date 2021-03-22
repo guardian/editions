@@ -7,12 +7,8 @@ import iam = require('@aws-cdk/aws-iam')
 import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
 import acm = require('@aws-cdk/aws-certificatemanager')
 import { Effect } from '@aws-cdk/aws-iam'
-import {
-    constructTriggeredStepFunction,
-    s3EventListenerFunction,
-} from './listener'
-import { CfnEventBusPolicy, Rule } from '@aws-cdk/aws-events'
-import { LambdaFunction } from '@aws-cdk/aws-events-targets'
+import { constructTriggeredStepFunction } from './listener'
+import { CfnEventBusPolicy } from '@aws-cdk/aws-events'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
