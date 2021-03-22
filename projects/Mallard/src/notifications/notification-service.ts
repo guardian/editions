@@ -27,7 +27,7 @@ const registerWithNotificationService = async (
 	if (isInBeta()) {
 		const defaultEdition = await getDefaultEdition();
 		console.log('*** NOTIFICATION REG PAYLOAD *** ');
-		console.log('*** default edition *** ' + defaultEdition);
+		console.log(`*** default edition *** ${defaultEdition}`);
 		console.log('*** body *** ' + JSON.stringify(options));
 	}
 

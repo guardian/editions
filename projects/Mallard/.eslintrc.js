@@ -107,7 +107,6 @@ module.exports = {
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
-        "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/no-misused-promises": "off",
         "@typescript-eslint/ban-ts-ignore": "off",
         "@typescript-eslint/await-thenable": "off",

@@ -98,17 +98,18 @@ export const getBundleUri = (
 	key: keyof typeof bundles,
 	use?: 'dev' | 'prod',
 ): string => {
+	const devPath = bundles[key].watchPort;
+	const prodPath = bundles[key].key;
 	const uris = {
+		//10.0.2.2 is a special IP directing to the host dev machine from within the emulator
 		dev:
-			(Platform.OS === 'android'
-				? // 10.0.2.2 is a special IP directing to the host dev machine
-				  // from within the emulator
-				  'http://10.0.2.2:'
-				: 'http://localhost:') + bundles[key].watchPort,
+			Platform.OS === 'android'
+				? `http://10.0.2.2:${devPath}`
+				: `http://localhost:${devPath}`,
 		prod:
-			(Platform.OS === 'android' ? 'file:///android_asset/' : '') +
-			bundles[key].key +
-			'.bundle/index.html',
+			Platform.OS === 'android'
+				? `file:///android_asset/${prodPath}.bundle/index.html`
+				: `${prodPath}.bundle/index.html`,
 	};
 	if (!use) {
 		return __DEV__ ? uris.dev : uris.prod;

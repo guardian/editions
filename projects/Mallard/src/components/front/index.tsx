@@ -160,7 +160,7 @@ export const Front = React.memo(
 						index,
 					})}
 					keyExtractor={(item: FlatCard, index: number) =>
-						index + item.collection.key
+						`${index}${item.collection.key}`
 					}
 					ListFooterComponent={
 						<View
