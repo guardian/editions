@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import React, { useContext, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
 import { Alert, Linking, Platform, Switch, Text } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import type { NavigationRoute, NavigationScreenProp } from 'react-navigation';
 import {
 	AccessContext,
 	useAccess,
@@ -26,17 +26,17 @@ import {
 import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
 import { useNotificationsEnabled } from 'src/hooks/use-config-provider';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { DevZone } from './settings/dev-zone';
 
 const MiscSettingsList = React.memo(
-	(props: {
-		isWeatherShown: boolean;
-		client: ApolloClient<object>;
-		navigation: NavigationScreenProp<NavigationRoute>;
-	}) => {
+	(props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
+		const navigation = useNavigation<
+			StackNavigationProp<RootStackParamList>
+		>();
 		const {
 			notificationsEnabled,
 			setNotifications,
@@ -89,9 +89,7 @@ const MiscSettingsList = React.memo(
 				key: 'manageEditions',
 				title: Copy.settings.manageDownloads,
 				onPress: () =>
-					props.navigation.navigate(
-						RouteNames.ManageEditionsSettings,
-					),
+					navigation.navigate(RouteNames.ManageEditionsSettings),
 				proxy: <RightChevron />,
 			},
 		];
