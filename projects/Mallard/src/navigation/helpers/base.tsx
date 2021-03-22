@@ -20,6 +20,7 @@ import type {
 type NavigatorWrapper = ({
 	navigation,
 }: NavigationInjectedProps) => JSX.Element;
+
 export const addStaticRouter = (
 	navigator: NavigationContainer,
 	wrapper: NavigatorWrapper,
