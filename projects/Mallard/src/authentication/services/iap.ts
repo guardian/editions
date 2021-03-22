@@ -54,11 +54,7 @@ const isReceiptValid = (receipt: ReceiptIOS) => {
 };
 
 const hasLatestReceiptInfo = (receipt: ReceiptValidationResponse) => {
-	return (
-		receipt &&
-		receipt.latest_receipt_info &&
-		(receipt.latest_receipt_info as ReceiptIOS[]).length > 0
-	);
+	return (receipt?.latest_receipt_info as ReceiptIOS[])?.length > 0;
 };
 
 const findValidReceiptFromLatestInfo = (receipt: ReceiptValidationResponse) => {

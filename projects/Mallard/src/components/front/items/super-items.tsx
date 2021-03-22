@@ -190,8 +190,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
 						opinionStyles.trailText,
 						tappableProps.size.layout === PageLayoutSizes.mobile &&
 							opinionStyles.trailTextMobile,
-						article.bylineImages &&
-							article.bylineImages.cutout &&
+						article?.bylineImages?.cutout &&
 							opinionStyles.trailTextPadding,
 					]}
 					allowFontScaling={false}
@@ -199,7 +198,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
 					{article.trail}
 				</Text>
 			</View>
-			{article.bylineImages && article.bylineImages.cutout ? (
+			{article?.bylineImages?.cutout ? (
 				<View style={opinionStyles.cutout}>
 					<BylineCutout cutout={article.bylineImages.cutout} />
 				</View>

@@ -32,6 +32,6 @@ const getCASCode = () =>
 	Promise.all([
 		casCredentialsKeychain.get(),
 		legacyCASUsernameCache.get(),
-	]).then(([current, legacy]) => (current && current.username) || legacy);
+	]).then(([current, legacy]) => current?.username || legacy);
 
 export { canViewEdition, isStaffMember, getCASCode };

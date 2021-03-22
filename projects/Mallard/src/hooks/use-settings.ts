@@ -29,7 +29,7 @@ export const useIsPreview = () => {
 
 export const useIsProof = () => {
 	const apiUrl = useApiUrl();
-	return apiUrl && apiUrl.includes('proof');
+	return apiUrl?.includes('proof');
 };
 
 const PROD_DEV_QUERY = gql('{ isUsingProdDevtools @client }');

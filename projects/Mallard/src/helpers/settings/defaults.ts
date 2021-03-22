@@ -143,5 +143,5 @@ export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
 	const backend = backends.find((backend) => backend.value === apiUrl);
-	return (backend && backend.preview) || false;
+	return backend?.preview || false;
 };
