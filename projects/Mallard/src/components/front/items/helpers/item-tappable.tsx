@@ -10,7 +10,6 @@ import {
 	TouchableHighlight,
 	View,
 } from 'react-native';
-import type { AnimatedValue } from 'react-navigation';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
 import type { RootStackParamList } from 'src/navigation/NavigationModels';
@@ -60,7 +59,9 @@ To help smooth out the transition
 we fade the card contents out on tap
 and then back in when the view regains focus
 */
-const fade = (opacity: AnimatedValue, direction: 'in' | 'out') =>
+
+//https://stackoverflow.com/questions/51521809/typescript-definitions-for-animated-views-style-prop opacity: any can chhange at rn 0.61.8
+const fade = (opacity: any, direction: 'in' | 'out') =>
 	direction === 'in'
 		? Animated.timing(opacity, {
 				duration: 250,
