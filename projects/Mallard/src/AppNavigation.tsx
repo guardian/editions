@@ -33,6 +33,7 @@ import {
 } from './screens/settings/privacy-policy-screen';
 import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen';
 import { TermsAndConditionsScreen } from './screens/settings/terms-and-conditions-screen';
+import { WeatherGeolocationConsentScreen } from './screens/weather-geolocation-consent-screen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -184,6 +185,11 @@ const RootStack = () => {
                 name={RouteNames.Storybook}
                 component={StorybookScreen}
             /> */}
+
+			<Stack.Screen
+				name={RouteNames.WeatherGeolocationConsent}
+				component={WeatherGeolocationConsentScreen}
+			/>
 		</Stack.Navigator>
 	);
 };
