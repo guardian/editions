@@ -191,7 +191,7 @@ const Button = ({
 	TouchableOpacityProps) => {
 	const appStyles = useAppAppearance();
 	const defaultButtonStyles = useMemo(
-		() => getButtonAppearance(appStyles, pillar || null),
+		() => getButtonAppearance(appStyles, pillar ?? null),
 		[appStyles, pillar],
 	)[appearance];
 

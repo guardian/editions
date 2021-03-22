@@ -160,7 +160,7 @@ const LightboxScreen = ({
 						renderIndicator={() => <View />} // empty indicator
 						onClick={focusOnImageComponent}
 						onMove={handleScrollStartEvent}
-						onChange={(index) => handleOnMoveEvent(index || 0)} // seems that first index is nil?
+						onChange={(index) => handleOnMoveEvent(index ?? 0)} // seems that first index is nil?
 						saveToLocalByLongPress={false}
 						maxOverflow={width}
 						enablePreload={true}
@@ -185,7 +185,7 @@ const LightboxScreen = ({
 								{captionVisible && (
 									<LightboxCaption
 										caption={
-											images[currentIndex].caption || ''
+											images[currentIndex].caption ?? ''
 										}
 										pillarColor={
 											pillar === 'neutral'

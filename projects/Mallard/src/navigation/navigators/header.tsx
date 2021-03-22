@@ -51,7 +51,7 @@ const addStaticRouterWithHeader = (
 			options.showHeaderRight !== undefined
 				? options.showHeaderRight
 				: false;
-		const title = options.title || navigation.state.routeName;
+		const title = options.title ?? navigation.state.routeName;
 
 		return (
 			<>

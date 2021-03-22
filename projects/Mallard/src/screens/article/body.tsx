@@ -84,7 +84,7 @@ const ArticleScreenBody = React.memo<
 
 							<WithArticle
 								type={
-									article.article.articleType ||
+									article.article.articleType ??
 									ArticleType.Article
 								}
 								pillar={getCollectionPillarOverride(

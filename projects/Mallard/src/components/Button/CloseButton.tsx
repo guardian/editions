@@ -19,12 +19,12 @@ const CloseButton = ({
 		<Button
 			icon={'\uE04F'}
 			alt="Dismiss"
-			appearance={appearance || ButtonAppearance.default}
+			appearance={appearance ?? ButtonAppearance.default}
 			onPress={onPress}
 			accessibilityLabel={accessibilityLabel}
 			accessibilityRole="button"
 			accessibilityHint={accessibilityHint}
-			pillar={pillar || null}
+			pillar={pillar ?? null}
 		/>
 	);
 };

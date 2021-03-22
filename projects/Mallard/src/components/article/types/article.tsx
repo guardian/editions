@@ -187,7 +187,7 @@ const Article = ({
 	const lightboxEnabled = remoteConfigService.getBoolean('lightbox_enabled');
 
 	const [, { pillar }] = useArticle();
-	const apiUrl = useApiUrl() || '';
+	const apiUrl = useApiUrl() ?? '';
 	const { issueId } = useIssueSummary();
 
 	// if webUrl is undefined then we attempt to fetch a url to use for sharing

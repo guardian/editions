@@ -108,7 +108,6 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/no-unnecessary-condition": "off",
-        "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/no-misused-promises": "off",
         "@typescript-eslint/ban-ts-ignore": "off",
@@ -129,7 +128,7 @@ module.exports = {
         "max-len": "off",
         "eqeqeq": "off",
         "no-fallthrough": "off",
-        "no-async-promise-executor": "off",
+        "no-async-promise-executor": "off"
     },
     settings: {
         react: {

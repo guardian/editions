@@ -122,7 +122,7 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
 		let attempt: AnyAttempt<S> = NotRun;
 		for (const authorizer of this.authorizers) {
 			const candidate = authorizer.getAccessAttempt();
-			attempt = patchAttempt(attempt, candidate) || attempt;
+			attempt = patchAttempt(attempt, candidate) ?? attempt;
 			if (isValid(attempt)) {
 				break;
 			}
