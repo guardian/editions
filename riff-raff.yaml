@@ -2,7 +2,7 @@ stacks: [mobile]
 regions: [eu-west-1]
 
 deployments:
-    backend:
+    editions-backend:
         type: aws-lambda
         dependencies: [cloudformation]
         parameters:
@@ -11,7 +11,7 @@ deployments:
             fileName: editions-backend.zip
             functionNames:
                 [editions-preview-backend-, editions-published-backend-]
-    logging:
+    editions-logging:
         type: aws-lambda
         dependencies: [cloudformation]
         parameters:
@@ -19,7 +19,7 @@ deployments:
             bucket: mobile-dist
             fileName: editions-logging.zip
             functionNames: [editions-logging-]
-    archiver:
+    editions-archiver:
         type: aws-lambda
         dependencies: [cloudformation]
         parameters:
