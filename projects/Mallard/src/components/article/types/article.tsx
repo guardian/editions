@@ -137,7 +137,7 @@ const injectJavascript = (
 	webviewRef: React.MutableRefObject<WebView | null>,
 	script: string,
 ): void => {
-	if (webviewRef && webviewRef.current) {
+	if (webviewRef?.current) {
 		webviewRef.current.injectJavaScript(script);
 	}
 };
@@ -187,7 +187,7 @@ const Article = ({
 	const lightboxEnabled = remoteConfigService.getBoolean('lightbox_enabled');
 
 	const [, { pillar }] = useArticle();
-	const apiUrl = useApiUrl() || '';
+	const apiUrl = useApiUrl() ?? '';
 	const { issueId } = useIssueSummary();
 
 	// if webUrl is undefined then we attempt to fetch a url to use for sharing
@@ -197,7 +197,7 @@ const Article = ({
 	const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
 		query: gql('{ netInfo @client { isConnected @client } }'),
 	});
-	const isConnected = data && data.netInfo.isConnected;
+	const isConnected = data?.netInfo?.isConnected;
 	const shareUrlFetchEnabled =
 		!article.webUrl &&
 		isConnected &&

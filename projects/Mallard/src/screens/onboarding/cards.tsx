@@ -66,7 +66,7 @@ const OnboardingConsent = ({
 	return (
 		<Aligner>
 			<OnboardingCard
-				appearance={CardAppearance.blue}
+				appearance={CardAppearance.Blue}
 				title={Copy.consentOnboarding.title}
 				explainerTitle={Copy.consentOnboarding.explainerTitle}
 				bottomExplainerContent={
@@ -78,7 +78,7 @@ const OnboardingConsent = ({
 										onOpenGdprConsent();
 									}}
 									buttonAppearance={
-										ButtonAppearance.skeletonBlue
+										ButtonAppearance.SkeletonBlue
 									}
 								>
 									{Copy.consentOnboarding.optionsButton}
@@ -90,7 +90,7 @@ const OnboardingConsent = ({
 										enableNulls();
 										onContinue();
 									}}
-									buttonAppearance={ButtonAppearance.dark}
+									buttonAppearance={ButtonAppearance.Dark}
 								>
 									{Copy.consentOnboarding.okayButton}
 								</ModalButton>

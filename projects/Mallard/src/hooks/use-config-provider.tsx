@@ -53,7 +53,7 @@ export const notificationsAreEnabled = async () => {
 		return false;
 	}
 	const isEnabled = await notificationsEnabledCache.get();
-	return isEnabled || false;
+	return isEnabled ?? false;
 };
 
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
@@ -111,7 +111,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
             */
 			if (
 				Math.min(ev.window.width, ev.window.height) >=
-				Breakpoints.tabletVertical
+				Breakpoints.TabletVertical
 			) {
 				setDimensions(ev.window);
 			}

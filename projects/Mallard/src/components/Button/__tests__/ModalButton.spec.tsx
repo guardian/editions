@@ -23,7 +23,7 @@ describe('ModalButton', () => {
 		const component: ReactTestRendererJSON | null = TestRenderer.create(
 			<ModalButton
 				onPress={() => {}}
-				buttonAppearance={ButtonAppearance.apricot}
+				buttonAppearance={ButtonAppearance.Apricot}
 			>
 				Sign out
 			</ModalButton>,

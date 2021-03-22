@@ -19,7 +19,7 @@ export const ReloadButton: React.FC<{
 			]}
 		>
 			<Button
-				appearance={ButtonAppearance.tomato}
+				appearance={ButtonAppearance.Tomato}
 				onPress={onPress}
 				buttonStyles={{ left: 0 }}
 			>

@@ -53,7 +53,7 @@ const CasSignInScreen = ({
 			navigation.goBack();
 			open((close) => <SubFoundModalCard close={close} />);
 		} else {
-			setErrorMessage(accessAttempt.reason || 'Something went wrong');
+			setErrorMessage(accessAttempt.reason ?? 'Something went wrong');
 		}
 		setIsLoading(false);
 	};

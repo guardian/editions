@@ -59,7 +59,7 @@ const SignInFailedModalCard = ({
 	return (
 		<OnboardingCard
 			title={modalText.title}
-			appearance={CardAppearance.blue}
+			appearance={CardAppearance.Blue}
 			onDismissThisCard={() => {
 				close();
 				onDismiss();

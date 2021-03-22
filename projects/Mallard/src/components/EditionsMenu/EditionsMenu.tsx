@@ -68,7 +68,7 @@ const EditionsMenu = ({
 	return (
 		<ScrollView style={styles.container}>
 			<FlatList
-				data={regionalEditions || defaultRegionalEditions}
+				data={regionalEditions ?? defaultRegionalEditions}
 				renderItem={renderRegionalItem}
 				ItemSeparatorComponent={() => <ItemSeperator />}
 				ListFooterComponent={() => <ItemSeperator />}

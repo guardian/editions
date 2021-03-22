@@ -48,6 +48,7 @@ const issueSummaryToLatestPath = (issueSummary: IssueSummary[]): PathToIssue =>
 		publishedIssueId: issueSummary[0].publishedId,
 	};
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- apollo convention
 const __typename = 'IssueSummary';
 
 type QueryValue = { issueSummary: IssueSummaryState };

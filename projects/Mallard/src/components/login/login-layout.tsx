@@ -52,7 +52,7 @@ const LoginHeader = ({
 					onPress={onDismiss}
 					accessibilityHint="Closes the login screen"
 					accessibilityLabel="Close the login screen"
-					appearance={ButtonAppearance.skeletonBlue}
+					appearance={ButtonAppearance.SkeletonBlue}
 				/>
 			</View>
 			<View>

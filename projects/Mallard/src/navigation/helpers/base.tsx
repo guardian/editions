@@ -125,8 +125,8 @@ const navigateToIssue = ({
 		setIssueId(navigationProps.path, navigationProps.initialFrontKey);
 	}
 	sendComponentEvent({
-		componentType: ComponentType.appButton,
-		action: Action.click,
+		componentType: ComponentType.AppButton,
+		action: Action.Click,
 		value: 'issues_list_issue_clicked',
 	});
 };

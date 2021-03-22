@@ -20,7 +20,7 @@ export const sidebarLayerTransition = (
 	reverse?: boolean,
 ) => {
 	const { width } = Dimensions.get('window');
-	const isTablet = width >= Breakpoints.tabletVertical;
+	const isTablet = width >= Breakpoints.TabletVertical;
 
 	const outputRangeStart =
 		isTablet && reverse ? width : isTablet ? sidebarWidth : width;
