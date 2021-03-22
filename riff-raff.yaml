@@ -8,7 +8,7 @@ deployments:
         parameters:
             prefixStack: false
             bucket: mobile-dist
-            fileName: backend.zip
+            fileName: editions-backend.zip
             functionNames:
                 [editions-preview-backend-, editions-published-backend-]
     logging:
@@ -17,7 +17,7 @@ deployments:
         parameters:
             prefixStack: false
             bucket: mobile-dist
-            fileName: logging.zip
+            fileName: editions-logging.zip
             functionNames: [editions-logging-]
     archiver:
         type: aws-lambda
@@ -25,7 +25,7 @@ deployments:
         parameters:
             prefixStack: false
             bucket: mobile-dist
-            fileName: archiver.zip
+            fileName: editions-archiver.zip
             functionNames:
                 [
                     editions-proof-archiver-s3-event-listener-,
