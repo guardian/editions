@@ -42,7 +42,7 @@ import { useIssueSummary } from 'src/hooks/use-issue-summary';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings';
 import { navigateToIssue } from 'src/navigation/helpers/base';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToIssue } from 'src/paths';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { color } from 'src/theme/color';
@@ -156,7 +156,7 @@ const IssueRowContainer = React.memo(
 				issueDetails={issueDetails}
 				onGoToSettings={() =>
 					navigation.navigate({
-						routeName: routeNames.ManageEditions,
+						routeName: RouteNames.ManageEditions,
 					})
 				}
 			/>
@@ -177,7 +177,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 					appearance={ButtonAppearance.Skeleton}
 					onPress={() => {
 						navigation.navigate({
-							routeName: routeNames.ManageEditions,
+							routeName: RouteNames.ManageEditions,
 						});
 					}}
 				>

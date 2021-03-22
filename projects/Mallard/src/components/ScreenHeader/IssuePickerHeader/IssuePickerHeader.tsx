@@ -6,7 +6,7 @@ import { SettingsButton } from 'src/components/Button/SettingsButton';
 import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
-import { navigateToSettings } from 'src/navigation/helpers/base';
+import { RouteNames } from 'src/navigation/NavigationModels';
 
 const IssuePickerHeader = ({
 	headerStyles,
@@ -32,7 +32,7 @@ const IssuePickerHeader = ({
 			leftAction={
 				<SettingsButton
 					onPress={() => {
-						navigateToSettings(navigation);
+						navigation.navigate(RouteNames.Settings);
 					}}
 				/>
 			}

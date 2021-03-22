@@ -20,7 +20,7 @@ import {
 	SUBSCRIPTION_EMAIL,
 } from 'src/helpers/words';
 import { useToast } from 'src/hooks/use-toast';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/routes';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 export interface OnCompletionToast {
@@ -46,7 +46,7 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
 								key: 'Frequently Asked Questions',
 								title: 'Frequently Asked Questions',
 								onPress: () => {
-									navigation.navigate(routeNames.FAQ);
+									navigation.navigate(RouteNames.FAQ);
 								},
 								proxy: <RightChevron />,
 							},

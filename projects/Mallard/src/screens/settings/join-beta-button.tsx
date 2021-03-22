@@ -8,7 +8,7 @@ import { UiBodyCopy } from 'src/components/styled-text';
 import { JOIN_BETA_LINK } from 'src/constants';
 import { isInBeta } from 'src/helpers/release-stream';
 import { Copy } from 'src/helpers/words';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { remoteConfigService } from 'src/services/remote-config';
 import { metrics } from 'src/theme/spacing';
 
@@ -25,7 +25,7 @@ const betaProgrammeFAQs = (
 	key: 'Beta Programme FAQs',
 	title: Copy.settings.betaProgrammeFAQs,
 	onPress: () => {
-		navigation.navigate(routeNames.BetaProgrammeFAQs);
+		navigation.navigate(RouteNames.BetaProgrammeFAQs);
 	},
 	proxy: <RightChevron />,
 });

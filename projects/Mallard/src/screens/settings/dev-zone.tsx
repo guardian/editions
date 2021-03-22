@@ -30,7 +30,7 @@ import { useIsAppsRendering } from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info';
 import { useToast } from 'src/hooks/use-toast';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import {
 	clearPushTracking,
 	getPushTracking,
@@ -142,16 +142,14 @@ const DevZone = () => {
 			<ButtonList>
 				<Button
 					onPress={() => {
-						navigation.navigate(routeNames.Storybook);
+						navigation.navigate(RouteNames.Storybook);
 					}}
 				>
 					Storybook
 				</Button>
 				<Button
 					onPress={() => {
-						navigation.navigate(
-							routeNames.onboarding.OnboardingConsent,
-						);
+						navigation.navigate(RouteNames.OnboardingConsent);
 					}}
 				>
 					Show Startup Consent
@@ -244,7 +242,7 @@ const DevZone = () => {
 						title: 'API Endpoint',
 						explainer: apiUrl,
 						onPress: () => {
-							navigation.navigate(routeNames.Endpoints);
+							navigation.navigate(RouteNames.Endpoints);
 						},
 					},
 					{
@@ -252,7 +250,7 @@ const DevZone = () => {
 						title: 'Editions',
 						explainer: edition,
 						onPress: () => {
-							navigation.navigate(routeNames.Edition);
+							navigation.navigate(RouteNames.Edition);
 						},
 					},
 					{

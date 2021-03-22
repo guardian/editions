@@ -46,11 +46,11 @@ import { HomeScreen } from '../screens/home-screen';
 import { IssueScreen } from '../screens/issue-screen';
 import { SettingsScreen } from '../screens/settings-screen';
 import { mapNavigationToProps } from './helpers/base';
+import { RouteNames } from './NavigationModels';
 import { createArticleNavigator } from './navigators/article';
 import { createHeaderStackNavigator } from './navigators/header';
 import { createModalNavigator } from './navigators/modal';
 import { createSidebarNavigator } from './navigators/sidebar';
-import { routeNames } from './routes';
 
 const navOptionsWithGraunHeader = {
 	headerStyle: {
@@ -62,8 +62,8 @@ const navOptionsWithGraunHeader = {
 
 /* The screens you add to IOS_MODAL_ROUTES will have the modal transition. I.e they will slide up from the bottom. */
 const IOS_MODAL_ROUTES = [
-	routeNames.onboarding.PrivacyPolicyInline,
-	routeNames.onboarding.OnboardingConsentInline,
+	RouteNames.PrivacyPolicyInline,
+	RouteNames.OnboardingConsentInline,
 ];
 
 const dynamicModalTransition = (
@@ -86,30 +86,30 @@ const dynamicModalTransition = (
 
 const AppStack = createModalNavigator(
 	createSidebarNavigator(createArticleNavigator(IssueScreen, ArticleScreen), {
-		[routeNames.IssueList]: HomeScreen,
-		[routeNames.EditionsMenu]: EditionsMenuScreen,
+		[RouteNames.IssueList]: HomeScreen,
+		[RouteNames.EditionsMenu]: EditionsMenuScreen,
 	}),
 	{
-		[routeNames.ManageEditions]: createHeaderStackNavigator({
-			[routeNames.ManageEditions]: ManageEditionScreenFromIssuePicker,
+		[RouteNames.ManageEditions]: createHeaderStackNavigator({
+			[RouteNames.ManageEditions]: ManageEditionScreenFromIssuePicker,
 		}),
-		[routeNames.Settings]: createHeaderStackNavigator(
+		[RouteNames.Settings]: createHeaderStackNavigator(
 			{
-				[routeNames.Settings]: SettingsScreen,
-				[routeNames.Endpoints]: ApiScreen,
-				[routeNames.Edition]: EditionsScreen,
-				[routeNames.GdprConsent]: GdprConsentScreen,
-				[routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
-				[routeNames.ManageEditionsSettings]: ManageEditionsScreen,
-				[routeNames.TermsAndConditions]: TermsAndConditionsScreen,
-				[routeNames.BetaProgrammeFAQs]: BetaProgrammeFAQsScreen,
-				[routeNames.Help]: HelpScreen,
-				[routeNames.Credits]: CreditsScreen,
-				[routeNames.FAQ]: FAQScreen,
-				[routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
-				[routeNames.SubscriptionDetails]: SubscriptionDetailsScreen,
+				[RouteNames.Settings]: SettingsScreen,
+				[RouteNames.Endpoints]: ApiScreen,
+				[RouteNames.Edition]: EditionsScreen,
+				[RouteNames.GdprConsent]: GdprConsentScreen,
+				[RouteNames.PrivacyPolicy]: PrivacyPolicyScreen,
+				[RouteNames.ManageEditionsSettings]: ManageEditionsScreen,
+				[RouteNames.TermsAndConditions]: TermsAndConditionsScreen,
+				[RouteNames.BetaProgrammeFAQs]: BetaProgrammeFAQsScreen,
+				[RouteNames.Help]: HelpScreen,
+				[RouteNames.Credits]: CreditsScreen,
+				[RouteNames.FAQ]: FAQScreen,
+				[RouteNames.AlreadySubscribed]: AlreadySubscribedScreen,
+				[RouteNames.SubscriptionDetails]: SubscriptionDetailsScreen,
 				// Turned off to remove Promise rejection error on Android
-				[routeNames.Storybook]: StorybookScreen,
+				[RouteNames.Storybook]: StorybookScreen,
 			},
 			{
 				defaultNavigationOptions: {
@@ -117,8 +117,8 @@ const AppStack = createModalNavigator(
 				},
 			},
 		),
-		[routeNames.WeatherGeolocationConsent]: createHeaderStackNavigator({
-			[routeNames.WeatherGeolocationConsent]: WeatherGeolocationConsentScreen,
+		[RouteNames.WeatherGeolocationConsent]: createHeaderStackNavigator({
+			[RouteNames.WeatherGeolocationConsent]: WeatherGeolocationConsentScreen,
 		}),
 	},
 );
@@ -126,7 +126,7 @@ const AppStack = createModalNavigator(
 const OnboardingStack = createModalNavigator(
 	createStackNavigator(
 		{
-			[routeNames.onboarding.OnboardingConsent]: createStackNavigator(
+			[RouteNames.OnboardingConsent]: createStackNavigator(
 				{
 					Main: {
 						screen: mapNavigationToProps(
@@ -135,13 +135,11 @@ const OnboardingStack = createModalNavigator(
 								onContinue: () => nav.navigate('App'),
 								onOpenGdprConsent: () =>
 									nav.navigate(
-										routeNames.onboarding
-											.OnboardingConsentInline,
+										RouteNames.OnboardingConsentInline,
 									),
 								onOpenPrivacyPolicy: () =>
 									nav.navigate(
-										routeNames.onboarding
-											.PrivacyPolicyInline,
+										RouteNames.PrivacyPolicyInline,
 									),
 							}),
 						),
@@ -149,10 +147,8 @@ const OnboardingStack = createModalNavigator(
 							header: null,
 						},
 					},
-					[routeNames.onboarding
-						.OnboardingConsentInline]: GdprConsentScreenForOnboarding,
-					[routeNames.onboarding
-						.PrivacyPolicyInline]: PrivacyPolicyScreenForOnboarding,
+					[RouteNames.OnboardingConsentInline]: GdprConsentScreenForOnboarding,
+					[RouteNames.PrivacyPolicyInline]: PrivacyPolicyScreenForOnboarding,
 				},
 				{
 					headerMode: 'none',
@@ -225,9 +221,9 @@ const RootNavigator = createAppContainer(
 					initialRouteName: 'Main',
 				},
 			),
-			[routeNames.SignIn]: AuthSwitcherScreen,
-			[routeNames.CasSignIn]: CasSignInScreen,
-			[routeNames.Lightbox]: LightboxScreen,
+			[RouteNames.SignIn]: AuthSwitcherScreen,
+			[RouteNames.CasSignIn]: CasSignInScreen,
+			[RouteNames.Lightbox]: LightboxScreen,
 		},
 		{
 			initialRouteName: 'AppRoot',

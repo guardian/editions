@@ -26,7 +26,7 @@ import {
 import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
 import { useNotificationsEnabled } from 'src/hooks/use-config-provider';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { DevZone } from './settings/dev-zone';
@@ -90,7 +90,7 @@ const MiscSettingsList = React.memo(
 				title: Copy.settings.manageDownloads,
 				onPress: () =>
 					props.navigation.navigate(
-						routeNames.ManageEditionsSettings,
+						RouteNames.ManageEditionsSettings,
 					),
 				proxy: <RightChevron />,
 			},
@@ -142,7 +142,7 @@ const SignInButton = ({
 			accessible={true}
 			accessibilityRole={accessibilityRole}
 			text={Copy.settings.signIn}
-			onPress={() => navigation.navigate(routeNames.SignIn)}
+			onPress={() => navigation.navigate(RouteNames.SignIn)}
 		/>
 	);
 };
@@ -205,7 +205,7 @@ const SettingsScreen = () => {
 						key: 'Subscription details',
 						title: Copy.settings.subscriptionDetails,
 						onPress: () => {
-							navigation.navigate(routeNames.SubscriptionDetails);
+							navigation.navigate(RouteNames.SubscriptionDetails);
 						},
 						proxy: rightChevronIcon,
 					},
@@ -215,7 +215,7 @@ const SettingsScreen = () => {
 						key: `I'm already subscribed`,
 						title: Copy.settings.alreadySubscribed,
 						onPress: () => {
-							navigation.navigate(routeNames.AlreadySubscribed);
+							navigation.navigate(RouteNames.AlreadySubscribed);
 						},
 						proxy: rightChevronIcon,
 					},
@@ -252,7 +252,7 @@ const SettingsScreen = () => {
 								title: Copy.settings.privacySettings,
 								proxy: rightChevronIcon,
 								onPress: () => {
-									navigation.navigate(routeNames.GdprConsent);
+									navigation.navigate(RouteNames.GdprConsent);
 								},
 							},
 							{
@@ -261,7 +261,7 @@ const SettingsScreen = () => {
 								proxy: rightChevronIcon,
 								onPress: () => {
 									navigation.navigate(
-										routeNames.PrivacyPolicy,
+										RouteNames.PrivacyPolicy,
 									);
 								},
 							},
@@ -270,7 +270,7 @@ const SettingsScreen = () => {
 								title: Copy.settings.termsAndConditions,
 								onPress: () => {
 									navigation.navigate(
-										routeNames.TermsAndConditions,
+										RouteNames.TermsAndConditions,
 									);
 								},
 								proxy: rightChevronIcon,
@@ -284,7 +284,7 @@ const SettingsScreen = () => {
 								key: 'Help',
 								title: Copy.settings.help,
 								onPress: () => {
-									navigation.navigate(routeNames.Help);
+									navigation.navigate(RouteNames.Help);
 								},
 								proxy: rightChevronIcon,
 							},
@@ -292,7 +292,7 @@ const SettingsScreen = () => {
 								key: 'Credits',
 								title: Copy.settings.credits,
 								onPress: () => {
-									navigation.navigate(routeNames.Credits);
+									navigation.navigate(RouteNames.Credits);
 								},
 								proxy: rightChevronIcon,
 							},
