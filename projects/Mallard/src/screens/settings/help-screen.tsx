@@ -20,7 +20,7 @@ import {
 	SUBSCRIPTION_EMAIL,
 } from 'src/helpers/words';
 import { useToast } from 'src/hooks/use-toast';
-import { RouteNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 export interface OnCompletionToast {

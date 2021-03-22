@@ -11,7 +11,7 @@ import { getAppearancePillar } from 'src/hooks/use-article';
 import { useDimensions } from 'src/hooks/use-config-provider';
 import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
-import { RouteNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
