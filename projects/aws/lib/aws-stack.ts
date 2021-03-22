@@ -4,10 +4,15 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
-import { Duration, Tag } from '@aws-cdk/core'
-// import acm = require('@aws-cdk/aws-certificatemanager')
+import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
+import acm = require('@aws-cdk/aws-certificatemanager')
 import { Effect } from '@aws-cdk/aws-iam'
-import { constructTriggeredStepFunction } from './listener'
+import {
+    constructTriggeredStepFunction,
+    s3EventListenerFunction,
+} from './listener'
+import { CfnEventBusPolicy, Rule } from '@aws-cdk/aws-events'
+import { LambdaFunction } from '@aws-cdk/aws-events-targets'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -157,8 +162,8 @@ export class EditionsStack extends cdk.Stack {
 
         const deployBucket = s3.Bucket.fromBucketName(
             this,
-            'editions-dist',
-            'editions-dist',
+            'mobile-dist',
+            'mobile-dist',
         )
 
         const frontsAccess = iam.Role.fromRoleArn(
@@ -178,25 +183,25 @@ export class EditionsStack extends cdk.Stack {
             description: 'lambda access',
         })
 
-        // const previewHostname = new cdk.CfnParameter(this, 'preview-hostname', {
-        //     type: 'String',
-        //     description: 'Hostname of the preview endpoint',
-        // })
+        const previewHostname = new cdk.CfnParameter(this, 'preview-hostname', {
+            type: 'String',
+            description: 'Hostname of the preview endpoint',
+        })
 
-        // const previewCertificateArn = new cdk.CfnParameter(
-        //     this,
-        //     'preview-certificate-arn',
-        //     {
-        //         type: 'String',
-        //         description: 'ARN of ACM certificate for preview endpoint',
-        //     },
-        // )
+        const previewCertificateArn = new cdk.CfnParameter(
+            this,
+            'preview-certificate-arn',
+            {
+                type: 'String',
+                description: 'ARN of ACM certificate for preview endpoint',
+            },
+        )
 
-        // const previewCertificate = acm.Certificate.fromCertificateArn(
-        //     this,
-        //     'preview-certificate',
-        //     previewCertificateArn.valueAsString,
-        // )
+        const previewCertificate = acm.Certificate.fromCertificateArn(
+            this,
+            'preview-certificate',
+            previewCertificateArn.valueAsString,
+        )
 
         const backendFunction = (publicationStage: 'preview' | 'published') => {
             const titleCasePublicationStage =
@@ -212,7 +217,7 @@ export class EditionsStack extends cdk.Stack {
                     timeout: Duration.seconds(60),
                     code: Code.bucket(
                         deployBucket,
-                        `${stackParameter.valueAsString}/${stageParameter.valueAsString}/backend/backend.zip`,
+                        `${stackParameter.valueAsString}/${stageParameter.valueAsString}/editions-backend/editions-backend.zip`,
                     ),
                     handler: 'index.handler',
                     environment: {
@@ -279,7 +284,7 @@ export class EditionsStack extends cdk.Stack {
         })
         previewApiIpAccessPolicyStatement.addAnyPrincipal()
 
-        new apigateway.LambdaRestApi(
+        const previewApi = new apigateway.LambdaRestApi(
             this,
             'editions-preview-backend-apigateway',
             {
@@ -291,22 +296,22 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
-        // const previewDomainName = new apigateway.DomainName(
-        //     this,
-        //     'preview-domain-name',
-        //     {
-        //         domainName: previewHostname.valueAsString,
-        //         certificate: previewCertificate,
-        //         endpointType: apigateway.EndpointType.REGIONAL,
-        //     },
-        // )
+        const previewDomainName = new apigateway.DomainName(
+            this,
+            'preview-domain-name',
+            {
+                domainName: previewHostname.valueAsString,
+                certificate: previewCertificate,
+                endpointType: apigateway.EndpointType.REGIONAL,
+            },
+        )
 
-        // previewDomainName.addBasePathMapping(previewApi)
+        previewDomainName.addBasePathMapping(previewApi)
 
-        // new CfnOutput(this, 'Preview-Api-Target-Hostname', {
-        //     description: 'hostname',
-        //     value: `${previewDomainName.domainNameAliasDomainName}`,
-        // })
+        new CfnOutput(this, 'Preview-Api-Target-Hostname', {
+            description: 'hostname',
+            value: `${previewDomainName.domainNameAliasDomainName}`,
+        })
 
         const publishedApi = new apigateway.LambdaRestApi(
             this,
@@ -356,5 +361,12 @@ export class EditionsStack extends cdk.Stack {
             publishedBucket,
             frontsAccess.roleArn,
         )
+
+        // Allow CMS Fronts account to put cloudwatch events in this stack
+        new CfnEventBusPolicy(this, 'cmsFronts-access', {
+            action: 'events:PutEvents',
+            principal: cmsFrontsAccountIdParameter.valueAsString,
+            statementId: 'cmsFronts-putevents',
+        })
     }
 }

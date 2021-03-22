@@ -191,11 +191,9 @@ export const internalHandler = async (
 }
 
 export const handler: Handler<
-    {
-        Records: Record[]
-    },
+    object,
     (string | Failure)[]
-> = async ({ Records }) => {
+> = async inputData => {
     const proofStateMachineArnEnv = 'proofStateMachineARN'
     const proofStateMachineArn = process.env[proofStateMachineArnEnv]
     const publishStateMachineArnEnv = 'publishStateMachineARN'
@@ -208,20 +206,26 @@ export const handler: Handler<
         throw new Error('No Publish State Machine ARN configured')
     }
 
-    console.log(
-        `Attempting to invoke Proof/Publish State Machines after receiving records:`,
-        Records,
-    )
+    console.log('input data', inputData)
 
-    const runtimeDependencies: InvokerDependencies = {
-        proofStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
-            proofStateMachineArn,
-        ),
-        publishStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
-            publishStateMachineArn,
-        ),
-        s3fetch: fetchfromCMSFrontsS3,
-    }
+    // return withFailureMessage(Promise.reject(), 'fail')
+    return Promise.resolve(['success'])
+    // const Records: Record[] = inputData
 
-    return internalHandler(Records, runtimeDependencies)
+    // console.log(
+    //     `Attempting to invoke Proof/Publish State Machines after receiving records:`,
+    //     Records,
+    // )
+
+    // const runtimeDependencies: InvokerDependencies = {
+    //     proofStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
+    //         proofStateMachineArn,
+    //     ),
+    //     publishStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
+    //         publishStateMachineArn,
+    //     ),
+    //     s3fetch: fetchfromCMSFrontsS3,
+    // }
+
+    // return internalHandler(Records, runtimeDependencies)
 }

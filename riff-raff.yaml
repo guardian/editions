@@ -1,4 +1,4 @@
-stacks: [frontend]
+stacks: [mobile]
 regions: [eu-west-1]
 
 deployments:
@@ -7,7 +7,7 @@ deployments:
         dependencies: [cloudformation]
         parameters:
             prefixStack: false
-            bucket: editions-dist
+            bucket: mobile-dist
             fileName: backend.zip
             functionNames:
                 [editions-preview-backend-, editions-published-backend-]
@@ -16,7 +16,7 @@ deployments:
         dependencies: [cloudformation]
         parameters:
             prefixStack: false
-            bucket: editions-dist
+            bucket: mobile-dist
             fileName: logging.zip
             functionNames: [editions-logging-]
     archiver:
@@ -24,7 +24,7 @@ deployments:
         dependencies: [cloudformation]
         parameters:
             prefixStack: false
-            bucket: editions-dist
+            bucket: mobile-dist
             fileName: archiver.zip
             functionNames:
                 [
