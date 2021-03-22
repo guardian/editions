@@ -1,10 +1,6 @@
 import React from 'react';
 import { Linking, StyleSheet } from 'react-native';
-import type {
-	NavigationParams,
-	NavigationRoute,
-	NavigationScreenProp,
-} from 'react-navigation';
+import type { NavigationRoute, NavigationScreenProp } from 'react-navigation';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
