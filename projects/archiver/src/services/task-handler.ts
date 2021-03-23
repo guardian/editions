@@ -66,7 +66,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
             const event: PublishEvent = {
                 ...issuePublication,
                 status: 'Failed',
-                message: errorToString(err),
+                message: errorToString(err) + ' (Mobile account)',
                 timestamp: dependencies.getMoment().format(),
             }
             await dependencies.sendPublishStatusToTopic(event)

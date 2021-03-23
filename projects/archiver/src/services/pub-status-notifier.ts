@@ -61,56 +61,56 @@ export const createPublishEvent = (
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: '1/4: Started',
+                message: '1/4: Started (Mobile account)',
                 timestamp,
             }
         case 'assembled':
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: '2/4: Assembled',
+                message: '2/4: Assembled (Mobile account)',
                 timestamp,
             }
         case 'bundled':
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: '3/4: Bundled',
+                message: '3/4: Bundled (Mobile account)',
                 timestamp,
             }
         case 'proofed':
             return {
                 ...identifier,
                 status: 'Proofed',
-                message: '4/4: Ready for proofing on-device',
+                message: '4/4: Ready for proofing on-device (Mobile account)',
                 timestamp,
             }
         case 'copied':
             return {
                 ...identifier,
                 status: 'Publishing',
-                message: '1/2: Copied to publication location',
+                message: '1/2: Copied to publication location (Mobile account)',
                 timestamp,
             }
         case 'published':
             return {
                 ...identifier,
                 status: 'Published',
-                message: '2/2: Added to issue index',
+                message: '2/2: Added to issue index (Mobile account)',
                 timestamp,
             }
         case 'notified':
             return {
                 ...identifier,
                 status: 'PostProcessing',
-                message: 'Notification scheduled',
+                message: 'Notification scheduled (Mobile account)',
                 timestamp,
             }
         case 'editionsListUpdated':
             return {
                 ...identifier,
                 status: 'PostProcessing',
-                message: 'Editions List updated',
+                message: 'Editions List updated (Mobile account)',
                 timestamp,
             }
         case 'errored':
