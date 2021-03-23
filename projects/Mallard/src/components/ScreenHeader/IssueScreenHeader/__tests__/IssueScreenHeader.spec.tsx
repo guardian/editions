@@ -1,6 +1,7 @@
 import React from 'react';
 import type { ReactTestRendererJSON } from 'react-test-renderer';
 import TestRenderer from 'react-test-renderer';
+import MockedNavigator from 'src/__mocks__/@react-navigation';
 import type { IssueOrigin } from '../../../../../../Apps/common/src';
 import { IssueScreenHeader } from '../IssueScreenHeader';
 
@@ -14,24 +15,27 @@ const issue = {
 	origin: 'api' as IssueOrigin,
 };
 
-const navigate = jest.fn();
-
 describe('IssueScreenHeader', () => {
 	it('should match the default style', () => {
 		const component: ReactTestRendererJSON | null = TestRenderer.create(
-			<IssueScreenHeader issue={issue} navigation={{ navigate }} />,
+			<MockedNavigator
+				component={IssueScreenHeader}
+				props={{ issue: issue }}
+			/>,
 		).toJSON();
 		expect(component).toMatchSnapshot();
 	});
 	it('should match the altered style by the prop headerStyles', () => {
 		const component: ReactTestRendererJSON | null = TestRenderer.create(
-			<IssueScreenHeader
-				issue={issue}
-				navigation={{ navigate }}
-				headerStyles={{
-					backgroundColor: '#7D0068',
-					textColorPrimary: '#007ABC',
-					textColorSecondary: '#F3C100',
+			<MockedNavigator
+				component={IssueScreenHeader}
+				props={{
+					issue: issue,
+					haeaderStyles: {
+						backgroundColor: '#7D0068',
+						textColorPrimary: '#007ABC',
+						textColorSecondary: '#F3C100',
+					},
 				}}
 			/>,
 		).toJSON();
