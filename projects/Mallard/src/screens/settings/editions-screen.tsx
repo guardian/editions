@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
@@ -5,6 +6,7 @@ import { List } from 'src/components/lists/list';
 import { useEditions } from 'src/hooks/use-edition-provider';
 
 const EditionsScreen = () => {
+	const navigation = useNavigation();
 	const { editionsList, storeSelectedEdition } = useEditions();
 
 	const consolidatedEditions = [
@@ -28,9 +30,6 @@ const EditionsScreen = () => {
 			/>
 		</ScrollContainer>
 	);
-};
-EditionsScreen.navigationOptions = {
-	title: 'Edition',
 };
 
 export { EditionsScreen };

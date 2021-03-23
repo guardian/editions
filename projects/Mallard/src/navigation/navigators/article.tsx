@@ -55,7 +55,7 @@ export const ArticleWrapper = () => {
 	}
 	return (
 		<SlideCard>
-			<ArticleScreen route={route} />
+			<ArticleScreen />
 		</SlideCard>
 	);
 };

@@ -1,5 +1,5 @@
 import type { RouteProp } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -11,6 +11,7 @@ import { getAppearancePillar } from 'src/hooks/use-article';
 import { useDimensions } from 'src/hooks/use-config-provider';
 import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
@@ -148,15 +149,8 @@ const ArticleScreenWithProps = ({
 	);
 };
 
-type ArticleScreenParams = {
-	ArticleScreen: ArticleNavigationProps;
-};
-
-export const ArticleScreen = ({
-	route,
-}: {
-	route: RouteProp<ArticleScreenParams, 'ArticleScreen'>;
-}) => {
+export const ArticleScreen = () => {
+	const route = useRoute<RouteProp<RootStackParamList, 'Article'>>();
 	return getArticleNavigationProps(route.params, {
 		error: () => (
 			<FlexErrorMessage
