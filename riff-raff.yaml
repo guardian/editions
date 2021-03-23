@@ -11,14 +11,6 @@ deployments:
             fileName: editions-backend.zip
             functionNames:
                 [editions-preview-backend-, editions-published-backend-]
-    editions-logging:
-        type: aws-lambda
-        dependencies: [cloudformation]
-        parameters:
-            prefixStack: false
-            bucket: mobile-dist
-            fileName: editions-logging.zip
-            functionNames: [editions-logging-]
     editions-archiver:
         type: aws-lambda
         dependencies: [cloudformation]
@@ -47,11 +39,4 @@ deployments:
             cloudFormationStackName: editions
             templatePath: cloudformation.yaml
             cloudFormationStackByTags: false
-    logging-cloudformation:
-        type: cloud-formation
-        app: editions-logging
-        parameters:
-            prependStackToCloudFormationStackName: false
-            cloudFormationStackName: editions-logging
-            templatePath: logging-cloudformation.yaml
-            cloudFormationStackByTags: false
+
