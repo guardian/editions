@@ -50,6 +50,8 @@ function throwBadStatus(s: never): never {
     throw new Error('Unknown status type')
 }
 
+export const mobileAccountIdentifier = '(Mobile account)'
+
 export const createPublishEvent = (
     identifier: IssuePublicationIdentifier,
     status: Status,
@@ -61,56 +63,56 @@ export const createPublishEvent = (
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: '1/4: Started (Mobile account)',
+                message: `1/4: Started ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'assembled':
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: '2/4: Assembled (Mobile account)',
+                message: `2/4: Assembled ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'bundled':
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: '3/4: Bundled (Mobile account)',
+                message: `3/4: Bundled ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'proofed':
             return {
                 ...identifier,
                 status: 'Proofed',
-                message: '4/4: Ready for proofing on-device (Mobile account)',
+                message: `4/4: Ready for proofing on-device ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'copied':
             return {
                 ...identifier,
                 status: 'Publishing',
-                message: '1/2: Copied to publication location (Mobile account)',
+                message: `1/2: Copied to publication location ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'published':
             return {
                 ...identifier,
                 status: 'Published',
-                message: '2/2: Added to issue index (Mobile account)',
+                message: `2/2: Added to issue index ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'notified':
             return {
                 ...identifier,
                 status: 'PostProcessing',
-                message: 'Notification scheduled (Mobile account)',
+                message: `Notification scheduled ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'editionsListUpdated':
             return {
                 ...identifier,
                 status: 'PostProcessing',
-                message: 'Editions List updated (Mobile account)',
+                message: `Editions List updated ${mobileAccountIdentifier}`,
                 timestamp,
             }
         case 'errored':
