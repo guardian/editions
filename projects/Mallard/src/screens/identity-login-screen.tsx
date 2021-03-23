@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useContext, useState } from 'react';
 import { Alert } from 'react-native';
 import { AccessContext } from 'src/authentication/AccessContext';
@@ -17,6 +18,7 @@ import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { withConsent } from 'src/helpers/settings';
 import { Copy } from 'src/helpers/words';
 import { useFormField } from 'src/hooks/use-form-field';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import isEmail from 'validator/lib/isEmail';
 import { Login } from './log-in';
@@ -25,7 +27,7 @@ const useRandomState = () =>
 	useState(Math.random().toString().split('.')[1])[0];
 
 const AuthSwitcherScreen = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [error, setError] = useState<string | null>(null);
