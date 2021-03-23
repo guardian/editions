@@ -14,10 +14,6 @@ import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
 import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
-// import {
-// 	setScreenPositionFromView,
-// 	setScreenPositionOfItem,
-// } from 'src/navigation/navigators/article/positions';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
 import { color } from 'src/theme/color';
@@ -88,32 +84,9 @@ const ItemTappable = ({
 	hasPadding?: boolean;
 } & TappablePropTypes) => {
 	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-	const tappableRef = useRef<View>();
 	const [opacity] = useState(() => new Animated.Value(1));
 	return (
-		<Animated.View
-			style={[style]}
-			/**@TODO - FIND OUT WHAT THIS DOES! ANNA  */
-			// ref={(view: any) => {
-			// 	if (view) tappableRef.current = view._component as View;
-			// }}
-			// onLayout={(ev: any) => {
-			// 	setScreenPositionOfItem(article.key, ev.nativeEvent.layout);
-			// 	tappableRef.current &&
-			// 		setScreenPositionFromView(article.key, tappableRef.current);
-			// }}
-			// onTouchStart={() => {
-			// 	tappableRef.current &&
-			// 		setScreenPositionFromView(article.key, tappableRef.current);
-			// }}
-		>
-			{/** @TODO - FIND OUT WHAT THIS DOES!  JAMES */}
-			{/* <NavigationEvents
-                onWillFocus={() => {
-                    fade(opacity, 'in')
-                }}
-            /> */}
-
+		<Animated.View style={[style]}>
 			<TouchableHighlight
 				onPress={() => {
 					fade(opacity, 'out');
