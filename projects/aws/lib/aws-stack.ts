@@ -108,8 +108,6 @@ export class EditionsStack extends cdk.Stack {
                 type: 'String',
                 description: 'Proof Archive Bucket',
                 allowedValues: [
-                    'editions-proof-prod',
-                    'editions-proof-code',
                     'editions-proofed-prod',
                     'editions-proofed-code',
                 ],
@@ -123,8 +121,6 @@ export class EditionsStack extends cdk.Stack {
                 type: 'String',
                 description: 'Publish Archive Bucket',
                 allowedValues: [
-                    'editions-store-prod',
-                    'editions-store-code',
                     'editions-published-code',
                     'editions-published-prod',
                 ],
@@ -243,10 +239,10 @@ export class EditionsStack extends cdk.Stack {
                         }),
                         new iam.PolicyStatement({
                             resources: [
-                                `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}/*`,
-                                `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}/*`,
-                                `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}`,
-                                `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}`,
+                                `arn:aws:s3:::editions-published-${lowerCaseStageParameter.valueAsString}/*`,
+                                `arn:aws:s3:::editions-proofed-${lowerCaseStageParameter.valueAsString}/*`,
+                                `arn:aws:s3:::editions-proofed-${lowerCaseStageParameter.valueAsString}`,
+                                `arn:aws:s3:::editions-published-${lowerCaseStageParameter.valueAsString}`,
                             ],
                             actions: [
                                 's3:PutObject',
