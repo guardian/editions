@@ -12,12 +12,13 @@ const IssuePickerHeader = ({
 	headerStyles,
 	subTitle,
 	title,
+	navigation,
 }: {
 	headerStyles?: SpecialEditionHeaderStyles;
 	subTitle?: string;
 	title: string;
+	navigation: any;
 }) => {
-	const navigation = useNavigation();
 	return (
 		<Header
 			alignment={'drawer'}

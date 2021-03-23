@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import type { MutableRefObject, ReactElement } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
@@ -300,41 +301,61 @@ const handleError = (headerStyle?: SpecialEditionHeaderStyles) => (
 	{ message }: { message: string },
 	_: unknown,
 	{ retry }: { retry: () => void },
-) => (
-	<>
-		<IssueScreenHeader headerStyles={headerStyle} />
+) => {
+	const navigation = useNavigation();
+	return (
+		<>
+			<IssueScreenHeader
+				headerStyles={headerStyle}
+				navigation={navigation}
+			/>
 
-		<FlexErrorMessage
-			debugMessage={message}
-			title={CONNECTION_FAILED_ERROR}
-			message={CONNECTION_FAILED_SUB_ERROR}
-			action={[REFRESH_BUTTON_TEXT, retry]}
-		/>
-	</>
-);
+			<FlexErrorMessage
+				debugMessage={message}
+				title={CONNECTION_FAILED_ERROR}
+				message={CONNECTION_FAILED_SUB_ERROR}
+				action={[REFRESH_BUTTON_TEXT, retry]}
+			/>
+		</>
+	);
+};
 
-const handlePending = (headerStyle?: SpecialEditionHeaderStyles) => () => (
-	<>
-		<IssueScreenHeader headerStyles={headerStyle} />
-		<FlexCenter>
-			<Spinner />
-		</FlexCenter>
-	</>
-);
+const handlePending = (headerStyle?: SpecialEditionHeaderStyles) => () => {
+	const navigation = useNavigation();
+
+	return (
+		<>
+			<IssueScreenHeader
+				headerStyles={headerStyle}
+				navigation={navigation}
+			/>
+			<FlexCenter>
+				<Spinner />
+			</FlexCenter>
+		</>
+	);
+};
 
 const handleIssueScreenError = (
 	error: string,
 	headerStyle?: SpecialEditionHeaderStyles,
-) => (
-	<>
-		<IssueScreenHeader headerStyles={headerStyle} />
-		<FlexErrorMessage
-			debugMessage={error}
-			title={CONNECTION_FAILED_ERROR}
-			message={CONNECTION_FAILED_AUTO_RETRY}
-		/>
-	</>
-);
+) => {
+	const navigation = useNavigation();
+
+	return (
+		<>
+			<IssueScreenHeader
+				headerStyles={headerStyle}
+				navigation={navigation}
+			/>
+			<FlexErrorMessage
+				debugMessage={error}
+				title={CONNECTION_FAILED_ERROR}
+				message={CONNECTION_FAILED_AUTO_RETRY}
+			/>
+		</>
+	);
+};
 
 /** used to memoize the IssueScreenWithPath */
 const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>

@@ -427,7 +427,7 @@ const IssueListFetchContainer = () => {
 export const HomeScreen = () => {
 	const { issueSummary, error } = useIssueSummary();
 	const { selectedEdition } = useEditions();
-
+	const navigation = useNavigation();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
 	const issueHeaderData =
 		selectedEdition.editionType === 'Special'
@@ -437,6 +437,7 @@ export const HomeScreen = () => {
 	return (
 		<WithAppAppearance value={'tertiary'}>
 			<IssuePickerHeader
+				navigation={navigation}
 				title={issueHeaderData.title}
 				subTitle={issueHeaderData.subTitle}
 				headerStyles={specialEditionProps?.headerStyle}

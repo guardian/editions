@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import type { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common';
 import { IssueTitle } from 'src/components/issue/issue-title';
@@ -19,12 +18,12 @@ interface Titles {
 const IssueScreenHeader = ({
 	headerStyles,
 	issue,
+	navigation,
 }: {
 	headerStyles?: SpecialEditionHeaderStyles;
 	issue?: IssueWithFronts;
+	navigation: any;
 }) => {
-	const navigation = useNavigation();
-
 	const { date, weekday } = useIssueDate(issue);
 	const { setNewEditionSeen, selectedEdition } = useEditions();
 
