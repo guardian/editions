@@ -1,4 +1,4 @@
-import type { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import type { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common';
 import { IssueTitle } from 'src/components/issue/issue-title';
@@ -6,7 +6,6 @@ import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
 import { useIssueDate } from 'src/helpers/issues';
 import { useEditions } from 'src/hooks/use-edition-provider';
-import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { IssueMenuButton } from '../../Button/IssueMenuButton';
 import { EditionsMenuButton } from '../../EditionsMenu/EditionsMenuButton/EditionsMenuButton';
@@ -20,12 +19,11 @@ interface Titles {
 const IssueScreenHeader = ({
 	headerStyles,
 	issue,
-	navigation,
 }: {
 	headerStyles?: SpecialEditionHeaderStyles;
 	issue?: IssueWithFronts;
-	navigation: StackNavigationProp<RootStackParamList>;
 }) => {
+	const navigation = useNavigation();
 	const { date, weekday } = useIssueDate(issue);
 	const { setNewEditionSeen, selectedEdition } = useEditions();
 
