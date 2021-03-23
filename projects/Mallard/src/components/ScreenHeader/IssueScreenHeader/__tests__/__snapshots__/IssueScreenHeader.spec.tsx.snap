@@ -446,14 +446,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
             onGestureHandlerStateChange={[Function]}
             onHandlerStateChange={[Function]}
             rippleColor={0}
-            style={
-              Array [
-                Object {
-                  "overflow": "hidden",
-                },
-                undefined,
-              ]
-            }
           >
             <View
               accessible={true}
@@ -1056,14 +1048,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
             onGestureHandlerStateChange={[Function]}
             onHandlerStateChange={[Function]}
             rippleColor={0}
-            style={
-              Array [
-                Object {
-                  "overflow": "hidden",
-                },
-                undefined,
-              ]
-            }
           >
             <View
               accessible={true}

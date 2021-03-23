@@ -14,10 +14,12 @@ const issue = {
 	origin: 'api' as IssueOrigin,
 };
 
+const navigate = jest.fn();
+
 describe('IssueScreenHeader', () => {
 	it('should match the default style', () => {
 		const component: ReactTestRendererJSON | null = TestRenderer.create(
-			<IssueScreenHeader issue={issue} />,
+			<IssueScreenHeader issue={issue} navigation={{ navigate }} />,
 		).toJSON();
 		expect(component).toMatchSnapshot();
 	});
@@ -25,6 +27,7 @@ describe('IssueScreenHeader', () => {
 		const component: ReactTestRendererJSON | null = TestRenderer.create(
 			<IssueScreenHeader
 				issue={issue}
+				navigation={{ navigate }}
 				headerStyles={{
 					backgroundColor: '#7D0068',
 					textColorPrimary: '#007ABC',
