@@ -61,12 +61,12 @@ const WeatherGeolocationConsentScreen = () => {
 				showIsDisabledAlert();
 				return;
 			}
-			navigation.dismiss();
+			navigation.goBack();
 		}
 	};
 	const onHidePress = () => {
 		setIsWeatherShown(apolloClient, false);
-		navigation.dismiss();
+		navigation.goBack();
 	};
 
 	return (
