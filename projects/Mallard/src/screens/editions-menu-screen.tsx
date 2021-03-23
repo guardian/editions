@@ -6,8 +6,8 @@ import type { NavigationScreenProp } from 'react-navigation';
 import { EditionsMenu } from 'src/components/EditionsMenu/EditionsMenu';
 import { EditionsMenuScreenHeader } from 'src/components/ScreenHeader/EditionMenuScreenHeader';
 import { useEditions } from 'src/hooks/use-edition-provider';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { sidebarWidth } from 'src/navigation/navigators/sidebar/positions';
-import { routeNames } from 'src/navigation/routes';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { ApiState } from './settings/api-screen';
 
@@ -53,13 +53,13 @@ export const EditionsMenuScreen = ({
 				<>
 					<EditionsMenuScreenHeader
 						leftActionPress={() =>
-							navigation.navigate(routeNames.Issue)
+							navigation.navigate(RouteNames.Issue)
 						}
 					/>
 
 					<EditionsMenu
 						navigationPress={() =>
-							navigation.navigate(routeNames.Issue)
+							navigation.navigate(RouteNames.Issue)
 						}
 						regionalEditions={regionalEditions}
 						specialEditions={specialEditions}

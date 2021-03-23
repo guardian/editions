@@ -7,7 +7,7 @@ import {
 	minScale,
 	radius,
 } from 'src/navigation/helpers/transition';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { metrics } from 'src/theme/spacing';
 
 const getScaleForArticle = (width: LayoutRectangle['width']) => {
@@ -151,7 +151,7 @@ const articleScreenMotion = ({
 
 const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
 	const { scene } = sceneProps;
-	if (scene.route.routeName === routeNames.Issue) {
+	if (scene.route.routeName === RouteNames.Issue) {
 		return issueScreenInterpolator(sceneProps);
 	}
 	return {};

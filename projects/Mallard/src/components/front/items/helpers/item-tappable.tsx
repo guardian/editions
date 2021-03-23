@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactNode } from 'react';
 import React, { useRef, useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -13,6 +14,7 @@ import type { AnimatedValue } from 'react-navigation';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
 import { navigateToArticle } from 'src/navigation/helpers/base';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import {
 	setScreenPositionFromView,
 	setScreenPositionOfItem,
@@ -84,7 +86,7 @@ const ItemTappable = ({
 	children: ReactNode;
 	hasPadding?: boolean;
 } & TappablePropTypes) => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 	const tappableRef = useRef<View>();
 	const [opacity] = useState(() => new Animated.Value(1));
 	return (

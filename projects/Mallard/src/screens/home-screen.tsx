@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { Dispatch } from 'react';
 import React, {
 	useCallback,
@@ -8,11 +9,6 @@ import React, {
 	useState,
 } from 'react';
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
-import type {
-	NavigationInjectedProps,
-	NavigationRoute,
-	NavigationScreenProp,
-} from 'react-navigation';
 import type { IssueSummary } from 'src/common';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import {
@@ -42,13 +38,13 @@ import { useIssueSummary } from 'src/hooks/use-issue-summary';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings';
 import { navigateToIssue } from 'src/navigation/helpers/base';
-import { routeNames } from 'src/navigation/routes';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToIssue } from 'src/paths';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import type { IssueWithFronts } from '../../../Apps/common/src';
-import { ScreenFiller } from './editions-menu-screen';
 import { ApiState } from './settings/api-screen';
 
 const styles = StyleSheet.create({
@@ -76,13 +72,14 @@ const IssueRowContainer = React.memo(
 		setIssueId: setLocalIssueId,
 		issue,
 		issueDetails,
-		navigation,
 	}: {
 		setIssueId: Dispatch<PathToIssue>;
 		issue: IssueSummary;
 		issueDetails: Loaded<IssueWithFronts> | null;
-		navigation: NavigationScreenProp<NavigationRoute>;
 	}) => {
+		const navigation = useNavigation<
+			StackNavigationProp<RootStackParamList>
+		>();
 		const { issueId, setIssueId } = useIssueSummary();
 		const { localId, publishedId } = issue;
 		const setNavPosition = useSetNavPosition();
@@ -156,16 +153,15 @@ const IssueRowContainer = React.memo(
 				issue={issue}
 				issueDetails={issueDetails}
 				onGoToSettings={() =>
-					navigation.navigate({
-						routeName: routeNames.ManageEditions,
-					})
+					navigation.navigate(RouteNames.ManageEditions)
 				}
 			/>
 		);
 	},
 );
 
-const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
+const IssueListFooter = () => {
+	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 	const isUsingProdDevtools = useIsUsingProdDevtools();
 	const { setIssueId } = useIssueSummary();
 
@@ -177,9 +173,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 					accessibilityHint="Navigates to the manage downloads screen"
 					appearance={ButtonAppearance.Skeleton}
 					onPress={() => {
-						navigation.navigate({
-							routeName: routeNames.ManageEditions,
-						});
+						navigation.navigate(RouteNames.ManageEditions);
 					}}
 				>
 					{Copy.issueListFooter.manageDownloads}
@@ -266,7 +260,6 @@ const IssueListView = React.memo(
 					setIssueId={setIssueId}
 					issue={item}
 					issueDetails={index === currentIssueIndex ? details : null}
-					navigation={navigation}
 				/>
 			),
 			[currentIssueIndex, details, navigation, setIssueId],
@@ -298,7 +291,7 @@ const IssueListView = React.memo(
 			() => (
 				<View>
 					<Separator />
-					<IssueListFooter navigation={navigation} />
+					<IssueListFooter />
 				</View>
 			),
 			[navigation],
@@ -434,7 +427,6 @@ const IssueListFetchContainer = () => {
 export const HomeScreen = () => {
 	const { issueSummary, error } = useIssueSummary();
 	const { selectedEdition } = useEditions();
-
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
 	const issueHeaderData =
 		selectedEdition.editionType === 'Special'

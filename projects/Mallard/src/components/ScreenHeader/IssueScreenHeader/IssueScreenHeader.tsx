@@ -6,10 +6,7 @@ import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
 import { useIssueDate } from 'src/helpers/issues';
 import { useEditions } from 'src/hooks/use-edition-provider';
-import {
-	navigateToEditionMenu,
-	navigateToIssueList,
-} from 'src/navigation/helpers/base';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { IssueMenuButton } from '../../Button/IssueMenuButton';
 import { EditionsMenuButton } from '../../EditionsMenu/EditionsMenuButton/EditionsMenuButton';
 
@@ -27,7 +24,6 @@ const IssueScreenHeader = ({
 	issue?: IssueWithFronts;
 }) => {
 	const navigation = useNavigation();
-
 	const { date, weekday } = useIssueDate(issue);
 	const { setNewEditionSeen, selectedEdition } = useEditions();
 
@@ -37,12 +33,12 @@ const IssueScreenHeader = ({
 	};
 
 	const goToIssueList = () => {
-		navigateToIssueList(navigation);
+		navigation.navigate(RouteNames.IssueList);
 	};
 
 	const handleEditionMenuPress = () => {
 		setNewEditionSeen();
-		navigateToEditionMenu(navigation);
+		navigation.navigate(RouteNames.EditionsMenu);
 	};
 
 	const isSpecialEdition = (editionType: string) => {

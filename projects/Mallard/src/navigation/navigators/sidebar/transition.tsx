@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import type { NavigationTransitionProps } from 'react-navigation';
 import { safeInterpolation } from 'src/helpers/math';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { sidebarWidth } from './positions';
 
@@ -52,7 +52,7 @@ const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
 		return mainLayerTransition();
 	}
 	const reverse =
-		scene.route.routeName === routeNames.EditionsMenu ? true : false;
+		scene.route.routeName === RouteNames.EditionsMenu ? true : false;
 	return sidebarLayerTransition(
 		sceneProps.position,
 		sceneProps.scene.index,

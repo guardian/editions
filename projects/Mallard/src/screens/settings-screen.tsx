@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import React, { useContext, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
 import { Alert, Linking, Platform, Switch, Text } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import type { NavigationRoute, NavigationScreenProp } from 'react-navigation';
 import {
 	AccessContext,
 	useAccess,
@@ -26,17 +26,17 @@ import {
 import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
 import { useNotificationsEnabled } from 'src/hooks/use-config-provider';
-import { routeNames } from 'src/navigation/routes';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { DevZone } from './settings/dev-zone';
 
 const MiscSettingsList = React.memo(
-	(props: {
-		isWeatherShown: boolean;
-		client: ApolloClient<object>;
-		navigation: NavigationScreenProp<NavigationRoute>;
-	}) => {
+	(props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
+		const navigation = useNavigation<
+			StackNavigationProp<RootStackParamList>
+		>();
 		const {
 			notificationsEnabled,
 			setNotifications,
@@ -89,9 +89,7 @@ const MiscSettingsList = React.memo(
 				key: 'manageEditions',
 				title: Copy.settings.manageDownloads,
 				onPress: () =>
-					props.navigation.navigate(
-						routeNames.ManageEditionsSettings,
-					),
+					navigation.navigate(RouteNames.ManageEditionsSettings),
 				proxy: <RightChevron />,
 			},
 		];
@@ -142,7 +140,7 @@ const SignInButton = ({
 			accessible={true}
 			accessibilityRole={accessibilityRole}
 			text={Copy.settings.signIn}
-			onPress={() => navigation.navigate(routeNames.SignIn)}
+			onPress={() => navigation.navigate(RouteNames.SignIn)}
 		/>
 	);
 };
@@ -205,7 +203,7 @@ const SettingsScreen = () => {
 						key: 'Subscription details',
 						title: Copy.settings.subscriptionDetails,
 						onPress: () => {
-							navigation.navigate(routeNames.SubscriptionDetails);
+							navigation.navigate(RouteNames.SubscriptionDetails);
 						},
 						proxy: rightChevronIcon,
 					},
@@ -215,7 +213,7 @@ const SettingsScreen = () => {
 						key: `I'm already subscribed`,
 						title: Copy.settings.alreadySubscribed,
 						onPress: () => {
-							navigation.navigate(routeNames.AlreadySubscribed);
+							navigation.navigate(RouteNames.AlreadySubscribed);
 						},
 						proxy: rightChevronIcon,
 					},
@@ -229,7 +227,6 @@ const SettingsScreen = () => {
 					<SignInButton
 						accessible={true}
 						accessibilityRole="button"
-						navigation={navigation}
 						username={
 							identityData
 								? identityData.userDetails.primaryEmailAddress
@@ -242,7 +239,6 @@ const SettingsScreen = () => {
 					<MiscSettingsList
 						client={client}
 						isWeatherShown={isWeatherShown}
-						navigation={navigation}
 					/>
 					<Heading>{``}</Heading>
 					<List
@@ -252,7 +248,7 @@ const SettingsScreen = () => {
 								title: Copy.settings.privacySettings,
 								proxy: rightChevronIcon,
 								onPress: () => {
-									navigation.navigate(routeNames.GdprConsent);
+									navigation.navigate(RouteNames.GdprConsent);
 								},
 							},
 							{
@@ -261,7 +257,7 @@ const SettingsScreen = () => {
 								proxy: rightChevronIcon,
 								onPress: () => {
 									navigation.navigate(
-										routeNames.PrivacyPolicy,
+										RouteNames.PrivacyPolicy,
 									);
 								},
 							},
@@ -270,7 +266,7 @@ const SettingsScreen = () => {
 								title: Copy.settings.termsAndConditions,
 								onPress: () => {
 									navigation.navigate(
-										routeNames.TermsAndConditions,
+										RouteNames.TermsAndConditions,
 									);
 								},
 								proxy: rightChevronIcon,
@@ -284,7 +280,7 @@ const SettingsScreen = () => {
 								key: 'Help',
 								title: Copy.settings.help,
 								onPress: () => {
-									navigation.navigate(routeNames.Help);
+									navigation.navigate(RouteNames.Help);
 								},
 								proxy: rightChevronIcon,
 							},
@@ -292,7 +288,7 @@ const SettingsScreen = () => {
 								key: 'Credits',
 								title: Copy.settings.credits,
 								onPress: () => {
-									navigation.navigate(routeNames.Credits);
+									navigation.navigate(RouteNames.Credits);
 								},
 								proxy: rightChevronIcon,
 							},
@@ -309,9 +305,7 @@ const SettingsScreen = () => {
 						]}
 					/>
 
-					{canDisplayBetaButton && (
-						<BetaButtonOption navigation={navigation} />
-					)}
+					{canDisplayBetaButton && <BetaButtonOption />}
 
 					{isUsingProdDevtools && <DevZone />}
 				</ScrollContainer>

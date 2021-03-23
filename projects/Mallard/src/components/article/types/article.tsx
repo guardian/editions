@@ -5,12 +5,12 @@ import {
 	pingEditionsRenderingJsString,
 	Platform as PlatformType,
 } from '@guardian/renditions';
+import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform, Share, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import type WebView from 'react-native-webview';
-import type { NavigationScreenProp } from 'react-navigation';
 import type {
 	Article as ArticleT,
 	GalleryArticle,
@@ -24,7 +24,7 @@ import { useIsAppsRendering } from 'src/hooks/use-config-provider';
 import { selectImagePath } from 'src/hooks/use-image-paths';
 import { useIssueSummary } from 'src/hooks/use-issue-summary';
 import { useApiUrl } from 'src/hooks/use-settings';
-import { navigateToLightbox } from 'src/navigation/helpers/base';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { remoteConfigService } from 'src/services/remote-config';
 import { metrics } from 'src/theme/spacing';
@@ -160,7 +160,6 @@ const checkPathExists = async (articlePath: string) => {
 };
 
 const Article = ({
-	navigation,
 	article,
 	path,
 	onShouldShowHeaderChange,
@@ -169,11 +168,11 @@ const Article = ({
 	onIsAtTopChange,
 	origin,
 }: {
-	navigation: NavigationScreenProp<{}>;
 	article: ArticleT | PictureArticle | GalleryArticle;
 	path: PathToArticle;
 	origin: IssueOrigin;
 } & HeaderControlProps) => {
+	const navigation = useNavigation();
 	const [, { type }] = useArticle();
 	const ref = useRef<WebView | null>(null);
 	const [imagePaths, setImagePaths] = useState(['']);
@@ -294,14 +293,12 @@ const Article = ({
 		) {
 			index++;
 		}
-		navigateToLightbox({
-			navigation,
-			navigationProps: {
-				images: lightboxImages,
-				imagePaths: imagePaths,
-				index,
-				pillar,
-			},
+
+		navigation.navigate(RouteNames.Lightbox, {
+			images: lightboxImages,
+			imagePaths: imagePaths,
+			index,
+			pillar,
 		});
 	};
 

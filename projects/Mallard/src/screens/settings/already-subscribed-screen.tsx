@@ -12,7 +12,7 @@ import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card';
 import { useModal } from 'src/components/modal';
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { Copy } from 'src/helpers/words';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 const AlreadySubscribedScreen = () => {
@@ -43,7 +43,7 @@ const AlreadySubscribedScreen = () => {
 													.signInTitle,
 											onPress: () => {
 												navigation.navigate(
-													routeNames.SignIn,
+													RouteNames.SignIn,
 												);
 											},
 											proxy: rightChevronIcon,
@@ -56,7 +56,7 @@ const AlreadySubscribedScreen = () => {
 													.subscriberIdTitle,
 											onPress: () => {
 												navigation.navigate(
-													routeNames.CasSignIn,
+													RouteNames.CasSignIn,
 												);
 											},
 											proxy: rightChevronIcon,

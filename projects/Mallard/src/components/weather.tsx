@@ -7,7 +7,7 @@ import DeviceInfo from 'react-native-device-info';
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary';
 import type { QueryResult } from 'src/hooks/apollo';
 import { useQuery } from 'src/hooks/apollo';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
@@ -212,7 +212,7 @@ const WeatherIconView = ({
 const SetLocationButton = () => {
 	const navigation = useNavigation();
 	const onSetLocation = useCallback(() => {
-		navigation.navigate(routeNames.WeatherGeolocationConsent);
+		navigation.navigate(RouteNames.WeatherGeolocationConsent);
 	}, [navigation]);
 
 	return (

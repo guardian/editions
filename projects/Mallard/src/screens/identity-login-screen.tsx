@@ -17,7 +17,7 @@ import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { withConsent } from 'src/helpers/settings';
 import { Copy } from 'src/helpers/words';
 import { useFormField } from 'src/hooks/use-form-field';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import isEmail from 'validator/lib/isEmail';
 import { Login } from './log-in';
 
@@ -82,16 +82,16 @@ const AuthSwitcherScreen = ({
 										onDismiss={() => navigation.popToTop()}
 										onOpenCASLogin={() =>
 											navigation.navigate(
-												routeNames.CasSignIn,
+												RouteNames.CasSignIn,
 											)
 										}
 										onLoginPress={() =>
 											navigation.navigate(
-												routeNames.SignIn,
+												RouteNames.SignIn,
 											)
 										}
 										onFaqPress={() =>
-											navigation.navigate(routeNames.FAQ)
+											navigation.navigate(RouteNames.FAQ)
 										}
 										close={close}
 									/>
@@ -140,7 +140,7 @@ const AuthSwitcherScreen = ({
 			isLoading={isLoading}
 			onDismiss={() => navigation.goBack()}
 			onHelpPress={() =>
-				navigation.navigate(routeNames.AlreadySubscribed)
+				navigation.navigate(RouteNames.AlreadySubscribed)
 			}
 			onFacebookPress={() =>
 				handleAuthClick(

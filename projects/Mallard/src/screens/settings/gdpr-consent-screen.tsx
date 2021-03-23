@@ -27,7 +27,7 @@ import {
 	PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words';
 import { useToast } from 'src/hooks/use-toast';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 interface GdprConfig {
@@ -199,8 +199,7 @@ const GdprConsent = ({
 							<LinkNav
 								onPress={() =>
 									navigation.navigate(
-										routeNames.onboarding
-											.PrivacyPolicyInline,
+										RouteNames.PrivacyPolicyInline,
 									)
 								}
 							>

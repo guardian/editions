@@ -4,8 +4,9 @@ import {
 } from '@react-navigation/stack';
 import React from 'react';
 import { Animated } from 'react-native';
+import type { RootStackParamList } from './navigation/NavigationModels';
+import { RouteNames } from './navigation/NavigationModels';
 import { ArticleWrapper } from './navigation/navigators/article';
-import { routeNames } from './navigation/routes';
 import { EditionsMenuScreen } from './screens/editions-menu-screen';
 import { HomeScreen } from './screens/home-screen';
 import { AuthSwitcherScreen } from './screens/identity-login-screen';
@@ -32,11 +33,11 @@ import {
 import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen';
 import { TermsAndConditionsScreen } from './screens/settings/terms-and-conditions-screen';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 const { multiply } = Animated;
 
-const cardStyleInterpolator = (props) => {
+const cardStyleInterpolator = (props: any) => {
 	const translateX = multiply(
 		props.current.progress.interpolate({
 			inputRange: [0, 1],
@@ -45,7 +46,6 @@ const cardStyleInterpolator = (props) => {
 		}),
 		props.inverted,
 	);
-	console.log(props.inverted);
 
 	return {
 		// ...CardStyleInterpolators.forHorizontalIOS(props),
@@ -71,16 +71,16 @@ const cardStyleInterpolator = (props) => {
 const RootStack = () => {
 	return (
 		<Stack.Navigator
-			initialRouteName="Home"
+			initialRouteName={RouteNames.Home}
 			screenOptions={{ gestureEnabled: false, headerShown: false }}
 		>
 			<Stack.Screen
-				name={routeNames.Issue}
+				name={RouteNames.Issue}
 				component={IssueScreen}
 				options={{}}
 			/>
 			<Stack.Screen
-				name={routeNames.IssueList}
+				name={RouteNames.IssueList}
 				component={HomeScreen}
 				options={{
 					gestureDirection: 'horizontal',
@@ -90,7 +90,7 @@ const RootStack = () => {
 				}}
 			/>
 			<Stack.Screen
-				name={routeNames.EditionsMenu}
+				name={RouteNames.EditionsMenu}
 				component={EditionsMenuScreen}
 				options={{
 					gestureDirection: 'horizontal-inverted',
@@ -100,7 +100,7 @@ const RootStack = () => {
 				}}
 			/>
 			<Stack.Screen
-				name={routeNames.Article}
+				name={RouteNames.Article}
 				component={ArticleWrapper}
 				options={{
 					cardStyleInterpolator:
@@ -109,88 +109,75 @@ const RootStack = () => {
 					gestureDirection: 'vertical',
 				}}
 			/>
-			{/* <Stack.Screen
-                name={routeNames.Article}
-                component={SlideCardJames}
-                options={{
-                    cardStyleInterpolator: props => {
-                        return {
-                            ...CardStyleInterpolators.forModalPresentationIOS(
-                                props,
-                            ),
-                        }
-                    },
-                }}
-            /> */}
 			<Stack.Screen
-				name={routeNames.Settings}
+				name={RouteNames.Settings}
 				component={SettingsScreen}
 			/>
 			<Stack.Screen
-				name={routeNames.SignIn}
+				name={RouteNames.SignIn}
 				component={AuthSwitcherScreen}
 			/>
 			{/* <Stack.Screen
-                name={routeNames.OnboardingStart}
+                name={RouteNames.OnboardingStart}
             /> */}
 			<Stack.Screen
-				name={routeNames.onboarding.OnboardingConsent}
+				name={RouteNames.OnboardingConsent}
 				component={OnboardingConsentScreen}
 			/>
 			<Stack.Screen
-				name={routeNames.onboarding.OnboardingConsentInline}
+				name={RouteNames.OnboardingConsentInline}
 				component={GdprConsentScreenForOnboarding}
 			/>
 			<Stack.Screen
-				name={routeNames.onboarding.PrivacyPolicyInline}
+				name={RouteNames.PrivacyPolicyInline}
 				component={PrivacyPolicyScreenForOnboarding}
 			/>
 			<Stack.Screen
-				name={routeNames.AlreadySubscribed}
+				name={RouteNames.AlreadySubscribed}
 				component={AlreadySubscribedScreen}
 			/>
 			<Stack.Screen
-				name={routeNames.CasSignIn}
+				name={RouteNames.CasSignIn}
 				component={CasSignInScreen}
 			/>
 			<Stack.Screen
-				name={routeNames.ManageEditionsSettings}
+				name={RouteNames.ManageEditionsSettings}
 				component={ManageEditionsScreenWithHeader}
 			/>
 			{/** @TODO Fix the enable all button */}
 			<Stack.Screen
-				name={routeNames.GdprConsent}
+				name={RouteNames.GdprConsent}
 				component={GdprConsentScreen}
 			/>
 			<Stack.Screen
-				name={routeNames.PrivacyPolicy}
+				name={RouteNames.PrivacyPolicy}
 				component={PrivacyPolicyScreen}
 			/>
 
 			{/* ==== Inspect from here === */}
 			<Stack.Screen
-				name={routeNames.Edition}
+				name={RouteNames.Edition}
 				component={EditionsScreen}
 			/>
 			<Stack.Screen
-				name={routeNames.TermsAndConditions}
+				name={RouteNames.TermsAndConditions}
 				component={TermsAndConditionsScreen}
 			/>
 			<Stack.Screen
-				name={routeNames.BetaProgrammeFAQs}
+				name={RouteNames.BetaProgrammeFAQs}
 				component={BetaProgrammeFAQsScreen}
 			/>
-			<Stack.Screen name={routeNames.Help} component={HelpScreen} />
-			<Stack.Screen name={routeNames.Credits} component={CreditsScreen} />
-			<Stack.Screen name={routeNames.FAQ} component={FAQScreen} />
+			<Stack.Screen name={RouteNames.Help} component={HelpScreen} />
+			<Stack.Screen name={RouteNames.Credits} component={CreditsScreen} />
+			<Stack.Screen name={RouteNames.FAQ} component={FAQScreen} />
 			<Stack.Screen
-				name={routeNames.SubscriptionDetails}
+				name={RouteNames.SubscriptionDetails}
 				component={SubscriptionDetailsScreen}
 			/>
-			<Stack.Screen name={routeNames.Endpoints} component={ApiScreen} />
+			<Stack.Screen name={RouteNames.Endpoints} component={ApiScreen} />
 			{/* Turned off to remove Promise rejection error on Android */}
 			{/* <Stack.Screen
-                name={routeNames.Storybook}
+                name={RouteNames.Storybook}
                 component={StorybookScreen}
             /> */}
 		</Stack.Navigator>
