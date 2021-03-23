@@ -11,20 +11,6 @@ import type {
 	Issue,
 } from '../../../../Apps/common/src';
 
-/**
- *
- * @param Component - component that doesn't want to have navigation as a dependency
- * @param mapper - function to generate props from navigation
- *
- * Much like `mapDispatchToProps` in `redux`. Means we can decouple out components from navigation.
-//  */
-// const mapNavigationToProps = <T extends {}, P extends {}>(
-// 	Component: React.ComponentType<T>,
-// 	mapper: (navigation: NavigationScreenProp<P>) => Partial<T>,
-// ) => (props: T & { navigation: NavigationScreenProp<P> }) => (
-// 	<Component {...props} {...mapper(props.navigation)} />
-// );
-
 export interface ArticleNavigationProps {
 	path: PathToArticle;
 	articleNavigator?: ArticleNavigator;
