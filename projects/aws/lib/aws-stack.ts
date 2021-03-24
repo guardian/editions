@@ -8,6 +8,7 @@ import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
 import acm = require('@aws-cdk/aws-certificatemanager')
 import { Effect } from '@aws-cdk/aws-iam'
 import { constructTriggeredStepFunction } from './listener'
+import { CfnEventBusPolicy } from '@aws-cdk/aws-events'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -106,7 +107,10 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Proof Archive Bucket',
-                allowedValues: ['editions-proof-prod', 'editions-proof-code'],
+                allowedValues: [
+                    'editions-proofed-prod',
+                    'editions-proofed-code',
+                ],
             },
         )
 
@@ -116,7 +120,10 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Publish Archive Bucket',
-                allowedValues: ['editions-store-prod', 'editions-store-code'],
+                allowedValues: [
+                    'editions-published-code',
+                    'editions-published-prod',
+                ],
             },
         )
 
@@ -147,8 +154,8 @@ export class EditionsStack extends cdk.Stack {
 
         const deployBucket = s3.Bucket.fromBucketName(
             this,
-            'editions-dist',
-            'editions-dist',
+            'mobile-dist',
+            'mobile-dist',
         )
 
         const frontsAccess = iam.Role.fromRoleArn(
@@ -202,7 +209,7 @@ export class EditionsStack extends cdk.Stack {
                     timeout: Duration.seconds(60),
                     code: Code.bucket(
                         deployBucket,
-                        `${stackParameter.valueAsString}/${stageParameter.valueAsString}/backend/backend.zip`,
+                        `${stackParameter.valueAsString}/${stageParameter.valueAsString}/editions-backend/editions-backend.zip`,
                     ),
                     handler: 'index.handler',
                     environment: {
@@ -232,10 +239,10 @@ export class EditionsStack extends cdk.Stack {
                         }),
                         new iam.PolicyStatement({
                             resources: [
-                                `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}/*`,
-                                `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}/*`,
-                                `arn:aws:s3:::editions-proof-${lowerCaseStageParameter.valueAsString}`,
-                                `arn:aws:s3:::editions-store-${lowerCaseStageParameter.valueAsString}`,
+                                `arn:aws:s3:::editions-published-${lowerCaseStageParameter.valueAsString}/*`,
+                                `arn:aws:s3:::editions-proofed-${lowerCaseStageParameter.valueAsString}/*`,
+                                `arn:aws:s3:::editions-proofed-${lowerCaseStageParameter.valueAsString}`,
+                                `arn:aws:s3:::editions-published-${lowerCaseStageParameter.valueAsString}`,
                             ],
                             actions: [
                                 's3:PutObject',
@@ -346,5 +353,12 @@ export class EditionsStack extends cdk.Stack {
             publishedBucket,
             frontsAccess.roleArn,
         )
+
+        // Allow CMS Fronts account to put cloudwatch events in this stack
+        new CfnEventBusPolicy(this, 'cmsFronts-access', {
+            action: 'events:PutEvents',
+            principal: cmsFrontsAccountIdParameter.valueAsString,
+            statementId: 'cmsFronts-putevents',
+        })
     }
 }

@@ -27,7 +27,7 @@ export const s3EventListenerFunction = (
             memorySize: 256,
             code: Code.bucket(
                 deployBucket,
-                `${stack}/${stage}/archiver/archiver.zip`,
+                `${stack}/${stage}/editions-archiver/editions-archiver.zip`,
             ),
             handler: 'index.invoke',
             environment: {
@@ -108,6 +108,26 @@ export const constructTriggeredStepFunction = (
         frontsRoleARN,
         backendURL,
     )
+
+    // Read events from cloudwatch event bus and send to listener lambda
+    // const x = new Rule(this, 'cmsFronts-editions-events', {
+    //     eventPattern: {
+    //         source: ['aws.s3'],
+    //         detailType: ['AWS API Call via CloudTrail'],
+    //         account: [cmsFrontsAccountIdParameter.valueAsString],
+    //         detail: {
+    //             eventSource: ['s3.amazonaws.com'],
+    //             eventName: ['PutObject'],
+    //             requestParameters: {
+    //                 bucketName: [
+    //                     publishedEditionsBucketnameParameter.valueAsString,
+    //                 ],
+    //             },
+    //         },
+    //     },
+    //     // targets: [],
+    // })
+    // const funct = new LambdaFunction(archiveS3EventListener)
 
     new CfnOutput(scope, 'archiver-s3-event-listener-arn', {
         description: 'ARN for proof-archiver state machine trigger lambda',
