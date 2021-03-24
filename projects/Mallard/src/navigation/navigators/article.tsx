@@ -1,11 +1,13 @@
+import type { RouteProp } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import type { NavigationRouteConfig } from 'react-navigation';
 import { safeInterpolation } from 'src/helpers/math';
 import { ArticleScreen } from 'src/screens/article-screen';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { SlideCard } from '../../components/layout/slide-card/index';
+import type { RootStackParamList } from '../NavigationModels';
 
 const styles = StyleSheet.create({
 	root: {
@@ -22,7 +24,8 @@ const styles = StyleSheet.create({
 	basicCard: { backgroundColor: color.background, overflow: 'hidden' },
 });
 
-export const ArticleWrapper = ({ route }: NavigationRouteConfig) => {
+export const ArticleWrapper = () => {
+	const route = useRoute<RouteProp<RootStackParamList, 'Article'>>();
 	const position = new Animated.Value(0);
 	if (route.params.prefersFullScreen) {
 		return (
@@ -52,7 +55,7 @@ export const ArticleWrapper = ({ route }: NavigationRouteConfig) => {
 	}
 	return (
 		<SlideCard>
-			<ArticleScreen route={route} />
+			<ArticleScreen />
 		</SlideCard>
 	);
 };

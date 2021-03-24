@@ -1,9 +1,8 @@
 import type { RouteProp } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import type { Appearance } from 'src/common';
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
 import { LoginOverlay } from 'src/components/login/login-overlay';
@@ -12,10 +11,10 @@ import { getAppearancePillar } from 'src/hooks/use-article';
 import { useDimensions } from 'src/hooks/use-config-provider';
 import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
+import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
 import { ArticleScreenBody } from './article/body';
 import { ArticleSlider } from './article/slider';
 
@@ -150,15 +149,8 @@ const ArticleScreenWithProps = ({
 	);
 };
 
-type ArticleScreenParams = {
-	ArticleScreen: ArticleNavigationProps;
-};
-
-export const ArticleScreen = ({
-	route,
-}: {
-	route: RouteProp<ArticleScreenParams, 'ArticleScreen'>;
-}) => {
+export const ArticleScreen = () => {
+	const route = useRoute<RouteProp<RootStackParamList, 'Article'>>();
 	return getArticleNavigationProps(route.params, {
 		error: () => (
 			<FlexErrorMessage
@@ -171,14 +163,3 @@ export const ArticleScreen = ({
 		},
 	});
 };
-ArticleScreen.navigationOptions = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => ({
-	title: navigation.getParam('title', 'Loading'),
-	gesturesEnabled: true,
-	gestureResponseDistance: {
-		vertical: metrics.headerHeight + metrics.slideCardSpacing,
-	},
-});

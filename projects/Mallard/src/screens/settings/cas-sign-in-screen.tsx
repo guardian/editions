@@ -1,6 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { LoginButton } from 'src/components/login/login-button';
@@ -17,11 +17,8 @@ const styles = StyleSheet.create({
 	casExplainerBody: { ...getFont('headline', 1, 'regular') },
 });
 
-const CasSignInScreen = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => {
+const CasSignInScreen = () => {
+	const navigation = useNavigation();
 	const { authCAS } = useContext(AccessContext);
 
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);

@@ -1,13 +1,12 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useCallback, useMemo, useState } from 'react';
 import { Animated, PanResponder } from 'react-native';
-import { NavigationContext } from 'react-navigation';
 import { safeInterpolation } from 'src/helpers/math';
-import { useNavigatorPosition } from 'src/navigation/helpers/transition';
 
 export const useDismissArticle = () => {
-	const navigation = useContext(NavigationContext);
+	const navigation = useNavigation();
 	const [scrollY] = useState(() => new Animated.Value(0));
-	const pos = useNavigatorPosition();
+	const pos = new Animated.Value(1);
 
 	const onDismiss = useCallback(() => {
 		navigation.goBack();

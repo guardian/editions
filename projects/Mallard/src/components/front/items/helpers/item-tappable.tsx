@@ -10,15 +10,10 @@ import {
 	TouchableHighlight,
 	View,
 } from 'react-native';
-import type { AnimatedValue } from 'react-navigation';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
-import { navigateToArticle } from 'src/navigation/helpers/base';
 import type { RootStackParamList } from 'src/navigation/NavigationModels';
-import {
-	setScreenPositionFromView,
-	setScreenPositionOfItem,
-} from 'src/navigation/navigators/article/positions';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
 import { color } from 'src/theme/color';
@@ -60,7 +55,9 @@ To help smooth out the transition
 we fade the card contents out on tap
 and then back in when the view regains focus
 */
-const fade = (opacity: AnimatedValue, direction: 'in' | 'out') =>
+
+//https://stackoverflow.com/questions/51521809/typescript-definitions-for-animated-views-style-prop opacity: any can chhange at rn 0.61.8
+const fade = (opacity: any, direction: 'in' | 'out') =>
 	direction === 'in'
 		? Animated.timing(opacity, {
 				duration: 250,
@@ -87,35 +84,13 @@ const ItemTappable = ({
 	hasPadding?: boolean;
 } & TappablePropTypes) => {
 	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-	const tappableRef = useRef<View>();
 	const [opacity] = useState(() => new Animated.Value(1));
 	return (
-		<Animated.View
-			style={[style]}
-			ref={(view: any) => {
-				if (view) tappableRef.current = view._component as View;
-			}}
-			onLayout={(ev: any) => {
-				setScreenPositionOfItem(article.key, ev.nativeEvent.layout);
-				tappableRef.current &&
-					setScreenPositionFromView(article.key, tappableRef.current);
-			}}
-			onTouchStart={() => {
-				tappableRef.current &&
-					setScreenPositionFromView(article.key, tappableRef.current);
-			}}
-		>
-			{/** @TODO - FIND OUT WHAT THIS DOES! */}
-			{/* <NavigationEvents
-                onWillFocus={() => {
-                    fade(opacity, 'in')
-                }}
-            /> */}
-
+		<Animated.View style={[style]}>
 			<TouchableHighlight
 				onPress={() => {
 					fade(opacity, 'out');
-					navigateToArticle(navigation, {
+					navigation.navigate(RouteNames.Article, {
 						path,
 						articleNavigator,
 						prefersFullScreen: article.type === 'crossword',

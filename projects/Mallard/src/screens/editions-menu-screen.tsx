@@ -1,15 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
 import type { ReactElement } from 'react';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import type { NavigationScreenProp } from 'react-navigation';
 import { EditionsMenu } from 'src/components/EditionsMenu/EditionsMenu';
 import { EditionsMenuScreenHeader } from 'src/components/ScreenHeader/EditionMenuScreenHeader';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
-import { sidebarWidth } from 'src/navigation/navigators/sidebar/positions';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { ApiState } from './settings/api-screen';
+
+const sidebarWidth = 360;
 
 const styles = StyleSheet.create({
 	screenFiller: {
@@ -36,17 +37,13 @@ export const ScreenFiller = ({
 	</View>
 );
 
-export const EditionsMenuScreen = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => {
+export const EditionsMenuScreen = () => {
 	const {
 		editionsList: { regionalEditions, specialEditions },
 		selectedEdition,
 		storeSelectedEdition,
 	} = useEditions();
-
+	const navigation = useNavigation();
 	return (
 		<WithAppAppearance value="default">
 			<ScreenFiller>
