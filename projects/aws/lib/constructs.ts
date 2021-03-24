@@ -75,7 +75,7 @@ export const publishTaskLambda = (
         memorySize: 1500,
         code: Code.bucket(
             deployBucket,
-            `${stack}/${stage}/archiver/archiver.zip`,
+            `${stack}/${stage}/editions-archiver/editions-archiver.zip`,
         ),
         handler: `index.${name}`,
         environment: {
@@ -157,7 +157,7 @@ export const proofTaskLambda = (
         memorySize: 1500,
         code: Code.bucket(
             deployBucket,
-            `${stack}/${stage}/archiver/archiver.zip`,
+            `${stack}/${stage}/editions-archiver/editions-archiver.zip`,
         ),
         handler: `index.${name}`,
         environment: {

@@ -52,6 +52,7 @@
         "@aws-cdk/aws-ssm": "^1.4.0",
         "@aws-cdk/aws-stepfunctions": "^1.4.0",
         "@aws-cdk/aws-stepfunctions-tasks": "^1.4.0",
+        "@aws-cdk/aws-events-targets": "^1.4.0",
         "@aws-cdk/core": "^1.4.0",
         "@aws-cdk/cx-api": "^1.4.0",
         "@aws-cdk/region-info": "^1.4.0",
