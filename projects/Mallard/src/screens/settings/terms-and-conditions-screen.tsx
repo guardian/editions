@@ -1,15 +1,16 @@
-import React from 'react'
-import { DefaultInfoTextWebview } from './default-info-text-webview'
+/* eslint-disable import/order */
+import React from 'react';
+import { DefaultInfoTextWebview } from './default-info-text-webview';
 
 const termsAndConditionsHtml = require('src/constants/settings/terms-of-service.json')
-    .bodyHtml
+	.bodyHtml;
 
 const TermsAndConditionsScreen = () => (
-    <DefaultInfoTextWebview html={termsAndConditionsHtml} />
-)
+	<DefaultInfoTextWebview html={termsAndConditionsHtml} />
+);
 
 TermsAndConditionsScreen.navigationOptions = {
-    title: 'Terms & Conditions',
-}
+	title: 'Terms & Conditions',
+};
 
-export { TermsAndConditionsScreen }
+export { TermsAndConditionsScreen };
