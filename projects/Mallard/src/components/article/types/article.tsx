@@ -165,7 +165,6 @@ const Article = ({
 	path,
 	onShouldShowHeaderChange,
 	shouldShowHeader,
-	topPadding,
 	onIsAtTopChange,
 	origin,
 }: {
@@ -174,7 +173,6 @@ const Article = ({
 	path: PathToArticle;
 	origin: IssueOrigin;
 } & HeaderControlProps) => {
-	const [, { type }] = useArticle();
 	const ref = useRef<WebView | null>(null);
 	const [imagePaths, setImagePaths] = useState(['']);
 	const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>();

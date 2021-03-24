@@ -40,7 +40,6 @@ describe('paths', () => {
 			expect(
 				FSPaths.image(
 					'daily-edition/2019-10-10',
-					'phone',
 					{
 						source: 'source',
 						path: 'path',
@@ -55,7 +54,6 @@ describe('paths', () => {
 			expect(
 				FSPaths.image(
 					'daily-edition/2019-10-10',
-					'phone',
 					{
 						source: 'source',
 						path: 'path',
