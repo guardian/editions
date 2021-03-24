@@ -27,8 +27,18 @@ export const backends = [
 		preview: false,
 	},
 	{
+		title: 'CODE published mobile',
+		value: 'https://editions-published-code.s3-eu-west-1.amazonaws.com/',
+		preview: false,
+	},
+	{
 		title: 'CODE proofed',
 		value: 'https://editions-proof.code.dev-guardianapis.com/',
+		preview: true,
+	},
+	{
+		title: 'CODE proofed mobile',
+		value: 'https://editions-proofed-code.s3-eu-west-1.amazonaws.com/',
 		preview: true,
 	},
 	{
