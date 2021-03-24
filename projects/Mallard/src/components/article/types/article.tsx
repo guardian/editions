@@ -332,11 +332,9 @@ const Article = ({
 	return (
 		<Fader>
 			<WebviewWithArticle
-				type={type}
 				article={article}
 				path={path}
 				scrollEnabled={true}
-				useWebKit={false}
 				allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
 				mediaPlaybackRequiresUserAction={false}
 				style={[
@@ -346,7 +344,6 @@ const Article = ({
 				_ref={(r) => {
 					ref.current = r;
 				}}
-				topPadding={topPadding}
 				origin={origin}
 				injectedJavaScript={pingEditionsRenderingJsString(platform)}
 				onMessage={(event) => {
