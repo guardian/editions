@@ -45,6 +45,7 @@ import { WithAppAppearance } from 'src/theme/appearance';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import type { IssueWithFronts } from '../../../Apps/common/src';
+import { ScreenFiller } from './editions-menu-screen';
 import { ApiState } from './settings/api-screen';
 
 const styles = StyleSheet.create({
@@ -435,26 +436,30 @@ export const HomeScreen = () => {
 
 	return (
 		<WithAppAppearance value={'tertiary'}>
-			<IssuePickerHeader
-				title={issueHeaderData.title}
-				subTitle={issueHeaderData.subTitle}
-				headerStyles={specialEditionProps?.headerStyle}
-			/>
-			{issueSummary ? (
-				<IssueListFetchContainer />
-			) : error ? (
-				<FlexErrorMessage
-					style={styles.issueList}
-					debugMessage={error}
-					title={CONNECTION_FAILED_ERROR}
-					message={CONNECTION_FAILED_AUTO_RETRY}
-				/>
-			) : (
-				<FlexCenter>
-					<Spinner></Spinner>
-				</FlexCenter>
-			)}
-			<ApiState />
+			<ScreenFiller direction="end">
+				<>
+					<IssuePickerHeader
+						title={issueHeaderData.title}
+						subTitle={issueHeaderData.subTitle}
+						headerStyles={specialEditionProps?.headerStyle}
+					/>
+					{issueSummary ? (
+						<IssueListFetchContainer />
+					) : error ? (
+						<FlexErrorMessage
+							style={styles.issueList}
+							debugMessage={error}
+							title={CONNECTION_FAILED_ERROR}
+							message={CONNECTION_FAILED_AUTO_RETRY}
+						/>
+					) : (
+						<FlexCenter>
+							<Spinner></Spinner>
+						</FlexCenter>
+					)}
+					<ApiState />
+				</>
+			</ScreenFiller>
 		</WithAppAppearance>
 	);
 };
