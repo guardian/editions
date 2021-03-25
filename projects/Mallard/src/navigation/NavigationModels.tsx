@@ -6,9 +6,6 @@ import type {
 
 export type RootStackParamList = {
 	Home: undefined;
-	Issue: IssueNavigationProps;
-	Article: ArticleNavigationProps;
-	IssueList: undefined;
 	Settings: undefined;
 	Endpoints: undefined;
 	Edition: undefined;
@@ -18,23 +15,29 @@ export type RootStackParamList = {
 	BetaProgrammeFAQs: undefined;
 	Help: undefined;
 	ManageEditions: undefined;
-	ManageEditionsSettings: undefined;
 	Credits: undefined;
 	FAQ: undefined;
 	AlreadySubscribed: undefined;
 	SubscriptionDetails: undefined;
-	SignIn: undefined;
 	CasSignIn: undefined;
-	WeatherGeolocationConsent: undefined;
-	Lightbox: LightboxNavigationProps;
 	Storybook: undefined;
-	EditionsMenu: undefined;
 };
 
 export type OnboardingStackParamList = {
 	OnboardingConsent: undefined;
 	PrivacyPolicyInline: undefined;
 	OnboardingConsentInline: undefined;
+};
+
+export type MainStackParamList = {
+	Home: undefined;
+	Issue: IssueNavigationProps;
+	Article: ArticleNavigationProps;
+	IssueList: undefined;
+	SignIn: undefined;
+	EditionsMenu: undefined;
+	WeatherGeolocationConsent: undefined;
+	Lightbox: LightboxNavigationProps;
 };
 
 export enum RouteNames {
@@ -51,7 +54,6 @@ export enum RouteNames {
 	BetaProgrammeFAQs = 'BetaProgrammeFAQs',
 	Help = 'Help',
 	ManageEditions = 'ManageEditions',
-	ManageEditionsSettings = 'ManageEditionsSettings',
 	Credits = 'Credits',
 	FAQ = 'FAQ',
 	AlreadySubscribed = 'AlreadySubscribed',

@@ -1,14 +1,13 @@
-import { useQuery } from '@apollo/react-hooks';
 import { NavigationContainer } from '@react-navigation/native';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
 } from '@react-navigation/stack';
-import gql from 'graphql-tag';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Animated } from 'react-native';
-import { CURRENT_CONSENT_VERSION } from './helpers/settings';
+import { useIsOnboarded } from './navigation/helpers/onboarding';
 import type {
+	MainStackParamList,
 	OnboardingStackParamList,
 	RootStackParamList,
 } from './navigation/NavigationModels';
@@ -33,7 +32,7 @@ import {
 	GdprConsentScreenForOnboarding,
 } from './screens/settings/gdpr-consent-screen';
 import { HelpScreen } from './screens/settings/help-screen';
-import { ManageEditionsScreenWithHeader } from './screens/settings/manage-editions-screen';
+import { ManageEditionsScreen } from './screens/settings/manage-editions-screen';
 import {
 	PrivacyPolicyScreen,
 	PrivacyPolicyScreenForOnboarding,
@@ -41,9 +40,6 @@ import {
 import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen';
 import { TermsAndConditionsScreen } from './screens/settings/terms-and-conditions-screen';
 import { WeatherGeolocationConsentScreen } from './screens/weather-geolocation-consent-screen';
-
-const RootStack = createStackNavigator<RootStackParamList>();
-const MainStack = createStackNavigator<RootStackParamList>();
 
 const { multiply } = Animated;
 
@@ -79,6 +75,8 @@ const cardStyleInterpolator = (props: any) => {
 };
 
 const Onboarding = createStackNavigator<OnboardingStackParamList>();
+const RootStack = createStackNavigator<RootStackParamList>();
+const MainStack = createStackNavigator<MainStackParamList>();
 
 const OnboardingStack = () => {
 	return (
@@ -147,67 +145,19 @@ const MainStackScreen = () => {
 				name={RouteNames.SignIn}
 				component={AuthSwitcherScreen}
 			/>
-			<MainStack.Screen
-				name={RouteNames.AlreadySubscribed}
-				component={AlreadySubscribedScreen}
-			/>
-			<MainStack.Screen
-				name={RouteNames.CasSignIn}
-				component={CasSignInScreen}
-			/>
-			<MainStack.Screen
-				name={RouteNames.ManageEditionsSettings}
-				component={ManageEditionsScreenWithHeader}
-			/>
-			{/** @TODO Fix the enable all button */}
-			<MainStack.Screen
-				name={RouteNames.GdprConsent}
-				component={GdprConsentScreen}
-			/>
-			<MainStack.Screen
-				name={RouteNames.PrivacyPolicy}
-				component={PrivacyPolicyScreen}
-			/>
-			<MainStack.Screen
-				name={RouteNames.Lightbox}
-				component={LightboxScreen}
-			/>
-			{/* ==== Inspect from here === */}
-			<MainStack.Screen
-				name={RouteNames.Edition}
-				component={EditionsScreen}
-			/>
-			<MainStack.Screen
-				name={RouteNames.TermsAndConditions}
-				component={TermsAndConditionsScreen}
-			/>
-			<MainStack.Screen
-				name={RouteNames.BetaProgrammeFAQs}
-				component={BetaProgrammeFAQsScreen}
-			/>
-			<MainStack.Screen name={RouteNames.Help} component={HelpScreen} />
-			<MainStack.Screen
-				name={RouteNames.Credits}
-				component={CreditsScreen}
-			/>
-			<MainStack.Screen name={RouteNames.FAQ} component={FAQScreen} />
-			<MainStack.Screen
-				name={RouteNames.SubscriptionDetails}
-				component={SubscriptionDetailsScreen}
-			/>
-			<MainStack.Screen
-				name={RouteNames.Endpoints}
-				component={ApiScreen}
-			/>
+
 			{/* Turned off to remove Promise rejection error on Android */}
 			{/* <MainStack.Screen
                 name={RouteNames.Storybook}
                 component={StorybookScreen}
             /> */}
-
 			<MainStack.Screen
 				name={RouteNames.WeatherGeolocationConsent}
 				component={WeatherGeolocationConsentScreen}
+			/>
+			<MainStack.Screen
+				name={RouteNames.Lightbox}
+				component={LightboxScreen}
 			/>
 		</MainStack.Navigator>
 	);
@@ -248,46 +198,60 @@ function RootStackScreen() {
 				component={SettingsScreen}
 				options={{ headerShown: false }}
 			/>
+			<RootStack.Screen
+				name={RouteNames.TermsAndConditions}
+				component={TermsAndConditionsScreen}
+				options={{ headerShown: false }}
+			/>
+			<RootStack.Screen
+				name={RouteNames.SubscriptionDetails}
+				component={SubscriptionDetailsScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.AlreadySubscribed}
+				component={AlreadySubscribedScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.GdprConsent}
+				component={GdprConsentScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.PrivacyPolicy}
+				component={PrivacyPolicyScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.ManageEditions}
+				component={ManageEditionsScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.Endpoints}
+				component={ApiScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.Credits}
+				component={CreditsScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.BetaProgrammeFAQs}
+				component={BetaProgrammeFAQsScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.Edition}
+				component={EditionsScreen}
+			/>
+			<RootStack.Screen
+				name={RouteNames.CasSignIn}
+				component={CasSignInScreen}
+			/>
+			<RootStack.Screen name={RouteNames.Help} component={HelpScreen} />
+			<RootStack.Screen name={RouteNames.FAQ} component={FAQScreen} />
 		</RootStack.Navigator>
 	);
 }
 
-const ONBOARDING_QUERY = gql(`{
-    gdprAllowEssential @client
-    gdprAllowPerformance @client
-    gdprAllowFunctionality @client
-    gdprConsentVersion @client
-}`);
-
-type OnboardingQueryData = {
-	gdprAllowEssential: boolean;
-	gdprAllowPerformance: boolean;
-	gdprAllowFunctionality: boolean;
-	gdprConsentVersion: number;
-};
-
-const hasOnboarded = (data: OnboardingQueryData) =>
-	data.gdprAllowEssential != null &&
-	data.gdprAllowFunctionality != null &&
-	data.gdprAllowPerformance != null &&
-	data.gdprConsentVersion == CURRENT_CONSENT_VERSION;
-
 const AppNavigation = () => {
-	const [isOnboarded, setIsOnboarded] = useState(true);
-	const query = useQuery<OnboardingQueryData>(ONBOARDING_QUERY);
-	useEffect(() => {
-		/** Setting is still loading, do nothing yet. */
-		if (query.loading) return;
-		const { data } = query;
-		// If any flag is unknown still, we want to onboard.
-		// We expected people to give explicit yay/nay to
-		// each GDPR bucket.
-		if (!data || !hasOnboarded(data)) {
-			setIsOnboarded(false);
-		} else {
-			setIsOnboarded(true);
-		}
-	});
+	const { isOnboarded } = useIsOnboarded();
+
 	return (
 		<NavigationContainer>
 			{isOnboarded ? <RootStackScreen /> : <OnboardingStack />}
