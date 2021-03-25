@@ -1,9 +1,13 @@
+import { useQuery } from '@apollo/react-hooks';
+import { NavigationContainer } from '@react-navigation/native';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
 } from '@react-navigation/stack';
-import React from 'react';
+import gql from 'graphql-tag';
+import React, { useEffect, useState } from 'react';
 import { Animated } from 'react-native';
+import { CURRENT_CONSENT_VERSION } from './helpers/settings';
 import type {
 	OnboardingStackParamList,
 	RootStackParamList,
@@ -203,4 +207,48 @@ const RootStack = () => {
 	);
 };
 
-export { RootStack };
+const ONBOARDING_QUERY = gql(`{
+    gdprAllowEssential @client
+    gdprAllowPerformance @client
+    gdprAllowFunctionality @client
+    gdprConsentVersion @client
+}`);
+
+type OnboardingQueryData = {
+	gdprAllowEssential: boolean;
+	gdprAllowPerformance: boolean;
+	gdprAllowFunctionality: boolean;
+	gdprConsentVersion: number;
+};
+
+const hasOnboarded = (data: OnboardingQueryData) =>
+	data.gdprAllowEssential != null &&
+	data.gdprAllowFunctionality != null &&
+	data.gdprAllowPerformance != null &&
+	data.gdprConsentVersion == CURRENT_CONSENT_VERSION;
+
+const AppNavigation = () => {
+	const [isOnboarded, setIsOnboarded] = useState(true);
+	const query = useQuery<OnboardingQueryData>(ONBOARDING_QUERY);
+	useEffect(() => {
+		/** Setting is still loading, do nothing yet. */
+		if (query.loading) return;
+		const { data } = query;
+		// If any flag is unknown still, we want to onboard.
+		// We expected people to give explicit yay/nay to
+		// each GDPR bucket.
+		if (!data || !hasOnboarded(data)) {
+			setIsOnboarded(false);
+		} else {
+			setIsOnboarded(true);
+			console.log(isOnboarded, 'onboarded');
+		}
+	});
+	return (
+		<NavigationContainer>
+			{isOnboarded ? <RootStack /> : <OnboardingStack />}
+		</NavigationContainer>
+	);
+};
+
+export { AppNavigation };

@@ -4,7 +4,6 @@
 
 import { ApolloProvider } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
-import { NavigationContainer } from '@react-navigation/native';
 import type ApolloClient from 'apollo-client';
 import React from 'react';
 import { AppState, StatusBar, StyleSheet, View } from 'react-native';
@@ -17,7 +16,7 @@ import {
 } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
 import { setUserId } from 'src/services/ophan';
-import { RootStack } from './AppNavigation';
+import { AppNavigation } from './AppNavigation';
 import { AccessProvider } from './authentication/AccessContext';
 import type { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer';
 import type { AnyAttempt } from './authentication/lib/Attempt';
@@ -137,9 +136,7 @@ export default class App extends React.Component {
                                             onNavigationStateChange
                                         }
                                     /> */}
-									<NavigationContainer>
-										<RootStack />
-									</NavigationContainer>
+									<AppNavigation />
 									<NetInfoAutoToast />
 								</View>
 								<ModalRenderer />
