@@ -162,7 +162,6 @@ const RootStack = () => {
 				name={RouteNames.ManageEditionsSettings}
 				component={ManageEditionsScreenWithHeader}
 			/>
-			{/** @TODO Fix the enable all button */}
 			<Root.Screen
 				name={RouteNames.GdprConsent}
 				component={GdprConsentScreen}
