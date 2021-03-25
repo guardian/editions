@@ -42,8 +42,6 @@ import { SubscriptionDetailsScreen } from './screens/settings/subscription-detai
 import { TermsAndConditionsScreen } from './screens/settings/terms-and-conditions-screen';
 import { WeatherGeolocationConsentScreen } from './screens/weather-geolocation-consent-screen';
 
-const Stack = createStackNavigator<RootStackParamList>();
-
 const { multiply } = Animated;
 
 const cardStyleInterpolator = (props: any) => {
@@ -101,18 +99,20 @@ const OnboardingStack = () => {
 	);
 };
 
+const Root = createStackNavigator<RootStackParamList>();
+
 const RootStack = () => {
 	return (
-		<Stack.Navigator
+		<Root.Navigator
 			initialRouteName={RouteNames.Home}
 			screenOptions={{ gestureEnabled: false, headerShown: false }}
 		>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.Issue}
 				component={IssueScreen}
 				options={{}}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.IssueList}
 				component={HomeScreen}
 				options={{
@@ -122,7 +122,7 @@ const RootStack = () => {
 					cardStyleInterpolator,
 				}}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.EditionsMenu}
 				component={EditionsMenuScreen}
 				options={{
@@ -132,7 +132,7 @@ const RootStack = () => {
 					cardStyleInterpolator,
 				}}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.Article}
 				component={ArticleWrapper}
 				options={{
@@ -142,71 +142,68 @@ const RootStack = () => {
 					gestureDirection: 'vertical',
 				}}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.Settings}
 				component={SettingsScreen}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.SignIn}
 				component={AuthSwitcherScreen}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.AlreadySubscribed}
 				component={AlreadySubscribedScreen}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.CasSignIn}
 				component={CasSignInScreen}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.ManageEditionsSettings}
 				component={ManageEditionsScreenWithHeader}
 			/>
 			{/** @TODO Fix the enable all button */}
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.GdprConsent}
 				component={GdprConsentScreen}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.PrivacyPolicy}
 				component={PrivacyPolicyScreen}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.Lightbox}
 				component={LightboxScreen}
 			/>
 			{/* ==== Inspect from here === */}
-			<Stack.Screen
-				name={RouteNames.Edition}
-				component={EditionsScreen}
-			/>
-			<Stack.Screen
+			<Root.Screen name={RouteNames.Edition} component={EditionsScreen} />
+			<Root.Screen
 				name={RouteNames.TermsAndConditions}
 				component={TermsAndConditionsScreen}
 			/>
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.BetaProgrammeFAQs}
 				component={BetaProgrammeFAQsScreen}
 			/>
-			<Stack.Screen name={RouteNames.Help} component={HelpScreen} />
-			<Stack.Screen name={RouteNames.Credits} component={CreditsScreen} />
-			<Stack.Screen name={RouteNames.FAQ} component={FAQScreen} />
-			<Stack.Screen
+			<Root.Screen name={RouteNames.Help} component={HelpScreen} />
+			<Root.Screen name={RouteNames.Credits} component={CreditsScreen} />
+			<Root.Screen name={RouteNames.FAQ} component={FAQScreen} />
+			<Root.Screen
 				name={RouteNames.SubscriptionDetails}
 				component={SubscriptionDetailsScreen}
 			/>
-			<Stack.Screen name={RouteNames.Endpoints} component={ApiScreen} />
+			<Root.Screen name={RouteNames.Endpoints} component={ApiScreen} />
 			{/* Turned off to remove Promise rejection error on Android */}
-			{/* <Stack.Screen
+			{/* <Root.Screen
                 name={RouteNames.Storybook}
                 component={StorybookScreen}
             /> */}
 
-			<Stack.Screen
+			<Root.Screen
 				name={RouteNames.WeatherGeolocationConsent}
 				component={WeatherGeolocationConsentScreen}
 			/>
-		</Stack.Navigator>
+		</Root.Navigator>
 	);
 };
 
