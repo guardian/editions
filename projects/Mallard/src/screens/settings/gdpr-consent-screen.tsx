@@ -107,18 +107,6 @@ const GdprConsent = ({
 		gdprCurrentVersion: null,
 	});
 
-	const QUERY = gql(`{ ${GDPR_SETTINGS_FRAGMENT} }`);
-	const query = useQuery<Record<string, boolean | null>>(QUERY);
-	if (query.loading) return null;
-	const { client } = query;
-
-	const enableNulls = (client: ApolloClient<object>) => {
-		gdprSwitchSettings.map((sw) => {
-			setGdprFlag(client, sw, true);
-		});
-		setGdprConsentVersion(client, CURRENT_CONSENT_VERSION);
-	};
-
 	const fetchAndSetGdprData = async () => {
 		const perfData = await getSetting(gdprAllowPerformanceKey);
 		const funcData = await getSetting(gdprAllowFunctionalityKey);
@@ -128,6 +116,13 @@ const GdprConsent = ({
 			gdprAllowFunctionality: funcData,
 			gdprCurrentVersion: currentVersion,
 		});
+	};
+
+	const enableNulls = (client: ApolloClient<object>) => {
+		gdprSwitchSettings.map((sw) => {
+			setGdprFlag(client, sw, true);
+		});
+		setGdprConsentVersion(client, CURRENT_CONSENT_VERSION);
 	};
 
 	useEffect(() => {
@@ -209,6 +204,12 @@ const GdprConsent = ({
 			);
 		}
 	};
+
+	const QUERY = gql(`{ ${GDPR_SETTINGS_FRAGMENT} }`);
+	const query = useQuery<Record<string, boolean | null>>(QUERY);
+	if (query.loading) return null;
+	const { client } = query;
+
 	return (
 		<View style={{ flex: 1, backgroundColor: 'white' }}>
 			{shouldShowDismissableHeader && (
