@@ -1,9 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
+import type { ParamListBase, RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import type ApolloClient from 'apollo-client';
+import gql from 'graphql-tag';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, ScrollView, Text, View } from 'react-native';
+import { Alert, FlatList, Text, View } from 'react-native';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row';
 import type { ThreeWaySwitchValue } from 'src/components/layout/ui/switch';
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch';
@@ -21,11 +23,17 @@ import {
 	getSetting,
 	storeSetting,
 } from 'src/helpers/settings';
-import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters';
+import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers';
+import {
+	GDPR_CONSENT_VERSION,
+	setGdprConsentVersion,
+	setGdprFlag,
+} from 'src/helpers/settings/setters';
 import {
 	PREFS_SAVED_MSG,
 	PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words';
+import { useQuery } from 'src/hooks/apollo';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -89,6 +97,7 @@ const GdprConsent = ({
 	continueText: string;
 }) => {
 	const navigation = useNavigation();
+	const route = useRoute();
 	const { showToast } = useToast();
 
 	const [updateFlag, setDataUpdated] = useState(false);
@@ -97,6 +106,18 @@ const GdprConsent = ({
 		gdprAllowFunctionality: null,
 		gdprCurrentVersion: null,
 	});
+
+	const QUERY = gql(`{ ${GDPR_SETTINGS_FRAGMENT} }`);
+	const query = useQuery<Record<string, boolean | null>>(QUERY);
+	if (query.loading) return null;
+	const { client } = query;
+
+	const enableNulls = (client: ApolloClient<object>) => {
+		gdprSwitchSettings.map((sw) => {
+			setGdprFlag(client, sw, true);
+		});
+		setGdprConsentVersion(client, CURRENT_CONSENT_VERSION);
+	};
 
 	const fetchAndSetGdprData = async () => {
 		const perfData = await getSetting(gdprAllowPerformanceKey);
@@ -148,20 +169,31 @@ const GdprConsent = ({
 		},
 	};
 
-	const onEnableAllAndContinue = () => {
-		consentAllAndUpdate();
-		showToast(PREFS_SAVED_MSG);
-		navigation.navigate('App');
+	const onEnableAllAndContinue = (
+		route: RouteProp<ParamListBase, string>,
+		client: ApolloClient<object>,
+	) => {
+		if (route.name === 'OnboardingConsentInline') {
+			enableNulls(client);
+		} else {
+			consentAllAndUpdate();
+			showToast(PREFS_SAVED_MSG);
+			navigation.navigate(RouteNames.Issue);
+		}
 	};
 
-	const onDismiss = () => {
-		if (
-			gdprData.gdprAllowFunctionality != null &&
-			gdprData.gdprAllowPerformance != null &&
-			gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION
-		) {
+	const hasSetGdpr = () =>
+		gdprData.gdprAllowFunctionality != null &&
+		gdprData.gdprAllowPerformance != null &&
+		gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION;
+
+	const onDismiss = (
+		route: RouteProp<ParamListBase, string>,
+		client: ApolloClient<object>,
+	) => {
+		if (hasSetGdpr()) {
 			showToast(PREFS_SAVED_MSG);
-			navigation.navigate('App');
+			navigation.navigate(RouteNames.Issue);
 		} else {
 			Alert.alert(
 				'Before you go',
@@ -170,101 +202,141 @@ const GdprConsent = ({
 					{ text: 'Manage preferences', onPress: () => {} },
 					{
 						text: continueText,
-						onPress: () => onEnableAllAndContinue(),
+						onPress: () => onEnableAllAndContinue(route, client),
 					},
 				],
 				{ cancelable: false },
 			);
 		}
 	};
-
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 1, backgroundColor: 'white' }}>
 			{shouldShowDismissableHeader && (
-				<LoginHeader onDismiss={onDismiss}>
+				<LoginHeader onDismiss={() => onDismiss(route, client)}>
 					{PRIVACY_SETTINGS_HEADER_TITLE}
 				</LoginHeader>
 			)}
-			<ScrollView>
-				<TallRow
-					title={''}
-					explainer={
-						<Text>
-							Below you can manage your privacy settings for
-							cookies and similar technologies for this service.
-							These technologies are provided by us and by our
-							third-party partners. To find out more, read our{' '}
-							<LinkNav
-								onPress={() =>
-									navigation.navigate(
-										RouteNames.PrivacyPolicyInline,
-									)
-								}
-							>
-								privacy policy
-							</LinkNav>
-							. If you disable a category, you may need to restart
-							the app for your changes to fully take effect.
-						</Text>
-					}
-					proxy={
-						<Button
-							appearance={ButtonAppearance.Skeleton}
-							onPress={() => onEnableAllAndContinue()}
-						>
-							{continueText}
-						</Button>
-					}
-				></TallRow>
-				<Separator></Separator>
-				<TallRow
-					title={essentials.name}
-					subtitle={essentials.services}
-					explainer={essentials.description}
-				></TallRow>
-
-				<FlatList
-					ItemSeparatorComponent={Separator}
-					ListFooterComponent={Separator}
-					ListHeaderComponent={Separator}
-					data={Object.values(switches)}
-					keyExtractor={({ key }) => key}
-					renderItem={({ item }) => (
+			<FlatList
+				ListHeaderComponent={() => (
+					<>
 						<TallRow
-							title={item.name}
-							subtitle={item.services}
-							explainer={item.description}
+							title={''}
+							explainer={
+								<Text>
+									Below you can manage your privacy settings
+									for cookies and similar technologies for
+									this service. These technologies are
+									provided by us and by our third-party
+									partners. To find out more, read our{' '}
+									<LinkNav
+										onPress={() =>
+											navigation.navigate(
+												RouteNames.PrivacyPolicyInline,
+											)
+										}
+									>
+										privacy policy
+									</LinkNav>
+									. If you disable a category, you may need to
+									restart the app for your changes to fully
+									take effect.
+								</Text>
+							}
 							proxy={
-								<ThreeWaySwitch
-									onValueChange={(value) => {
-										setConsentAndUpdate(item.key, value);
-										showToast(PREFS_SAVED_MSG);
-									}}
-									value={
-										gdprData.gdprCurrentVersion !==
-										CURRENT_CONSENT_VERSION
-											? null
-											: gdprData[item.key]
+								<Button
+									appearance={ButtonAppearance.Skeleton}
+									onPress={() =>
+										onEnableAllAndContinue(route, client)
 									}
-								/>
+								>
+									{continueText}
+								</Button>
 							}
 						></TallRow>
-					)}
-				/>
-				<Footer>
-					<UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
-						You can change the above settings any time by selecting
-						Privacy Settings from the Settings menu.
-					</UiBodyCopy>
-				</Footer>
-				{__DEV__ ? (
-					<Footer>
-						<Button onPress={resetAllAndUpdate.bind(undefined)}>
-							Reset
-						</Button>
-					</Footer>
-				) : null}
-			</ScrollView>
+						<Separator></Separator>
+						<TallRow
+							title={essentials.name}
+							subtitle={essentials.services}
+							explainer={essentials.description}
+						></TallRow>
+					</>
+				)}
+				ListFooterComponent={() => (
+					<>
+						<FlatList
+							ItemSeparatorComponent={Separator}
+							ListFooterComponent={Separator}
+							ListHeaderComponent={Separator}
+							data={Object.values(switches)}
+							keyExtractor={({ key }) => key}
+							renderItem={({ item }) => (
+								<TallRow
+									title={item.name}
+									subtitle={item.services}
+									explainer={item.description}
+									proxy={
+										<ThreeWaySwitch
+											onValueChange={(value) => {
+												setConsentAndUpdate(
+													item.key,
+													value,
+												);
+												showToast(PREFS_SAVED_MSG);
+											}}
+											value={
+												gdprData.gdprCurrentVersion !==
+												CURRENT_CONSENT_VERSION
+													? null
+													: gdprData[item.key]
+											}
+										/>
+									}
+								></TallRow>
+							)}
+						/>
+						<Footer>
+							<UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
+								You can change the above settings any time by
+								selecting Privacy Settings from the Settings
+								menu.
+							</UiBodyCopy>
+						</Footer>
+						{__DEV__ ? (
+							<Footer>
+								<Button
+									onPress={resetAllAndUpdate.bind(undefined)}
+								>
+									Reset
+								</Button>
+							</Footer>
+						) : null}
+					</>
+				)}
+				ItemSeparatorComponent={Separator}
+				data={Object.values(switches)}
+				keyExtractor={({ key }) => key}
+				renderItem={({ item }) => (
+					<TallRow
+						title={item.name}
+						subtitle={item.services}
+						explainer={item.description}
+						proxy={
+							<ThreeWaySwitch
+								onValueChange={(value) => {
+									setConsentAndUpdate(item.key, value);
+									showToast(PREFS_SAVED_MSG);
+								}}
+								value={
+									gdprData.gdprCurrentVersion !==
+									CURRENT_CONSENT_VERSION
+										? null
+										: gdprData[item.key]
+								}
+							/>
+						}
+					></TallRow>
+				)}
+			/>
 		</View>
 	);
 };
@@ -275,9 +347,7 @@ const GdprConsentScreen = () => (
 		actionLeft={true}
 	>
 		<WithAppAppearance value={'settings'}>
-			<ScrollContainer>
-				<GdprConsent continueText={'Enable all'}></GdprConsent>
-			</ScrollContainer>
+			<GdprConsent continueText={'Enable all'}></GdprConsent>
 		</WithAppAppearance>
 	</HeaderScreenContainer>
 );
