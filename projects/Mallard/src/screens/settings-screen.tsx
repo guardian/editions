@@ -4,7 +4,15 @@ import type ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import React, { useContext, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
-import { Alert, Linking, Platform, Switch, Text } from 'react-native';
+import {
+	Alert,
+	Linking,
+	Platform,
+	StyleSheet,
+	Switch,
+	Text,
+	View,
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
 	AccessContext,
@@ -14,7 +22,7 @@ import {
 import { isStaffMember } from 'src/authentication/helpers';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
-import { ScrollContainer } from 'src/components/layout/ui/container';
+import { Container, ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { DualButton } from 'src/components/lists/DualButton';
 import { FullButton } from 'src/components/lists/FullButton';
@@ -30,6 +38,7 @@ import type { RootStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
+import { ScreenFiller } from './editions-menu-screen';
 import { DevZone } from './settings/dev-zone';
 
 const MiscSettingsList = React.memo(
@@ -220,97 +229,119 @@ const SettingsScreen = () => {
 			  ]),
 	];
 
+	const SettingsScreenStyles = StyleSheet.create({
+		wrapper: {
+			alignItems: 'center',
+			flexDirection: 'column',
+			justifyContent: 'center',
+			flex: 1,
+		},
+		container: {
+			height: 600,
+			width: 400,
+		},
+	});
+
 	return (
-		<HeaderScreenContainer title="Settings" actionLeft={true}>
-			<WithAppAppearance value={'settings'}>
-				<ScrollContainer>
-					<SignInButton
-						accessible={true}
-						accessibilityRole="button"
-						username={
-							identityData
-								? identityData.userDetails.primaryEmailAddress
-								: undefined
-						}
-						signOutIdentity={signOutIdentity}
-					/>
-					<List data={signInListItems} />
-					<Heading>{``}</Heading>
-					<MiscSettingsList
-						client={client}
-						isWeatherShown={isWeatherShown}
-					/>
-					<Heading>{``}</Heading>
-					<List
-						data={[
-							{
-								key: 'Privacy settings',
-								title: Copy.settings.privacySettings,
-								proxy: rightChevronIcon,
-								onPress: () => {
-									navigation.navigate(RouteNames.GdprConsent);
-								},
-							},
-							{
-								key: 'Privacy policy',
-								title: Copy.settings.privacyPolicy,
-								proxy: rightChevronIcon,
-								onPress: () => {
-									navigation.navigate(
-										RouteNames.PrivacyPolicy,
-									);
-								},
-							},
-							{
-								key: 'Terms and conditions',
-								title: Copy.settings.termsAndConditions,
-								onPress: () => {
-									navigation.navigate(
-										RouteNames.TermsAndConditions,
-									);
-								},
-								proxy: rightChevronIcon,
-							},
-						]}
-					/>
-					<Heading>{``}</Heading>
-					<List
-						data={[
-							{
-								key: 'Help',
-								title: Copy.settings.help,
-								onPress: () => {
-									navigation.navigate(RouteNames.Help);
-								},
-								proxy: rightChevronIcon,
-							},
-							{
-								key: 'Credits',
-								title: Copy.settings.credits,
-								onPress: () => {
-									navigation.navigate(RouteNames.Credits);
-								},
-								proxy: rightChevronIcon,
-							},
-							{
-								key: 'Version',
-								title: Copy.settings.version,
-								onPress: versionClickHandler,
-								proxy: (
-									<Text>
-										{versionNumber} ({buildNumber})
-									</Text>
-								),
-							},
-						]}
-					/>
-
-					{canDisplayBetaButton && <BetaButtonOption />}
-
-					{isUsingProdDevtools && <DevZone />}
-				</ScrollContainer>
-			</WithAppAppearance>
-		</HeaderScreenContainer>
+		<View style={SettingsScreenStyles.wrapper}>
+			<View style={SettingsScreenStyles.container}>
+				<HeaderScreenContainer title="Settings" actionLeft={true}>
+					<WithAppAppearance value={'settings'}>
+						<ScrollContainer>
+							<SignInButton
+								accessible={true}
+								accessibilityRole="button"
+								username={
+									identityData
+										? identityData.userDetails
+												.primaryEmailAddress
+										: undefined
+								}
+								signOutIdentity={signOutIdentity}
+							/>
+							<List data={signInListItems} />
+							<Heading>{``}</Heading>
+							<MiscSettingsList
+								client={client}
+								isWeatherShown={isWeatherShown}
+							/>
+							<Heading>{``}</Heading>
+							<List
+								data={[
+									{
+										key: 'Privacy settings',
+										title: Copy.settings.privacySettings,
+										proxy: rightChevronIcon,
+										onPress: () => {
+											navigation.navigate(
+												RouteNames.GdprConsent,
+											);
+										},
+									},
+									{
+										key: 'Privacy policy',
+										title: Copy.settings.privacyPolicy,
+										proxy: rightChevronIcon,
+										onPress: () => {
+											navigation.navigate(
+												RouteNames.PrivacyPolicy,
+											);
+										},
+									},
+									{
+										key: 'Terms and conditions',
+										title: Copy.settings.termsAndConditions,
+										onPress: () => {
+											navigation.navigate(
+												RouteNames.TermsAndConditions,
+											);
+										},
+										proxy: rightChevronIcon,
+									},
+								]}
+							/>
+							<Heading>{``}</Heading>
+							<List
+								data={[
+									{
+										key: 'Help',
+										title: Copy.settings.help,
+										onPress: () => {
+											navigation.navigate(
+												RouteNames.Help,
+											);
+										},
+										proxy: rightChevronIcon,
+									},
+									{
+										key: 'Credits',
+										title: Copy.settings.credits,
+										onPress: () => {
+											navigation.navigate(
+												RouteNames.Credits,
+											);
+										},
+										proxy: rightChevronIcon,
+									},
+									{
+										key: 'Version',
+										title: Copy.settings.version,
+										onPress: versionClickHandler,
+										proxy: (
+											<Text>
+												{versionNumber} ({buildNumber})
+											</Text>
+										),
+									},
+								]}
+							/>
+							{canDisplayBetaButton && <BetaButtonOption />}
+							{isUsingProdDevtools && <DevZone />}
+						</ScrollContainer>
+					</WithAppAppearance>
+				</HeaderScreenContainer>
+			</View>
+		</View>
 	);
 };
 
