@@ -151,7 +151,7 @@ const GdprConsent = ({
 	const onEnableAllAndContinue = () => {
 		consentAllAndUpdate();
 		showToast(PREFS_SAVED_MSG);
-		navigation.navigate('App');
+		navigation.navigate(RouteNames.Issue);
 	};
 
 	const hasSetGdpr = () =>
@@ -162,7 +162,7 @@ const GdprConsent = ({
 	const onDismiss = () => {
 		if (hasSetGdpr()) {
 			showToast(PREFS_SAVED_MSG);
-			navigation.navigate('App');
+			navigation.navigate(RouteNames.Issue);
 		} else {
 			Alert.alert(
 				'Before you go',
