@@ -218,6 +218,7 @@ const GdprConsent = ({
 				</LoginHeader>
 			)}
 			<FlatList
+				showsVerticalScrollIndicator={false}
 				ListHeaderComponent={() => (
 					<>
 						<TallRow
