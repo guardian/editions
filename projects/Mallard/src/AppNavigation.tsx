@@ -81,7 +81,10 @@ const Onboarding = createStackNavigator<OnboardingStackParamList>();
 
 const OnboardingStack = () => {
 	return (
-		<Onboarding.Navigator>
+		<Onboarding.Navigator
+			initialRouteName={RouteNames.OnboardingConsent}
+			screenOptions={{ gestureEnabled: false, headerShown: false }}
+		>
 			<Onboarding.Screen
 				name={RouteNames.OnboardingConsent}
 				component={OnboardingConsentScreen}
@@ -241,7 +244,6 @@ const AppNavigation = () => {
 			setIsOnboarded(false);
 		} else {
 			setIsOnboarded(true);
-			console.log(isOnboarded, 'onboarded');
 		}
 	});
 	return (
