@@ -1,10 +1,11 @@
+import type { ParamListBase, RouteProp } from '@react-navigation/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import type ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, ScrollView, Text, View } from 'react-native';
+import { Alert, FlatList, Text, View } from 'react-native';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row';
 import type { ThreeWaySwitchValue } from 'src/components/layout/ui/switch';
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch';
@@ -111,7 +112,7 @@ const GdprConsent = ({
 	if (query.loading) return null;
 	const { client } = query;
 
-	const enableNulls = (client: any) => {
+	const enableNulls = (client: ApolloClient<object>) => {
 		gdprSwitchSettings.map((sw) => {
 			setGdprFlag(client, sw, true);
 		});
@@ -168,7 +169,10 @@ const GdprConsent = ({
 		},
 	};
 
-	const onEnableAllAndContinue = (route: any, client: any) => {
+	const onEnableAllAndContinue = (
+		route: RouteProp<ParamListBase, string>,
+		client: ApolloClient<object>,
+	) => {
 		if (route.name === 'OnboardingConsentInline') {
 			enableNulls(client);
 		} else {
@@ -183,7 +187,10 @@ const GdprConsent = ({
 		gdprData.gdprAllowPerformance != null &&
 		gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION;
 
-	const onDismiss = (route: any, client: any) => {
+	const onDismiss = (
+		route: RouteProp<ParamListBase, string>,
+		client: ApolloClient<object>,
+	) => {
 		if (hasSetGdpr()) {
 			showToast(PREFS_SAVED_MSG);
 			navigation.navigate(RouteNames.Issue);
