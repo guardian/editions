@@ -21,11 +21,15 @@ const fetchRenderedArticle = async (
     url: string,
     buffer: Buffer,
 ): Promise<RenderedArticle> => {
+    console.log('Making Rendering request to: ' + url)
     const response = await fetch(url, {
         method: 'post',
         headers: { 'Content-Type': 'application/octet-stream' },
         body: buffer,
     })
+    console.log(
+        'Rendered response: ' + response.status + ' ' + response.statusText,
+    )
     const responseBody = await response.text()
     return {
         success: response.statusText === 'OK',
