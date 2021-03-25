@@ -143,21 +143,6 @@ const RootStack = () => {
 				name={RouteNames.SignIn}
 				component={AuthSwitcherScreen}
 			/>
-			{/* <Stack.Screen
-                name={RouteNames.OnboardingStart}
-            /> */}
-			<Stack.Screen
-				name={RouteNames.OnboardingConsent}
-				component={OnboardingConsentScreen}
-			/>
-			<Stack.Screen
-				name={RouteNames.OnboardingConsentInline}
-				component={GdprConsentScreenForOnboarding}
-			/>
-			<Stack.Screen
-				name={RouteNames.PrivacyPolicyInline}
-				component={PrivacyPolicyScreenForOnboarding}
-			/>
 			<Stack.Screen
 				name={RouteNames.AlreadySubscribed}
 				component={AlreadySubscribedScreen}
