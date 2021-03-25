@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactNode } from 'react';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import {
 	Animated,
@@ -85,6 +85,15 @@ const ItemTappable = ({
 } & TappablePropTypes) => {
 	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 	const [opacity] = useState(() => new Animated.Value(1));
+
+	React.useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', () => {
+			fade(opacity, 'in');
+		});
+
+		return unsubscribe;
+	}, [navigation]);
+
 	return (
 		<Animated.View style={[style]}>
 			<TouchableHighlight
@@ -108,7 +117,6 @@ const ItemTappable = ({
 					{children}
 				</View>
 			</TouchableHighlight>
-
 			<Animated.View
 				{...ariaHidden}
 				pointerEvents="none"
