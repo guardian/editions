@@ -1,4 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import gql from 'graphql-tag';
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, ScrollView, Text, View } from 'react-native';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
@@ -21,11 +22,17 @@ import {
 	getSetting,
 	storeSetting,
 } from 'src/helpers/settings';
-import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters';
+import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers';
+import {
+	GDPR_CONSENT_VERSION,
+	setGdprConsentVersion,
+	setGdprFlag,
+} from 'src/helpers/settings/setters';
 import {
 	PREFS_SAVED_MSG,
 	PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words';
+import { useQuery } from 'src/hooks/apollo';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -89,6 +96,7 @@ const GdprConsent = ({
 	continueText: string;
 }) => {
 	const navigation = useNavigation();
+	const route = useRoute();
 	const { showToast } = useToast();
 
 	const [updateFlag, setDataUpdated] = useState(false);
@@ -97,6 +105,18 @@ const GdprConsent = ({
 		gdprAllowFunctionality: null,
 		gdprCurrentVersion: null,
 	});
+
+	const QUERY = gql(`{ ${GDPR_SETTINGS_FRAGMENT} }`);
+	const query = useQuery<Record<string, boolean | null>>(QUERY);
+	if (query.loading) return null;
+	const { client } = query;
+
+	const enableNulls = (client: any) => {
+		gdprSwitchSettings.map((sw) => {
+			setGdprFlag(client, sw, true);
+		});
+		setGdprConsentVersion(client, CURRENT_CONSENT_VERSION);
+	};
 
 	const fetchAndSetGdprData = async () => {
 		const perfData = await getSetting(gdprAllowPerformanceKey);
@@ -148,10 +168,14 @@ const GdprConsent = ({
 		},
 	};
 
-	const onEnableAllAndContinue = () => {
-		consentAllAndUpdate();
-		showToast(PREFS_SAVED_MSG);
-		navigation.navigate(RouteNames.Issue);
+	const onEnableAllAndContinue = (route: any, client: any) => {
+		if (route.name === 'OnboardingConsentInline') {
+			enableNulls(client);
+		} else {
+			consentAllAndUpdate();
+			showToast(PREFS_SAVED_MSG);
+			navigation.navigate(RouteNames.Issue);
+		}
 	};
 
 	const hasSetGdpr = () =>
@@ -159,7 +183,7 @@ const GdprConsent = ({
 		gdprData.gdprAllowPerformance != null &&
 		gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION;
 
-	const onDismiss = () => {
+	const onDismiss = (route: any, client: any) => {
 		if (hasSetGdpr()) {
 			showToast(PREFS_SAVED_MSG);
 			navigation.navigate(RouteNames.Issue);
@@ -171,7 +195,7 @@ const GdprConsent = ({
 					{ text: 'Manage preferences', onPress: () => {} },
 					{
 						text: continueText,
-						onPress: () => onEnableAllAndContinue(),
+						onPress: () => onEnableAllAndContinue(route, client),
 					},
 				],
 				{ cancelable: false },
@@ -182,7 +206,7 @@ const GdprConsent = ({
 	return (
 		<View style={{ flex: 1 }}>
 			{shouldShowDismissableHeader && (
-				<LoginHeader onDismiss={onDismiss}>
+				<LoginHeader onDismiss={() => onDismiss(route, client)}>
 					{PRIVACY_SETTINGS_HEADER_TITLE}
 				</LoginHeader>
 			)}
@@ -211,7 +235,9 @@ const GdprConsent = ({
 					proxy={
 						<Button
 							appearance={ButtonAppearance.Skeleton}
-							onPress={() => onEnableAllAndContinue()}
+							onPress={() =>
+								onEnableAllAndContinue(route, client)
+							}
 						>
 							{continueText}
 						</Button>
