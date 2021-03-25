@@ -4,7 +4,10 @@ import {
 } from '@react-navigation/stack';
 import React from 'react';
 import { Animated } from 'react-native';
-import type { RootStackParamList } from './navigation/NavigationModels';
+import type {
+	OnboardingStackParamList,
+	RootStackParamList,
+} from './navigation/NavigationModels';
 import { RouteNames } from './navigation/NavigationModels';
 import { ArticleWrapper } from './navigation/navigators/article';
 import { EditionsMenuScreen } from './screens/editions-menu-screen';
@@ -68,6 +71,27 @@ const cardStyleInterpolator = (props: any) => {
 			}),
 		},
 	};
+};
+
+const Onboarding = createStackNavigator<OnboardingStackParamList>();
+
+const OnboardingStack = () => {
+	return (
+		<Onboarding.Navigator>
+			<Onboarding.Screen
+				name={RouteNames.OnboardingConsent}
+				component={OnboardingConsentScreen}
+			/>
+			<Onboarding.Screen
+				name={RouteNames.OnboardingConsentInline}
+				component={GdprConsentScreenForOnboarding}
+			/>
+			<Onboarding.Screen
+				name={RouteNames.PrivacyPolicyInline}
+				component={PrivacyPolicyScreenForOnboarding}
+			/>
+		</Onboarding.Navigator>
+	);
 };
 
 const RootStack = () => {
