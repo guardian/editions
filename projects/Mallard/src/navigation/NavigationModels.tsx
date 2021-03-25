@@ -29,6 +29,9 @@ export type RootStackParamList = {
 	Lightbox: LightboxNavigationProps;
 	Storybook: undefined;
 	EditionsMenu: undefined;
+};
+
+export type OnboardingStackParamList = {
 	OnboardingConsent: undefined;
 	PrivacyPolicyInline: undefined;
 	OnboardingConsentInline: undefined;
