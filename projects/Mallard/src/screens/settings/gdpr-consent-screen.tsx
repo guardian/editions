@@ -154,12 +154,13 @@ const GdprConsent = ({
 		navigation.navigate('App');
 	};
 
+	const hasSetGdpr = () =>
+		gdprData.gdprAllowFunctionality != null &&
+		gdprData.gdprAllowPerformance != null &&
+		gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION;
+
 	const onDismiss = () => {
-		if (
-			gdprData.gdprAllowFunctionality != null &&
-			gdprData.gdprAllowPerformance != null &&
-			gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION
-		) {
+		if (hasSetGdpr()) {
 			showToast(PREFS_SAVED_MSG);
 			navigation.navigate('App');
 		} else {
