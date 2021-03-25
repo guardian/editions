@@ -53,7 +53,7 @@ export const s3EditionClient = () => {
         return new S3({
             region: 'eu-west-1',
             credentials: new SharedIniFileCredentials({
-                profile: 'frontend',
+                profile: 'mobile',
             }),
         })
     }
