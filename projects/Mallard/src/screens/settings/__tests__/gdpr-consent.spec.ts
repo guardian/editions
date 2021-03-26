@@ -6,6 +6,10 @@ import {
 } from 'src/helpers/settings';
 import { resetAll, setConsent } from '../gdpr-consent-screen';
 
+jest.mock('react-native-device-info', () => ({
+	isTablet: () => false,
+}));
+
 const getperf = async () =>
 	await AsyncStorage.getItem(SETTINGS_KEY_PREFIX + gdprAllowPerformanceKey);
 
