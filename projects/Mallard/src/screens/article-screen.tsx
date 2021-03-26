@@ -11,7 +11,7 @@ import { getAppearancePillar } from 'src/hooks/use-article';
 import { useDimensions } from 'src/hooks/use-config-provider';
 import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
-import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
@@ -150,7 +150,7 @@ const ArticleScreenWithProps = ({
 };
 
 export const ArticleScreen = () => {
-	const route = useRoute<RouteProp<RootStackParamList, 'Article'>>();
+	const route = useRoute<RouteProp<MainStackParamList, 'Article'>>();
 	return getArticleNavigationProps(route.params, {
 		error: () => (
 			<FlexErrorMessage

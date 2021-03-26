@@ -1,3 +1,5 @@
+import type { CompositeNavigationProp } from '@react-navigation/core';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type {
 	ArticleNavigationProps,
 	IssueNavigationProps,
@@ -39,6 +41,12 @@ export type MainStackParamList = {
 	WeatherGeolocationConsent: undefined;
 	Lightbox: LightboxNavigationProps;
 };
+
+// This is used on pages which include both main and root stacks
+export type CompositeNavigationStackProps = CompositeNavigationProp<
+	StackNavigationProp<RootStackParamList>,
+	StackNavigationProp<MainStackParamList>
+>;
 
 export enum RouteNames {
 	Home = 'Home',

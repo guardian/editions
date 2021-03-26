@@ -7,7 +7,7 @@ import { ArticleScreen } from 'src/screens/article-screen';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { SlideCard } from '../../components/layout/slide-card/index';
-import type { RootStackParamList } from '../NavigationModels';
+import type { MainStackParamList } from '../NavigationModels';
 
 const styles = StyleSheet.create({
 	root: {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 export const ArticleWrapper = () => {
-	const route = useRoute<RouteProp<RootStackParamList, 'Article'>>();
+	const route = useRoute<RouteProp<MainStackParamList, 'Article'>>();
 	const position = new Animated.Value(0);
 	if (route.params.prefersFullScreen) {
 		return (

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
-import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
@@ -83,7 +83,7 @@ const ItemTappable = ({
 	children: ReactNode;
 	hasPadding?: boolean;
 } & TappablePropTypes) => {
-	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+	const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 	const [opacity] = useState(() => new Animated.Value(1));
 
 	React.useEffect(() => {
