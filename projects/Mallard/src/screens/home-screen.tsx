@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
 import type { Dispatch } from 'react';
 import React, {
 	useCallback,
@@ -38,7 +37,7 @@ import { useIssueSummary } from 'src/hooks/use-issue-summary';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings';
 import { navigateToIssue } from 'src/navigation/helpers/base';
-import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToIssue } from 'src/paths';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -78,9 +77,7 @@ const IssueRowContainer = React.memo(
 		issue: IssueSummary;
 		issueDetails: Loaded<IssueWithFronts> | null;
 	}) => {
-		const navigation = useNavigation<
-			StackNavigationProp<RootStackParamList>
-		>();
+		const navigation = useNavigation<CompositeNavigationStackProps>();
 		const { issueId, setIssueId } = useIssueSummary();
 		const { localId, publishedId } = issue;
 		const setNavPosition = useSetNavPosition();
@@ -162,7 +159,7 @@ const IssueRowContainer = React.memo(
 );
 
 const IssueListFooter = () => {
-	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+	const navigation = useNavigation<CompositeNavigationStackProps>();
 	const isUsingProdDevtools = useIsUsingProdDevtools();
 	const { setIssueId } = useIssueSummary();
 

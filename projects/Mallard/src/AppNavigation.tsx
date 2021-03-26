@@ -1,14 +1,13 @@
-import { useQuery } from '@apollo/react-hooks';
 import { NavigationContainer } from '@react-navigation/native';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
 } from '@react-navigation/stack';
-import gql from 'graphql-tag';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Animated } from 'react-native';
-import { CURRENT_CONSENT_VERSION } from './helpers/settings';
+import { useIsOnboarded } from './navigation/helpers/onboarding';
 import type {
+	MainStackParamList,
 	OnboardingStackParamList,
 	RootStackParamList,
 } from './navigation/NavigationModels';
@@ -33,7 +32,7 @@ import {
 	GdprConsentScreenForOnboarding,
 } from './screens/settings/gdpr-consent-screen';
 import { HelpScreen } from './screens/settings/help-screen';
-import { ManageEditionsScreenWithHeader } from './screens/settings/manage-editions-screen';
+import { ManageEditionsScreen } from './screens/settings/manage-editions-screen';
 import {
 	PrivacyPolicyScreen,
 	PrivacyPolicyScreenForOnboarding,
@@ -76,6 +75,8 @@ const cardStyleInterpolator = (props: any) => {
 };
 
 const Onboarding = createStackNavigator<OnboardingStackParamList>();
+const Root = createStackNavigator<RootStackParamList>();
+const Main = createStackNavigator<MainStackParamList>();
 
 const OnboardingStack = () => {
 	return (
@@ -99,20 +100,18 @@ const OnboardingStack = () => {
 	);
 };
 
-const Root = createStackNavigator<RootStackParamList>();
-
-const RootStack = () => {
+const MainStack = () => {
 	return (
-		<Root.Navigator
+		<Main.Navigator
 			initialRouteName={RouteNames.Home}
 			screenOptions={{ gestureEnabled: false, headerShown: false }}
 		>
-			<Root.Screen
+			<Main.Screen
 				name={RouteNames.Issue}
 				component={IssueScreen}
 				options={{}}
 			/>
-			<Root.Screen
+			<Main.Screen
 				name={RouteNames.IssueList}
 				component={HomeScreen}
 				options={{
@@ -122,7 +121,7 @@ const RootStack = () => {
 					cardStyleInterpolator,
 				}}
 			/>
-			<Root.Screen
+			<Main.Screen
 				name={RouteNames.EditionsMenu}
 				component={EditionsMenuScreen}
 				options={{
@@ -132,7 +131,7 @@ const RootStack = () => {
 					cardStyleInterpolator,
 				}}
 			/>
-			<Root.Screen
+			<Main.Screen
 				name={RouteNames.Article}
 				component={ArticleWrapper}
 				options={{
@@ -142,25 +141,70 @@ const RootStack = () => {
 					gestureDirection: 'vertical',
 				}}
 			/>
+			<Main.Screen
+				name={RouteNames.SignIn}
+				component={AuthSwitcherScreen}
+			/>
+			{/* Turned off to remove Promise rejection error on Android */}
+			{/* <Main.Screen
+                name={RouteNames.Storybook}
+                component={StorybookScreen}
+            /> */}
+			<Main.Screen
+				name={RouteNames.Lightbox}
+				component={LightboxScreen}
+			/>
+		</Main.Navigator>
+	);
+};
+
+const RootStack = () => {
+	return (
+		<Root.Navigator
+			mode="modal"
+			screenOptions={{
+				headerShown: false,
+				cardStyle: { backgroundColor: 'transparent' },
+				cardOverlayEnabled: true,
+				cardStyleInterpolator: ({ current: { progress } }) => ({
+					cardStyle: {
+						opacity: progress.interpolate({
+							inputRange: [0, 0.5, 0.9, 1],
+							outputRange: [0, 0.25, 0.7, 1],
+						}),
+					},
+					overlayStyle: {
+						opacity: progress.interpolate({
+							inputRange: [0, 1],
+							outputRange: [0, 0.5],
+							extrapolate: 'clamp',
+						}),
+					},
+				}),
+			}}
+		>
+			<Root.Screen
+				name={RouteNames.Home}
+				component={MainStack}
+				options={{ headerShown: false }}
+			/>
 			<Root.Screen
 				name={RouteNames.Settings}
 				component={SettingsScreen}
+				options={{ headerShown: false }}
 			/>
 			<Root.Screen
-				name={RouteNames.SignIn}
-				component={AuthSwitcherScreen}
+				name={RouteNames.TermsAndConditions}
+				component={TermsAndConditionsScreen}
+				options={{ headerShown: false }}
+			/>
+			<Root.Screen
+				name={RouteNames.SubscriptionDetails}
+				component={SubscriptionDetailsScreen}
 			/>
 			<Root.Screen
 				name={RouteNames.AlreadySubscribed}
 				component={AlreadySubscribedScreen}
-			/>
-			<Root.Screen
-				name={RouteNames.CasSignIn}
-				component={CasSignInScreen}
-			/>
-			<Root.Screen
-				name={RouteNames.ManageEditionsSettings}
-				component={ManageEditionsScreenWithHeader}
 			/>
 			<Root.Screen
 				name={RouteNames.GdprConsent}
@@ -171,77 +215,33 @@ const RootStack = () => {
 				component={PrivacyPolicyScreen}
 			/>
 			<Root.Screen
-				name={RouteNames.Lightbox}
-				component={LightboxScreen}
+				name={RouteNames.ManageEditions}
+				component={ManageEditionsScreen}
 			/>
-			{/* ==== Inspect from here === */}
-			<Root.Screen name={RouteNames.Edition} component={EditionsScreen} />
-			<Root.Screen
-				name={RouteNames.TermsAndConditions}
-				component={TermsAndConditionsScreen}
-			/>
+			<Root.Screen name={RouteNames.Endpoints} component={ApiScreen} />
+			<Root.Screen name={RouteNames.Credits} component={CreditsScreen} />
 			<Root.Screen
 				name={RouteNames.BetaProgrammeFAQs}
 				component={BetaProgrammeFAQsScreen}
 			/>
-			<Root.Screen name={RouteNames.Help} component={HelpScreen} />
-			<Root.Screen name={RouteNames.Credits} component={CreditsScreen} />
-			<Root.Screen name={RouteNames.FAQ} component={FAQScreen} />
+			<Root.Screen name={RouteNames.Edition} component={EditionsScreen} />
 			<Root.Screen
-				name={RouteNames.SubscriptionDetails}
-				component={SubscriptionDetailsScreen}
+				name={RouteNames.CasSignIn}
+				component={CasSignInScreen}
 			/>
-			<Root.Screen name={RouteNames.Endpoints} component={ApiScreen} />
-			{/* Turned off to remove Promise rejection error on Android */}
-			{/* <Root.Screen
-                name={RouteNames.Storybook}
-                component={StorybookScreen}
-            /> */}
-
 			<Root.Screen
 				name={RouteNames.WeatherGeolocationConsent}
 				component={WeatherGeolocationConsentScreen}
 			/>
+			<Root.Screen name={RouteNames.Help} component={HelpScreen} />
+			<Root.Screen name={RouteNames.FAQ} component={FAQScreen} />
 		</Root.Navigator>
 	);
 };
 
-const ONBOARDING_QUERY = gql(`{
-    gdprAllowEssential @client
-    gdprAllowPerformance @client
-    gdprAllowFunctionality @client
-    gdprConsentVersion @client
-}`);
-
-type OnboardingQueryData = {
-	gdprAllowEssential: boolean;
-	gdprAllowPerformance: boolean;
-	gdprAllowFunctionality: boolean;
-	gdprConsentVersion: number;
-};
-
-const hasOnboarded = (data: OnboardingQueryData) =>
-	data.gdprAllowEssential != null &&
-	data.gdprAllowFunctionality != null &&
-	data.gdprAllowPerformance != null &&
-	data.gdprConsentVersion == CURRENT_CONSENT_VERSION;
-
 const AppNavigation = () => {
-	const [isOnboarded, setIsOnboarded] = useState(true);
-	const query = useQuery<OnboardingQueryData>(ONBOARDING_QUERY);
-	useEffect(() => {
-		/** Setting is still loading, do nothing yet. */
-		if (query.loading) return;
-		const { data } = query;
-		// If any flag is unknown still, we want to onboard.
-		// We expected people to give explicit yay/nay to
-		// each GDPR bucket.
-		if (!data || !hasOnboarded(data)) {
-			setIsOnboarded(false);
-		} else {
-			setIsOnboarded(true);
-		}
-	});
+	const { isOnboarded } = useIsOnboarded();
+
 	return (
 		<NavigationContainer>
 			{isOnboarded ? <RootStack /> : <OnboardingStack />}

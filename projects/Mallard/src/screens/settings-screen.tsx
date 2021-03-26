@@ -88,8 +88,7 @@ const MiscSettingsList = React.memo(
 			{
 				key: 'manageEditions',
 				title: Copy.settings.manageDownloads,
-				onPress: () =>
-					navigation.navigate(RouteNames.ManageEditionsSettings),
+				onPress: () => navigation.navigate(RouteNames.ManageEditions),
 				proxy: <RightChevron />,
 			},
 		];
@@ -304,9 +303,7 @@ const SettingsScreen = () => {
 							},
 						]}
 					/>
-
 					{canDisplayBetaButton && <BetaButtonOption />}
-
 					{isUsingProdDevtools && <DevZone />}
 				</ScrollContainer>
 			</WithAppAppearance>

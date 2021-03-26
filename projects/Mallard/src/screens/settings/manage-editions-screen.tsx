@@ -106,127 +106,111 @@ const ManageEditionsScreen = () => {
 	`);
 
 	return (
-		<WithAppAppearance value="settings">
-			<List
-				data={[
-					...(loading
-						? []
-						: [
-								{
-									key: 'Wifi-only',
-									title: Copy.manageDownloads.wifiOnlyTitle,
-									explainer:
-										Copy.manageDownloads.wifiOnlyExplainer,
-									proxy: (
-										<Switch
-											accessible={true}
-											accessibilityLabel="Wifi-only."
-											accessibilityRole="switch"
-											value={data.wifiOnlyDownloads}
-											onValueChange={(val) => {
-												setWifiOnlyDownloads(
-													client,
-													val,
-												);
-												sendComponentEvent({
-													componentType:
-														ComponentType.AppButton,
-													action: Action.Click,
-													componentId:
-														'manageEditionsWifiDownload',
-													value: val.toString(),
-												});
-											}}
-										/>
-									),
-								},
-								{
-									key: 'Available editions',
-									title:
-										Copy.manageDownloads.availableDownloads,
-									explainer: (
-										<AvailableEditionsButtons
-											numbers={[7, 14, 30]}
-											isSelected={(n) =>
-												n === data.maxAvailableEditions
-											}
-											onPress={async (n) => {
-												await setMaxAvailableEditions(
-													client,
-													n,
-												);
-												getIssueSummary(false);
-												sendComponentEvent({
-													componentType:
-														ComponentType.AppButton,
-													action: Action.Click,
-													componentId:
-														'manageEditionsAvailableEditions',
-													value: n.toString(),
-												});
-											}}
-										/>
-									),
-								},
-						  ]),
-					{
-						key: 'Delete all downloads',
-						title: Copy.manageDownloads.deleteDownloadsTitle,
-						explainer:
-							Copy.manageDownloads.deleteDownloadsExplainer,
-						onPress: () => {
-							Alert.alert(
-								Copy.manageDownloads.deleteDownloadsAlertTitle,
-								Copy.manageDownloads
-									.deleteDownloadsAlertSubtitle,
-								[
+		<HeaderScreenContainer title={MANAGE_EDITIONS_TITLE} actionLeft={true}>
+			<WithAppAppearance value="settings">
+				<List
+					data={[
+						...(loading
+							? []
+							: [
 									{
-										text: Copy.manageDownloads.delete,
-										style: 'destructive',
-										onPress: deleteIssueFiles,
+										key: 'Wifi-only',
+										title:
+											Copy.manageDownloads.wifiOnlyTitle,
+										explainer:
+											Copy.manageDownloads
+												.wifiOnlyExplainer,
+										proxy: (
+											<Switch
+												accessible={true}
+												accessibilityLabel="Wifi-only."
+												accessibilityRole="switch"
+												value={data.wifiOnlyDownloads}
+												onValueChange={(val) => {
+													setWifiOnlyDownloads(
+														client,
+														val,
+													);
+													sendComponentEvent({
+														componentType:
+															ComponentType.AppButton,
+														action: Action.Click,
+														componentId:
+															'manageEditionsWifiDownload',
+														value: val.toString(),
+													});
+												}}
+											/>
+										),
 									},
 									{
-										text: Copy.manageDownloads.cancel,
-										style: 'cancel',
+										key: 'Available editions',
+										title:
+											Copy.manageDownloads
+												.availableDownloads,
+										explainer: (
+											<AvailableEditionsButtons
+												numbers={[7, 14, 30]}
+												isSelected={(n) =>
+													n ===
+													data.maxAvailableEditions
+												}
+												onPress={async (n) => {
+													await setMaxAvailableEditions(
+														client,
+														n,
+													);
+													getIssueSummary(false);
+													sendComponentEvent({
+														componentType:
+															ComponentType.AppButton,
+														action: Action.Click,
+														componentId:
+															'manageEditionsAvailableEditions',
+														value: n.toString(),
+													});
+												}}
+											/>
+										),
 									},
-								],
-								{ cancelable: false },
-							);
-							sendComponentEvent({
-								componentType: ComponentType.AppButton,
-								action: Action.Click,
-								value: 'deleteAllDownload',
-								componentId: 'manageEditions',
-							});
+							  ]),
+						{
+							key: 'Delete all downloads',
+							title: Copy.manageDownloads.deleteDownloadsTitle,
+							explainer:
+								Copy.manageDownloads.deleteDownloadsExplainer,
+							onPress: () => {
+								Alert.alert(
+									Copy.manageDownloads
+										.deleteDownloadsAlertTitle,
+									Copy.manageDownloads
+										.deleteDownloadsAlertSubtitle,
+									[
+										{
+											text: Copy.manageDownloads.delete,
+											style: 'destructive',
+											onPress: deleteIssueFiles,
+										},
+										{
+											text: Copy.manageDownloads.cancel,
+											style: 'cancel',
+										},
+									],
+									{ cancelable: false },
+								);
+								sendComponentEvent({
+									componentType: ComponentType.AppButton,
+									action: Action.Click,
+									value: 'deleteAllDownload',
+									componentId: 'manageEditions',
+								});
+							},
 						},
-					},
-				]}
-			/>
-		</WithAppAppearance>
+					]}
+				/>
+			</WithAppAppearance>
+		</HeaderScreenContainer>
 	);
 };
 
-const ManageEditionScreenFromIssuePicker = () => <ManageEditionsScreen />;
-
-ManageEditionsScreen.navigationOptions = {
-	title: MANAGE_EDITIONS_TITLE,
-};
-
-ManageEditionScreenFromIssuePicker.navigationOptions = {
-	title: MANAGE_EDITIONS_TITLE,
-	showHeaderLeft: false,
-	showHeaderRight: true,
-};
-
-// @TODO - two routes here require different header configurations.
-const ManageEditionsScreenWithHeader = () => (
-	<HeaderScreenContainer title={MANAGE_EDITIONS_TITLE} actionLeft={true}>
-		<ManageEditionsScreen />
-	</HeaderScreenContainer>
-);
-
-export {
-	ManageEditionsScreen,
-	ManageEditionScreenFromIssuePicker,
-	ManageEditionsScreenWithHeader,
-};
+export { ManageEditionsScreen };
