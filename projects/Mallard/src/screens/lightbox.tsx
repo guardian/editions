@@ -16,7 +16,10 @@ import { CloseButton } from 'src/components/Button/CloseButton';
 import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption';
 import { getPillarColors } from 'src/helpers/transform';
 import { useDimensions } from 'src/hooks/use-config-provider';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import type {
+	MainStackParamList,
+	RouteNames,
+} from 'src/navigation/NavigationModels';
 
 const styles = StyleSheet.create({
 	lightboxPage: {
@@ -74,7 +77,9 @@ const styles = StyleSheet.create({
 
 const LightboxScreen = () => {
 	const navigation = useNavigation();
-	const route = useRoute<RouteProp<MainStackParamList, 'Lightbox'>>();
+	const route = useRoute<
+		RouteProp<MainStackParamList, RouteNames.Lightbox>
+	>();
 	const imagePaths = route.params?.imagePaths ?? [];
 	const images = route.params?.images ?? [];
 	const index = route.params?.index ?? 0;
