@@ -75,8 +75,8 @@ const cardStyleInterpolator = (props: any) => {
 };
 
 const Onboarding = createStackNavigator<OnboardingStackParamList>();
-const RootStack = createStackNavigator<RootStackParamList>();
-const MainStack = createStackNavigator<MainStackParamList>();
+const Root = createStackNavigator<RootStackParamList>();
+const Main = createStackNavigator<MainStackParamList>();
 
 const OnboardingStack = () => {
 	return (
@@ -100,18 +100,18 @@ const OnboardingStack = () => {
 	);
 };
 
-const MainStackScreen = () => {
+const MainStack = () => {
 	return (
-		<MainStack.Navigator
+		<Main.Navigator
 			initialRouteName={RouteNames.Home}
 			screenOptions={{ gestureEnabled: false, headerShown: false }}
 		>
-			<MainStack.Screen
+			<Main.Screen
 				name={RouteNames.Issue}
 				component={IssueScreen}
 				options={{}}
 			/>
-			<MainStack.Screen
+			<Main.Screen
 				name={RouteNames.IssueList}
 				component={HomeScreen}
 				options={{
@@ -121,7 +121,7 @@ const MainStackScreen = () => {
 					cardStyleInterpolator,
 				}}
 			/>
-			<MainStack.Screen
+			<Main.Screen
 				name={RouteNames.EditionsMenu}
 				component={EditionsMenuScreen}
 				options={{
@@ -131,7 +131,7 @@ const MainStackScreen = () => {
 					cardStyleInterpolator,
 				}}
 			/>
-			<MainStack.Screen
+			<Main.Screen
 				name={RouteNames.Article}
 				component={ArticleWrapper}
 				options={{
@@ -141,31 +141,26 @@ const MainStackScreen = () => {
 					gestureDirection: 'vertical',
 				}}
 			/>
-			<MainStack.Screen
+			<Main.Screen
 				name={RouteNames.SignIn}
 				component={AuthSwitcherScreen}
 			/>
-
 			{/* Turned off to remove Promise rejection error on Android */}
-			{/* <MainStack.Screen
+			{/* <Main.Screen
                 name={RouteNames.Storybook}
                 component={StorybookScreen}
             /> */}
-			<MainStack.Screen
-				name={RouteNames.WeatherGeolocationConsent}
-				component={WeatherGeolocationConsentScreen}
-			/>
-			<MainStack.Screen
+			<Main.Screen
 				name={RouteNames.Lightbox}
 				component={LightboxScreen}
 			/>
-		</MainStack.Navigator>
+		</Main.Navigator>
 	);
 };
 
-function RootStackScreen() {
+const RootStack = () => {
 	return (
-		<RootStack.Navigator
+		<Root.Navigator
 			mode="modal"
 			screenOptions={{
 				headerShown: false,
@@ -188,73 +183,68 @@ function RootStackScreen() {
 				}),
 			}}
 		>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.Home}
-				component={MainStackScreen}
+				component={MainStack}
 				options={{ headerShown: false }}
 			/>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.Settings}
 				component={SettingsScreen}
 				options={{ headerShown: false }}
 			/>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.TermsAndConditions}
 				component={TermsAndConditionsScreen}
 				options={{ headerShown: false }}
 			/>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.SubscriptionDetails}
 				component={SubscriptionDetailsScreen}
 			/>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.AlreadySubscribed}
 				component={AlreadySubscribedScreen}
 			/>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.GdprConsent}
 				component={GdprConsentScreen}
 			/>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.PrivacyPolicy}
 				component={PrivacyPolicyScreen}
 			/>
-			<RootStack.Screen
+			<Root.Screen
 				name={RouteNames.ManageEditions}
 				component={ManageEditionsScreen}
 			/>
-			<RootStack.Screen
-				name={RouteNames.Endpoints}
-				component={ApiScreen}
-			/>
-			<RootStack.Screen
-				name={RouteNames.Credits}
-				component={CreditsScreen}
-			/>
-			<RootStack.Screen
+			<Root.Screen name={RouteNames.Endpoints} component={ApiScreen} />
+			<Root.Screen name={RouteNames.Credits} component={CreditsScreen} />
+			<Root.Screen
 				name={RouteNames.BetaProgrammeFAQs}
 				component={BetaProgrammeFAQsScreen}
 			/>
-			<RootStack.Screen
-				name={RouteNames.Edition}
-				component={EditionsScreen}
-			/>
-			<RootStack.Screen
+			<Root.Screen name={RouteNames.Edition} component={EditionsScreen} />
+			<Root.Screen
 				name={RouteNames.CasSignIn}
 				component={CasSignInScreen}
 			/>
-			<RootStack.Screen name={RouteNames.Help} component={HelpScreen} />
-			<RootStack.Screen name={RouteNames.FAQ} component={FAQScreen} />
-		</RootStack.Navigator>
+			<Root.Screen
+				name={RouteNames.WeatherGeolocationConsent}
+				component={WeatherGeolocationConsentScreen}
+			/>
+			<Root.Screen name={RouteNames.Help} component={HelpScreen} />
+			<Root.Screen name={RouteNames.FAQ} component={FAQScreen} />
+		</Root.Navigator>
 	);
-}
+};
 
 const AppNavigation = () => {
 	const { isOnboarded } = useIsOnboarded();
 
 	return (
 		<NavigationContainer>
-			{isOnboarded ? <RootStackScreen /> : <OnboardingStack />}
+			{isOnboarded ? <RootStack /> : <OnboardingStack />}
 		</NavigationContainer>
 	);
 };

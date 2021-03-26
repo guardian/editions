@@ -23,6 +23,7 @@ export type RootStackParamList = {
 	SubscriptionDetails: undefined;
 	CasSignIn: undefined;
 	Storybook: undefined;
+	WeatherGeolocationConsent: undefined;
 };
 
 export type OnboardingStackParamList = {
@@ -38,7 +39,6 @@ export type MainStackParamList = {
 	IssueList: undefined;
 	SignIn: undefined;
 	EditionsMenu: undefined;
-	WeatherGeolocationConsent: undefined;
 	Lightbox: LightboxNavigationProps;
 };
 
