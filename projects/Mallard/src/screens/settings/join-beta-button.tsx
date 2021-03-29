@@ -9,7 +9,7 @@ import { UiBodyCopy } from 'src/components/styled-text';
 import { JOIN_BETA_LINK } from 'src/constants';
 import { isInBeta } from 'src/helpers/release-stream';
 import { Copy } from 'src/helpers/words';
-import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { remoteConfigService } from 'src/services/remote-config';
 import { metrics } from 'src/theme/spacing';
@@ -22,7 +22,7 @@ const betaButtonStyle = StyleSheet.create({
 });
 
 const betaProgrammeFAQs = (
-	navigation: StackNavigationProp<RootStackParamList>,
+	navigation: StackNavigationProp<SettingsStackParamList>,
 ) => ({
 	key: 'Beta Programme FAQs',
 	title: Copy.settings.betaProgrammeFAQs,
@@ -33,7 +33,9 @@ const betaProgrammeFAQs = (
 });
 
 const betaThanks = () => {
-	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+	const navigation = useNavigation<
+		StackNavigationProp<SettingsStackParamList>
+	>();
 	return (
 		<>
 			<Heading>{``}</Heading>
@@ -47,7 +49,9 @@ const betaThanks = () => {
 };
 
 const joinBetaMenuButton = () => {
-	const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+	const navigation = useNavigation<
+		StackNavigationProp<SettingsStackParamList>
+	>();
 	return (
 		<>
 			<Heading>{``}</Heading>

@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { isTablet } from 'react-native-device-info';
+import { color } from 'src/theme/color';
 import { Button } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';
 import { IssueTitle } from '../issue/issue-title';
@@ -18,8 +19,11 @@ const ModalStyles = StyleSheet.create({
 		flex: 1,
 	},
 	container: {
-		minHeight: isTablet() ? 600 : height,
+		height: isTablet() ? 600 : height,
 		width: isTablet() ? 400 : width,
+		borderRadius: 15,
+		overflow: 'hidden',
+		backgroundColor: color.background,
 	},
 });
 
