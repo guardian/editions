@@ -32,15 +32,15 @@ const s3DefaultCredentials = new S3({
     region: 'eu-west-1',
 })
 
-const s3FrontendCredentials = new S3({
+const s3MobileCredentials = new S3({
     region: 'eu-west-1',
-    credentials: new SharedIniFileCredentials({ profile: 'frontend' }),
+    credentials: new SharedIniFileCredentials({ profile: 'mobile' }),
 })
 
 export const s3 =
     process.env.stage === 'CODE' || process.env.stage === 'PROD'
         ? s3DefaultCredentials
-        : s3FrontendCredentials
+        : s3MobileCredentials
 
 export type Bucket = {
     name: string
@@ -52,16 +52,16 @@ export const getBucket = (bucket: string): Bucket => {
         if (!!process.env.proofBucket) {
             return { name: process.env.proofBucket, context: bucket }
         } else {
-            return { name: 'editions-store-code', context: 'default' }
+            return { name: 'editions-published-code', context: 'default' }
         }
     } else if (bucket === 'publish') {
         if (!!process.env.publishBucket) {
             return { name: process.env.publishBucket, context: bucket }
         } else {
-            return { name: 'editions-store-code', context: 'default' }
+            return { name: 'editions-published-code', context: 'default' }
         }
     } else {
-        return { name: 'editions-store-code', context: 'default' }
+        return { name: 'editions-published-code', context: 'default' }
     }
 }
 

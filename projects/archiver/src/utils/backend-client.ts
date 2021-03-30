@@ -38,12 +38,12 @@ export const getFront = async (
     console.log(`attempt to getFront from path: ${path}`)
     const response = await fetch(path)
     const maybeFront = await attempt(response.json() as Promise<Front>)
-    console.log(`got response: ${JSON.stringify(maybeFront)}`)
     if (hasFailed(maybeFront))
         return withFailureMessage(
             maybeFront,
             `Failed to download front ${front} from ${publishedId}`,
         )
+    console.log(`got response: ${JSON.stringify(maybeFront.title)}`)
     return maybeFront
 }
 
@@ -76,13 +76,13 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
     const maybeEditionsList = await attempt(response.json() as Promise<
         EditionsList
     >)
-    console.log(`Got response: ${JSON.stringify(maybeEditionsList)}`)
     if (hasFailed(maybeEditionsList)) {
         return withFailureMessage(
             maybeEditionsList,
             `Failed to download editions list from ${path}`,
         )
     }
+    console.log(`Got response: ${JSON.stringify(maybeEditionsList)}`)
     return maybeEditionsList
 }
 
