@@ -10,16 +10,16 @@ import { Effect } from '@aws-cdk/aws-iam'
 import { constructTriggeredStepFunction } from './listener'
 import { CfnEventBusPolicy } from '@aws-cdk/aws-events'
 import { GuStack } from '@guardian/cdk/lib/constructs/core/stack'
-import type { App } from "@aws-cdk/core";
-import type { GuStackProps } from "@guardian/cdk/lib/constructs/core/stack";
-import { GuVpc } from "@guardian/cdk/lib/constructs/ec2";
+import { App } from '@aws-cdk/core'
+import { GuStackProps } from '@guardian/cdk/lib/constructs/core/stack'
+import { GuVpc } from '@guardian/cdk/lib/constructs/ec2'
 
 export class EditionsStack extends GuStack {
     constructor(scope: App, id: string, props: GuStackProps) {
         super(scope, id, props)
 
-        const vpc = GuVpc.fromIdParameter(this, "vpc");
-        const subnets = GuVpc.subnetsfromParameter(this);
+        const vpc = GuVpc.fromIdParameter(this, 'vpc')
+        const subnets = GuVpc.subnetsfromParameter(this)
 
         const stackParameter = new cdk.CfnParameter(this, 'stack', {
             type: 'String',
