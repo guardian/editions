@@ -32,7 +32,6 @@ export type SettingsStackParamList = {
 	AlreadySubscribed: undefined;
 	SubscriptionDetails: undefined;
 	CasSignIn: undefined;
-	Storybook: undefined;
 	WeatherGeolocationConsent: undefined;
 };
 
@@ -74,7 +73,6 @@ export enum RouteNames {
 	CasSignIn = 'CasSignIn',
 	WeatherGeolocationConsent = 'WeatherGeolocationConsent',
 	Lightbox = 'Lightbox',
-	Storybook = 'Storybook',
 	EditionsMenu = 'EditionsMenu',
 	OnboardingConsent = 'OnboardingConsent',
 	PrivacyPolicyInline = 'PrivacyPolicyInline',
