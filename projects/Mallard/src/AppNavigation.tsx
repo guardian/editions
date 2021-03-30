@@ -1,4 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
+import type { StackCardInterpolationProps } from '@react-navigation/stack';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
@@ -10,6 +11,7 @@ import type {
 	MainStackParamList,
 	OnboardingStackParamList,
 	RootStackParamList,
+	SettingsStackParamList,
 } from './navigation/NavigationModels';
 import { RouteNames } from './navigation/NavigationModels';
 import { ArticleWrapper } from './navigation/navigators/article';
@@ -43,7 +45,7 @@ import { WeatherGeolocationConsentScreen } from './screens/weather-geolocation-c
 
 const { multiply } = Animated;
 
-const cardStyleInterpolator = (props: any) => {
+const cardStyleInterpolator = (props: StackCardInterpolationProps) => {
 	const translateX = multiply(
 		props.current.progress.interpolate({
 			inputRange: [0, 1],
@@ -54,7 +56,6 @@ const cardStyleInterpolator = (props: any) => {
 	);
 
 	return {
-		// ...CardStyleInterpolators.forHorizontalIOS(props),
 		cardStyle: {
 			overflow: 'hidden',
 			transform: [
@@ -74,8 +75,44 @@ const cardStyleInterpolator = (props: any) => {
 	};
 };
 
+const settingsInterpolater = (props: StackCardInterpolationProps) => {
+	const translateX = multiply(
+		props.current.progress.interpolate({
+			inputRange: [0, 1],
+			outputRange: [200, 0],
+			extrapolate: 'clamp',
+		}),
+		props.inverted,
+	);
+
+	return {
+		cardStyle: {
+			backgroundColor: 'transparent',
+
+			opacity: props.current.progress.interpolate({
+				inputRange: [0, 1, 4],
+				outputRange: [0, 1, 0],
+			}),
+			transform: [
+				// Translation for the animation of the current card
+				{
+					translateX,
+				},
+			],
+		},
+		overlayStyle: {
+			opacity: props.current.progress.interpolate({
+				inputRange: [0, 1, 2],
+				outputRange: [0, 1, 0],
+			}),
+			backgroundColor: 'transparent',
+		},
+	};
+};
+
 const Onboarding = createStackNavigator<OnboardingStackParamList>();
 const Root = createStackNavigator<RootStackParamList>();
+const Settings = createStackNavigator<SettingsStackParamList>();
 const Main = createStackNavigator<MainStackParamList>();
 
 const OnboardingStack = () => {
@@ -145,16 +182,85 @@ const MainStack = () => {
 				name={RouteNames.SignIn}
 				component={AuthSwitcherScreen}
 			/>
-			{/* Turned off to remove Promise rejection error on Android */}
-			{/* <Main.Screen
-                name={RouteNames.Storybook}
-                component={StorybookScreen}
-            /> */}
 			<Main.Screen
 				name={RouteNames.Lightbox}
 				component={LightboxScreen}
 			/>
 		</Main.Navigator>
+	);
+};
+
+const SettingsStack = () => {
+	return (
+		<Settings.Navigator
+			initialRouteName={RouteNames.Settings}
+			mode="modal"
+			screenOptions={{
+				gestureEnabled: false,
+				headerShown: false,
+				cardStyle: { backgroundColor: 'transparent' },
+				cardOverlayEnabled: true,
+				cardStyleInterpolator: settingsInterpolater,
+			}}
+		>
+			<Settings.Screen
+				name={RouteNames.Settings}
+				component={SettingsScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.TermsAndConditions}
+				component={TermsAndConditionsScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.SubscriptionDetails}
+				component={SubscriptionDetailsScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.AlreadySubscribed}
+				component={AlreadySubscribedScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.GdprConsent}
+				component={GdprConsentScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.PrivacyPolicy}
+				component={PrivacyPolicyScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.ManageEditions}
+				component={ManageEditionsScreen}
+				options={{
+					gestureDirection: 'vertical',
+				}}
+			/>
+			<Settings.Screen
+				name={RouteNames.Endpoints}
+				component={ApiScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.Credits}
+				component={CreditsScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.BetaProgrammeFAQs}
+				component={BetaProgrammeFAQsScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.Edition}
+				component={EditionsScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.CasSignIn}
+				component={CasSignInScreen}
+			/>
+			<Settings.Screen
+				name={RouteNames.WeatherGeolocationConsent}
+				component={WeatherGeolocationConsentScreen}
+			/>
+			<Settings.Screen name={RouteNames.Help} component={HelpScreen} />
+			<Settings.Screen name={RouteNames.FAQ} component={FAQScreen} />
+		</Settings.Navigator>
 	);
 };
 
@@ -166,21 +272,6 @@ const RootStack = () => {
 				headerShown: false,
 				cardStyle: { backgroundColor: 'transparent' },
 				cardOverlayEnabled: true,
-				cardStyleInterpolator: ({ current: { progress } }) => ({
-					cardStyle: {
-						opacity: progress.interpolate({
-							inputRange: [0, 0.5, 0.9, 1],
-							outputRange: [0, 0.25, 0.7, 1],
-						}),
-					},
-					overlayStyle: {
-						opacity: progress.interpolate({
-							inputRange: [0, 1],
-							outputRange: [0, 0.5],
-							extrapolate: 'clamp',
-						}),
-					},
-				}),
 			}}
 		>
 			<Root.Screen
@@ -190,51 +281,9 @@ const RootStack = () => {
 			/>
 			<Root.Screen
 				name={RouteNames.Settings}
-				component={SettingsScreen}
+				component={SettingsStack}
 				options={{ headerShown: false }}
 			/>
-			<Root.Screen
-				name={RouteNames.TermsAndConditions}
-				component={TermsAndConditionsScreen}
-				options={{ headerShown: false }}
-			/>
-			<Root.Screen
-				name={RouteNames.SubscriptionDetails}
-				component={SubscriptionDetailsScreen}
-			/>
-			<Root.Screen
-				name={RouteNames.AlreadySubscribed}
-				component={AlreadySubscribedScreen}
-			/>
-			<Root.Screen
-				name={RouteNames.GdprConsent}
-				component={GdprConsentScreen}
-			/>
-			<Root.Screen
-				name={RouteNames.PrivacyPolicy}
-				component={PrivacyPolicyScreen}
-			/>
-			<Root.Screen
-				name={RouteNames.ManageEditions}
-				component={ManageEditionsScreen}
-			/>
-			<Root.Screen name={RouteNames.Endpoints} component={ApiScreen} />
-			<Root.Screen name={RouteNames.Credits} component={CreditsScreen} />
-			<Root.Screen
-				name={RouteNames.BetaProgrammeFAQs}
-				component={BetaProgrammeFAQsScreen}
-			/>
-			<Root.Screen name={RouteNames.Edition} component={EditionsScreen} />
-			<Root.Screen
-				name={RouteNames.CasSignIn}
-				component={CasSignInScreen}
-			/>
-			<Root.Screen
-				name={RouteNames.WeatherGeolocationConsent}
-				component={WeatherGeolocationConsentScreen}
-			/>
-			<Root.Screen name={RouteNames.Help} component={HelpScreen} />
-			<Root.Screen name={RouteNames.FAQ} component={FAQScreen} />
 		</Root.Navigator>
 	);
 };

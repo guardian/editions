@@ -9,6 +9,16 @@ import type {
 export type RootStackParamList = {
 	Home: undefined;
 	Settings: undefined;
+};
+
+export type OnboardingStackParamList = {
+	OnboardingConsent: undefined;
+	PrivacyPolicyInline: undefined;
+	OnboardingConsentInline: undefined;
+};
+
+export type SettingsStackParamList = {
+	Settings: undefined;
 	Endpoints: undefined;
 	Edition: undefined;
 	GdprConsent: undefined;
@@ -26,12 +36,6 @@ export type RootStackParamList = {
 	WeatherGeolocationConsent: undefined;
 };
 
-export type OnboardingStackParamList = {
-	OnboardingConsent: undefined;
-	PrivacyPolicyInline: undefined;
-	OnboardingConsentInline: undefined;
-};
-
 export type MainStackParamList = {
 	Home: undefined;
 	Issue: IssueNavigationProps;
@@ -44,8 +48,8 @@ export type MainStackParamList = {
 
 // This is used on pages which include both main and root stacks
 export type CompositeNavigationStackProps = CompositeNavigationProp<
-	StackNavigationProp<RootStackParamList>,
-	StackNavigationProp<MainStackParamList>
+	StackNavigationProp<MainStackParamList>,
+	StackNavigationProp<SettingsStackParamList>
 >;
 
 export enum RouteNames {

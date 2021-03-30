@@ -26,7 +26,7 @@ import {
 import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
 import { useNotificationsEnabled } from 'src/hooks/use-config-provider';
-import type { RootStackParamList } from 'src/navigation/NavigationModels';
+import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -35,7 +35,7 @@ import { DevZone } from './settings/dev-zone';
 const MiscSettingsList = React.memo(
 	(props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
 		const navigation = useNavigation<
-			StackNavigationProp<RootStackParamList>
+			StackNavigationProp<SettingsStackParamList>
 		>();
 		const {
 			notificationsEnabled,
