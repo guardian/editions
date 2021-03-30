@@ -151,7 +151,9 @@ const IssueRowContainer = React.memo(
 				issue={issue}
 				issueDetails={issueDetails}
 				onGoToSettings={() =>
-					navigation.navigate(RouteNames.ManageEditions)
+					navigation.navigate(RouteNames.Settings, {
+						screen: RouteNames.ManageEditions,
+					})
 				}
 			/>
 		);
@@ -171,7 +173,9 @@ const IssueListFooter = () => {
 					accessibilityHint="Navigates to the manage downloads screen"
 					appearance={ButtonAppearance.Skeleton}
 					onPress={() => {
-						navigation.navigate(RouteNames.ManageEditions);
+						navigation.navigate(RouteNames.Settings, {
+							screen: RouteNames.ManageEditions,
+						});
 					}}
 				>
 					{Copy.issueListFooter.manageDownloads}
