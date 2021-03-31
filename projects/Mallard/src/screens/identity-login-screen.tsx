@@ -17,6 +17,8 @@ import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { withConsent } from 'src/helpers/settings';
 import { Copy } from 'src/helpers/words';
 import { useFormField } from 'src/hooks/use-form-field';
+import type { SettingsOverlayInterface } from 'src/hooks/use-settings-overlay';
+import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import isEmail from 'validator/lib/isEmail';
@@ -50,6 +52,9 @@ const AuthSwitcherScreen = () => {
 
 	const { authIdentity } = useContext(AccessContext);
 	const { open } = useModal();
+	const { setSettingsModalOpen } = useContext(
+		SettingsOverlayContext,
+	) as SettingsOverlayInterface;
 
 	const handleAuthClick = async (
 		runGetIdentityAuthParams: () => Promise<AuthParams>,
@@ -77,7 +82,10 @@ const AuthSwitcherScreen = () => {
 											attempt.data.userDetails
 												.primaryEmailAddress
 										}
-										onDismiss={() => navigation.popToTop()}
+										onDismiss={() => {
+											setSettingsModalOpen(false);
+											navigation.popToTop();
+										}}
 										onOpenCASLogin={() =>
 											navigation.navigate(
 												RouteNames.CasSignIn,
