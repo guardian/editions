@@ -1,7 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
+import React, { useContext } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { isTablet } from 'react-native-device-info';
+import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
+import type { SettingsOverlayInterface } from 'src/hooks/use-settings-overlay';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { color } from 'src/theme/color';
 import { Button } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';
@@ -39,6 +42,13 @@ const HeaderScreenContainer = ({
 	title: string;
 }) => {
 	const navigation = useNavigation();
+	const { setSettingsModalOpen } = useContext(
+		SettingsOverlayContext,
+	) as SettingsOverlayInterface;
+	const screenName = useNavigationState(
+		(state) => state.routes[state.index].name,
+	);
+
 	return (
 		<View style={ModalStyles.wrapper}>
 			<View style={ModalStyles.container}>
@@ -48,7 +58,12 @@ const HeaderScreenContainer = ({
 							<Button
 								icon={'\uE00A'}
 								alt="Back"
-								onPress={() => navigation.goBack()}
+								onPress={() => {
+									if (screenName === RouteNames.Settings) {
+										setSettingsModalOpen(false);
+									}
+									navigation.goBack();
+								}}
 							></Button>
 						) : null
 					}

@@ -31,6 +31,7 @@ import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe';
 import { EditionProvider } from './hooks/use-edition-provider';
+import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
 import { pushNotificationRegistration } from './notifications/push-notifications';
 import { DeprecateVersionModal } from './screens/deprecate-screen';
@@ -68,6 +69,7 @@ const WithProviders = nestProviders(
 	NavPositionProvider,
 	ConfigProvider,
 	EditionProvider,
+	SettingsOverlayProvider,
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
