@@ -15,6 +15,7 @@ import {
     getEditionOrFallback,
     decodeVersionOrPreview,
 } from '../utils/issue'
+import fetch from 'node-fetch'
 
 export const DEFAULT_LIVE_PAGE_SIZE = 30
 export const DEFAULT_PREVIEW_PAGE_SIZE = 35
