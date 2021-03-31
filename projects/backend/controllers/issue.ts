@@ -56,8 +56,10 @@ export const getIssuesSummary = async (
      * to support /issues path
      * TODO to delete in the future
      */
+    console.log('fetching issue summary')
     const edition: EditionId = getEditionOrFallback(maybeEdition)
     const editionPath = buildEditionPath(maybeEdition, isPreview)
+    console.log('s3 list', JSON.stringify(editionPath))
     const issueKeys = await s3List(editionPath, s3FrontsClient)
     console.log('I listed some S3 stuff')
     const result = await fetch('https://editions.guardianapis.com/issues')
