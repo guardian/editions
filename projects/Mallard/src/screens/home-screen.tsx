@@ -164,7 +164,6 @@ const IssueListFooter = () => {
 	const navigation = useNavigation<CompositeNavigationStackProps>();
 	const isUsingProdDevtools = useIsUsingProdDevtools();
 	const { setIssueId } = useIssueSummary();
-
 	return (
 		<View style={styles.issueListFooter}>
 			<GridRowSplit style={styles.issueListFooterGrid}>
