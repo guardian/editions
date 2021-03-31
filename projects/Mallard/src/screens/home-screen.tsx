@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { Dispatch } from 'react';
 import React, {
 	useCallback,
@@ -440,10 +440,19 @@ export const HomeScreen = () => {
 	const { issueSummary, error } = useIssueSummary();
 	const { selectedEdition } = useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
-	const { settingsModalOpen } = useContext(
+	const { settingsModalOpen, setSettingsModalOpen } = useContext(
 		SettingsOverlayContext,
 	) as SettingsOverlayInterface;
 	const { showOverlay, fadeAnim } = useOverlayAnimation(settingsModalOpen);
+	const isFocused = useIsFocused();
+
+	useEffect(() => {
+		if (isFocused) {
+			setSettingsModalOpen(false);
+		} else {
+			setSettingsModalOpen(true);
+		}
+	}, [isFocused]);
 
 	const issueHeaderData =
 		selectedEdition.editionType === 'Special'
