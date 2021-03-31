@@ -4,6 +4,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
 <RCTScrollView
   style={
     Object {
+      "height": 1334,
       "paddingHorizontal": 14,
       "paddingTop": 17,
     }
@@ -107,6 +108,7 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
 <RCTScrollView
   style={
     Object {
+      "height": 1334,
       "paddingHorizontal": 14,
       "paddingTop": 17,
     }
@@ -290,6 +292,7 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
 <RCTScrollView
   style={
     Object {
+      "height": 1334,
       "paddingHorizontal": 14,
       "paddingTop": 17,
     }

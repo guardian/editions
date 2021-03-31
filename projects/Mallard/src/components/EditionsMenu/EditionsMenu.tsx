@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, ScrollView, StyleSheet } from 'react-native';
 import type { EditionId, RegionalEdition, SpecialEdition } from 'src/common';
 import { metrics } from 'src/theme/spacing';
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults';
@@ -7,7 +7,11 @@ import { EditionButton } from './EditionButton/EditionButton';
 import { ItemSeperator } from './ItemSeperator/ItemSeperator';
 
 const styles = StyleSheet.create({
-	container: { paddingTop: 17, paddingHorizontal: metrics.horizontal },
+	container: {
+		paddingTop: 17,
+		paddingHorizontal: metrics.horizontal,
+		height: Dimensions.get('window').height,
+	},
 });
 
 const EditionsMenu = ({
