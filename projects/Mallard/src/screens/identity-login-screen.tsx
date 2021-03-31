@@ -136,7 +136,7 @@ const AuthSwitcherScreen = () => {
 			email={email}
 			password={password}
 			isLoading={isLoading}
-			onDismiss={() => navigation.goBack()}
+			onDismiss={() => navigation.popToTop()}
 			onHelpPress={() =>
 				navigation.navigate(RouteNames.AlreadySubscribed)
 			}

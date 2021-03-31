@@ -1,13 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { Dispatch } from 'react';
 import React, {
 	useCallback,
+	useContext,
 	useEffect,
 	useMemo,
 	useRef,
 	useState,
 } from 'react';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { Animated, FlatList, Platform, StyleSheet, View } from 'react-native';
+import { isTablet } from 'react-native-device-info';
 import type { IssueSummary } from 'src/common';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import {
@@ -35,7 +37,10 @@ import {
 import { useIssueResponse } from 'src/hooks/use-issue';
 import { useIssueSummary } from 'src/hooks/use-issue-summary';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
+import useOverlayAnimation from 'src/hooks/use-overlay-animation';
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings';
+import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
+import type { SettingsOverlayInterface } from 'src/hooks/use-settings-overlay';
 import { navigateToIssue } from 'src/navigation/helpers/base';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -64,6 +69,15 @@ const styles = StyleSheet.create({
 	listPlaceholder: {
 		backgroundColor: color.dimmerBackground,
 		height: '100%',
+	},
+	overlay: {
+		position: 'absolute',
+		backgroundColor: color.darkBackground,
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		zIndex: 2,
 	},
 });
 
@@ -429,6 +443,20 @@ export const HomeScreen = () => {
 	const { issueSummary, error } = useIssueSummary();
 	const { selectedEdition } = useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
+	const { settingsModalOpen, setSettingsModalOpen } = useContext(
+		SettingsOverlayContext,
+	) as SettingsOverlayInterface;
+	const { showOverlay, fadeAnim } = useOverlayAnimation(settingsModalOpen);
+	const isFocused = useIsFocused();
+
+	useEffect(() => {
+		if (isFocused) {
+			setSettingsModalOpen(false);
+		} else {
+			setSettingsModalOpen(true);
+		}
+	}, [isFocused]);
+
 	const issueHeaderData =
 		selectedEdition.editionType === 'Special'
 			? { title: '', subTitle: '' }
@@ -436,6 +464,11 @@ export const HomeScreen = () => {
 
 	return (
 		<WithAppAppearance value={'tertiary'}>
+			{isTablet() && showOverlay && (
+				<Animated.View
+					style={[styles.overlay, { opacity: fadeAnim }]}
+				></Animated.View>
+			)}
 			<ScreenFiller direction="end">
 				<>
 					<IssuePickerHeader

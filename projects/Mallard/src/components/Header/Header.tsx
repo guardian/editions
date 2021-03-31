@@ -39,6 +39,7 @@ const HeaderScreenContainer = ({
 	title: string;
 }) => {
 	const navigation = useNavigation();
+
 	return (
 		<View style={ModalStyles.wrapper}>
 			<View style={ModalStyles.container}>
@@ -48,7 +49,9 @@ const HeaderScreenContainer = ({
 							<Button
 								icon={'\uE00A'}
 								alt="Back"
-								onPress={() => navigation.goBack()}
+								onPress={() => {
+									navigation.goBack();
+								}}
 							></Button>
 						) : null
 					}
