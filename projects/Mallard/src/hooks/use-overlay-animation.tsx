@@ -11,14 +11,13 @@ const useOverlayAnimation = (shouldAnimate: boolean) => {
 			setShowOverlay(true);
 			Animated.timing(fadeAnim, {
 				toValue: 0.5,
-				duration: 400,
-				delay: 0,
+				duration: 300,
+				delay: 200,
 			}).start();
 		} else {
 			Animated.timing(fadeAnim, {
 				toValue: 0,
-				duration: 400,
-				delay: 250,
+				duration: 200,
 			}).start(() => setShowOverlay(false));
 		}
 	}, [shouldAnimate]);
