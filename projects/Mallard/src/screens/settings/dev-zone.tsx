@@ -142,13 +142,6 @@ const DevZone = () => {
 			<ButtonList>
 				<Button
 					onPress={() => {
-						navigation.navigate(RouteNames.Storybook);
-					}}
-				>
-					Storybook
-				</Button>
-				<Button
-					onPress={() => {
 						navigation.navigate(RouteNames.OnboardingConsent);
 					}}
 				>
