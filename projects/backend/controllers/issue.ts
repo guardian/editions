@@ -57,13 +57,15 @@ export const getIssuesSummary = async (
      * TODO to delete in the future
      */
     console.log('fetching issue summary')
+    const result1 = await fetch('https://editions.guardianapis.com/issues')
+    console.log('first fetch result', result1.status)
     const edition: EditionId = getEditionOrFallback(maybeEdition)
     const editionPath = buildEditionPath(maybeEdition, isPreview)
     console.log('s3 list', JSON.stringify(editionPath))
     const issueKeys = await s3List(editionPath, s3FrontsClient)
     console.log('I listed some S3 stuff')
-    const result = await fetch('https://editions.guardianapis.com/issues')
-    console.log('got random issues list ', result)
+    const result2 = await fetch('https://editions.guardianapis.com/issues')
+    console.log('got random issues list ', result2)
 
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
