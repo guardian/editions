@@ -18,7 +18,7 @@ export type OnboardingStackParamList = {
 };
 
 export type SettingsStackParamList = {
-	Settings: undefined;
+	Settings: { screen: RouteNames };
 	Endpoints: undefined;
 	Edition: undefined;
 	GdprConsent: undefined;
