@@ -21,9 +21,10 @@ const ModalStyles = StyleSheet.create({
 	container: {
 		height: isTablet() ? 600 : height,
 		width: isTablet() ? 400 : width,
-		borderRadius: 15,
+		borderRadius: isTablet() ? 15 : 0,
 		overflow: 'hidden',
 		backgroundColor: color.background,
+		flex: isTablet() ? 0 : 1,
 	},
 });
 
