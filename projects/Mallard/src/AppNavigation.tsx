@@ -88,7 +88,6 @@ const settingsInterpolater = (props: StackCardInterpolationProps) => {
 	return {
 		cardStyle: {
 			backgroundColor: 'transparent',
-
 			opacity: props.current.progress.interpolate({
 				inputRange: [0, 1, 4],
 				outputRange: [0, 1, 0],
@@ -97,6 +96,39 @@ const settingsInterpolater = (props: StackCardInterpolationProps) => {
 				// Translation for the animation of the current card
 				{
 					translateX,
+				},
+			],
+		},
+		overlayStyle: {
+			opacity: props.current.progress.interpolate({
+				inputRange: [0, 1, 2],
+				outputRange: [0, 1, 0],
+			}),
+			backgroundColor: 'transparent',
+		},
+	};
+};
+
+const modalInterpolater = (props: StackCardInterpolationProps) => {
+	const translateY = multiply(
+		props.current.progress.interpolate({
+			inputRange: [0, 1],
+			outputRange: [200, 0],
+			extrapolate: 'clamp',
+		}),
+		props.inverted,
+	);
+
+	return {
+		cardStyle: {
+			backgroundColor: 'transparent',
+			opacity: props.current.progress.interpolate({
+				inputRange: [0, 1, 4],
+				outputRange: [0, 1, 0],
+			}),
+			transform: [
+				{
+					translateY,
 				},
 			],
 		},
@@ -141,7 +173,10 @@ const MainStack = () => {
 	return (
 		<Main.Navigator
 			initialRouteName={RouteNames.Home}
-			screenOptions={{ gestureEnabled: false, headerShown: false }}
+			screenOptions={{
+				gestureEnabled: false,
+				headerShown: false,
+			}}
 		>
 			<Main.Screen
 				name={RouteNames.Issue}
@@ -272,17 +307,22 @@ const RootStack = () => {
 				headerShown: false,
 				cardStyle: { backgroundColor: 'transparent' },
 				cardOverlayEnabled: true,
+				cardStyleInterpolator: modalInterpolater,
 			}}
 		>
 			<Root.Screen
 				name={RouteNames.Home}
 				component={MainStack}
-				options={{ headerShown: false }}
+				options={{
+					headerShown: false,
+				}}
 			/>
 			<Root.Screen
 				name={RouteNames.Settings}
 				component={SettingsStack}
-				options={{ headerShown: false }}
+				options={{
+					headerShown: false,
+				}}
 			/>
 		</Root.Navigator>
 	);
