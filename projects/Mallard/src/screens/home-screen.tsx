@@ -409,7 +409,12 @@ const IssueListFetchContainer = () => {
 	}, []);
 
 	const resp = useIssueResponse(issueId);
-	if (!isShown) return <View style={styles.listPlaceholder} />;
+	if (!isShown)
+		return (
+			<FlexCenter>
+				<Spinner />
+			</FlexCenter>
+		);
 
 	return resp({
 		error: (error: {}) => (
