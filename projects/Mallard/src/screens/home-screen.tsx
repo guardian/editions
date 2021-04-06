@@ -8,7 +8,14 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { Animated, FlatList, Platform, StyleSheet, View } from 'react-native';
+import {
+	Animated,
+	Dimensions,
+	FlatList,
+	Platform,
+	StyleSheet,
+	View,
+} from 'react-native';
 import { isTablet } from 'react-native-device-info';
 import type { IssueSummary } from 'src/common';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
@@ -66,9 +73,12 @@ const styles = StyleSheet.create({
 		paddingTop: 0,
 		backgroundColor: color.dimBackground,
 	},
-	listPlaceholder: {
-		backgroundColor: color.dimmerBackground,
-		height: '100%',
+	loadingScreen: {
+		height: Dimensions.get('window').height,
+		width: Dimensions.get('window').width,
+		backgroundColor: 'white',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	overlay: {
 		position: 'absolute',
@@ -411,9 +421,9 @@ const IssueListFetchContainer = () => {
 	const resp = useIssueResponse(issueId);
 	if (!isShown)
 		return (
-			<FlexCenter>
+			<View style={styles.loadingScreen}>
 				<Spinner />
-			</FlexCenter>
+			</View>
 		);
 
 	return resp({
