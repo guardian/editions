@@ -60,14 +60,14 @@ and then back in when the view regains focus
 const fade = (opacity: any, direction: 'in' | 'out') =>
 	direction === 'in'
 		? Animated.timing(opacity, {
-				duration: 250,
-				delay: 250,
+				duration: 150,
+				delay: 150,
 				toValue: 1,
 				easing: Easing.linear,
 				useNativeDriver: true,
 		  }).start()
 		: Animated.timing(opacity, {
-				duration: 250,
+				duration: 150,
 				toValue: 0,
 				useNativeDriver: true,
 		  }).start();
