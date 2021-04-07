@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import type { ReactNode } from 'react';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Clipboard, View } from 'react-native';
+import { Alert, Clipboard, Platform, View } from 'react-native';
 import { Switch } from 'react-native-gesture-handler';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
@@ -178,7 +178,7 @@ const DevZone = () => {
 				>
 					Pop a toast
 				</Button>
-				{isInBeta() && (
+				{isInBeta() && Platform.OS === 'ios' && (
 					<Button onPress={() => DEV_getLegacyIAPReceipt()}>
 						Add legacy IAP receipt
 					</Button>
