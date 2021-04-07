@@ -4,6 +4,7 @@ import React from 'react';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { RESULTS } from 'react-native-permissions';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { requestLocationPermission } from 'src/helpers/location-permission';
 import { setIsWeatherShown } from 'src/helpers/settings/setters';
 import { getGeolocation } from 'src/helpers/weather';
@@ -70,7 +71,7 @@ const WeatherGeolocationConsentScreen = () => {
 	};
 
 	return (
-		<>
+		<HeaderScreenContainer actionLeft={false} actionRight title={''}>
 			<DefaultInfoTextWebview
 				html={html` ${Copy.weatherConsentHtml.content} `}
 			/>
@@ -90,7 +91,7 @@ const WeatherGeolocationConsentScreen = () => {
 					{Copy.weather.cancelButton}
 				</Button>
 			</View>
-		</>
+		</HeaderScreenContainer>
 	);
 };
 
