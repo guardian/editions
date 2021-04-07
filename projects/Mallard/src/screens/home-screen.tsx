@@ -61,13 +61,11 @@ import { ApiState } from './settings/api-screen';
 
 const styles = StyleSheet.create({
 	issueListFooter: {
-		padding: metrics.horizontal,
-		paddingTop: metrics.vertical * 2,
-		paddingBottom: metrics.vertical * 8,
-		paddingLeft: 90,
+		marginBottom: 160,
 	},
 	issueListFooterGrid: {
-		marginBottom: metrics.vertical,
+		paddingLeft: 90,
+		marginTop: metrics.vertical * 2,
 	},
 	issueList: {
 		paddingTop: 0,
@@ -189,7 +187,7 @@ const IssueListFooter = () => {
 	const isUsingProdDevtools = useIsUsingProdDevtools();
 	const { setIssueId } = useIssueSummary();
 	return (
-		<View style={styles.issueListFooter}>
+		<>
 			<GridRowSplit style={styles.issueListFooterGrid}>
 				<Button
 					accessibilityLabel="Manage downloads button"
@@ -224,7 +222,7 @@ const IssueListFooter = () => {
 					</Button>
 				</GridRowSplit>
 			) : null}
-		</View>
+		</>
 	);
 };
 
@@ -335,6 +333,7 @@ const IssueListView = React.memo(
 				// space on the screen. This improves performance.
 				initialNumToRender={4}
 				ItemSeparatorComponent={Separator}
+				ListFooterComponentStyle={styles.issueListFooter}
 				ListFooterComponent={footer}
 				style={styles.issueList}
 				data={issueList}
