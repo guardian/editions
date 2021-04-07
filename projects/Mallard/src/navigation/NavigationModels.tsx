@@ -32,6 +32,7 @@ export type SettingsStackParamList = {
 	AlreadySubscribed: undefined;
 	SubscriptionDetails: undefined;
 	CasSignIn: undefined;
+	SignIn: undefined;
 	WeatherGeolocationConsent: undefined;
 };
 
@@ -40,7 +41,6 @@ export type MainStackParamList = {
 	Issue: IssueNavigationProps;
 	Article: ArticleNavigationProps;
 	IssueList: undefined;
-	SignIn: undefined;
 	EditionsMenu: undefined;
 	Lightbox: LightboxNavigationProps;
 };
