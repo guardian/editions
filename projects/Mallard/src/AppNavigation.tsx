@@ -3,6 +3,7 @@ import type { StackCardInterpolationProps } from '@react-navigation/stack';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
+	TransitionPresets,
 } from '@react-navigation/stack';
 import React from 'react';
 import { Animated } from 'react-native';
@@ -220,6 +221,9 @@ const MainStack = () => {
 			<Main.Screen
 				name={RouteNames.Lightbox}
 				component={LightboxScreen}
+				options={{
+					...TransitionPresets.ModalSlideFromBottomIOS,
+				}}
 			/>
 		</Main.Navigator>
 	);
