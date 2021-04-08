@@ -12,7 +12,10 @@ import {
 } from 'react-native';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import type {
+	CompositeNavigationStackProps,
+	MainStackParamList,
+} from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
@@ -94,19 +97,23 @@ const ItemTappable = ({
 		return unsubscribe;
 	}, [navigation]);
 
+	const handlePress = () => {
+		fade(opacity, 'out');
+		article.type === 'crossword'
+			? navigation.navigate(RouteNames.Crossword, {
+					path,
+					articleNavigator,
+					prefersFullScreen: true,
+			  })
+			: navigation.navigate(RouteNames.Article, {
+					path,
+					articleNavigator,
+			  });
+	};
+
 	return (
 		<Animated.View style={[style]}>
-			<TouchableHighlight
-				onPress={() => {
-					fade(opacity, 'out');
-					navigation.navigate(RouteNames.Article, {
-						path,
-						articleNavigator,
-						prefersFullScreen: article.type === 'crossword',
-					});
-				}}
-				activeOpacity={0.95}
-			>
+			<TouchableHighlight onPress={handlePress} activeOpacity={0.95}>
 				<View
 					style={[
 						tappableStyles.root,
