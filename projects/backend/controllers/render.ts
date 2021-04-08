@@ -19,12 +19,16 @@ interface RenderedArticle {
 
 const fetchRenderedArticle = async (
     url: string,
+    proxyHeaderKey: string,
     buffer: Buffer,
 ): Promise<RenderedArticle> => {
     console.log('Making Rendering request to: ' + url)
     const response = await fetch(url, {
         method: 'post',
-        headers: { 'Content-Type': 'application/octet-stream' },
+        headers: {
+            'Content-Type': 'application/octet-stream',
+            'proxy-key': proxyHeaderKey,
+        },
         body: buffer,
     })
     console.log(
@@ -98,8 +102,13 @@ export const renderController = async (req: Request, res: Response) => {
         const stage = process.env.stage || 'dev'
         const renderingUrl =
             stage == 'dev'
-                ? 'http://localhost:8080/editions-article'
+                ? 'https://editions-ar-proxy.mobile-aws.code.dev-gutools.co.uk/editions-article'
                 : `${process.env.APPS_RENDERING_URL}`
+
+        const proxyHeaderKey =
+            stage == 'dev'
+                ? 'add it to .env'
+                : `${process.env.APPS_RENDERING_PROXY_HEADER_KEY}`
 
         // TODO modify the 'content' if required before re-encode
         // we may need to modify the pillar based on 'front'
@@ -109,6 +118,7 @@ export const renderController = async (req: Request, res: Response) => {
         const bufferData = await encodeContent(content)
         const renderedArticle = await fetchRenderedArticle(
             renderingUrl,
+            proxyHeaderKey,
             bufferData,
         )
         if (renderedArticle.success) {

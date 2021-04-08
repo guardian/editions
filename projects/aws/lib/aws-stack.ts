@@ -12,14 +12,10 @@ import { CfnEventBusPolicy } from '@aws-cdk/aws-events'
 import { GuStack } from '@guardian/cdk/lib/constructs/core/stack'
 import { App } from '@aws-cdk/core'
 import { GuStackProps } from '@guardian/cdk/lib/constructs/core/stack'
-import { GuVpc } from '@guardian/cdk/lib/constructs/ec2'
 
 export class EditionsStack extends GuStack {
     constructor(scope: App, id: string, props: GuStackProps) {
         super(scope, id, props)
-
-        const vpc = GuVpc.fromIdParameter(this, 'vpc')
-        const subnets = GuVpc.subnetsfromParameter(this)
 
         const stackParameter = new cdk.CfnParameter(this, 'stack', {
             type: 'String',
@@ -72,6 +68,15 @@ export class EditionsStack extends GuStack {
             {
                 type: 'String',
                 description: 'Apps rendering endpoint',
+            },
+        )
+
+        const appsRenderingEndpointProxyKey = new cdk.CfnParameter(
+            this,
+            'apps-rendering-endpoint-header-key',
+            {
+                type: 'String',
+                description: 'Apps rendering endpoint header key',
             },
         )
 
@@ -203,11 +208,6 @@ export class EditionsStack extends GuStack {
             previewCertificateArn.valueAsString,
         )
 
-        // const subnetSlection: SubnetSelection = {
-        //     availabilityZones: availabilityZones.valueAsList,
-        //     subnetType: SubnetType.PRIVATE,
-        // }
-
         const backendFunction = (publicationStage: 'preview' | 'published') => {
             const titleCasePublicationStage =
                 publicationStage.charAt(0).toUpperCase() +
@@ -216,8 +216,6 @@ export class EditionsStack extends GuStack {
                 this,
                 `Editions${titleCasePublicationStage}Backend`,
                 {
-                    vpc: vpc,
-                    vpcSubnets: { subnets },
                     functionName: `editions-${publicationStage}-backend-${stageParameter.valueAsString}`,
                     runtime: lambda.Runtime.NODEJS_10_X,
                     memorySize: 512,
@@ -239,6 +237,8 @@ export class EditionsStack extends GuStack {
                         capiAccessArn: capiRoleARN.valueAsString,
                         capiPreviewUrl: capiPreviewUrl.valueAsString,
                         APPS_RENDERING_URL: appsRenderingEndpoint.valueAsString,
+                        APPS_RENDERING_PROXY_HEADER_KEY:
+                            appsRenderingEndpointProxyKey.valueAsString,
                     },
                     initialPolicy: [
                         new iam.PolicyStatement({
