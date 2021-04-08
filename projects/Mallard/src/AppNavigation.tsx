@@ -1,3 +1,4 @@
+import { neutral } from '@guardian/src-foundations';
 import { NavigationContainer } from '@react-navigation/native';
 import type { StackCardInterpolationProps } from '@react-navigation/stack';
 import {
@@ -175,6 +176,7 @@ const MainStack = () => {
 		<Main.Navigator
 			initialRouteName={RouteNames.Home}
 			screenOptions={{
+				cardStyle: { backgroundColor: neutral[100] },
 				gestureEnabled: false,
 				headerShown: false,
 			}}
