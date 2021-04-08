@@ -43,6 +43,7 @@ import {
 import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen';
 import { TermsAndConditionsScreen } from './screens/settings/terms-and-conditions-screen';
 import { WeatherGeolocationConsentScreen } from './screens/weather-geolocation-consent-screen';
+import { color } from './theme/color';
 
 const { multiply } = Animated;
 
@@ -108,6 +109,7 @@ const MainStack = () => {
 		<Main.Navigator
 			initialRouteName={RouteNames.Home}
 			screenOptions={{
+				cardStyle: { backgroundColor: color.background },
 				gestureEnabled: false,
 				headerShown: false,
 			}}
@@ -116,6 +118,13 @@ const MainStack = () => {
 				name={RouteNames.Issue}
 				component={IssueScreen}
 				options={{}}
+			/>
+			<Main.Screen
+				name={RouteNames.Crossword}
+				component={ArticleWrapper}
+				options={{
+					...TransitionPresets.ModalSlideFromBottomIOS,
+				}}
 			/>
 			<Main.Screen
 				name={RouteNames.IssueList}

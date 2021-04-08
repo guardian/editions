@@ -94,19 +94,23 @@ const ItemTappable = ({
 		return unsubscribe;
 	}, [navigation]);
 
+	const handlePress = () => {
+		fade(opacity, 'out');
+		article.type === 'crossword'
+			? navigation.navigate(RouteNames.Crossword, {
+					path,
+					articleNavigator,
+					prefersFullScreen: true,
+			  })
+			: navigation.navigate(RouteNames.Article, {
+					path,
+					articleNavigator,
+			  });
+	};
+
 	return (
 		<Animated.View style={[style]}>
-			<TouchableHighlight
-				onPress={() => {
-					fade(opacity, 'out');
-					navigation.navigate(RouteNames.Article, {
-						path,
-						articleNavigator,
-						prefersFullScreen: article.type === 'crossword',
-					});
-				}}
-				activeOpacity={0.95}
-			>
+			<TouchableHighlight onPress={handlePress} activeOpacity={0.95}>
 				<View
 					style={[
 						tappableStyles.root,

@@ -43,6 +43,7 @@ export type MainStackParamList = {
 	IssueList: undefined;
 	EditionsMenu: undefined;
 	Lightbox: LightboxNavigationProps;
+	Crossword: ArticleNavigationProps;
 };
 
 // This is used on pages which include both main and root stacks
@@ -77,4 +78,5 @@ export enum RouteNames {
 	OnboardingConsent = 'OnboardingConsent',
 	PrivacyPolicyInline = 'PrivacyPolicyInline',
 	OnboardingConsentInline = 'OnboardingConsentInline',
+	Crossword = 'Crossword',
 }
