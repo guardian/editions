@@ -3,6 +3,7 @@ import type { StackCardInterpolationProps } from '@react-navigation/stack';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
+	TransitionPresets,
 } from '@react-navigation/stack';
 import React from 'react';
 import { Animated } from 'react-native';
@@ -182,6 +183,13 @@ const MainStack = () => {
 				name={RouteNames.Issue}
 				component={IssueScreen}
 				options={{}}
+			/>
+			<Main.Screen
+				name={RouteNames.Crossword}
+				component={ArticleWrapper}
+				options={{
+					...TransitionPresets.ModalSlideFromBottomIOS,
+				}}
 			/>
 			<Main.Screen
 				name={RouteNames.IssueList}
