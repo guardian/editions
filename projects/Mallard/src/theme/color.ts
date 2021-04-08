@@ -24,42 +24,42 @@ put that in the <Spinner /> component.
 
 export const color = {
 	/*
-    Backgrounds
-    */
-	background: background.primary,
+	Backgrounds
+	*/
+	background: neutral[100],
 	text: text.primary,
 	dimBackground: neutral[93],
 	dimmerBackground: neutral[86],
 	dimText: neutral[20],
 	darkBackground: neutral[20],
 	photoBackground: neutral[7],
-	textOverPhotoBackground: background.primary,
-	textOverDarkBackground: background.primary,
+	textOverPhotoBackground: neutral[100],
+	textOverDarkBackground: neutral[100],
 	artboardBackground: neutral[7],
 	skeleton: neutral[60],
 
 	/*
-    Brand (our blue)
-    */
+	Brand (our blue)
+	*/
 	textOverPrimary: brandText.primary,
 	primary: brandBackground.primary,
 	primaryDarker: brand[300],
 
 	/*
-    Border colors
-    */
+	Border colors
+	*/
 	line: border.primary,
 	dimLine: border.secondary,
 	lineOverPrimary: brandBorder.primary,
 
 	/*
-    Error messages and icons.
-    */
+	Error messages and icons.
+	*/
 	error: text.error,
 
 	/*
-    Onboarding & button UI.
-    */
+	Onboarding & button UI.
+	*/
 	ui: {
 		tomato: news[500],
 		apricot: opinion[500],
@@ -69,7 +69,7 @@ export const color = {
 	},
 
 	/*
-    The palette is available to use, but prefer using the name.
-    */
+	The palette is available to use, but prefer using the name.
+	*/
 	palette,
 };
