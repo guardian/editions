@@ -3,6 +3,7 @@ import type { StackCardInterpolationProps } from '@react-navigation/stack';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
+	TransitionPresets,
 } from '@react-navigation/stack';
 import React from 'react';
 import { Animated } from 'react-native';
@@ -71,73 +72,6 @@ const cardStyleInterpolator = (props: StackCardInterpolationProps) => {
 				outputRange: [0, 0.5],
 				extrapolate: 'clamp',
 			}),
-		},
-	};
-};
-
-const settingsInterpolater = (props: StackCardInterpolationProps) => {
-	const translateX = multiply(
-		props.current.progress.interpolate({
-			inputRange: [0, 1],
-			outputRange: [200, 0],
-			extrapolate: 'clamp',
-		}),
-		props.inverted,
-	);
-
-	return {
-		cardStyle: {
-			backgroundColor: 'transparent',
-			opacity: props.current.progress.interpolate({
-				inputRange: [0, 1, 4],
-				outputRange: [0, 1, 0],
-			}),
-			transform: [
-				// Translation for the animation of the current card
-				{
-					translateX,
-				},
-			],
-		},
-		overlayStyle: {
-			opacity: props.current.progress.interpolate({
-				inputRange: [0, 1, 2],
-				outputRange: [0, 1, 0],
-			}),
-			backgroundColor: 'transparent',
-		},
-	};
-};
-
-const modalInterpolater = (props: StackCardInterpolationProps) => {
-	const translateY = multiply(
-		props.current.progress.interpolate({
-			inputRange: [0, 1],
-			outputRange: [200, 0],
-			extrapolate: 'clamp',
-		}),
-		props.inverted,
-	);
-
-	return {
-		cardStyle: {
-			backgroundColor: 'transparent',
-			opacity: props.current.progress.interpolate({
-				inputRange: [0, 1, 4],
-				outputRange: [0, 1, 0],
-			}),
-			transform: [
-				{
-					translateY,
-				},
-			],
-		},
-		overlayStyle: {
-			opacity: props.current.progress.interpolate({
-				inputRange: [0, 1, 2],
-				outputRange: [0, 1, 0],
-			}),
-			backgroundColor: 'transparent',
 		},
 	};
 };
@@ -213,10 +147,7 @@ const MainStack = () => {
 					gestureDirection: 'vertical',
 				}}
 			/>
-			<Main.Screen
-				name={RouteNames.SignIn}
-				component={AuthSwitcherScreen}
-			/>
+
 			<Main.Screen
 				name={RouteNames.Lightbox}
 				component={LightboxScreen}
@@ -229,13 +160,12 @@ const SettingsStack = () => {
 	return (
 		<Settings.Navigator
 			initialRouteName={RouteNames.Settings}
-			mode="modal"
 			screenOptions={{
 				gestureEnabled: false,
 				headerShown: false,
 				cardStyle: { backgroundColor: 'transparent' },
 				cardOverlayEnabled: true,
-				cardStyleInterpolator: settingsInterpolater,
+				animationEnabled: false,
 			}}
 		>
 			<Settings.Screen
@@ -293,6 +223,10 @@ const SettingsStack = () => {
 				name={RouteNames.WeatherGeolocationConsent}
 				component={WeatherGeolocationConsentScreen}
 			/>
+			<Settings.Screen
+				name={RouteNames.SignIn}
+				component={AuthSwitcherScreen}
+			/>
 			<Settings.Screen name={RouteNames.Help} component={HelpScreen} />
 			<Settings.Screen name={RouteNames.FAQ} component={FAQScreen} />
 		</Settings.Navigator>
@@ -307,7 +241,7 @@ const RootStack = () => {
 				headerShown: false,
 				cardStyle: { backgroundColor: 'transparent' },
 				cardOverlayEnabled: true,
-				cardStyleInterpolator: modalInterpolater,
+				...TransitionPresets.ModalSlideFromBottomIOS,
 			}}
 		>
 			<Root.Screen
