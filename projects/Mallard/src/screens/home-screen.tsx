@@ -203,7 +203,7 @@ const IssueListFooter = () => {
 				</Button>
 			</GridRowSplit>
 			{isUsingProdDevtools ? (
-				<GridRowSplit>
+				<GridRowSplit style={styles.issueListFooterGrid}>
 					<Button
 						accessibilityLabel="Go to the latest edition button"
 						accessibilityHint="Navigates to the latest edition"
