@@ -160,6 +160,9 @@ const MainStack = () => {
 			<Main.Screen
 				name={RouteNames.Lightbox}
 				component={LightboxScreen}
+				options={{
+					...TransitionPresets.ModalSlideFromBottomIOS,
+				}}
 			/>
 		</Main.Navigator>
 	);
