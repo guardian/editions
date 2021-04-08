@@ -1,6 +1,5 @@
 import { palette } from '@guardian/pasteup/palette';
 import {
-	background,
 	border,
 	brand,
 	brandBackground,
