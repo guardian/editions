@@ -99,16 +99,11 @@ export const renderController = async (req: Request, res: Response) => {
             return
         }
 
-        const stage = process.env.stage || 'dev'
-        const renderingUrl =
-            stage == 'dev'
-                ? 'https://editions-ar-proxy.mobile-aws.code.dev-gutools.co.uk/editions-article'
-                : `${process.env.APPS_RENDERING_URL}`
-
-        const proxyHeaderKey =
-            stage == 'dev'
-                ? 'add it to .env'
-                : `${process.env.APPS_RENDERING_PROXY_HEADER_KEY}`
+        const appsRenderingProxyUrl =
+            process.env.APPS_RENDERING_URL || 'apps rendering url missing'
+        const appsRenderingProxyHeader =
+            process.env.APPS_RENDERING_PROXY_HEADER_KEY ||
+            'proxy header missing'
 
         // TODO modify the 'content' if required before re-encode
         // we may need to modify the pillar based on 'front'
@@ -117,15 +112,15 @@ export const renderController = async (req: Request, res: Response) => {
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(content)
         const renderedArticle = await fetchRenderedArticle(
-            renderingUrl,
-            proxyHeaderKey,
+            appsRenderingProxyUrl,
+            appsRenderingProxyHeader,
             bufferData,
         )
         if (renderedArticle.success) {
             res.setHeader('Content-Type', 'text/html')
             res.send(renderedArticle.body)
         } else {
-            const message = `Failed to fetch story from ${renderingUrl}. Response: ${renderedArticle.body}`
+            const message = `Failed to fetch story from ${appsRenderingProxyUrl}. Response: ${renderedArticle.body}`
             sendError(message, renderedArticle.status, res)
         }
     } catch (error) {
