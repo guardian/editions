@@ -1,4 +1,3 @@
-import { Content } from '@guardian/content-api-models/v1/content'
 import { SearchResponse } from '@guardian/content-api-models/v1/searchResponse'
 import { Request, Response } from 'express'
 import fetch from 'node-fetch'
@@ -78,7 +77,7 @@ const fetchCapiContent = async (
         fetchSingleCapiContent(internalPageCode, 'preview'),
     ]
 
-    for (let capiFetch of allCapiFetch) {
+    for (const capiFetch of allCapiFetch) {
         try {
             const response = await capiFetch
             if (response.results.length > 0) {
