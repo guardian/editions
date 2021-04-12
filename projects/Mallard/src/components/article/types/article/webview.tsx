@@ -8,7 +8,8 @@ import type {
 	IssueOrigin,
 	PictureArticle,
 } from 'src/common';
-import { defaultSettings } from 'src/helpers/settings/defaults';
+import { getSetting } from 'src/helpers/settings';
+import { htmlEndpoint } from 'src/helpers/settings/defaults';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
@@ -29,15 +30,20 @@ const WebviewWithArticle = ({
 	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
+	const [s3HtmlUrlPrefix, setS3HtmlUrlPrefix] = useState('')
 
 	useEffect(() => {
 		setIsReady(true);
+		getSetting('apiUrl').then(async (url) => {
+			const s3HtmlUrl = htmlEndpoint(url, path.publishedIssueId);
+			setS3HtmlUrlPrefix(s3HtmlUrl);
+		});
 	}, [isReady]);
 
-	// Online rendering
-	let uri = `${defaultSettings.appsRenderingService}${article.internalPageCode}?editions`;
+	// Online: Url to load direct from s3 (when bundle is not downloaded)
+	let uri = `${s3HtmlUrlPrefix}/${article.internalPageCode}.html`;
 
-	// Offline rendering
+	// Offline: load from file system when bundle is downloadedrendering
 	if (origin === 'filesystem') {
 		const htmlUri = `${FSPaths.issueRoot(localIssueId)}/html/${
 			article.internalPageCode

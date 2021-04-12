@@ -161,6 +161,11 @@ export const defaultSettings: Settings = {
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
 	`${apiUrl}editions`;
 
+export const htmlEndpoint = (
+	apiUrl: Settings['apiUrl'],
+	publishedIssueId: string,
+): string => `${apiUrl}${publishedIssueId}/html`;
+
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
 	const backend = backends.find((backend) => backend.value === apiUrl);
 	return backend?.preview ?? false;
