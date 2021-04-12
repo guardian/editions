@@ -7,6 +7,7 @@ import { publishArchiverStepFunction } from './publish-step-function'
 import iam = require('@aws-cdk/aws-iam')
 import { LambdaFunction } from '@aws-cdk/aws-events-targets'
 import { Rule } from '@aws-cdk/aws-events'
+import { GuStack } from '@guardian/cdk/lib/constructs/core/stack'
 
 export const s3EventListenerFunction = (
     scope: Construct,
@@ -48,7 +49,7 @@ export const s3EventListenerFunction = (
 }
 
 export const constructTriggeredStepFunction = (
-    scope: Construct,
+    scope: GuStack,
     stack: string,
     stage: string,
     deployBucket: IBucket,
@@ -63,6 +64,21 @@ export const constructTriggeredStepFunction = (
     publishedBucket: IBucket,
     frontsAccessArn: string,
 ) => {
+    scope.setStageDependentValue({
+        variableName: 'stateMachineNameProof',
+        stageValues: {
+            CODE: 'Editions-Archiver-Proof-State-Machine-code',
+            PROD: 'Editions-Archiver-Proof-State-Machine-prod',
+        },
+    })
+
+    scope.setStageDependentValue({
+        variableName: 'stateMachineNamePublished',
+        stageValues: {
+            CODE: 'Editions-Archiver-Published-State-Machine-code',
+            PROD: 'Editions-Archiver-Published-State-Machine-prod',
+        },
+    })
     const proofArchiverStateMachine = proofArchiverStepFunction(scope, {
         stack: stack,
         stage: stage,
