@@ -61,6 +61,8 @@ platform :ios do
       path: "ios/Mallard.xcodeproj",
     )
 
+    get_provisioning_profile(app_identifier: "uk.co.guardian.gce", readonly: true, api_key: appstore_api_key)
+
     currentNumber = latest_testflight_build_number(api_key: appstore_api_key)
 
     increment_build_number(
