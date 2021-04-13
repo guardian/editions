@@ -373,7 +373,7 @@ export class EditionsStack extends GuStack {
         new CfnEventBusPolicy(this, 'cmsFronts-access', {
             action: 'events:PutEvents',
             principal: cmsFrontsAccountIdParameter.valueAsString,
-            statementId: 'cmsFronts-putevents',
+            statementId: `cmsFronts-putevents-${stageParameter.valueAsString}`,
         })
     }
 }
