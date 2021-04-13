@@ -64,21 +64,6 @@ export const constructTriggeredStepFunction = (
     publishedBucket: IBucket,
     frontsAccessArn: string,
 ) => {
-    scope.setStageDependentValue({
-        variableName: 'stateMachineNameProof',
-        stageValues: {
-            CODE: 'Editions-Archiver-Proof-State-Machine-code',
-            PROD: 'Editions-Archiver-Proof-State-Machine-prod',
-        },
-    })
-
-    scope.setStageDependentValue({
-        variableName: 'stateMachineNamePublished',
-        stageValues: {
-            CODE: 'Editions-Archiver-Published-State-Machine-code',
-            PROD: 'Editions-Archiver-Published-State-Machine-prod',
-        },
-    })
     const proofArchiverStateMachine = proofArchiverStepFunction(scope, {
         stack: stack,
         stage: stage,

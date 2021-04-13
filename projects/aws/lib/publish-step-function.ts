@@ -75,9 +75,6 @@ export const publishArchiverStepFunction = (
         scope,
         'Archiver Publish State Machine',
         {
-            stateMachineName: scope.getStageDependentValue(
-                'stateMachineNamePublished',
-            ),
             definition: copier.task,
             timeout: Duration.minutes(10),
         },
