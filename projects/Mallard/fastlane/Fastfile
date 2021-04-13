@@ -54,6 +54,7 @@ platform :ios do
       git_url: "https://github.com/guardian/code-signing.git",
       keychain_name: "CI",
       keychain_password: ENV["FASTLANE_PASSWORD"]
+      skip_provisioning_profiles: true
     )
 
     update_code_signing_settings(
