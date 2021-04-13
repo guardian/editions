@@ -20,7 +20,6 @@ import type {
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import { parsePing } from 'src/helpers/webview';
 import { useArticle } from 'src/hooks/use-article';
-import { useIsAppsRendering } from 'src/hooks/use-config-provider';
 import { selectImagePath } from 'src/hooks/use-image-paths';
 import { useIssueSummary } from 'src/hooks/use-issue-summary';
 import { useApiUrl } from 'src/hooks/use-settings';
@@ -254,7 +253,6 @@ const Article = ({
 		article.key,
 		shareUrlFetchEnabled,
 	]);
-	const { isAppsRendering } = useIsAppsRendering();
 	const handleShare = (shareUrl: string) => {
 		if (Platform.OS === 'ios') {
 			Share.share({
@@ -278,19 +276,7 @@ const Article = ({
 	};
 
 	const handleLightbox = (parsed: LightboxMessage) => {
-		let index = parsed.index;
-
-		//following if statement can be removed once ER is in production
-		if (
-			!isAppsRendering &&
-			article.type !== 'gallery' &&
-			article.image &&
-			!parsed.isMainImage &&
-			lightboxImages &&
-			lightboxImages.length > 1
-		) {
-			index++;
-		}
+		const index = parsed.index;
 		navigateToLightbox({
 			navigation,
 			navigationProps: {
@@ -337,7 +323,7 @@ const Article = ({
 				mediaPlaybackRequiresUserAction={false}
 				style={[
 					styles.webview,
-					isAppsRendering ? { marginTop: 52 } : null,
+					{ marginTop: 52 },
 				]}
 				_ref={(r) => {
 					ref.current = r;
