@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
 	webview: {
 		flex: 1,
 		overflow: 'hidden',
+		marginTop: 52,
 		/*
         The below line fixes crashes on Android
         https://github.com/react-native-community/react-native-webview/issues/429
@@ -321,10 +322,7 @@ const Article = ({
 				scrollEnabled={true}
 				allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
 				mediaPlaybackRequiresUserAction={false}
-				style={[
-					styles.webview,
-					{ marginTop: 52 },
-				]}
+				style={[styles.webview]}
 				_ref={(r) => {
 					ref.current = r;
 				}}

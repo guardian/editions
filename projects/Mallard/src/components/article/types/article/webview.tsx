@@ -30,7 +30,7 @@ const WebviewWithArticle = ({
 	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
-	const [s3HtmlUrlPrefix, setS3HtmlUrlPrefix] = useState('')
+	const [s3HtmlUrlPrefix, setS3HtmlUrlPrefix] = useState('');
 
 	useEffect(() => {
 		setIsReady(true);
