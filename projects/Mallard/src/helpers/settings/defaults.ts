@@ -37,6 +37,16 @@ export const backends = [
 		preview: true,
 	},
 	{
+		title: '(MOBILE) CODE published',
+		value: 'https://editions-published-code.s3-eu-west-1.amazonaws.com/',
+		preview: false,
+	},
+	{
+		title: '(MOBILE) PROD published',
+		value: 'https://editions-published-prod.s3-eu-west-1.amazonaws.com/',
+		preview: false,
+	},
+	{
 		title: 'DEV',
 		value: 'http://localhost:3131/',
 		preview: true,
