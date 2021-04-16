@@ -47,6 +47,11 @@ export const backends = [
 		preview: true,
 	},
 	{
+		title: 'PROD PUBLISHED MOBILE',
+		value: 'https://editions-published-prod.s3-eu-west-1.amazonaws.com/',
+		preview: false,
+	},
+	{
 		title: 'CODE PROOFED MOBILE',
 		value: 'https://editions-proofed-code.s3-eu-west-1.amazonaws.com/',
 		preview: true,
