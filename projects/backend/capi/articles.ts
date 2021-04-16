@@ -334,8 +334,7 @@ export const getArticles = async (
         const lastArray = Object.entries(last)
         return fromPairs(firstArray.concat(lastArray))
     }
-    console.log('Making CAPI query', endpoint)
-    console.log('Debug link:', endpoint.replace(/thrift/g, 'json'))
+    console.log('Debug link (CAPI query):', endpoint.replace(/thrift/g, 'json'))
     const resp = await attempt(fetch(endpoint, { headers }))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
     if (resp.status != 200) {

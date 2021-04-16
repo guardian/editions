@@ -62,6 +62,12 @@ const fetchSingleCapiContent = async (
 
         const buffer = await resp.buffer()
         const data = await capiSearchDecoder(buffer)
+        console.log(
+            'Fetched data from CAPI: ' +
+                capi +
+                ' internalCode: ' +
+                internalPageCode,
+        )
         return data
     } catch (error) {
         return Promise.reject(error)
@@ -71,20 +77,18 @@ const fetchSingleCapiContent = async (
 const fetchCapiContent = async (
     internalPageCode: number,
 ): Promise<SearchResponse> => {
-    const allCapiFetch = [
-        fetchSingleCapiContent(internalPageCode, 'live'),
-        fetchSingleCapiContent(internalPageCode, 'printsent'),
-        fetchSingleCapiContent(internalPageCode, 'preview'),
-    ]
-
-    for (const capiFetch of allCapiFetch) {
+    const capiEnviroments = ['live', 'printsent', 'preview']
+    for (const capi of capiEnviroments) {
         try {
-            const response = await capiFetch
+            const response = await fetchSingleCapiContent(
+                internalPageCode,
+                capi as CAPIEndpoint,
+            )
             if (response.results.length > 0) {
                 return response
             }
         } catch (e) {
-            console.log('No result found for a capi query')
+            console.log(`No result found for a capi ${capi} query`)
         }
     }
 
