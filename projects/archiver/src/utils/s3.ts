@@ -256,7 +256,9 @@ export const recursiveCopy = async (
     outputBucket: Bucket,
 ): Promise<{}[]> => {
     console.log(
-        `Recursively copying ${baseKey} from ${inputBucket} to ${outputBucket}`,
+        `Recursively copying ${baseKey} from ${JSON.stringify(
+            inputBucket,
+        )} to ${JSON.stringify(outputBucket)}`,
     )
     if (baseKey == undefined) {
         console.log('Recursive copy request ignored due to undefined base key')
