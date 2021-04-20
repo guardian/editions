@@ -34,7 +34,6 @@ const Header = () => {
 	return (
 		<Animated.View style={[styles.headerContainer]}>
 			<TouchableWithoutFeedback
-				// onPress={onDismiss}
 				onPress={navigation.goBack}
 				accessibilityHint="Go back"
 			>
