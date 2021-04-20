@@ -54,7 +54,7 @@ const WebviewWithArticle = ({
 	// set url only when component is ready
 	// https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
 	const finalUrl = isReady ? uri : '';
-	console.log('URL: ' + finalUrl);
+	console.log(`URL (${origin}): ${finalUrl}`);
 
 	return (
 		<WebView
