@@ -16,8 +16,6 @@ export const uploadRenderedArticle = async (path: string, html: string) => {
  * @param front
  */
 export const getSSRArticlesFromFront = async (front: Front) => {
-    console.log('Getting images for front ' + JSON.stringify(front))
-
     const allCards = unnest(front.collections.map(_ => _.cards))
     const content = unnest(allCards.map(_ => Object.values(_.articles)))
     const renderedContent = await Promise.all(
