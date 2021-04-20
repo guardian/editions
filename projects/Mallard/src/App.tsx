@@ -131,13 +131,6 @@ export default class App extends React.Component {
 									backgroundColor="#041f4a"
 								/>
 								<View style={styles.appContainer}>
-									{/* <RootNavigator
-                                        {...rootNavigationProps}
-                                        enableURLHandling={__DEV__}
-                                        onNavigationStateChange={
-                                            onNavigationStateChange
-                                        }
-                                    /> */}
 									<AppNavigation />
 									<NetInfoAutoToast />
 								</View>

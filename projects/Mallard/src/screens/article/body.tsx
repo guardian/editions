@@ -55,7 +55,6 @@ const ArticleScreenBody = React.memo<
 		const { isAppsRendering } = useIsAppsRendering();
 		const { showToast } = useToast();
 		// First time it's mounted, we make sure to report we're at the top.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		useEffect(() => handleIsAtTopChange(true), []);
 		return (
 			<View style={[styles.container, { width }]}>
