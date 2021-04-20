@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-client';
+import type ApolloClient from 'apollo-client';
 import { DownloadBlockedStatus } from 'src/hooks/use-net-info';
 import { downloadAndUnzipIssue } from '../download-and-unzip';
 

@@ -1,25 +1,30 @@
-import React from 'react';
-import type { NavigationInjectedProps } from 'react-navigation';
-import { withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
 import type { SpecialEditionHeaderStyles } from 'src/common';
 import { CloseButton } from 'src/components/Button/CloseButton';
 import { SettingsButton } from 'src/components/Button/SettingsButton';
 import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
-import { navigateToSettings } from 'src/navigation/helpers/base';
+import type { SettingsOverlayInterface } from 'src/hooks/use-settings-overlay';
+import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
+import { RouteNames } from 'src/navigation/NavigationModels';
 
-const IssuePickerHeader = withNavigation(
-	({
-		headerStyles,
-		navigation,
-		subTitle,
-		title,
-	}: {
-		headerStyles?: SpecialEditionHeaderStyles;
-		subTitle?: string;
-		title: string;
-	} & NavigationInjectedProps) => (
+const IssuePickerHeader = ({
+	headerStyles,
+	subTitle,
+	title,
+}: {
+	headerStyles?: SpecialEditionHeaderStyles;
+	subTitle?: string;
+	title: string;
+}) => {
+	const navigation = useNavigation();
+	const { setSettingsModalOpen } = useContext(
+		SettingsOverlayContext,
+	) as SettingsOverlayInterface;
+
+	return (
 		<Header
 			alignment={'drawer'}
 			onPress={() => navigation.goBack()}
@@ -33,7 +38,8 @@ const IssuePickerHeader = withNavigation(
 			leftAction={
 				<SettingsButton
 					onPress={() => {
-						navigateToSettings(navigation);
+						setSettingsModalOpen(true);
+						navigation.navigate(RouteNames.Settings);
 					}}
 				/>
 			}
@@ -48,7 +54,7 @@ const IssuePickerHeader = withNavigation(
 				/>
 			) : null}
 		</Header>
-	),
-);
+	);
+};
 
 export { IssuePickerHeader };

@@ -4,6 +4,7 @@ import { AccessContext } from 'src/authentication/AccessContext';
 import type { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer';
 import { isValid } from 'src/authentication/lib/Attempt';
 import type { ReceiptIOS } from 'src/authentication/services/iap';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
@@ -103,35 +104,40 @@ const SubscriptionDetailsScreen = () => {
 	);
 
 	return (
-		<WithAppAppearance value={'settings'}>
-			<ScrollContainer>
-				{(() => {
-					const attemptType = isValid(attempt) ? attempt.data : null;
-					if (!attemptType) return <LoggedOutDetails />;
-					switch (attemptType) {
-						case 'cas':
-							return casData && <CASDetails casData={casData} />;
-						case 'iap':
-							return iapData && <IAPDetails iapData={iapData} />;
-						case 'identity':
-							return (
-								identityData && (
-									<IdentityDetails
-										identityData={identityData}
-									/>
-								)
-							);
-					}
-				})()}
-			</ScrollContainer>
-		</WithAppAppearance>
+		<HeaderScreenContainer
+			title={Copy.subscriptionDetails.title}
+			actionLeft={true}
+		>
+			<WithAppAppearance value={'settings'}>
+				<ScrollContainer>
+					{(() => {
+						const attemptType = isValid(attempt)
+							? attempt.data
+							: null;
+						if (!attemptType) return <LoggedOutDetails />;
+						switch (attemptType) {
+							case 'cas':
+								return (
+									casData && <CASDetails casData={casData} />
+								);
+							case 'iap':
+								return (
+									iapData && <IAPDetails iapData={iapData} />
+								);
+							case 'identity':
+								return (
+									identityData && (
+										<IdentityDetails
+											identityData={identityData}
+										/>
+									)
+								);
+						}
+					})()}
+				</ScrollContainer>
+			</WithAppAppearance>
+		</HeaderScreenContainer>
 	);
-};
-
-SubscriptionDetailsScreen.navigationOptions = {
-	title: (
-		<Text style={{ fontSize: 20 }}>{Copy.subscriptionDetails.title}</Text>
-	),
 };
 
 export { SubscriptionDetailsScreen };

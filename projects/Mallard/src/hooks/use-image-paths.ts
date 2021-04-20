@@ -76,9 +76,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
 		apiUrl,
 		image,
 		use,
-
 		issueId ? issueId.publishedIssueId : undefined, // Why isn't this just issueId?
-
 		issueId ? issueId.localIssueId : undefined,
 	]);
 	if (image === undefined) return undefined;

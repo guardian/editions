@@ -1,6 +1,6 @@
-import { ErrorServiceImpl } from '../errors';
 import gql from 'graphql-tag';
 import Observable from 'zen-observable';
+import type { ErrorServiceImpl } from '../errors';
 
 jest.mock('src/helpers/release-stream', () => ({
 	isInBeta: () => false,

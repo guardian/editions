@@ -1,5 +1,5 @@
-import { findIssueSummaryByKey } from '../../helpers/files';
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary';
+import { findIssueSummaryByKey } from '../../helpers/files';
 
 describe('helpers/files', () => {
 	describe('findIssueSummaryByKey', () => {

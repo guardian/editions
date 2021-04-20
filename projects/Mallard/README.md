@@ -96,7 +96,7 @@ To test the iPad version, run `yarn run-ipad`. To test responsive layouts, you c
 
 ### Storybook
 
-Within the dev menu, there is a link to Storybook. [Storybook](https://storybook.js.org/) allows us to view components in isolation and helps to define a component library whilst looking at all potential edge cases. A useful tool for both FE developers and the UX/UI team. Storybook will automatically open in a browser when running `run-ios`, `run-android` or `run-ipad`. This browser window allows the user to the control what is happening in the Storybook window of the app.
+[Storybook](https://storybook.js.org/) allows us to view components in isolation and helps to define a component library whilst looking at all potential edge cases. A useful tool for both FE developers and the UX/UI team. Storybook will automatically open in a browser when running `run-ios`, `run-android` or `run-ipad`. This browser window allows the user to the control what is happening in the Storybook window of the app.
 
 ### Upgrading React Native
 

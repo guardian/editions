@@ -1,5 +1,5 @@
 import MockDate from 'mockdate';
-import { todayAsFolder, lastNDays, todayAsKey } from '../issues';
+import { lastNDays, todayAsFolder, todayAsKey } from '../issues';
 
 describe('helpers/issues', () => {
 	describe('todayAsFolder', () => {

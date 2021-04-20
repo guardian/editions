@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
+import { CREDITS_HEADER_TITLE } from 'src/helpers/words';
 import { DefaultInfoTextWebview } from './default-info-text-webview';
 
 const CreditsScreen = () => {
@@ -8,11 +10,11 @@ const CreditsScreen = () => {
 		setHtmlData(require('src/constants/settings/credits.json').bodyHtml);
 	}, []);
 
-	return <DefaultInfoTextWebview html={htmlData} />;
-};
-
-CreditsScreen.navigationOptions = {
-	title: 'Credits',
+	return (
+		<HeaderScreenContainer title={CREDITS_HEADER_TITLE} actionLeft={true}>
+			<DefaultInfoTextWebview html={htmlData} />
+		</HeaderScreenContainer>
+	);
 };
 
 export { CreditsScreen };

@@ -1,5 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactNode } from 'react';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import {
 	Animated,
@@ -8,15 +10,10 @@ import {
 	TouchableHighlight,
 	View,
 } from 'react-native';
-import type { AnimatedValue, NavigationInjectedProps } from 'react-navigation';
-import { NavigationEvents, withNavigation } from 'react-navigation';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
 import { ariaHidden } from 'src/helpers/a11y';
-import { navigateToArticle } from 'src/navigation/helpers/base';
-import {
-	setScreenPositionFromView,
-	setScreenPositionOfItem,
-} from 'src/navigation/navigators/article/positions';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
 import { color } from 'src/theme/color';
@@ -58,104 +55,88 @@ To help smooth out the transition
 we fade the card contents out on tap
 and then back in when the view regains focus
 */
-const fade = (opacity: AnimatedValue, direction: 'in' | 'out') =>
+
+//https://stackoverflow.com/questions/51521809/typescript-definitions-for-animated-views-style-prop opacity: any can chhange at rn 0.61.8
+const fade = (opacity: any, direction: 'in' | 'out') =>
 	direction === 'in'
 		? Animated.timing(opacity, {
-				duration: 250,
-				delay: 250,
+				duration: 150,
+				delay: 150,
 				toValue: 1,
 				easing: Easing.linear,
 				useNativeDriver: true,
 		  }).start()
 		: Animated.timing(opacity, {
-				duration: 250,
+				duration: 150,
 				toValue: 0,
 				useNativeDriver: true,
 		  }).start();
 
-const ItemTappable = withNavigation(
-	({
-		children,
-		articleNavigator,
-		style,
-		article,
-		path,
-		navigation,
-		hasPadding = true,
-	}: {
-		children: ReactNode;
-		hasPadding?: boolean;
-	} & TappablePropTypes &
-		NavigationInjectedProps) => {
-		const tappableRef = useRef<View>();
-		const [opacity] = useState(() => new Animated.Value(1));
-		return (
-			<Animated.View
-				style={[style]}
-				ref={(view: any) => {
-					if (view) tappableRef.current = view._component as View;
-				}}
-				onLayout={(ev: any) => {
-					setScreenPositionOfItem(article.key, ev.nativeEvent.layout);
-					tappableRef.current &&
-						setScreenPositionFromView(
-							article.key,
-							tappableRef.current,
-						);
-				}}
-				onTouchStart={() => {
-					tappableRef.current &&
-						setScreenPositionFromView(
-							article.key,
-							tappableRef.current,
-						);
-				}}
-			>
-				<NavigationEvents
-					onWillFocus={() => {
-						fade(opacity, 'in');
-					}}
-				/>
+const ItemTappable = ({
+	children,
+	articleNavigator,
+	style,
+	article,
+	path,
+	hasPadding = true,
+}: {
+	children: ReactNode;
+	hasPadding?: boolean;
+} & TappablePropTypes) => {
+	const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+	const [opacity] = useState(() => new Animated.Value(1));
 
-				<TouchableHighlight
-					onPress={() => {
-						fade(opacity, 'out');
-						navigateToArticle(navigation, {
-							path,
-							articleNavigator,
-							prefersFullScreen: article.type === 'crossword',
-						});
-					}}
-					activeOpacity={0.95}
-				>
-					<View
-						style={[
-							tappableStyles.root,
-							hasPadding && tappableStyles.padding,
-							useCardBackgroundStyle(),
-						]}
-					>
-						{children}
-					</View>
-				</TouchableHighlight>
+	React.useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', () => {
+			fade(opacity, 'in');
+		});
 
-				<Animated.View
-					{...ariaHidden}
-					pointerEvents="none"
+		return unsubscribe;
+	}, [navigation]);
+
+	const handlePress = () => {
+		fade(opacity, 'out');
+		article.type === 'crossword'
+			? navigation.navigate(RouteNames.Crossword, {
+					path,
+					articleNavigator,
+					prefersFullScreen: true,
+			  })
+			: navigation.navigate(RouteNames.Article, {
+					path,
+					articleNavigator,
+			  });
+	};
+
+	return (
+		<Animated.View style={[style]}>
+			<TouchableHighlight onPress={handlePress} activeOpacity={0.95}>
+				<View
 					style={[
-						StyleSheet.absoluteFill,
-						{
-							backgroundColor: color.dimBackground,
-							opacity: opacity.interpolate({
-								inputRange: [0, 1],
-								outputRange: [1, 0],
-							}),
-						},
+						tappableStyles.root,
+						hasPadding && tappableStyles.padding,
+						useCardBackgroundStyle(),
 					]}
-				></Animated.View>
-			</Animated.View>
-		);
-	},
-);
+				>
+					{children}
+				</View>
+			</TouchableHighlight>
+			<Animated.View
+				{...ariaHidden}
+				pointerEvents="none"
+				style={[
+					StyleSheet.absoluteFill,
+					{
+						backgroundColor: color.dimBackground,
+						opacity: opacity.interpolate({
+							inputRange: [0, 1],
+							outputRange: [1, 0],
+						}),
+					},
+				]}
+			></Animated.View>
+		</Animated.View>
+	);
+};
 
 export { ItemTappable };

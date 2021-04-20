@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { safeInterpolation } from 'src/helpers/math';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
-import { useNavigatorPosition } from 'src/navigation/helpers/transition';
 
 /*
 This is part of the transition from articles to fronts
@@ -27,7 +26,7 @@ const faderStyles = StyleSheet.create({
 });
 
 const Fader = ({ children }: PropTypes) => {
-	const position = useNavigatorPosition();
+	const position = new Animated.Value(1);
 	const { height } = Dimensions.get('window');
 	const largeDeviceMemeory = useLargeDeviceMemory();
 

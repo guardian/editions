@@ -1,9 +1,9 @@
-import { authWithDeepRedirect } from '../deep-link-auth';
 import { EventEmitter } from 'events';
-import {
-	RedirectResult,
+import type {
 	BrowserResult,
+	RedirectResult,
 } from 'react-native-inappbrowser-reborn';
+import { authWithDeepRedirect } from '../deep-link-auth';
 
 const createListener = (): EventEmitter & {
 	addEventListener: EventEmitter['addListener'];
