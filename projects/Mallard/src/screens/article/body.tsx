@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import type { ArticlePillar } from 'src/common';
 import { ArticleType } from 'src/common';
 import { ArticleController } from 'src/components/article';
@@ -27,7 +26,6 @@ export type OnIsAtTopChange = (isAtTop: boolean, articleKey: string) => void;
 
 const ArticleScreenBody = React.memo<
 	{
-		navigation: NavigationScreenProp<{}>;
 		path: PathToArticle;
 		pillar: ArticlePillar;
 		width: number;
@@ -36,7 +34,6 @@ const ArticleScreenBody = React.memo<
 	} & HeaderControlInnerProps
 >(
 	({
-		navigation,
 		path,
 		pillar,
 		width,
@@ -52,13 +49,12 @@ const ArticleScreenBody = React.memo<
 
 		const handleIsAtTopChange = useCallback(
 			(value: boolean) => onIsAtTopChange?.(value, path.article),
-
 			[onIsAtTopChange],
 		);
+
 		const { isAppsRendering } = useIsAppsRendering();
 		const { showToast } = useToast();
 		// First time it's mounted, we make sure to report we're at the top.
-
 		useEffect(() => handleIsAtTopChange(true), []);
 		return (
 			<View style={[styles.container, { width }]}>
@@ -93,7 +89,6 @@ const ArticleScreenBody = React.memo<
 								)}
 							>
 								<ArticleController
-									navigation={navigation}
 									{...headerControlProps}
 									path={path}
 									article={article.article}

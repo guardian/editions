@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { html } from 'src/helpers/webview';
 import { BETA_PROGRAMME_FAQ_HEADER_TITLE } from 'src/helpers/words';
 import { DefaultInfoTextWebview } from './default-info-text-webview';
@@ -216,10 +217,13 @@ const betaProgrammeFAQsHtml = html`
 	</p>
 `;
 
-export const BetaProgrammeFAQsScreen = () => (
-	<DefaultInfoTextWebview html={betaProgrammeFAQsHtml} />
+const BetaProgrammeFAQsScreen = () => (
+	<HeaderScreenContainer
+		title={BETA_PROGRAMME_FAQ_HEADER_TITLE}
+		actionLeft={true}
+	>
+		<DefaultInfoTextWebview html={betaProgrammeFAQsHtml} />
+	</HeaderScreenContainer>
 );
 
-BetaProgrammeFAQsScreen.navigationOptions = {
-	title: BETA_PROGRAMME_FAQ_HEADER_TITLE,
-};
+export { BetaProgrammeFAQsScreen };

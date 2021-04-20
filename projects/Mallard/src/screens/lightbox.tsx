@@ -1,8 +1,9 @@
 import { palette } from '@guardian/pasteup/palette';
+import type { RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import type { NavigationScreenProp } from 'react-navigation';
 import { ArticleTheme } from 'src/components/article/html/article';
 import { themeColors } from 'src/components/article/html/helpers/css';
 import {
@@ -15,7 +16,10 @@ import { CloseButton } from 'src/components/Button/CloseButton';
 import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption';
 import { getPillarColors } from 'src/helpers/transform';
 import { useDimensions } from 'src/hooks/use-config-provider';
-import type { LightboxNavigationProps } from 'src/navigation/helpers/base';
+import type {
+	MainStackParamList,
+	RouteNames,
+} from 'src/navigation/NavigationModels';
 
 const styles = StyleSheet.create({
 	lightboxPage: {
@@ -71,15 +75,15 @@ const styles = StyleSheet.create({
 	},
 });
 
-const LightboxScreen = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}, LightboxNavigationProps>;
-}) => {
-	const imagePaths = navigation.getParam('imagePaths', []);
-	const images = navigation.getParam('images', []);
-	const index = navigation.getParam('index', 0);
-	const pillar = navigation.getParam('pillar', 'news');
+const LightboxScreen = () => {
+	const navigation = useNavigation();
+	const route = useRoute<
+		RouteProp<MainStackParamList, RouteNames.Lightbox>
+	>();
+	const imagePaths = route.params?.imagePaths ?? [];
+	const images = route.params?.images ?? [];
+	const index = route.params?.index ?? 0;
+	const pillar = route.params?.pillar ?? 'news';
 	const pillarColors = getPillarColors(pillar);
 	const [windowStart, setWindowsStart] = useState(0);
 	const [currentIndex, setCurrentIndex] = useState(index);

@@ -1,6 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import { Alert } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import { AccessContext } from 'src/authentication/AccessContext';
 import type { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer';
 import { isValid } from 'src/authentication/lib/Attempt';
@@ -17,18 +17,16 @@ import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { withConsent } from 'src/helpers/settings';
 import { Copy } from 'src/helpers/words';
 import { useFormField } from 'src/hooks/use-form-field';
-import { routeNames } from 'src/navigation/routes';
+import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import isEmail from 'validator/lib/isEmail';
 import { Login } from './log-in';
 
 const useRandomState = () =>
 	useState(Math.random().toString().split('.')[1])[0];
 
-const AuthSwitcherScreen = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => {
+const AuthSwitcherScreen = () => {
+	const navigation = useNavigation<CompositeNavigationStackProps>();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [error, setError] = useState<string | null>(null);
@@ -82,16 +80,16 @@ const AuthSwitcherScreen = ({
 										onDismiss={() => navigation.popToTop()}
 										onOpenCASLogin={() =>
 											navigation.navigate(
-												routeNames.CasSignIn,
+												RouteNames.CasSignIn,
 											)
 										}
 										onLoginPress={() =>
 											navigation.navigate(
-												routeNames.SignIn,
+												RouteNames.SignIn,
 											)
 										}
 										onFaqPress={() =>
-											navigation.navigate(routeNames.FAQ)
+											navigation.navigate(RouteNames.FAQ)
 										}
 										close={close}
 									/>
@@ -138,9 +136,9 @@ const AuthSwitcherScreen = ({
 			email={email}
 			password={password}
 			isLoading={isLoading}
-			onDismiss={() => navigation.goBack()}
+			onDismiss={() => navigation.popToTop()}
 			onHelpPress={() =>
-				navigation.navigate(routeNames.AlreadySubscribed)
+				navigation.navigate(RouteNames.AlreadySubscribed)
 			}
 			onFacebookPress={() =>
 				handleAuthClick(

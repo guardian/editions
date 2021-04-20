@@ -26,27 +26,10 @@ const Frame = ({ children }: { children: ReactNode }) => (
 	</SafeAreaView>
 );
 
-const OnboardingConsentScreen = ({
-	onOpenGdprConsent,
-	onContinue,
-	onOpenPrivacyPolicy,
-}: {
-	onOpenGdprConsent: () => void;
-	onContinue: () => void;
-	onOpenPrivacyPolicy: () => void;
-}) => {
+const OnboardingConsentScreen = () => {
 	return (
 		<Frame>
-			<OnboardingConsent
-				{...{
-					onOpenGdprConsent,
-					onOpenPrivacyPolicy,
-				}}
-				onContinue={() => {
-					onOpenGdprConsent();
-					onContinue();
-				}}
-			/>
+			<OnboardingConsent />
 		</Frame>
 	);
 };

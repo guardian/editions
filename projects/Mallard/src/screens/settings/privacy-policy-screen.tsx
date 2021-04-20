@@ -1,5 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import type { NavigationInjectedProps } from 'react-navigation';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { LoginHeader } from 'src/components/login/login-layout';
 import { html } from 'src/helpers/webview';
 import { PRIVACY_POLICY_HEADER_TITLE } from 'src/helpers/words';
@@ -480,22 +481,24 @@ const privacyPolicyHtml = html`
 `;
 
 const PrivacyPolicyScreen = () => (
-	<DefaultInfoTextWebview html={privacyPolicyHtml} />
-);
-
-PrivacyPolicyScreen.navigationOptions = {
-	title: PRIVACY_POLICY_HEADER_TITLE,
-};
-
-const PrivacyPolicyScreenForOnboarding = ({
-	navigation,
-}: NavigationInjectedProps) => (
-	<>
-		<LoginHeader onDismiss={() => navigation.goBack()}>
-			{PRIVACY_POLICY_HEADER_TITLE}
-		</LoginHeader>
+	<HeaderScreenContainer
+		title={PRIVACY_POLICY_HEADER_TITLE}
+		actionLeft={true}
+	>
 		<DefaultInfoTextWebview html={privacyPolicyHtml} />
-	</>
+	</HeaderScreenContainer>
 );
+
+const PrivacyPolicyScreenForOnboarding = () => {
+	const navigation = useNavigation();
+	return (
+		<>
+			<LoginHeader onDismiss={() => navigation.goBack()}>
+				{PRIVACY_POLICY_HEADER_TITLE}
+			</LoginHeader>
+			<DefaultInfoTextWebview html={privacyPolicyHtml} />
+		</>
+	);
+};
 
 export { PrivacyPolicyScreen, PrivacyPolicyScreenForOnboarding };

@@ -117,7 +117,7 @@ export const getBundleUri = (
 	return uris[use];
 };
 
-export const parsePing = (data: string) => JSON.parse(data) as WebViewPing;
+export const parsePing = (data: string) => JSON.parse(data);
 
 const makeJavaScript = (topPadding: number) => html`
 	<script>

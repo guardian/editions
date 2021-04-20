@@ -1,5 +1,5 @@
-import { Logging, Level, cropMessage } from '../logging';
 import MockDate from 'mockdate';
+import { cropMessage, Level, Logging } from '../logging';
 
 jest.mock('@react-native-community/netinfo', () => ({
 	fetch: jest.fn(() => Promise.resolve({ isConnected: true })),

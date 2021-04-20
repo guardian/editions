@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import type { ReactNode } from 'react';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Clipboard, View } from 'react-native';
+import { Alert, Clipboard, Platform, View } from 'react-native';
 import { Switch } from 'react-native-gesture-handler';
-import type { NavigationInjectedProps } from 'react-navigation';
-import { withNavigation } from 'react-navigation';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap';
@@ -31,7 +30,7 @@ import { useIsAppsRendering } from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info';
 import { useToast } from 'src/hooks/use-toast';
-import { routeNames } from 'src/navigation/routes';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import {
 	clearPushTracking,
 	getPushTracking,
@@ -59,7 +58,8 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
 	);
 };
 
-const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
+const DevZone = () => {
+	const navigation = useNavigation();
 	const {
 		isDevButtonShown: showNetInfoButton,
 		setIsDevButtonShown: setShowNetInfoButton,
@@ -85,6 +85,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 	const [pushTokens, setPushTokens] = useState('fetching...');
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
 	const { isAppsRendering, setIsAppsRendering } = useIsAppsRendering();
+
 	// initialise local showAllEditions property
 	useEffect(() => {
 		showAllEditionsCache
@@ -141,16 +142,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 			<ButtonList>
 				<Button
 					onPress={() => {
-						navigation.navigate(routeNames.Storybook);
-					}}
-				>
-					Storybook
-				</Button>
-				<Button
-					onPress={() => {
-						navigation.navigate(
-							routeNames.onboarding.OnboardingConsent,
-						);
+						navigation.navigate(RouteNames.OnboardingConsent);
 					}}
 				>
 					Show Startup Consent
@@ -186,7 +178,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 				>
 					Pop a toast
 				</Button>
-				{isInBeta() && (
+				{isInBeta() && Platform.OS === 'ios' && (
 					<Button onPress={() => DEV_getLegacyIAPReceipt()}>
 						Add legacy IAP receipt
 					</Button>
@@ -221,7 +213,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 					Clear caches
 				</Button>
 			</ButtonList>
-
 			<List
 				data={[
 					{
@@ -244,7 +235,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 						title: 'API Endpoint',
 						explainer: apiUrl,
 						onPress: () => {
-							navigation.navigate(routeNames.Endpoints);
+							navigation.navigate(RouteNames.Endpoints);
 						},
 					},
 					{
@@ -252,7 +243,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 						title: 'Editions',
 						explainer: edition,
 						onPress: () => {
-							navigation.navigate(routeNames.Edition);
+							navigation.navigate(RouteNames.Edition);
 						},
 					},
 					{
@@ -390,6 +381,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 			/>
 		</>
 	);
-});
+};
 
 export { DevZone };

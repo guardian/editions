@@ -1,11 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { withNavigation } from 'react-navigation';
-import type { NavigationInjectedProps } from 'react-navigation';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { Header } from 'src/components/layout/header/header';
 
-export const BasicArticleHeader = withNavigation(
-	({ navigation }: NavigationInjectedProps) => (
+export const BasicArticleHeader = () => {
+	const navigation = useNavigation();
+	return (
 		<Header
 			theme="light"
 			leftAction={
@@ -13,12 +13,12 @@ export const BasicArticleHeader = withNavigation(
 					appearance={ButtonAppearance.Skeleton}
 					icon={'\uE00A'}
 					alt="Back"
-					onPress={() => navigation.goBack(null)}
+					onPress={() => navigation.goBack()}
 				></Button>
 			}
 			layout="center"
 		>
 			{null}
 		</Header>
-	),
-);
+	);
+};

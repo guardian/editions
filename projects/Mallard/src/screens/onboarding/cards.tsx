@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -19,6 +20,7 @@ import {
 } from 'src/helpers/settings/setters';
 import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
+import { RouteNames } from 'src/navigation/NavigationModels';
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
 	<View
@@ -43,15 +45,8 @@ const styles = StyleSheet.create({
 
 const QUERY = gql(`{ ${GDPR_SETTINGS_FRAGMENT} }`);
 
-const OnboardingConsent = ({
-	onOpenGdprConsent,
-	onContinue,
-	onOpenPrivacyPolicy,
-}: {
-	onOpenGdprConsent: () => void;
-	onContinue: () => void;
-	onOpenPrivacyPolicy: () => void;
-}) => {
+const OnboardingConsent = () => {
+	const navigation = useNavigation();
 	const query = useQuery<Record<string, boolean | null>>(QUERY);
 	if (query.loading) return null;
 	const { client } = query;
@@ -75,7 +70,9 @@ const OnboardingConsent = ({
 							<View>
 								<ModalButton
 									onPress={() => {
-										onOpenGdprConsent();
+										navigation.navigate(
+											RouteNames.OnboardingConsentInline,
+										);
 									}}
 									buttonAppearance={
 										ButtonAppearance.SkeletonBlue
@@ -88,7 +85,6 @@ const OnboardingConsent = ({
 								<ModalButton
 									onPress={() => {
 										enableNulls();
-										onContinue();
 									}}
 									buttonAppearance={ButtonAppearance.Dark}
 								>
@@ -105,7 +101,13 @@ const OnboardingConsent = ({
 						technology) is used by the Guardian to improve your
 						experience and our level of service to you. By
 						continuing, you agree with the Guardian&apos;s{' '}
-						<LinkNav onPress={onOpenPrivacyPolicy}>
+						<LinkNav
+							onPress={() => {
+								navigation.navigate(
+									RouteNames.PrivacyPolicyInline,
+								);
+							}}
+						>
 							privacy policy
 						</LinkNav>
 						.

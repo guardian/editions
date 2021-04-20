@@ -1,5 +1,7 @@
 import React from 'react';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { html } from 'src/helpers/webview';
+import { FAQS_HEADER_TITLE } from 'src/helpers/words';
 import { DefaultInfoTextWebview } from './default-info-text-webview';
 
 const burgerMenuSVG = () => html`
@@ -439,10 +441,10 @@ const faqHtml = html`
 	<p>No, we don’t publish an issue on Christmas Day.</p>
 `;
 
-const FAQScreen = () => <DefaultInfoTextWebview html={faqHtml} />;
-
-FAQScreen.navigationOptions = {
-	title: 'FAQ',
-};
+const FAQScreen = () => (
+	<HeaderScreenContainer title={FAQS_HEADER_TITLE} actionLeft={true}>
+		<DefaultInfoTextWebview html={faqHtml} />
+	</HeaderScreenContainer>
+);
 
 export { FAQScreen };

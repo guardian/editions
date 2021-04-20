@@ -1,15 +1,14 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import type { NavigationScreenProp } from 'react-navigation';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
+import { EDITIONS_HEADER_TITLE } from 'src/helpers/words';
 import { useEditions } from 'src/hooks/use-edition-provider';
 
-const EditionsScreen = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => {
+const EditionsScreen = () => {
+	const navigation = useNavigation();
 	const { editionsList, storeSelectedEdition } = useEditions();
 
 	const consolidatedEditions = [
@@ -18,24 +17,23 @@ const EditionsScreen = ({
 	];
 
 	return (
-		<ScrollContainer>
-			<Heading>Presets</Heading>
-			<List
-				data={consolidatedEditions.map((edition) => ({
-					title: edition.title,
-					key: edition.title,
-					data: consolidatedEditions,
-					onPress: () => {
-						storeSelectedEdition(edition);
-						navigation.goBack();
-					},
-				}))}
-			/>
-		</ScrollContainer>
+		<HeaderScreenContainer title={EDITIONS_HEADER_TITLE} actionLeft={true}>
+			<ScrollContainer>
+				<Heading>Presets</Heading>
+				<List
+					data={consolidatedEditions.map((edition) => ({
+						title: edition.title,
+						key: edition.title,
+						data: consolidatedEditions,
+						onPress: () => {
+							storeSelectedEdition(edition);
+							navigation.goBack();
+						},
+					}))}
+				/>
+			</ScrollContainer>
+		</HeaderScreenContainer>
 	);
-};
-EditionsScreen.navigationOptions = {
-	title: 'Edition',
 };
 
 export { EditionsScreen };

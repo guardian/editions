@@ -1,7 +1,8 @@
+import type { RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { NavigationScreenProp } from 'react-navigation';
 import type { Appearance } from 'src/common';
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
 import { LoginOverlay } from 'src/components/login/login-overlay';
@@ -10,10 +11,10 @@ import { getAppearancePillar } from 'src/hooks/use-article';
 import { useDimensions } from 'src/hooks/use-config-provider';
 import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
-import { routeNames } from 'src/navigation/routes';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
 import { ArticleScreenBody } from './article/body';
 import { ArticleSlider } from './article/slider';
 
@@ -34,6 +35,7 @@ export type ArticleSpec = PathToArticle & {
 
 export type ArticleNavigator = FrontSpec[];
 
+// THIS SEEMS USEFUL
 export const getArticleDataFromNavigator = (
 	navigator: ArticleNavigator,
 	currentArticle: PathToArticle,
@@ -81,22 +83,19 @@ export const getArticleDataFromNavigator = (
 	};
 };
 
-const ArticleScreenLoginOverlay = ({
-	navigation,
-	children,
-}: {
-	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
-	children: ReactNode;
-}) => (
-	<LoginOverlay
-		isFocused={() => navigation.isFocused()}
-		onLoginPress={() => navigation.navigate(routeNames.SignIn)}
-		onOpenCASLogin={() => navigation.navigate(routeNames.CasSignIn)}
-		onDismiss={() => navigation.goBack()}
-	>
-		{children}
-	</LoginOverlay>
-);
+const ArticleScreenLoginOverlay = ({ children }: { children: ReactNode }) => {
+	const navigation = useNavigation();
+	return (
+		<LoginOverlay
+			isFocused={() => navigation.isFocused()}
+			onLoginPress={() => navigation.navigate(RouteNames.SignIn)}
+			onOpenCASLogin={() => navigation.navigate(RouteNames.CasSignIn)}
+			onDismiss={() => navigation.goBack()}
+		>
+			{children}
+		</LoginOverlay>
+	);
+};
 
 const styles = StyleSheet.create({
 	refView: { flex: 1 },
@@ -105,11 +104,8 @@ const styles = StyleSheet.create({
 const ArticleScreenWithProps = ({
 	path,
 	articleNavigator,
-	navigation,
 	prefersFullScreen,
-}: Required<ArticleNavigationProps> & {
-	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
-}) => {
+}: Required<ArticleNavigationProps> & {}) => {
 	const current = getArticleDataFromNavigator(articleNavigator, path);
 	// TODO use `getData` for this
 	const pillar = getAppearancePillar(current.appearance);
@@ -124,7 +120,7 @@ const ArticleScreenWithProps = ({
 		}
 	}, [width]);
 	return (
-		<ArticleScreenLoginOverlay navigation={navigation}>
+		<ArticleScreenLoginOverlay>
 			<View
 				style={styles.refView}
 				ref={(r) => {
@@ -134,7 +130,6 @@ const ArticleScreenWithProps = ({
 				{prefersFullScreen ? (
 					<>
 						<ArticleScreenBody
-							navigation={navigation}
 							path={path}
 							width={width}
 							pillar={pillar}
@@ -145,7 +140,6 @@ const ArticleScreenWithProps = ({
 					</>
 				) : (
 					<ArticleSlider
-						navigation={navigation}
 						path={path}
 						articleNavigator={articleNavigator}
 					/>
@@ -155,12 +149,9 @@ const ArticleScreenWithProps = ({
 	);
 };
 
-export const ArticleScreen = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}, ArticleNavigationProps>;
-}) =>
-	getArticleNavigationProps(navigation, {
+export const ArticleScreen = () => {
+	const route = useRoute<RouteProp<MainStackParamList, 'Article'>>();
+	return getArticleNavigationProps(route.params, {
 		error: () => (
 			<FlexErrorMessage
 				title={ERR_404_MISSING_PROPS}
@@ -168,18 +159,7 @@ export const ArticleScreen = ({
 			/>
 		),
 		success: (props) => {
-			return <ArticleScreenWithProps {...{ navigation }} {...props} />;
+			return <ArticleScreenWithProps {...props} />;
 		},
 	});
-
-ArticleScreen.navigationOptions = ({
-	navigation,
-}: {
-	navigation: NavigationScreenProp<{}>;
-}) => ({
-	title: navigation.getParam('title', 'Loading'),
-	gesturesEnabled: true,
-	gestureResponseDistance: {
-		vertical: metrics.headerHeight + metrics.slideCardSpacing,
-	},
-});
+};

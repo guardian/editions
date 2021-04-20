@@ -1,7 +1,7 @@
-import fetchMock from 'fetch-mock';
 import AsyncStorage from '@react-native-community/async-storage';
-import { defaultSettings } from '../settings/defaults';
+import fetchMock from 'fetch-mock';
 import { fetchCacheClear } from '../fetch';
+import { defaultSettings } from '../settings/defaults';
 
 describe('helpers/fetch', () => {
 	describe('fetchCacheClear', () => {

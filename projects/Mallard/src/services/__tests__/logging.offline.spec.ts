@@ -1,5 +1,5 @@
-import { Level, Logging } from '../logging';
 import MockDate from 'mockdate';
+import { Level, Logging } from '../logging';
 
 jest.mock('@react-native-community/netinfo', () => ({
 	fetch: jest.fn(() => Promise.resolve(false)),

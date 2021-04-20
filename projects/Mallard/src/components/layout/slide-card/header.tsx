@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Animated, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { safeInterpolation } from 'src/helpers/math';
@@ -28,14 +29,12 @@ const styles = StyleSheet.create({
 });
 
 const Header = () => {
-	const { panResponder, scrollY, onDismiss } = useDismissArticle();
+	const { scrollY } = useDismissArticle();
+	const navigation = useNavigation();
 	return (
-		<Animated.View
-			{...panResponder.panHandlers}
-			style={[styles.headerContainer]}
-		>
+		<Animated.View style={[styles.headerContainer]}>
 			<TouchableWithoutFeedback
-				onPress={onDismiss}
+				onPress={navigation.goBack}
 				accessibilityHint="Go back"
 			>
 				<Animated.View

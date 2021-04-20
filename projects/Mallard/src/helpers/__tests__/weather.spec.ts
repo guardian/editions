@@ -75,7 +75,7 @@ it('should resolve and update the weather', async () => {
 	now += 1000 * 60 * 60 * 3;
 
 	expect(AppState.addEventListener).toHaveBeenCalledTimes(1);
-	const cb = (AppState.addEventListener as any).mock.calls[0][1];
+	const cb = AppState.addEventListener.mock.calls[0][1];
 	await cb('active');
 
 	res = await resolveWeather({}, {}, { client });
