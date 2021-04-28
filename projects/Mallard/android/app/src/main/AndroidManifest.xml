@@ -29,7 +29,7 @@
       android:appComponentFactory="androidx.core.app.CoreComponentFactory"
       >
 
-      <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+      <meta-data android:name="firebase_analytics_collection_enabled" android:value="false"  tools:replace="android:value" />
       <meta-data android:name="com.dieam.reactnativepushnotification.notification_color" android:resource="@color/primary"/>
 
     <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
@@ -53,7 +53,6 @@
         android:launchMode="singleTask"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-        android:launchMode="singleTask"
         android:windowSoftInputMode="adjustPan"
         android:exported="true">
         <intent-filter>
