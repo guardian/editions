@@ -10,15 +10,10 @@ target 'Mallard' do
       # to enable hermes on iOS, change `false` to `true` and then install pods
       :hermes_enabled => false
     )
-    pod 'react-native-config', :path => '../node_modules/react-native-config'
       #   https://github.com/luggit/react-native-config/issues/187
-    pod 'react-native-in-app-utils', :path => '../node_modules/react-native-in-app-utils'
 
-    pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
-    pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
 
-    pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
 
   # Enables Flipper.
   #
