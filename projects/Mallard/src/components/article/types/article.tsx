@@ -172,7 +172,6 @@ const Article = ({
 	origin: IssueOrigin;
 } & HeaderControlProps) => {
 	const navigation = useNavigation();
-	const [, { type }] = useArticle();
 	const ref = useRef<WebView | null>(null);
 	const [imagePaths, setImagePaths] = useState(['']);
 	const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>();
@@ -278,7 +277,7 @@ const Article = ({
 	};
 
 	const handleLightbox = (parsed: LightboxMessage) => {
-		let index = parsed.index;
+		const index = parsed.index;
 
 		navigation.navigate(RouteNames.Lightbox, {
 			images: lightboxImages,
