@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { defaultSettings } from './settings/defaults';
+import { isInBeta } from './release-stream';
+import { defaultSettings, newMobileProdStack } from './settings/defaults';
 
 /**
  * History of Consent Management
@@ -118,13 +119,18 @@ const unsanitize = (value: string): UnsanitizedSetting => {
 
 export const getSetting = <S extends keyof Settings>(
 	setting: S,
-): Promise<Settings[S]> =>
-	AsyncStorage.getItem(SETTINGS_KEY_PREFIX + setting).then((item) => {
+): Promise<Settings[S]> => {
+	return AsyncStorage.getItem(SETTINGS_KEY_PREFIX + setting).then((item) => {
 		if (!item) {
 			return defaultSettings[setting];
 		}
+
+		if (isInBeta() && setting == 'apiUrl') {
+			return newMobileProdStack as Settings[S];
+		}
 		return unsanitize(item) as Settings[S];
 	});
+};
 
 export const storeSetting = (
 	setting: keyof Settings,

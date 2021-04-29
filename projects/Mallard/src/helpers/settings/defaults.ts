@@ -1,6 +1,9 @@
 import { Platform } from 'react-native';
 import type { Settings } from '../settings';
 
+export const newMobileProdStack =
+	'https://editions-published-prod.s3-eu-west-1.amazonaws.com/';
+
 /*
 Default settings.
 This is a bit of a mess
@@ -43,7 +46,7 @@ export const backends = [
 	},
 	{
 		title: '(MOBILE) PROD published',
-		value: 'https://editions-published-prod.s3-eu-west-1.amazonaws.com/',
+		value: newMobileProdStack,
 		preview: false,
 	},
 	{
