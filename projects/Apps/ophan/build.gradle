@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
+//import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
 
 plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.4.31'
@@ -6,6 +6,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     //jcenter()
     //maven { url 'https://dl.bintray.com/guardian/kotlin' }
 }
@@ -40,7 +41,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                api "com.gu.kotlin:multiplatform-ophan:$multiplatformOphanVersion"
+                api("com.gu.kotlin:multiplatform-ophan:$multiplatformOphanVersion")
             }
         }
         androidMain {
@@ -59,7 +60,7 @@ kotlin {
         }
     }
 }
-
+/*
 task fatFramework(type: FatFrameworkTask) {
     def buildType = project.findProperty('kotlin.build.type') ?: 'DEBUG'
     def validArchs = project.findProperty('kotlin.valid.archs') ?: 'x86_64'
@@ -114,7 +115,8 @@ task copyFatFramework {
         }
     }
 }
+*/
 
-configurations {
-    compileClasspath
-}
+//configurations {
+ //   compileClasspath
+//}
