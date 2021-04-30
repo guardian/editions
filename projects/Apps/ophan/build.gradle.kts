@@ -1,63 +1,88 @@
 //import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
 
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform' version '1.4.31'
+    kotlin("multiplatform") version "1.4.32"
 }
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
     //jcenter()
     //maven { url 'https://dl.bintray.com/guardian/kotlin' }
 }
 
 kotlin {
     jvm("android")
-    // This is for iPhone emulator
-    // Switch here to iosArm64 (or iosArm32) to build library for iPhone device
-    iosX64("ios") {
-        binaries.framework {
-            baseName = "ophan"
-        }
-    }
-    iosArm64("ios64") {
-        binaries.framework {
-            baseName = "ophan"
-        }
-    }
-    iosArm32("ios32") {
-        binaries.framework {
-            baseName = "ophan"
-        }
-    }
+    val iosX64 = iosX64("ios")
+    val iosArm64 = iosArm64("iosArm64")
+    val iosArm32 = iosArm32("iosArm32")
 
-    def coroutinesVersion = "1.4.3"
-    def ktorVersion = "1.5.3"
-    def multiplatformOphanVersion = "0.1.11"
+    val frameworkName = "MultiplatformOphan"
+
+    configure(listOf(iosX64, iosArm64, iosArm32)) {
+        binaries.framework {
+            baseName = frameworkName
+        }
+    }
+    /*
+    ios {
+        binaries.framework {
+            baseName = "ophan"
+        }
+    }
+    */
+    //val iosX64 = iosX64("ios")
+    //val iosArm64 = iosArm64("ios64")
+    //val iosArm32 = iosArm32("ios32")
+
+    /*
+    val frameworkName = "ophan"
+
+    configure(listOf(iosX64, iosArm64)) {
+        binaries.framework {
+            baseName = frameworkName
+        }
+    }
+    */
+
+    val coroutinesVersion = "1.4.3"
+    val ktorVersion = "1.5.3"
+    val multiplatformOphanVersion = "0.1.11"
 
     sourceSets {
-        commonMain {
+        named("commonMain") {
             dependencies {
-                implementation(kotlin("stdlib-common"))
+                //implementation(kotlin("stdlib-common"))
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 api("com.gu.kotlin:multiplatform-ophan:$multiplatformOphanVersion")
             }
         }
-        androidMain {
+        named("androidMain") {
             dependencies {
-                implementation kotlin("stdlib")
+                //implementation(kotlin("stdlib"))
                 implementation("io.ktor:ktor-client-android:$ktorVersion")
             }
         }
-        iosMain {
+        val iosMain by getting {
+
         }
-        ios64Main {
-            dependsOn iosMain
+        val iosArm64Main by getting {
+            dependsOn(iosMain)
         }
-        ios32Main {
-            dependsOn iosMain
+        val iosArm32Main by getting {
+            dependsOn(iosMain)
         }
+        /*
+        val iosMain by getting {
+        }
+        val ios64Main by getting {
+            dependsOn(iosMain)
+        }
+         */
+        //val ios32Main by getting {
+        //    dependsOn(iosMain)
+        //}
     }
 }
 /*
