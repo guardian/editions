@@ -1,13 +1,13 @@
 //import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
 
 plugins {
-    kotlin("multiplatform") version "1.4.32"
+    kotlin("multiplatform") version "1.3.41"
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
-    //jcenter()
+    jcenter()
     //maven { url 'https://dl.bintray.com/guardian/kotlin' }
 }
 
@@ -17,7 +17,7 @@ kotlin {
     val iosArm64 = iosArm64("iosArm64")
     val iosArm32 = iosArm32("iosArm32")
 
-    val frameworkName = "MultiplatformOphan"
+    val frameworkName = "ophan"
 
     configure(listOf(iosX64, iosArm64, iosArm32)) {
         binaries.framework {
@@ -45,14 +45,14 @@ kotlin {
     }
     */
 
-    val coroutinesVersion = "1.4.3"
-    val ktorVersion = "1.5.3"
-    val multiplatformOphanVersion = "0.1.11"
+    val coroutinesVersion = "1.3.0"
+    val ktorVersion = "1.2.3"
+    val multiplatformOphanVersion = "0.1.12"
 
     sourceSets {
         named("commonMain") {
             dependencies {
-                //implementation(kotlin("stdlib-common"))
+                implementation(kotlin("stdlib-common"))
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 api("com.gu.kotlin:multiplatform-ophan:$multiplatformOphanVersion")
@@ -60,7 +60,7 @@ kotlin {
         }
         named("androidMain") {
             dependencies {
-                //implementation(kotlin("stdlib"))
+                implementation(kotlin("stdlib"))
                 implementation("io.ktor:ktor-client-android:$ktorVersion")
             }
         }
@@ -71,7 +71,7 @@ kotlin {
             dependsOn(iosMain)
         }
         val iosArm32Main by getting {
-            dependsOn(iosMain)
+            //dependsOn(iosMain)
         }
         /*
         val iosMain by getting {
