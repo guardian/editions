@@ -55,7 +55,7 @@
         "@react-native-firebase/remote-config": "^9.0.10",
         "@react-navigation/native": "^5.9.3",
         "@react-navigation/stack": "^5.14.3",
-        "@sentry/react-native": "^1.4.4",
+        "@sentry/react-native": "^2.0.1",
         "@types/react-native-htmlview": "^0.12.2",
         "apollo-cache-inmemory": "^1.6.3",
         "apollo-client": "^2.6.4",
