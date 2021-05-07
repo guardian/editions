@@ -2509,25 +2509,25 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/viewpager/-/viewpager-4.2.1.tgz#9886d17a04a3a2f260ec246eb52750439e2064b9"
   integrity sha512-VX2tkN0nv7PRem7iS++4tblLKf7RLWemqucDnD6ZIKKBE0s3n7T5vOSAFJyJBH6WucwoUz6HE+0vm8AC3tZDbw==
 
-"@react-native-firebase/app@^11.4.0":
-  version "11.4.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-11.4.1.tgz#42d5b8ff0b8e17398e2d1b65ca698b9990a76bcf"
-  integrity sha512-RzG3kGzKwO/Ets3S4XxAoki4GhzaHRVrnUDyr7U1zOL46xqOMGD7MKTmpYBa9qzh5GOz3aQwlRvu1yRhPHNGKA==
+"@react-native-firebase/app@^10.0.0":
+  version "10.8.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.8.1.tgz#3455f491a5fc3d91677fd69e70b006a68fb7ca5c"
+  integrity sha512-EHbFGCbRdZMxSbdq5YCc47E9C+ckzsMeZdknJbSddTYJ9JxPDiorUyoHFOUCAHS2ZoklhpdlrU5zGNzxpBgDUw==
   dependencies:
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/crashlytics@^11.4.0":
-  version "11.4.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-11.4.1.tgz#6bd79a437ab971f7227ede7afad4608e8a08897d"
-  integrity sha512-kR4/GJZOLElrZ2z9wmSiKBlAp/+KUGEfYhAf6NBQWJDlMa5yQxBloPeEOIH4Dw20MqIbvVL0oyGqwhXFVMNpwQ==
+"@react-native-firebase/crashlytics@^10.0.0":
+  version "10.8.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-10.8.1.tgz#85ca47f5d8fd39799c4cb485d1fd107162d87fb5"
+  integrity sha512-XD3x60s5G3w8YNiZWkXnOXnND8H9GnN/0GwXX4bRwQdAhHurGA6wbDqWDmIseD3VRdSB3d+RYRRU0W7+f0HV9Q==
   dependencies:
     stacktrace-js "^2.0.0"
 
-"@react-native-firebase/remote-config@^11.4.0":
-  version "11.4.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-11.4.1.tgz#8340fd6186fdffc00933b9163864f1dc60b615b0"
-  integrity sha512-kiu5tHDIG6gbADu2mAIsr53hl0ON/wxAKNa4jh028jPeT+toJagbNuZI1kTKmRLtwbpZ+zOYAdFDbRoLFyAJbg==
+"@react-native-firebase/remote-config@^10.0.0":
+  version "10.8.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-10.8.1.tgz#c6587c2ee3610870372084ed51dbfd66d26ffbc3"
+  integrity sha512-zONnuaNsyFziNXR5ee222QgcJv8OIvPufMwzXaY180XRzNnBUsCPWmOvhQouA3ko8oUKov1J/sXPAL9DWpb+JQ==
 
 "@react-navigation/core@^5.15.2":
   version "5.15.2"
@@ -12424,7 +12424,7 @@ react-native-color-picker@^0.4.0:
     prop-types "^15.5.10"
     tinycolor2 "^1.4.1"
 
-react-native-config@^1.4.0:
+react-native-config@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.4.2.tgz#cc39f22ed72c5cb06af1adf0ba70ef01593900b4"
   integrity sha512-iTvCvThvFTH7SdiBcsxYtpLy86zglsh51ZBqFPPZ75tdrQMdlRnDNnb86kNjQf03KT0qs1nCMLRejfPMIim8iA==

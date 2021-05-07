@@ -44,21 +44,6 @@ target 'Mallard' do
 
     pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
 
-    post_install do |installer|
-    installer.pods_project.targets.each do |target|
-      if target.name == 'react-native-config'
-        phase = target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
-        phase.shell_script = "cd ../../"\
-        " && RNC_ROOT=./node_modules/react-native-config/"\
-        " && export SYMROOT=$RNC_ROOT/ios/ReactNativeConfig"\
-        " && ruby $RNC_ROOT/ios/ReactNativeConfig/BuildDotenvConfig.ruby"\
-
-        target.build_phases << phase
-        target.build_phases.move(phase,0)
-      end
-    end
-   end
-
   # permisions
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
