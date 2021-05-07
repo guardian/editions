@@ -1,7 +1,7 @@
 import { NativeModules, Platform } from 'react-native';
 import type { Purchase } from 'react-native-iap';
 import RNIAP from 'react-native-iap';
-import type { ReceiptValidationResponse } from 'react-native-iap/apple';
+import type { ReceiptValidationResponse } from 'react-native-iap/type/apple';
 import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants';
 import { isInBeta } from 'src/helpers/release-stream';
 import type { AuthResult } from '../lib/Result';
