@@ -57,23 +57,7 @@ target 'Mallard' do
         target.build_phases.move(phase,0)
       end
     end
-    # A known bug in current RN (61.5) with ios14 - https://github.com/facebook/react-native/issues/29279
-    find_and_replace("../node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m",
-  "_currentFrame.CGImage;","_currentFrame.CGImage ;} else { [super displayLayer:layer];")
    end
-  
-  def find_and_replace(dir, findstr, replacestr)
-    Dir[dir].each do |name|
-        text = File.read(name)
-        replace = text.gsub(findstr,replacestr)
-        if text != replace
-            puts "Fix: " + name
-            File.open(name, "w") { |file| file.puts replace }
-            STDOUT.flush
-        end
-    end
-    Dir[dir + '*/'].each(&method(:find_and_replace))
-  end
 
   # permisions
   permissions_path = '../node_modules/react-native-permissions/ios'
