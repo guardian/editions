@@ -125,7 +125,7 @@ Privacy settings: ${gdprEntries
 		.join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
 Total Disk Space (Mb): ${bytesToMb(totalDiskCapacity)}
-Available Disk Spce (Mb): ${bytesToMb(freeDiskStorage)}
+Available Disk Space (Mb): ${bytesToMb(freeDiskStorage)}
 Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
 
 -User / Supporter Info-
