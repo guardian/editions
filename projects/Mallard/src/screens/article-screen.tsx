@@ -88,8 +88,16 @@ const ArticleScreenLoginOverlay = ({ children }: { children: ReactNode }) => {
 	return (
 		<LoginOverlay
 			isFocused={() => navigation.isFocused()}
-			onLoginPress={() => navigation.navigate(RouteNames.SignIn)}
-			onOpenCASLogin={() => navigation.navigate(RouteNames.CasSignIn)}
+			onLoginPress={() =>
+				navigation.navigate(RouteNames.Settings, {
+					screen: RouteNames.SignIn,
+				})
+			}
+			onOpenCASLogin={() =>
+				navigation.navigate(RouteNames.Settings, {
+					screen: RouteNames.CasSignIn,
+				})
+			}
 			onDismiss={() => navigation.goBack()}
 		>
 			{children}

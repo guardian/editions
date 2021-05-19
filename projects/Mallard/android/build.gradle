@@ -47,7 +47,7 @@ allprojects {
             //react-native-image-filter-kit
             url 'https://jitpack.io'
         }
-        maven { url 'https://dl.bintray.com/guardian/kotlin' }
+        mavenCentral()
     }
 
 

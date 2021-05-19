@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
 		marginTop: metrics.vertical * 2,
 	},
 	issueList: {
+		height: Dimensions.get('window').height,
 		paddingTop: 0,
 		backgroundColor: color.dimBackground,
 	},
