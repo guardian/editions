@@ -41,7 +41,11 @@ export const sendPublishStatusToTopic = async (pubEvent: PublishEvent) => {
             .publish({ TopicArn: topic, Message: JSON.stringify(payload) })
             .promise(),
     )
-    console.log(`SNS publish response: ${JSON.stringify(sendStatus)}`)
+    console.log(
+        `SNS publish response: ${JSON.stringify(
+            sendStatus,
+        )} --- Payload:${JSON.stringify(payload)}`,
+    )
     return sendStatus
 }
 
