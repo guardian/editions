@@ -14,25 +14,32 @@ jobs:
         # The type of runner that the job will run on
         runs-on: macos-10.15
 
+        # Specifies the multiple node versions we want to use
+        # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast
+        strategy:
+            fail-fast: false
+            matrix:
+                node-version: [10.15, 14.16]
+
         # Steps represent a sequence of tasks that will be executed as part of the job
         steps:
             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: '10.15'
+                  node-version: ${{ matrix.node-version }}
 
-            - name: install mallard
+            - name: install mallard - Node.js ${{ matrix.node-version }}
               run: |
                   yarn
                   yarn install-mallard
 
-            - name: validate Mallard project
+            - name: validate Mallard project - Node.js ${{ matrix.node-version }}
               run: |
                   cd projects/Mallard
                   yarn validate
 
-            - name: publish app
+            - name: publish app - Node.js ${{ matrix.node-version }}
               id: publish_app
               run: |
                   cd projects/Mallard
@@ -69,7 +76,7 @@ jobs:
                   MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
                   MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
 
-            - name: publish release to github
+            - name: publish release to github - Node.js ${{ matrix.node-version }}
               run: |
                   cd script
                   node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.publish_app.outputs.buildnumber }} ios
