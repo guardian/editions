@@ -217,7 +217,7 @@ export class EditionsStack extends GuStack {
                 `Editions${titleCasePublicationStage}Backend`,
                 {
                     functionName: `editions-${publicationStage}-backend-${stageParameter.valueAsString}`,
-                    runtime: lambda.Runtime.NODEJS_10_X,
+                    runtime: lambda.Runtime.NODEJS_14_X,
                     memorySize: 512,
                     timeout: Duration.seconds(60),
                     code: Code.bucket(
