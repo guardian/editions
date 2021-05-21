@@ -25,7 +25,7 @@ export const s3EventListenerFunction = (
         'EditionsProofArchiverS3EventListener',
         {
             functionName: `editions-proof-archiver-s3-event-listener-${stage}`,
-            runtime: lambda.Runtime.NODEJS_10_X,
+            runtime: lambda.Runtime.NODEJS_14_X,
             timeout: Duration.minutes(5),
             memorySize: 256,
             code: Code.bucket(

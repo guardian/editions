@@ -70,7 +70,7 @@ export const publishTaskLambda = (
     const lambdaName = `EditionsArchiver${toTitleCase(name)}`
     const fn = new lambda.Function(scope, lambdaName, {
         functionName: `editions-archiver-stepmachine-${name}-${stage}`,
-        runtime: lambda.Runtime.NODEJS_10_X,
+        runtime: lambda.Runtime.NODEJS_14_X,
         timeout: Duration.minutes(5),
         memorySize: 1500,
         code: Code.bucket(
@@ -152,7 +152,7 @@ export const proofTaskLambda = (
     const lambdaName = `EditionsArchiver${toTitleCase(name)}`
     const fn = new lambda.Function(scope, lambdaName, {
         functionName: `editions-archiver-stepmachine-${name}-${stage}`,
-        runtime: lambda.Runtime.NODEJS_10_X,
+        runtime: lambda.Runtime.NODEJS_14_X,
         timeout: Duration.minutes(5),
         memorySize: 1500,
         code: Code.bucket(
