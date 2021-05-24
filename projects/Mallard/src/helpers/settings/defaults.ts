@@ -10,6 +10,11 @@ This is a bit of a mess
 */
 export const backends = [
 	{
+		title: 'PROD published (mobile)',
+		value: newMobileProdStack,
+		preview: false,
+	},
+	{
 		title: 'PROD published',
 		value: 'https://editions.guardianapis.com/',
 		preview: false,
@@ -48,11 +53,6 @@ export const backends = [
 		title: 'CODE preview',
 		value: 'https://preview.editions.code.dev-guardianapis.com/',
 		preview: true,
-	},
-	{
-		title: 'PROD published (mobile)',
-		value: 'https://editions-published-prod.s3-eu-west-1.amazonaws.com/',
-		preview: false,
 	},
 	{
 		title: 'CODE proofed (mobile)',
@@ -156,14 +156,11 @@ export const defaultSettings: Settings = {
 	senderId: __DEV__ ? senderId.code : senderId.prod,
 	isWeatherShown: true,
 	wifiOnlyDownloads: false,
-	isAppsRendering: false,
 	maxAvailableEditions: 7,
 	websiteUrl: 'https://www.theguardian.com/',
 	logging: __DEV__
 		? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
 		: 'https://editions-logging.guardianapis.com/log/mallard',
-	// this currently points exclusively to PROD so that we don't require a VPN to access the endpoint.
-	appsRenderingService: appsRenderingService.prod,
 };
 
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
