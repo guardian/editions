@@ -12,7 +12,6 @@ import {
 } from 'src/hooks/use-article';
 import { useArticleResponse } from 'src/hooks/use-issue';
 import { useIsPreview } from 'src/hooks/use-settings';
-import { useToast } from 'src/hooks/use-toast';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
 
@@ -51,7 +50,6 @@ const ArticleScreenBody = React.memo<
 			[onIsAtTopChange],
 		);
 
-		const { showToast } = useToast();
 		// First time it's mounted, we make sure to report we're at the top.
 		useEffect(() => handleIsAtTopChange(true), []);
 		return (

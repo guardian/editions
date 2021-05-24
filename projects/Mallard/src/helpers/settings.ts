@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { isInBeta } from './release-stream';
 import { defaultSettings, newMobileProdStack } from './settings/defaults';
 
 /**
@@ -81,8 +80,6 @@ export interface DevSettings {
 	issuesPath: string;
 	senderId: string;
 	logging: string;
-	appsRenderingService: string;
-	isAppsRendering: boolean;
 }
 
 interface UserSettings {

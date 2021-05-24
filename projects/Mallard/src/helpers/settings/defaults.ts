@@ -156,14 +156,11 @@ export const defaultSettings: Settings = {
 	senderId: __DEV__ ? senderId.code : senderId.prod,
 	isWeatherShown: true,
 	wifiOnlyDownloads: false,
-	isAppsRendering: false,
 	maxAvailableEditions: 7,
 	websiteUrl: 'https://www.theguardian.com/',
 	logging: __DEV__
 		? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
 		: 'https://editions-logging.guardianapis.com/log/mallard',
-	// this currently points exclusively to PROD so that we don't require a VPN to access the endpoint.
-	appsRenderingService: appsRenderingService.prod,
 };
 
 export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
