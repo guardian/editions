@@ -10,6 +10,11 @@ This is a bit of a mess
 */
 export const backends = [
 	{
+		title: 'PROD published (mobile)',
+		value: newMobileProdStack,
+		preview: false,
+	},
+	{
 		title: 'PROD published',
 		value: 'https://editions.guardianapis.com/',
 		preview: false,
@@ -48,11 +53,6 @@ export const backends = [
 		title: 'CODE preview',
 		value: 'https://preview.editions.code.dev-guardianapis.com/',
 		preview: true,
-	},
-	{
-		title: 'PROD published (mobile)',
-		value: 'https://editions-published-prod.s3-eu-west-1.amazonaws.com/',
-		preview: false,
 	},
 	{
 		title: 'CODE proofed (mobile)',

@@ -19,8 +19,6 @@ interface ConfigState {
 	};
 	notificationsEnabled: boolean;
 	setNotifications: (setting: boolean) => Promise<void>;
-	isAppsRendering: boolean;
-	storeisAppsRendering: (setting: boolean) => void;
 }
 
 const notificationInitialState = () =>
@@ -36,8 +34,6 @@ const initialState: ConfigState = {
 	},
 	notificationsEnabled: notificationInitialState(),
 	setNotifications: () => Promise.resolve(),
-	isAppsRendering: false,
-	storeisAppsRendering: () => {},
 };
 
 const ConfigContext = createContext(initialState);
@@ -152,9 +148,4 @@ export const useDimensions = () => useContext(ConfigContext).dimensions;
 export const useNotificationsEnabled = () => ({
 	notificationsEnabled: useContext(ConfigContext).notificationsEnabled,
 	setNotifications: useContext(ConfigContext).setNotifications,
-});
-
-export const useIsAppsRendering = () => ({
-	isAppsRendering: useContext(ConfigContext).isAppsRendering,
-	setIsAppsRendering: useContext(ConfigContext).storeisAppsRendering,
 });

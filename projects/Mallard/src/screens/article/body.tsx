@@ -10,7 +10,6 @@ import {
 	getCollectionPillarOverride,
 	WithArticle,
 } from 'src/hooks/use-article';
-import { useIsAppsRendering } from 'src/hooks/use-config-provider';
 import { useArticleResponse } from 'src/hooks/use-issue';
 import { useIsPreview } from 'src/hooks/use-settings';
 import { useToast } from 'src/hooks/use-toast';
@@ -52,13 +51,11 @@ const ArticleScreenBody = React.memo<
 			[onIsAtTopChange],
 		);
 
-		const { isAppsRendering } = useIsAppsRendering();
 		const { showToast } = useToast();
 		// First time it's mounted, we make sure to report we're at the top.
 		useEffect(() => handleIsAtTopChange(true), []);
 		return (
 			<View style={[styles.container, { width }]}>
-				{isAppsRendering && showToast('EDITIONS RENDERED CONTENT')}
 				{articleResponse({
 					error: ({ message }) => (
 						<FlexErrorMessage

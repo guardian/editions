@@ -121,6 +121,10 @@ export const getSetting = <S extends keyof Settings>(
 	setting: S,
 ): Promise<Settings[S]> => {
 	return AsyncStorage.getItem(SETTINGS_KEY_PREFIX + setting).then((item) => {
+		// TODO - remove this force apiUrl logic before ER work goes production users
+		if (setting == 'apiUrl') {
+			return newMobileProdStack as Settings[S];
+		}
 		if (!item) {
 			return defaultSettings[setting];
 		}
