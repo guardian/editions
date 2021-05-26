@@ -77,6 +77,7 @@ export class EditionsStack extends GuStack {
             {
                 type: 'String',
                 description: 'Apps rendering endpoint header key',
+                noEcho: true,
             },
         )
 
