@@ -124,9 +124,9 @@ export const getSetting = <S extends keyof Settings>(
 		// TODO - to test our new edition stack we are forcing beta users to use
 		// the new stack. Need to remove this once new stack is fully in operation
 		// and fastly config change has been made so it points to the new mobile stack
-		if (isInBeta() && setting == 'apiUrl') {
-			return newMobileProdStack as Settings[S];
-		}
+		// if (isInBeta() && setting == 'apiUrl') {
+		// 	return newMobileProdStack as Settings[S];
+		// }
 		if (!item) {
 			return defaultSettings[setting];
 		}
