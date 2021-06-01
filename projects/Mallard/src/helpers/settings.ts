@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { isInBeta } from './release-stream';
-import { defaultSettings, newMobileProdStack } from './settings/defaults';
+import { defaultSettings } from './settings/defaults';
 
 /**
  * History of Consent Management

@@ -90,17 +90,16 @@ const forceUpdateApiUrlIfBeta = async () => {
 	// TODO - to test our new edition stack we are forcing beta users to use
 	// the new stack. Need to remove this once new stack is fully in operation.
 	if (isInBeta()) {
-		const betaApiHasSetAlready = await newApiUrlSetForBetaUsers.get()
-		if(!betaApiHasSetAlready) {
-			setApiUrl(apolloClient, newMobileProdStack)
-			console.log('*** Beta: updated api url for BETA Users ***')
-			await newApiUrlSetForBetaUsers.set(true)
-		}
-		else {
-			console.log('*** Beta: api url for Beta users already updated ***')
+		const betaApiHasSetAlready = await newApiUrlSetForBetaUsers.get();
+		if (!betaApiHasSetAlready) {
+			setApiUrl(apolloClient, newMobileProdStack);
+			console.log('*** Beta: updated api url for BETA Users ***');
+			await newApiUrlSetForBetaUsers.set(true);
+		} else {
+			console.log('*** Beta: api url for Beta users already updated ***');
 		}
 	}
-}
+};
 
 export default class App extends React.Component {
 	componentDidMount() {
