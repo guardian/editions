@@ -96,6 +96,10 @@ const notificationsEnabledCache = createAsyncCache<boolean>(
 	'notificationsEnabled',
 );
 
+const newApiUrlSetForBetaUsers = createAsyncCache<boolean>(
+	'newApiUrlSetForBeta',
+);
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -164,6 +168,7 @@ export {
 	editionsListCache,
 	pushRegisteredTokens,
 	notificationsEnabledCache,
+	newApiUrlSetForBetaUsers,
 	showAllEditionsCache,
 	seenEditionsCache,
 };

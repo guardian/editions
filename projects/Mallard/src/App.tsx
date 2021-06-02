@@ -30,6 +30,10 @@ import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-do
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe';
+import { isInBeta } from './helpers/release-stream';
+import { newMobileProdStack } from './helpers/settings/defaults';
+import { setApiUrl } from './helpers/settings/setters';
+import { newApiUrlSetForBetaUsers } from './helpers/storage';
 import { EditionProvider } from './hooks/use-edition-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
@@ -82,6 +86,20 @@ const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
 	}
 };
 
+const forceUpdateApiUrlIfBeta = async () => {
+	// TODO - Remove this whole function once new stack is fully in operation.
+	if (isInBeta()) {
+		const betaApiHasSetAlready = await newApiUrlSetForBetaUsers.get();
+		if (!betaApiHasSetAlready) {
+			setApiUrl(apolloClient, newMobileProdStack);
+			console.log('*** Beta: updated api url for BETA Users ***');
+			await newApiUrlSetForBetaUsers.set(true);
+		} else {
+			console.log('*** Beta: api url for Beta users already updated ***');
+		}
+	}
+};
+
 export default class App extends React.Component {
 	componentDidMount() {
 		SplashScreen.hide();
@@ -93,6 +111,7 @@ export default class App extends React.Component {
 			if (appState === 'active') {
 				prepareAndDownloadTodaysIssue(apolloClient);
 				loggingService.postLogs();
+				forceUpdateApiUrlIfBeta();
 			}
 		});
 
