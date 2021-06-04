@@ -4,6 +4,7 @@ import { attempt, hasFailed } from '../../../../backend/utils/try'
 import {
     frontPath,
     htmlPath,
+    htmlRootPath,
     Image,
     ImageSize,
     imageSizes,
@@ -12,7 +13,13 @@ import {
 } from '../../../common'
 import { handleAndNotifyOnError } from '../../services/task-handler'
 import { getFront } from '../../utils/backend-client'
-import { getBucket, ONE_WEEK, upload } from '../../utils/s3'
+import {
+    getBucket,
+    list,
+    ONE_WEEK,
+    recursiveCopy,
+    upload,
+} from '../../utils/s3'
 import { IssueParams } from '../issue'
 import {
     getAndUploadImageUse,
@@ -42,17 +49,16 @@ export const handler: Handler<
 
     const { publishedId } = issue
 
+    // *** Upload Front Data ***
+    // Fetch the 'front' data for given front name from the backend and upload to s3 folder
+    // folder for the given Issue as well as upload all the images.
+
     const maybeFront = await getFront(publishedId, front)
 
     if (hasFailed(maybeFront)) {
         console.error(JSON.stringify(attempt))
         throw new Error(`Could not download front ${front}`)
     }
-
-    console.log(
-        `succesfully download front ${front}`,
-        JSON.stringify(maybeFront),
-    )
 
     const frontUpload = await attempt(
         upload(
@@ -101,8 +107,8 @@ export const handler: Handler<
     const failedImages = failedImageUseUploads.length
     const success = failedImages === 0
 
-    // server side rendering
-
+    // *** Server Side Rendering ***
+    // Fetch ER articles for this 'front' and upload them issue specific 'html' folder
     const ssrArticles = await getSSRArticlesFromFront(maybeFront)
 
     const result = await Promise.all(
@@ -126,6 +132,37 @@ export const handler: Handler<
         )
     }
     console.log('Uploaded rendered HTML')
+
+    // *** Copy Html Aassets ***
+    // Copy html assets from a static folder (<bucket_name>/assets) to 'html/assets' of the given Issue. Since this lambda
+    // function can trigger multiple times for any given Issue (for single 'front') we only need
+    // to perform this copy operation once for a given Issue. If 'html/assets' exists then just ignore
+    // this operation.
+    const htmlAssetsRootPath = `${htmlRootPath(publishedId)}/assets/`
+    const listing = await list(Bucket, htmlAssetsRootPath)
+    const keys = listing.objects.Contents || []
+    if (keys.length > 0) {
+        console.log(
+            '*** Ignoring asset copy: they are already copied for this issue ***',
+        )
+    } else {
+        console.log('*** Copying assets for issue: ' + publishedId)
+        const outBucket = {
+            name: `${Bucket.name}/${htmlRootPath(publishedId)}`,
+            context: Bucket.context,
+        }
+        const copyPromises = await recursiveCopy('assets', Bucket, outBucket)
+        if (copyPromises.filter(hasFailed).length) {
+            throw new Error(
+                `*** Failed to copy Asset files for ${publishedId}***`,
+            )
+        } else {
+            console.log(
+                '*** Successfully copied html assets for issue: ' + publishedId,
+            )
+        }
+    }
+
     return {
         message: `${front} and images uploaded ${
             success ? 'succesfully' : 'with some images missing'

@@ -462,7 +462,9 @@ export const frontPath = (issue: string, frontId: string) =>
 export const htmlDirPath = (issue: string) => `${issueDir(issue)}/html`
 
 export const htmlPath = (issue: string, internalPageCode: number) =>
-    `${issueDir(issue)}/html/${internalPageCode}.html`
+    `${htmlRootPath(issue)}/${internalPageCode}.html`
+
+export const htmlRootPath = (issue: string) => `${issueDir(issue)}/html`
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 
