@@ -461,19 +461,17 @@ export const frontPath = (issue: string, frontId: string) =>
 
 export const htmlDirPath = (issue: string) => `${issueDir(issue)}/html`
 
-export const htmlPath = (issue: string, internalPageCode: number) =>
-    `${htmlRootPath(issue)}/${internalPageCode}.html`
-
 export const htmlRootPath = (issue: string) => `${issueDir(issue)}/html`
 
-// These have issueids in the path, but you'll need to change the archiver if you want to use them.
+export const htmlPath = (issue: string, internalPageCode: number) =>
+    `${htmlRootPath(issue)}/${internalPageCode}.html`
 
 export const mediaDir = (issue: string, size?: ImageSize) => {
     // `size` only used to contstruct web url
     if (size) {
-        return `${issueDir(issue)}/media/${size}/`
+        return `${issueDir(issue)}/media/${size}/` // used by old articles and its clients
     } else {
-        return `${issueDir(issue)}/media/images/`
+        return `${issueDir(issue)}/media/images/` // used by SSR
     }
 }
 
