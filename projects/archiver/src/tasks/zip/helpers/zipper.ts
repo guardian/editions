@@ -34,8 +34,7 @@ export const zip = async (
 
     const files = await getMatchingObjects(prefixes, bucket)
 
-    console.log('Got file names')
-    console.log('zipping', JSON.stringify(files))
+    console.log('Got file names, zipping them...')
 
     const archive = archiver('zip')
     archive.on('warning', err => {
@@ -49,7 +48,7 @@ export const zip = async (
                 ? file.replace(`${options.removeFromOutputPath}`, '')
                 : file
 
-            console.log(`getting ${file}`)
+            console.log(`fetching file from s3: ${file}`)
             const s3response = await s3
                 .getObject({ Bucket: bucket.name, Key: file })
                 .promise()
@@ -61,10 +60,14 @@ export const zip = async (
                 ? path.replace(`/${options.replaceImageSize}/`, '/images/')
                 : path
 
+            const shouldReplaceImagePath =
+                options.replaceImagePathInDataBundle &&
+                file.indexOf('html/assets/') == -1
             let bufferedData: Buffer
-            if (options.replaceImagePathInDataBundle) {
-                // SSR: inside the 'data' bundle all the image path need to be in
-                // 'relative' path format
+            if (shouldReplaceImagePath) {
+                // SSR: inside the 'html' bundle all the image path need to be in
+                // 'relative' path format so, replace them. Do not apply then to the
+                // assets inside `html` folder
                 const articleHtml = s3response.Body.toString('utf-8')
                 const articleWithRelativeImgUrl = replaceImageUrls(articleHtml)
                 bufferedData = Buffer.from(articleWithRelativeImgUrl)
