@@ -26,12 +26,8 @@ const identifyAssetFiles = (assetKeys: string[]) => {
                     .replace('.zip', '')
 
                 // special case the data and html bundle
-                if (filename === 'data') {
-                    return ['data', key]
-                }
-
-                if (filename === 'html') {
-                    return ['html', key]
+                if (filename === 'data' || filename === 'html') {
+                    return [filename, key]
                 }
 
                 // drop any unrecognised asset zips
@@ -147,13 +143,14 @@ export const getIssueSummary = async (
 
     const prefix = `zips/${publishedIssuePrefix}/`
     const assetKeys = await getAssestKeysFromBucket(bucket, prefix)
+    const assetWithoutSSR = assetKeys.filter(key => key.indexOf('/ssr') == -1)
 
     const prefixSSR = `zips/${publishedIssuePrefix}/ssr`
     const assetKeysSSR = await getAssestKeysFromBucket(bucket, prefixSSR)
 
     return getIssueSummaryInternal(
         issuePublication,
-        assetKeys,
+        assetWithoutSSR,
         assetKeysSSR,
         displayName,
     )
