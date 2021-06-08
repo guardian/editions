@@ -9,9 +9,6 @@ import {
     decodeVersionOrPreview,
 } from '../utils/issue'
 
-export const DEFAULT_LIVE_PAGE_SIZE = 30
-export const DEFAULT_PREVIEW_PAGE_SIZE = 35
-
 export const issueController = (req: Request, res: Response) => {
     const issueDate: string = req.params.date
     const version: string = decodeVersionOrPreview(
