@@ -103,6 +103,7 @@ const sendError = (message: string, errCode: number, res: Response) => {
 }
 
 export const renderController = async (req: Request, res: Response) => {
+    const frontName = req.query['frontName'] || 'unknown'
     const internalPageCode: number = req.params.internalPageCode
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
@@ -124,8 +125,9 @@ export const renderController = async (req: Request, res: Response) => {
 
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(content)
+        const url = `${appsRenderingProxyUrl}?frontName=${frontName}`
         const renderedArticle = await fetchRenderedArticle(
-            appsRenderingProxyUrl,
+            url,
             appsRenderingProxyHeader,
             bufferData,
         )
