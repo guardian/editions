@@ -279,11 +279,15 @@ export const getFileList = async () => {
 				file.name === 'media'
 					? `${file.path}/${imageSize}/media`
 					: `${file.path}/${imageSize}/thumb/media`,
-			).then((filestat) =>
-				filestat
-					.map((deepfile) => cleanFileDisplay(deepfile))
-					.slice(0, 1),
-			);
+			)
+				.then((filestat) =>
+					filestat
+						.map((deepfile) => cleanFileDisplay(deepfile))
+						.slice(0, 1),
+				)
+				.catch((e) => {
+					console.error(e);
+				});
 		}),
 	);
 
