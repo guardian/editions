@@ -54,7 +54,7 @@ const styles = (color: string, location: string) => {
 	return StyleSheet.create({
 		container: {
 			paddingLeft: location === 'front' ? 10 : 0,
-			maxWidth: location === 'article' ? 800 : undefined,
+			maxWidth: location === 'article' ? 740 : undefined,
 			width: '100%',
 			alignSelf: 'center',
 		},

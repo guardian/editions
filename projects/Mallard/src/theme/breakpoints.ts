@@ -1,7 +1,7 @@
 export enum Breakpoints {
 	SmallPhone = 0,
 	Phone = 375,
-	TabletVertical = 690,
+	TabletVertical = 740,
 	TabletLandscape = 1000,
 }
 
