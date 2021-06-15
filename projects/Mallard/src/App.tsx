@@ -34,7 +34,10 @@ import { pushDownloadFailsafe } from './helpers/push-download-failsafe';
 import { isInBeta } from './helpers/release-stream';
 import { newMobileProdStack } from './helpers/settings/defaults';
 import { setApiUrl } from './helpers/settings/setters';
-import { hasERMigrationOperationDone, newApiUrlSetForBetaUsers } from './helpers/storage';
+import {
+	hasERMigrationOperationDone,
+	newApiUrlSetForBetaUsers,
+} from './helpers/storage';
 import { EditionProvider } from './hooks/use-edition-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
@@ -105,32 +108,30 @@ const deleteIssuesForERMigration = async (): Promise<boolean> => {
 	// TODO
 	// This is a migration function - can be safely removed once user migrated to
 	// the new version of the app.
-	if(await hasERMigrationOperationDone.get()) {
+	if (await hasERMigrationOperationDone.get()) {
 		console.log('ER migration operation already done.');
 		return false;
-	}
-	else {
+	} else {
 		await cleanNonERCompatibleDownloadedIssues();
 		await hasERMigrationOperationDone.set(true);
 		console.log('ER migration operation completed.');
 		return true;
 	}
-}
+};
 
 export default class App extends React.Component {
-	
 	componentDidMount() {
 		SplashScreen.hide();
 		prepareAndDownloadTodaysIssue(apolloClient);
 		shouldHavePushFailsafe(apolloClient);
 		forceUpdateApiUrlIfBeta();
-		deleteIssuesForERMigration()
+		deleteIssuesForERMigration();
 		loggingService.postLogs();
 
 		AppState.addEventListener('change', async (appState) => {
 			if (appState === 'active') {
 				prepareAndDownloadTodaysIssue(apolloClient);
-				loggingService.postLogs();				
+				loggingService.postLogs();
 			}
 		});
 
