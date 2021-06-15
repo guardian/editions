@@ -26,6 +26,7 @@ import { ErrorBoundary } from './components/layout/ui/errors/error-boundary';
 import { Modal, ModalRenderer } from './components/modal';
 import { NetInfoDevOverlay } from './components/NetInfoDevOverlay';
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast';
+import { cleanNonERCompatibleDownloadedIssues } from './download-edition/clear-issues-and-editions';
 import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue';
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
@@ -33,7 +34,7 @@ import { pushDownloadFailsafe } from './helpers/push-download-failsafe';
 import { isInBeta } from './helpers/release-stream';
 import { newMobileProdStack } from './helpers/settings/defaults';
 import { setApiUrl } from './helpers/settings/setters';
-import { newApiUrlSetForBetaUsers } from './helpers/storage';
+import { hasERMigrationOperationDone, newApiUrlSetForBetaUsers } from './helpers/storage';
 import { EditionProvider } from './hooks/use-edition-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
@@ -100,18 +101,36 @@ const forceUpdateApiUrlIfBeta = async () => {
 	}
 };
 
+const deleteIssuesForERMigration = async (): Promise<boolean> => {
+	// TODO
+	// This is a migration function - can be safely removed once user migrated to
+	// the new version of the app.
+	if(await hasERMigrationOperationDone.get()) {
+		console.log('ER migration operation already done.');
+		return false;
+	}
+	else {
+		await cleanNonERCompatibleDownloadedIssues();
+		await hasERMigrationOperationDone.set(true);
+		console.log('ER migration operation completed.');
+		return true;
+	}
+}
+
 export default class App extends React.Component {
+	
 	componentDidMount() {
 		SplashScreen.hide();
 		prepareAndDownloadTodaysIssue(apolloClient);
 		shouldHavePushFailsafe(apolloClient);
+		forceUpdateApiUrlIfBeta();
+		deleteIssuesForERMigration()
 		loggingService.postLogs();
 
 		AppState.addEventListener('change', async (appState) => {
 			if (appState === 'active') {
 				prepareAndDownloadTodaysIssue(apolloClient);
-				loggingService.postLogs();
-				forceUpdateApiUrlIfBeta();
+				loggingService.postLogs();				
 			}
 		});
 

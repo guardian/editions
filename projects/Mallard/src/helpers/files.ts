@@ -122,7 +122,7 @@ export const isIssueOnDevice = async (
 const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`;
 
 export const getLocalIssues = async (editionSlug: string) => {
-	const editionDirectory = await FSPaths.editionDir(editionSlug);
+	const editionDirectory = FSPaths.editionDir(editionSlug);
 	return RNFS.readdir(editionDirectory).then((files) =>
 		files.map(withPathPrefix(editionSlug)),
 	);
@@ -142,8 +142,10 @@ export const getIssuesCountStrings = async () => {
 	return result;
 };
 
-export const getIssuesToDelete = async (files: string[]) => {
-	const maxAvailableEditions = await getSetting('maxAvailableEditions');
+export const getIssuesToDelete = async (
+	files: string[],
+	maxAvailableEditions: number,
+) => {
 	const totalIssues = files.length;
 
 	if (totalIssues <= maxAvailableEditions) {

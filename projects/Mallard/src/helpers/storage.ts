@@ -100,6 +100,10 @@ const newApiUrlSetForBetaUsers = createAsyncCache<boolean>(
 	'newApiUrlSetForBeta',
 );
 
+const hasERMigrationOperationDone = createAsyncCache<boolean>(
+	'hasERMigrationOperationDone',
+);
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -169,6 +173,7 @@ export {
 	pushRegisteredTokens,
 	notificationsEnabledCache,
 	newApiUrlSetForBetaUsers,
+	hasERMigrationOperationDone,
 	showAllEditionsCache,
 	seenEditionsCache,
 };

@@ -4,6 +4,7 @@ import {
 	getLocalIssues,
 	prepFileSystem,
 } from 'src/helpers/files';
+import { getSetting } from 'src/helpers/settings';
 import { editionsListCache } from 'src/helpers/storage';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
 import { localIssueListStore } from 'src/hooks/use-issue-on-device';
@@ -69,10 +70,23 @@ const deleteIssues = (issuesToDelete: string[], trackingId: PushTrackingId) => {
 
 const clearOldIssues = async (): Promise<void> => {
 	const edition = await getSelectedEditionSlug();
-	const files = await getLocalIssues(edition);
+	const maxAvailableEditions = await getSetting('maxAvailableEditions');
+	return clearOldIssuesForEdition(edition, maxAvailableEditions);
+};
 
-	const iTD: string[] = await getIssuesToDelete(files);
-	return deleteIssues(iTD, 'clearOldIssues');
+const clearOldIssuesForEdition = async (
+	edition: string,
+	maxAvailableEditions: number,
+): Promise<void> => {
+	const files = await getLocalIssues(edition);
+	const issuesToDelete: string[] = await getIssuesToDelete(
+		files,
+		maxAvailableEditions,
+	);
+	console.log(
+		`Total issues to be deleted for ${edition} is ${issuesToDelete.length}`,
+	);
+	return deleteIssues(issuesToDelete, 'clearOldIssues');
 };
 
 /**
@@ -141,10 +155,29 @@ const cleanOldEditions = async () => {
 	}
 };
 
+const cleanNonERCompatibleDownloadedIssues = async () => {
+	// *** THIS IS A MIGRATION STEP AND SHOULD NOT RUN MORE THAN ONCE ***
+	// As part of ER work - where apps download rendered content bundle 'html'
+	// and webview expect to receive a html file, all previously downloaded Issues
+	// will not work (simply because they don't have 'html' folder in the bundle).
+	// So clean all downloaded Issue and let users to chose download again.
+
+	const editionsList = await editionsListCache.get();
+	const regionalAndSpecialEditionIds = getEditionIds(editionsList);
+	console.log(
+		`Deleting issues for ${JSON.stringify(regionalAndSpecialEditionIds)}`,
+	);
+	regionalAndSpecialEditionIds.forEach(async (edition) => {
+		console.log('Deleting all issues from: ' + edition);
+		await clearOldIssuesForEdition(edition, 0);
+	});
+};
+
 export {
 	clearOldIssues,
 	deleteIssueFiles,
 	clearDownloadsDirectory,
 	cleanOldEditions,
 	editionDirsToClean,
+	cleanNonERCompatibleDownloadedIssues,
 };
