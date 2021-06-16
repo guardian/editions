@@ -62,7 +62,9 @@ export const downloadNamedIssueArchive = async ({
 }) => {
 	const apiUrl = await getSetting('apiUrl');
 	const zipUrl = `${apiUrl}${assetPath}`;
+	console.log('Zip url: ' + zipUrl);
 	const downloadFolderLocation = FSPaths.downloadIssueLocation(localIssueId);
+	console.log(`Download Path: ${downloadFolderLocation}/${filename}`);
 	await prepFileSystem();
 	await ensureDirExists(FSPaths.issueRoot(localIssueId));
 	await ensureDirExists(downloadFolderLocation);
@@ -101,6 +103,7 @@ export const unzipNamedIssueArchive = async (zipFilePath: string) => {
 	} catch (e) {
 		e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`;
 		errorService.captureException(e);
+		console.log('Unzip Error: ' + JSON.stringify(e));
 	}
 };
 

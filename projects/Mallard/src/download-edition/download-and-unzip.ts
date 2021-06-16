@@ -97,6 +97,20 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					`Data download completed with status:${dataDownloadResult.statusCode}`,
 				);
 
+				const htmlAssetPath = assets.data.replace(
+					'data.zip',
+					'ssr/html.zip',
+				);
+				const htmlDownloadResult = await downloadNamedIssueArchive({
+					localIssueId: localId,
+					assetPath: htmlAssetPath,
+					filename: 'ssr-html.zip',
+					withProgress: false,
+				});
+				console.log(
+					`Html download completed with status:${htmlDownloadResult.statusCode}`,
+				);
+
 				await pushTracking(
 					'attemptDataDownload',
 					'completed',
@@ -119,6 +133,22 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					`Image download completed with status: ${dlImg.statusCode}`,
 				);
 
+				const originalImgAsset = assets[imageSize] as string;
+				const ssrImgPath = originalImgAsset.replace(
+					`${imageSize}.zip`,
+					`ssr/${imageSize}.zip`,
+				);
+				const downloadSSRImgFileName = `ssr-${imageSize}.zip`;
+				const dlSSRImg = await downloadNamedIssueArchive({
+					localIssueId: localId,
+					assetPath: ssrImgPath,
+					filename: downloadSSRImgFileName,
+					withProgress: true,
+				});
+				console.log(
+					`SSR Image download completed with status: ${dlSSRImg.statusCode}`,
+				);
+
 				await pushTracking(
 					'attemptMediaDownload',
 					'completed',
@@ -136,6 +166,11 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					`${FSPaths.downloadIssueLocation(localId)}/data.zip`,
 				);
 
+				await unzipNamedIssueArchive(
+					`${FSPaths.downloadIssueLocation(localId)}/ssr-html.zip`,
+				);
+				console.log('SSR html unzipped');
+
 				await pushTracking('unzipData', 'end', Feature.DOWNLOAD);
 
 				await pushTracking('unzipImages', 'start', Feature.DOWNLOAD);
@@ -143,6 +178,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 				await unzipNamedIssueArchive(
 					`${FSPaths.downloadIssueLocation(localId)}/media.zip`,
 				);
+				await unzipNamedIssueArchive(
+					`${FSPaths.downloadIssueLocation(
+						localId,
+					)}/${downloadSSRImgFileName}`,
+				);
+				console.log('SSR image unzipped');
 
 				await pushTracking('unzipImages', 'end', Feature.DOWNLOAD);
 
