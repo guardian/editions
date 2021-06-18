@@ -12,6 +12,7 @@ import { DownloadBlockedStatus } from 'src/hooks/use-net-info';
 import { pushTracking } from 'src/notifications/push-tracking';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
+import { remoteConfigService } from 'src/services/remote-config';
 import type { ImageSize, IssueSummary } from '../../../Apps/common/src';
 import { Feature } from '../../../Apps/common/src/logging';
 import { deleteIssue } from './clear-issues-and-editions';
@@ -64,6 +65,49 @@ export const updateListeners = (localId: string, status: DLStatus) => {
 	listeners.forEach((listener) => listener(status));
 };
 
+const downloadSSRBundle = async (issue: IssueSummary, imageSize: ImageSize) => {
+	const { assets, localId } = issue;
+
+	if (assets) {
+		const htmlAssetPath = assets.data.replace('data.zip', 'ssr/html.zip');
+		const htmlDownloadResult = await downloadNamedIssueArchive({
+			localIssueId: localId,
+			assetPath: htmlAssetPath,
+			filename: 'ssr-html.zip',
+			withProgress: false,
+		});
+		console.log(
+			`SSR html.zip download completed with status:${htmlDownloadResult.statusCode}`,
+		);
+		await unzipNamedIssueArchive(
+			`${FSPaths.downloadIssueLocation(localId)}/ssr-html.zip`,
+		);
+		console.log('SSR html unzipped');
+
+		const originalImgAsset = assets[imageSize] as string;
+		const ssrImgPath = originalImgAsset.replace(
+			`${imageSize}.zip`,
+			`ssr/${imageSize}.zip`,
+		);
+		const downloadSSRImgFileName = `ssr-${imageSize}.zip`;
+		const dlSSRImg = await downloadNamedIssueArchive({
+			localIssueId: localId,
+			assetPath: ssrImgPath,
+			filename: downloadSSRImgFileName,
+			withProgress: false,
+		});
+		console.log(
+			`SSR image download completed with status: ${dlSSRImg.statusCode}`,
+		);
+		await unzipNamedIssueArchive(
+			`${FSPaths.downloadIssueLocation(
+				localId,
+			)}/${downloadSSRImgFileName}`,
+		);
+		console.log('SSR image unzipped');
+	}
+};
+
 const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 	const { assets, localId } = issue;
 
@@ -79,13 +123,16 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 			Feature.DOWNLOAD,
 		);
 
+		const ssrBundleDownloadEnabled = remoteConfigService.getBoolean(
+			'download_parallel_ssr_bundle',
+		);
+
 		await retry(
 			async () => {
-				// We are not asking for progress update during Data bundle download (to avoid false visual completion)
-				// So, instead we are artificially triggering a small progress update to render some visual change
+				// To give a artificial visual indication move the progressbar a little
 				updateListeners(localId, {
 					type: 'download',
-					data: 0.5,
+					data: 1.0,
 				});
 				const dataDownloadResult = await downloadNamedIssueArchive({
 					localIssueId: localId,
@@ -94,21 +141,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					withProgress: false,
 				});
 				console.log(
-					`Data download completed with status:${dataDownloadResult.statusCode}`,
-				);
-
-				const htmlAssetPath = assets.data.replace(
-					'data.zip',
-					'ssr/html.zip',
-				);
-				const htmlDownloadResult = await downloadNamedIssueArchive({
-					localIssueId: localId,
-					assetPath: htmlAssetPath,
-					filename: 'ssr-html.zip',
-					withProgress: false,
-				});
-				console.log(
-					`Html download completed with status:${htmlDownloadResult.statusCode}`,
+					`data.zip download completed with status:${dataDownloadResult.statusCode}`,
 				);
 
 				await pushTracking(
@@ -116,6 +149,13 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					'completed',
 					Feature.DOWNLOAD,
 				);
+
+				if (ssrBundleDownloadEnabled) {
+					console.log('Parallel SSR bundle download is ENABLED');
+					await downloadSSRBundle(issue, imageSize);
+				} else {
+					console.log('Parallel SSR bundle download is DISABLED');
+				}
 
 				await pushTracking(
 					'attemptMediaDownload',
@@ -130,23 +170,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					withProgress: true,
 				});
 				console.log(
-					`Image download completed with status: ${dlImg.statusCode}`,
-				);
-
-				const originalImgAsset = assets[imageSize] as string;
-				const ssrImgPath = originalImgAsset.replace(
-					`${imageSize}.zip`,
-					`ssr/${imageSize}.zip`,
-				);
-				const downloadSSRImgFileName = `ssr-${imageSize}.zip`;
-				const dlSSRImg = await downloadNamedIssueArchive({
-					localIssueId: localId,
-					assetPath: ssrImgPath,
-					filename: downloadSSRImgFileName,
-					withProgress: true,
-				});
-				console.log(
-					`SSR Image download completed with status: ${dlSSRImg.statusCode}`,
+					`media.zip download completed with status: ${dlImg.statusCode}`,
 				);
 
 				await pushTracking(
@@ -165,11 +189,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 				await unzipNamedIssueArchive(
 					`${FSPaths.downloadIssueLocation(localId)}/data.zip`,
 				);
-
-				await unzipNamedIssueArchive(
-					`${FSPaths.downloadIssueLocation(localId)}/ssr-html.zip`,
-				);
-				console.log('SSR html unzipped');
+				console.log('data.zip unzipped');
 
 				await pushTracking('unzipData', 'end', Feature.DOWNLOAD);
 
@@ -178,12 +198,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 				await unzipNamedIssueArchive(
 					`${FSPaths.downloadIssueLocation(localId)}/media.zip`,
 				);
-				await unzipNamedIssueArchive(
-					`${FSPaths.downloadIssueLocation(
-						localId,
-					)}/${downloadSSRImgFileName}`,
-				);
-				console.log('SSR image unzipped');
+				console.log('media.zip unzipped');
 
 				await pushTracking('unzipImages', 'end', Feature.DOWNLOAD);
 

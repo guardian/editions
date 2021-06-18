@@ -304,8 +304,8 @@ PODS:
     - React
   - RNCPushNotificationIOS (1.2.2):
     - React
-  - RNDeviceInfo (5.3.1):
-    - React
+  - RNDeviceInfo (8.1.3):
+    - React-Core
   - RNFBApp (10.8.1):
     - Firebase/CoreOnly (~> 7.6.0)
     - React-Core
@@ -601,7 +601,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 2e2e3feb9bdadc752a026703d8c4065ca912e75a
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNCPushNotificationIOS: 4c97a36dbec42dba411cc35e6dac25e34a805fde
-  RNDeviceInfo: 6f20764111df002b4484f90cbe0a861be29bcc6c
+  RNDeviceInfo: 8d3a29207835f972bce883723882980143270d55
   RNFBApp: 02bde3edecf2e9694b908a5d3504e03449980f20
   RNFBCrashlytics: 0e6347d4e2251c6656b43ce8544662d1bac7deff
   RNFBRemoteConfig: 1adf37593b23dfec015a48016cd26982257889ba

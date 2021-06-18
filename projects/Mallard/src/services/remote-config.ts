@@ -15,6 +15,7 @@ const remoteConfigDefaults = {
 	join_beta_button_enabled: false,
 	lightbox_enabled: true,
 	generate_share_url: true,
+	download_parallel_ssr_bundle: false,
 };
 
 export const RemoteConfigProperties = [
@@ -22,6 +23,7 @@ export const RemoteConfigProperties = [
 	'join_beta_button_enabled',
 	'lightbox_enabled',
 	'generate_share_url',
+	'download_parallel_ssr_bundle',
 ] as const;
 
 export type RemoteConfigProperty = typeof RemoteConfigProperties[number];
