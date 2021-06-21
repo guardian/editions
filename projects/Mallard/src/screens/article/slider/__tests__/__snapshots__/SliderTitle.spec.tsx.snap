@@ -93,7 +93,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
   style={
     Object {
       "alignSelf": "center",
-      "maxWidth": 800,
+      "maxWidth": 740,
       "paddingLeft": 0,
       "width": "100%",
     }
@@ -182,7 +182,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
   style={
     Object {
       "alignSelf": "center",
-      "maxWidth": 800,
+      "maxWidth": 740,
       "paddingLeft": 0,
       "width": "100%",
     }
@@ -258,7 +258,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
   style={
     Object {
       "alignSelf": "center",
-      "maxWidth": 800,
+      "maxWidth": 740,
       "paddingLeft": 0,
       "width": "100%",
     }
@@ -511,7 +511,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
   style={
     Object {
       "alignSelf": "center",
-      "maxWidth": 800,
+      "maxWidth": 740,
       "paddingLeft": 0,
       "width": "100%",
     }
@@ -599,7 +599,7 @@ exports[`SliderTitle - iOS - Mobile should display no dots when numOfItems is 1 
   style={
     Object {
       "alignSelf": "center",
-      "maxWidth": 800,
+      "maxWidth": 740,
       "paddingLeft": 0,
       "width": "100%",
     }

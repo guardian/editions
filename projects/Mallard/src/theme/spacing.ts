@@ -36,7 +36,7 @@ export const metrics = {
 	radius: 10,
 	article: {
 		sides,
-		maxWidth: 800,
+		maxWidth: 740,
 		rightRail: 180 + sides,
 		railPaddingLeft: sides * 1.5,
 		standfirstBottom: basicMetrics.vertical * 1.5,
