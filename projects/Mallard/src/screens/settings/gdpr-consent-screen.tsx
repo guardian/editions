@@ -261,41 +261,12 @@ const GdprConsent = ({
 							subtitle={essentials.services}
 							explainer={essentials.description}
 						></TallRow>
+						<Separator></Separator>
 					</>
 				)}
 				ListFooterComponent={() => (
 					<>
-						<FlatList
-							ItemSeparatorComponent={Separator}
-							ListFooterComponent={Separator}
-							ListHeaderComponent={Separator}
-							data={Object.values(switches)}
-							keyExtractor={({ key }) => key}
-							renderItem={({ item }) => (
-								<TallRow
-									title={item.name}
-									subtitle={item.services}
-									explainer={item.description}
-									proxy={
-										<ThreeWaySwitch
-											onValueChange={(value) => {
-												setConsentAndUpdate(
-													item.key,
-													value,
-												);
-												showToast(PREFS_SAVED_MSG);
-											}}
-											value={
-												gdprData.gdprCurrentVersion !==
-												CURRENT_CONSENT_VERSION
-													? null
-													: gdprData[item.key]
-											}
-										/>
-									}
-								></TallRow>
-							)}
-						/>
+						<Separator></Separator>
 						<Footer>
 							<UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
 								You can change the above settings any time by
