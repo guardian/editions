@@ -101,6 +101,7 @@ export const unzipNamedIssueArchive = async (zipFilePath: string) => {
 	} catch (e) {
 		e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`;
 		errorService.captureException(e);
+		console.log('Unzip Error: ' + JSON.stringify(e));
 	}
 };
 
