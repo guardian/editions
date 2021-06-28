@@ -9,14 +9,19 @@ import {
     getPreviewHeaders,
 } from '../utils/article'
 import { attempt, hasFailed } from '../utils/try'
-
-interface RenderedArticle {
-    success: boolean
-    status: number
-    body: string
-}
+import { isPreview } from '../preview'
+import { decodeVersionOrPreview } from '../utils/issue'
+import { lastModified } from '../lastModified'
+import { IssuePublicationIdentifier, RenderedArticle } from '../common'
+import { fetchPublishedIssue } from '../fronts'
+import { PublishedFurniture } from '../fronts/issue'
+import { Content } from '@guardian/content-api-models/v1/content'
+import { Tag } from '@guardian/content-api-models/v1/tag'
+import { TagType } from '@guardian/content-api-models/v1/tagType'
+import { oc } from 'ts-optchain'
 
 const fetchRenderedArticle = async (
+    internalPageCode: number,
     url: string,
     proxyHeaderKey: string,
     buffer: Buffer,
@@ -36,8 +41,9 @@ const fetchRenderedArticle = async (
     const responseBody = await response.text()
     return {
         success: response.statusText === 'OK',
-        status: response.status,
+        message: 'success',
         body: responseBody,
+        internalPageCode,
     }
 }
 
@@ -88,29 +94,69 @@ const fetchCapiContent = async (
                 return response
             }
         } catch (e) {
-            console.log(`No result found for a capi ${capi} query`)
+            console.log(
+                `No result found for ${internalPageCode} from capi '${capi}'`,
+            )
         }
     }
 
     return Promise.reject(
-        `Failed to fetch article:${internalPageCode} from live, printsent or preview`,
+        `Failed to fetch article with internalPageCode=${internalPageCode} from live, printsent or preview`,
     )
 }
 
-const sendError = (message: string, errCode: number, res: Response) => {
+const sendError = (message: string, res: Response) => {
     console.error(`${message}`)
-    res.status(errCode).send(message)
+    res.status(400).send(message)
 }
 
-export const renderController = async (req: Request, res: Response) => {
-    const frontName = req.query['frontName'] || 'unknown'
-    const internalPageCode: number = req.params.internalPageCode
+const getTags = (kicker: string): Tag[] => [
+    {
+        id: '',
+        type: TagType.SERIES,
+        webTitle: kicker,
+        webUrl: '',
+        apiUrl: '',
+        references: [],
+        internalName: '',
+    },
+]
+
+const mapFurnitureToContent = (
+    furniture: PublishedFurniture,
+    content: Content,
+): Content => {
+    const headline =
+        oc(furniture).headlineOverride() || oc(content).fields.headline()
+    const byline = furniture.showByline
+        ? oc(furniture).bylineOverride() || oc(content).fields.byline()
+        : ''
+    return {
+        ...content,
+        tags: furniture.kicker ? getTags(furniture.kicker) : content.tags,
+        fields: {
+            ...content.fields,
+            headline,
+            byline,
+            trailText: oc(furniture).trailTextOverride() || '',
+        },
+    }
+}
+
+const processArticleRendering = async (
+    internalPageCode: number,
+    furniture: PublishedFurniture,
+): Promise<RenderedArticle> => {
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
         if (searchResponse.results.length < 1) {
             const msg = `Failed to fetch content for internalPageCode: ${internalPageCode}`
-            sendError(msg, 400, res)
-            return
+            return {
+                success: false,
+                message: msg,
+                body: '',
+                internalPageCode,
+            }
         }
 
         const appsRenderingProxyUrl =
@@ -119,27 +165,105 @@ export const renderController = async (req: Request, res: Response) => {
             process.env.APPS_RENDERING_PROXY_HEADER_KEY ||
             'proxy header missing'
 
-        // TODO modify the 'content' if required before re-encode
-        // we may need to modify the pillar based on 'front'
         const content = searchResponse.results[0]
+        const patchedContent = mapFurnitureToContent(furniture, content)
 
         // re-encode the response to send to AR backend
-        const bufferData = await encodeContent(content)
-        const url = `${appsRenderingProxyUrl}?frontName=${frontName}`
+        const bufferData = await encodeContent(patchedContent)
+        const url = `${appsRenderingProxyUrl}`
         const renderedArticle = await fetchRenderedArticle(
+            internalPageCode,
             url,
             appsRenderingProxyHeader,
             bufferData,
         )
         if (renderedArticle.success) {
-            res.setHeader('Content-Type', 'text/html')
-            res.send(renderedArticle.body)
+            console.log(
+                'successfully rendered article for id: ' + internalPageCode,
+            )
+            return renderedArticle
         } else {
-            const message = `Failed to fetch story from ${appsRenderingProxyUrl}. Response: ${renderedArticle.body}`
-            sendError(message, renderedArticle.status, res)
+            const msg = `Failed to fetch story from ${appsRenderingProxyUrl}. Response: ${renderedArticle.body}`
+            return {
+                success: false,
+                message: msg,
+                body: '',
+                internalPageCode,
+            }
         }
     } catch (error) {
-        const message = `Failed to fetch story for internalPageCode ${internalPageCode}.`
-        sendError(message, 400, res)
+        const msg = `Failed to fetch story for internalPageCode ${internalPageCode}.`
+        return {
+            success: false,
+            message: msg,
+            body: '',
+            internalPageCode,
+        }
+    }
+}
+
+export const renderFrontController = async (req: Request, res: Response) => {
+    const frontId: string = req.params[0]
+    const issueDate: string = req.params.date
+    const version: string = decodeVersionOrPreview(
+        req.params.version,
+        isPreview,
+    )
+    const edition = req.params.edition
+    const [date, updater] = lastModified()
+    console.log(`Request for ${req.url} fetching front ${frontId}`)
+    const issue: IssuePublicationIdentifier = {
+        issueDate,
+        version,
+        edition,
+    }
+
+    const publishedIssue = await fetchPublishedIssue(issue, frontId, updater)
+
+    if (hasFailed(publishedIssue)) {
+        sendError('Failed to fetch publised issues', res)
+        return
+    }
+
+    const front = publishedIssue.fronts.find(_ => _.name === frontId)
+    if (!front) {
+        sendError(
+            `Failed to find front '${frontId}' from the published issue`,
+            res,
+        )
+        return
+    }
+
+    const idFurniturePair = front.collections
+        .map(collection =>
+            collection.items.map((item): [number, PublishedFurniture] => [
+                item.internalPageCode,
+                item.furniture,
+            ]),
+        )
+        .reduce((acc, val) => acc.concat(val), [])
+        .map(r => {
+            return { internalPageCode: r[0], furniture: r[1] }
+        })
+
+    console.log('Furniture: ' + JSON.stringify(idFurniturePair))
+
+    const finalResult: RenderedArticle[] = []
+    for (const pair of idFurniturePair) {
+        const result = await processArticleRendering(
+            pair.internalPageCode,
+            pair.furniture,
+        )
+        finalResult.push(result)
+    }
+
+    if (finalResult.length < 1) {
+        const msg = 'Rendered article process failed'
+        console.log('Failed: ' + JSON.stringify(finalResult))
+        sendError(msg, res)
+    } else {
+        res.setHeader('Content-Type', 'application/json')
+        res.setHeader('Last-Modifed', date())
+        res.send(JSON.stringify(finalResult))
     }
 }

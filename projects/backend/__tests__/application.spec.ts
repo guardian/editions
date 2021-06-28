@@ -25,7 +25,7 @@ const testStubControllers: EditionsBackendControllers = {
     issueController: stub,
     frontController: stub,
     imageController: stub,
-    renderController: stub,
+    renderFrontController: stub,
     appsRenderingController: stub,
     editionsController: stubEditionController,
 }

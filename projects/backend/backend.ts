@@ -5,7 +5,7 @@ import { Handler } from 'aws-lambda'
 import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController } from './controllers/fronts'
 import { imageController } from './controllers/image'
-import { renderController } from './controllers/render'
+import { renderFrontController } from './controllers/render'
 import { appsRenderingController } from './controllers/appsRendering'
 import {
     editionsControllerGet,
@@ -19,7 +19,7 @@ const runtimeControllers: EditionsBackendControllers = {
     issueController,
     frontController,
     imageController,
-    renderController,
+    renderFrontController,
     appsRenderingController,
     editionsController: {
         GET: editionsControllerGet,
