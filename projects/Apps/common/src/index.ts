@@ -258,6 +258,13 @@ Don't really want to run this all the time, so it's calculated below.
     thumb: { phone: 158, tablet: 185, tabletL: 245, tabletXL: 285 },
     'thumb-large': { phone: 225, tablet: 385, tabletL: 510, tabletXL: 605 },
 }
+
+export interface RenderedArticle {
+    success: boolean
+    message: string
+    internalPageCode: number
+    body: string
+}
 export interface IssueIdentifier {
     edition: EditionId
     issueDate: string

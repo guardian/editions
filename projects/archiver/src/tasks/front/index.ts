@@ -12,7 +12,7 @@ import {
     Issue,
 } from '../../../common'
 import { handleAndNotifyOnError } from '../../services/task-handler'
-import { getFront } from '../../utils/backend-client'
+import { getFront, getRenderedFront } from '../../utils/backend-client'
 import {
     getBucket,
     list,
@@ -28,10 +28,7 @@ import {
 } from './helpers/media'
 import pAll = require('p-all')
 import { sleep } from '../../utils/sleep'
-import {
-    getSSRArticlesFromFront,
-    uploadRenderedArticle,
-} from './helpers/render'
+import { uploadRenderedArticle } from './helpers/render'
 
 export interface FrontTaskInput extends IssueParams {
     issue: Issue
@@ -50,7 +47,7 @@ export const handler: Handler<
     const { publishedId } = issue
 
     // *** Upload Front Data ***
-    // Fetch the 'front' data for given front name from the backend and upload to s3 folder
+    // Fetch the 'front' data for given front name from the backend and upload to s3
     // folder for the given Issue as well as upload all the images.
 
     const maybeFront = await getFront(publishedId, front)
@@ -108,23 +105,22 @@ export const handler: Handler<
     const success = failedImages === 0
 
     // *** Server Side Rendering ***
-    // Fetch ER articles for this 'front' and upload them issue specific 'html' folder
-    const ssrArticles = await getSSRArticlesFromFront(maybeFront)
+    // Fetch ER articles for this 'front' and upload them to the 'html' folder of the given Issue
+    const renderedFront = await getRenderedFront(publishedId, front)
+    if (hasFailed(renderedFront)) {
+        console.error(JSON.stringify(renderedFront))
+        throw new Error(
+            `Failed to fetch rendered front '${front}' from the backend`,
+        )
+    }
 
-    const result = await Promise.all(
-        ssrArticles.map(async ssrArticle => {
-            if (hasFailed(ssrArticle.content)) {
-                const errorMessage = `Failed to render articles for front ${front}`
-                console.error(errorMessage)
-                throw new Error(errorMessage)
-            }
-            return await uploadRenderedArticle(
-                htmlPath(publishedId, ssrArticle.internalPageCode),
-                ssrArticle.content,
-            )
-        }),
-    )
-
+    console.log('Rendered front fetched successfully from the Backend')
+    const result = renderedFront.map(async renderedArticle => {
+        return await uploadRenderedArticle(
+            htmlPath(publishedId, renderedArticle.internalPageCode),
+            renderedArticle.body,
+        )
+    })
     const failedHtmlUploads = result.filter(hasFailed)
     if (failedHtmlUploads.length > 0) {
         console.warn(
