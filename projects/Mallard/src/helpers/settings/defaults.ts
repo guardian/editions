@@ -10,9 +10,24 @@ This is a bit of a mess
 */
 export const backends = [
 	{
-		title: 'PROD published (mobile)',
+		title: 'PROD published (new stack)',
 		value: newMobileProdStack,
 		preview: false,
+	},
+	{
+		title: 'PROD proofed (new stack)',
+		value: 'https://editions-proofed-prod.s3-eu-west-1.amazonaws.com/',
+		preview: true,
+	},
+	{
+		title: 'CODE published (new stack)',
+		value: 'https://editions-published-code.s3-eu-west-1.amazonaws.com/',
+		preview: false,
+	},
+	{
+		title: 'CODE proofed (new stack)',
+		value: 'https://editions-proofed-code.s3-eu-west-1.amazonaws.com/',
+		preview: true,
 	},
 	{
 		title: 'PROD published',
@@ -35,34 +50,14 @@ export const backends = [
 		preview: false,
 	},
 	{
-		title: 'CODE published mobile',
-		value: 'https://editions-published-code.s3-eu-west-1.amazonaws.com/',
-		preview: false,
-	},
-	{
 		title: 'CODE proofed',
 		value: 'https://editions-proof.code.dev-guardianapis.com/',
-		preview: true,
-	},
-	{
-		title: 'CODE proofed mobile',
-		value: 'https://editions-proofed-code.s3-eu-west-1.amazonaws.com/',
 		preview: true,
 	},
 	{
 		title: 'CODE preview',
 		value: 'https://preview.editions.code.dev-guardianapis.com/',
 		preview: true,
-	},
-	{
-		title: 'CODE proofed (mobile)',
-		value: 'https://editions-proofed-code.s3-eu-west-1.amazonaws.com/',
-		preview: true,
-	},
-	{
-		title: 'CODE published (mobile)',
-		value: newMobileProdStack,
-		preview: false,
 	},
 	{
 		title: 'DEV',
