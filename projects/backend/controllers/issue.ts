@@ -46,6 +46,8 @@ export const getIssuesSummary = async (
         key: editionPath.key + 'issues',
         bucket: getEditionsBucket('published'),
     }
+
+    console.log(`Fetching issues summary from s3: ${JSON.stringify(issuePath)}`)
     const issueData = await s3fetch(issuePath)
 
     if (hasFailed(issueData)) {

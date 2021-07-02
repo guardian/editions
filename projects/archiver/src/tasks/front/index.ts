@@ -114,7 +114,9 @@ export const handler: Handler<
         )
     }
 
-    console.log('Rendered front fetched successfully from the Backend')
+    console.log(
+        `Rendered front (${front}) fetched successfully from the Backend`,
+    )
     const result = renderedFront.map(async renderedArticle => {
         return await uploadRenderedArticle(
             htmlPath(publishedId, renderedArticle.internalPageCode),

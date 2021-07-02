@@ -30,6 +30,11 @@ export const backends = [
 		preview: true,
 	},
 	{
+		title: 'CODE preview (new stack)',
+		value: 'https://preview.editions.code.dev-guardianapis.com/',
+		preview: true,
+	},
+	{
 		title: 'PROD published',
 		value: 'https://editions.guardianapis.com/',
 		preview: false,
