@@ -122,6 +122,19 @@ const getTags = (kicker: string): Tag[] => [
     },
 ]
 
+const getStandfirst = (
+    furniture: PublishedFurniture,
+    content: Content,
+): string | undefined => {
+    const override = oc(furniture).trailTextOverride()
+
+    if (override) {
+        return `<p>${override}</p>`
+    }
+
+    return oc(content).fields.standfirst()
+}
+
 const mapFurnitureToContent = (
     furniture: PublishedFurniture,
     content: Content,
@@ -131,6 +144,8 @@ const mapFurnitureToContent = (
     const byline = furniture.showByline
         ? oc(furniture).bylineOverride() || oc(content).fields.byline()
         : ''
+    const standfirst = getStandfirst(furniture, content)
+
     return {
         ...content,
         tags: furniture.kicker ? getTags(furniture.kicker) : content.tags,
@@ -138,7 +153,7 @@ const mapFurnitureToContent = (
             ...content.fields,
             headline,
             byline,
-            trailText: oc(furniture).trailTextOverride() || '',
+            standfirst,
         },
     }
 }
