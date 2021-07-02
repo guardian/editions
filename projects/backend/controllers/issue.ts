@@ -1,13 +1,23 @@
 import { Request, Response } from 'express'
-import { IssueSummary, IssuePublicationIdentifier } from '../common'
+import {
+    IssueSummary,
+    IssuePublicationIdentifier,
+    EditionId,
+    notNull,
+} from '../common'
 import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
-import { s3fetch, getEditionsBucket } from '../s3'
+import { s3List, s3FrontsClient } from '../s3'
 import { Attempt, hasFailed } from '../utils/try'
 import {
     buildEditionRootPath as buildEditionPath,
     decodeVersionOrPreview,
+    getEditionOrFallback,
 } from '../utils/issue'
+import { groupBy } from 'ramda'
+
+export const DEFAULT_LIVE_PAGE_SIZE = 30
+export const DEFAULT_PREVIEW_PAGE_SIZE = 35
 
 export const issueController = (req: Request, res: Response) => {
     const issueDate: string = req.params.date
@@ -38,25 +48,76 @@ export const issueController = (req: Request, res: Response) => {
 export const getIssuesSummary = async (
     maybeEdition: string,
     isPreview: boolean,
+    pageSize?: number,
 ): Promise<Attempt<IssueSummary[]>> => {
-    console.log('fetching issues summary')
+    /**
+     * fallbacks to 'daily-edition'
+     * to support /issues path
+     * TODO to delete in the future
+     */
+    const edition: EditionId = getEditionOrFallback(maybeEdition)
     const editionPath = buildEditionPath(maybeEdition, isPreview)
+    const issueKeys = await s3List(editionPath, s3FrontsClient)
+    console.log(`Preparing issues summaries, isPreview: ${isPreview}`)
 
-    const issuePath = {
-        key: editionPath.key + 'issues',
-        bucket: getEditionsBucket('published'),
-    }
-
-    console.log(`Fetching issues summary from s3: ${JSON.stringify(issuePath)}`)
-    const issueData = await s3fetch(issuePath)
-
-    if (hasFailed(issueData)) {
+    if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
-        console.error(JSON.stringify(issueData))
-        return issueData
+        console.error(JSON.stringify(issueKeys))
+        return issueKeys
     }
-    const data = (await issueData.json()) as IssueSummary[]
-    return data
+    const issuePublications: IssuePublicationIdentifier[] = issueKeys.map(
+        ({ key, lastModified }) => {
+            const [, issueDate, filename] = key.split('/')
+            const publicationDate = lastModified
+            const version = filename.replace('.json', '')
+            return {
+                edition,
+                issueDate,
+                version,
+                publicationDate,
+            }
+        },
+    )
+
+    const issues = Object.values(
+        groupBy(_ => _.issueDate, issuePublications),
+    ).map(versions =>
+        versions.reduce((a, b) =>
+            new Date(a.version).getTime() > new Date(b.version).getTime() // Version is always a date. This is obscene. This controller should also never be hit. Fix after launch.
+                ? a
+                : b,
+        ),
+    )
+
+    return issues
+        .map(issuePublication => {
+            const date = new Date(issuePublication.issueDate)
+            if (isNaN(date.getTime())) {
+                console.warn(
+                    `Issue with path ${JSON.stringify(
+                        issuePublication,
+                    )} is not a valid date`,
+                )
+                return null
+            }
+            return { compositeKey: issuePublication, date }
+        })
+        .filter(notNull)
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .map(({ compositeKey, date }) => ({
+            key: `${compositeKey.edition}/${compositeKey.issueDate}`,
+            name: 'Daily Edition',
+            date: date.toISOString(),
+            localId: `${compositeKey.edition}/${compositeKey.issueDate}`,
+            publishedId: `${compositeKey.edition}/${compositeKey.issueDate}/${compositeKey.version}`,
+        }))
+        .slice(
+            0,
+            pageSize ||
+                (isPreview
+                    ? DEFAULT_PREVIEW_PAGE_SIZE
+                    : DEFAULT_LIVE_PAGE_SIZE),
+        )
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
