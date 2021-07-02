@@ -131,6 +131,8 @@ const mapFurnitureToContent = (
     const byline = furniture.showByline
         ? oc(furniture).bylineOverride() || oc(content).fields.byline()
         : ''
+    const standfirst =
+        oc(furniture).trailTextOverride() || oc(content).fields.standfirst()
     return {
         ...content,
         tags: furniture.kicker ? getTags(furniture.kicker) : content.tags,
@@ -138,7 +140,7 @@ const mapFurnitureToContent = (
             ...content.fields,
             headline,
             byline,
-            trailText: oc(furniture).trailTextOverride() || '',
+            standfirst,
         },
     }
 }
