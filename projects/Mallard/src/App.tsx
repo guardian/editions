@@ -92,7 +92,7 @@ const forceUpdateApiUrlIfBeta = async () => {
 		const rollbackedApi = await rollbackedApiUrlForBetaUsers.get();
 		if (!rollbackedApi) {
 			setApiUrl(apolloClient, newMobileProdStack);
-			console.log('*** Beta: fastly config is done, all beta users now rollback to default prod api url, previously it was a custom url ***');
+			console.log('*** Beta: rolling back to default prod api url ***');
 			await rollbackedApiUrlForBetaUsers.set(true);
 		} else {
 			console.log('*** Beta: api url for Beta users already updated ***');
