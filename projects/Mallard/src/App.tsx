@@ -33,7 +33,7 @@ import { pushDownloadFailsafe } from './helpers/push-download-failsafe';
 import { isInBeta } from './helpers/release-stream';
 import { newMobileProdStack } from './helpers/settings/defaults';
 import { setApiUrl } from './helpers/settings/setters';
-import { newApiUrlSetForBetaUsers } from './helpers/storage';
+import { rollbackedApiUrlForBetaUsers } from './helpers/storage';
 import { EditionProvider } from './hooks/use-edition-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
@@ -87,13 +87,13 @@ const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
 };
 
 const forceUpdateApiUrlIfBeta = async () => {
-	// TODO - Remove this whole function once new stack is fully in operation.
+	// TODO - Remove this whole function before release to prod.
 	if (isInBeta()) {
-		const betaApiHasSetAlready = await newApiUrlSetForBetaUsers.get();
-		if (!betaApiHasSetAlready) {
+		const rollbackedApi = await rollbackedApiUrlForBetaUsers.get();
+		if (!rollbackedApi) {
 			setApiUrl(apolloClient, newMobileProdStack);
-			console.log('*** Beta: updated api url for BETA Users ***');
-			await newApiUrlSetForBetaUsers.set(true);
+			console.log('*** Beta: fastly config is done, all beta users now rollback to default prod api url, previously it was a custom url ***');
+			await rollbackedApiUrlForBetaUsers.set(true);
 		} else {
 			console.log('*** Beta: api url for Beta users already updated ***');
 		}
