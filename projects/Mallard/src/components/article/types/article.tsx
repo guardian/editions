@@ -329,6 +329,7 @@ const Article = ({
 				onMessage={(event) => {
 					handlePing(event.nativeEvent.data);
 				}}
+				decelerationRate={'normal'}
 			/>
 		</Fader>
 	);
