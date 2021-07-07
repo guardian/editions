@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { Platform } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
@@ -28,8 +29,6 @@ const WebviewWithArticle = ({
 	_ref?: (ref: WebView) => void;
 	origin: IssueOrigin;
 } & WebViewProps & { onScroll?: any }) => {
-	console.log('Atricle: ' + JSON.stringify(article))
-	console.log('Path: ' + JSON.stringify(path))
 	const { localIssueId, front } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
@@ -37,11 +36,11 @@ const WebviewWithArticle = ({
 	const [isPreviewMode, setIsPreviewMode] = useState(false);
 
 	useEffect(() => {
-		setIsReady(true);
 		getSetting('apiUrl').then(async (url) => {
 			const s3HtmlUrl = htmlEndpoint(url, path.publishedIssueId);
 			setS3HtmlUrlPrefix(s3HtmlUrl);
 			setIsPreviewMode(isPreview(url))
+			setIsReady(true);
 		});
 	}, [isReady]);
 
@@ -62,6 +61,12 @@ const WebviewWithArticle = ({
 	// set url only when component is ready
 	// https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
 	const finalUrl = isReady ? uri : '';
+
+	// returning an empty view instead of setting empty url to the webview that results in showing error msg for a brief period
+	if (!isReady) {
+		return <View/>;
+	}
+
 	console.log(`URL (${origin}): ${finalUrl}`);
 
 	return (
