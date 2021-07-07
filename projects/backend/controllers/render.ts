@@ -176,7 +176,7 @@ const processArticleRendering = async (
         const url = `${appsRenderingProxyUrl}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
-            'http://localhost:8080//editions-article',
+            url,
             appsRenderingProxyHeader,
             bufferData,
         )
