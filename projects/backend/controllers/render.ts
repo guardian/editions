@@ -11,14 +11,15 @@ import {
 import { attempt, hasFailed } from '../utils/try'
 import { isPreview } from '../preview'
 import { decodeVersionOrPreview } from '../utils/issue'
-import { lastModified } from '../lastModified'
+import { lastModified, LastModifiedUpdater } from '../lastModified'
 import { IssuePublicationIdentifier, RenderedArticle } from '../common'
 import { fetchPublishedIssue } from '../fronts'
-import { PublishedFurniture } from '../fronts/issue'
+import { PublishedFront, PublishedFurniture } from '../fronts/issue'
 import { Content } from '@guardian/content-api-models/v1/content'
 import { Tag } from '@guardian/content-api-models/v1/tag'
 import { TagType } from '@guardian/content-api-models/v1/tagType'
 import { oc } from 'ts-optchain'
+import { Attempt } from '../common'
 
 const fetchRenderedArticle = async (
     internalPageCode: number,
@@ -175,7 +176,7 @@ const processArticleRendering = async (
         const url = `${appsRenderingProxyUrl}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
-            url,
+            'http://localhost:8080//editions-article',
             appsRenderingProxyHeader,
             bufferData,
         )
@@ -204,31 +205,46 @@ const processArticleRendering = async (
     }
 }
 
-export const renderFrontController = async (req: Request, res: Response) => {
-    const frontId: string = req.params[0]
+const fetchPublishedFront = async (
+    req: Request,
+    frontId: string,
+    lastModifiedUpdater: LastModifiedUpdater,
+): Promise<Attempt<PublishedFront>> => {
     const issueDate: string = req.params.date
     const version: string = decodeVersionOrPreview(
         req.params.version,
         isPreview,
     )
     const edition = req.params.edition
-    const [date, updater] = lastModified()
-    console.log(`Request for ${req.url} fetching front ${frontId}`)
     const issue: IssuePublicationIdentifier = {
         issueDate,
         version,
         edition,
     }
 
-    const publishedIssue = await fetchPublishedIssue(issue, frontId, updater)
+    const publishedIssue = await fetchPublishedIssue(
+        issue,
+        frontId,
+        lastModifiedUpdater,
+    )
 
     if (hasFailed(publishedIssue)) {
-        sendError('Failed to fetch publised issues', res)
-        return
+        return publishedIssue
     }
 
     const front = publishedIssue.fronts.find(_ => _.name === frontId)
     if (!front) {
+        throw Error('Failed to find front ' + frontId)
+    }
+
+    return front
+}
+
+export const renderFrontController = async (req: Request, res: Response) => {
+    const frontId: string = req.params[0]
+    const [date, updater] = lastModified()
+    const front = await fetchPublishedFront(req, frontId, updater)
+    if (hasFailed(front)) {
         sendError(
             `Failed to find front '${frontId}' from the published issue`,
             res,
@@ -268,4 +284,55 @@ export const renderFrontController = async (req: Request, res: Response) => {
         res.setHeader('Last-Modifed', date())
         res.send(JSON.stringify(finalResult))
     }
+}
+
+export const renderItemController = async (req: Request, res: Response) => {
+    console.log(JSON.stringify(req.params))
+    const internalPageCode = req.params[0] as number
+    const frontId: string = req.query['frontId']
+    console.log(
+        `Rendering single article with internalPageCode=${internalPageCode} within a front: ${frontId}`,
+    )
+
+    const [date, updater] = lastModified()
+    const front = await fetchPublishedFront(req, frontId, updater)
+    if (hasFailed(front)) {
+        sendError(
+            `Failed to find front '${frontId}' from the published issue`,
+            res,
+        )
+        return
+    }
+
+    // find the corresponding furniture for the article so we can apply the fronts overrides
+    const idFurniturePair = front.collections
+        .map(collection =>
+            collection.items.map((item): [number, PublishedFurniture] => [
+                item.internalPageCode,
+                item.furniture,
+            ]),
+        )
+        .reduce((acc, val) => acc.concat(val), [])
+        .map(r => {
+            return { internalPageCode: r[0], furniture: r[1] }
+        })
+        .filter(item => item.internalPageCode == internalPageCode)
+
+    if (idFurniturePair.length != 1) {
+        // there should be only one article within a front, if not then throw error
+        sendError(
+            `Failed to find item with internalPageCode: ${internalPageCode} in front: ${frontId}`,
+            res,
+        )
+        return
+    }
+
+    const renderedArticle = await processArticleRendering(
+        idFurniturePair[0].internalPageCode,
+        idFurniturePair[0].furniture,
+    )
+
+    res.setHeader('Content-Type', 'text/html')
+    res.setHeader('Last-Modifed', date())
+    res.send(renderedArticle.body)
 }

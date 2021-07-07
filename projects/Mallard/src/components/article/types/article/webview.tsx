@@ -9,8 +9,9 @@ import type {
 	PictureArticle,
 } from 'src/common';
 import { getSetting } from 'src/helpers/settings';
-import { htmlEndpoint } from 'src/helpers/settings/defaults';
+import { htmlEndpoint, isPreview } from 'src/helpers/settings/defaults';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
+import { useIsPreview } from 'src/hooks/use-settings';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
 import { onShouldStartLoadWithRequest } from './helpers';
@@ -27,23 +28,30 @@ const WebviewWithArticle = ({
 	_ref?: (ref: WebView) => void;
 	origin: IssueOrigin;
 } & WebViewProps & { onScroll?: any }) => {
-	const { localIssueId } = path;
+	console.log('Atricle: ' + JSON.stringify(article))
+	console.log('Path: ' + JSON.stringify(path))
+	const { localIssueId, front } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
 	const [s3HtmlUrlPrefix, setS3HtmlUrlPrefix] = useState('');
+	const [isPreviewMode, setIsPreviewMode] = useState(false);
 
 	useEffect(() => {
 		setIsReady(true);
 		getSetting('apiUrl').then(async (url) => {
 			const s3HtmlUrl = htmlEndpoint(url, path.publishedIssueId);
 			setS3HtmlUrlPrefix(s3HtmlUrl);
+			setIsPreviewMode(isPreview(url))
 		});
 	}, [isReady]);
 
 	// Online: Url to load direct from s3 (when bundle is not downloaded)
-	let uri = `${s3HtmlUrlPrefix}/${article.internalPageCode}.html`;
+	// When app runs in Preview Mode the url points to backend and backend needs to know 
+	// which front the articles belongs to properly render an article with correct overrides from the fronts tool
+	const previewParam = isPreviewMode ? `?frontId=${front}` : '';
+	let uri = `${s3HtmlUrlPrefix}/${article.internalPageCode}.html${previewParam}`;
 
-	// Offline: load from file system when bundle is downloadedrendering
+	// Offline/Downloaded: load from file system
 	if (origin === 'filesystem') {
 		const htmlUri = `${FSPaths.issueRoot(localIssueId)}/html/${
 			article.internalPageCode
