@@ -12,7 +12,6 @@ import type {
 import { getSetting } from 'src/helpers/settings';
 import { htmlEndpoint, isPreview } from 'src/helpers/settings/defaults';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
-import { useIsPreview } from 'src/hooks/use-settings';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
 import { onShouldStartLoadWithRequest } from './helpers';
