@@ -180,15 +180,6 @@ export class EditionsStack extends GuStack {
             vpcId: vpcIdParameter.valueAsString,
         })
 
-        // const vpc = GuVpc.fromId(this, 'vpc', {
-        //     vpcId: GuVpcParameter.getInstance(this).valueAsString,
-        // })
-
-        // const privateSubnets = GuVpc.subnetsFromParameter(this, {
-        //     type: SubnetType.PRIVATE,
-        //     app: appName,
-        // })
-
         const privateSubnets = GuVpc.subnets(this, subnets.valueAsList)
 
         const deployBucket = s3.Bucket.fromBucketName(
