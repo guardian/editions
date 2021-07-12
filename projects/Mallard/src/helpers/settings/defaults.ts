@@ -1,8 +1,7 @@
 import { Platform } from 'react-native';
 import type { Settings } from '../settings';
 
-export const newMobileProdStack =
-	'https://editions-published-prod.s3-eu-west-1.amazonaws.com/';
+export const newMobileProdStack = 'https://editions.guardianapis.com/';
 
 /*
 Default settings.
@@ -10,33 +9,8 @@ This is a bit of a mess
 */
 export const backends = [
 	{
-		title: 'PROD published (new stack)',
-		value: newMobileProdStack,
-		preview: false,
-	},
-	{
-		title: 'PROD proofed (new stack)',
-		value: 'https://editions-proofed-prod.s3-eu-west-1.amazonaws.com/',
-		preview: true,
-	},
-	{
-		title: 'CODE published (new stack)',
-		value: 'https://editions-published-code.s3-eu-west-1.amazonaws.com/',
-		preview: false,
-	},
-	{
-		title: 'CODE proofed (new stack)',
-		value: 'https://editions-proofed-code.s3-eu-west-1.amazonaws.com/',
-		preview: true,
-	},
-	{
-		title: 'CODE preview (new stack)',
-		value: 'https://editions-preview.code.dev-guardianapis.com/',
-		preview: true,
-	},
-	{
 		title: 'PROD published',
-		value: 'https://editions.guardianapis.com/',
+		value: newMobileProdStack,
 		preview: false,
 	},
 	{
@@ -46,7 +20,7 @@ export const backends = [
 	},
 	{
 		title: 'PROD preview',
-		value: 'https://preview.editions.guardianapis.com/',
+		value: 'https://editions-preview.guardianapis.com/',
 		preview: true,
 	},
 	{
@@ -61,7 +35,7 @@ export const backends = [
 	},
 	{
 		title: 'CODE preview',
-		value: 'https://preview.editions.code.dev-guardianapis.com/',
+		value: 'https://editions-preview.code.dev-guardianapis.com/',
 		preview: true,
 	},
 	{
