@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
 import type {
@@ -38,13 +37,13 @@ const WebviewWithArticle = ({
 		getSetting('apiUrl').then(async (url) => {
 			const s3HtmlUrl = htmlEndpoint(url, path.publishedIssueId);
 			setS3HtmlUrlPrefix(s3HtmlUrl);
-			setIsPreviewMode(isPreview(url))
+			setIsPreviewMode(isPreview(url));
 			setIsReady(true);
 		});
 	}, [isReady]);
 
 	// Online: Url to load direct from s3 (when bundle is not downloaded)
-	// When app runs in Preview Mode the url points to backend and backend needs to know 
+	// When app runs in Preview Mode the url points to backend and backend needs to know
 	// which front the articles belongs to properly render an article with correct overrides from the fronts tool
 	const previewParam = isPreviewMode ? `?frontId=${front}` : '';
 	let uri = `${s3HtmlUrlPrefix}/${article.internalPageCode}.html${previewParam}`;
@@ -63,7 +62,7 @@ const WebviewWithArticle = ({
 
 	// returning an empty view instead of setting empty url to the webview that results in showing error msg for a brief period
 	if (!isReady) {
-		return <View/>;
+		return <View />;
 	}
 
 	console.log(`URL (${origin}): ${finalUrl}`);
