@@ -2,6 +2,7 @@ import express = require('express')
 import { Request, Response } from 'express'
 import listEndpoints from 'express-list-endpoints'
 import {
+    htmlDirPath,
     ImageSize,
     ImageThumbnailUse,
     thumbsPath,
@@ -15,7 +16,7 @@ export interface EditionsBackendControllers {
     frontController: (req: Request, res: Response) => void
     imageController: (req: Request, res: Response) => void
     renderFrontController: (req: Request, res: Response) => void
-    appsRenderingController: (req: Request, res: Response) => void
+    renderItemController: (req: Request, res: Response) => void
     editionsController: {
         GET: (req: Request, res: Response) => void
         POST: (req: Request, res: Response) => void
@@ -65,7 +66,11 @@ export const createApp = (
         controllers.renderFrontController,
     )
 
-    app.get('/rendered-items/:path(*)', controllers.appsRenderingController)
+    // This html endpoint only meant be used in preview mode to serve single rendered html
+    app.get(
+        '/' + htmlDirPath(issuePathSegments) + '/*.html',
+        controllers.renderItemController,
+    )
 
     app.get(
         '/' +
