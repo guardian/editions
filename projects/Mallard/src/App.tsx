@@ -88,6 +88,8 @@ const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
 
 const forceUpdateApiUrlIfBeta = async () => {
 	// TODO - Remove this whole function before release to prod.
+	// Previously we forced beta users to use a tmp url to point to the new stack, now that
+	// we changed the fastly config we can rollback urls and eventually we can remove this full method.
 	if (isInBeta()) {
 		const rollbackedApi = await rollbackedApiUrlForBetaUsers.get();
 		if (!rollbackedApi) {
