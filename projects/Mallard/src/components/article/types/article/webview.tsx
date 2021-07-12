@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
 import type {
@@ -9,7 +9,7 @@ import type {
 	PictureArticle,
 } from 'src/common';
 import { getSetting } from 'src/helpers/settings';
-import { htmlEndpoint } from 'src/helpers/settings/defaults';
+import { htmlEndpoint, isPreview } from 'src/helpers/settings/defaults';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
@@ -27,23 +27,28 @@ const WebviewWithArticle = ({
 	_ref?: (ref: WebView) => void;
 	origin: IssueOrigin;
 } & WebViewProps & { onScroll?: any }) => {
-	const { localIssueId } = path;
+	const { localIssueId, front } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
 	const [s3HtmlUrlPrefix, setS3HtmlUrlPrefix] = useState('');
+	const [isPreviewMode, setIsPreviewMode] = useState(false);
 
 	useEffect(() => {
-		setIsReady(true);
 		getSetting('apiUrl').then(async (url) => {
 			const s3HtmlUrl = htmlEndpoint(url, path.publishedIssueId);
 			setS3HtmlUrlPrefix(s3HtmlUrl);
+			setIsPreviewMode(isPreview(url));
+			setIsReady(true);
 		});
 	}, [isReady]);
 
 	// Online: Url to load direct from s3 (when bundle is not downloaded)
-	let uri = `${s3HtmlUrlPrefix}/${article.internalPageCode}.html`;
+	// When app runs in Preview Mode the url points to backend and backend needs to know
+	// which front the articles belongs to properly render an article with correct overrides from the fronts tool
+	const previewParam = isPreviewMode ? `?frontId=${front}` : '';
+	let uri = `${s3HtmlUrlPrefix}/${article.internalPageCode}.html${previewParam}`;
 
-	// Offline: load from file system when bundle is downloadedrendering
+	// Offline/Downloaded: load from file system
 	if (origin === 'filesystem') {
 		const htmlUri = `${FSPaths.issueRoot(localIssueId)}/html/${
 			article.internalPageCode
@@ -54,6 +59,12 @@ const WebviewWithArticle = ({
 	// set url only when component is ready
 	// https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
 	const finalUrl = isReady ? uri : '';
+
+	// returning an empty view instead of setting empty url to the webview that results in showing error msg for a brief period
+	if (!isReady) {
+		return <View />;
+	}
+
 	console.log(`URL (${origin}): ${finalUrl}`);
 
 	return (
