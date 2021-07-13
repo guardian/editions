@@ -12766,10 +12766,10 @@ react-native-switch@^1.5.0:
   dependencies:
     prop-types "^15.6.0"
 
-react-native-webview@^11.4.2:
-  version "11.4.5"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.4.5.tgz#a264ac2f9146b23b10dcea1a12b9ce3ec0df9db8"
-  integrity sha512-hH+0QjetQ8A6TpXdXba7QLeEX1mi7fVClu+CVjj+PwKCirl1GPPhYMeq6/qR+zEifh6KnQINLFifOb651lOuhA==
+react-native-webview@^11.6.5:
+  version "11.6.5"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.6.5.tgz#34e86a342c6a2cbcf109db98f639f7bb8f055da2"
+  integrity sha512-5U+hI8snkCrFeDy+bUTszwhzcJIenaaOy3ubhY77HZq7R0pFIZzRYWkT0YXe1ymRYW9mSU96nr6S0AVDk8qkMw==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
