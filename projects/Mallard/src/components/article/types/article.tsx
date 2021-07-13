@@ -17,7 +17,11 @@ import type {
 	Image,
 	PictureArticle,
 } from 'src/common';
-import { defaultSettings, htmlEndpoint, isPreview } from 'src/helpers/settings/defaults';
+import {
+	defaultSettings,
+	htmlEndpoint,
+	isPreview,
+} from 'src/helpers/settings/defaults';
 import { parsePing } from 'src/helpers/webview';
 import { useArticle } from 'src/hooks/use-article';
 import { selectImagePath } from 'src/hooks/use-image-paths';

@@ -29,18 +29,17 @@ const WebviewWithArticle = ({
 	_ref?: (ref: WebView) => void;
 	origin: IssueOrigin;
 } & WebViewProps & { onScroll?: any }) => {
-	const { localIssueId, front } = path;
+	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
 
 	const updateSource = () => {
 		// On Android there is a potential race condition where url did get set before
 		// webview file system permission did get set and as result local html file fails to load
-		// within the webview. 
-		// Github issue: https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436 
-		console.log('load started: ' + article.internalPageCode)
+		// within the webview.
+		// Github issue: https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
 		setIsReady(true);
-	 };
+	};
 
 	// Online: Url to load direct from s3 (when bundle is not downloaded)
 	// When app runs in Preview Mode the url points to backend and backend needs to know
@@ -70,9 +69,9 @@ const WebviewWithArticle = ({
 			allowFileAccess={true}
 			allowUniversalAccessFromFileURLs={true}
 			allowingReadAccessToURL={FSPaths.issuesDir}
-			onLoadStart={() => {				
+			onLoadStart={() => {
 				updateSource();
-			}}			
+			}}
 		/>
 	);
 };
