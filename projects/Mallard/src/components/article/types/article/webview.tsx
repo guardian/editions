@@ -44,7 +44,6 @@ const WebviewWithArticle = ({
 	// Online: Url to load direct from s3 (when bundle is not downloaded)
 	// When app runs in Preview Mode the url points to backend and backend needs to know
 	// which front the articles belongs to properly render an article with correct overrides from the fronts tool
-	// const previewParam = isPreviewMode ? `?frontId=${front}` : '';
 	let uri = `${htmlFolderInS3}/${article.internalPageCode}.html${previewParam}`;
 
 	// Offline/Downloaded: load from file system
