@@ -149,6 +149,7 @@ const mapFurnitureToContent = (
 const processArticleRendering = async (
     internalPageCode: number,
     furniture: PublishedFurniture,
+    theme: Theme,
 ): Promise<RenderedArticle> => {
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
@@ -173,7 +174,7 @@ const processArticleRendering = async (
 
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(patchedContent)
-        const url = `${appsRenderingProxyUrl}`
+        const url = `${appsRenderingProxyUrl}?theme=${theme}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
             url,
@@ -273,25 +274,29 @@ export const renderFrontController = async (req: Request, res: Response) => {
         }
     }
 
-    const idFurniturePair = front.collections
+    const groupIdToFurnitureAndTheme = front.collections
         .map(collection =>
-            collection.items.map((item): [number, PublishedFurniture] => [
-                item.internalPageCode,
-                item.furniture,
-            ]),
+            collection.items.map((item): [
+                number,
+                PublishedFurniture,
+                Theme,
+            ] => {
+                const mappedTheme = mapSwatchToTheme(front.swatch)
+
+                return [item.internalPageCode, item.furniture, mappedTheme]
+            }),
         )
         .reduce((acc, val) => acc.concat(val), [])
         .map(r => {
-            return { internalPageCode: r[0], furniture: r[1] }
+            return { internalPageCode: r[0], furniture: r[1], theme: r[2] }
         })
 
-    console.log('Furniture: ' + JSON.stringify(idFurniturePair))
-
     const finalResult: RenderedArticle[] = []
-    for (const pair of idFurniturePair) {
+    for (const group of groupIdToFurnitureAndTheme) {
         const result = await processArticleRendering(
-            pair.internalPageCode,
-            pair.furniture,
+            group.internalPageCode,
+            group.furniture,
+            group.theme,
         )
         finalResult.push(result)
     }
