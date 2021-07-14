@@ -14,7 +14,7 @@ import { decodeVersionOrPreview } from '../utils/issue'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
 import { IssuePublicationIdentifier, RenderedArticle } from '../common'
 import { fetchPublishedIssue } from '../fronts'
-import { PublishedFront, PublishedFurniture } from '../fronts/issue'
+import { PublishedFront, PublishedFurniture, Swatch, Theme } from '../fronts/issue'
 import { Content } from '@guardian/content-api-models/v1/content'
 import { Tag } from '@guardian/content-api-models/v1/tag'
 import { TagType } from '@guardian/content-api-models/v1/tagType'
@@ -71,9 +71,9 @@ const fetchSingleCapiContent = async (
         const data = await capiSearchDecoder(buffer)
         console.log(
             'Fetched data from CAPI: ' +
-                capi +
-                ' internalCode: ' +
-                internalPageCode,
+            capi +
+            ' internalCode: ' +
+            internalPageCode,
         )
         return data
     } catch (error) {
@@ -250,6 +250,27 @@ export const renderFrontController = async (req: Request, res: Response) => {
             res,
         )
         return
+    }
+
+    const mapSwatchToTheme = (swatch: Swatch) => {
+        switch (swatch) {
+            case 'neutral':
+            case 'news': {
+                return Theme.News
+            }
+            case 'opinion': {
+                return Theme.Opinion
+            }
+            case 'culture': {
+                return Theme.Culture
+            }
+            case 'lifestyle': {
+                return Theme.Lifestyle
+            }
+            case 'sport': {
+                return Theme.Sport
+            }
+        }
     }
 
     const idFurniturePair = front.collections
