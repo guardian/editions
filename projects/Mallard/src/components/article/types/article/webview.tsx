@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
+import React, { useState } from 'react';
+import { Platform } from 'react-native';
 import type { WebViewProps } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
 import type {
@@ -8,8 +8,6 @@ import type {
 	IssueOrigin,
 	PictureArticle,
 } from 'src/common';
-import { getSetting } from 'src/helpers/settings';
-import { htmlEndpoint, isPreview } from 'src/helpers/settings/defaults';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
@@ -18,35 +16,35 @@ import { onShouldStartLoadWithRequest } from './helpers';
 const WebviewWithArticle = ({
 	article,
 	path,
+	previewParam,
+	htmlFolderInS3,
 	_ref,
 	origin,
 	...webViewProps
 }: {
 	article: Article | PictureArticle | GalleryArticle;
 	path: PathToArticle;
+	previewParam: string;
+	htmlFolderInS3: string;
 	_ref?: (ref: WebView) => void;
 	origin: IssueOrigin;
 } & WebViewProps & { onScroll?: any }) => {
-	const { localIssueId, front } = path;
+	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
-	const [s3HtmlUrlPrefix, setS3HtmlUrlPrefix] = useState('');
-	const [isPreviewMode, setIsPreviewMode] = useState(false);
 
-	useEffect(() => {
-		getSetting('apiUrl').then(async (url) => {
-			const s3HtmlUrl = htmlEndpoint(url, path.publishedIssueId);
-			setS3HtmlUrlPrefix(s3HtmlUrl);
-			setIsPreviewMode(isPreview(url));
-			setIsReady(true);
-		});
-	}, [isReady]);
+	const updateSource = () => {
+		// On Android there is a potential race condition where url did get set before
+		// webview file system permission did get set and as result local html file fails to load
+		// within the webview.
+		// Github issue: https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
+		setIsReady(true);
+	};
 
 	// Online: Url to load direct from s3 (when bundle is not downloaded)
 	// When app runs in Preview Mode the url points to backend and backend needs to know
 	// which front the articles belongs to properly render an article with correct overrides from the fronts tool
-	const previewParam = isPreviewMode ? `?frontId=${front}` : '';
-	let uri = `${s3HtmlUrlPrefix}/${article.internalPageCode}.html${previewParam}`;
+	let uri = `${htmlFolderInS3}/${article.internalPageCode}.html${previewParam}`;
 
 	// Offline/Downloaded: load from file system
 	if (origin === 'filesystem') {
@@ -56,16 +54,7 @@ const WebviewWithArticle = ({
 		uri = Platform.OS === 'android' ? 'file://' + htmlUri : htmlUri;
 	}
 
-	// set url only when component is ready
-	// https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
-	const finalUrl = isReady ? uri : '';
-
-	// returning an empty view instead of setting empty url to the webview that results in showing error msg for a brief period
-	if (!isReady) {
-		return <View />;
-	}
-
-	console.log(`URL (${origin}): ${finalUrl}`);
+	console.log(`URL (${origin}): ${uri}`);
 
 	return (
 		<WebView
@@ -73,12 +62,15 @@ const WebviewWithArticle = ({
 			bounces={largeDeviceMemory ? true : false}
 			originWhitelist={['*']}
 			scrollEnabled={true}
-			source={{ uri: finalUrl }}
+			source={isReady ? { uri: uri } : undefined}
 			ref={_ref}
 			onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
 			allowFileAccess={true}
-			allowFileAccessFromFileURLs={true}
+			allowUniversalAccessFromFileURLs={true}
 			allowingReadAccessToURL={FSPaths.issuesDir}
+			onLoadStart={() => {
+				updateSource();
+			}}
 		/>
 	);
 };

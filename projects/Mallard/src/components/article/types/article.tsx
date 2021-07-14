@@ -17,7 +17,11 @@ import type {
 	Image,
 	PictureArticle,
 } from 'src/common';
-import { defaultSettings } from 'src/helpers/settings/defaults';
+import {
+	defaultSettings,
+	htmlEndpoint,
+	isPreview,
+} from 'src/helpers/settings/defaults';
 import { parsePing } from 'src/helpers/webview';
 import { useArticle } from 'src/hooks/use-article';
 import { selectImagePath } from 'src/hooks/use-image-paths';
@@ -186,6 +190,9 @@ const Article = ({
 	const [, { pillar }] = useArticle();
 	const apiUrl = useApiUrl() ?? '';
 	const { issueId } = useIssueSummary();
+	const { front, publishedIssueId } = path;
+	const htmlFolderInS3 = htmlEndpoint(apiUrl, publishedIssueId);
+	const previewParam = isPreview(apiUrl) ? `?frontId=${front}` : '';
 
 	// if webUrl is undefined then we attempt to fetch a url to use for sharing
 	const [shareUrl, setShareUrl] = useState(article.webUrl);
@@ -317,6 +324,8 @@ const Article = ({
 			<WebviewWithArticle
 				article={article}
 				path={path}
+				previewParam={previewParam}
+				htmlFolderInS3={htmlFolderInS3}
 				scrollEnabled={true}
 				allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
 				mediaPlaybackRequiresUserAction={false}
