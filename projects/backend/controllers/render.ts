@@ -154,7 +154,7 @@ const mapFurnitureToContent = (
 const processArticleRendering = async (
     internalPageCode: number,
     furniture: PublishedFurniture,
-    theme: Theme,
+    theme: Theme | null,
 ): Promise<RenderedArticle> => {
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
@@ -249,21 +249,18 @@ const fetchPublishedFront = async (
 const mapSwatchToTheme = (swatch: Swatch) => {
     switch (swatch) {
         case 'neutral':
-        case 'news': {
+        case 'news':
             return Theme.News
-        }
-        case 'opinion': {
+        case 'opinion':
             return Theme.Opinion
-        }
-        case 'culture': {
+        case 'culture':
             return Theme.Culture
-        }
-        case 'lifestyle': {
+        case 'lifestyle':
             return Theme.Lifestyle
-        }
-        case 'sport': {
+        case 'sport':
             return Theme.Sport
-        }
+        default:
+            return null
     }
 }
 
@@ -279,21 +276,17 @@ export const renderFrontController = async (req: Request, res: Response) => {
         return
     }
 
+    const mappedTheme = mapSwatchToTheme(front.swatch)
+
     const groupIdToFurnitureAndTheme = front.collections
         .map(collection =>
-            collection.items.map((item): [
-                number,
-                PublishedFurniture,
-                Theme,
-            ] => {
-                const mappedTheme = mapSwatchToTheme(front.swatch)
-
-                return [item.internalPageCode, item.furniture, mappedTheme]
+            collection.items.map((item): [number, PublishedFurniture] => {
+                return [item.internalPageCode, item.furniture]
             }),
         )
         .reduce((acc, val) => acc.concat(val), [])
         .map(r => {
-            return { internalPageCode: r[0], furniture: r[1], theme: r[2] }
+            return { internalPageCode: r[0], furniture: r[1] }
         })
 
     const finalResult: RenderedArticle[] = []
@@ -301,7 +294,7 @@ export const renderFrontController = async (req: Request, res: Response) => {
         const result = await processArticleRendering(
             group.internalPageCode,
             group.furniture,
-            group.theme,
+            mappedTheme,
         )
         finalResult.push(result)
     }
@@ -334,23 +327,18 @@ export const renderItemController = async (req: Request, res: Response) => {
         )
         return
     }
+    const mappedTheme = mapSwatchToTheme(front.swatch)
 
     // find the corresponding furniture for the article so we can apply the fronts overrides
     const groupIdToFurnitureAndTheme = front.collections
         .map(collection =>
-            collection.items.map((item): [
-                number,
-                PublishedFurniture,
-                Theme,
-            ] => {
-                const mappedTheme = mapSwatchToTheme(front.swatch)
-
-                return [item.internalPageCode, item.furniture, mappedTheme]
+            collection.items.map((item): [number, PublishedFurniture] => {
+                return [item.internalPageCode, item.furniture]
             }),
         )
         .reduce((acc, val) => acc.concat(val), [])
         .map(r => {
-            return { internalPageCode: r[0], furniture: r[1], theme: r[2] }
+            return { internalPageCode: r[0], furniture: r[1] }
         })
         .filter(item => item.internalPageCode == internalPageCode)
 
@@ -366,7 +354,7 @@ export const renderItemController = async (req: Request, res: Response) => {
     const renderedArticle = await processArticleRendering(
         groupIdToFurnitureAndTheme[0].internalPageCode,
         groupIdToFurnitureAndTheme[0].furniture,
-        groupIdToFurnitureAndTheme[0].theme,
+        mappedTheme,
     )
 
     res.setHeader('Content-Type', 'text/html')
