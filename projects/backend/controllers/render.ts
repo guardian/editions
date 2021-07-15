@@ -278,7 +278,7 @@ export const renderFrontController = async (req: Request, res: Response) => {
 
     const mappedTheme = mapSwatchToTheme(front.swatch)
 
-    const groupIdToFurnitureAndTheme = front.collections
+    const idFurniturePair = front.collections
         .map(collection =>
             collection.items.map((item): [number, PublishedFurniture] => {
                 return [item.internalPageCode, item.furniture]
@@ -290,10 +290,10 @@ export const renderFrontController = async (req: Request, res: Response) => {
         })
 
     const finalResult: RenderedArticle[] = []
-    for (const group of groupIdToFurnitureAndTheme) {
+    for (const pair of idFurniturePair) {
         const result = await processArticleRendering(
-            group.internalPageCode,
-            group.furniture,
+            pair.internalPageCode,
+            pair.furniture,
             mappedTheme,
         )
         finalResult.push(result)
@@ -330,7 +330,7 @@ export const renderItemController = async (req: Request, res: Response) => {
     const mappedTheme = mapSwatchToTheme(front.swatch)
 
     // find the corresponding furniture for the article so we can apply the fronts overrides
-    const groupIdToFurnitureAndTheme = front.collections
+    const idFurniturePair = front.collections
         .map(collection =>
             collection.items.map((item): [number, PublishedFurniture] => {
                 return [item.internalPageCode, item.furniture]
@@ -342,7 +342,7 @@ export const renderItemController = async (req: Request, res: Response) => {
         })
         .filter(item => item.internalPageCode == internalPageCode)
 
-    if (groupIdToFurnitureAndTheme.length != 1) {
+    if (idFurniturePair.length != 1) {
         // there should be only one article within a front, if not then throw error
         sendError(
             `Failed to find item with internalPageCode: ${internalPageCode} in front: ${frontId}`,
@@ -352,8 +352,8 @@ export const renderItemController = async (req: Request, res: Response) => {
     }
 
     const renderedArticle = await processArticleRendering(
-        groupIdToFurnitureAndTheme[0].internalPageCode,
-        groupIdToFurnitureAndTheme[0].furniture,
+        idFurniturePair[0].internalPageCode,
+        idFurniturePair[0].furniture,
         mappedTheme,
     )
 
