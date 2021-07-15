@@ -14,7 +14,12 @@ import { decodeVersionOrPreview } from '../utils/issue'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
 import { IssuePublicationIdentifier, RenderedArticle } from '../common'
 import { fetchPublishedIssue } from '../fronts'
-import { PublishedFront, PublishedFurniture } from '../fronts/issue'
+import {
+    PublishedFront,
+    PublishedFurniture,
+    Swatch,
+    Theme,
+} from '../fronts/issue'
 import { Content } from '@guardian/content-api-models/v1/content'
 import { Tag } from '@guardian/content-api-models/v1/tag'
 import { TagType } from '@guardian/content-api-models/v1/tagType'
@@ -149,6 +154,7 @@ const mapFurnitureToContent = (
 const processArticleRendering = async (
     internalPageCode: number,
     furniture: PublishedFurniture,
+    theme: Theme | null,
 ): Promise<RenderedArticle> => {
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
@@ -173,7 +179,7 @@ const processArticleRendering = async (
 
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(patchedContent)
-        const url = `${appsRenderingProxyUrl}`
+        const url = `${appsRenderingProxyUrl}?theme=${theme}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
             url,
@@ -240,6 +246,24 @@ const fetchPublishedFront = async (
     return front
 }
 
+const mapSwatchToTheme = (swatch: Swatch) => {
+    switch (swatch) {
+        case 'neutral':
+        case 'news':
+            return Theme.News
+        case 'opinion':
+            return Theme.Opinion
+        case 'culture':
+            return Theme.Culture
+        case 'lifestyle':
+            return Theme.Lifestyle
+        case 'sport':
+            return Theme.Sport
+        default:
+            return null
+    }
+}
+
 export const renderFrontController = async (req: Request, res: Response) => {
     const frontId: string = req.params[0]
     const [date, updater] = lastModified()
@@ -252,25 +276,25 @@ export const renderFrontController = async (req: Request, res: Response) => {
         return
     }
 
+    const mappedTheme = mapSwatchToTheme(front.swatch)
+
     const idFurniturePair = front.collections
         .map(collection =>
-            collection.items.map((item): [number, PublishedFurniture] => [
-                item.internalPageCode,
-                item.furniture,
-            ]),
+            collection.items.map((item): [number, PublishedFurniture] => {
+                return [item.internalPageCode, item.furniture]
+            }),
         )
         .reduce((acc, val) => acc.concat(val), [])
         .map(r => {
             return { internalPageCode: r[0], furniture: r[1] }
         })
 
-    console.log('Furniture: ' + JSON.stringify(idFurniturePair))
-
     const finalResult: RenderedArticle[] = []
     for (const pair of idFurniturePair) {
         const result = await processArticleRendering(
             pair.internalPageCode,
             pair.furniture,
+            mappedTheme,
         )
         finalResult.push(result)
     }
@@ -303,14 +327,14 @@ export const renderItemController = async (req: Request, res: Response) => {
         )
         return
     }
+    const mappedTheme = mapSwatchToTheme(front.swatch)
 
     // find the corresponding furniture for the article so we can apply the fronts overrides
     const idFurniturePair = front.collections
         .map(collection =>
-            collection.items.map((item): [number, PublishedFurniture] => [
-                item.internalPageCode,
-                item.furniture,
-            ]),
+            collection.items.map((item): [number, PublishedFurniture] => {
+                return [item.internalPageCode, item.furniture]
+            }),
         )
         .reduce((acc, val) => acc.concat(val), [])
         .map(r => {
@@ -330,6 +354,7 @@ export const renderItemController = async (req: Request, res: Response) => {
     const renderedArticle = await processArticleRendering(
         idFurniturePair[0].internalPageCode,
         idFurniturePair[0].furniture,
+        mappedTheme,
     )
 
     res.setHeader('Content-Type', 'text/html')
