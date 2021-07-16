@@ -42,19 +42,19 @@
     eslint-plugin-import "2.23.4"
     eslint-plugin-prettier "3.4.0"
 
-"@guardian/node-riffraff-artifact@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.2.1.tgz#e7f7d30f018273b6b384bc68477d0868f4ea3058"
-  integrity sha512-sNFaXo068Tla/7SpoaAvJLg63Z8JOi1ubUkLsl0ZoDm90/BRw2Qd8hnhl2iXbgVV4Fe3y12ymEHr9+rLgBGm4w==
+"@guardian/node-riffraff-artifact@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.2.2.tgz#ec85c9f37410c844fa4e6343272ae391fe183ed7"
+  integrity sha512-o0tfVEW8iT2G0uKalJT9g1xeEpAKf3nfeJbDy/bCUs+EdybaiLh/y6TN2200J+sH10Rjtf0/DoX8MqT9d2P+8A==
   dependencies:
     "@mojotech/json-type-validation" "^3.1.0"
     "@types/temp" "^0.8.34"
     archiver "^3.1.1"
-    aws-sdk "2.893.0"
+    aws-sdk "^2.946.0"
     ora "^4.0.3"
     temp "^0.9.1"
     yaml "^1.7.2"
-    yargs "^15.1.0"
+    yargs "^15.4.1"
 
 "@guardian/prettier@^0.6.0":
   version "0.6.0"
@@ -424,10 +424,10 @@ async@^2.6.3:
   dependencies:
     lodash "^4.17.14"
 
-aws-sdk@2.893.0:
-  version "2.893.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.893.0.tgz#953116eeef20ed7ced1ee081ec249af6644ccf44"
-  integrity sha512-yebi0KfJSyYcaYF+sDJ6Wq7OLq/8VZZiP7mN3fYfE3XZQV9MUYHMITqyeVxKG8BMvzkYfr6gpx1XZOJAYzfvJQ==
+aws-sdk@^2.946.0:
+  version "2.947.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.947.0.tgz#2cc329654ad09ee7199ef25bc88f2b0e5a2fc155"
+  integrity sha512-m58mW/0Yg2RnRCJSzWZS8JUMhoBQ4trjKf+uJ3bD24jeV+Nf6iIHQ1s4ogP2O2XXUreSRsJNe8l0cOPSOM37Lg==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -2787,7 +2787,7 @@ yargs-parser@^18.1.2:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs@^15.1.0:
+yargs@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==
