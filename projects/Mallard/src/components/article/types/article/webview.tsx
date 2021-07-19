@@ -68,6 +68,8 @@ const WebviewWithArticle = ({
 			allowFileAccess={true}
 			allowUniversalAccessFromFileURLs={true}
 			allowingReadAccessToURL={FSPaths.issuesDir}
+			cacheEnabled={false}
+			cacheMode={'LOAD_NO_CACHE'}
 			onLoadStart={() => {
 				updateSource();
 			}}
