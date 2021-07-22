@@ -61,14 +61,12 @@ export const notificationEdition = {
 
 const notificationTrackingReceivedEndpoints = {
 	prod: 'https://mobile-events.guardianapis.com/notification/received',
-	code:
-		'https://mobile-events.code.dev-guardianapis.com/notification/received',
+	code: 'https://mobile-events.code.dev-guardianapis.com/notification/received',
 };
 
 const notificationTrackingDownloadedEndpoints = {
 	prod: 'https://mobile-events.guardianapis.com/notification/downloaded',
-	code:
-		'https://mobile-events.code.dev-guardianapis.com/notification/downloaded',
+	code: 'https://mobile-events.code.dev-guardianapis.com/notification/downloaded',
 };
 
 export const senderId = {

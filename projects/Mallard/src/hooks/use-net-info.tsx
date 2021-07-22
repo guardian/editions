@@ -1,5 +1,5 @@
-import * as NetInfo from '@react-native-community/netinfo';
 import type { NetInfoState } from '@react-native-community/netinfo';
+import * as NetInfo from '@react-native-community/netinfo';
 import { NetInfoStateType } from '@react-native-community/netinfo';
 import type ApolloClient from 'apollo-client';
 import { isEqual } from 'apollo-utilities';

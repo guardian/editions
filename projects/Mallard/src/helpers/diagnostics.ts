@@ -40,29 +40,24 @@ const getDiagnosticInfo = async (
 	client: ApolloClient<object>,
 	authAttempt: AnyAttempt<string>,
 ) => {
-	const [
-		netInfoResult,
-		gdprEntries,
-		casCode,
-		idData,
-		receiptData,
-	] = await Promise.all([
-		client.query<{ netInfo: NetInfo }>({
-			query: gql`
-				{
-					netInfo @client {
-						type @client
-						isConnected @client
-						details @client
+	const [netInfoResult, gdprEntries, casCode, idData, receiptData] =
+		await Promise.all([
+			client.query<{ netInfo: NetInfo }>({
+				query: gql`
+					{
+						netInfo @client {
+							type @client
+							isConnected @client
+							details @client
+						}
 					}
-				}
-			`,
-		}),
-		getGDPREntries(),
-		getCASCode(),
-		userDataCache.get(),
-		iapReceiptCache.get(),
-	]);
+				`,
+			}),
+			getGDPREntries(),
+			getCASCode(),
+			userDataCache.get(),
+			iapReceiptCache.get(),
+		]);
 	const netInfo = netInfoResult.data.netInfo;
 
 	const folderStat = await RNFS.stat(FSPaths.issuesDir);
@@ -168,44 +163,52 @@ const openSupportMailto = async (
 	);
 };
 
-const createMailtoHandler = (
-	client: ApolloClient<object>,
-	text: string,
-	releaseURL: string,
-	authAttempt: AnyAttempt<string>,
-	dialogTitle = '',
-) => () =>
-	runActionSheet(dialogTitle, DIAGNOSTICS_REQUEST, [
-		{
-			text: 'Include',
-			onPress: async () => {
-				const diagnostics = await getDiagnosticInfo(
-					client,
-					authAttempt,
-				);
-				openSupportMailto(
-					text,
-					releaseURL,
-					` ${USER_EMAIL_BODY_INTRO} \n \n${diagnostics}`,
-				);
+const createMailtoHandler =
+	(
+		client: ApolloClient<object>,
+		text: string,
+		releaseURL: string,
+		authAttempt: AnyAttempt<string>,
+		dialogTitle = '',
+	) =>
+	() =>
+		runActionSheet(dialogTitle, DIAGNOSTICS_REQUEST, [
+			{
+				text: 'Include',
+				onPress: async () => {
+					const diagnostics = await getDiagnosticInfo(
+						client,
+						authAttempt,
+					);
+					openSupportMailto(
+						text,
+						releaseURL,
+						` ${USER_EMAIL_BODY_INTRO} \n \n${diagnostics}`,
+					);
+				},
 			},
-		},
-		{
-			text: `Don't include`,
-			onPress: () =>
-				openSupportMailto(text, releaseURL, `${USER_EMAIL_BODY_INTRO}`),
-		},
-	]);
+			{
+				text: `Don't include`,
+				onPress: () =>
+					openSupportMailto(
+						text,
+						releaseURL,
+						`${USER_EMAIL_BODY_INTRO}`,
+					),
+			},
+		]);
 
-const copyDiagnosticInfoToClipboard = (
-	client: ApolloClient<object>,
-	authAttempt: AnyAttempt<string>,
-	callback: OnCompletionToast,
-) => async () => {
-	const diagnostics = await getDiagnosticInfo(client, authAttempt);
-	Clipboard.setString(diagnostics);
-	callback('Diagnostic info copied to clipboard');
-};
+const copyDiagnosticInfoToClipboard =
+	(
+		client: ApolloClient<object>,
+		authAttempt: AnyAttempt<string>,
+		callback: OnCompletionToast,
+	) =>
+	async () => {
+		const diagnostics = await getDiagnosticInfo(client, authAttempt);
+		Clipboard.setString(diagnostics);
+		callback('Diagnostic info copied to clipboard');
+	};
 
 const createSupportMailto = (
 	client: ApolloClient<object>,

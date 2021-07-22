@@ -304,9 +304,10 @@ const IssueRowHeader = React.memo(
 		const isSpecialEdition = (editionType: string) => {
 			return editionType === 'Special';
 		};
-		const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
-			issue.date,
-		]);
+		const { date, weekday } = useMemo(
+			() => renderIssueDate(issue.date),
+			[issue.date],
+		);
 		const getTitles = () => {
 			if (isSpecialEdition(selectedEdition.editionType)) {
 				const splitTitle = selectedEdition.title.split('\n');

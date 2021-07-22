@@ -398,7 +398,7 @@ export const getUnscaledFont = <F extends FontFamily>(
 	family: F,
 	level: FontSizes<F>,
 ) => {
-	return (scale[family][level] as unknown) as BreakpointList<{
+	return scale[family][level] as unknown as BreakpointList<{
 		fontSize: number;
 		lineHeight: number;
 	}>;

@@ -111,10 +111,8 @@ export const Front = React.memo(
 			  };
 
 		const [cardIndex, setCardIndex] = useState(0);
-		const [
-			position,
-			setPosition,
-		] = useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
+		const [position, setPosition] =
+			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
 
 		// Whenever we change edition, this resets us back to 0 scroll index for all fronts
 		useEffect(() => {

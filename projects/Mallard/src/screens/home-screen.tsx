@@ -247,10 +247,8 @@ const IssueListView = React.memo(
 		setIssueId: Dispatch<PathToIssue>;
 	}) => {
 		const navigation = useNavigation();
-		const {
-			localIssueId: localId,
-			publishedIssueId: publishedId,
-		} = currentIssue.id;
+		const { localIssueId: localId, publishedIssueId: publishedId } =
+			currentIssue.id;
 		const { details } = currentIssue;
 
 		// We want to scroll to the current issue.

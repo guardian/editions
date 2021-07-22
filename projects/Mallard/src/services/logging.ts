@@ -61,31 +61,25 @@ class Logging extends AsyncQueue {
 	}
 
 	init(apolloClient: ApolloClient<object>) {
-		apolloClient
-			.watchQuery<QueryData>({ query: QUERY })
-			.subscribe({
-				next: (query) => {
-					if (query.loading) return;
-					this.hasConsent = query.data.gdprAllowPerformance;
-				},
-				error: (error) => {
-					errorService.captureException(error);
-				},
-			});
+		apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
+			next: (query) => {
+				if (query.loading) return;
+				this.hasConsent = query.data.gdprAllowPerformance;
+			},
+			error: (error) => {
+				errorService.captureException(error);
+			},
+		});
 	}
 
 	async getExternalInfo() {
-		const [
-			networkStatus,
-			userData,
-			casCode,
-			iapReceipt,
-		] = await Promise.all([
-			NetInfo.fetch(),
-			userDataCache.get(),
-			getCASCode(),
-			iapReceiptCache.get(),
-		]);
+		const [networkStatus, userData, casCode, iapReceipt] =
+			await Promise.all([
+				NetInfo.fetch(),
+				userDataCache.get(),
+				getCASCode(),
+				iapReceiptCache.get(),
+			]);
 		return {
 			networkStatus,
 			userData,
@@ -99,12 +93,8 @@ class Logging extends AsyncQueue {
 		message,
 		...optionalFields
 	}: LogParams): Promise<MallardLogFormat> {
-		const {
-			networkStatus,
-			userData,
-			casCode,
-			iapReceipt,
-		} = await this.getExternalInfo();
+		const { networkStatus, userData, casCode, iapReceipt } =
+			await this.getExternalInfo();
 
 		// User Data and Subscription
 		const userId = userData?.userDetails?.id ?? '';

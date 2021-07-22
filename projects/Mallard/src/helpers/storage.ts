@@ -62,9 +62,10 @@ const userDataCache = createAsyncCache<IdentityAuthData>('user-data-cache');
 
 const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache');
 
-const pushNotificationRegistrationCache = createAsyncCache<PushNotificationRegistration>(
-	'push-notification-registration-cache',
-);
+const pushNotificationRegistrationCache =
+	createAsyncCache<PushNotificationRegistration>(
+		'push-notification-registration-cache',
+	);
 
 const cacheClearCache = createAsyncCache<string>('cacheClear');
 

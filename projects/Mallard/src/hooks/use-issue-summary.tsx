@@ -246,9 +246,7 @@ export const createIssueSummaryResolver = () => {
 		{
 			type QueryValue = { maxAvailableEditions: number };
 			const query = gql('{maxAvailableEditions @client}');
-			client
-				.watchQuery<QueryValue>({ query })
-				.subscribe(refetchUpdate);
+			client.watchQuery<QueryValue>({ query }).subscribe(refetchUpdate);
 		}
 
 		// 4. If the edition we need to display changed (ex. user
