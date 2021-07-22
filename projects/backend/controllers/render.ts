@@ -116,8 +116,13 @@ const sendError = (message: string, res: Response) => {
     res.status(400).send(message)
 }
 
-const getTags = (kicker: string): Tag[] => [
-    {
+const removeSeriesTags = (tags: Tag[]) =>
+    tags.filter((tag: Tag) => tag.type !== TagType.SERIES)
+
+const getTags = (kicker: string, tags: Tag[]): Tag[] => {
+    const filteredTags = removeSeriesTags(tags)
+
+    const seriesTag = {
         id: '',
         type: TagType.SERIES,
         webTitle: kicker,
@@ -125,8 +130,10 @@ const getTags = (kicker: string): Tag[] => [
         apiUrl: '',
         references: [],
         internalName: '',
-    },
-]
+    }
+
+    return [...filteredTags, seriesTag]
+}
 
 const mapFurnitureToContent = (
     furniture: PublishedFurniture,
@@ -141,7 +148,9 @@ const mapFurnitureToContent = (
         oc(furniture).trailTextOverride() || oc(content).fields.standfirst()
     return {
         ...content,
-        tags: furniture.kicker ? getTags(furniture.kicker) : content.tags,
+        tags: furniture.kicker
+            ? getTags(furniture.kicker, content.tags)
+            : content.tags,
         fields: {
             ...content.fields,
             headline,
