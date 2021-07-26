@@ -12,7 +12,7 @@
     },
     "devDependencies": {
         "@guardian/eslint-config-typescript": "^0.6.0",
-        "@guardian/node-riffraff-artifact": "0.2.1",
+        "@guardian/node-riffraff-artifact": "0.2.2",
         "@guardian/prettier": "^0.6.0",
         "@typescript-eslint/eslint-plugin": "^2.0.0",
         "@typescript-eslint/parser": "^2.34.0",
