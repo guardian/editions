@@ -108,7 +108,6 @@ export const handler: Handler<
     // Fetch ER articles for this 'front' and upload them to the 'html' folder of the given Issue
     const renderedFront = await getRenderedFront(publishedId, front)
     if (hasFailed(renderedFront)) {
-        console.error(JSON.stringify(renderedFront))
         throw new Error(
             `Failed to fetch rendered front '${front}' from the backend`,
         )

@@ -34,8 +34,6 @@ export const zip = async (
 
     const files = await getMatchingObjects(prefixes, bucket)
 
-    console.log('Got file names, zipping them...')
-
     const archive = archiver('zip')
     archive.on('warning', err => {
         console.error('Error in attempting to compress', err)

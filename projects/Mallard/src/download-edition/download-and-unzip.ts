@@ -113,15 +113,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					Feature.DOWNLOAD,
 				);
 
-				const htmlDownloadResult = await downloadNamedIssueArchive({
+				await downloadNamedIssueArchive({
 					localIssueId: localId,
 					assetPath: assetsSSR.html,
 					filename: 'html.zip',
 					withProgress: false,
 				});
-				console.log(
-					`HTML download completed with status: ${htmlDownloadResult.statusCode}`,
-				);
 
 				await pushTracking(
 					'attemptHTMLDownload',
@@ -137,15 +134,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					Feature.DOWNLOAD,
 				);
 
-				const dlImg = await downloadNamedIssueArchive({
+				await downloadNamedIssueArchive({
 					localIssueId: localId,
 					assetPath: assetsSSR[imageSize] as string,
 					filename: 'media.zip',
 					withProgress: true,
 				});
-				console.log(
-					`Image download completed with status: ${dlImg.statusCode}`,
-				);
 
 				await pushTracking(
 					'attemptMediaDownload',

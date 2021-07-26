@@ -6,7 +6,7 @@ import { Button, ButtonAppearance } from './Button';
 export const ReloadButton: React.FC<{
 	onPress: () => void;
 }> = ({ onPress }) => {
-	const { top, left } = useInsets();
+	const { top } = useInsets();
 	return (
 		<View
 			style={[

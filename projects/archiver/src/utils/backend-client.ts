@@ -44,7 +44,6 @@ export const getFront = async (
             maybeFront,
             `Failed to download front ${front} from ${publishedId}`,
         )
-    console.log(`got response: ${JSON.stringify(maybeFront.title)}`)
     return maybeFront
 }
 
@@ -83,7 +82,6 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
             `Failed to download editions list from ${path}`,
         )
     }
-    console.log(`Got response: ${JSON.stringify(maybeEditionsList)}`)
     return maybeEditionsList
 }
 
