@@ -48,8 +48,6 @@ export const getMatchingObjects = async (
     prefixes: string[],
     bucket: Bucket,
 ) => {
-    console.log('listing', JSON.stringify(prefixes))
-    console.log(JSON.stringify(prefixes))
     const keys: string[] = []
     for await (const partialKeys of listAndFilterPrefixes(prefixes, bucket)) {
         keys.push(...partialKeys)

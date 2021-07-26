@@ -6,14 +6,14 @@ import { Button, ButtonAppearance } from './Button';
 export const ReloadButton: React.FC<{
 	onPress: () => void;
 }> = ({ onPress }) => {
-	const { top, left } = useInsets();
+	const { top } = useInsets();
 	return (
 		<View
 			style={[
 				{
 					position: 'absolute',
 					top: top + 20,
-					left: left + 60,
+					right: 70,
 					zIndex: 99999,
 				},
 			]}

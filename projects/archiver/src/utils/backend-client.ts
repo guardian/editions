@@ -16,6 +16,7 @@ import {
     hasFailed,
     withFailureMessage,
 } from '../../../backend/utils/try'
+import { RenderedArticle } from '../../../Apps/common/src'
 
 export const URL =
     process.env.backend !== undefined
@@ -38,7 +39,6 @@ export const getFront = async (
     console.log(`attempt to getFront from path: ${path}`)
     const response = await fetch(path)
     const maybeFront = await attempt(response.json() as Promise<Front>)
-    console.log(`got response: ${JSON.stringify(maybeFront)}`)
     if (hasFailed(maybeFront))
         return withFailureMessage(
             maybeFront,
@@ -53,7 +53,7 @@ export const getImageUse = async (
     size: ImageSize,
     use: ImageUse,
 ): Promise<[string, Attempt<Buffer>]> => {
-    const path = imagePath(publishedId, size, image, use)
+    const path = imagePath(publishedId, image, use, size)
 
     const url = `${URL}/${path}`
     const resp = attempt(fetch(url))
@@ -76,7 +76,6 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
     const maybeEditionsList = await attempt(response.json() as Promise<
         EditionsList
     >)
-    console.log(`Got response: ${JSON.stringify(maybeEditionsList)}`)
     if (hasFailed(maybeEditionsList)) {
         return withFailureMessage(
             maybeEditionsList,
@@ -84,4 +83,19 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
         )
     }
     return maybeEditionsList
+}
+
+export const getRenderedFront = async (
+    publishedId: string,
+    front: string,
+): Promise<Attempt<RenderedArticle[]>> => {
+    const path = `${URL}render/${frontPath(publishedId, front)}`
+    const response = await fetch(path)
+    const renderedFront = await attempt(response.json() as Promise<
+        RenderedArticle[]
+    >)
+    if (hasFailed(renderedFront)) {
+        return renderedFront
+    }
+    return renderedFront
 }
