@@ -4,9 +4,7 @@ import { Newspaper } from '../Newspaper';
 
 describe('Newspaper', () => {
 	it('should display a Newspaper icon in SVG', () => {
-		const component = TestRenderer.create(
-			<Newspaper />,
-		).toJSON();
+		const component = TestRenderer.create(<Newspaper />).toJSON();
 		expect(component).toMatchSnapshot();
 	});
 });
