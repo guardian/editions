@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { IssueWithFronts } from 'src/common';
 import { withCache } from 'src/helpers/fetch/cache';
 import { isIssueOnDevice } from 'src/helpers/files';
 
@@ -65,7 +64,7 @@ const useIssueOnDevice = (localId: string) => {
 	const [status, setStatus] = useState(
 		localIssueListStore.getStatus(localId),
 	);
-	const { clear } = withCache<IssueWithFronts>('issue');
+	const { clear } = withCache('issue');
 
 	useEffect(
 		() =>
