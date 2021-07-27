@@ -250,9 +250,8 @@ export const EditionProvider = ({
 	const [selectedEdition, setSelectedEdition] = useState<
 		RegionalEdition | SpecialEdition
 	>(BASE_EDITION);
-	const [defaultEdition, setDefaultEdition] = useState<RegionalEdition>(
-		BASE_EDITION,
-	);
+	const [defaultEdition, setDefaultEdition] =
+		useState<RegionalEdition>(BASE_EDITION);
 	const [showNewEditionCard, setShowNewEditionCard] = useState(false);
 	const [apiUrl, setApiUrl] = useState('');
 

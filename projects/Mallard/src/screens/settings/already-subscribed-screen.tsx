@@ -38,9 +38,8 @@ const AlreadySubscribedScreen = () => {
 								? [
 										{
 											key: 'Sign in to activate',
-											title:
-												Copy.alreadySubscribed
-													.signInTitle,
+											title: Copy.alreadySubscribed
+												.signInTitle,
 											onPress: () => {
 												navigation.navigate(
 													RouteNames.SignIn,
@@ -51,9 +50,8 @@ const AlreadySubscribedScreen = () => {
 										},
 										{
 											key: 'Activate with subscriber ID',
-											title:
-												Copy.alreadySubscribed
-													.subscriberIdTitle,
+											title: Copy.alreadySubscribed
+												.subscriberIdTitle,
 											onPress: () => {
 												navigation.navigate(
 													RouteNames.CasSignIn,
@@ -76,13 +74,11 @@ const AlreadySubscribedScreen = () => {
 								data={[
 									{
 										key: 'Restore App Store subscription',
-										title:
-											Copy.alreadySubscribed
-												.restoreIapTitle,
+										title: Copy.alreadySubscribed
+											.restoreIapTitle,
 										onPress: async () => {
-											const {
-												accessAttempt,
-											} = await authIAP();
+											const { accessAttempt } =
+												await authIAP();
 											if (isValid(accessAttempt)) {
 												open((close) => (
 													<SubFoundModalCard

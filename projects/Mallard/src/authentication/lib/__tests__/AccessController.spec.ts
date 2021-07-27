@@ -372,12 +372,10 @@ describe('AccessController', () => {
 
 	describe('validAttemptCache', () => {
 		it('is populated with the attempt date after valid auths', async () => {
-			const {
-				controller,
-				validAttemptCache,
-			} = createSimpleAccessController({
-				grantAccessFromUserData: true,
-			});
+			const { controller, validAttemptCache } =
+				createSimpleAccessController({
+					grantAccessFromUserData: true,
+				});
 			await expect(validAttemptCache.get()).resolves.toBe(null);
 
 			await controller.authorizerMap.a.runAuth();

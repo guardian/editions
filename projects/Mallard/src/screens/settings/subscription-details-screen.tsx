@@ -99,9 +99,8 @@ const LoggedOutDetails = () => (
 );
 
 const SubscriptionDetailsScreen = () => {
-	const { identityData, iapData, casData, attempt } = useContext(
-		AccessContext,
-	);
+	const { identityData, iapData, casData, attempt } =
+		useContext(AccessContext);
 
 	return (
 		<HeaderScreenContainer

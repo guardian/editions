@@ -33,9 +33,8 @@ const betaProgrammeFAQs = (
 });
 
 const betaThanks = () => {
-	const navigation = useNavigation<
-		StackNavigationProp<SettingsStackParamList>
-	>();
+	const navigation =
+		useNavigation<StackNavigationProp<SettingsStackParamList>>();
 	return (
 		<>
 			<Heading>{``}</Heading>
@@ -49,9 +48,8 @@ const betaThanks = () => {
 };
 
 const joinBetaMenuButton = () => {
-	const navigation = useNavigation<
-		StackNavigationProp<SettingsStackParamList>
-	>();
+	const navigation =
+		useNavigation<StackNavigationProp<SettingsStackParamList>>();
 	return (
 		<>
 			<Heading>{``}</Heading>

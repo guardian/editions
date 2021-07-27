@@ -115,8 +115,8 @@ const ManageEditionsScreen = () => {
 							: [
 									{
 										key: 'Wifi-only',
-										title:
-											Copy.manageDownloads.wifiOnlyTitle,
+										title: Copy.manageDownloads
+											.wifiOnlyTitle,
 										explainer:
 											Copy.manageDownloads
 												.wifiOnlyExplainer,
@@ -145,9 +145,8 @@ const ManageEditionsScreen = () => {
 									},
 									{
 										key: 'Available editions',
-										title:
-											Copy.manageDownloads
-												.availableDownloads,
+										title: Copy.manageDownloads
+											.availableDownloads,
 										explainer: (
 											<AvailableEditionsButtons
 												numbers={[7, 14, 30]}
