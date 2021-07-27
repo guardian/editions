@@ -1,4 +1,4 @@
-import type { RNAppleAuth } from '@invertase/react-native-apple-authentication';
+import type { AppleAuthRequestResponse } from '@invertase/react-native-apple-authentication';
 import appleAuth, {
 	AppleAuthError,
 	AppleAuthRequestOperation,
@@ -7,7 +7,7 @@ import appleAuth, {
 import type { AppleCreds } from 'src/authentication/authorizers/IdentityAuthorizer';
 
 const mapCredentials = (
-	appleCredentials: RNAppleAuth.AppleAuthRequestResponse,
+	appleCredentials: AppleAuthRequestResponse,
 ): AppleCreds => {
 	const { identityToken, authorizationCode, fullName } = appleCredentials;
 	const givenName = fullName ? fullName.givenName : '';
