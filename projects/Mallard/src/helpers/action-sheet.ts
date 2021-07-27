@@ -30,6 +30,17 @@ const runActionSheet = (
 			),
 		android: () =>
 			Alert.alert(title, message, optionsWithCancel.slice().reverse()),
+		default: () =>
+			ActionSheetIOS.showActionSheetWithOptions(
+				{
+					options: optionsWithCancel.map(({ text }) => text),
+					title,
+					message,
+					cancelButtonIndex: options.length,
+				},
+				async (index) =>
+					index !== options.length && options[index].onPress(),
+			),
 	})();
 };
 
