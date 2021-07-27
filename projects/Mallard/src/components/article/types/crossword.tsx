@@ -11,16 +11,15 @@ const Crossword = ({
 }: {
 	crosswordArticle: CrosswordArticle;
 }) => {
+	const loadCrosswordScript = `window.loadCrosswordData("${
+		crosswordArticle.key
+	}", ${JSON.stringify(crosswordArticle.crossword)}); true;`;
 	return (
 		<WebView
 			key={crosswordArticle.key}
 			originWhitelist={['*']}
 			source={{ uri: getBundleUri('crosswords') }}
-			injectedJavaScript={`
-                window.loadCrosswordData("${
-					crosswordArticle.key
-				}", ${JSON.stringify(crosswordArticle.crossword)}); true;
-            `}
+			injectedJavaScript={loadCrosswordScript}
 			onMessage={(event) => {
 				console.log(JSON.stringify(event));
 			}} // This is important, with onMessage JS will not be injected, doc: https://github.com/react-native-webview/react-native-webview/blob/d6672c87eb61827c9b0215733a4766c14f68d01a/docs/Guide.md
