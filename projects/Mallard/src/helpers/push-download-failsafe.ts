@@ -17,7 +17,7 @@ const pushDownloadFailsafe = (client: ApolloClient<object>) => {
 			await pushTracking('backgroundFetch', 'started', feature);
 			await prepareAndDownloadTodaysIssue(client);
 			await pushTracking('backgroundFetch', 'ended', feature);
-			BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+			BackgroundFetch.finish();
 		},
 		(error) => {
 			pushTracking('backgroundFetchError', error.toString(), feature);
