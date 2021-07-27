@@ -4,9 +4,7 @@ import { LeftChevron } from '../LeftChevron';
 
 describe('LeftChevron', () => {
 	it('should display a LeftChevron icon using the icon font', () => {
-		const component = TestRenderer.create(
-			<LeftChevron />,
-		).toJSON();
+		const component = TestRenderer.create(<LeftChevron />).toJSON();
 		expect(component).toMatchSnapshot();
 	});
 });
