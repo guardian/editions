@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ReactTestRendererJSON } from 'react-test-renderer';
 import TestRenderer from 'react-test-renderer';
 import { EditionButton } from '../EditionButton';
 
@@ -30,13 +29,13 @@ jest.mock('src/components/front/image-resource', () => ({
 
 describe('RegionButton', () => {
 	it('should display a default RegionButton with correct styling', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<EditionButton {...props} />,
 		).toJSON();
 		expect(component).toMatchSnapshot();
 	});
 	it('should display a selected RegionButton with correct styling', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<EditionButton selected={true} {...props} />,
 		).toJSON();
 		expect(component).toMatchSnapshot();
@@ -45,13 +44,13 @@ describe('RegionButton', () => {
 
 describe('SpecialEditionButton', () => {
 	it('should display a default SpecialEditionButton with correct styling', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<EditionButton isSpecial {...specialProps} />,
 		).toJSON();
 		expect(component).toMatchSnapshot();
 	});
 	it('should display a selected SpecialEditionButton despite correct styling', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<EditionButton isSpecial selected {...specialProps} />,
 		).toJSON();
 		expect(component).toMatchSnapshot();

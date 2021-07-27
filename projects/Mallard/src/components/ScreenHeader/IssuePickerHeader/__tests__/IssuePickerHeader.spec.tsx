@@ -1,12 +1,11 @@
 import React from 'react';
-import type { ReactTestRendererJSON } from 'react-test-renderer';
 import TestRenderer from 'react-test-renderer';
 import MockedNavigator from 'src/__mocks__/@react-navigation';
 import { IssuePickerHeader } from '../IssuePickerHeader';
 
 describe('IssuePickerHeader', () => {
 	it('should match the default style', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<MockedNavigator
 				component={IssuePickerHeader}
 				props={{ title: 'UK', subTitle: 'Daily' }}
@@ -15,7 +14,7 @@ describe('IssuePickerHeader', () => {
 		expect(component).toMatchSnapshot();
 	});
 	it('should match the default style with a subTitle', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<MockedNavigator
 				component={IssuePickerHeader}
 				props={{ title: 'Recent', subTitle: 'Editions' }}
@@ -24,7 +23,7 @@ describe('IssuePickerHeader', () => {
 		expect(component).toMatchSnapshot();
 	});
 	it('should match the altered style by the prop headerStyles', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<MockedNavigator
 				component={IssuePickerHeader}
 				props={{

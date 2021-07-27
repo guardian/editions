@@ -1,6 +1,5 @@
 import React from 'react';
 import { Animated } from 'react-native';
-import type { ReactTestRendererJSON } from 'react-test-renderer';
 import TestRenderer from 'react-test-renderer';
 import { issueDateFromId } from '../slider-helpers';
 import { SliderTitle } from '../SliderTitle';
@@ -16,21 +15,21 @@ const sliderDetails = {
 const baseTests = (title: string) =>
 	describe(title, () => {
 		it('should display a Front SliderTitle with the correct styles', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle {...sliderDetails} location="front" />,
 			).toJSON();
 			expect(component).toMatchSnapshot();
 		});
 
 		it('should display an Article SliderTitle with the correct styles', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle {...sliderDetails} location="article" />,
 			).toJSON();
 			expect(component).toMatchSnapshot();
 		});
 
 		it('should display an Front SliderTitle with a subtitle the same as the title', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle
 					{...sliderDetails}
 					location="front"
@@ -41,7 +40,7 @@ const baseTests = (title: string) =>
 		});
 
 		it('should display an Article SliderTitle with a subtitle the same as the title', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle
 					{...sliderDetails}
 					location="article"
@@ -52,7 +51,7 @@ const baseTests = (title: string) =>
 		});
 
 		it('should display an Front SliderTitle with a subtitle different to the title', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle
 					{...sliderDetails}
 					location="front"
@@ -63,7 +62,7 @@ const baseTests = (title: string) =>
 		});
 
 		it('should display an Article SliderTitle with a subtitle different to the title', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle
 					{...sliderDetails}
 					location="article"
@@ -74,14 +73,14 @@ const baseTests = (title: string) =>
 		});
 
 		it('should display an default SliderTitle with a prescribed start index', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle {...sliderDetails} startIndex={2} />,
 			).toJSON();
 			expect(component).toMatchSnapshot();
 		});
 
 		it('should display no dots when numOfItems is 1 or less', () => {
-			const component: ReactTestRendererJSON | null = TestRenderer.create(
+			const component = TestRenderer.create(
 				<SliderTitle {...sliderDetails} numOfItems={1} />,
 			).toJSON();
 			expect(component).toMatchSnapshot();
