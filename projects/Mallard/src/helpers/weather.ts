@@ -125,6 +125,7 @@ const shouldUseMetric = (): boolean => {
 	return Platform.select({
 		ios: RNLocalize.getTemperatureUnit() === 'celsius',
 		android: locale === 'en_US' ? false : true,
+		default: RNLocalize.getTemperatureUnit() === 'celsius',
 	});
 };
 
