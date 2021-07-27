@@ -34,7 +34,7 @@ export const DevTools = ({
 }) => {
 	const [open, setOpen] = useState(false);
 	const [firstPillar, lastPillar] = getFirstLast(
-		(articlePillars as unknown) as ArticlePillar[],
+		articlePillars as unknown as ArticlePillar[],
 	);
 	const types: ArticleType[] = Object.values(ArticleType);
 	const [firstType, lastType] = getFirstLast(types);

@@ -34,17 +34,12 @@ import { DevZone } from './settings/dev-zone';
 
 const MiscSettingsList = React.memo(
 	(props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
-		const navigation = useNavigation<
-			StackNavigationProp<SettingsStackParamList>
-		>();
-		const {
-			notificationsEnabled,
-			setNotifications,
-		} = useNotificationsEnabled();
-		const [
-			settingNotificationsEnabled,
-			setSettingNotificationsEnabled,
-		] = useState(notificationsEnabled);
+		const navigation =
+			useNavigation<StackNavigationProp<SettingsStackParamList>>();
+		const { notificationsEnabled, setNotifications } =
+			useNotificationsEnabled();
+		const [settingNotificationsEnabled, setSettingNotificationsEnabled] =
+			useState(notificationsEnabled);
 
 		const onWeatherChange = () =>
 			setIsWeatherShown(props.client, !props.isWeatherShown);

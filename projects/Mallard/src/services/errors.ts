@@ -35,17 +35,15 @@ export class ErrorServiceImpl implements ErrorService {
 	}
 
 	public init(apolloClient: ApolloClient<object>) {
-		apolloClient
-			.watchQuery<QueryData>({ query: QUERY })
-			.subscribe({
-				next: (query) => {
-					if (query.loading) return;
-					this.handleConsentUpdate(query.data.gdprAllowPerformance);
-				},
-				error: (error) => {
-					this.captureException(error);
-				},
-			});
+		apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
+			next: (query) => {
+				if (query.loading) return;
+				this.handleConsentUpdate(query.data.gdprAllowPerformance);
+			},
+			error: (error) => {
+				this.captureException(error);
+			},
+		});
 	}
 
 	private async handleConsentUpdate(hasConsent: GdprSwitchSetting) {

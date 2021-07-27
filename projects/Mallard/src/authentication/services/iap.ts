@@ -37,6 +37,7 @@ const fetchDecodeReceipt = (receipt: string) =>
 			'receipt-data': receipt,
 			password: ITUNES_CONNECT_SHARED_SECRET,
 		},
+		// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 		isInBeta() || __DEV__,
 	);
 

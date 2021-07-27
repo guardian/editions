@@ -159,9 +159,10 @@ const useScrollToFrontBehavior = (
 	// changes and nothing else.
 	//
 
-	useEffect(() => scrollTo(findFrontIndex(initialFrontKey)), [
-		frontWithCards,
-	]);
+	useEffect(
+		() => scrollTo(findFrontIndex(initialFrontKey)),
+		[frontWithCards],
+	);
 };
 
 const IssueFronts = ({
@@ -296,31 +297,35 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 	return preview ? <ReloadButton onPress={onPress} /> : null;
 };
 
-const handleError = (headerStyle?: SpecialEditionHeaderStyles) => (
-	{ message }: { message: string },
-	_: unknown,
-	{ retry }: { retry: () => void },
-) => (
-	<>
-		<IssueScreenHeader headerStyles={headerStyle} />
+const handleError =
+	(headerStyle?: SpecialEditionHeaderStyles) =>
+	(
+		{ message }: { message: string },
+		_: unknown,
+		{ retry }: { retry: () => void },
+	) =>
+		(
+			<>
+				<IssueScreenHeader headerStyles={headerStyle} />
 
-		<FlexErrorMessage
-			debugMessage={message}
-			title={CONNECTION_FAILED_ERROR}
-			message={CONNECTION_FAILED_SUB_ERROR}
-			action={[REFRESH_BUTTON_TEXT, retry]}
-		/>
-	</>
-);
+				<FlexErrorMessage
+					debugMessage={message}
+					title={CONNECTION_FAILED_ERROR}
+					message={CONNECTION_FAILED_SUB_ERROR}
+					action={[REFRESH_BUTTON_TEXT, retry]}
+				/>
+			</>
+		);
 
-const handlePending = (headerStyle?: SpecialEditionHeaderStyles) => () => (
-	<>
-		<IssueScreenHeader headerStyles={headerStyle} />
-		<FlexCenter>
-			<Spinner />
-		</FlexCenter>
-	</>
-);
+const handlePending = (headerStyle?: SpecialEditionHeaderStyles) => () =>
+	(
+		<>
+			<IssueScreenHeader headerStyles={headerStyle} />
+			<FlexCenter>
+				<Spinner />
+			</FlexCenter>
+		</>
+	);
 
 /** used to memoize the IssueScreenWithPath */
 const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
@@ -448,11 +453,8 @@ const IssueScreenWithPath = React.memo(
 
 export const IssueScreen = () => {
 	const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary();
-	const {
-		selectedEdition,
-		showNewEditionCard,
-		setNewEditionSeen,
-	} = useEditions();
+	const { selectedEdition, showNewEditionCard, setNewEditionSeen } =
+		useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
 	const headerStyle = specialEditionProps?.headerStyle;
 

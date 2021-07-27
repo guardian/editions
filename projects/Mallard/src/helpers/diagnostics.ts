@@ -56,8 +56,7 @@ const getDiagnosticInfo = async (
 						details @client
 						isPoorConnection @client
 					}
-				}
-			`,
+				`,
 		}),
 		getGDPREntries(),
 		getCASCode(),
