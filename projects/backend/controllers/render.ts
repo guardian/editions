@@ -164,6 +164,7 @@ const processArticleRendering = async (
     internalPageCode: number,
     furniture: PublishedFurniture,
     theme: Theme | null,
+    isPreview: boolean = false,
 ): Promise<RenderedArticle> => {
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
@@ -188,7 +189,7 @@ const processArticleRendering = async (
 
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(patchedContent)
-        const url = `${appsRenderingProxyUrl}?theme=${theme}`
+        const url = `${appsRenderingProxyUrl}?theme=${theme}?isPreview=${isPreview}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
             url,
@@ -319,6 +320,7 @@ export const renderFrontController = async (req: Request, res: Response) => {
     }
 }
 
+// This controller only meant to be used in preview mode
 export const renderItemController = async (req: Request, res: Response) => {
     console.log(JSON.stringify(req.params))
     const internalPageCode = req.params[0] as number
@@ -364,6 +366,7 @@ export const renderItemController = async (req: Request, res: Response) => {
         idFurniturePair[0].internalPageCode,
         idFurniturePair[0].furniture,
         mappedTheme,
+        true,
     )
 
     res.setHeader('Content-Type', 'text/html')
