@@ -164,7 +164,7 @@ const processArticleRendering = async (
     internalPageCode: number,
     furniture: PublishedFurniture,
     theme: Theme | null,
-    isPreview: boolean = false,
+    isPreview = false,
 ): Promise<RenderedArticle> => {
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
