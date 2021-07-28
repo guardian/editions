@@ -189,7 +189,7 @@ const processArticleRendering = async (
 
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(patchedContent)
-        const url = `${appsRenderingProxyUrl}?theme=${theme}?isPreview=${isPreview}`
+        const url = `${appsRenderingProxyUrl}?theme=${theme}&isPreview=${isPreview}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
             url,
