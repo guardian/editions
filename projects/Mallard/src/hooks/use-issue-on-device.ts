@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { withCache } from 'src/helpers/fetch/cache';
 import { isIssueOnDevice } from 'src/helpers/files';
 
 export enum ExistsStatus {
@@ -63,11 +64,15 @@ const useIssueOnDevice = (localId: string) => {
 	const [status, setStatus] = useState(
 		localIssueListStore.getStatus(localId),
 	);
+	const { clear } = withCache('issue');
 
 	useEffect(
 		() =>
 			localIssueListStore.subscribe(() => {
 				const newStatus = localIssueListStore.getStatus(localId);
+				if (newStatus == ExistsStatus.DoesNotExist) {
+					clear(localId);
+				}
 				setStatus(newStatus);
 			}),
 		[localId],
