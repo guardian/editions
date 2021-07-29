@@ -325,7 +325,6 @@ export const renderItemController = async (req: Request, res: Response) => {
     console.log(JSON.stringify(req.params))
     const internalPageCode = req.params[0] as number
     const frontId: string = req.query['frontId']
-    const isPreview = req.params.version === 'preview'
     console.log(
         `Rendering single article with internalPageCode=${internalPageCode} within a front: ${frontId}`,
     )
