@@ -25,6 +25,7 @@ import { Tag } from '@guardian/content-api-models/v1/tag'
 import { TagType } from '@guardian/content-api-models/v1/tagType'
 import { oc } from 'ts-optchain'
 import { Attempt } from '../common'
+import { getEditionFilePath, s3fetchObject } from '../s3'
 
 const fetchRenderedArticle = async (
     internalPageCode: number,
@@ -369,4 +370,20 @@ export const renderItemController = async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'text/html')
     res.setHeader('Last-Modifed', date())
     res.send(renderedArticle.body)
+}
+
+export const assetsController = async (req: Request, res: Response) => {
+    const inputPath = req.path.slice(1) // remove the '/' at the beginning
+    const path = getEditionFilePath(inputPath, 'published')
+    try {
+        const s3Response = await s3fetchObject(path)
+        if (hasFailed(s3Response)) throw s3Response
+
+        res.setHeader('Content-Length', String(s3Response.ContentLength))
+        res.setHeader('Content-Type', String(s3Response.ContentType))
+        res.send(s3Response.Body)
+    } catch (error) {
+        console.log(error)
+        sendError('Failed fetch requested object', res)
+    }
 }

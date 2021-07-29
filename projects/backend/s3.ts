@@ -11,6 +11,7 @@ import {
     ChainableTemporaryCredentials,
 } from 'aws-sdk'
 import { notNull } from './common'
+import { GetObjectOutput } from 'aws-sdk/clients/s3'
 
 export interface Path {
     key: string
@@ -23,6 +24,10 @@ export const getFrontsBucket = (isPreview: boolean) =>
 
 export const getEditionsBucket = (bucketType: string) =>
     `editions-${bucketType}-${stage.toLowerCase()}`
+
+export const getEditionFilePath = (file: string, bucketType: string): Path => {
+    return { key: file, bucket: getEditionsBucket(bucketType) }
+}
 
 if (process.env.arn) {
     console.log(`Creating S3 client with role arn: ${process.env.arn}`)
@@ -209,6 +214,56 @@ export const s3fetch = (path: Path): Promise<Attempt<S3Response>> => {
                     lastModified: result.LastModified,
                     etag: result.ETag,
                 })
+            },
+        )
+    })
+}
+
+export const s3fetchObject = (
+    path: Path,
+): Promise<Attempt<GetObjectOutput>> => {
+    return new Promise(resolve => {
+        s3EditionClient().getObject(
+            {
+                Key: path.key,
+                Bucket: path.bucket,
+            },
+            (error, result) => {
+                if (error && error.code == 'NoSuchKey') {
+                    resolve(
+                        failure({
+                            httpStatus: 404,
+                            error: new Error(
+                                `Could not find key ${JSON.stringify(path)}`,
+                            ),
+                        }),
+                    )
+                    return
+                }
+                if (error)
+                    resolve(
+                        failure({
+                            httpStatus: 500,
+                            error,
+                            messages: [error.message],
+                        }),
+                    )
+
+                if (result == undefined) {
+                    resolve(
+                        failure({
+                            httpStatus: 500,
+                            error: new Error(
+                                `Neither result nor error in s3 response for  ${JSON.stringify(
+                                    path,
+                                )}`,
+                            ),
+                        }),
+                    )
+                    return
+                }
+
+                resolve(result)
             },
         )
     })

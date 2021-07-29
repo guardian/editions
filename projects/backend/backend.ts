@@ -6,6 +6,7 @@ import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController } from './controllers/fronts'
 import { imageController } from './controllers/image'
 import {
+    assetsController,
     renderFrontController,
     renderItemController,
 } from './controllers/render'
@@ -23,6 +24,7 @@ const runtimeControllers: EditionsBackendControllers = {
     imageController,
     renderFrontController,
     renderItemController,
+    assetsController,
     editionsController: {
         GET: editionsControllerGet,
         POST: editionsControllerPost,

@@ -17,6 +17,7 @@ export interface EditionsBackendControllers {
     imageController: (req: Request, res: Response) => void
     renderFrontController: (req: Request, res: Response) => void
     renderItemController: (req: Request, res: Response) => void
+    assetsController: (req: Request, res: Response) => void
     editionsController: {
         GET: (req: Request, res: Response) => void
         POST: (req: Request, res: Response) => void
@@ -66,11 +67,15 @@ export const createApp = (
         controllers.renderFrontController,
     )
 
-    // This html endpoint only meant be used in preview mode to serve single rendered html
+    // This html endpoint only meant to be used in preview mode to serve single rendered html
     app.get(
         '/' + htmlDirPath(issuePathSegments) + '/*.html',
         controllers.renderItemController,
     )
+
+    // This assets endpoint only meant to be used in preview mode to server static assets
+    // from editions-published-<stage> s3 assets folder
+    app.get('/assets/*?', controllers.assetsController)
 
     app.get(
         '/' +
