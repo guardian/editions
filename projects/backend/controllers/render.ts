@@ -385,12 +385,17 @@ export const assetsController = async (req: Request, res: Response) => {
         console.log('Content-Length: ' + String(s3Response.ContentLength))
 
         res.setHeader('content-length', String(s3Response.ContentLength))
-        res.setHeader('content-type', String(s3Response.ContentType))
+        // res.setHeader('content-type', String(s3Response.ContentType))
         // res.send(s3Response.Body as Buffer)
         // res.write(s3Response.Body, 'binary')
-        const encoding =
-            inputPath.indexOf('assets/fonts/') == -1 ? 'utf8' : 'binary'
-        res.end(s3Response.Body, encoding)
+        const isFont = inputPath.indexOf('assets/fonts/') != -1
+        const encoding = isFont ? 'binary' : 'utf8'
+
+        res.setHeader(
+            'content-type',
+            isFont ? 'font/ttf' : String(s3Response.ContentType),
+        )
+        res.write(s3Response.Body as Buffer, encoding)
     } catch (error) {
         console.log(error)
         sendError('Failed fetch requested object', res)
