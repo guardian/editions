@@ -179,8 +179,9 @@ const processArticleRendering = async (
             }
         }
 
-        const appsRenderingProxyUrl =
-            process.env.APPS_RENDERING_URL || 'apps rendering url missing'
+        const appsRenderingProxyUrl = 'http://localhost:8080/editions-article'
+        // const appsRenderingProxyUrl =
+        //     process.env.APPS_RENDERING_URL || 'apps rendering url missing'
         const appsRenderingProxyHeader =
             process.env.APPS_RENDERING_PROXY_HEADER_KEY ||
             'proxy header missing'
@@ -386,7 +387,7 @@ export const assetsController = async (req: Request, res: Response) => {
 
         res.setHeader('content-length', String(s3Response.ContentLength))
         res.setHeader('content-type', String(s3Response.ContentType))
-        res.send(s3Response.Body)
+        res.send(s3Response.Body as Buffer)
     } catch (error) {
         console.log(error)
         sendError('Failed fetch requested object', res)
