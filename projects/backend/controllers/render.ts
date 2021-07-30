@@ -179,9 +179,8 @@ const processArticleRendering = async (
             }
         }
 
-        const appsRenderingProxyUrl = 'http://localhost:8080/editions-article'
-        // const appsRenderingProxyUrl =
-        //     process.env.APPS_RENDERING_URL || 'apps rendering url missing'
+        const appsRenderingProxyUrl =
+            process.env.APPS_RENDERING_URL || 'apps rendering url missing'
         const appsRenderingProxyHeader =
             process.env.APPS_RENDERING_PROXY_HEADER_KEY ||
             'proxy header missing'
