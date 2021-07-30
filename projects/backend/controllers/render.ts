@@ -387,7 +387,11 @@ export const assetsController = async (req: Request, res: Response) => {
 
         res.setHeader('content-length', String(s3Response.ContentLength))
         res.setHeader('content-type', String(s3Response.ContentType))
-        res.send(s3Response.Body as Buffer)
+        // res.send(s3Response.Body as Buffer)
+        // res.write(s3Response.Body, 'binary')
+        const encoding =
+            inputPath.indexOf('assets/fonts/') == -1 ? 'utf8' : 'binary'
+        res.end(s3Response.Body, encoding)
     } catch (error) {
         console.log(error)
         sendError('Failed fetch requested object', res)
