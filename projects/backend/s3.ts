@@ -269,15 +269,6 @@ export const s3fetchObject = (
     })
 }
 
-export const getS3Stream = (path: Path) => {
-    return s3EditionClient()
-        .getObject({
-            Key: path.key,
-            Bucket: path.bucket,
-        })
-        .createReadStream()
-}
-
 export const s3Put = async (path: Path, data: string) => {
     await s3EditionClient()
         .putObject({

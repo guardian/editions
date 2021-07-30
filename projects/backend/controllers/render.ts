@@ -25,7 +25,7 @@ import { Tag } from '@guardian/content-api-models/v1/tag'
 import { TagType } from '@guardian/content-api-models/v1/tagType'
 import { oc } from 'ts-optchain'
 import { Attempt } from '../common'
-import { getEditionFilePath, getS3Stream, s3fetchObject } from '../s3'
+import { getEditionFilePath, s3fetchObject } from '../s3'
 
 const fetchRenderedArticle = async (
     internalPageCode: number,
@@ -378,17 +378,15 @@ export const assetsController = async (req: Request, res: Response) => {
     const inputPath = req.path.slice(1) // remove the '/' at the beginning
     const path = getEditionFilePath(inputPath, 'published')
     try {
-        // const s3Response = await s3fetchObject(path)
-        // if (hasFailed(s3Response)) throw s3Response
+        const s3Response = await s3fetchObject(path)
+        if (hasFailed(s3Response)) throw s3Response
 
-        // console.log('Content-type: ' + String(s3Response.ContentType))
-        // console.log('Content-Length: ' + String(s3Response.ContentLength))
+        console.log('Content-type: ' + String(s3Response.ContentType))
+        console.log('Content-Length: ' + String(s3Response.ContentLength))
 
-        // res.setHeader('Content-Length', String(s3Response.ContentLength))
-        // res.setHeader('Content-Type', String(s3Response.ContentType))
-        // res.send(s3Response.Body)
-
-        getS3Stream(path).pipe(res)
+        res.setHeader('Content-Length', String(s3Response.ContentLength))
+        res.setHeader('Content-Type', String(s3Response.ContentType))
+        res.send(s3Response.Body)
     } catch (error) {
         console.log(error)
         sendError('Failed fetch requested object', res)
