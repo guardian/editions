@@ -381,11 +381,11 @@ export const assetsController = async (req: Request, res: Response) => {
         const s3Response = await s3fetchObject(path)
         if (hasFailed(s3Response)) throw s3Response
 
-        console.log('Content-type: ' + String(s3Response.ContentType))
+        console.log('Content-Type: ' + String(s3Response.ContentType))
         console.log('Content-Length: ' + String(s3Response.ContentLength))
 
-        res.setHeader('Content-Length', String(s3Response.ContentLength))
-        res.setHeader('Content-Type', String(s3Response.ContentType))
+        res.setHeader('content-length', String(s3Response.ContentLength))
+        res.setHeader('content-type', String(s3Response.ContentType))
         res.send(s3Response.Body)
     } catch (error) {
         console.log(error)
