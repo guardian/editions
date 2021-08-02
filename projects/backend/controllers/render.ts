@@ -164,6 +164,7 @@ const processArticleRendering = async (
     internalPageCode: number,
     furniture: PublishedFurniture,
     theme: Theme | null,
+    isPreview = false,
 ): Promise<RenderedArticle> => {
     try {
         const searchResponse = await fetchCapiContent(internalPageCode)
@@ -188,7 +189,7 @@ const processArticleRendering = async (
 
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(patchedContent)
-        const url = `${appsRenderingProxyUrl}?theme=${theme}`
+        const url = `${appsRenderingProxyUrl}?theme=${theme}&isPreview=${isPreview}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
             url,
@@ -364,6 +365,7 @@ export const renderItemController = async (req: Request, res: Response) => {
         idFurniturePair[0].internalPageCode,
         idFurniturePair[0].furniture,
         mappedTheme,
+        isPreview,
     )
 
     res.setHeader('Content-Type', 'text/html')
