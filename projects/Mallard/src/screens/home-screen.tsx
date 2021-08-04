@@ -132,7 +132,7 @@ const IssueRowContainer = React.memo(
 		);
 
 		const onPress = useCallback(() => {
-			if (issueDetails !== undefined) {
+			if (issueDetails !== null) {
 				setNavPosition(null);
 				navToIssue(null);
 				return;
