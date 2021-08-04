@@ -284,8 +284,18 @@ const Article = ({
 	};
 
 	const handleLightbox = (parsed: LightboxMessage) => {
-		const index = parsed.index;
+		let index = parsed.index;
 
+		// the following if statement is required to make sure the lightbox opens on the correct image.
+		if (
+			article.type !== 'gallery' &&
+			article.image &&
+			!parsed.isMainImage &&
+			lightboxImages &&
+			lightboxImages.length > 1
+		) {
+			index++;
+		}
 		navigation.navigate(RouteNames.Lightbox, {
 			images: lightboxImages,
 			imagePaths: imagePaths,
