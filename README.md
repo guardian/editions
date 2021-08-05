@@ -64,7 +64,7 @@ This contains `common` which is the code shared between app and backends and `cr
 
 ### backend, archiver and aws
 
-These all deploys in one go, the default github branch is `master` which automatically triggers CI deployment once someone merges code changes into it. If you need to deploy from a different branch (i.e. from a PR branch) first make sure it builds ok in teamcity job (Editions > Build) and make sure you choose the right branch before you press the `run` button in teamcity. Once build completes successfully make a note of the build number, go to [riffraff](https://riffraff.gutools.co.uk), type/find the `editions` project and choose the build number you noted from teamcity. As usual, you can choose CODE or PROD to deploy depending on your needs.
+These all deploy in one go. The default github branch is `master` which automatically triggers CI deployment once someone merges code changes into it. If you need to deploy from a different branch (i.e. from a PR branch) first make sure it builds ok in teamcity job (Editions > Build) and make sure you choose the right branch before you press the `run` button in teamcity. Once the build completes successfully, make a note of the build number, go to [riffraff](https://riffraff.gutools.co.uk), type/find the `editions` project and choose the build number you noted from teamcity. As usual, you can choose CODE or PROD to deploy depending on your needs.
 
 ## Uploading iOS internal beta to testflight
 
