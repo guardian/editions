@@ -550,7 +550,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
+  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Firebase: e1e089d9aac215a52442583f818ab61de3c4581b
@@ -561,7 +561,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
   FirebaseRemoteConfig: f805089c5c383c17d68bcc0799d8a3622f9ae28f
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
-  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   GoogleDataTransport: 8b0e733ea77c9218778e5a9e34ba9508b8328939
   GoogleUtilities: 284cddc7fffc14ae1907efb6f78ab95c1fccaedc
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e

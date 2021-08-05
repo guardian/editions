@@ -33,7 +33,7 @@ const WebviewWithArticle = ({
 	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
-	const [showError, setShowError] = useState(false);
+	const [showError, setShowError] = useState(true);
 
 	const updateSource = () => {
 		// On Android there is a potential race condition where url did get set before

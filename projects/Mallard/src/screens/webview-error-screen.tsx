@@ -1,13 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { SvgOfflineCloud } from 'src/components/icons/OfflineCloud';
 import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
 
 const WebviewError = () => {
 	const copy =
-		'Sorry, you need to be online or have this issue downloaded to read this article. Please go online to try again.';
+		"Sorry, we couldn't load this page. Please ensure you're online in order to view it.";
 	return (
 		<View style={styles.container}>
+			<SvgOfflineCloud />
+
 			<Text style={styles.text}>{copy}</Text>
 		</View>
 	);
@@ -15,14 +19,16 @@ const WebviewError = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flex: 0.7,
+		backgroundColor: '#F6F6F6',
 		alignItems: 'center',
 		justifyContent: 'center',
+		marginHorizontal: metrics.horizontal,
 	},
 	text: {
-		...getFont('sans', 1),
+		...getFont('sans', 0.9),
 		width: '70%',
-		color: color.error,
+		color: color.text,
 		textAlign: 'center',
 	},
 });
