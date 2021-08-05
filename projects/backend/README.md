@@ -34,4 +34,4 @@ The routing is done in `application.ts` - go and find some routes to hit!
 
 ## Deploying to AWS
 
-Follow the steps in `Deployment` section of this [ReadMe](https://github.com/guardian/editions/blob/master/README.md).
+Follow the steps in the `Deployment` section of this [ReadMe](https://github.com/guardian/editions/blob/master/README.md).
