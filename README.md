@@ -12,7 +12,7 @@ Once nvm is installed run `nvm use`.
 
 Run `make install`, this will install the dependencies for all sub-projects.
 
-You will need `frontend` and `cmsFronts` credentials loaded. (NOTE: At present, if you have [default] credentials set in ~/.aws/credentials) the app won't build - best to delete these before continuing)
+You will need `mobile` and `cmsFronts` credentials loaded. (NOTE: At present, if you have [default] credentials set in ~/.aws/credentials) the app won't build - best to delete these before continuing)
 
 ## App setup
 
@@ -64,57 +64,57 @@ This contains `common` which is the code shared between app and backends and `cr
 
 ### backend, archiver and aws
 
-These are deployed using [riffraff](https://riffraff.gutools.co.uk) as `editions`.
+These all deploys in one go, the default github branch is `master` which automatically triggers CI deployment once someone merges code changes into it. If you need to deploy from a different branch (i.e. from a PR branch) first make sure it builds ok in teamcity job (Editions > Build) and make sure you choose the right branch before you press the `run` button in teamcity. Once build completes successfully make a note of the build number, go to [riffraff](https://riffraff.gutools.co.uk), type/find the `editions` project and choose the build number you noted from teamcity. As usual, you can choose CODE or PROD to deploy depending on your needs.
 
 ## Uploading iOS internal beta to testflight
+
 There is a scheduled github [action](https://github.com/guardian/editions/actions?query=workflow%3Ascheduled-ios-beta) which runs everyday at 3pm and uploads an internal beta build to testflight.
 
-To **manually** upload an internal beta 
+To **manually** upload an internal beta
+
 1. Go to the scheduled github [action](https://github.com/guardian/editions/actions?query=workflow%3Ascheduled-ios-beta)
 2. Select Run Worflow
 3. Select which branch you would like to use the workflow from
 
 ## Complete Process Flow
 
-1) Editors open the Fronts tool and collate the content for an issue.
-1) Editors click 'Publish'
-1) The list of articles forming the content is written to a json file in a specific s3 bucket
-1) A policy on that bucket notifies a function running in AWS Lambda service
-1) That function (and a bunch of others that follow it) produces the entire issue content and write it to a different s3 bucket
-1) The download location of that content is added to an index file in that bucket
-1) The app is opened and fetches the index file
-1) The user chooses which issues they would like to have
-1) The app fetches those issues
-1) The user reads the paper, there is applause, fireworks, etc.
+1. Editors open the Fronts tool and collate the content for an issue.
+1. Editors click 'Proof'
+1. The list of articles forming the content is written to a json file in a specific s3 bucket
+1. A policy on that bucket notifies a function running in AWS Lambda service
+1. That function (and a bunch of others that follow it) produces the entire issue content and write it to a different s3 bucket ('proofed')
+1. The download location of that content is added to an index file in that bucket
+1. Editions click 'Publish' when it is ready
+1. That triggers another step function in 'archiver' which copy all the generated content in previous step to a different s3 ('published')
+1. The app is opened and fetches the index file
+1. The user chooses which issues they would like to have
+1. The app fetches those issues
+1. The user reads the e-paper, there is applause, fireworks, etc.
 
 ## Notification Flow
 
- * Fronts tool (aka facia-tool)  
-   * owned by the `cmsFronts` account, `facia-$STAGE` stack 
+-   Fronts tool (aka facia-tool)
+    -   owned by the `cmsFronts` account, `facia-$STAGE` stack
 
 writes to
- 
- * bucket `published-editions-$STAGE`
-   * owned by the `cmsFronts` account, `facia-db-$STAGE` stack
+
+-   bucket `published-editions-$STAGE`
+    -   owned by the `cmsFronts` account, `facia-db-$STAGE` stack
 
 which notifies
 
- * the lambda specified in `EdtionsArchiverLambdaArn` (typo is correct) 
-   * owned by the `frontend` account, in the `editions-$STAGE` stack
-   * Currently this is:
-     * `arn:aws:lambda:eu-west-1:642631414762:function:editions-archiver-s3-event-listener-CODE`
-     * `arn:aws:lambda:eu-west-1:642631414762:function:editions-proof-archiver-s3-event-listener-CODE`
-   
+-   the lambda specified in the `mobile` account
+    -   Currently this is:
+        -   `arn:aws:lambda:eu-west-1:201359054765:function:editions-proof-archiver-s3-event-listener-CODE`
+        -   `arn:aws:lambda:eu-west-1:201359054765:function:editions-proof-archiver-s3-event-listener-PROD`
+
 which kicks off the step function, which writes to
 
- * the s3 bucket `editions-proof-$STAGE`
-   * owned by the `frontend` account, but not created via cloudformation
-   
-until the complete issue is ready to publish, when it is copied to 
+-   the s3 bucket `editions-proofed-$STAGE`
 
- * the s3 bucket `editions-store-$STAGE`
-   * owned by the `frontend` account, but not created via cloudformation
+    -   owned by the `mobile` account
 
-NB This means that updates to the `editions-$STAGE` stack can imply that changes will need to be made
-in the `facia-db-$STAGE` stack.
+until the complete issue is ready to publish, when it is copied to
 
+-   the s3 bucket `editions-published-$STAGE`
+    -   owned by the `mobile` account

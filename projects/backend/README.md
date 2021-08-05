@@ -8,7 +8,7 @@ Follow the steps in the project [readme](https://github.com/guardian/editions/bl
 
 ### Janus
 
-Ensure you have Janus credentials for `cmsFronts`, `capi` and `frontend`.
+Ensure you have Janus credentials for `cmsFronts`, `capi` and `mobile`.
 
 ### Env vars
 
@@ -31,3 +31,7 @@ yarn preview
 You can now access the backend on `https://localhost:3131/`
 
 The routing is done in `application.ts` - go and find some routes to hit!
+
+## Deploying to AWS
+
+Follow the steps in `Deployment` section of this [ReadMe](https://github.com/guardian/editions/blob/master/README.md).
