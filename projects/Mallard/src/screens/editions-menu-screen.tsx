@@ -16,6 +16,7 @@ const sidebarWidth = 360;
 const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
+		justifyContent: 'flex-end',
 		flexDirection: 'row-reverse',
 	},
 	touchable: {
@@ -42,7 +43,9 @@ export const ScreenFiller = ({
 		<View
 			style={[
 				styles.container,
-				{ flexDirection: direction === 'end' ? 'row' : 'row-reverse' },
+				{
+					flexDirection: direction === 'end' ? 'row' : 'row-reverse',
+				},
 			]}
 		>
 			{DeviceInfo.isTablet() && (
