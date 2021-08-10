@@ -60,8 +60,12 @@ const SignInModalCard = ({
 					</View>
 				</>
 			}
-			explainerTitle={Copy.signIn.explainerTitle}
-			explainerSubtitle={Copy.signIn.explainerSubtitle}
+			explainerTitle={
+				Platform.OS === 'android' && Copy.signIn.explainerTitle
+			}
+			explainerSubtitle={
+				Platform.OS === 'android' && Copy.signIn.explainerSubtitle
+			}
 			bottomExplainerContent={
 				<>
 					{/* Added only for Android - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
