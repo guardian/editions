@@ -1,10 +1,6 @@
 import { useApolloClient } from '@apollo/react-hooks';
 import type { LightboxMessage, PlatformMessage } from '@guardian/renditions';
-import {
-	MessageKind,
-	pingEditionsRenderingJsString,
-	Platform as PlatformType,
-} from '@guardian/renditions';
+import { MessageKind, Platform as PlatformType } from '@guardian/renditions';
 import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import React, { useEffect, useRef, useState } from 'react';
@@ -137,15 +133,6 @@ const useUpdateWebviewVariable = (
 	return valueInWebview;
 };
 
-const injectJavascript = (
-	webviewRef: React.MutableRefObject<WebView | null>,
-	script: string,
-): void => {
-	if (webviewRef?.current) {
-		webviewRef.current.injectJavaScript(script);
-	}
-};
-
 /**
  * Sometimes the webUrl is empty due to that content not being published at the point the edition
  * was created. However, we still have access to the article path at the time of publication
@@ -195,20 +182,18 @@ const Article = ({
 	const previewParam = isPreview(apiUrl) ? `?frontId=${front}` : '';
 
 	// if webUrl is undefined then we attempt to fetch a url to use for sharing
-	const [shareUrl, setShareUrl] = useState(article.webUrl);
+	const [shareUrl, setShareUrl] = useState(article.webUrl ?? '');
 	// we can only attempt to fetch the url if connected
 	const client = useApolloClient();
 	const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
 		query: gql('{ netInfo @client { isConnected @client } }'),
 	});
 	const isConnected = data?.netInfo?.isConnected;
-	const shareUrlFetchEnabled =
-		!article.webUrl &&
-		isConnected &&
-		// TODO: remove remote switch once we are happy this feature is stable
-		remoteConfigService.getBoolean('generate_share_url');
+
+	const shareUrlFetchEnabled = isConnected;
 
 	useEffect(() => {
+		console.log('here');
 		const lbimages = getLightboxImages(article.elements);
 		const lbCreditedImages = getCreditedImages(lbimages);
 		// to avoid image duplication we don't add the main image of gallery articles to the array
@@ -240,12 +225,6 @@ const Article = ({
 		const updateShareUrl = async () => {
 			const url = await checkPathExists(article.key);
 			if (url) {
-				injectJavascript(
-					ref,
-					`document.getElementById('share-button').classList.remove('display-none');
-                     document.getElementById('byline-area').classList.remove('display-none');
-                    `,
-				);
 				setShareUrl(url);
 			}
 		};
@@ -322,12 +301,45 @@ const Article = ({
 		}
 	};
 
-	const getPlatform = (): PlatformMessage => {
+	const getPlatformMessage = (): PlatformMessage => {
 		const value =
 			Platform.OS === 'ios' ? PlatformType.IOS : PlatformType.Android;
 		return { kind: MessageKind.Platform, value };
 	};
-	const platform = getPlatform();
+	const platform = getPlatformMessage();
+
+	interface ShareIconMessage {
+		kind: string;
+		value: string;
+	}
+
+	const getShareMessage = (shareUrl: string): ShareIconMessage => {
+		return { kind: 'ShareIcon', value: shareUrl };
+	};
+
+	const share = getShareMessage(shareUrl);
+
+	const pingEditionsRenderingJsString = (
+		platformMessage: PlatformMessage,
+		shareIconMessage: ShareIconMessage,
+	) => {
+		console.log('PING CALLED');
+		const ping = `
+                try {
+                    window.pingEditionsRendering(${JSON.stringify(
+						platformMessage,
+					)})
+                    window.pingEditionsRendering(${JSON.stringify(
+						shareIconMessage,
+					)})
+                } catch {
+                    console.error("Editions -> Editions Rendering not initiated")
+                }
+        `;
+		console.log('PING:', ping);
+		return ping;
+	};
+	console.log(pingEditionsRenderingJsString(platform, share));
 
 	return (
 		<Fader>
@@ -344,7 +356,10 @@ const Article = ({
 					ref.current = r;
 				}}
 				origin={origin}
-				injectedJavaScript={pingEditionsRenderingJsString(platform)}
+				injectedJavaScript={pingEditionsRenderingJsString(
+					platform,
+					share,
+				)}
 				onMessage={(event) => {
 					handlePing(event.nativeEvent.data);
 				}}

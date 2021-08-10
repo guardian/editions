@@ -180,6 +180,7 @@ const processArticleRendering = async (
 
         const appsRenderingProxyUrl =
             process.env.APPS_RENDERING_URL || 'apps rendering url missing'
+
         const appsRenderingProxyHeader =
             process.env.APPS_RENDERING_PROXY_HEADER_KEY ||
             'proxy header missing'
