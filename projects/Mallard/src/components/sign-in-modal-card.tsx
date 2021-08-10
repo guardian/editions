@@ -69,7 +69,7 @@ const SignInModalCard = ({
 			bottomExplainerContent={
 				<>
 					{/* Added only for Android - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
-					{Platform.OS === 'android' ? (
+					{Platform.OS === 'android' && (
 						<ModalButton
 							onPress={() => {
 								Linking.openURL(
@@ -80,22 +80,7 @@ const SignInModalCard = ({
 						>
 							{Copy.signIn.freeTrial}
 						</ModalButton>
-					) : null}
-					{/* Being hidden temporarily - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
-					{/* <ModalButton
-                    onPress={() => {
-                        if (Platform.OS === 'android') {
-                            Linking.openURL(
-                                'https://support.theguardian.com/uk/subscribe/digital',
-                            )
-                        }
-                    }}
-                    buttonAppearance={ButtonAppearance.Dark}
-                >
-                    {Platform.OS === 'ios'
-                        ? 'Learn more'
-                        : 'Get your free 14 day trial'}
-                </ModalButton> */}
+					)}
 				</>
 			}
 		/>
