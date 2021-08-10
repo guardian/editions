@@ -15,7 +15,7 @@ import { getPlatformName } from './consts'
 const creds = process.env.arn
     ? {}
     : {
-          credentials: new SharedIniFileCredentials({ profile: 'frontend' }),
+          credentials: new SharedIniFileCredentials({ profile: 'mobile' }),
       }
 
 const lambda = new Lambda({

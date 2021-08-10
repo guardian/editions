@@ -16,7 +16,7 @@ const appRelativePath = argv.appRelativePath || '../../../Mallard/'
 const envBucket = argv.envBucket || 'Mallard/dev/.env'
 const sentryBucket = argv.sentryBucket || 'Mallard/dev/sentry.properties'
 
-const AWS_PROFILE = 'frontend'
+const AWS_PROFILE = 'mobile'
 const ENV_PATH = path.join(__dirname, `${appRelativePath}.env`)
 const SENTRY_PATH = path.join(
     __dirname,

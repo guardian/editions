@@ -9,8 +9,10 @@ import type {
 	PictureArticle,
 } from 'src/common';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
+import { useNetInfo } from 'src/hooks/use-net-info';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
+import WebviewError from 'src/screens/webview-error-screen';
 import { onShouldStartLoadWithRequest } from './helpers';
 
 const WebviewWithArticle = ({
@@ -32,6 +34,7 @@ const WebviewWithArticle = ({
 	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
+	const { isConnected } = useNetInfo();
 
 	const updateSource = () => {
 		// On Android there is a potential race condition where url did get set before
@@ -55,6 +58,9 @@ const WebviewWithArticle = ({
 	}
 
 	console.log(`URL (${origin}): ${uri}`);
+
+	// if the device is offline and the Issue is not downloaded show a user friendly error message
+	if (!isConnected && origin == 'api') return <WebviewError />;
 
 	return (
 		<WebView
