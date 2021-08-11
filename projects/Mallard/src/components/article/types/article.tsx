@@ -137,7 +137,6 @@ const injectJavascript = (
 	webviewRef: React.MutableRefObject<WebView | null>,
 	script: string,
 ): void => {
-	console.log(webviewRef);
 	if (webviewRef?.current) {
 		webviewRef.current.injectJavaScript(script);
 	}
@@ -257,7 +256,7 @@ const Article = ({
 		if (ref) {
 			injectJavascript(ref, script);
 		}
-	}, [ref, script]);
+	}, [script]);
 
 	const handleShare = (shareUrl: string) => {
 		if (Platform.OS === 'ios') {
