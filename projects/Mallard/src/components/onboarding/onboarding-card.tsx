@@ -96,8 +96,8 @@ const OnboardingCard = ({
 	title: string;
 	subtitle?: string;
 	bottomContent?: React.ReactNode;
-	explainerTitle?: string;
-	explainerSubtitle?: string;
+	explainerTitle?: string | boolean;
+	explainerSubtitle?: string | boolean;
 	bottomExplainerContent?: React.ReactNode;
 	onDismissThisCard?: () => void;
 	style?: StyleProp<ViewStyle>;

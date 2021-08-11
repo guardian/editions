@@ -44,25 +44,6 @@ const SubNotFoundModalCard = ({
 				</ModalButton>
 			</>
 		}
-		bottomExplainerContent={
-			<>
-				{/* Being hidden temporarily - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
-				{/* <ModalButton
-                    onPress={() => {
-                        if (Platform.OS === 'android') {
-                            Linking.openURL(
-                                'https://support.theguardian.com/uk/subscribe/digital',
-                            )
-                        }
-                    }}
-                    buttonAppearance={ButtonAppearance.Dark}
-                >
-                    {Platform.OS === 'ios'
-                        ? 'Learn more'
-                        : 'Get your free 14 day trial'}
-                </ModalButton> */}
-			</>
-		}
 	></OnboardingCard>
 );
 
