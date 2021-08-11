@@ -81,16 +81,6 @@ export class EditionsStack extends GuStack {
             },
         )
 
-        const appsRenderingEndpointProxyKey = new cdk.CfnParameter(
-            this,
-            'apps-rendering-endpoint-header-key',
-            {
-                type: 'String',
-                description: 'Apps rendering endpoint header key',
-                noEcho: true,
-            },
-        )
-
         const frontsRoleARN = new cdk.CfnParameter(this, 'fronts-role-arn', {
             type: 'String',
             description: 'fronts s3 access',
@@ -256,8 +246,6 @@ export class EditionsStack extends GuStack {
                         capiAccessArn: capiRoleARN.valueAsString,
                         capiPreviewUrl: capiPreviewUrl.valueAsString,
                         APPS_RENDERING_URL: appsRenderingEndpoint.valueAsString,
-                        APPS_RENDERING_PROXY_HEADER_KEY:
-                            appsRenderingEndpointProxyKey.valueAsString,
                     },
                     initialPolicy: [
                         new iam.PolicyStatement({
