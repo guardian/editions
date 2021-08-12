@@ -2042,10 +2042,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-0.5.0.tgz#d8ea25cc396f31bd4baedb8f6d7d3727a9af1fa7"
   integrity sha512-IYXMdqW6vg9mVnAXbbWCm0R9AZfWlAjfJ668TnCx3ypX5/u4AYAXdOfrWWX+uWvFvs3Ulub+E8vEm+eUkxi6rQ==
 
-"@guardian/renditions@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@guardian/renditions/-/renditions-0.1.4.tgz#1e0e53e28cb0fb33a71930c8ec5c31f85669b143"
-  integrity sha512-OPg0ShKPlSBccIXEZBjHRt4W+f6qeGELLevpaE2qaqNG+5U2MoermC0e7YjLwXKDdMsCCpemuvqtm0XMJ1sCCw==
+"@guardian/renditions@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/renditions/-/renditions-0.2.0.tgz#eb3d464ee212eca66c997855fdf8c02b4fe53b8e"
+  integrity sha512-AXUD83v9uY1oAXj6GcnVwP64UscjEbJhwLkq2dwmHXuP0UZkSxft9Q6WtTZemjHG4kpijYU+eulS8zoYXbiSLQ==
   dependencies:
     typescript "^4.1.3"
 

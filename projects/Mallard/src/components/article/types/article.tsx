@@ -1,9 +1,9 @@
 import { useApolloClient } from '@apollo/react-hooks';
-import type { LightboxMessage, PlatformMessage } from '@guardian/renditions';
-import {
-	MessageKind,
-	pingEditionsRenderingJsString,
-	Platform as PlatformType,
+import { MessageKind, Platform as PlatformType } from '@guardian/renditions';
+import type {
+	LightboxMessage,
+	PlatformMessage,
+	ShareIconMessage,
 } from '@guardian/renditions';
 import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
@@ -177,6 +177,7 @@ const Article = ({
 } & HeaderControlProps) => {
 	const navigation = useNavigation();
 	const ref = useRef<WebView | null>(null);
+	const [script, setScript] = useState('');
 	const [imagePaths, setImagePaths] = useState(['']);
 	const [lightboxImages, setLightboxImages] = useState<CreditedImage[]>();
 
@@ -195,18 +196,13 @@ const Article = ({
 	const previewParam = isPreview(apiUrl) ? `?frontId=${front}` : '';
 
 	// if webUrl is undefined then we attempt to fetch a url to use for sharing
-	const [shareUrl, setShareUrl] = useState(article.webUrl);
+	const [shareUrl, setShareUrl] = useState(article.webUrl ?? '');
 	// we can only attempt to fetch the url if connected
 	const client = useApolloClient();
 	const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
 		query: gql('{ netInfo @client { isConnected @client } }'),
 	});
 	const isConnected = data?.netInfo?.isConnected;
-	const shareUrlFetchEnabled =
-		!article.webUrl &&
-		isConnected &&
-		// TODO: remove remote switch once we are happy this feature is stable
-		remoteConfigService.getBoolean('generate_share_url');
 
 	useEffect(() => {
 		const lbimages = getLightboxImages(article.elements);
@@ -239,18 +235,10 @@ const Article = ({
 
 		const updateShareUrl = async () => {
 			const url = await checkPathExists(article.key);
-			if (url) {
-				injectJavascript(
-					ref,
-					`document.getElementById('share-button').classList.remove('display-none');
-                     document.getElementById('byline-area').classList.remove('display-none');
-                    `,
-				);
-				setShareUrl(url);
-			}
+			setShareUrl(url ?? '');
 		};
 
-		shareUrlFetchEnabled && updateShareUrl();
+		isConnected && updateShareUrl();
 	}, [
 		apiUrl,
 		article.elements,
@@ -258,8 +246,19 @@ const Article = ({
 		article.image,
 		article.type,
 		article.key,
-		shareUrlFetchEnabled,
+		isConnected,
 	]);
+
+	// This is triggered when the script is updated via handlePlatformQuery
+	// which itself is trigger by a ping from Editions-Rendering to signify
+	// that the event listeners in ER are in place.
+	// The injected js controls the shareIcon icon and will not render if
+	// an article has no webUrl
+	useEffect(() => {
+		if (ref) {
+			injectJavascript(ref, script);
+		}
+	}, [script]);
 
 	const handleShare = (shareUrl: string) => {
 		if (Platform.OS === 'ios') {
@@ -304,11 +303,48 @@ const Article = ({
 		});
 	};
 
+	const handlePlatformQuery = (shareUrl: string): void => {
+		const getPlatformMessage = (): PlatformMessage => {
+			const value =
+				Platform.OS === 'ios' ? PlatformType.IOS : PlatformType.Android;
+			return { kind: MessageKind.Platform, value };
+		};
+
+		const getShareMessage = (shareUrl: string): ShareIconMessage => {
+			return { kind: MessageKind.ShareIcon, value: shareUrl };
+		};
+
+		const pingEditionsRenderingJsString = (
+			platformMessage: PlatformMessage,
+			shareIconMessage: ShareIconMessage,
+		) => {
+			return `
+                try {
+                    window.pingEditionsRendering(${JSON.stringify(
+						shareIconMessage,
+					)})
+                    window.pingEditionsRendering(${JSON.stringify(
+						platformMessage,
+					)})
+                } catch {
+                    console.error("Editions -> Editions Rendering not initiated")
+                }
+        `;
+		};
+
+		const platform = getPlatformMessage();
+		const share = getShareMessage(shareUrl);
+		const platformScript = pingEditionsRenderingJsString(platform, share);
+
+		setScript(platformScript);
+	};
+
 	const handlePing = (event: string) => {
 		const parsed = parsePing(event);
 		if (parsed.kind === MessageKind.Share && shareUrl) {
 			handleShare(shareUrl);
 		}
+
 		if (parsed.kind === 'shouldShowHeaderChange') {
 			wasShowingHeader.current = parsed.shouldShowHeader;
 			onShouldShowHeaderChange(parsed.shouldShowHeader);
@@ -317,17 +353,15 @@ const Article = ({
 		if (parsed.kind === 'isAtTopChange') {
 			onIsAtTopChange(parsed.isAtTop);
 		}
+
 		if (lightboxEnabled && parsed.kind === MessageKind.Lightbox) {
 			handleLightbox(parsed);
 		}
-	};
 
-	const getPlatform = (): PlatformMessage => {
-		const value =
-			Platform.OS === 'ios' ? PlatformType.IOS : PlatformType.Android;
-		return { kind: MessageKind.Platform, value };
+		if (parsed.kind === MessageKind.PlatformQuery) {
+			handlePlatformQuery(shareUrl);
+		}
 	};
-	const platform = getPlatform();
 
 	return (
 		<Fader>
@@ -344,7 +378,6 @@ const Article = ({
 					ref.current = r;
 				}}
 				origin={origin}
-				injectedJavaScript={pingEditionsRenderingJsString(platform)}
 				onMessage={(event) => {
 					handlePing(event.nativeEvent.data);
 				}}
