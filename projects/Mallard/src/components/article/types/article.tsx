@@ -1,6 +1,10 @@
 import { useApolloClient } from '@apollo/react-hooks';
-import type { LightboxMessage, PlatformMessage } from '@guardian/renditions';
 import { MessageKind, Platform as PlatformType } from '@guardian/renditions';
+import type {
+	LightboxMessage,
+	PlatformMessage,
+	ShareIconMessage,
+} from '@guardian/renditions';
 import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import React, { useEffect, useRef, useState } from 'react';
@@ -299,11 +303,6 @@ const Article = ({
 		});
 	};
 
-	interface ShareIconMessage {
-		kind: string;
-		value: string;
-	}
-
 	const handlePlatformQuery = (shareUrl: string): void => {
 		const getPlatformMessage = (): PlatformMessage => {
 			const value =
@@ -312,7 +311,7 @@ const Article = ({
 		};
 
 		const getShareMessage = (shareUrl: string): ShareIconMessage => {
-			return { kind: 'ShareIcon', value: shareUrl };
+			return { kind: MessageKind.ShareIcon, value: shareUrl };
 		};
 
 		const pingEditionsRenderingJsString = (
