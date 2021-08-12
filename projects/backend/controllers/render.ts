@@ -29,7 +29,6 @@ import { Attempt } from '../common'
 const fetchRenderedArticle = async (
     internalPageCode: number,
     url: string,
-    proxyHeaderKey: string,
     buffer: Buffer,
 ): Promise<RenderedArticle> => {
     console.log('Making Rendering request to: ' + url)
@@ -37,7 +36,6 @@ const fetchRenderedArticle = async (
         method: 'post',
         headers: {
             'Content-Type': 'application/octet-stream',
-            'proxy-key': proxyHeaderKey,
         },
         body: buffer,
     })
@@ -178,22 +176,18 @@ const processArticleRendering = async (
             }
         }
 
-        const appsRenderingProxyUrl =
+        const appsRenderingUrl =
             process.env.APPS_RENDERING_URL || 'apps rendering url missing'
-        const appsRenderingProxyHeader =
-            process.env.APPS_RENDERING_PROXY_HEADER_KEY ||
-            'proxy header missing'
 
         const content = searchResponse.results[0]
         const patchedContent = mapFurnitureToContent(furniture, content)
 
         // re-encode the response to send to AR backend
         const bufferData = await encodeContent(patchedContent)
-        const url = `${appsRenderingProxyUrl}?theme=${theme}&isPreview=${isPreview}`
+        const url = `${appsRenderingUrl}?theme=${theme}&isPreview=${isPreview}`
         const renderedArticle = await fetchRenderedArticle(
             internalPageCode,
             url,
-            appsRenderingProxyHeader,
             bufferData,
         )
         if (renderedArticle.success) {
@@ -202,7 +196,7 @@ const processArticleRendering = async (
             )
             return renderedArticle
         } else {
-            const msg = `Failed to fetch story from ${appsRenderingProxyUrl}. Response: ${renderedArticle.body}`
+            const msg = `Failed to fetch story from ${appsRenderingUrl}. Response: ${renderedArticle.body}`
             return {
                 success: false,
                 message: msg,
