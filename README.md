@@ -12,7 +12,7 @@ Once nvm is installed run `nvm use`.
 
 Run `make install`, this will install the dependencies for all sub-projects.
 
-You will need `mobile` and `cmsFronts` credentials loaded. (NOTE: At present, if you have [default] credentials set in ~/.aws/credentials) the app won't build - best to delete these before continuing)
+You will need `mobile` and `cmsFronts.s3Read` credentials loaded. (NOTE: At present, if you have [default] credentials set in ~/.aws/credentials) the app won't build - best to delete these before continuing)
 
 ## App setup
 
