@@ -60,7 +60,7 @@ const s3 = new AWS.S3({
 })
 
 s3.getObject({
-    Bucket: 'editions-config',
+    Bucket: 'editions-app-config',
     Key: envBucket,
 })
     .promise()
@@ -70,7 +70,7 @@ s3.getObject({
     .catch(() => failureMessage(ENV_PATH))
 
 s3.getObject({
-    Bucket: 'editions-config',
+    Bucket: 'editions-app-config',
     Key: sentryBucket,
 })
     .promise()
