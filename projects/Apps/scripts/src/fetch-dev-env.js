@@ -40,11 +40,12 @@ const sentryPropertiesFileWrite = (platform, file) => {
     )
 }
 
-const failureMessage = path => {
+const failureMessage = (path, error) => {
     const message = `Unable to update environment variables, check you have \`${AWS_PROFILE}\` credentials and your args are correct.`
     if (fs.existsSync(path)) {
         console.log(chalk.yellow(message))
     } else {
+        console.error(error)
         console.log(chalk.red(message))
         process.exit(1)
     }
@@ -60,17 +61,17 @@ const s3 = new AWS.S3({
 })
 
 s3.getObject({
-    Bucket: 'editions-config',
+    Bucket: 'editions-app-config',
     Key: envBucket,
 })
     .promise()
     .then(file => {
         fs.writeFileSync(ENV_PATH, file.Body)
     })
-    .catch(() => failureMessage(ENV_PATH))
+    .catch((e) => failureMessage(ENV_PATH, e))
 
 s3.getObject({
-    Bucket: 'editions-config',
+    Bucket: 'editions-app-config',
     Key: sentryBucket,
 })
     .promise()
@@ -78,4 +79,4 @@ s3.getObject({
         sentryPropertiesFileWrite('ios', file)
         sentryPropertiesFileWrite('android', file)
     })
-    .catch(() => failureMessage(SENTRY_PATH))
+    .catch((e) => failureMessage(SENTRY_PATH, e))
