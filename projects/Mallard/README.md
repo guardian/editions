@@ -117,3 +117,8 @@ We can use an auto credits generator tool to scan package.json file and generate
 2. Copy the content of `CREDITS.md` file and convert it into html (https://markdowntohtml.com/ can be use for this purpose)
 3. Converted html needs to be `string escapped` so we use it in a json file (https://www.freeformatter.com/json-escape.html can be use for this purpose)
 4. Copy the string escapped html content and paste inside `credits.json` file under `bodyHtml`
+
+
+### Stages and Environment
+
+Editions app has multiple stages and environments and they explained in this [document](https://docs.google.com/document/d/1fopf0JamGZb1rswj2rFRgpYbtBj5OW9Kkieb1LJEnlw/edit?usp=sharing)
