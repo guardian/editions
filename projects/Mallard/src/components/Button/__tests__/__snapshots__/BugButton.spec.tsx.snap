@@ -15,7 +15,6 @@ exports[`BugButton should display a BugButton 1`] = `
       "top": 10,
     }
   }
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}

@@ -14,7 +14,6 @@ exports[`ModalButton should display a ModalButton with accessible text 1`] = `
       "top": 10,
     }
   }
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -98,7 +97,6 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
       "top": 10,
     }
   }
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -182,7 +180,6 @@ exports[`ModalButton should display a default ModalButton 1`] = `
       "top": 10,
     }
   }
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}

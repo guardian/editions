@@ -51,7 +51,6 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
       initialNumToRender={10}
       keyExtractor={[Function]}
       maxToRenderPerBatch={10}
-      numColumns={1}
       onContentSizeChange={[Function]}
       onEndReachedThreshold={2}
       onLayout={[Function]}
@@ -157,7 +156,6 @@ Saturday by 6 am (AEST)",
       initialNumToRender={10}
       keyExtractor={[Function]}
       maxToRenderPerBatch={10}
-      numColumns={1}
       onContentSizeChange={[Function]}
       onEndReachedThreshold={2}
       onLayout={[Function]}
@@ -259,7 +257,6 @@ Monthly",
       initialNumToRender={10}
       keyExtractor={[Function]}
       maxToRenderPerBatch={10}
-      numColumns={1}
       onContentSizeChange={[Function]}
       onEndReachedThreshold={2}
       onLayout={[Function]}
@@ -341,7 +338,6 @@ Saturday by 6 am (AEST)",
       initialNumToRender={10}
       keyExtractor={[Function]}
       maxToRenderPerBatch={10}
-      numColumns={1}
       onContentSizeChange={[Function]}
       onEndReachedThreshold={2}
       onLayout={[Function]}

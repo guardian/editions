@@ -4,7 +4,7 @@ describe('defaults', () => {
 	describe('notificationTrackingUrl', () => {
 		beforeEach(() => {
 			jest.mock('react-native/Libraries/Utilities/Platform', () => {
-				const Platform = require.requireActual(
+				const Platform = jest.requireActual(
 					'react-native/Libraries/Utilities/Platform',
 				);
 				Platform.OS = 'android';

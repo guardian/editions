@@ -15,7 +15,6 @@ exports[`SettingsButton should display a SettingsButton 1`] = `
       "top": 10,
     }
   }
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
