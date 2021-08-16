@@ -15,7 +15,6 @@ exports[`CloseButton should display a CloseButton with an alternative appearance
       "top": 10,
     }
   }
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -92,7 +91,6 @@ exports[`CloseButton should display a default CloseButton 1`] = `
       "top": 10,
     }
   }
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}

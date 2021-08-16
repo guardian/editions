@@ -217,6 +217,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
           >
             <View
               collapsable={false}
+              forwardedRef={[Function]}
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
@@ -333,7 +334,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                               accessibilityRole="button"
                               accessible={true}
                               focusable={true}
-                              isTVSelectable={true}
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -814,7 +814,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                                     "top": 10,
                                   }
                                 }
-                                isTVSelectable={true}
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -1108,6 +1107,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
           >
             <View
               collapsable={false}
+              forwardedRef={[Function]}
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
@@ -1224,7 +1224,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                               accessibilityRole="button"
                               accessible={true}
                               focusable={true}
-                              isTVSelectable={true}
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -1705,7 +1704,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                                     "top": 10,
                                   }
                                 }
-                                isTVSelectable={true}
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}

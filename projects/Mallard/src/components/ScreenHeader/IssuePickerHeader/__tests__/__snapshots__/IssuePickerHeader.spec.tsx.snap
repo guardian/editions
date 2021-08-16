@@ -217,6 +217,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           >
             <View
               collapsable={false}
+              forwardedRef={[Function]}
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
@@ -342,7 +343,6 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                   "top": 10,
                                 }
                               }
-                              isTVSelectable={true}
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -481,7 +481,6 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                     "top": 10,
                                   }
                                 }
-                                isTVSelectable={true}
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -775,6 +774,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           >
             <View
               collapsable={false}
+              forwardedRef={[Function]}
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
@@ -900,7 +900,6 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                   "top": 10,
                                 }
                               }
-                              isTVSelectable={true}
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -1039,7 +1038,6 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                     "top": 10,
                                   }
                                 }
-                                isTVSelectable={true}
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -1333,6 +1331,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           >
             <View
               collapsable={false}
+              forwardedRef={[Function]}
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
@@ -1458,7 +1457,6 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                   "top": 10,
                                 }
                               }
-                              isTVSelectable={true}
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -1597,7 +1595,6 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                     "top": 10,
                                   }
                                 }
-                                isTVSelectable={true}
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
