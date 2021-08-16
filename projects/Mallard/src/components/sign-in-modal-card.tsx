@@ -1,9 +1,8 @@
 import React from 'react';
-import { Linking, Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Copy } from 'src/helpers/words';
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import { getFont } from 'src/theme/typography';
-import { ButtonAppearance } from './Button/Button';
 import { ModalButton } from './Button/ModalButton';
 import { Link } from './link';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
@@ -58,29 +57,6 @@ const SignInModalCard = ({
 							Need help signing in?
 						</Link>
 					</View>
-				</>
-			}
-			explainerTitle={
-				Platform.OS === 'android' && Copy.signIn.explainerTitle
-			}
-			explainerSubtitle={
-				Platform.OS === 'android' && Copy.signIn.explainerSubtitle
-			}
-			bottomExplainerContent={
-				<>
-					{/* Added only for Android - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
-					{Platform.OS === 'android' && (
-						<ModalButton
-							onPress={() => {
-								Linking.openURL(
-									'https://support.theguardian.com/uk/subscribe/digital',
-								);
-							}}
-							buttonAppearance={ButtonAppearance.Dark}
-						>
-							{Copy.signIn.freeTrial}
-						</ModalButton>
-					)}
 				</>
 			}
 		/>
