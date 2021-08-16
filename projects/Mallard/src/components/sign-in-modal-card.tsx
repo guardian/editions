@@ -50,12 +50,6 @@ const SignInModalCard = ({
 						>
 							Sign in
 						</ModalButton>
-						<Link
-							style={{ ...getFont('sans', 0.9, 'bold') }}
-							href="https://www.theguardian.com/help/identity-faq"
-						>
-							Need help signing in?
-						</Link>
 					</View>
 				</>
 			}
