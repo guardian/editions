@@ -121,4 +121,4 @@ We can use an auto credits generator tool to scan package.json file and generate
 
 ### Stages and Environment
 
-Editions app multiple stages and environments and they explained in this [document](https://docs.google.com/document/d/1fopf0JamGZb1rswj2rFRgpYbtBj5OW9Kkieb1LJEnlw/edit?usp=sharing)
+Editions app has multiple stages and environments and they explained in this [document](https://docs.google.com/document/d/1fopf0JamGZb1rswj2rFRgpYbtBj5OW9Kkieb1LJEnlw/edit?usp=sharing)
