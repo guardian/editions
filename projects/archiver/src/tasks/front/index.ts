@@ -104,6 +104,14 @@ export const handler: Handler<
     const failedImages = failedImageUseUploads.length
     const success = failedImages === 0
 
+    if (front.toLowerCase() == 'crosswords') {
+        return {
+            message: `Crosswords Front data and images uploaded ${
+                success ? 'succesfully' : 'with some images missing'
+            }. Ignoring Apps Rendering process for "${front}" Front, happens locally within the app`,
+        }
+    }
+
     // *** Server Side Rendering ***
     // Fetch ER articles for this 'front' and upload them to the 'html' folder of the given Issue
     const renderedFront = await getRenderedFront(publishedId, front)
