@@ -2,9 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Copy } from 'src/helpers/words';
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
-import { getFont } from 'src/theme/typography';
 import { ModalButton } from './Button/ModalButton';
-import { Link } from './link';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 
 const styles = StyleSheet.create({

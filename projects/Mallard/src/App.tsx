@@ -30,10 +30,6 @@ import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-do
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe';
-import { isInBeta } from './helpers/release-stream';
-import { newMobileProdStack } from './helpers/settings/defaults';
-import { setApiUrl } from './helpers/settings/setters';
-import { rollbackedApiUrlForBetaUsers } from './helpers/storage';
 import { EditionProvider } from './hooks/use-edition-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
@@ -85,23 +81,6 @@ const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
 		pushDownloadFailsafe(client);
 	}
 };
-
-const forceUpdateApiUrlIfBeta = async () => {
-	// TODO - Remove this whole function before release to prod.
-	// Previously we forced beta users to use a tmp url to point to the new stack, now that
-	// we changed the fastly config we can rollback urls and eventually we can remove this full method.
-	if (isInBeta()) {
-		const rollbackedApi = await rollbackedApiUrlForBetaUsers.get();
-		if (!rollbackedApi) {
-			setApiUrl(apolloClient, newMobileProdStack);
-			console.log('*** Beta: rolling back to default prod api url ***');
-			await rollbackedApiUrlForBetaUsers.set(true);
-		} else {
-			console.log('*** Beta: api url for Beta users already updated ***');
-		}
-	}
-};
-
 export default class App extends React.Component {
 	componentDidMount() {
 		SplashScreen.hide();
@@ -113,7 +92,6 @@ export default class App extends React.Component {
 			if (appState === 'active') {
 				prepareAndDownloadTodaysIssue(apolloClient);
 				loggingService.postLogs();
-				forceUpdateApiUrlIfBeta();
 			}
 		});
 

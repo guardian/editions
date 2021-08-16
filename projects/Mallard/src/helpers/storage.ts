@@ -96,10 +96,6 @@ const notificationsEnabledCache = createAsyncCache<boolean>(
 	'notificationsEnabled',
 );
 
-const rollbackedApiUrlForBetaUsers = createAsyncCache<boolean>(
-	'rollbackedApiUrlForBetaUsers',
-);
-
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -168,7 +164,6 @@ export {
 	editionsListCache,
 	pushRegisteredTokens,
 	notificationsEnabledCache,
-	rollbackedApiUrlForBetaUsers,
 	showAllEditionsCache,
 	seenEditionsCache,
 };
