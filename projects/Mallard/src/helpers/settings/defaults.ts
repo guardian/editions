@@ -1,8 +1,6 @@
 import { Platform } from 'react-native';
 import type { Settings } from '../settings';
 
-export const newMobileProdStack = 'https://editions.guardianapis.com/';
-
 /*
 Default settings.
 This is a bit of a mess
@@ -10,7 +8,7 @@ This is a bit of a mess
 export const backends = [
 	{
 		title: 'PROD published',
-		value: newMobileProdStack,
+		value: 'https://editions.guardianapis.com/',
 		preview: false,
 	},
 	{
