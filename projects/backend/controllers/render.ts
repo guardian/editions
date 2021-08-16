@@ -114,12 +114,8 @@ const sendError = (message: string, res: Response) => {
     res.status(400).send(message)
 }
 
-const removeSeriesTags = (tags: Tag[]) =>
-    tags.filter((tag: Tag) => tag.type !== TagType.SERIES)
-
+// If we have a kicker override, add a new series tag with the override kicker at the front of the tag array.
 const getTags = (kicker: string, tags: Tag[]): Tag[] => {
-    const filteredTags = removeSeriesTags(tags)
-
     const seriesTag = {
         id: '',
         type: TagType.SERIES,
@@ -130,7 +126,7 @@ const getTags = (kicker: string, tags: Tag[]): Tag[] => {
         internalName: '',
     }
 
-    return [...filteredTags, seriesTag]
+    return [seriesTag, ...tags]
 }
 
 const mapFurnitureToContent = (
