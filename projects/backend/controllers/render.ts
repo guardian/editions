@@ -129,17 +129,29 @@ const getTags = (kicker: string, tags: Tag[]): Tag[] => {
     return [seriesTag, ...tags]
 }
 
+const standfirstContainsList = (standfirst?: string): boolean => {
+    return standfirst ? !['UL', 'LI', 'A'].includes(standfirst) : false
+}
+
 const mapFurnitureToContent = (
     furniture: PublishedFurniture,
     content: Content,
 ): Content => {
+    const contentStandfirst = oc(content).fields.standfirst()
+    const originalStandfirst = standfirstContainsList(contentStandfirst)
+        ? contentStandfirst
+        : undefined
+
     const headline =
         oc(furniture).headlineOverride() || oc(content).fields.headline()
     const byline = furniture.showByline
         ? oc(furniture).bylineOverride() || oc(content).fields.byline()
         : ''
     const standfirst =
-        oc(furniture).trailTextOverride() || oc(content).fields.standfirst()
+        oc(furniture).trailTextOverride() ||
+        originalStandfirst ||
+        oc(content).fields.trailText()
+
     return {
         ...content,
         tags: furniture.kicker
