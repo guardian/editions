@@ -282,17 +282,19 @@ const Article = ({
 		return;
 	};
 
+	const isGalleryHeaderImage = (parsed: LightboxMessage) =>
+		article.type === 'gallery' && parsed.isMainImage;
+
+	const isGalleryBodyImage = (index: number) =>
+		article.type === 'gallery' && index !== 0;
+
 	const handleLightbox = (parsed: LightboxMessage) => {
+		// Gallery header images should not open the lightbox.
+		if (isGalleryHeaderImage(parsed)) return;
+
 		let index = parsed.index;
-		// // the following if statement is required to make sure the lightbox opens on the correct image.
-		if (
-			article.type === 'gallery' &&
-			index !== 0 &&
-			article.image &&
-			!parsed.isMainImage
-		) {
-			index--;
-		}
+		// Gallery body images have the the wrong index because the main media is duplicated and assumed index 0. To fix this, body images need to have their index reduced by 1.
+		if (isGalleryBodyImage(index)) index--;
 
 		navigation.navigate(RouteNames.Lightbox, {
 			images: lightboxImages,
