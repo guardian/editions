@@ -129,17 +129,30 @@ const getTags = (kicker: string, tags: Tag[]): Tag[] => {
     return [seriesTag, ...tags]
 }
 
+const listTags = ['<ul>', '<li>', '<a>']
+
+const containsListTags = (str: string): boolean =>
+    listTags.some(tag => str.includes(tag))
+
+const filterStandfirst = (standfirst?: string): string =>
+    standfirst && !containsListTags(standfirst) ? standfirst : ''
+
 const mapFurnitureToContent = (
     furniture: PublishedFurniture,
     content: Content,
 ): Content => {
+    const contentStandfirst = oc(content).fields.standfirst()
+    const filteredStandfirst = filterStandfirst(contentStandfirst)
     const headline =
         oc(furniture).headlineOverride() || oc(content).fields.headline()
     const byline = furniture.showByline
         ? oc(furniture).bylineOverride() || oc(content).fields.byline()
         : ''
     const standfirst =
-        oc(furniture).trailTextOverride() || oc(content).fields.standfirst()
+        oc(furniture).trailTextOverride() ||
+        filteredStandfirst ||
+        oc(content).fields.trailText()
+
     return {
         ...content,
         tags: furniture.kicker
