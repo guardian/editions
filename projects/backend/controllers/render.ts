@@ -129,7 +129,7 @@ const getTags = (kicker: string, tags: Tag[]): Tag[] => {
     return [seriesTag, ...tags]
 }
 
-const listTags = ['<ul>', '<li>', '<a']
+const listTags = ['<ul>', '<li>', '</a>']
 
 const containsListTags = (str: string): boolean =>
     listTags.some(tag => str.includes(tag))
