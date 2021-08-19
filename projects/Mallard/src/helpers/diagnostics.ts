@@ -73,7 +73,7 @@ const getDiagnosticInfo = async (
 	const gigabytes = megabytes / 1000;
 	const buildNumber = DeviceInfo.getBuildNumber();
 	const version = DeviceInfo.getVersion();
-	const deviceId = DeviceInfo.getDeviceId();
+	const device = `${await DeviceInfo.getManufacturer()}, ${await DeviceInfo.getDeviceName()}, ${DeviceInfo.getDeviceId()}`;
 	const uniqueId = DeviceInfo.getUniqueId();
 
 	const bytesToMb = (bytes: number) =>
@@ -117,7 +117,7 @@ Image Size for Downloads: ${imageSize}
 
 -Device-
 ${Platform.OS} Version: ${Platform.Version}
-Device Type: ${deviceId}
+Device: ${device}
 Device Id: ${uniqueId}
 Network availability: ${netInfo.type}
 Privacy settings: ${gdprEntries
