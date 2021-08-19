@@ -17,17 +17,16 @@ beta-ios:
 	yarn bundle-ios
 	fastlane ios beta
 
-beta-android:
+android-bundle:
 	mkdir -p android/app/src/main/assets
 	yarn jetify
 	yarn bundle-android
+
+beta-android-build:
 	cd android && ./gradlew clean && cd ..
 	fastlane android beta
 
-release-android:
-	mkdir -p android/app/src/main/assets
-	yarn jetify
-	yarn bundle-android
+release-android-build:
 	cd android && ./gradlew clean && cd ..
 	fastlane android release_to_production
 
