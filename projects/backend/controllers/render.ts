@@ -129,8 +129,16 @@ const getTags = (kicker: string, tags: Tag[]): Tag[] => {
     return [seriesTag, ...tags]
 }
 
-const standfirstContainsListItem = (standfirst?: string): boolean => {
-    return standfirst ? !['UL', 'LI', 'A'].includes(standfirst) : false
+const listTags = ['<ul>', '<li>', '<a>']
+
+const containsListTags = (str: string): boolean =>
+    listTags.some(tag => str.includes(tag))
+
+const filterStandfirst = (standfirst?: string): string | undefined => {
+    if (standfirst) {
+        return !containsListTags(standfirst) ? standfirst : undefined
+    }
+    return undefined
 }
 
 const mapFurnitureToContent = (
@@ -138,10 +146,8 @@ const mapFurnitureToContent = (
     content: Content,
 ): Content => {
     const contentStandfirst = oc(content).fields.standfirst()
-    const filteredStandfirst = standfirstContainsListItem(contentStandfirst)
-        ? contentStandfirst
-        : undefined
-
+    const filteredStandfirst = filterStandfirst(contentStandfirst)
+    console.log(filteredStandfirst)
     const headline =
         oc(furniture).headlineOverride() || oc(content).fields.headline()
     const byline = furniture.showByline
