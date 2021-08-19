@@ -129,7 +129,7 @@ const getTags = (kicker: string, tags: Tag[]): Tag[] => {
     return [seriesTag, ...tags]
 }
 
-const standfirstContainsList = (standfirst?: string): boolean => {
+const standfirstContainsListItem = (standfirst?: string): boolean => {
     return standfirst ? !['UL', 'LI', 'A'].includes(standfirst) : false
 }
 
@@ -138,7 +138,7 @@ const mapFurnitureToContent = (
     content: Content,
 ): Content => {
     const contentStandfirst = oc(content).fields.standfirst()
-    const originalStandfirst = standfirstContainsList(contentStandfirst)
+    const filteredStandfirst = standfirstContainsListItem(contentStandfirst)
         ? contentStandfirst
         : undefined
 
@@ -149,7 +149,7 @@ const mapFurnitureToContent = (
         : ''
     const standfirst =
         oc(furniture).trailTextOverride() ||
-        originalStandfirst ||
+        filteredStandfirst ||
         oc(content).fields.trailText()
 
     return {
