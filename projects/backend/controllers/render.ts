@@ -134,12 +134,8 @@ const listTags = ['<ul>', '<li>', '<a>']
 const containsListTags = (str: string): boolean =>
     listTags.some(tag => str.includes(tag))
 
-const filterStandfirst = (standfirst?: string): string | undefined => {
-    if (standfirst) {
-        return !containsListTags(standfirst) ? standfirst : undefined
-    }
-    return undefined
-}
+const filterStandfirst = (standfirst?: string): string =>
+    standfirst && !containsListTags(standfirst) ? standfirst : ''
 
 const mapFurnitureToContent = (
     furniture: PublishedFurniture,
@@ -147,7 +143,6 @@ const mapFurnitureToContent = (
 ): Content => {
     const contentStandfirst = oc(content).fields.standfirst()
     const filteredStandfirst = filterStandfirst(contentStandfirst)
-    console.log(filteredStandfirst)
     const headline =
         oc(furniture).headlineOverride() || oc(content).fields.headline()
     const byline = furniture.showByline
