@@ -10,7 +10,7 @@ jobs:
     # This workflow contains a single job called "build"
     build:
         # The type of runner that the job will run on
-        runs-on: ubuntu-latest
+        runs-on: macos-latest
 
         # Steps represent a sequence of tasks that will be executed as part of the job
         steps:
@@ -29,12 +29,6 @@ jobs:
               run: |
                   cd projects/Mallard
                   yarn validate
-                  
-            - name: Update system params
-              run: |
-                  # insert the new value into the system config
-                  # https://stackoverflow.com/questions/55763428/react-native-error-enospc-system-limit-for-number-of-file-watchers-reached
-                  $ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
             - name: Build and Publish app
               id: publish_app
@@ -71,7 +65,7 @@ jobs:
                   ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
                   USE_SANDBOX_IAP: ' '
 
-            - name: publish release to github
+            - name: Publish release to github
               run: |
                   cd script
                   node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.publish_app.outputs.buildnumber }} android
