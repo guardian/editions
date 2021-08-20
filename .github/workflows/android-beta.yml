@@ -1,0 +1,70 @@
+name: android-beta
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '0 14 * * 1-5' # every day at 2pm
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    # This workflow contains a single job called "build"
+    build:
+        # The type of runner that the job will run on
+        runs-on: ubuntu-latest
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14.16'
+
+            - name: install Mallard
+              run: |
+                  yarn
+                  yarn install-mallard
+
+            - name: validate Mallard
+              run: |
+                  cd projects/Mallard
+                  yarn validate
+
+            - name: publish app
+              id: publish_app
+              run: |
+                  cd projects/Mallard
+                  make beta-android
+              env:
+                  ANDROID_RELEASE_STREAM: DEBUG
+                  ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
+                  ID_API_URL: ${{ secrets.ID_API_URL }}
+                  LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
+                  MEMBERS_DATA_API_URL: ${{ secrets.MEMBERS_DATA_API_URL }}
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  SENTRY_CLI_EXECUTABLE: ${{ secrets.SENTRY_CLI_EXECUTABLE }}
+                  SENTRY_DEFAULTS_ORG: ${{ secrets.SENTRY_DEFAULTS_ORG }}
+                  SENTRY_DEFAULTS_PROJECT: ${{ secrets.SENTRY_DEFAULTS_PROJECT }}
+                  SENTRY_DEFAULTS_URL: ${{ secrets.SENTRY_DEFAULTS_URL }}
+                  SENTRY_DSN_URL: ${{ secrets.SENTRY_DSN_URL }}
+                  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+                  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+                  MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
+                  MATCH_STORAGE_MODE: git
+                  MATCH_KEYCHAIN_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+                  MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+                  # S3 credentials are not currently used but might be in future
+                  MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
+                  MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
+                  MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
+                  MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
+
+            - name: publish release to github
+              run: |
+                  cd script
+                  node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.publish_app.outputs.buildnumber }} android
+              env:
+                  REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
