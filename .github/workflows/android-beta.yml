@@ -63,6 +63,7 @@ jobs:
                   MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
                   # not used by android app but still need it as they have reference in common JS code 
                   ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
+                  USE_SANDBOX_IAP: ' '
 
             - name: publish release to github
               run: |
