@@ -20,17 +20,23 @@ jobs:
               with:
                   node-version: '14.16'
 
-            - name: install Mallard
+            - name: Install Mallard
               run: |
                   yarn
                   yarn install-mallard
 
-            - name: validate Mallard
+            - name: Validate Mallard
               run: |
                   cd projects/Mallard
                   yarn validate
+                  
+            - name: Update system params
+              run: |
+                  # insert the new value into the system config
+                  # https://stackoverflow.com/questions/55763428/react-native-error-enospc-system-limit-for-number-of-file-watchers-reached
+                  $ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-            - name: publish app
+            - name: Build and Publish app
               id: publish_app
               run: |
                   cd projects/Mallard
