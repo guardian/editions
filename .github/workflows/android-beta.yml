@@ -61,6 +61,8 @@ jobs:
                   MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
                   MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
                   MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
+                  # not used by android app but still need it as they have reference in common JS code 
+                  ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
 
             - name: publish release to github
               run: |
