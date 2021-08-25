@@ -8,7 +8,7 @@ import type {
 import { useNavigation } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, Share, StyleSheet } from 'react-native';
+import { PixelRatio, Platform, Share, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import type WebView from 'react-native-webview';
 import type {
@@ -319,8 +319,18 @@ const Article = ({
 			platformMessage: PlatformMessage,
 			shareIconMessage: ShareIconMessage,
 		) => {
+			const scale = PixelRatio.getFontScale();
+			const lineHeight = 25 * scale;
+			const fontSize = 17 * scale;
+
 			return `
                 try {
+                    let bodyContent = document.querySelectorAll(".body-content > p");
+                    for(i = 0; i < bodyContent.length; i++) {
+                        bodyContent[i].style.setProperty("font-size", "${fontSize}px");
+                        bodyContent[i].style.setProperty("line-height", "${lineHeight}px");
+
+                    }
                     window.pingEditionsRendering(${JSON.stringify(
 						shareIconMessage,
 					)})
