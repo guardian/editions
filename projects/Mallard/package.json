@@ -75,7 +75,7 @@
         "query-string": "^6.8.2",
         "react": "^17.0.1",
         "react-native": "0.64.2",
-        "react-native-background-fetch": "^2.7.1",
+        "react-native-background-fetch": "^4.0.3",
         "react-native-config": "^1.4.2",
         "react-native-device-info": "^8.0.2",
         "react-native-fs": "^2.16.6",
