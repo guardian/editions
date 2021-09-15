@@ -46,6 +46,12 @@ target 'Mallard' do
 
     # A known bug in current RN (61.5) with ios14 - https://github.com/facebook/react-native/issues/29279
     post_install do |installer|
+       ## Fix for XCode 12.5
+      find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
+      "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
+      find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+      "RCTBridgeModuleNameForClass(module))", "RCTBridgeModuleNameForClass(Class(module)))")
+      ## End
       find_and_replace("../node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m",
       "_currentFrame.CGImage;","_currentFrame.CGImage ;} else { [super displayLayer:layer];")
     end
