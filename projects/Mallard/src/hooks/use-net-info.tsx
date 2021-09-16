@@ -98,10 +98,7 @@ const assembleNetInfo = (state: InternalState): NetInfo => {
 		? FORCED_OFFLINE_NETINFO
 		: state.netInfo;
 	const { type, isConnected, details, isInternetReachable } = netInfo;
-	const isPoorConnection =
-		netInfo.type === 'cellular'
-			? netInfo.details.cellularGeneration === '2g'
-			: false;
+	const isPoorConnection = netInfo.type === 'cellular';
 	const internetUnreachable = isInternetReachable === false;
 	return {
 		__typename,

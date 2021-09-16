@@ -124,7 +124,7 @@ describe('use-net-info', () => {
 				isForcedOffline: false,
 				setIsDevButtonShown: expect.any(Function),
 				setIsForcedOffline: expect.any(Function),
-				isPoorConnection: false,
+				isPoorConnection: true,
 			});
 		});
 
