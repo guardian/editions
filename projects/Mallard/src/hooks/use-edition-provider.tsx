@@ -1,4 +1,3 @@
-import NetInfo from '@react-native-community/netinfo';
 import moment from 'moment';
 import type { Dispatch } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -29,6 +28,7 @@ import { pushNotificationRegistration } from 'src/notifications/push-notificatio
 import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
+import { useNetInfo } from './use-net-info';
 
 interface EditionState {
 	editionsList: EditionsList;
@@ -150,10 +150,10 @@ export const removeExpiredSpecialEditions = (
 };
 
 export const getEditions = async (
+	isConnected: boolean,
 	apiUrl: string = defaultSettings.editionsUrl,
 ) => {
 	try {
-		const { isConnected } = await NetInfo.fetch();
 		// We are connected
 		if (isConnected) {
 			// Grab editions list from the endpoint
@@ -256,6 +256,8 @@ export const EditionProvider = ({
 	const [showNewEditionCard, setShowNewEditionCard] = useState(false);
 	const [apiUrl, setApiUrl] = useState('');
 
+	const { isConnected } = useNetInfo();
+
 	/**
 	 * Default Edition and Selected
 	 *
@@ -286,7 +288,7 @@ export const EditionProvider = ({
 			// Avoid calling getEditions below by passing `apiUrl` state variable because that
 			// doesn't get updated immediately, it only updates in next render.
 			// Details can be found here: https://stackoverflow.com/questions/54069253/usestate-set-method-not-reflecting-change-immediately
-			const ed = await getEditions(fullUrl);
+			const ed = await getEditions(isConnected, fullUrl);
 			if (ed) {
 				setEditionsList(ed);
 			}
@@ -316,7 +318,9 @@ export const EditionProvider = ({
 		const appChangeEventHandler = async (appState: AppStateStatus) =>
 			appState === 'active' &&
 			apiUrl &&
-			getEditions(apiUrl).then((ed) => ed && setEditionsList(ed));
+			getEditions(isConnected, apiUrl).then(
+				(ed) => ed && setEditionsList(ed),
+			);
 
 		AppState.addEventListener('change', appChangeEventHandler);
 

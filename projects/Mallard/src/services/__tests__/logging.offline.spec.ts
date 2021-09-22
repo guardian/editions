@@ -1,12 +1,6 @@
 import MockDate from 'mockdate';
 import { Level, Logging } from '../logging';
 
-jest.mock('@react-native-community/netinfo', () => ({
-	fetch: jest.fn(() => Promise.resolve(false)),
-	NetInfoStateType: {
-		unknown: 'unknown',
-	},
-}));
 MockDate.set('2019-08-21');
 
 describe('logging service - Offline', () => {

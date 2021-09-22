@@ -18,9 +18,7 @@ import {
 	removeExpiredSpecialEditions,
 } from '../use-edition-provider';
 
-jest.mock('@react-native-community/netinfo', () => ({
-	fetch: jest.fn(() => Promise.resolve({ isConnected: true })),
-}));
+const IS_CONNECTED = true;
 
 jest.mock('src/services/remote-config', () => ({
 	remoteConfigService: {
@@ -192,7 +190,7 @@ describe('useEditions', () => {
 				{ overwriteRoutes: false },
 			);
 
-			const editions = await getEditions();
+			const editions = await getEditions(IS_CONNECTED);
 			const editionsListInCache = await editionsListCache.get();
 			expect(editions).toEqual(body);
 			expect(editionsListInCache).toEqual(body);
@@ -207,7 +205,7 @@ describe('useEditions', () => {
 			);
 			await editionsListCache.set(DEFAULT_EDITIONS_LIST);
 
-			const editions = await getEditions();
+			const editions = await getEditions(IS_CONNECTED);
 			expect(editions).toEqual(DEFAULT_EDITIONS_LIST);
 		});
 		it('should return the default editions list if there is nothing from the endpoint and no cache', async () => {
@@ -219,7 +217,7 @@ describe('useEditions', () => {
 				{ overwriteRoutes: false },
 			);
 
-			const editions = await getEditions();
+			const editions = await getEditions(IS_CONNECTED);
 			expect(editions).toEqual(DEFAULT_EDITIONS_LIST);
 		});
 	});

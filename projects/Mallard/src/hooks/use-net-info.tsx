@@ -1,6 +1,8 @@
 import * as NetInfo from '@react-native-community/netinfo';
-import type { NetInfoState } from '@react-native-community/netinfo';
-import { NetInfoStateType } from '@react-native-community/netinfo';
+import {
+	NetInfoState,
+	NetInfoStateType,
+} from '@react-native-community/netinfo';
 import type ApolloClient from 'apollo-client';
 import { isEqual } from 'apollo-utilities';
 import gql from 'graphql-tag';
@@ -98,7 +100,9 @@ const assembleNetInfo = (state: InternalState): NetInfo => {
 		? FORCED_OFFLINE_NETINFO
 		: state.netInfo;
 	const { type, isConnected, details, isInternetReachable } = netInfo;
-	const isPoorConnection = netInfo.type === 'cellular';
+	const isPoorConnection = state.isForcedOffline
+		? true
+		: netInfo.type === 'cellular';
 	const internetUnreachable = isInternetReachable === false;
 	return {
 		__typename,
@@ -250,4 +254,4 @@ const useNetInfo = (() => {
 	};
 })();
 
-export { useNetInfo, NetInfo };
+export { useNetInfo, NetInfo, NetInfoState, NetInfoStateType };

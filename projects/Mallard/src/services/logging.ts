@@ -1,5 +1,4 @@
 // Logging Service that sends event logs to ELK
-import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo';
 import type ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import { Platform } from 'react-native';
@@ -26,6 +25,7 @@ import {
 	ReleaseChannel,
 } from '../../../Apps/common/src/logging';
 import { AsyncQueue } from '../helpers/async-queue-cache';
+import { NetInfoStateType } from '../hooks/use-net-info';
 import { errorService } from './errors';
 import { remoteConfigService } from './remote-config';
 
@@ -39,8 +39,24 @@ interface LogParams {
 	optionalFields?: object;
 }
 
-type QueryData = { gdprAllowPerformance: GdprSwitchSetting };
-const QUERY = gql('{ gdprAllowPerformance @client }');
+type QueryData = {
+	gdprAllowPerformance: GdprSwitchSetting;
+	netInfo: {
+		isConnected: boolean;
+		isPoorConnection: boolean;
+		type: NetInfoStateType;
+	};
+};
+const QUERY = gql`
+	{
+		gdprAllowPerformance @client
+		netInfo @client {
+			isConnected @client
+			isPoorConnection @client
+			type @client
+		}
+	}
+`;
 
 const cropMessage = (message: string, maxLength: number): string => {
 	return message.length > maxLength
@@ -49,6 +65,9 @@ const cropMessage = (message: string, maxLength: number): string => {
 };
 
 class Logging extends AsyncQueue {
+	isConnected: boolean;
+	isPoorConnection: boolean;
+	networkStatus: NetInfoStateType;
 	hasConsent: GdprSwitchSetting;
 	numberOfAttempts: number;
 	enabled: boolean;
@@ -56,6 +75,9 @@ class Logging extends AsyncQueue {
 	constructor() {
 		super(loggingQueueCache);
 		this.hasConsent = false;
+		this.isConnected = true;
+		this.isPoorConnection = false;
+		this.networkStatus = NetInfoStateType.unknown;
 		this.numberOfAttempts = 0;
 		this.enabled = remoteConfigService.getBoolean('logging_enabled');
 	}
@@ -67,6 +89,9 @@ class Logging extends AsyncQueue {
 				next: (query) => {
 					if (query.loading) return;
 					this.hasConsent = query.data.gdprAllowPerformance;
+					this.isConnected = query.data.netInfo.isConnected;
+					this.isPoorConnection = query.data.netInfo.isPoorConnection;
+					this.networkStatus = query.data.netInfo.type;
 				},
 				error: (error) => {
 					errorService.captureException(error);
@@ -75,19 +100,12 @@ class Logging extends AsyncQueue {
 	}
 
 	async getExternalInfo() {
-		const [
-			networkStatus,
-			userData,
-			casCode,
-			iapReceipt,
-		] = await Promise.all([
-			NetInfo.fetch(),
+		const [userData, casCode, iapReceipt] = await Promise.all([
 			userDataCache.get(),
 			getCASCode(),
 			iapReceiptCache.get(),
 		]);
 		return {
-			networkStatus,
 			userData,
 			casCode,
 			iapReceipt,
@@ -99,12 +117,7 @@ class Logging extends AsyncQueue {
 		message,
 		...optionalFields
 	}: LogParams): Promise<MallardLogFormat> {
-		const {
-			networkStatus,
-			userData,
-			casCode,
-			iapReceipt,
-		} = await this.getExternalInfo();
+		const { userData, casCode, iapReceipt } = await this.getExternalInfo();
 
 		// User Data and Subscription
 		const userId = userData?.userDetails?.id ?? '';
@@ -120,9 +133,9 @@ class Logging extends AsyncQueue {
 			buildNumber: DeviceInfo.getBuildNumber(),
 			os: Platform.OS === 'ios' ? OS.IOS : OS.ANDROID,
 			device: DeviceInfo.getDeviceId(),
-			networkStatus: networkStatus
-				? networkStatus.type
-				: NetInfoStateType.unknown,
+			isConnected: this.isConnected,
+			isPoorConnection: this.isPoorConnection,
+			networkStatus: this.networkStatus,
 			selectedEdition: selectedEdition,
 			defaultEdition: defaultEdition,
 			release_channel: isInBeta()
@@ -161,9 +174,8 @@ class Logging extends AsyncQueue {
 
 	async postLogs() {
 		try {
-			const { isConnected } = await NetInfo.fetch();
 			// Only attempt if we are connected, otherwise wait till next time
-			if (isConnected) {
+			if (this.isConnected) {
 				const logsToPost = await this.getQueuedItems();
 
 				if (logsToPost.length > 1) {
