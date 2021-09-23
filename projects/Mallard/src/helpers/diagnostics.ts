@@ -54,6 +54,7 @@ const getDiagnosticInfo = async (
 						type @client
 						isConnected @client
 						details @client
+						isPoorConnection @client
 					}
 				}
 			`,
@@ -120,6 +121,8 @@ ${Platform.OS} Version: ${Platform.Version}
 Device Type: ${deviceId}
 Device Id: ${uniqueId}
 Network availability: ${netInfo.type}
+isConnected: ${netInfo.isConnected}
+isPoorConnection: ${netInfo.isPoorConnection}
 Privacy settings: ${gdprEntries
 		.map(([key, value]) => `${key}:${value}`)
 		.join(' ')}

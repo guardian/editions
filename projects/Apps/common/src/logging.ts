@@ -48,4 +48,6 @@ export interface MallardLogFormat {
     casCode: CASExpiry['subscriptionCode'] | null
     iAP: boolean
     feature?: Feature
+    isConnected: boolean
+    isPoorConnection: boolean
 }

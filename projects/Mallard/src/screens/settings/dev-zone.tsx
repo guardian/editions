@@ -61,6 +61,8 @@ const DevZone = () => {
 	const {
 		isDevButtonShown: showNetInfoButton,
 		setIsDevButtonShown: setShowNetInfoButton,
+		isConnected,
+		isPoorConnection,
 	} = useNetInfo();
 	const [showAllEditions, setShowAllEditions] = useState(false);
 
@@ -248,6 +250,11 @@ const DevZone = () => {
 						onPress: () => {
 							setIsUsingProdDevtools(client, false);
 						},
+					},
+					{
+						key: 'Network Information',
+						title: 'Network Information',
+						explainer: `isPoorConnection: ${isPoorConnection} \nisConnected: ${isConnected}`,
 					},
 					{
 						key: 'Clear CAS caches',
