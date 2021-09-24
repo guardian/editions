@@ -26,30 +26,27 @@ const cellularState = {
 	isInternetReachable: true,
 } as NetInfoState;
 
-jest.mock(
-	'@react-native-community/netinfo',
-	(): NetInfoMock => {
-		let bound: Handler = () => {};
+jest.mock('@react-native-community/netinfo', (): NetInfoMock => {
+	let bound: Handler = () => {};
 
-		const addEventListener = jest.fn((fn: Handler) => {
-			bound = fn;
-			return () => {};
-		});
+	const addEventListener = jest.fn((fn: Handler) => {
+		bound = fn;
+		return () => {};
+	});
 
-		const ret = {
-			NetInfoStateType: {
-				unknown: 'unknown',
-				none: 'none',
-				wifi: 'wifi',
-				cellular: 'cellular',
-			},
-			addEventListener,
-			emit: (state: NetInfoState) => bound(state),
-			fetch: jest.fn(),
-		};
-		return ret;
-	},
-);
+	const ret = {
+		NetInfoStateType: {
+			unknown: 'unknown',
+			none: 'none',
+			wifi: 'wifi',
+			cellular: 'cellular',
+		},
+		addEventListener,
+		emit: (state: NetInfoState) => bound(state),
+		fetch: jest.fn(),
+	};
+	return ret;
+});
 
 describe('use-net-info', () => {
 	describe('createNetInfoResolver', () => {
@@ -63,8 +60,8 @@ describe('use-net-info', () => {
 
 		beforeEach(() => {
 			jest.resetModules();
-			createNetInfoResolver = require('../use-net-info')
-				.createNetInfoResolver;
+			createNetInfoResolver =
+				require('../use-net-info').createNetInfoResolver;
 			NetInfo = require('@react-native-community/netinfo');
 			NetInfo.addEventListener.mockClear(); // ignore side-effects form module load
 			client = new ApolloClient({

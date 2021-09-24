@@ -153,9 +153,11 @@ const DevButton = (() => {
 										setOverrideNetworkType(itemValue)
 									}
 								>
-									{(Object.keys(NetInfoStateType) as Array<
-										keyof typeof NetInfoStateType
-									>).map((type) => (
+									{(
+										Object.keys(NetInfoStateType) as Array<
+											keyof typeof NetInfoStateType
+										>
+									).map((type) => (
 										<Picker.Item
 											key={type}
 											label={type}
