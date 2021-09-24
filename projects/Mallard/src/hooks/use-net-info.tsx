@@ -37,22 +37,29 @@ const QUERY = gql`
 		netInfo @client {
 			type @client
 			isConnected @client
-			details @client
 			isPoorConnection @client
-			isForcedOffline @client
+			isInternetReachable @client
 			downloadBlocked @client
-			setIsForcedOffline @client
 			isDevButtonShown @client
 			setIsDevButtonShown @client
+			overrideIsConnected @client
+			setOverrideIsConnected @client
+			overrideNetworkType @client
+			setOverrideIsInternetReachable @client
+			overrideIsInternetReachable @client
 		}
 	}
 `;
 
 type CommonState = {
-	isForcedOffline: boolean;
-	setIsForcedOffline: Dispatch<boolean>;
 	isDevButtonShown: boolean;
 	setIsDevButtonShown: Dispatch<boolean>;
+	overrideIsConnected: boolean;
+	setOverrideIsConnected: Dispatch<boolean>;
+	overrideNetworkType: NetInfoStateType;
+	setOverrideNetworkType: Dispatch<NetInfoStateType>;
+	overrideIsInternetReachable: boolean;
+	setOverrideIsInternetReachable: Dispatch<boolean>;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention -- apollo convention
@@ -62,8 +69,8 @@ type NetInfo = CommonState & {
 	__typename: 'NetInfo';
 	type: NetInfoStateType;
 	isConnected: boolean;
-	details: unknown;
 	isPoorConnection: boolean;
+	isInternetReachable: boolean;
 	downloadBlocked: DownloadBlockedStatus;
 };
 
@@ -73,20 +80,35 @@ type InternalState = CommonState & {
 };
 
 const getDownloadBlockedStatus = (
-	netInfo: NetInfoState,
+	netInfo: {
+		type: NetInfoState['type'];
+		isConnected: NetInfoState['isConnected'];
+	},
 	wifiOnlyDownloads: boolean,
-): DownloadBlockedStatus =>
-	!netInfo.isConnected
+): DownloadBlockedStatus => {
+	console.log(netInfo);
+	return !netInfo.isConnected
 		? DownloadBlockedStatus.Offline
 		: wifiOnlyDownloads && netInfo.type !== 'wifi'
 		? DownloadBlockedStatus.WifiOnly
 		: DownloadBlockedStatus.NotBlocked;
+};
 
-const FORCED_OFFLINE_NETINFO: NetInfoState = {
-	type: NetInfoStateType.none,
-	isConnected: false,
-	details: null,
-	isInternetReachable: false,
+export const isDisconnectedState = (type: NetInfoStateType) =>
+	type === NetInfoStateType.none || type === NetInfoStateType.unknown;
+
+const padNetInfoState = (state: InternalState): NetInfoState => {
+	const basicNetInfo = {
+		type: state.overrideNetworkType,
+		isConnected: isDisconnectedState(state.overrideNetworkType)
+			? false
+			: state.overrideIsConnected,
+		isInternetReachable: isDisconnectedState(state.overrideNetworkType)
+			? false
+			: state.overrideIsInternetReachable,
+	};
+
+	return { ...basicNetInfo } as NetInfoState;
 };
 
 /**
@@ -96,26 +118,38 @@ const FORCED_OFFLINE_NETINFO: NetInfoState = {
  * real state).
  */
 const assembleNetInfo = (state: InternalState): NetInfo => {
-	const netInfo = state.isForcedOffline
-		? FORCED_OFFLINE_NETINFO
+	const netInfo = state.isDevButtonShown
+		? padNetInfoState(state)
 		: state.netInfo;
-	const { type, isConnected, details, isInternetReachable } = netInfo;
+	const { type, isConnected, isInternetReachable } = netInfo;
 	const isPoorConnection = netInfo.type === 'cellular';
 	const internetUnreachable = isInternetReachable === false;
+
+	const typeOverrideCheck = state.isDevButtonShown
+		? state.overrideNetworkType
+		: type;
+	const isTrulyConnected = isConnected && !internetUnreachable;
 	return {
 		__typename,
-		type,
-		isConnected: isConnected && !internetUnreachable,
-		details,
+		type: typeOverrideCheck,
+		isConnected: isTrulyConnected,
+		isInternetReachable: isInternetReachable ?? false,
 		isPoorConnection,
-		isForcedOffline: state.isForcedOffline,
 		downloadBlocked: getDownloadBlockedStatus(
-			netInfo,
+			{
+				type: typeOverrideCheck,
+				isConnected: isTrulyConnected,
+			},
 			state.wifiOnlyDownloads,
 		),
-		setIsForcedOffline: state.setIsForcedOffline,
 		isDevButtonShown: state.isDevButtonShown,
 		setIsDevButtonShown: state.setIsDevButtonShown,
+		overrideIsConnected: state.overrideIsConnected,
+		setOverrideIsConnected: state.setOverrideIsConnected,
+		overrideNetworkType: state.overrideNetworkType,
+		setOverrideNetworkType: state.setOverrideNetworkType,
+		overrideIsInternetReachable: state.overrideIsInternetReachable,
+		setOverrideIsInternetReachable: state.setOverrideIsInternetReachable,
 	};
 };
 
@@ -191,10 +225,27 @@ export const createNetInfoResolver = () => {
 		/**
 		 * Then we have the mutators for the debug controls.
 		 */
-		const setIsForcedOffline = (isForcedOffline: boolean) =>
-			update(async (prevState) => ({ ...prevState, isForcedOffline }));
 		const setIsDevButtonShown = (isDevButtonShown: boolean) =>
 			update(async (prevState) => ({ ...prevState, isDevButtonShown }));
+		const setOverrideIsConnected = (overrideIsConnected: boolean) =>
+			update(async (prevState) => ({
+				...prevState,
+				overrideIsConnected,
+			}));
+		const setOverrideNetworkType = (
+			overrideNetworkType: NetInfoStateType,
+		) =>
+			update(async (prevState) => ({
+				...prevState,
+				overrideNetworkType,
+			}));
+		const setOverrideIsInternetReachable = (
+			overrideIsInternetReachable: boolean,
+		) =>
+			update(async (prevState) => ({
+				...prevState,
+				overrideIsInternetReachable,
+			}));
 
 		/**
 		 * Finally we initialize the result promise with our first value. By
@@ -210,11 +261,15 @@ export const createNetInfoResolver = () => {
 			]);
 			return {
 				netInfo,
-				isForcedOffline: false,
-				setIsForcedOffline,
 				wifiOnlyDownloads: innerQuery.data.wifiOnlyDownloads,
 				isDevButtonShown: false,
 				setIsDevButtonShown,
+				overrideIsConnected: false,
+				setOverrideIsConnected,
+				overrideNetworkType: NetInfoStateType.unknown,
+				setOverrideNetworkType,
+				overrideIsInternetReachable: false,
+				setOverrideIsInternetReachable,
 			};
 		})();
 
@@ -233,13 +288,17 @@ const useNetInfo = (() => {
 		__typename,
 		type: NetInfoStateType.unknown,
 		isConnected: false,
-		details: null,
 		isPoorConnection: false,
-		isForcedOffline: false,
+		isInternetReachable: false,
 		downloadBlocked: DownloadBlockedStatus.NotBlocked,
-		setIsForcedOffline: () => {},
 		isDevButtonShown: false,
 		setIsDevButtonShown: () => {},
+		overrideIsConnected: false,
+		setOverrideIsConnected: () => {},
+		overrideNetworkType: NetInfoStateType.unknown,
+		setOverrideNetworkType: () => {},
+		overrideIsInternetReachable: false,
+		setOverrideIsInternetReachable: () => {},
 	};
 
 	return (): NetInfo => {

@@ -3,7 +3,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import { NON_IMPLEMENTED_LINK } from 'src/helpers/apollo_link';
-import { DownloadBlockedStatus } from '../use-net-info';
+import { DownloadBlockedStatus, NetInfoStateType } from '../use-net-info';
 import type { NetInfo as NetInfoType } from '../use-net-info';
 
 type Handler = (state: NetInfoState) => void;
@@ -17,44 +17,39 @@ type NetInfoMock = {
 const wifiState = {
 	type: 'wifi',
 	isConnected: true,
-	details: {
-		isConnectionExpensive: false,
-	},
+	isInternetReachable: true,
 } as NetInfoState;
 
 const cellularState = {
 	type: 'cellular',
 	isConnected: true,
-	details: {
-		isConnectionExpensive: true,
+	isInternetReachable: true,
+} as NetInfoState;
+
+jest.mock(
+	'@react-native-community/netinfo',
+	(): NetInfoMock => {
+		let bound: Handler = () => {};
+
+		const addEventListener = jest.fn((fn: Handler) => {
+			bound = fn;
+			return () => {};
+		});
+
+		const ret = {
+			NetInfoStateType: {
+				unknown: 'unknown',
+				none: 'none',
+				wifi: 'wifi',
+				cellular: 'cellular',
+			},
+			addEventListener,
+			emit: (state: NetInfoState) => bound(state),
+			fetch: jest.fn(),
+		};
+		return ret;
 	},
-} as NetInfoState;
-
-const offlineState = {
-	type: 'none',
-	isConnected: false,
-	details: null,
-} as NetInfoState;
-
-jest.mock('@react-native-community/netinfo', (): NetInfoMock => {
-	let bound: Handler = () => {};
-
-	const addEventListener = jest.fn((fn: Handler) => {
-		bound = fn;
-		return () => {};
-	});
-
-	const ret = {
-		NetInfoStateType: {
-			unknown: 'unknown',
-			none: 'none',
-		},
-		addEventListener,
-		emit: (state: NetInfoState) => bound(state),
-		fetch: jest.fn(),
-	};
-	return ret;
-});
+);
 
 describe('use-net-info', () => {
 	describe('createNetInfoResolver', () => {
@@ -68,8 +63,8 @@ describe('use-net-info', () => {
 
 		beforeEach(() => {
 			jest.resetModules();
-			createNetInfoResolver =
-				require('../use-net-info').createNetInfoResolver;
+			createNetInfoResolver = require('../use-net-info')
+				.createNetInfoResolver;
 			NetInfo = require('@react-native-community/netinfo');
 			NetInfo.addEventListener.mockClear(); // ignore side-effects form module load
 			client = new ApolloClient({
@@ -97,10 +92,15 @@ describe('use-net-info', () => {
 				...wifiState,
 				downloadBlocked: DownloadBlockedStatus.NotBlocked,
 				isDevButtonShown: false,
-				isForcedOffline: false,
 				setIsDevButtonShown: expect.any(Function),
-				setIsForcedOffline: expect.any(Function),
+				setOverrideIsConnected: expect.any(Function),
+				setOverrideIsInternetReachable: expect.any(Function),
+				setOverrideNetworkType: expect.any(Function),
 				isPoorConnection: false,
+				isInternetReachable: true,
+				overrideIsConnected: false,
+				overrideIsInternetReachable: false,
+				overrideNetworkType: NetInfoStateType.unknown,
 			});
 		});
 
@@ -118,10 +118,15 @@ describe('use-net-info', () => {
 				...cellularState,
 				downloadBlocked: DownloadBlockedStatus.NotBlocked,
 				isDevButtonShown: false,
-				isForcedOffline: false,
 				setIsDevButtonShown: expect.any(Function),
-				setIsForcedOffline: expect.any(Function),
+				setOverrideIsConnected: expect.any(Function),
+				setOverrideIsInternetReachable: expect.any(Function),
+				setOverrideNetworkType: expect.any(Function),
 				isPoorConnection: true,
+				isInternetReachable: true,
+				overrideIsConnected: false,
+				overrideIsInternetReachable: false,
+				overrideNetworkType: NetInfoStateType.unknown,
 			});
 		});
 
@@ -134,8 +139,9 @@ describe('use-net-info', () => {
 				{
 					netInfo @client {
 						type @client
-						details @client
 						isConnected @client
+						isPoorConnection @client
+						isInternetReachable @client
 					}
 				}
 			`;
@@ -150,26 +156,120 @@ describe('use-net-info', () => {
 			expect(res.netInfo).toEqual({
 				...cellularState,
 				__typename: 'NetInfo',
+				isPoorConnection: true,
 			});
 		});
 
-		it('applies the setForceOffline() override', async () => {
+		it('applies the setOverrideNetworkType() override which means we are in dev mode which means the overrides isConnected and isInternetReacable come into play', async () => {
 			const resolve = createNetInfoResolver();
 			NetInfo.fetch.mockResolvedValue(wifiState);
 			let state = await resolve(null, null, { client });
 
-			await state.setIsForcedOffline(true);
+			await state.setIsDevButtonShown(true);
+			await state.setOverrideNetworkType(NetInfoStateType.cellular);
 
 			state = await resolve(null, null, { client });
 			expect(state).toEqual({
 				__typename: 'NetInfo',
-				...offlineState,
+				...cellularState,
 				downloadBlocked: DownloadBlockedStatus.Offline,
-				isDevButtonShown: false,
-				isForcedOffline: true,
+				isDevButtonShown: true,
 				setIsDevButtonShown: expect.any(Function),
-				setIsForcedOffline: expect.any(Function),
+				setOverrideIsConnected: expect.any(Function),
+				setOverrideIsInternetReachable: expect.any(Function),
+				setOverrideNetworkType: expect.any(Function),
+				isPoorConnection: true,
+				isConnected: false,
+				isInternetReachable: false,
+				overrideIsConnected: false,
+				overrideIsInternetReachable: false,
+				overrideNetworkType: NetInfoStateType.cellular,
+			});
+		});
+
+		it('applies the setOverrideIsConnected() override which means we are in dev mode and forces the default network type', async () => {
+			const resolve = createNetInfoResolver();
+			NetInfo.fetch.mockResolvedValue(wifiState);
+			let state = await resolve(null, null, { client });
+
+			await state.setIsDevButtonShown(true);
+			await state.setOverrideIsConnected(false);
+
+			state = await resolve(null, null, { client });
+			expect(state).toEqual({
+				__typename: 'NetInfo',
+				...wifiState,
+				downloadBlocked: DownloadBlockedStatus.Offline,
+				isDevButtonShown: true,
+				setIsDevButtonShown: expect.any(Function),
+				setOverrideIsConnected: expect.any(Function),
+				setOverrideIsInternetReachable: expect.any(Function),
+				setOverrideNetworkType: expect.any(Function),
 				isPoorConnection: false,
+				isConnected: false,
+				isInternetReachable: false,
+				overrideIsConnected: false,
+				overrideIsInternetReachable: false,
+				overrideNetworkType: NetInfoStateType.unknown,
+				type: NetInfoStateType.unknown,
+			});
+		});
+
+		it('applies the setIsInternetIsReachable() override which means we are in dev mode and forces the default overrides', async () => {
+			const resolve = createNetInfoResolver();
+			NetInfo.fetch.mockResolvedValue(wifiState);
+			let state = await resolve(null, null, { client });
+
+			await state.setIsDevButtonShown(true);
+			await state.setOverrideIsInternetReachable(true);
+
+			state = await resolve(null, null, { client });
+			expect(state).toEqual({
+				__typename: 'NetInfo',
+				...wifiState,
+				downloadBlocked: DownloadBlockedStatus.Offline,
+				isDevButtonShown: true,
+				setIsDevButtonShown: expect.any(Function),
+				setOverrideIsConnected: expect.any(Function),
+				setOverrideIsInternetReachable: expect.any(Function),
+				setOverrideNetworkType: expect.any(Function),
+				isPoorConnection: false,
+				isConnected: false,
+				isInternetReachable: false,
+				overrideIsConnected: false,
+				overrideIsInternetReachable: true,
+				overrideNetworkType: NetInfoStateType.unknown,
+				type: NetInfoStateType.unknown,
+			});
+		});
+
+		it('isConnected should be false when overrideIsInternetReachable is false, despite overrideIsConnected being true and in a wifi state', async () => {
+			const resolve = createNetInfoResolver();
+			NetInfo.fetch.mockResolvedValue(wifiState);
+			let state = await resolve(null, null, { client });
+
+			await state.setIsDevButtonShown(true);
+			await state.setOverrideNetworkType(NetInfoStateType.wifi);
+			await state.setOverrideIsConnected(true);
+			await state.setOverrideIsInternetReachable(false);
+
+			state = await resolve(null, null, { client });
+			expect(state).toEqual({
+				__typename: 'NetInfo',
+				...wifiState,
+				downloadBlocked: DownloadBlockedStatus.Offline,
+				isDevButtonShown: true,
+				setIsDevButtonShown: expect.any(Function),
+				setOverrideIsConnected: expect.any(Function),
+				setOverrideIsInternetReachable: expect.any(Function),
+				setOverrideNetworkType: expect.any(Function),
+				isPoorConnection: false,
+				isConnected: false,
+				isInternetReachable: false,
+				overrideIsConnected: true,
+				overrideIsInternetReachable: false,
+				overrideNetworkType: NetInfoStateType.wifi,
+				type: NetInfoStateType.wifi,
 			});
 		});
 	});
