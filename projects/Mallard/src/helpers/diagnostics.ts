@@ -48,8 +48,8 @@ const getDiagnosticInfo = async (
 					netInfo @client {
 						type @client
 						isConnected @client
-						details @client
 						isPoorConnection @client
+						isInternetReachable @client
 					}
 				`,
 			}),
@@ -114,9 +114,10 @@ Image Size for Downloads: ${imageSize}
 ${Platform.OS} Version: ${Platform.Version}
 Device Type: ${deviceId}
 Device Id: ${uniqueId}
-Network availability: ${netInfo.type}
-isConnected: ${netInfo.isConnected}
-isPoorConnection: ${netInfo.isPoorConnection}
+Network: Type: ${netInfo.type}
+Network: Connected?: ${netInfo.isConnected}
+Network: Internet Reachable?: ${netInfo.isInternetReachable}
+Network: Poor Connection?: ${netInfo.isPoorConnection}
 Privacy settings: ${gdprEntries
 		.map(([key, value]) => `${key}:${value}`)
 		.join(' ')}

@@ -61,7 +61,9 @@ const DevZone = () => {
 	const {
 		isDevButtonShown: showNetInfoButton,
 		setIsDevButtonShown: setShowNetInfoButton,
+		type,
 		isConnected,
+		isInternetReachable,
 		isPoorConnection,
 	} = useNetInfo();
 	const [showAllEditions, setShowAllEditions] = useState(false);
@@ -254,7 +256,7 @@ const DevZone = () => {
 					{
 						key: 'Network Information',
 						title: 'Network Information',
-						explainer: `isPoorConnection: ${isPoorConnection} \nisConnected: ${isConnected}`,
+						explainer: `Type: ${type} \nisPoorConnection: ${isPoorConnection} \nisConnected: ${isConnected} \nisInternetReachable: ${isInternetReachable}`,
 					},
 					{
 						key: 'Clear CAS caches',
