@@ -28,7 +28,7 @@ class Authorizer<
 	S extends string,
 	T,
 	A extends any[],
-	C extends ReadonlyArray<AsyncCache<any>>
+	C extends ReadonlyArray<AsyncCache<any>>,
 > {
 	private subscribers: Array<UpdateHandler<T>> = [];
 	private attempt: AnyAttempt<T> = NotRun;

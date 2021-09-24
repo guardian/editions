@@ -64,16 +64,12 @@ const ArticleSlider = React.memo(
 		articleNavigator: ArticleNavigator;
 	}) => {
 		const navigation = useNavigation();
-		const {
-			startingPoint,
-			flattenedArticles,
-		} = getArticleDataFromNavigator(articleNavigator, path);
+		const { startingPoint, flattenedArticles } =
+			getArticleDataFromNavigator(articleNavigator, path);
 		const [current, setCurrent] = useState(startingPoint);
 		const [lastTrackedIndex, setLastTrackedIndex] = useState(-1);
-		const [
-			position,
-			setPosition,
-		] = useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
+		const [position, setPosition] =
+			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
 
 		const { width } = useDimensions();
 		const flatListRef = useRef<AnimatedFlatListRef | undefined>();

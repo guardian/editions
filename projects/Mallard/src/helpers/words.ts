@@ -26,8 +26,7 @@ export const DIAGNOSTICS_REQUEST = `Would you like us to include diagnostic info
 		? `
 
 ${Platform.select({
-	ios:
-		'If you would like to switch back from this beta back to the general app you can delete this app and reinstall it from the app store.',
+	ios: 'If you would like to switch back from this beta back to the general app you can delete this app and reinstall it from the app store.',
 	android:
 		'If you would like to switch back from this beta back to the general app you can find this app on the Play Store, leave the beta from the Play Store page, uninstall the app and then reinstall the app.',
 })}`
@@ -60,8 +59,7 @@ const SignIn = {
 	subtitle: 'Sign in with your subscriber details to continue',
 	explainerTitle: 'Not subscribed yet?',
 	explainerSubtitle: `${Platform.select({
-		ios:
-			'Get access with a digital subscription from The Guardian website.',
+		ios: 'Get access with a digital subscription from The Guardian website.',
 
 		android:
 			'Get access with a digital subscription from The Guardian website',
@@ -90,8 +88,7 @@ const SubNotFound = {
 	title: 'Already a subscriber?',
 	explainer: 'Not subscribed yet?',
 	explainerSubtitle: `${Platform.select({
-		ios:
-			'To get a free trial with our digital subscription, visit our website',
+		ios: 'To get a free trial with our digital subscription, visit our website',
 
 		android: 'Get a free trial with our digital subscription',
 	})}`,

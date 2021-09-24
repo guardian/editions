@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "29.0.2"
+        buildToolsVersion = "29.0.3"
         minSdkVersion = 21
         compileSdkVersion = 29
         targetSdkVersion = 29
@@ -12,19 +12,18 @@ buildscript {
         supportV4Version = '1.0.0' // Do not specify if using old libraries, specify '1.0.0' or similar for androidx.legacy:legacy-support-v4 dependency
         androidXAnnotation = "1.1.0"
         androidXBrowser = "1.0.0"
+        ndkVersion = "20.1.5948944"
+        FLIPPER_VERSION = "0.103.0"
     }
     repositories {
         google()
         jcenter()
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.4.2")
+        classpath("com.android.tools.build:gradle:4.1.0")
         classpath("com.google.gms:google-services:4.2.0")
 
-        classpath 'io.fabric.tools:gradle:1.31.2'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -45,8 +44,12 @@ allprojects {
         }
         maven {
             //react-native-image-filter-kit
-            url 'https://jitpack.io'
+            url 'https://www.jitpack.io'
         }
+        maven {
+           // react-native-background-fetch
+           url("${project(':react-native-background-fetch').projectDir}/libs")
+       }
         mavenCentral()
     }
 

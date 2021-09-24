@@ -10,7 +10,7 @@ const WithBreakpoints: FunctionComponent<{
 }> = ({ children }) => {
 	const { width, ...dimensions } = useDimensions();
 	const maxSize = getClosestBreakpoint(
-		(Object.keys(children) as unknown[]) as number[],
+		Object.keys(children) as unknown[] as number[],
 		width,
 	);
 	return <>{children[maxSize]({ width, ...dimensions })}</>;

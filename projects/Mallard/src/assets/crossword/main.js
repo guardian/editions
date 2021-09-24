@@ -83,8 +83,7 @@
 object-assign
 (c) Sindre Sorhus
 @license MIT
-*/ var r =
-				Object.getOwnPropertySymbols,
+*/ var r = Object.getOwnPropertySymbols,
 			o = Object.prototype.hasOwnProperty,
 			i = Object.prototype.propertyIsEnumerable;
 		e.exports = (function () {
@@ -307,7 +306,8 @@ object-assign
 						i = o.document,
 						a = i.documentElement,
 						u = /^(checked|value|selected|disabled)$/i,
-						l = /^(select|fieldset|table|tbody|tfoot|td|tr|colgroup)$/i,
+						l =
+							/^(select|fieldset|table|tbody|tfoot|td|tr|colgroup)$/i,
 						s = /\s*<script +src=['"]([^'"]+)['"]>/,
 						c = ['<table>', '</table>', 1],
 						f = ['<table><tbody><tr>', '</tr></tbody></table>', 3],
@@ -876,10 +876,11 @@ object-assign
 											? ((r = t),
 											  (a = e),
 											  (u = null),
-											  (l = i.defaultView.getComputedStyle(
-													r,
-													'',
-											  )) && (u = l[a]),
+											  (l =
+													i.defaultView.getComputedStyle(
+														r,
+														'',
+													)) && (u = l[a]),
 											  r.style[a] || u)
 											: null
 										: null
@@ -1119,9 +1120,10 @@ object-assign
 										if (s.test(e))
 											return [
 												((t = e),
-												(n = document.createElement(
-													'script',
-												)),
+												(n =
+													document.createElement(
+														'script',
+													)),
 												(r = t.match(s)),
 												(n.src = r[1]),
 												n),
@@ -1818,9 +1820,10 @@ object-assign
 				};
 			},
 			function (e, t) {
-				e.exports = 'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'.split(
-					',',
-				);
+				e.exports =
+					'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'.split(
+						',',
+					);
 			},
 			function (e, t, n) {
 				var r = n(12),
@@ -2076,7 +2079,8 @@ object-assign
 						d = /(^|,)\s*[>~+]/,
 						p = /^\s+|\s*([,\s\+\~>]|$)\s*/g,
 						h = /[\s\>\+\~]/,
-						m = /(?![\s\w\-\/\?\&\=\:\.\(\)\!,@#%<>\{\}\$\*\^'"]*\]|[\s\w\+\-]*\))/,
+						m =
+							/(?![\s\w\-\/\?\&\=\:\.\(\)\!,@#%<>\{\}\$\*\^'"]*\]|[\s\w\+\-]*\))/,
 						v = /([.*+?\^=!:${}()|\[\]\/\\])/g,
 						y = new RegExp(
 							c.source +
@@ -2434,13 +2438,13 @@ object-assign
 													y = e.match(g);
 												if (!v.length) return p;
 												if (
-													((l = (v = v.slice(
-														0,
-													)).pop()),
+													((l = (v =
+														v.slice(0)).pop()),
 													v.length &&
-														(i = v[
-															v.length - 1
-														].match(c)) &&
+														(i =
+															v[
+																v.length - 1
+															].match(c)) &&
 														(m = R(t, i[1])),
 													!m)
 												)
@@ -2475,7 +2479,8 @@ object-assign
 																						].toLowerCase()) &&
 																				(e[
 																					e.length
-																				] = m);
+																				] =
+																					m);
 																		return e;
 																  })([])
 																: m[o](
@@ -2490,9 +2495,8 @@ object-assign
 												return v.length
 													? (O(p, function (e) {
 															L(e, v, y) &&
-																(h[
-																	h.length
-																] = e);
+																(h[h.length] =
+																	e);
 													  }),
 													  h)
 													: p;
@@ -3315,28 +3319,32 @@ object-assign
 								(h.prototype.stopPropagation = function () {
 									this.originalEvent.stopPropagation
 										? this.originalEvent.stopPropagation()
-										: (this.originalEvent.cancelBubble = !0);
+										: (this.originalEvent.cancelBubble =
+												!0);
 								}),
 								(h.prototype.stop = function () {
 									this.preventDefault(),
 										this.stopPropagation(),
 										(this.stopped = !0);
 								}),
-								(h.prototype.stopImmediatePropagation = function () {
-									this.originalEvent
-										.stopImmediatePropagation &&
-										this.originalEvent.stopImmediatePropagation(),
-										(this.isImmediatePropagationStopped = function () {
-											return !0;
-										});
-								}),
-								(h.prototype.isImmediatePropagationStopped = function () {
-									return (
+								(h.prototype.stopImmediatePropagation =
+									function () {
 										this.originalEvent
-											.isImmediatePropagationStopped &&
-										this.originalEvent.isImmediatePropagationStopped()
-									);
-								}),
+											.stopImmediatePropagation &&
+											this.originalEvent.stopImmediatePropagation(),
+											(this.isImmediatePropagationStopped =
+												function () {
+													return !0;
+												});
+									}),
+								(h.prototype.isImmediatePropagationStopped =
+									function () {
+										return (
+											this.originalEvent
+												.isImmediatePropagationStopped &&
+											this.originalEvent.isImmediatePropagationStopped()
+										);
+									}),
 								(h.prototype.clone = function (e) {
 									var t = new h(
 										this,
@@ -3374,7 +3382,8 @@ object-assign
 													if (n.apply(t, arguments))
 														return (
 															e &&
-																(e.currentTarget = t),
+																(e.currentTarget =
+																	t),
 															o(e, arguments)
 														);
 											  }
@@ -4436,12 +4445,10 @@ object-assign
 											placeholder: 'Enter letters',
 											maxLength: this.props.clue.length,
 											value: this.props.value,
-											onChange: this.onInputChange.bind(
-												this,
-											),
-											onKeyDown: this.onKeyDown.bind(
-												this,
-											),
+											onChange:
+												this.onInputChange.bind(this),
+											onKeyDown:
+												this.onKeyDown.bind(this),
 										});
 									},
 								},
@@ -4697,12 +4704,14 @@ object-assign
 																r ===
 																t.toLowerCase();
 														return {
-															letters: e.letters.concat(
-																{
-																	value: t,
-																	entered: i,
-																},
-															),
+															letters:
+																e.letters.concat(
+																	{
+																		value: t,
+																		entered:
+																			i,
+																	},
+																),
 															entries: i
 																? o
 																: e.entries,
@@ -4802,22 +4811,23 @@ object-assign
 																				function (
 																					n,
 																				) {
-																					var r = (
-																						n
-																							.separatorLocations[
-																							e
-																						] ||
-																						[]
-																					).map(
-																						function (
-																							e,
-																						) {
-																							return (
-																								e +
-																								t
-																							);
-																						},
-																					);
+																					var r =
+																						(
+																							n
+																								.separatorLocations[
+																								e
+																							] ||
+																							[]
+																						).map(
+																							function (
+																								e,
+																							) {
+																								return (
+																									e +
+																									t
+																								);
+																							},
+																						);
 																					return (
 																						(t +=
 																							n.length),
@@ -4845,16 +4855,18 @@ object-assign
 														value: this.state
 															.clueInput,
 														clue: t,
-														onChange: this.onClueInput.bind(
-															this,
-														),
-														onEnter: this.shuffle.bind(
-															this,
-														),
+														onChange:
+															this.onClueInput.bind(
+																this,
+															),
+														onEnter:
+															this.shuffle.bind(
+																this,
+															),
 												  })
 												: d.a.createElement(ve, {
-														letters: this.state
-															.letters,
+														letters:
+															this.state.letters,
 												  });
 										return d.a.createElement(
 											'div',
@@ -4889,9 +4901,8 @@ object-assign
 														(this.state.clueInput
 															? ''
 															: 'button--tertiary'),
-													onClick: this.reset.bind(
-														this,
-													),
+													onClick:
+														this.reset.bind(this),
 													'data-link-name':
 														'Start Again',
 												},
@@ -4905,9 +4916,8 @@ object-assign
 														(this.canShuffle()
 															? ''
 															: 'button--tertiary'),
-													onClick: this.shuffle.bind(
-														this,
-													),
+													onClick:
+														this.shuffle.bind(this),
 													'data-link-name': 'Shuffle',
 												},
 												'shuffle',
@@ -4916,8 +4926,8 @@ object-assign
 												clue: t,
 												entries: this.entries(),
 												letters: this.state.letters,
-												hasShuffled: !this.state
-													.showInput,
+												hasShuffled:
+													!this.state.showInput,
 											}),
 										);
 									},
@@ -4974,15 +4984,16 @@ object-assign
 												'a',
 												{
 													href: '#' + this.props.id,
-													onClick: this.onClick.bind(
-														this,
-													),
+													onClick:
+														this.onClick.bind(this),
 													className: Ee({
 														crossword__clue: !0,
-														'crossword__clue--answered': this
-															.props.hasAnswered,
-														'crossword__clue--selected': this
-															.props.isSelected,
+														'crossword__clue--answered':
+															this.props
+																.hasAnswered,
+														'crossword__clue--selected':
+															this.props
+																.isSelected,
 														'crossword__clue--display-group-order':
 															JSON.stringify(
 																this.props
@@ -5127,15 +5138,13 @@ object-assign
 																},
 																id: t.entry.id,
 																key: t.entry.id,
-																number:
-																	t.entry
-																		.number,
+																number: t.entry
+																	.number,
 																humanNumber:
 																	t.entry
 																		.humanNumber,
-																clue:
-																	t.entry
-																		.clue,
+																clue: t.entry
+																	.clue,
 																hasAnswered:
 																	t.hasAnswered,
 																isSelected:
@@ -5143,11 +5152,12 @@ object-assign
 																focusFirstCellInClueById:
 																	e.props
 																		.focusFirstCellInClueById,
-																setReturnPosition: function () {
-																	e.props.setReturnPosition(
-																		window.scrollY,
-																	);
-																},
+																setReturnPosition:
+																	function () {
+																		e.props.setReturnPosition(
+																			window.scrollY,
+																		);
+																	},
 															},
 														);
 													});
@@ -5278,12 +5288,12 @@ object-assign
 												t),
 											),
 											r = {
-												'data-link-name': this.props[
-													'data-link-name'
-												],
-												onClick: this.confirm.bind(
-													this,
-												),
+												'data-link-name':
+													this.props[
+														'data-link-name'
+													],
+												onClick:
+													this.confirm.bind(this),
 												className: n,
 											};
 										return d.a.createElement(
@@ -5323,9 +5333,11 @@ object-assign
 												d.a.createElement(Ce, {
 													className:
 														'button button--primary button--secondary',
-													onClick: this.props.crossword.onClearAll.bind(
-														this.props.crossword,
-													),
+													onClick:
+														this.props.crossword.onClearAll.bind(
+															this.props
+																.crossword,
+														),
 													key: 'clear',
 													'data-link-name':
 														'Clear all',
@@ -5337,10 +5349,11 @@ object-assign
 													d.a.createElement(Ce, {
 														className:
 															'button button--primary button--secondary',
-														onClick: this.props.crossword.onSolution.bind(
-															this.props
-																.crossword,
-														),
+														onClick:
+															this.props.crossword.onSolution.bind(
+																this.props
+																	.crossword,
+															),
 														key: 'solution',
 														'data-link-name':
 															'Reveal all',
@@ -5351,10 +5364,11 @@ object-assign
 													d.a.createElement(Ce, {
 														className:
 															'button button--primary button--secondary',
-														onClick: this.props.crossword.onCheckAll.bind(
-															this.props
-																.crossword,
-														),
+														onClick:
+															this.props.crossword.onCheckAll.bind(
+																this.props
+																	.crossword,
+															),
 														key: 'checkAll',
 														'data-link-name':
 															'Check all',
@@ -5368,10 +5382,11 @@ object-assign
 														{
 															className:
 																'button button--primary button--crossword--current',
-															onClick: this.props.crossword.onClearSingle.bind(
-																this.props
-																	.crossword,
-															),
+															onClick:
+																this.props.crossword.onClearSingle.bind(
+																	this.props
+																		.crossword,
+																),
 															key: 'clear-single',
 															'data-link-name':
 																'Clear this',
@@ -5385,10 +5400,11 @@ object-assign
 														{
 															className:
 																'button button--primary button--crossword--current',
-															onClick: this.props.crossword.onToggleAnagramHelper.bind(
-																this.props
-																	.crossword,
-															),
+															onClick:
+																this.props.crossword.onToggleAnagramHelper.bind(
+																	this.props
+																		.crossword,
+																),
 															key: 'anagram',
 															'data-link-name':
 																'Show anagram helper',
@@ -5403,10 +5419,12 @@ object-assign
 															{
 																className:
 																	'button button--primary button--crossword--current',
-																onClick: this.props.crossword.onCheat.bind(
-																	this.props
-																		.crossword,
-																),
+																onClick:
+																	this.props.crossword.onCheat.bind(
+																		this
+																			.props
+																			.crossword,
+																	),
 																key: 'cheat',
 																'data-link-name':
 																	'Reveal this',
@@ -5420,10 +5438,12 @@ object-assign
 															{
 																className:
 																	'button button--primary button--crossword--current',
-																onClick: this.props.crossword.onCheck.bind(
-																	this.props
-																		.crossword,
-																),
+																onClick:
+																	this.props.crossword.onCheck.bind(
+																		this
+																			.props
+																			.crossword,
+																	),
 																key: 'check',
 																'data-link-name':
 																	'Check this',
@@ -5545,9 +5565,10 @@ object-assign
 												type: 'text',
 												className:
 													'crossword__hidden-input-prev-next',
-												onFocus: this.onFocusPrevious.bind(
-													this,
-												),
+												onFocus:
+													this.onFocusPrevious.bind(
+														this,
+													),
 											}),
 											d.a.createElement('input', {
 												key: '2',
@@ -5555,18 +5576,16 @@ object-assign
 												className:
 													'crossword__hidden-input',
 												maxLength: '1',
-												onClick: this.onClick.bind(
-													this,
-												),
-												onChange: this.handleChange.bind(
-													this,
-												),
-												onTouchStart: this.touchStart.bind(
-													this,
-												),
-												onKeyDown: this.onKeyDown.bind(
-													this,
-												),
+												onClick:
+													this.onClick.bind(this),
+												onChange:
+													this.handleChange.bind(
+														this,
+													),
+												onTouchStart:
+													this.touchStart.bind(this),
+												onKeyDown:
+													this.onKeyDown.bind(this),
 												onBlur: this.onBlur.bind(this),
 												value: this.state.value,
 												autoComplete: 'off',
@@ -5581,9 +5600,8 @@ object-assign
 												type: 'text',
 												className:
 													'crossword__hidden-input-prev-next',
-												onFocus: this.onFocusNext.bind(
-													this,
-												),
+												onFocus:
+													this.onFocusNext.bind(this),
 											}),
 										);
 									},
@@ -5658,12 +5676,14 @@ object-assign
 														y: e + 20.925,
 														key: 'entry',
 														className: Ee({
-															'crossword__cell-text': !0,
-															'crossword__cell-text--focussed': this
-																.props
-																.isFocussed,
-															'crossword__cell-text--error': this
-																.props.isError,
+															'crossword__cell-text':
+																!0,
+															'crossword__cell-text--focussed':
+																this.props
+																	.isFocussed,
+															'crossword__cell-text--error':
+																this.props
+																	.isError,
 														}),
 														textAnchor: 'middle',
 													},
@@ -5672,9 +5692,8 @@ object-assign
 											d.a.createElement(
 												'g',
 												{
-													onClick: this.onClick.bind(
-														this,
-													),
+													onClick:
+														this.onClick.bind(this),
 												},
 												d.a.createElement('rect', {
 													x: t,
@@ -5683,11 +5702,12 @@ object-assign
 													height: B,
 													className: Ee({
 														crossword__cell: !0,
-														'crossword__cell--focussed': this
-															.props.isFocussed,
-														'crossword__cell--highlighted': this
-															.props
-															.isHighlighted,
+														'crossword__cell--focussed':
+															this.props
+																.isFocussed,
+														'crossword__cell--highlighted':
+															this.props
+																.isHighlighted,
 													}),
 												}),
 												n,
@@ -5913,7 +5933,8 @@ object-assign
 									viewBox: '0 0 ' + n + ' ' + r,
 									className: Ee({
 										crossword__grid: !0,
-										'crossword__grid--focussed': !!e.focussedCell,
+										'crossword__grid--focussed':
+											!!e.focussedCell,
 									}),
 								},
 								d.a.createElement('rect', {
@@ -6392,7 +6413,8 @@ object-assign
 																	x: r,
 																	y: o,
 																	value: '',
-																	previousValue: i,
+																	previousValue:
+																		i,
 																});
 														}
 														return t;
@@ -6445,7 +6467,8 @@ object-assign
 																	'px',
 															);
 														}),
-															(e.gridHeightIsSet = !0);
+															(e.gridHeightIsSet =
+																!0);
 												  })
 												: this.gridHeightIsSet &&
 												  this.$gridWrapper.attr(
@@ -6476,7 +6499,8 @@ object-assign
 																	x: e,
 																	y: t,
 																	value: n,
-																	previousValue: l,
+																	previousValue:
+																		l,
 																});
 													}
 													return i;
@@ -6874,9 +6898,8 @@ object-assign
 														e.state.grid,
 														t,
 													),
-													isSelected: e.clueIsInFocusGroup(
-														t,
-													),
+													isSelected:
+														e.clueIsInFocusGroup(t),
 												};
 											},
 										);
@@ -6919,9 +6942,9 @@ object-assign
 																t.props.onMove({
 																	x: o,
 																	y: i,
-																	value:
-																		r.value,
-																	previousValue: u,
+																	value: r.value,
+																	previousValue:
+																		u,
 																});
 														}
 														return r;
@@ -6975,7 +6998,8 @@ object-assign
 																	x: n,
 																	y: o,
 																	value: '',
-																	previousValue: i,
+																	previousValue:
+																		i,
 																});
 														}
 														return e;
@@ -6992,8 +7016,9 @@ object-assign
 											t = void 0;
 										return (
 											e &&
-												(t = this.state.grid[e.x][e.y]
-													.value),
+												(t =
+													this.state.grid[e.x][e.y]
+														.value),
 											t || ''
 										);
 									},
@@ -7015,11 +7040,12 @@ object-assign
 										return (
 											!!r &&
 											r.group.some(function (r) {
-												var o = n.props.data.entries.find(
-													function (e) {
-														return e.id === r;
-													},
-												);
+												var o =
+													n.props.data.entries.find(
+														function (e) {
+															return e.id === r;
+														},
+													);
 												return le(o, e, t);
 											})
 										);
@@ -7050,8 +7076,8 @@ object-assign
 													key: n.id,
 													crossword: this,
 													focussedEntry: n,
-													entries: this.props.data
-														.entries,
+													entries:
+														this.props.data.entries,
 													grid: this.state.grid,
 													close: this
 														.onToggleAnagramHelper,
@@ -7061,8 +7087,9 @@ object-assign
 												columns: this.columns,
 												cells: this.state.grid,
 												separators:
-													((e = this.props.data
-														.entries),
+													((e =
+														this.props.data
+															.entries),
 													e
 														.map(function (e) {
 															return Object.keys(
@@ -7098,7 +7125,8 @@ object-assign
 																			  ),
 																		direction:
 																			e.direction,
-																		separator: n,
+																		separator:
+																			n,
 																	};
 																});
 															});
@@ -7113,10 +7141,11 @@ object-assign
 																	r,
 																) &&
 																	r.length &&
-																	(r = r.reduce(
-																		e,
-																		[],
-																	)),
+																	(r =
+																		r.reduce(
+																			e,
+																			[],
+																		)),
 																t.concat(r)
 															);
 														},
@@ -7134,16 +7163,15 @@ object-assign
 																		(e[
 																			t.key
 																		] = {}),
-																  (e[
-																		t.key
-																  ] = t),
+																  (e[t.key] =
+																		t),
 																  e)
 																: e;
 														},
 														{})),
 												crossword: this,
-												focussedCell: this.state
-													.cellInFocus,
+												focussedCell:
+													this.state.cellInFocus,
 												ref: function (e) {
 													t.grid = e;
 												},
@@ -7173,14 +7201,16 @@ object-assign
 														className:
 															'crossword__sticky-clue-wrapper',
 														ref: function (e) {
-															t.stickyClueWrapper = e;
+															t.stickyClueWrapper =
+																e;
 														},
 													},
 													d.a.createElement(
 														'div',
 														{
 															className: Ee({
-																'crossword__sticky-clue': !0,
+																'crossword__sticky-clue':
+																	!0,
 																'is-hidden': !n,
 															}),
 														},
@@ -7231,26 +7261,30 @@ object-assign
 														crossword: this,
 														value: this.hiddenInputValue(),
 														ref: function (e) {
-															t.hiddenInputComponent = e;
+															t.hiddenInputComponent =
+																e;
 														},
 													}),
 													r,
 												),
 											),
 											d.a.createElement(Oe, {
-												hasSolutions: this.hasSolutions(),
+												hasSolutions:
+													this.hasSolutions(),
 												clueInFocus: n,
 												crossword: this,
 											}),
 											d.a.createElement(Se, {
 												clues: this.cluesData(),
 												focussed: n,
-												focusFirstCellInClueById: this.focusFirstCellInClueById.bind(
-													this,
-												),
-												setReturnPosition: this.setReturnPosition.bind(
-													this,
-												),
+												focusFirstCellInClueById:
+													this.focusFirstCellInClueById.bind(
+														this,
+													),
+												setReturnPosition:
+													this.setReturnPosition.bind(
+														this,
+													),
 											}),
 										);
 									},
@@ -7652,7 +7686,8 @@ object-assign
 				};
 			},
 			function (e, t, n) {
-				var r = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,
+				var r =
+						/[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,
 					o = /\\(\\)?/g,
 					i = n(145)(function (e) {
 						var t = [];
@@ -7817,24 +7852,32 @@ object-assign
 					o = n(46),
 					i = n(18),
 					a = {};
-				(a['[object Float32Array]'] = a['[object Float64Array]'] = a[
-					'[object Int8Array]'
-				] = a['[object Int16Array]'] = a['[object Int32Array]'] = a[
-					'[object Uint8Array]'
-				] = a['[object Uint8ClampedArray]'] = a[
-					'[object Uint16Array]'
-				] = a['[object Uint32Array]'] = !0),
-					(a['[object Arguments]'] = a['[object Array]'] = a[
-						'[object ArrayBuffer]'
-					] = a['[object Boolean]'] = a['[object DataView]'] = a[
-						'[object Date]'
-					] = a['[object Error]'] = a['[object Function]'] = a[
-						'[object Map]'
-					] = a['[object Number]'] = a['[object Object]'] = a[
-						'[object RegExp]'
-					] = a['[object Set]'] = a['[object String]'] = a[
-						'[object WeakMap]'
-					] = !1),
+				(a['[object Float32Array]'] =
+					a['[object Float64Array]'] =
+					a['[object Int8Array]'] =
+					a['[object Int16Array]'] =
+					a['[object Int32Array]'] =
+					a['[object Uint8Array]'] =
+					a['[object Uint8ClampedArray]'] =
+					a['[object Uint16Array]'] =
+					a['[object Uint32Array]'] =
+						!0),
+					(a['[object Arguments]'] =
+						a['[object Array]'] =
+						a['[object ArrayBuffer]'] =
+						a['[object Boolean]'] =
+						a['[object DataView]'] =
+						a['[object Date]'] =
+						a['[object Error]'] =
+						a['[object Function]'] =
+						a['[object Map]'] =
+						a['[object Number]'] =
+						a['[object Object]'] =
+						a['[object RegExp]'] =
+						a['[object Set]'] =
+						a['[object String]'] =
+						a['[object WeakMap]'] =
+							!1),
 					(e.exports = function (e) {
 						return i(e) && o(e.length) && !!a[r(e)];
 					});
@@ -9418,9 +9461,10 @@ object-assign
 					})),
 					a(a.G + a.W + a.F * !H, { Symbol: j });
 				for (
-					var Z = 'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'.split(
-							',',
-						),
+					var Z =
+							'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'.split(
+								',',
+							),
 						ee = 0;
 					Z.length > ee;
 
@@ -9560,9 +9604,10 @@ object-assign
 						o = n(22),
 						i = n(26),
 						a = n(8)('toStringTag'),
-						u = 'CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,TextTrackList,TouchList'.split(
-							',',
-						),
+						u =
+							'CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,TextTrackList,TouchList'.split(
+								',',
+							),
 						l = 0;
 					l < u.length;
 					l++
@@ -10461,9 +10506,10 @@ object-assign
 			J = Y('animationiteration'),
 			Z = Y('animationstart'),
 			ee = Y('transitionend'),
-			te = 'abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange seeked seeking stalled suspend timeupdate volumechange waiting'.split(
-				' ',
-			),
+			te =
+				'abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange seeked seeking stalled suspend timeupdate volumechange waiting'.split(
+					' ',
+				),
 			ne = null,
 			re = null,
 			oe = null;
@@ -10552,7 +10598,10 @@ object-assign
 				var e,
 					t = this.constructor.Interface;
 				for (e in t) this[e] = null;
-				(this.nativeEvent = this._targetInst = this.dispatchConfig = null),
+				(this.nativeEvent =
+					this._targetInst =
+					this.dispatchConfig =
+						null),
 					(this.isPropagationStopped = this.isDefaultPrevented = ue),
 					(this._dispatchInstances = this._dispatchListeners = null);
 			},
@@ -10618,27 +10667,30 @@ object-assign
 						bubbled: 'onCompositionEnd',
 						captured: 'onCompositionEndCapture',
 					},
-					dependencies: 'blur compositionend keydown keypress keyup mousedown'.split(
-						' ',
-					),
+					dependencies:
+						'blur compositionend keydown keypress keyup mousedown'.split(
+							' ',
+						),
 				},
 				compositionStart: {
 					phasedRegistrationNames: {
 						bubbled: 'onCompositionStart',
 						captured: 'onCompositionStartCapture',
 					},
-					dependencies: 'blur compositionstart keydown keypress keyup mousedown'.split(
-						' ',
-					),
+					dependencies:
+						'blur compositionstart keydown keypress keyup mousedown'.split(
+							' ',
+						),
 				},
 				compositionUpdate: {
 					phasedRegistrationNames: {
 						bubbled: 'onCompositionUpdate',
 						captured: 'onCompositionUpdateCapture',
 					},
-					dependencies: 'blur compositionupdate keydown keypress keyup mousedown'.split(
-						' ',
-					),
+					dependencies:
+						'blur compositionupdate keydown keypress keyup mousedown'.split(
+							' ',
+						),
 				},
 			},
 			we = !1;
@@ -11017,7 +11069,8 @@ object-assign
 			} while (e);
 			return t;
 		}
-		var st = /^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,
+		var st =
+				/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,
 			ct = Object.prototype.hasOwnProperty,
 			ft = {},
 			dt = {};
@@ -11265,9 +11318,10 @@ object-assign
 					bubbled: 'onChange',
 					captured: 'onChangeCapture',
 				},
-				dependencies: 'blur change click focus input keydown keyup selectionchange'.split(
-					' ',
-				),
+				dependencies:
+					'blur change click focus input keydown keyup selectionchange'.split(
+						' ',
+					),
 			},
 		};
 		function St(e, t, n) {
@@ -12190,9 +12244,10 @@ object-assign
 						bubbled: 'onSelect',
 						captured: 'onSelectCapture',
 					},
-					dependencies: 'blur contextmenu dragend focus keydown keyup mousedown mouseup selectionchange'.split(
-						' ',
-					),
+					dependencies:
+						'blur contextmenu dragend focus keydown keyup mousedown mouseup selectionchange'.split(
+							' ',
+						),
 				},
 			},
 			Hn = null,
@@ -12638,7 +12693,8 @@ object-assign
 			return (
 				r &&
 					(((e =
-						e.stateNode).__reactInternalMemoizedUnmaskedChildContext = t),
+						e.stateNode).__reactInternalMemoizedUnmaskedChildContext =
+						t),
 					(e.__reactInternalMemoizedMaskedChildContext = i)),
 				i
 			);
@@ -12700,11 +12756,21 @@ object-assign
 		function Br(e, t, n, r) {
 			(this.tag = e),
 				(this.key = n),
-				(this.sibling = this.child = this.return = this.stateNode = this.type = this.elementType = null),
+				(this.sibling =
+					this.child =
+					this.return =
+					this.stateNode =
+					this.type =
+					this.elementType =
+						null),
 				(this.index = 0),
 				(this.ref = null),
 				(this.pendingProps = t),
-				(this.contextDependencies = this.memoizedState = this.updateQueue = this.memoizedProps = null),
+				(this.contextDependencies =
+					this.memoizedState =
+					this.updateQueue =
+					this.memoizedProps =
+						null),
 				(this.mode = r),
 				(this.effectTag = 0),
 				(this.lastEffect = this.firstEffect = this.nextEffect = null),
@@ -12952,7 +13018,8 @@ object-assign
 				(t._reactInternalFiber = e),
 				r &&
 					(((e =
-						e.stateNode).__reactInternalMemoizedUnmaskedChildContext = o),
+						e.stateNode).__reactInternalMemoizedUnmaskedChildContext =
+						o),
 					(e.__reactInternalMemoizedMaskedChildContext = i)),
 				t
 			);
@@ -13079,14 +13146,8 @@ object-assign
 					? (((r = o(t, n.props)).ref = po(e, t, n)),
 					  (r.return = e),
 					  r)
-					: (((r = Gr(
-							n.type,
-							n.key,
-							n.props,
-							null,
-							e.mode,
-							r,
-					  )).ref = po(e, t, n)),
+					: (((r = Gr(n.type, n.key, n.props, null, e.mode, r)).ref =
+							po(e, t, n)),
 					  (r.return = e),
 					  r);
 			}
@@ -13732,12 +13793,14 @@ object-assign
 					return (
 						(t = void 0 !== n ? n(t) : t),
 						(r.memoizedState = r.baseState = t),
-						(e = (e = r.queue = {
-							last: null,
-							dispatch: null,
-							lastRenderedReducer: e,
-							lastRenderedState: t,
-						}).dispatch = li.bind(null, zo, e)),
+						(e = (e = r.queue =
+							{
+								last: null,
+								dispatch: null,
+								lastRenderedReducer: e,
+								lastRenderedState: t,
+							}).dispatch =
+							li.bind(null, zo, e)),
 						[r.memoizedState, e]
 					);
 				},
@@ -13749,12 +13812,14 @@ object-assign
 					return (
 						'function' == typeof e && (e = e()),
 						(t.memoizedState = t.baseState = e),
-						(e = (e = t.queue = {
-							last: null,
-							dispatch: null,
-							lastRenderedReducer: ti,
-							lastRenderedState: e,
-						}).dispatch = li.bind(null, zo, e)),
+						(e = (e = t.queue =
+							{
+								last: null,
+								dispatch: null,
+								lastRenderedReducer: ti,
+								lastRenderedState: e,
+							}).dispatch =
+							li.bind(null, zo, e)),
 						[t.memoizedState, e]
 					);
 				},
@@ -14158,12 +14223,8 @@ object-assign
 										null !== t.memoizedState
 											? t.child.child
 											: t.child),
-							  ((r = o.sibling = Kr(
-									a,
-									r,
-									n,
-									null,
-							  )).effectTag |= 2),
+							  ((r = o.sibling =
+									Kr(a, r, n, null)).effectTag |= 2),
 							  (n = o),
 							  (o.childExpirationTime = 0),
 							  (n.return = r.return = t))
@@ -14189,11 +14250,9 @@ object-assign
 
 				)
 					(e = e.sibling),
-						((n = n.sibling = Qr(
-							e,
-							e.pendingProps,
-							e.expirationTime,
-						)).return = t);
+						((n = n.sibling =
+							Qr(e, e.pendingProps, e.expirationTime)).return =
+							t);
 				n.sibling = null;
 			}
 			return t.child;
@@ -14309,14 +14368,16 @@ object-assign
 							}
 						})(o)),
 						(t.type = e),
-						(o = t.tag = (function (e) {
-							if ('function' == typeof e) return qr(e) ? 1 : 0;
-							if (null != e) {
-								if ((e = e.$$typeof) === tt) return 11;
-								if (e === rt) return 14;
-							}
-							return 2;
-						})(e)),
+						(o = t.tag =
+							(function (e) {
+								if ('function' == typeof e)
+									return qr(e) ? 1 : 0;
+								if (null != e) {
+									if ((e = e.$$typeof) === tt) return 11;
+									if (e === rt) return 14;
+								}
+								return 2;
+							})(e)),
 						(i = ro(e, i)),
 						(u = void 0),
 						o)
@@ -14471,11 +14532,13 @@ object-assign
 														f.childExpirationTime <
 														c
 													)
-														(f.childExpirationTime = c),
+														(f.childExpirationTime =
+															c),
 															null !== d &&
 																d.childExpirationTime <
 																	c &&
-																(d.childExpirationTime = c);
+																(d.childExpirationTime =
+																	c);
 													else {
 														if (
 															!(
@@ -14485,7 +14548,8 @@ object-assign
 															)
 														)
 															break;
-														d.childExpirationTime = c;
+														d.childExpirationTime =
+															c;
 													}
 													f = f.return;
 												}
@@ -14733,7 +14797,9 @@ object-assign
 							((e.effectTag |= 32),
 							(l.nextEffect = null),
 							null === t.lastCapturedEffect
-								? (t.firstCapturedEffect = t.lastCapturedEffect = l)
+								? (t.firstCapturedEffect =
+										t.lastCapturedEffect =
+											l)
 								: ((t.lastCapturedEffect.nextEffect = l),
 								  (t.lastCapturedEffect = l)))),
 					(l = l.next);
@@ -15165,7 +15231,8 @@ object-assign
 											break;
 										case 'select':
 											(t = e._wrapperState.wasMultiple),
-												(e._wrapperState.wasMultiple = !!o.multiple),
+												(e._wrapperState.wasMultiple =
+													!!o.multiple),
 												null != (n = o.value)
 													? Gn(e, !!o.multiple, n, !1)
 													: t !== !!o.multiple &&
@@ -15445,7 +15512,8 @@ object-assign
 											: ro(t.type, n),
 										r,
 									)),
-										(e.__reactInternalSnapshotBeforeUpdate = t);
+										(e.__reactInternalSnapshotBeforeUpdate =
+											t);
 								}
 								break e;
 							case 3:
@@ -15551,7 +15619,8 @@ object-assign
 						var n = e.latestPendingTime;
 						0 !== n &&
 							(n > t
-								? (e.earliestPendingTime = e.latestPendingTime = 0)
+								? (e.earliestPendingTime = e.latestPendingTime =
+										0)
 								: e.earliestPendingTime > t &&
 								  (e.earliestPendingTime =
 										e.latestPendingTime)),
@@ -15879,9 +15948,10 @@ object-assign
 											c === Zn.html && (c = er(p)),
 											c === Zn.html
 												? 'script' === p
-													? (((i = f.createElement(
-															'div',
-													  )).innerHTML =
+													? (((i =
+															f.createElement(
+																'div',
+															)).innerHTML =
 															'<script></script>'),
 													  (f = i.removeChild(
 															i.firstChild,
@@ -15894,7 +15964,8 @@ object-assign
 													  'select' === p &&
 															((p = f),
 															i.multiple
-																? (p.multiple = !0)
+																? (p.multiple =
+																		!0)
 																: i.size &&
 																  (p.size =
 																		i.size)))
@@ -16012,7 +16083,8 @@ object-assign
 													);
 												break;
 											case 'select':
-												((s = p).multiple = !!d.multiple),
+												((s = p).multiple =
+													!!d.multiple),
 													null != (p = d.value)
 														? Gn(
 																s,
@@ -16054,9 +16126,10 @@ object-assign
 											  (u[M] = l),
 											  (l = u.nodeValue !== i) && aa(t))
 											: ((u = t),
-											  ((l = (9 === i.nodeType
-													? i
-													: i.ownerDocument
+											  ((l = (
+													9 === i.nodeType
+														? i
+														: i.ownerDocument
 											  ).createTextNode(l))[M] = t),
 											  (u.stateNode = l)));
 								break;
@@ -16080,7 +16153,8 @@ object-assign
 										(null !== (s = t.firstEffect)
 											? ((t.firstEffect = i),
 											  (i.nextEffect = s))
-											: ((t.firstEffect = t.lastEffect = i),
+											: ((t.firstEffect = t.lastEffect =
+													i),
 											  (i.nextEffect = null)),
 										(i.effectTag = 8)),
 									(l || u) && (t.effectTag |= 4);
@@ -16235,9 +16309,10 @@ object-assign
 													1 === c.tag &&
 														(null === c.alternate
 															? (c.tag = 17)
-															: (((u = Yi(
-																	1073741823,
-															  )).tag = Vi),
+															: (((u =
+																	Yi(
+																		1073741823,
+																	)).tag = Vi),
 															  Ji(c, u))),
 													(c.expirationTime = 1073741823);
 												break e;
@@ -16540,7 +16615,8 @@ object-assign
 				? ((e.expirationTime = t),
 				  null === tu
 						? ((eu = tu = e), (e.nextScheduledRoot = e))
-						: ((tu = tu.nextScheduledRoot = e).nextScheduledRoot = eu))
+						: ((tu = tu.nextScheduledRoot = e).nextScheduledRoot =
+								eu))
 				: t > e.expirationTime && (e.expirationTime = t),
 				ou ||
 					(cu
@@ -16843,23 +16919,25 @@ object-assign
 					: i.render(t, o);
 			} else {
 				if (
-					((i = n._reactRootContainer = (function (e, t) {
-						if (
-							(t ||
-								(t = !(
-									!(t = e
-										? 9 === e.nodeType
-											? e.documentElement
-											: e.firstChild
-										: null) ||
-									1 !== t.nodeType ||
-									!t.hasAttribute('data-reactroot')
-								)),
-							!t)
-						)
-							for (var n; (n = e.lastChild); ) e.removeChild(n);
-						return new Hu(e, !1, t);
-					})(n, r)),
+					((i = n._reactRootContainer =
+						(function (e, t) {
+							if (
+								(t ||
+									(t = !(
+										!(t = e
+											? 9 === e.nodeType
+												? e.documentElement
+												: e.firstChild
+											: null) ||
+										1 !== t.nodeType ||
+										!t.hasAttribute('data-reactroot')
+									)),
+								!t)
+							)
+								for (var n; (n = e.lastChild); )
+									e.removeChild(n);
+							return new Hu(e, !1, t);
+						})(n, r)),
 					'function' == typeof o)
 				) {
 					var u = o;
@@ -17674,8 +17752,7 @@ object-assign
 													id: '1-across',
 													number: 1,
 													humanNumber: '1',
-													clue:
-														'Toy on a string (2-2)',
+													clue: 'Toy on a string (2-2)',
 													direction: 'across',
 													length: 4,
 													group: ['1-across'],
@@ -17715,8 +17792,7 @@ object-assign
 													id: '3-down',
 													number: 3,
 													humanNumber: '3',
-													clue:
-														'Bits and bobs (4,3,4)',
+													clue: 'Bits and bobs (4,3,4)',
 													direction: 'down',
 													length: 7,
 													group: ['3-down', '4-down'],

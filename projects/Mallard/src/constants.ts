@@ -28,6 +28,7 @@ const LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY = 'printSubscriberPostcode';
 const JOIN_BETA_LINK = Platform.select({
 	ios: 'https://testflight.apple.com/join/O2EojUEl',
 	android: 'https://play.google.com/apps/testing/com.guardian.editions',
+	default: 'https://testflight.apple.com/join/O2EojUEl',
 });
 
 export {

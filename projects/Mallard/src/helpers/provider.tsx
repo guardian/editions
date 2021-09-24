@@ -15,11 +15,13 @@ export const nestProviders = (
 	...providers: Array<(p: { children: ReactNode }) => JSX.Element | null>
 ) =>
 	providers.reduce(
-		(Prev, Cur) => ({ children }) => (
-			<Prev>
-				<Cur>{children}</Cur>
-			</Prev>
-		),
+		(Prev, Cur) =>
+			({ children }) =>
+				(
+					<Prev>
+						<Cur>{children}</Cur>
+					</Prev>
+				),
 		({ children }) => <>{children}</>,
 	);
 

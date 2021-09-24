@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ReactTestRendererJSON } from 'react-test-renderer';
 import TestRenderer from 'react-test-renderer';
 import MockedNavigator from 'src/__mocks__/@react-navigation';
 import type { IssueOrigin } from '../../../../../../Apps/common/src';
@@ -17,7 +16,7 @@ const issue = {
 
 describe('IssueScreenHeader', () => {
 	it('should match the default style', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<MockedNavigator
 				component={IssueScreenHeader}
 				props={{ issue: issue }}
@@ -26,7 +25,7 @@ describe('IssueScreenHeader', () => {
 		expect(component).toMatchSnapshot();
 	});
 	it('should match the altered style by the prop headerStyles', () => {
-		const component: ReactTestRendererJSON | null = TestRenderer.create(
+		const component = TestRenderer.create(
 			<MockedNavigator
 				component={IssueScreenHeader}
 				props={{

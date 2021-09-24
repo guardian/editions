@@ -77,9 +77,8 @@ const styles = StyleSheet.create({
 
 const LightboxScreen = () => {
 	const navigation = useNavigation();
-	const route = useRoute<
-		RouteProp<MainStackParamList, RouteNames.Lightbox>
-	>();
+	const route =
+		useRoute<RouteProp<MainStackParamList, RouteNames.Lightbox>>();
 	const imagePaths = route.params?.imagePaths ?? [];
 	const images = route.params?.images ?? [];
 	const index = route.params?.index ?? 0;
