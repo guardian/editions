@@ -83,20 +83,18 @@ class Logging extends AsyncQueue {
 	}
 
 	init(apolloClient: ApolloClient<object>) {
-		apolloClient
-			.watchQuery<QueryData>({ query: QUERY })
-			.subscribe({
-				next: (query) => {
-					if (query.loading) return;
-					this.hasConsent = query.data.gdprAllowPerformance;
-					this.isConnected = query.data.netInfo.isConnected;
-					this.isPoorConnection = query.data.netInfo.isPoorConnection;
-					this.networkStatus = query.data.netInfo.type;
-				},
-				error: (error) => {
-					errorService.captureException(error);
-				},
-			});
+		apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
+			next: (query) => {
+				if (query.loading) return;
+				this.hasConsent = query.data.gdprAllowPerformance;
+				this.isConnected = query.data.netInfo.isConnected;
+				this.isPoorConnection = query.data.netInfo.isPoorConnection;
+				this.networkStatus = query.data.netInfo.type;
+			},
+			error: (error) => {
+				errorService.captureException(error);
+			},
+		});
 	}
 
 	async getExternalInfo() {
