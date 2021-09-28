@@ -1,6 +1,5 @@
 import { NetInfoStateType, useNetInfo } from '@react-native-community/netinfo';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { NetInfoDevOverlay } from 'src/components/NetInfoDevOverlay';
 import type { NetInfoState } from './types';
 import { DownloadBlockedStatus } from './types';
 import { isDisconnectedState, stateResolver } from './utils';
@@ -110,7 +109,6 @@ export const NetInfoProvider = ({
 			}}
 		>
 			{children}
-			<NetInfoDevOverlay />
 		</NetInfoContext.Provider>
 	);
 };
