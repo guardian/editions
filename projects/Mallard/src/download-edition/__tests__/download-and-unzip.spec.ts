@@ -1,5 +1,4 @@
-import type ApolloClient from 'apollo-client';
-import { DownloadBlockedStatus } from 'src/hooks/use-net-info';
+import { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
 import { downloadAndUnzipIssue } from '../download-and-unzip';
 
 const createIssueSummary = (localId: string) => ({
@@ -11,24 +10,14 @@ const createIssueSummary = (localId: string) => ({
 	assets: { data: '' },
 });
 
-const apolloClientMock: ApolloClient<object> = {
-	query: () => ({
-		data: {
-			netInfo: {
-				dowloadBlocked: DownloadBlockedStatus.NotBlocked,
-			},
-		},
-	}),
-} as any;
-
 describe('download', () => {
 	describe('downloadAndUnzipIssue', () => {
 		it('should resolve the outer promise when the download runner resolves', async () => {
 			const localId = '1';
 			const p = downloadAndUnzipIssue(
-				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
+				DownloadBlockedStatus.NotBlocked,
 				() => {},
 				() => Promise.resolve(),
 				// the above promise is the main downloader that drives the outer promise
@@ -41,9 +30,9 @@ describe('download', () => {
 		it('should not set any statuses without the passed promise calling an updater', async () => {
 			const updateStatus = jest.fn(() => {});
 			const p = downloadAndUnzipIssue(
-				apolloClientMock,
 				createIssueSummary('1'),
 				'phone',
+				DownloadBlockedStatus.NotBlocked,
 				updateStatus,
 				() => Promise.resolve(),
 			);
@@ -53,24 +42,24 @@ describe('download', () => {
 		it('should create new downloads when previous ones have finished', async () => {
 			const localId = '1';
 			const p1 = downloadAndUnzipIssue(
-				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
+				DownloadBlockedStatus.NotBlocked,
 				() => {},
 				() => Promise.resolve(),
 			);
 			const p2 = downloadAndUnzipIssue(
-				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
+				DownloadBlockedStatus.NotBlocked,
 				() => {},
 				() => Promise.resolve(),
 			);
 			await Promise.all([p1, p2]);
 			const p3 = downloadAndUnzipIssue(
-				apolloClientMock,
 				createIssueSummary(localId),
 				'phone',
+				DownloadBlockedStatus.NotBlocked,
 				() => {},
 				() => Promise.resolve(),
 			);

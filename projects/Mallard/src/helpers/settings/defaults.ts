@@ -121,8 +121,6 @@ export const defaultSettings: Settings = {
 	storeDetails,
 	senderId: __DEV__ ? senderId.code : senderId.prod,
 	isWeatherShown: true,
-	wifiOnlyDownloads: false,
-	maxAvailableEditions: 7,
 	websiteUrl: 'https://www.theguardian.com/',
 	logging: __DEV__
 		? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'

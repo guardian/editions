@@ -5,6 +5,7 @@ import {
 } from 'src/helpers/storage';
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults';
 import { BASE_EDITION, defaultEditionDecider } from '../use-edition-provider';
+import { DownloadBlockedStatus } from '../use-net-info-provider';
 
 jest.mock('src/services/remote-config', () => ({
 	remoteConfigService: {
@@ -34,6 +35,7 @@ describe('useEditions', () => {
 				defaultLocalState,
 				selectedLocalState,
 				editionsList,
+				DownloadBlockedStatus.NotBlocked,
 			);
 			expect(defaultLocalState).toBeCalledTimes(1);
 			expect(defaultLocalState).toBeCalledWith(BASE_EDITION);

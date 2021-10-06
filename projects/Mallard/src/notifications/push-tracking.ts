@@ -81,6 +81,7 @@ const pushTracking = async (
 		}
 
 		const storedTracking = await AsyncStorage.getItem(PUSH_TRACKING_KEY);
+		// @TODO: Needs to use the netInfoProvider hook
 		const { type } = await NetInfo.fetch();
 		const tracking: Tracking = {
 			time: londonTime().format(),

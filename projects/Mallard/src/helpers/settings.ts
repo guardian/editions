@@ -84,8 +84,6 @@ export interface DevSettings {
 
 interface UserSettings {
 	isWeatherShown: boolean;
-	wifiOnlyDownloads: boolean;
-	maxAvailableEditions: number;
 }
 
 export interface Settings

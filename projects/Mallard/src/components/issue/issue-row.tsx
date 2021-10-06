@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import type { colour } from '@guardian/pasteup/palette';
 import React, {
 	Fragment,
@@ -34,7 +33,10 @@ import {
 } from 'src/helpers/words';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { ExistsStatus, useIssueOnDevice } from 'src/hooks/use-issue-on-device';
-import { DownloadBlockedStatus, useNetInfo } from 'src/hooks/use-net-info';
+import {
+	DownloadBlockedStatus,
+	useNetInfoProvider,
+} from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import { color } from 'src/theme/color';
@@ -125,8 +127,7 @@ const IssueButton = ({
 	const isOnDevice = useIssueOnDevice(issue.localId);
 	const [dlStatus, setDlStatus] = useState<DLStatus | null>(null);
 	const { showToast } = useToast();
-	const { downloadBlocked, isConnected } = useNetInfo();
-	const client = useApolloClient();
+	const { downloadBlocked, isConnected } = useNetInfoProvider();
 
 	const handleUpdate = useCallback(
 		(status: DLStatus) => {
@@ -165,7 +166,12 @@ const IssueButton = ({
 					value: 'issues_list_issue_clicked',
 				});
 				const imageSize = await imageForScreenSize();
-				downloadAndUnzipIssue(client, issue, imageSize, handleUpdate);
+				downloadAndUnzipIssue(
+					issue,
+					imageSize,
+					downloadBlocked,
+					handleUpdate,
+				);
 			}
 		} else {
 			showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE);

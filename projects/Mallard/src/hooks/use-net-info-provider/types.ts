@@ -13,7 +13,7 @@ export type NetInfoCore = {
 	isInternetReachable: boolean | null | undefined;
 };
 
-type NetInfoCalculated = {
+export type NetInfoCalculated = {
 	isPoorConnection: boolean;
 	downloadBlocked: DownloadBlockedStatus;
 };

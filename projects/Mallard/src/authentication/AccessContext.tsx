@@ -1,5 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import React, {
 	createContext,
 	useContext,
@@ -8,6 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import { validAttemptCache } from 'src/helpers/storage';
+import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
 import type { CASExpiry } from '../../../Apps/common/src/cas-expiry';
 import cas from './authorizers/CASAuthorizer';
 import iap from './authorizers/IAPAuthorizer';
@@ -90,7 +89,7 @@ const AccessProvider = ({
 	const [iapAuth, setIAPAuth] = useState<AnyAttempt<ReceiptIOS>>(
 		controller.authorizerMap.iap.getAttempt(),
 	);
-	const client = useApolloClient();
+	const { isConnected, isPoorConnection } = useNetInfoProvider();
 
 	useEffect(() => {
 		const unsubController = controller.subscribe(setAttempt);
@@ -102,18 +101,9 @@ const AccessProvider = ({
 		);
 		const unsubCAS = controller.authorizerMap.cas.subscribe(setCASAuth);
 		const unsubIAP = controller.authorizerMap.iap.subscribe(setIAPAuth);
-		client
-			.watchQuery({
-				query: gql(
-					'{ netInfo @client { isConnected @client, isPoorConnection @client } }',
-				),
-			})
-			.subscribe((res) => {
-				controller.handleConnectionStatusChanged(
-					res.data.netInfo.isConnected,
-					res.data.netInfo.isPoorConnection,
-				);
-			});
+
+		controller.handleConnectionStatusChanged(isConnected, isPoorConnection);
+
 		return () => {
 			unsubController();
 			unsubIdentity();

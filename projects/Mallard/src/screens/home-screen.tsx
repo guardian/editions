@@ -42,7 +42,7 @@ import {
 	useEditions,
 } from 'src/hooks/use-edition-provider';
 import { useIssueResponse } from 'src/hooks/use-issue';
-import { useIssueSummary } from 'src/hooks/use-issue-summary';
+import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import useOverlayAnimation from 'src/hooks/use-overlay-animation';
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings';

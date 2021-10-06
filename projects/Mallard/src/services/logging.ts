@@ -17,6 +17,7 @@ import {
 	getDefaultEditionSlug,
 	getSelectedEditionSlug,
 } from 'src/hooks/use-edition-provider';
+import type { NetInfoState } from 'src/hooks/use-net-info-provider';
 import type { MallardLogFormat } from '../../../Apps/common/src/logging';
 import {
 	Feature,
@@ -25,7 +26,7 @@ import {
 	ReleaseChannel,
 } from '../../../Apps/common/src/logging';
 import { AsyncQueue } from '../helpers/async-queue-cache';
-import { NetInfoStateType } from '../hooks/use-net-info';
+import { NetInfoStateType } from '../hooks/use-net-info-provider';
 import { errorService } from './errors';
 import { remoteConfigService } from './remote-config';
 
@@ -50,11 +51,6 @@ type QueryData = {
 const QUERY = gql`
 	{
 		gdprAllowPerformance @client
-		netInfo @client {
-			isConnected @client
-			isPoorConnection @client
-			type @client
-		}
 	}
 `;
 
@@ -82,19 +78,29 @@ class Logging extends AsyncQueue {
 		this.enabled = remoteConfigService.getBoolean('logging_enabled');
 	}
 
-	init(apolloClient: ApolloClient<object>) {
+	init({
+		apolloClient,
+		isConnected,
+		isPoorConnection,
+		networkStatus,
+	}: {
+		apolloClient: ApolloClient<object>;
+		isConnected: NetInfoState['isConnected'];
+		isPoorConnection: NetInfoState['isPoorConnection'];
+		networkStatus: NetInfoState['type'];
+	}) {
 		apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
 			next: (query) => {
 				if (query.loading) return;
 				this.hasConsent = query.data.gdprAllowPerformance;
-				this.isConnected = query.data.netInfo.isConnected;
-				this.isPoorConnection = query.data.netInfo.isPoorConnection;
-				this.networkStatus = query.data.netInfo.type;
 			},
 			error: (error) => {
 				errorService.captureException(error);
 			},
 		});
+		this.isConnected = isConnected;
+		this.isPoorConnection = isPoorConnection;
+		this.networkStatus = networkStatus;
 	}
 
 	async getExternalInfo() {

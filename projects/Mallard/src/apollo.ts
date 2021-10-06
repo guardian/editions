@@ -9,8 +9,6 @@ import { resolveLocationPermissionStatus } from './helpers/location-permission';
 import { createImageSizeResolver } from './helpers/screen';
 import { SETTINGS_RESOLVERS } from './helpers/settings/resolvers';
 import { resolveWeather } from './helpers/weather';
-import { createIssueSummaryResolver } from './hooks/use-issue-summary';
-import { createNetInfoResolver } from './hooks/use-net-info';
 
 export const createApolloClient = () => {
 	/**
@@ -32,8 +30,6 @@ export const createApolloClient = () => {
 			...SETTINGS_RESOLVERS,
 			weather: resolveWeather,
 			locationPermissionStatus: resolveLocationPermissionStatus,
-			netInfo: createNetInfoResolver(),
-			issueSummary: createIssueSummaryResolver(),
 			imageSize: createImageSizeResolver(),
 		},
 	};

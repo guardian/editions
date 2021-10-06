@@ -300,6 +300,7 @@ const SettingsScreen = () => {
 					/>
 					{canDisplayBetaButton && <BetaButtonOption />}
 					{isUsingProdDevtools && <DevZone />}
+					<DevZone />
 				</ScrollContainer>
 			</WithAppAppearance>
 		</HeaderScreenContainer>

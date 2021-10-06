@@ -97,6 +97,12 @@ const notificationsEnabledCache = createAsyncCache<boolean>(
 	'notificationsEnabled',
 );
 
+const wifiOnlyDownloadsCache = createAsyncCache<boolean>('wifiOnlyDownloads');
+
+const maxAvailableEditionsCache = createAsyncCache<number>(
+	'maxAvailableEditions',
+);
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -167,4 +173,6 @@ export {
 	notificationsEnabledCache,
 	showAllEditionsCache,
 	seenEditionsCache,
+	wifiOnlyDownloadsCache,
+	maxAvailableEditionsCache,
 };

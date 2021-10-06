@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import { MessageKind, Platform as PlatformType } from '@guardian/renditions';
 import type {
 	LightboxMessage,
@@ -6,7 +5,6 @@ import type {
 	ShareIconMessage,
 } from '@guardian/renditions';
 import { useNavigation } from '@react-navigation/native';
-import gql from 'graphql-tag';
 import React, { useEffect, useRef, useState } from 'react';
 import { PixelRatio, Platform, Share, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -25,7 +23,8 @@ import {
 import { parsePing } from 'src/helpers/webview';
 import { useArticle } from 'src/hooks/use-article';
 import { selectImagePath } from 'src/hooks/use-image-paths';
-import { useIssueSummary } from 'src/hooks/use-issue-summary';
+import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
+import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
 import { useApiUrl } from 'src/hooks/use-settings';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
@@ -197,12 +196,7 @@ const Article = ({
 
 	// if webUrl is undefined then we attempt to fetch a url to use for sharing
 	const [shareUrl, setShareUrl] = useState(article.webUrl ?? '');
-	// we can only attempt to fetch the url if connected
-	const client = useApolloClient();
-	const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
-		query: gql('{ netInfo @client { isConnected @client } }'),
-	});
-	const isConnected = data?.netInfo?.isConnected;
+	const { isConnected } = useNetInfoProvider();
 
 	useEffect(() => {
 		const lbimages = getLightboxImages(article.elements);

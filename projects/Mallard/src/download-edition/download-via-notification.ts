@@ -1,7 +1,7 @@
-import type ApolloClient from 'apollo-client';
 import { findIssueSummaryByKey } from 'src/helpers/files';
 import { imageForScreenSize } from 'src/helpers/screen';
-import { getIssueSummary } from 'src/hooks/use-issue-summary';
+import { getIssueSummary } from 'src/hooks/use-issue-summary-provider';
+import type { NetInfoState } from 'src/hooks/use-net-info-provider';
 import { pushTracking } from 'src/notifications/push-tracking';
 import { errorService } from 'src/services/errors';
 import { Feature } from '../../../Apps/common/src/logging';
@@ -10,7 +10,7 @@ import { downloadAndUnzipIssue } from './download-and-unzip';
 
 const downloadViaNotification = async (
 	key: string,
-	apolloClient: ApolloClient<object>,
+	downloadBlocked: NetInfoState['downloadBlocked'],
 ) => {
 	try {
 		const screenSize = await imageForScreenSize();
@@ -30,7 +30,11 @@ const downloadViaNotification = async (
 			Feature.DOWNLOAD,
 		);
 
-		await downloadAndUnzipIssue(apolloClient, pushImageSummary, screenSize);
+		await downloadAndUnzipIssue(
+			pushImageSummary,
+			screenSize,
+			downloadBlocked,
+		);
 
 		await pushTracking(
 			'pushDownloadComplete',

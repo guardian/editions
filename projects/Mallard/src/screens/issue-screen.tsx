@@ -51,7 +51,7 @@ import { useIssueResponse } from 'src/hooks/use-issue';
 import {
 	issueSummaryToLatestPath,
 	useIssueSummary,
-} from 'src/hooks/use-issue-summary';
+} from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useIsPreview, useIsProof } from 'src/hooks/use-settings';
 import type { PathToIssue } from 'src/paths';

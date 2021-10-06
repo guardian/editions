@@ -4,16 +4,12 @@
 
 import { ApolloProvider } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
-import type ApolloClient from 'apollo-client';
 import React from 'react';
-import { AppState, StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { eventEmitter } from 'src/helpers/event-emitter';
 import { weatherHider } from 'src/helpers/weather-hider';
-import {
-	ConfigProvider,
-	largeDeviceMemory,
-} from 'src/hooks/use-config-provider';
+import { ConfigProvider } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
 import { setUserId } from 'src/services/ophan';
 import { AppNavigation } from './AppNavigation';
@@ -24,31 +20,29 @@ import { isValid } from './authentication/lib/Attempt';
 import { BugButtonHandler } from './components/Button/BugButtonHandler';
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary';
 import { Modal, ModalRenderer } from './components/modal';
-import { NetInfoDevOverlay } from './components/NetInfoDevOverlay';
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast';
-import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue';
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
-import { pushDownloadFailsafe } from './helpers/push-download-failsafe';
+import { AppStateProvider } from './hooks/use-app-state-provider';
 import { EditionProvider } from './hooks/use-edition-provider';
+import { PrepareAndDownloadTodaysIssue } from './hooks/use-issue-downloads';
+import { IssueSummaryProvider } from './hooks/use-issue-summary-provider';
+import { LoggingInitialiser } from './hooks/use-logging';
+import { NetInfoProvider } from './hooks/use-net-info-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
-import { pushNotificationRegistration } from './notifications/push-notifications';
 import { DeprecateVersionModal } from './screens/deprecate-screen';
 import { apolloClient } from './services/apollo-singleton';
 import { errorService } from './services/errors';
-import { loggingService } from './services/logging';
 import { remoteConfigService } from './services/remote-config';
 
 // Log Intitialisation
 if (!__DEV__) {
 	errorService.init(apolloClient);
 }
-loggingService.init(apolloClient);
 remoteConfigService.init();
 
 // --- SETUP OPERATIONS ---
-pushNotificationRegistration();
 prepFileSystem();
 
 const styles = StyleSheet.create({
@@ -70,31 +64,19 @@ const WithProviders = nestProviders(
 	ConfigProvider,
 	EditionProvider,
 	SettingsOverlayProvider,
+	AppStateProvider,
+	NetInfoProvider,
+	LoggingInitialiser,
+	IssueSummaryProvider,
+	PrepareAndDownloadTodaysIssue,
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 	setUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
 
-const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
-	const largeRAM = await largeDeviceMemory();
-	if (largeRAM) {
-		pushDownloadFailsafe(client);
-	}
-};
 export default class App extends React.Component {
 	componentDidMount() {
 		SplashScreen.hide();
-		prepareAndDownloadTodaysIssue(apolloClient);
-		shouldHavePushFailsafe(apolloClient);
-		loggingService.postLogs();
-
-		AppState.addEventListener('change', async (appState) => {
-			if (appState === 'active') {
-				prepareAndDownloadTodaysIssue(apolloClient);
-				loggingService.postLogs();
-			}
-		});
-
 		{
 			eventEmitter.on('editionCachesSet', () => {
 				weatherHider(apolloClient);
@@ -120,25 +102,21 @@ export default class App extends React.Component {
 		return (
 			<ErrorBoundary>
 				<ApolloProvider client={apolloClient}>
-					<NetInfoDevOverlay>
-						<WithProviders>
-							<AccessProvider
-								onIdentityStatusChange={handleIdStatus}
-							>
-								<StatusBar
-									barStyle="light-content"
-									backgroundColor="#041f4a"
-								/>
-								<View style={styles.appContainer}>
-									<AppNavigation />
-									<NetInfoAutoToast />
-								</View>
-								<ModalRenderer />
-								<BugButtonHandler />
-								<DeprecateVersionModal />
-							</AccessProvider>
-						</WithProviders>
-					</NetInfoDevOverlay>
+					<WithProviders>
+						<AccessProvider onIdentityStatusChange={handleIdStatus}>
+							<StatusBar
+								barStyle="light-content"
+								backgroundColor="#041f4a"
+							/>
+							<View style={styles.appContainer}>
+								<AppNavigation />
+								<NetInfoAutoToast />
+							</View>
+							<ModalRenderer />
+							<BugButtonHandler />
+							<DeprecateVersionModal />
+						</AccessProvider>
+					</WithProviders>
 				</ApolloProvider>
 			</ErrorBoundary>
 		);

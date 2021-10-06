@@ -28,7 +28,8 @@ import { pushNotificationRegistration } from 'src/notifications/push-notificatio
 import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
-import { useNetInfo } from './use-net-info';
+import type { NetInfoState } from './use-net-info-provider';
+import { useNetInfoProvider } from './use-net-info-provider';
 
 interface EditionState {
 	editionsList: EditionsList;
@@ -192,19 +193,21 @@ const setEdition = async (
 	edition: RegionalEdition,
 	setDefaultEdition: Dispatch<RegionalEdition>,
 	setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
+	downloadBlocked: NetInfoState['downloadBlocked'],
 ) => {
 	setDefaultEdition(edition);
 	setSelectedEdition(edition);
 	await selectedEditionCache.set(edition);
 	await defaultEditionCache.set(edition);
 	eventEmitter.emit('editionCachesSet');
-	pushNotificationRegistration();
+	pushNotificationRegistration(downloadBlocked);
 };
 
 export const defaultEditionDecider = async (
 	setDefaultEdition: Dispatch<RegionalEdition>,
 	setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
 	editionsList: EditionsList,
+	downloadBlocked: NetInfoState['downloadBlocked'],
 ): Promise<void> => {
 	const selectedEdition = await getSelectedEdition();
 	// When user already has default edition set then that edition
@@ -217,7 +220,7 @@ export const defaultEditionDecider = async (
 		setDefaultEdition(defaultEdition);
 		setSelectedEdition(defaultEdition);
 		await selectedEditionCache.set(defaultEdition);
-		pushNotificationRegistration();
+		pushNotificationRegistration(downloadBlocked);
 	} else {
 		// Get the correct edition for the device locale
 		const autoDetectedEdition = localeToEdition(locale, editionsList);
@@ -227,6 +230,7 @@ export const defaultEditionDecider = async (
 				autoDetectedEdition,
 				setDefaultEdition,
 				setSelectedEdition,
+				downloadBlocked,
 			);
 		} else {
 			// auto detected edition was not possible, set default edition
@@ -234,6 +238,7 @@ export const defaultEditionDecider = async (
 				BASE_EDITION,
 				setDefaultEdition,
 				setSelectedEdition,
+				downloadBlocked,
 			);
 		}
 	}
@@ -255,7 +260,7 @@ export const EditionProvider = ({
 	const [showNewEditionCard, setShowNewEditionCard] = useState(false);
 	const [apiUrl, setApiUrl] = useState('');
 
-	const { isConnected } = useNetInfo();
+	const { isConnected, downloadBlocked } = useNetInfoProvider();
 
 	/**
 	 * Default Edition and Selected
@@ -269,6 +274,7 @@ export const EditionProvider = ({
 			setDefaultEdition,
 			setSelectedEdition,
 			editionsList,
+			downloadBlocked,
 		);
 	}, [editionsList]);
 
@@ -305,7 +311,7 @@ export const EditionProvider = ({
 		if (chosenEdition.editionType === 'Regional') {
 			await defaultEditionCache.set(chosenEdition as RegionalEdition);
 			setDefaultEdition(chosenEdition as RegionalEdition);
-			pushNotificationRegistration();
+			pushNotificationRegistration(downloadBlocked);
 		}
 		eventEmitter.emit('editionUpdate');
 	};
@@ -326,7 +332,7 @@ export const EditionProvider = ({
 		return () => {
 			AppState.removeEventListener('change', appChangeEventHandler);
 		};
-	});
+	}, []);
 
 	useEffect(() => {
 		seenEditionsCache.get().then((seen) => {

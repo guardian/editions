@@ -33,7 +33,10 @@ export const isTruelyConnected = ({
 export const isPoorConnection = (type: NetInfoStateType) =>
 	type === NetInfoStateType.cellular;
 
-export const stateResolver = (netInfo: NetInfoInputs): NetInfoValues => {
+export const stateResolver = (
+	netInfo: NetInfoInputs,
+	wifiOnlyDownloads: boolean,
+): NetInfoValues => {
 	const {
 		type,
 		isConnected,
@@ -70,7 +73,7 @@ export const stateResolver = (netInfo: NetInfoInputs): NetInfoValues => {
 					type: overrideNetworkType,
 					isConnected: isFullyConnected,
 				},
-				true,
+				wifiOnlyDownloads,
 			),
 		};
 	}
@@ -84,7 +87,7 @@ export const stateResolver = (netInfo: NetInfoInputs): NetInfoValues => {
 				type,
 				isConnected: isFullyConnected,
 			},
-			true,
+			wifiOnlyDownloads,
 		),
 	};
 };
