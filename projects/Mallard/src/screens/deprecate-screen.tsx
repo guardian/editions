@@ -12,7 +12,7 @@ import {
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import { Copy } from 'src/helpers/words';
 import { useDeprecationModal } from 'src/hooks/use-deprecation-screen';
-import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { color } from 'src/theme/color';
 import { getFont } from 'src/theme/typography';
 import { TitlepieceText } from '../components/styled-text';
@@ -63,7 +63,7 @@ const StoreLink = () => {
 };
 
 const DeprecateVersionModal = () => {
-	const { isConnected } = useNetInfoProvider();
+	const { isConnected } = useNetInfo();
 	const { showModal } = useDeprecationModal();
 
 	return (

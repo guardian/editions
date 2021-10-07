@@ -6,14 +6,14 @@ import { pushDownloadFailsafe } from 'src/helpers/push-download-failsafe';
 import { pushNotificationRegistration } from 'src/notifications/push-notifications';
 import { useAppState } from './use-app-state-provider';
 import { useLargeDeviceMemory } from './use-config-provider';
-import { useNetInfoProvider } from './use-net-info-provider';
+import { useNetInfo } from './use-net-info-provider';
 
 export const IssueDownloadsInitialiser = ({
 	children,
 }: {
 	children: React.ReactNode;
 }) => {
-	const { downloadBlocked } = useNetInfoProvider();
+	const { downloadBlocked } = useNetInfo();
 	const { isActive } = useAppState();
 	const largeRAM = useLargeDeviceMemory();
 

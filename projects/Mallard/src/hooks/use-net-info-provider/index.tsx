@@ -1,4 +1,7 @@
-import { NetInfoStateType, useNetInfo } from '@react-native-community/netinfo';
+import {
+	useNetInfo as coreUseNetInfo,
+	NetInfoStateType,
+} from '@react-native-community/netinfo';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { NetInfoDevOverlay } from 'src/components/NetInfoDevOverlay';
 import { useWifiOnlyDownloads } from '../use-config-provider';
@@ -62,7 +65,7 @@ export const NetInfoProvider = ({
 			defaultState.overrideIsInternetReachable,
 		);
 
-	const { type, isConnected, isInternetReachable } = useNetInfo();
+	const { type, isConnected, isInternetReachable } = coreUseNetInfo();
 	const { wifiOnlyDownloads } = useWifiOnlyDownloads();
 
 	// Update the state whenever core netinfo values change or overrides are in play
@@ -118,7 +121,7 @@ export const NetInfoProvider = ({
 	);
 };
 
-export const useNetInfoProvider = () => useContext(NetInfoContext);
+export const useNetInfo = () => useContext(NetInfoContext);
 export {
 	NetInfoStateType,
 	isDisconnectedState,

@@ -24,7 +24,7 @@ import { parsePing } from 'src/helpers/webview';
 import { useArticle } from 'src/hooks/use-article';
 import { selectImagePath } from 'src/hooks/use-image-paths';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
-import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useApiUrl } from 'src/hooks/use-settings';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
@@ -196,7 +196,7 @@ const Article = ({
 
 	// if webUrl is undefined then we attempt to fetch a url to use for sharing
 	const [shareUrl, setShareUrl] = useState(article.webUrl ?? '');
-	const { isConnected } = useNetInfoProvider();
+	const { isConnected } = useNetInfo();
 
 	useEffect(() => {
 		const lbimages = getLightboxImages(article.elements);

@@ -35,7 +35,7 @@ import { useEditions } from 'src/hooks/use-edition-provider';
 import { ExistsStatus, useIssueOnDevice } from 'src/hooks/use-issue-on-device';
 import {
 	DownloadBlockedStatus,
-	useNetInfoProvider,
+	useNetInfo,
 } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
@@ -127,7 +127,7 @@ const IssueButton = ({
 	const isOnDevice = useIssueOnDevice(issue.localId);
 	const [dlStatus, setDlStatus] = useState<DLStatus | null>(null);
 	const { showToast } = useToast();
-	const { downloadBlocked, isConnected } = useNetInfoProvider();
+	const { downloadBlocked, isConnected } = useNetInfo();
 
 	const handleUpdate = useCallback(
 		(status: DLStatus) => {

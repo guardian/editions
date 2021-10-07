@@ -14,7 +14,7 @@ import {
 import {
 	isDisconnectedState,
 	NetInfoStateType,
-	useNetInfoProvider,
+	useNetInfo,
 } from 'src/hooks/use-net-info-provider';
 
 const devToggleStyles = StyleSheet.create({
@@ -68,7 +68,7 @@ export const NetInfoDevOverlay = () => {
 		isDevButtonShown,
 		overrideIsInternetReachable,
 		setOverrideIsInternetReachable,
-	} = useNetInfoProvider();
+	} = useNetInfo();
 
 	if (!isDevButtonShown) return null;
 

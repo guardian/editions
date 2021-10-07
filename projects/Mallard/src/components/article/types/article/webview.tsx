@@ -9,7 +9,7 @@ import type {
 	PictureArticle,
 } from 'src/common';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
-import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
 import WebviewError from 'src/screens/webview-error-screen';
@@ -34,7 +34,7 @@ const WebviewWithArticle = ({
 	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
-	const { isConnected } = useNetInfoProvider();
+	const { isConnected } = useNetInfo();
 
 	const updateSource = () => {
 		// On Android there is a potential race condition where url did get set before

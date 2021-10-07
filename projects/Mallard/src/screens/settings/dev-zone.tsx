@@ -26,7 +26,7 @@ import {
 } from 'src/helpers/storage';
 import { useQuery } from 'src/hooks/apollo';
 import { useEditions } from 'src/hooks/use-edition-provider';
-import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import {
@@ -65,7 +65,7 @@ const DevZone = () => {
 		isConnected,
 		isInternetReachable,
 		isPoorConnection,
-	} = useNetInfoProvider();
+	} = useNetInfo();
 
 	const [showAllEditions, setShowAllEditions] = useState(false);
 

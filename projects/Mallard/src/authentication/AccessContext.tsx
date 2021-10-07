@@ -6,7 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import { validAttemptCache } from 'src/helpers/storage';
-import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import type { CASExpiry } from '../../../Apps/common/src/cas-expiry';
 import cas from './authorizers/CASAuthorizer';
 import iap from './authorizers/IAPAuthorizer';
@@ -89,7 +89,7 @@ const AccessProvider = ({
 	const [iapAuth, setIAPAuth] = useState<AnyAttempt<ReceiptIOS>>(
 		controller.authorizerMap.iap.getAttempt(),
 	);
-	const { isConnected, isPoorConnection } = useNetInfoProvider();
+	const { isConnected, isPoorConnection } = useNetInfo();
 
 	useEffect(() => {
 		const unsubController = controller.subscribe(setAttempt);

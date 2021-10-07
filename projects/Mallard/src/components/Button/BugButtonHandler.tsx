@@ -3,7 +3,7 @@ import { AccessContext } from 'src/authentication/AccessContext';
 import { createMailtoHandler } from 'src/helpers/diagnostics';
 import { isInBeta } from 'src/helpers/release-stream';
 import { DIAGNOSTICS_TITLE } from 'src/helpers/words';
-import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { BugButton } from './BugButton';
 
 const BugButtonHandler = () => {
@@ -14,7 +14,7 @@ const BugButtonHandler = () => {
 		downloadBlocked,
 		isInternetReachable,
 		type,
-	} = useNetInfoProvider();
+	} = useNetInfo();
 	const netInfo = {
 		isConnected,
 		isPoorConnection,

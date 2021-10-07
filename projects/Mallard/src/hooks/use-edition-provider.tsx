@@ -29,7 +29,7 @@ import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
 import type { NetInfoState } from './use-net-info-provider';
-import { useNetInfoProvider } from './use-net-info-provider';
+import { useNetInfo } from './use-net-info-provider';
 
 interface EditionState {
 	editionsList: EditionsList;
@@ -260,7 +260,7 @@ export const EditionProvider = ({
 	const [showNewEditionCard, setShowNewEditionCard] = useState(false);
 	const [apiUrl, setApiUrl] = useState('');
 
-	const { isConnected, downloadBlocked } = useNetInfoProvider();
+	const { isConnected, downloadBlocked } = useNetInfo();
 
 	/**
 	 * Default Edition and Selected

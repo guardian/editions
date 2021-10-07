@@ -18,7 +18,7 @@ import {
 	READERS_EMAIL,
 	SUBSCRIPTION_EMAIL,
 } from 'src/helpers/words';
-import { useNetInfoProvider } from 'src/hooks/use-net-info-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -41,7 +41,7 @@ const HelpScreen = () => {
 		type,
 		downloadBlocked,
 		isInternetReachable,
-	} = useNetInfoProvider();
+	} = useNetInfo();
 	const netInfo = {
 		isConnected,
 		isPoorConnection,

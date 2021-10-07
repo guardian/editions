@@ -1,13 +1,10 @@
 import { useEffect } from 'react';
-import {
-	NetInfoStateType,
-	useNetInfoProvider,
-} from 'src/hooks/use-net-info-provider';
+import { NetInfoStateType, useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 
 const NetInfoAutoToast = () => {
 	const { showToast } = useToast();
-	const { isConnected, type } = useNetInfoProvider();
+	const { isConnected, type } = useNetInfo();
 	useEffect(() => {
 		const time = setTimeout(() => {
 			if (!isConnected && type !== NetInfoStateType.unknown) {
