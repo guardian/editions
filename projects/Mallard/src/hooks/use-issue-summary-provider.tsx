@@ -16,7 +16,7 @@ import {
 	useMaxAvailableEditions,
 } from './use-config-provider';
 import { useEditions } from './use-edition-provider';
-import { useNetInfoProvider } from './use-net-info-provider';
+import { useNetInfo } from './use-net-info-provider';
 
 interface IssueSummaryState {
 	issueSummary: IssueSummary[] | null;
@@ -82,7 +82,7 @@ export const IssueSummaryProvider = ({
 		defaultState.error,
 	);
 
-	const { isConnected, isPoorConnection } = useNetInfoProvider();
+	const { isConnected, isPoorConnection } = useNetInfo();
 	const { selectedEdition } = useEditions();
 	const { maxAvailableEditions } = useMaxAvailableEditions();
 	const { isActive } = useAppState();
@@ -93,6 +93,7 @@ export const IssueSummaryProvider = ({
 	};
 
 	// Use Callback used so the function isnt recreated on each rerender
+	// @TODO: Look to move this logic outside of the provider so it can be tested
 	const getLatestIssueSummary = useCallback(() => {
 		getIssueSummary(isConnected, isPoorConnection)
 			.then((retrievedIssueSummary) => {
@@ -101,8 +102,21 @@ export const IssueSummaryProvider = ({
 				const latestIssueId = issueSummaryToLatestPath(
 					retrievedIssueSummary,
 				);
-				issueId !== latestIssueId && setInitialFrontKey(null);
-				setLocalIssueId(latestIssueId);
+
+				const previousIssue =
+					issueSummary && issueSummaryToLatestPath(issueSummary);
+				if (
+					issueId === null ||
+					!previousIssue ||
+					(previousIssue.localIssueId !==
+						latestIssueId.localIssueId &&
+						previousIssue.publishedIssueId !==
+							latestIssueId.publishedIssueId)
+				) {
+					setInitialFrontKey(null);
+					setLocalIssueId(latestIssueId);
+				}
+
 				setError('');
 			})
 			.catch((e) => {
