@@ -8,7 +8,7 @@ import { useAppState } from './use-app-state-provider';
 import { useLargeDeviceMemory } from './use-config-provider';
 import { useNetInfoProvider } from './use-net-info-provider';
 
-export const PrepareAndDownloadTodaysIssue = ({
+export const IssueDownloadsInitialiser = ({
 	children,
 }: {
 	children: React.ReactNode;
