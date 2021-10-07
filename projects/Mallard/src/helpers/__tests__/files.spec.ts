@@ -22,8 +22,8 @@ describe('helpers/files', () => {
 		});
 
 		it('should return items outside of the 7 latest issues', async () => {
-			jest.mock('src/helpers/settings', () => ({
-				getSetting: () => 7,
+			jest.mock('src/hooks/use-config-provider', () => ({
+				getMaxAvailableEditions: () => 7,
 			}));
 			const { getIssuesToDelete } = await require('../../helpers/files');
 
@@ -49,8 +49,8 @@ describe('helpers/files', () => {
 		});
 
 		it('should return items outside of the 3 latest issues', async () => {
-			jest.mock('src/helpers/settings', () => ({
-				getSetting: () => 3,
+			jest.mock('src/hooks/use-config-provider', () => ({
+				getMaxAvailableEditions: () => 3,
 			}));
 			const { getIssuesToDelete } = await require('../../helpers/files');
 
