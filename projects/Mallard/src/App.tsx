@@ -25,7 +25,7 @@ import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
 import { AppStateProvider } from './hooks/use-app-state-provider';
 import { EditionProvider } from './hooks/use-edition-provider';
-import { PrepareAndDownloadTodaysIssue } from './hooks/use-issue-downloads';
+import { IssueDownloadsInitialiser } from './hooks/use-issue-downloads';
 import { IssueSummaryProvider } from './hooks/use-issue-summary-provider';
 import { LoggingInitialiser } from './hooks/use-logging';
 import { NetInfoProvider } from './hooks/use-net-info-provider';
@@ -68,7 +68,7 @@ const WithProviders = nestProviders(
 	NetInfoProvider,
 	LoggingInitialiser,
 	IssueSummaryProvider,
-	PrepareAndDownloadTodaysIssue,
+	IssueDownloadsInitialiser,
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
