@@ -4,7 +4,7 @@ import RNFS from 'react-native-fs';
 import { imageForScreenSize } from 'src/helpers/screen';
 import { APIPaths, FSPaths } from 'src/paths';
 import type { Image, ImageUse, Issue } from '../../../Apps/common/src';
-import { useIssueSummary } from './use-issue-summary';
+import { useIssueSummary } from './use-issue-summary-provider';
 import { useApiUrl } from './use-settings';
 
 export type GetImagePath = (

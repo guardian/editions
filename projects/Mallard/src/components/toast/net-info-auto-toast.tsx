@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { NetInfoStateType, useNetInfo } from 'src/hooks/use-net-info';
+import { NetInfoStateType, useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 
 const NetInfoAutoToast = () => {

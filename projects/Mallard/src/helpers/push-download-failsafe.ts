@@ -1,12 +1,14 @@
-import type ApolloClient from 'apollo-client';
 import BackgroundFetch from 'react-native-background-fetch';
 import { prepareAndDownloadTodaysIssue } from 'src/download-edition/prepare-and-download-issue';
+import type { NetInfoState } from 'src/hooks/use-net-info-provider';
 import { Feature } from 'src/services/logging';
 import { pushTracking } from '../notifications/push-tracking';
 
 const feature = Feature.BACKGROUNG_DOWNLOAD;
 
-const pushDownloadFailsafe = (client: ApolloClient<object>) => {
+const pushDownloadFailsafe = (
+	downloadBlocked: NetInfoState['downloadBlocked'],
+) => {
 	BackgroundFetch.configure(
 		{
 			minimumFetchInterval: 120, // Every 2 hours
@@ -15,7 +17,7 @@ const pushDownloadFailsafe = (client: ApolloClient<object>) => {
 		},
 		async () => {
 			await pushTracking('backgroundFetch', 'started', feature);
-			await prepareAndDownloadTodaysIssue(client);
+			await prepareAndDownloadTodaysIssue(downloadBlocked);
 			await pushTracking('backgroundFetch', 'ended', feature);
 			BackgroundFetch.finish();
 		},

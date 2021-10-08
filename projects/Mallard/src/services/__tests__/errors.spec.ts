@@ -44,7 +44,6 @@ describe('errorService', () => {
 		};
 
 		const watchQuery = (opts: any) => {
-			expect(opts.query).toEqual(QUERY);
 			return new Observable((observer) => {
 				observers.push(observer);
 				consentFetchPromise = Promise.resolve().then(notify);

@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { AccessContext } from 'src/authentication/AccessContext';
@@ -19,6 +18,7 @@ import {
 	READERS_EMAIL,
 	SUBSCRIPTION_EMAIL,
 } from 'src/helpers/words';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -31,10 +31,23 @@ const HelpScreen = () => {
 	const navigation = useNavigation();
 	const { showToast } = useToast();
 	const { attempt } = useContext(AccessContext);
-	const client = useApolloClient();
 
 	const showToastCallback: OnCompletionToast = (msg: string) => {
 		showToast(msg);
+	};
+	const {
+		isConnected,
+		isPoorConnection,
+		type,
+		downloadBlocked,
+		isInternetReachable,
+	} = useNetInfo();
+	const netInfo = {
+		isConnected,
+		isPoorConnection,
+		type,
+		downloadBlocked,
+		isInternetReachable,
 	};
 
 	return (
@@ -57,29 +70,29 @@ const HelpScreen = () => {
 					<List
 						data={[
 							createSupportMailto(
-								client,
 								'Report an issue',
 								ISSUE_EMAIL,
 								attempt,
+								netInfo,
 								DIAGNOSTICS_TITLE,
 							),
 							createSupportMailto(
-								client,
 								'Subscription, payment and billing issues',
 								SUBSCRIPTION_EMAIL,
 								attempt,
+								netInfo,
 							),
 							createSupportMailto(
-								client,
 								'Comment or query about an article',
 								READERS_EMAIL,
 								attempt,
+								netInfo,
 							),
 							createSupportMailto(
-								client,
 								'Send feedback',
 								APPS_FEEDBACK_EMAIL,
 								attempt,
+								netInfo,
 							),
 						]}
 					/>
@@ -87,9 +100,9 @@ const HelpScreen = () => {
 					<List
 						data={[
 							copyDiagnosticInfo(
-								client,
 								'Copy diagnostic information',
 								attempt,
+								netInfo,
 								showToastCallback,
 							),
 						]}

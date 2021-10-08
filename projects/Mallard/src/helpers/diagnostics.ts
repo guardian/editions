@@ -1,5 +1,3 @@
-import type ApolloClient from 'apollo-client';
-import gql from 'graphql-tag';
 import { Clipboard, Linking, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
@@ -8,7 +6,10 @@ import type { AnyAttempt } from 'src/authentication/lib/Attempt';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { gdprSwitchSettings, getSetting } from 'src/helpers/settings';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
-import type { NetInfo } from 'src/hooks/use-net-info';
+import type {
+	NetInfoCalculated,
+	NetInfoCore,
+} from 'src/hooks/use-net-info-provider/types';
 import { FSPaths } from 'src/paths';
 import type { OnCompletionToast } from 'src/screens/settings/help-screen';
 import { getDiagnosticPushTracking } from '../notifications/push-tracking';
@@ -29,6 +30,8 @@ import {
 	USER_EMAIL_BODY_INTRO,
 } from './words';
 
+type NetInfoDiagnostic = NetInfoCore & NetInfoCalculated;
+
 const getGDPREntries = () =>
 	Promise.all(
 		gdprSwitchSettings.map(
@@ -37,28 +40,15 @@ const getGDPREntries = () =>
 	);
 
 const getDiagnosticInfo = async (
-	client: ApolloClient<object>,
 	authAttempt: AnyAttempt<string>,
+	netInfo: NetInfoDiagnostic,
 ) => {
-	const [netInfoResult, gdprEntries, casCode, idData, receiptData] =
-		await Promise.all([
-			client.query<{ netInfo: NetInfo }>({
-				query: gql`
-				{
-					netInfo @client {
-						type @client
-						isConnected @client
-						isPoorConnection @client
-						isInternetReachable @client
-					}
-				`,
-			}),
-			getGDPREntries(),
-			getCASCode(),
-			userDataCache.get(),
-			iapReceiptCache.get(),
-		]);
-	const netInfo = netInfoResult.data.netInfo;
+	const [gdprEntries, casCode, idData, receiptData] = await Promise.all([
+		getGDPREntries(),
+		getCASCode(),
+		userDataCache.get(),
+		iapReceiptCache.get(),
+	]);
 
 	const folderStat = await RNFS.stat(FSPaths.issuesDir);
 	const size = parseInt(folderStat.size);
@@ -168,10 +158,10 @@ const openSupportMailto = async (
 
 const createMailtoHandler =
 	(
-		client: ApolloClient<object>,
 		text: string,
 		releaseURL: string,
 		authAttempt: AnyAttempt<string>,
+		netInfo: NetInfoDiagnostic,
 		dialogTitle = '',
 	) =>
 	() =>
@@ -180,8 +170,8 @@ const createMailtoHandler =
 				text: 'Include',
 				onPress: async () => {
 					const diagnostics = await getDiagnosticInfo(
-						client,
 						authAttempt,
+						netInfo,
 					);
 					openSupportMailto(
 						text,
@@ -203,45 +193,45 @@ const createMailtoHandler =
 
 const copyDiagnosticInfoToClipboard =
 	(
-		client: ApolloClient<object>,
 		authAttempt: AnyAttempt<string>,
+		netInfo: NetInfoDiagnostic,
 		callback: OnCompletionToast,
 	) =>
 	async () => {
-		const diagnostics = await getDiagnosticInfo(client, authAttempt);
+		const diagnostics = await getDiagnosticInfo(authAttempt, netInfo);
 		Clipboard.setString(diagnostics);
 		callback('Diagnostic info copied to clipboard');
 	};
 
 const createSupportMailto = (
-	client: ApolloClient<object>,
 	text: string,
 	releaseURL: string,
 	authAttempt: AnyAttempt<string>,
+	netInfo: NetInfoDiagnostic,
 	dialogTitle = '',
 ) => ({
 	key: text,
 	title: text,
 	linkWeight: 'regular' as const,
 	onPress: createMailtoHandler(
-		client,
 		text,
 		releaseURL,
 		authAttempt,
+		netInfo,
 		dialogTitle,
 	),
 });
 
 const copyDiagnosticInfo = (
-	client: ApolloClient<object>,
 	text: string,
 	authAttempt: AnyAttempt<string>,
+	netInfo: NetInfoDiagnostic,
 	callback: OnCompletionToast,
 ) => ({
 	key: text,
 	title: text,
 	linkWeight: 'regular' as const,
-	onPress: copyDiagnosticInfoToClipboard(client, authAttempt, callback),
+	onPress: copyDiagnosticInfoToClipboard(authAttempt, netInfo, callback),
 });
 
 export { createSupportMailto, createMailtoHandler, copyDiagnosticInfo };

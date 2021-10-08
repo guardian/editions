@@ -12,10 +12,10 @@ import {
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import { Copy } from 'src/helpers/words';
 import { useDeprecationModal } from 'src/hooks/use-deprecation-screen';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { color } from 'src/theme/color';
 import { getFont } from 'src/theme/typography';
 import { TitlepieceText } from '../components/styled-text';
-import { useNetInfo } from '../hooks/use-net-info';
 
 const styles = StyleSheet.create({
 	container: {

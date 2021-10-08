@@ -3,10 +3,10 @@ import {
 	isPoorConnection,
 	isTruelyConnected,
 	stateResolver,
+	isDisconnectedState,
 } from '../utils';
 import { DownloadBlockedStatus } from '../types';
 import { NetInfoStateType } from '../index';
-import { isDisconnectedState } from 'src/hooks/use-net-info';
 
 describe('use-net-info-provider', () => {
 	describe('getDownloadBlockedStatus', () => {
@@ -113,7 +113,7 @@ describe('use-net-info-provider', () => {
 				overrideIsInternetReachable: false,
 			};
 
-			const resolvedState = stateResolver(netInfo);
+			const resolvedState = stateResolver(netInfo, false);
 			expect(resolvedState).toEqual({
 				downloadBlocked: DownloadBlockedStatus.NotBlocked,
 				isConnected: true,
@@ -137,7 +137,7 @@ describe('use-net-info-provider', () => {
 				overrideIsInternetReachable: false,
 			};
 
-			const resolvedState = stateResolver(netInfo);
+			const resolvedState = stateResolver(netInfo, false);
 			expect(resolvedState).toEqual({
 				downloadBlocked: DownloadBlockedStatus.Offline,
 				isConnected: false,

@@ -9,7 +9,7 @@ import type {
 	PictureArticle,
 } from 'src/common';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
-import { useNetInfo } from 'src/hooks/use-net-info';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import type { PathToArticle } from 'src/paths';
 import { FSPaths } from 'src/paths';
 import WebviewError from 'src/screens/webview-error-screen';

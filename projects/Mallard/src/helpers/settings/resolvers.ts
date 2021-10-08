@@ -36,8 +36,6 @@ const ALL_NAMES = [
 	'apiUrl',
 	'isWeatherShown',
 	'isUsingProdDevtools',
-	'wifiOnlyDownloads',
-	'maxAvailableEditions',
 ];
 
 /**

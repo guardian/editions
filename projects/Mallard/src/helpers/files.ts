@@ -3,6 +3,7 @@ import { unzip } from 'react-native-zip-archive';
 import type { Issue, IssueSummary } from 'src/common';
 import { updateListeners } from 'src/download-edition/download-and-unzip';
 import { editionsListCache } from 'src/helpers/storage';
+import { getMaxAvailableEditions } from 'src/hooks/use-config-provider';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
@@ -144,7 +145,7 @@ export const getIssuesCountStrings = async () => {
 };
 
 export const getIssuesToDelete = async (files: string[]) => {
-	const maxAvailableEditions = await getSetting('maxAvailableEditions');
+	const maxAvailableEditions = await getMaxAvailableEditions();
 	const totalIssues = files.length;
 
 	if (totalIssues <= maxAvailableEditions) {

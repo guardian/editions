@@ -1,21 +1,34 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import React, { useContext } from 'react';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { createMailtoHandler } from 'src/helpers/diagnostics';
 import { isInBeta } from 'src/helpers/release-stream';
 import { DIAGNOSTICS_TITLE } from 'src/helpers/words';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { BugButton } from './BugButton';
 
 const BugButtonHandler = () => {
 	const { attempt } = useContext(AccessContext);
-	const client = useApolloClient();
+	const {
+		isConnected,
+		isPoorConnection,
+		downloadBlocked,
+		isInternetReachable,
+		type,
+	} = useNetInfo();
+	const netInfo = {
+		isConnected,
+		isPoorConnection,
+		downloadBlocked,
+		isInternetReachable,
+		type,
+	};
 	return isInBeta() ? (
 		<BugButton
 			onPress={createMailtoHandler(
-				client,
 				'Report a bug',
 				'',
 				attempt,
+				netInfo,
 				DIAGNOSTICS_TITLE,
 			)}
 		/>

@@ -17,6 +17,7 @@ import {
 	getSelectedEditionSlug,
 	removeExpiredSpecialEditions,
 } from '../use-edition-provider';
+import { DownloadBlockedStatus } from '../use-net-info-provider';
 
 const IS_CONNECTED = true;
 
@@ -236,6 +237,7 @@ describe('useEditions', () => {
 				defaultLocalState,
 				selectedLocalState,
 				DEFAULT_EDITIONS_LIST,
+				DownloadBlockedStatus.NotBlocked,
 			);
 			expect(defaultLocalState).toBeCalledTimes(1);
 			expect(defaultLocalState).toBeCalledWith(
@@ -259,6 +261,7 @@ describe('useEditions', () => {
 				defaultLocalState,
 				selectedLocalState,
 				DEFAULT_EDITIONS_LIST,
+				DownloadBlockedStatus.NotBlocked,
 			);
 			expect(defaultLocalState).toBeCalledTimes(1);
 			expect(defaultLocalState).toBeCalledWith(

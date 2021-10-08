@@ -1,29 +1,18 @@
-import type ApolloClient from 'apollo-client';
 import retry from 'async-retry';
-import gql from 'graphql-tag';
 import type { DLStatus } from 'src/helpers/files';
 import {
 	downloadNamedIssueArchive,
 	unzipNamedIssueArchive,
 } from 'src/helpers/files';
 import { localIssueListStore } from 'src/hooks/use-issue-on-device';
-import type { NetInfo } from 'src/hooks/use-net-info';
-import { DownloadBlockedStatus } from 'src/hooks/use-net-info';
+import type { NetInfoState } from 'src/hooks/use-net-info-provider';
+import { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
 import { pushTracking } from 'src/notifications/push-tracking';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
 import type { ImageSize, IssueSummary } from '../../../Apps/common/src';
 import { Feature } from '../../../Apps/common/src/logging';
 import { deleteIssue } from './clear-issues-and-editions';
-
-type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> };
-const DOWNLOAD_BLOCKED_QUERY = gql`
-	{
-		netInfo @client {
-			downloadBlocked @client
-		}
-	}
-`;
 
 // Cache of current downloads
 const dlCache: Record<
@@ -210,19 +199,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 // This caches downloads so that if there is one already running you
 // will get a reference to that rather promise than triggering a new one
 export const downloadAndUnzipIssue = async (
-	client: ApolloClient<object>,
 	issue: IssueSummary,
 	imageSize: ImageSize,
+	downloadBlocked: NetInfoState['downloadBlocked'],
 	onProgress: (status: DLStatus) => void = () => {},
 	run = runDownload,
 ) => {
-	const queryResult = await client.query<DlBlkQueryValue>({
-		query: DOWNLOAD_BLOCKED_QUERY,
-	});
-	const {
-		netInfo: { downloadBlocked },
-	} = queryResult.data;
-
 	if (downloadBlocked !== DownloadBlockedStatus.NotBlocked) {
 		await pushTracking(
 			'downloadBlocked',

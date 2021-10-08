@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import { downloadViaNotification } from 'src/download-edition/download-via-notification';
 import { defaultSettings } from 'src/helpers/settings/defaults';
-import { apolloClient } from 'src/services/apollo-singleton';
+import type { NetInfoState } from 'src/hooks/use-net-info-provider';
 import { errorService } from 'src/services/errors';
 import { Feature } from 'src/services/logging';
 import { maybeRegister } from './helpers';
@@ -15,7 +15,9 @@ export interface PushNotificationRegistration {
 	token: string;
 }
 
-const pushNotificationRegistration = () => {
+const pushNotificationRegistration = (
+	downloadBlocked: NetInfoState['downloadBlocked'],
+) => {
 	PushNotification.configure({
 		onRegister: (token: { token: string } | undefined) => {
 			pushTracking(
@@ -47,7 +49,7 @@ const pushNotificationRegistration = () => {
 
 			if (key) {
 				try {
-					await downloadViaNotification(key, apolloClient);
+					await downloadViaNotification(key, downloadBlocked);
 					notificationTracking(notificationId, 'downloaded');
 				} catch (e) {
 					errorService.captureException(e);
