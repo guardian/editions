@@ -97,10 +97,12 @@ const notificationsEnabledCache = createAsyncCache<boolean>(
 	'notificationsEnabled',
 );
 
-const wifiOnlyDownloadsCache = createAsyncCache<boolean>('wifiOnlyDownloads');
+const wifiOnlyDownloadsCache = createAsyncCache<boolean>(
+	'@Setting_wifiOnlyDownloads',
+);
 
 const maxAvailableEditionsCache = createAsyncCache<number>(
-	'maxAvailableEditions',
+	'@Setting_maxAvailableEditions',
 );
 
 /**
