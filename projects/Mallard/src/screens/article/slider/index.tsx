@@ -7,7 +7,6 @@ import type { AnimatedFlatListRef } from 'src/components/front/helpers/helpers';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
 import { useDimensions } from 'src/hooks/use-config-provider';
-import { useDismissArticle } from 'src/hooks/use-dismiss-article';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import { useIsPreview } from 'src/hooks/use-settings';
 import type { PathToArticle } from 'src/paths';
@@ -83,8 +82,6 @@ const ArticleSlider = React.memo(
 				animated: false,
 			});
 		}, [width, navigation.isFocused()]);
-
-		const { panResponder } = useDismissArticle();
 
 		const currentArticle = flattenedArticles[Math.round(current)];
 
@@ -214,7 +211,6 @@ const ArticleSlider = React.memo(
 				<SliderHeaderHighEnd
 					isShown={shouldShowHeader}
 					isAtTop={isAtTop}
-					panResponder={panResponder}
 					sliderDetails={sliderDetails}
 				/>
 
