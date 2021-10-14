@@ -33,12 +33,10 @@ const styles = StyleSheet.create({
 const SliderHeaderHighEnd = ({
 	isShown,
 	isAtTop,
-	panResponder,
 	sliderDetails,
 }: {
 	isShown: boolean;
 	isAtTop: boolean;
-	panResponder: any;
 	sliderDetails: SliderTitleProps;
 }) => {
 	const [top] = useState(new Animated.Value(0));
@@ -62,10 +60,7 @@ const SliderHeaderHighEnd = ({
 
 	return (
 		<Animated.View style={[styles.header, { top }]}>
-			<View
-				style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
-				{...panResponder.panHandlers}
-			>
+			<View style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}>
 				<SliderTitle {...sliderDetails} />
 			</View>
 		</Animated.View>

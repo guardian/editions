@@ -1,8 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Animated, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import { safeInterpolation } from 'src/helpers/math';
-import { useDismissArticle } from 'src/hooks/use-dismiss-article';
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { Chevron } from '../../chevron';
@@ -29,37 +27,18 @@ const styles = StyleSheet.create({
 });
 
 const Header = () => {
-	const { scrollY } = useDismissArticle();
 	const navigation = useNavigation();
 	return (
-		<Animated.View style={[styles.headerContainer]}>
+		<View style={styles.headerContainer}>
 			<TouchableWithoutFeedback
 				onPress={navigation.goBack}
 				accessibilityHint="Go back"
 			>
-				<Animated.View
-					style={[
-						styles.headerChevronContainer,
-						{
-							transform: [
-								{
-									translateY: scrollY.interpolate({
-										inputRange: safeInterpolation([0, 100]),
-										outputRange: safeInterpolation([
-											metrics.headerHeight / -10,
-											0,
-										]),
-										extrapolate: 'clamp',
-									}),
-								},
-							],
-						},
-					]}
-				>
+				<View style={styles.headerChevronContainer}>
 					<Chevron color={color.text} />
-				</Animated.View>
+				</View>
 			</TouchableWithoutFeedback>
-		</Animated.View>
+		</View>
 	);
 };
 
