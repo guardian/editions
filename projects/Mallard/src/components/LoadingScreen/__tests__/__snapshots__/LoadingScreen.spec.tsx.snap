@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoadingScreen should show a LoadingScreen with default styling 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "white",
+      "height": 1334,
+      "justifyContent": "center",
+      "width": 750,
+    }
+  }
+>
+  &lt;Spinner /&gt;
+</View>
+`;
