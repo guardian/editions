@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { Alert } from 'react-native';
 import { AccessContext } from 'src/authentication/AccessContext';
 import type { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer';
@@ -14,9 +14,9 @@ import { googleAuthWithDeepRedirect } from 'src/authentication/services/google';
 import { useModal } from 'src/components/modal';
 import { SignInFailedModalCard } from 'src/components/SignInFailedModalCard';
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
-import { withConsent } from 'src/helpers/settings';
 import { Copy } from 'src/helpers/words';
 import { useFormField } from 'src/hooks/use-form-field';
+import { useGdprSettings } from 'src/hooks/use-gdpr';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import isEmail from 'validator/lib/isEmail';
@@ -50,82 +50,86 @@ const AuthSwitcherScreen = () => {
 
 	const { authIdentity } = useContext(AccessContext);
 	const { open } = useModal();
+	const { gdprAllowFunctionality } = useGdprSettings();
 
-	const handleAuthClick = async (
-		runGetIdentityAuthParams: () => Promise<AuthParams>,
-		{
-			requiresFunctionalConsent,
-			signInName,
-		}: { requiresFunctionalConsent: boolean; signInName?: string },
-	) => {
-		setError(null);
-		withConsent(
-			requiresFunctionalConsent ? 'gdprAllowFunctionality' : null,
+	const handleAuthClick = useCallback(
+		async (
+			runGetIdentityAuthParams: () => Promise<AuthParams>,
 			{
-				allow: async () => {
-					setIsLoading(true);
-					try {
-						const { attempt, accessAttempt } = await authIdentity(
-							await runGetIdentityAuthParams(),
-						);
-						if (isValid(attempt)) {
-							setIsLoading(false);
-							if (!isValid(accessAttempt)) {
-								open((close) => (
-									<SignInFailedModalCard
-										email={
-											attempt.data.userDetails
-												.primaryEmailAddress
-										}
-										onDismiss={() => navigation.popToTop()}
-										onOpenCASLogin={() =>
-											navigation.navigate(
-												RouteNames.CasSignIn,
-											)
-										}
-										onLoginPress={() =>
-											navigation.navigate(
-												RouteNames.SignIn,
-											)
-										}
-										onFaqPress={() =>
-											navigation.navigate(RouteNames.FAQ)
-										}
-										close={close}
-									/>
-								));
-							} else {
-								open((close) => (
-									<SubFoundModalCard close={close} />
-								));
-							}
-							navigation.goBack();
-						} else {
-							attempt.reason && setError(attempt.reason);
-							// push this into the catch logic below
-							throw attempt.reason;
-						}
-					} catch (e) {
-						const appleErrorString = getErrorString(e);
-						appleErrorString && setError(appleErrorString);
-						setIsLoading(false);
-					}
-				},
-				deny: async () => {
-					Alert.alert(
-						Copy.authSwitcherScreen.socialSignInDisabledTitle.replace(
-							'%signInName%',
-							signInName ?? 'Social',
-						),
-						Copy.authSwitcherScreen.socialSignInDisabledSubtitle.replace(
-							'%signInName%',
-							signInName ?? 'social',
-						),
+				requiresFunctionalConsent,
+				signInName,
+			}: { requiresFunctionalConsent: boolean; signInName?: string },
+		) => {
+			setError(null);
+			// @TODO tidy this area up as its now not following functional paradigms
+			const allow = async () => {
+				setIsLoading(true);
+				try {
+					const { attempt, accessAttempt } = await authIdentity(
+						await runGetIdentityAuthParams(),
 					);
-				},
-			},
-		);
-	};
+					if (isValid(attempt)) {
+						setIsLoading(false);
+						if (!isValid(accessAttempt)) {
+							open((close) => (
+								<SignInFailedModalCard
+									email={
+										attempt.data.userDetails
+											.primaryEmailAddress
+									}
+									onDismiss={() => navigation.popToTop()}
+									onOpenCASLogin={() =>
+										navigation.navigate(
+											RouteNames.CasSignIn,
+										)
+									}
+									onLoginPress={() =>
+										navigation.navigate(RouteNames.SignIn)
+									}
+									onFaqPress={() =>
+										navigation.navigate(RouteNames.FAQ)
+									}
+									close={close}
+								/>
+							));
+						} else {
+							open((close) => (
+								<SubFoundModalCard close={close} />
+							));
+						}
+						navigation.goBack();
+					} else {
+						attempt.reason && setError(attempt.reason);
+						// push this into the catch logic below
+						throw attempt.reason;
+					}
+				} catch (e) {
+					const appleErrorString = getErrorString(e);
+					appleErrorString && setError(appleErrorString);
+					setIsLoading(false);
+				}
+			};
+
+			const deny = async () => {
+				Alert.alert(
+					Copy.authSwitcherScreen.socialSignInDisabledTitle.replace(
+						'%signInName%',
+						signInName ?? 'Social',
+					),
+					Copy.authSwitcherScreen.socialSignInDisabledSubtitle.replace(
+						'%signInName%',
+						signInName ?? 'social',
+					),
+				);
+			};
+
+			(gdprAllowFunctionality && requiresFunctionalConsent) ||
+			!requiresFunctionalConsent
+				? await allow()
+				: await deny();
+		},
+		[gdprAllowFunctionality],
+	);
 
 	return (
 		<Login

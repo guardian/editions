@@ -3,6 +3,7 @@ import { AccessContext } from 'src/authentication/AccessContext';
 import { createMailtoHandler } from 'src/helpers/diagnostics';
 import { isInBeta } from 'src/helpers/release-stream';
 import { DIAGNOSTICS_TITLE } from 'src/helpers/words';
+import { useGdprSettings } from 'src/hooks/use-gdpr';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { BugButton } from './BugButton';
 
@@ -22,6 +23,19 @@ const BugButtonHandler = () => {
 		isInternetReachable,
 		type,
 	};
+
+	const {
+		gdprAllowEssential,
+		gdprAllowPerformance,
+		gdprAllowFunctionality,
+		gdprConsentVersion,
+	} = useGdprSettings();
+	const gdprSettings = {
+		gdprAllowEssential,
+		gdprAllowPerformance,
+		gdprAllowFunctionality,
+		gdprConsentVersion,
+	};
 	return isInBeta() ? (
 		<BugButton
 			onPress={createMailtoHandler(
@@ -29,6 +43,7 @@ const BugButtonHandler = () => {
 				'',
 				attempt,
 				netInfo,
+				gdprSettings,
 				DIAGNOSTICS_TITLE,
 			)}
 		/>

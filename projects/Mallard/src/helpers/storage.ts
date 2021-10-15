@@ -105,6 +105,17 @@ const maxAvailableEditionsCache = createAsyncCache<number>(
 	'@Setting_maxAvailableEditions',
 );
 
+// GDPR Core Settings - Cannot be null as that is the "unset value"
+const gdprAllowPerformanceCache = createAsyncCache<boolean>(
+	'@Setting_gdprAllowPerformance',
+);
+const gdprAllowFunctionalityCache = createAsyncCache<boolean>(
+	'@Setting_gdprAllowFunctionality',
+);
+const gdprConsentVersionCache = createAsyncCache<number>(
+	'@Setting_gdprConsentVersion',
+);
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -177,4 +188,7 @@ export {
 	seenEditionsCache,
 	wifiOnlyDownloadsCache,
 	maxAvailableEditionsCache,
+	gdprAllowPerformanceCache,
+	gdprAllowFunctionalityCache,
+	gdprConsentVersionCache,
 };

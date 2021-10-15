@@ -4,8 +4,8 @@ import RNFS from 'react-native-fs';
 import { canViewEdition, getCASCode } from 'src/authentication/helpers';
 import type { AnyAttempt } from 'src/authentication/lib/Attempt';
 import { isValid } from 'src/authentication/lib/Attempt';
-import { gdprSwitchSettings, getSetting } from 'src/helpers/settings';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
+import type { GdprCoreSettings } from 'src/hooks/use-gdpr';
 import type {
 	NetInfoCalculated,
 	NetInfoCore,
@@ -32,19 +32,12 @@ import {
 
 type NetInfoDiagnostic = NetInfoCore & NetInfoCalculated;
 
-const getGDPREntries = () =>
-	Promise.all(
-		gdprSwitchSettings.map(
-			async (setting) => [setting, await getSetting(setting)] as const,
-		),
-	);
-
 const getDiagnosticInfo = async (
 	authAttempt: AnyAttempt<string>,
 	netInfo: NetInfoDiagnostic,
+	gdprSettings: GdprCoreSettings,
 ) => {
-	const [gdprEntries, casCode, idData, receiptData] = await Promise.all([
-		getGDPREntries(),
+	const [casCode, idData, receiptData] = await Promise.all([
 		getCASCode(),
 		userDataCache.get(),
 		iapReceiptCache.get(),
@@ -108,8 +101,8 @@ Network: Type: ${netInfo.type}
 Network: Connected?: ${netInfo.isConnected}
 Network: Internet Reachable?: ${netInfo.isInternetReachable}
 Network: Poor Connection?: ${netInfo.isPoorConnection}
-Privacy settings: ${gdprEntries
-		.map(([key, value]) => `${key}:${value}`)
+Privacy settings: ${Object.keys(gdprSettings)
+		.map((key) => `${key}: ${gdprSettings[key as keyof GdprCoreSettings]}`)
 		.join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
 Total Disk Space (Mb): ${bytesToMb(totalDiskCapacity)}
@@ -162,6 +155,7 @@ const createMailtoHandler =
 		releaseURL: string,
 		authAttempt: AnyAttempt<string>,
 		netInfo: NetInfoDiagnostic,
+		gdprSettings: GdprCoreSettings,
 		dialogTitle = '',
 	) =>
 	() =>
@@ -172,6 +166,7 @@ const createMailtoHandler =
 					const diagnostics = await getDiagnosticInfo(
 						authAttempt,
 						netInfo,
+						gdprSettings,
 					);
 					openSupportMailto(
 						text,
@@ -195,10 +190,15 @@ const copyDiagnosticInfoToClipboard =
 	(
 		authAttempt: AnyAttempt<string>,
 		netInfo: NetInfoDiagnostic,
+		gdprSettings: GdprCoreSettings,
 		callback: OnCompletionToast,
 	) =>
 	async () => {
-		const diagnostics = await getDiagnosticInfo(authAttempt, netInfo);
+		const diagnostics = await getDiagnosticInfo(
+			authAttempt,
+			netInfo,
+			gdprSettings,
+		);
 		Clipboard.setString(diagnostics);
 		callback('Diagnostic info copied to clipboard');
 	};
@@ -208,6 +208,7 @@ const createSupportMailto = (
 	releaseURL: string,
 	authAttempt: AnyAttempt<string>,
 	netInfo: NetInfoDiagnostic,
+	gdprSettings: GdprCoreSettings,
 	dialogTitle = '',
 ) => ({
 	key: text,
@@ -218,6 +219,7 @@ const createSupportMailto = (
 		releaseURL,
 		authAttempt,
 		netInfo,
+		gdprSettings,
 		dialogTitle,
 	),
 });
@@ -226,12 +228,18 @@ const copyDiagnosticInfo = (
 	text: string,
 	authAttempt: AnyAttempt<string>,
 	netInfo: NetInfoDiagnostic,
+	gdprSettings: GdprCoreSettings,
 	callback: OnCompletionToast,
 ) => ({
 	key: text,
 	title: text,
 	linkWeight: 'regular' as const,
-	onPress: copyDiagnosticInfoToClipboard(authAttempt, netInfo, callback),
+	onPress: copyDiagnosticInfoToClipboard(
+		authAttempt,
+		netInfo,
+		gdprSettings,
+		callback,
+	),
 });
 
 export { createSupportMailto, createMailtoHandler, copyDiagnosticInfo };
