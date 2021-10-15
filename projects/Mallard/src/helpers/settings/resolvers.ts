@@ -1,23 +1,7 @@
 /**
- * This exposes Apollo resolvers for all setting as well as query helpers for
- * some of the GDPR settings.
+ * This exposes Apollo resolvers for all setting as well as query helpers
  */
-import type { GDPRBucketKeys } from 'src/helpers/settings';
-import { GdprBuckets, getSetting } from 'src/helpers/settings';
-
-/**
- * We have setting keys **both** for GDPR consent "buckets" and specific
- * consent keys. This is why we merge them all flat in this array.
- */
-export const ALL_GDPR_SETTING_NAMES = Object.keys(GdprBuckets).reduce<string[]>(
-	(names, bucketName) => {
-		return names.concat(
-			[bucketName],
-			GdprBuckets[bucketName as GDPRBucketKeys] as any,
-		);
-	},
-	[],
-);
+import { getSetting } from 'src/helpers/settings';
 
 /**
  * Build a piece of GraphQL query string that would fetch all the settings with
@@ -26,16 +10,10 @@ export const ALL_GDPR_SETTING_NAMES = Object.keys(GdprBuckets).reduce<string[]>(
 const makeFragment = (names: string[]) =>
 	names.map((name) => `${name} @client,`).join('');
 
-/**
- * Put this in a query in order to fetch all the GDPR settings.
- */
-export const GDPR_SETTINGS_FRAGMENT = makeFragment(ALL_GDPR_SETTING_NAMES);
-
 const ALL_NAMES = [
-	...ALL_GDPR_SETTING_NAMES,
-	'apiUrl',
+	'apiUrl', // This should be an east one to remove.
 	'isWeatherShown',
-	'isUsingProdDevtools',
+	'isUsingProdDevtools', // This should be an easy one to remove
 ];
 
 /**

@@ -1,6 +1,6 @@
 // Hook to initialise the file system and download today's issue if appropriate
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { prepareAndDownloadTodaysIssue } from 'src/download-edition/prepare-and-download-issue';
 import { pushDownloadFailsafe } from 'src/helpers/push-download-failsafe';
 import { pushNotificationRegistration } from 'src/notifications/push-notifications';
@@ -8,11 +8,7 @@ import { useAppState } from './use-app-state-provider';
 import { useLargeDeviceMemory } from './use-config-provider';
 import { useNetInfo } from './use-net-info-provider';
 
-export const IssueDownloadsInitialiser = ({
-	children,
-}: {
-	children: React.ReactNode;
-}) => {
+export const useIssueDownloads = () => {
 	const { downloadBlocked } = useNetInfo();
 	const { isActive } = useAppState();
 	const largeRAM = useLargeDeviceMemory();
@@ -42,6 +38,4 @@ export const IssueDownloadsInitialiser = ({
 		// Update the notifications based on downloadBlocked status
 		pushNotificationRegistration(downloadBlocked);
 	}, [downloadBlocked]);
-
-	return <>{children}</>;
 };

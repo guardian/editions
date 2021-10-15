@@ -7,7 +7,8 @@ import {
 } from '@react-navigation/stack';
 import React from 'react';
 import { Animated } from 'react-native';
-import { useIsOnboarded } from './navigation/helpers/onboarding';
+import { LoadingScreen } from './components/LoadingScreen/LoadingScreen';
+import { useIsOnboarded } from './hooks/use-onboarding';
 import type {
 	MainStackParamList,
 	OnboardingStackParamList,
@@ -275,11 +276,17 @@ const RootStack = () => {
 };
 
 const AppNavigation = () => {
-	const { isOnboarded } = useIsOnboarded();
-
+	const { isOnboarded, isLoading } = useIsOnboarded();
+	// Designed to stop a screen flash as effects are resolving
 	return (
 		<NavigationContainer>
-			{isOnboarded ? <RootStack /> : <OnboardingStack />}
+			{isLoading ? (
+				<LoadingScreen />
+			) : isOnboarded ? (
+				<RootStack />
+			) : (
+				<OnboardingStack />
+			)}
 		</NavigationContainer>
 	);
 };

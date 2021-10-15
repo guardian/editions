@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import gql from 'graphql-tag';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ButtonAppearance } from 'src/components/Button/Button';
@@ -9,17 +8,8 @@ import {
 	CardAppearance,
 	OnboardingCard,
 } from 'src/components/onboarding/onboarding-card';
-import {
-	CURRENT_CONSENT_VERSION,
-	gdprSwitchSettings,
-} from 'src/helpers/settings';
-import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers';
-import {
-	setGdprConsentVersion,
-	setGdprFlag,
-} from 'src/helpers/settings/setters';
 import { Copy } from 'src/helpers/words';
-import { useQuery } from 'src/hooks/apollo';
+import { useGdprSettings } from 'src/hooks/use-gdpr';
 import { RouteNames } from 'src/navigation/NavigationModels';
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
@@ -43,20 +33,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-const QUERY = gql(`{ ${GDPR_SETTINGS_FRAGMENT} }`);
-
 const OnboardingConsent = () => {
 	const navigation = useNavigation();
-	const query = useQuery<Record<string, boolean | null>>(QUERY);
-	if (query.loading) return null;
-	const { client } = query;
-
-	const enableNulls = () => {
-		gdprSwitchSettings.map((sw) => {
-			setGdprFlag(client, sw, true);
-		});
-		setGdprConsentVersion(client, CURRENT_CONSENT_VERSION);
-	};
+	const { enableAllSettings } = useGdprSettings();
 
 	return (
 		<Aligner>
@@ -83,9 +62,7 @@ const OnboardingConsent = () => {
 							</View>
 							<View>
 								<ModalButton
-									onPress={() => {
-										enableNulls();
-									}}
+									onPress={enableAllSettings}
 									buttonAppearance={ButtonAppearance.Dark}
 								>
 									{Copy.consentOnboarding.okayButton}

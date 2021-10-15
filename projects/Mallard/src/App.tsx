@@ -3,8 +3,7 @@
 // In this file, we'll be kicking off our app or storybook.
 
 import { ApolloProvider } from '@apollo/react-hooks';
-import AsyncStorage from '@react-native-community/async-storage';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { eventEmitter } from 'src/helpers/event-emitter';
@@ -24,22 +23,17 @@ import { NetInfoAutoToast } from './components/toast/net-info-auto-toast';
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
 import { AppStateProvider } from './hooks/use-app-state-provider';
+import { CoreProvider } from './hooks/use-core-provider';
 import { EditionProvider } from './hooks/use-edition-provider';
-import { IssueDownloadsInitialiser } from './hooks/use-issue-downloads';
+import { GDPRProvider } from './hooks/use-gdpr';
 import { IssueSummaryProvider } from './hooks/use-issue-summary-provider';
-import { LoggingInitialiser } from './hooks/use-logging';
 import { NetInfoProvider } from './hooks/use-net-info-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
 import { DeprecateVersionModal } from './screens/deprecate-screen';
 import { apolloClient } from './services/apollo-singleton';
-import { errorService } from './services/errors';
 import { remoteConfigService } from './services/remote-config';
 
-// Log Intitialisation
-if (!__DEV__) {
-	errorService.init(apolloClient);
-}
 remoteConfigService.init();
 
 // --- SETUP OPERATIONS ---
@@ -52,11 +46,6 @@ const styles = StyleSheet.create({
 	},
 });
 
-const persistenceKey = 'dev-nav-key-232asfdffgdfg1asdffgfdgfdga3413';
-
-const isReactNavPersistenceError = (e: Error) =>
-	__DEV__ && e.message.includes('There is no route defined for');
-
 const WithProviders = nestProviders(
 	Modal,
 	ToastProvider,
@@ -66,62 +55,48 @@ const WithProviders = nestProviders(
 	SettingsOverlayProvider,
 	AppStateProvider,
 	NetInfoProvider,
-	LoggingInitialiser,
 	IssueSummaryProvider,
-	IssueDownloadsInitialiser,
+	GDPRProvider,
+	CoreProvider,
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 	setUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
 
-export default class App extends React.Component {
-	componentDidMount() {
+const App = () => {
+	useEffect(() => {
 		SplashScreen.hide();
 		{
 			eventEmitter.on('editionCachesSet', () => {
 				weatherHider(apolloClient);
 			});
 		}
-	}
+	}, []);
 
-	async componentDidCatch(e: Error) {
-		/**
-		 * use an heuristic to check whether this is a react-nav error
-		 * if it is then ditch our persistence and try to re-render
-		 */
-		if (isReactNavPersistenceError(e)) {
-			await AsyncStorage.removeItem(persistenceKey);
-			this.forceUpdate();
-		}
-	}
-	/**
-	 * When the component is mounted. This happens asynchronously and simply
-	 * re-renders when we're good to go.
-	 */
-	render() {
-		return (
-			<ErrorBoundary>
-				<ApolloProvider client={apolloClient}>
-					<WithProviders>
-						<AccessProvider onIdentityStatusChange={handleIdStatus}>
-							<StatusBar
-								barStyle="light-content"
-								backgroundColor="#041f4a"
-							/>
-							<View style={styles.appContainer}>
-								<AppNavigation />
-								<NetInfoAutoToast />
-							</View>
-							<ModalRenderer />
-							<BugButtonHandler />
-							<DeprecateVersionModal />
-						</AccessProvider>
-					</WithProviders>
-				</ApolloProvider>
-			</ErrorBoundary>
-		);
-	}
-}
+	return (
+		<ErrorBoundary>
+			<ApolloProvider client={apolloClient}>
+				<WithProviders>
+					<AccessProvider onIdentityStatusChange={handleIdStatus}>
+						<StatusBar
+							barStyle="light-content"
+							backgroundColor="#041f4a"
+						/>
+						<View style={styles.appContainer}>
+							<AppNavigation />
+							<NetInfoAutoToast />
+						</View>
+						<ModalRenderer />
+						<BugButtonHandler />
+						<DeprecateVersionModal />
+					</AccessProvider>
+				</WithProviders>
+			</ApolloProvider>
+		</ErrorBoundary>
+	);
+};
+
+export default App;
 
 /**
  * This needs to match what's found in your app_delegate.m and MainActivity.java.

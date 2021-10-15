@@ -18,6 +18,7 @@ import {
 	READERS_EMAIL,
 	SUBSCRIPTION_EMAIL,
 } from 'src/helpers/words';
+import { useGdprSettings } from 'src/hooks/use-gdpr';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -49,6 +50,18 @@ const HelpScreen = () => {
 		downloadBlocked,
 		isInternetReachable,
 	};
+	const {
+		gdprAllowEssential,
+		gdprAllowPerformance,
+		gdprAllowFunctionality,
+		gdprConsentVersion,
+	} = useGdprSettings();
+	const gdprSettings = {
+		gdprAllowEssential,
+		gdprAllowPerformance,
+		gdprAllowFunctionality,
+		gdprConsentVersion,
+	};
 
 	return (
 		<HeaderScreenContainer title={HELP_HEADER_TITLE} actionLeft={true}>
@@ -74,6 +87,7 @@ const HelpScreen = () => {
 								ISSUE_EMAIL,
 								attempt,
 								netInfo,
+								gdprSettings,
 								DIAGNOSTICS_TITLE,
 							),
 							createSupportMailto(
@@ -81,18 +95,21 @@ const HelpScreen = () => {
 								SUBSCRIPTION_EMAIL,
 								attempt,
 								netInfo,
+								gdprSettings,
 							),
 							createSupportMailto(
 								'Comment or query about an article',
 								READERS_EMAIL,
 								attempt,
 								netInfo,
+								gdprSettings,
 							),
 							createSupportMailto(
 								'Send feedback',
 								APPS_FEEDBACK_EMAIL,
 								attempt,
 								netInfo,
+								gdprSettings,
 							),
 						]}
 					/>
@@ -103,6 +120,7 @@ const HelpScreen = () => {
 								'Copy diagnostic information',
 								attempt,
 								netInfo,
+								gdprSettings,
 								showToastCallback,
 							),
 						]}

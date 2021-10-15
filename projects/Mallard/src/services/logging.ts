@@ -1,12 +1,9 @@
 // Logging Service that sends event logs to ELK
-import type ApolloClient from 'apollo-client';
-import gql from 'graphql-tag';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import DeviceInfo from 'react-native-device-info';
 import { getCASCode } from 'src/authentication/helpers';
 import { isInBeta } from 'src/helpers/release-stream';
-import type { GdprSwitchSetting } from 'src/helpers/settings';
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import {
 	iapReceiptCache,
@@ -17,6 +14,7 @@ import {
 	getDefaultEditionSlug,
 	getSelectedEditionSlug,
 } from 'src/hooks/use-edition-provider';
+import type { GdprSwitchSetting } from 'src/hooks/use-gdpr';
 import type { NetInfoState } from 'src/hooks/use-net-info-provider';
 import type { MallardLogFormat } from '../../../Apps/common/src/logging';
 import {
@@ -39,20 +37,6 @@ interface LogParams {
 	message: string;
 	optionalFields?: object;
 }
-
-type QueryData = {
-	gdprAllowPerformance: GdprSwitchSetting;
-	netInfo: {
-		isConnected: boolean;
-		isPoorConnection: boolean;
-		type: NetInfoStateType;
-	};
-};
-const QUERY = gql`
-	{
-		gdprAllowPerformance @client
-	}
-`;
 
 const cropMessage = (message: string, maxLength: number): string => {
 	return message.length > maxLength
@@ -79,25 +63,17 @@ class Logging extends AsyncQueue {
 	}
 
 	init({
-		apolloClient,
+		hasConsent,
 		isConnected,
 		isPoorConnection,
 		networkStatus,
 	}: {
-		apolloClient: ApolloClient<object>;
+		hasConsent: GdprSwitchSetting;
 		isConnected: NetInfoState['isConnected'];
 		isPoorConnection: NetInfoState['isPoorConnection'];
 		networkStatus: NetInfoState['type'];
 	}) {
-		apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
-			next: (query) => {
-				if (query.loading) return;
-				this.hasConsent = query.data.gdprAllowPerformance;
-			},
-			error: (error) => {
-				errorService.captureException(error);
-			},
-		});
+		this.hasConsent = hasConsent;
 		this.isConnected = isConnected;
 		this.isPoorConnection = isPoorConnection;
 		this.networkStatus = networkStatus;

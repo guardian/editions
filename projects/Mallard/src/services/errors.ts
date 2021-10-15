@@ -1,20 +1,15 @@
 import type { FirebaseCrashlyticsTypes } from '@react-native-firebase/crashlytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import * as Sentry from '@sentry/react-native';
-import type ApolloClient from 'apollo-client';
-import gql from 'graphql-tag';
 import Config from 'react-native-config';
 import { isInBeta } from 'src/helpers/release-stream';
-import type { GdprSwitchSetting } from 'src/helpers/settings';
+import type { GdprSwitchSetting } from 'src/hooks/use-gdpr';
 import { Level, loggingService } from './logging';
 
 const { SENTRY_DSN_URL } = Config;
 
-type QueryData = { gdprAllowPerformance: GdprSwitchSetting };
-const QUERY = gql('{ gdprAllowPerformance @client }');
-
 export interface ErrorService {
-	init(apolloClient: ApolloClient<object>): void;
+	init({ hasConsent }: { hasConsent: GdprSwitchSetting }): void;
 	captureException(err: Error): void;
 }
 
@@ -34,27 +29,14 @@ export class ErrorServiceImpl implements ErrorService {
 		this.crashlytics = crashlytics();
 	}
 
-	public init(apolloClient: ApolloClient<object>) {
-		apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
-			next: (query) => {
-				if (query.loading) return;
-				this.handleConsentUpdate(query.data.gdprAllowPerformance);
-			},
-			error: (error) => {
-				this.captureException(error);
-			},
-		});
-	}
-
-	private async handleConsentUpdate(hasConsent: GdprSwitchSetting) {
-		this.hasConsent = hasConsent === true;
-		console.log('setting consent: ', this.hasConsent);
-		this.initSentry(this.hasConsent);
-		await this.initCrashlytics(this.hasConsent);
+	public init({ hasConsent }: { hasConsent: GdprSwitchSetting }) {
+		this.hasConsent = hasConsent;
+		this.initSentry(hasConsent);
+		this.initCrashlytics(hasConsent);
 	}
 
 	initSentry(hasConsent: GdprSwitchSetting) {
-		if (hasConsent === false) {
+		if (!hasConsent) {
 			console.log('Sentry initialized ignore, no user permission');
 			return;
 		}
@@ -81,14 +63,18 @@ export class ErrorServiceImpl implements ErrorService {
 		}
 	}
 
-	private async initCrashlytics(hasConsent: boolean): Promise<void> {
+	private async initCrashlytics(
+		hasConsent: GdprSwitchSetting,
+	): Promise<void> {
 		console.log(
 			'Crashlytics current status:',
 			this.crashlytics.isCrashlyticsCollectionEnabled,
 		);
 
 		console.log('Setting crashlytics with user permission:', hasConsent);
-		await this.crashlytics.setCrashlyticsCollectionEnabled(hasConsent);
+		await this.crashlytics.setCrashlyticsCollectionEnabled(
+			hasConsent ?? false,
+		);
 
 		if (hasConsent) {
 			this.crashlytics.log('Crashlytics initialized');
