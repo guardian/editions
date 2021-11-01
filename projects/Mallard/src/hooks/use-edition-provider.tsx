@@ -320,7 +320,6 @@ export const EditionProvider = ({
 	 * On App State change to foreground, or connection change, we want to check for a new editionsList
 	 */
 	useEffect(() => {
-		console.log('CHANGING', isConnected, isActive);
 		getEditions(isConnected, apiUrl).then(
 			(ed) => ed && setEditionsList(ed),
 		);
