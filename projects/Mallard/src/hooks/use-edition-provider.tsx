@@ -1,8 +1,6 @@
 import moment from 'moment';
 import type { Dispatch } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import type { AppStateStatus } from 'react-native';
-import { AppState } from 'react-native';
 import type {
 	EditionsList,
 	Locale,
@@ -28,6 +26,7 @@ import { pushNotificationRegistration } from 'src/notifications/push-notificatio
 import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
+import { useAppState } from './use-app-state-provider';
 import type { NetInfoState } from './use-net-info-provider';
 import { useNetInfo } from './use-net-info-provider';
 
@@ -261,6 +260,7 @@ export const EditionProvider = ({
 	const [apiUrl, setApiUrl] = useState('');
 
 	const { isConnected, downloadBlocked } = useNetInfo();
+	const { isActive } = useAppState();
 
 	/**
 	 * Default Edition and Selected
@@ -276,7 +276,7 @@ export const EditionProvider = ({
 			editionsList,
 			downloadBlocked,
 		);
-	}, [editionsList]);
+	}, [editionsList, downloadBlocked]);
 
 	/**
 	 * List of Editions
@@ -317,22 +317,14 @@ export const EditionProvider = ({
 	};
 
 	/**
-	 * On App State change to foreground, we want to check for a new editionsList
+	 * On App State change to foreground, or connection change, we want to check for a new editionsList
 	 */
 	useEffect(() => {
-		const appChangeEventHandler = async (appState: AppStateStatus) =>
-			appState === 'active' &&
-			apiUrl &&
-			getEditions(isConnected, apiUrl).then(
-				(ed) => ed && setEditionsList(ed),
-			);
-
-		AppState.addEventListener('change', appChangeEventHandler);
-
-		return () => {
-			AppState.removeEventListener('change', appChangeEventHandler);
-		};
-	}, []);
+		console.log('CHANGING', isConnected, isActive);
+		getEditions(isConnected, apiUrl).then(
+			(ed) => ed && setEditionsList(ed),
+		);
+	}, [isConnected, isActive]);
 
 	useEffect(() => {
 		seenEditionsCache.get().then((seen) => {
