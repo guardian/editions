@@ -299,8 +299,7 @@ const SettingsScreen = () => {
 						]}
 					/>
 					{canDisplayBetaButton && <BetaButtonOption />}
-					{/* {isUsingProdDevtools && <DevZone />} */}
-					<DevZone />
+					{isUsingProdDevtools && <DevZone />}
 				</ScrollContainer>
 			</WithAppAppearance>
 		</HeaderScreenContainer>
