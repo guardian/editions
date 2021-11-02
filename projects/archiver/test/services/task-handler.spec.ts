@@ -2,7 +2,6 @@ import { handleAndNotifyInternal } from '../../src/services/task-handler'
 import moment = require('moment')
 import {
     createPublishEvent,
-    mobileAccountIdentifier,
     PublishEvent,
 } from '../../src/services/pub-status-notifier'
 import { IssuePublicationIdentifier } from '../../common'
@@ -91,7 +90,7 @@ describe('handleAndNotifyInternal', () => {
         const event: PublishEvent = {
             ...input.issuePublication,
             status: 'Failed',
-            message: `Error: error ${mobileAccountIdentifier}`,
+            message: `Error: error`,
             timestamp: now.format(),
         }
         expect(dependencies.sendPublishStatusToTopic).toBeCalledWith(event)
