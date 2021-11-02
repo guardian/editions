@@ -4,8 +4,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { ArticleTheme } from 'src/components/article/html/article';
-import { themeColors } from 'src/components/article/html/helpers/css';
+import { ArticleTheme } from 'src/components/article/article';
+import { themeColors } from 'src/components/article/helpers/css';
 import {
 	getNewWindowStart,
 	getWindowStart,
