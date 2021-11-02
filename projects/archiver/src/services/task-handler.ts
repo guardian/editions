@@ -5,7 +5,6 @@ import {
     sendPublishStatusToTopic,
     createPublishEvent,
     PublishEvent,
-    mobileAccountIdentifier,
 } from './pub-status-notifier'
 import { Handler } from 'aws-lambda'
 import { Attempt } from '../../../backend/utils/try'
@@ -67,7 +66,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
             const event: PublishEvent = {
                 ...issuePublication,
                 status: 'Failed',
-                message: `${errorToString(err)} ${mobileAccountIdentifier}`,
+                message: `${errorToString(err)}`,
                 timestamp: dependencies.getMoment().format(),
             }
             await dependencies.sendPublishStatusToTopic(event)

@@ -50,8 +50,6 @@ function throwBadStatus(s: never): never {
     throw new Error('Unknown status type')
 }
 
-export const mobileAccountIdentifier = '(Mobile account)'
-
 export const createPublishEvent = (
     identifier: IssuePublicationIdentifier,
     status: Status,
@@ -63,56 +61,56 @@ export const createPublishEvent = (
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: `1/4: Started ${mobileAccountIdentifier}`,
+                message: `1/4: Started`,
                 timestamp,
             }
         case 'assembled':
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: `2/4: Assembled ${mobileAccountIdentifier}`,
+                message: `2/4: Assembled`,
                 timestamp,
             }
         case 'bundled':
             return {
                 ...identifier,
                 status: 'Proofing',
-                message: `3/4: Bundled ${mobileAccountIdentifier}`,
+                message: `3/4: Bundled`,
                 timestamp,
             }
         case 'proofed':
             return {
                 ...identifier,
                 status: 'Proofed',
-                message: `4/4: Ready for proofing on-device ${mobileAccountIdentifier}`,
+                message: `4/4: Ready for proofing on-device`,
                 timestamp,
             }
         case 'copied':
             return {
                 ...identifier,
                 status: 'Publishing',
-                message: `1/2: Copied to publication location ${mobileAccountIdentifier}`,
+                message: `1/2: Copied to publication location`,
                 timestamp,
             }
         case 'published':
             return {
                 ...identifier,
                 status: 'Published',
-                message: `2/2: Added to issue index ${mobileAccountIdentifier}`,
+                message: `2/2: Added to issue index`,
                 timestamp,
             }
         case 'notified':
             return {
                 ...identifier,
                 status: 'PostProcessing',
-                message: `Notification scheduled ${mobileAccountIdentifier}`,
+                message: `Notification scheduled`,
                 timestamp,
             }
         case 'editionsListUpdated':
             return {
                 ...identifier,
                 status: 'PostProcessing',
-                message: `Editions List updated ${mobileAccountIdentifier}`,
+                message: `Editions List updated`,
                 timestamp,
             }
         case 'errored':
