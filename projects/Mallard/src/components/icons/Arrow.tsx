@@ -1,8 +1,8 @@
 import React from 'react';
 import Svg, { G, Path } from 'react-native-svg';
-import { Direction } from '../../../../../../../Apps/common/src';
+import type { Direction } from '../../../../Apps/common/src';
 
-export const NativeArrow = ({
+export const Arrow = ({
 	fill,
 	direction,
 	marginTop = 4,

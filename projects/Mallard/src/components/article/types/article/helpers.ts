@@ -1,5 +1,6 @@
 import { Linking, Platform } from 'react-native';
-import { EMBED_DOMAIN } from '../../html/components/media-atoms';
+
+const EMBED_DOMAIN = 'https://embed.theguardian.com';
 
 const urlIsNotAnEmbed = (url: string) =>
 	!(

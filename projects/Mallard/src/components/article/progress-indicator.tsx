@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ArticleTheme } from 'src/components/article/html/article';
-import { themeColors } from 'src/components/article/html/helpers/css';
+import { ArticleTheme } from 'src/components/article/article';
+import { themeColors } from 'src/components/article/helpers/css';
 
 const styles = StyleSheet.create({
 	progressIndicator: {

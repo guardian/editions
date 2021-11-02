@@ -1,9 +1,9 @@
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import HTMLView from 'react-native-htmlview';
-import { ArticleTheme } from 'src/components/article/html/article';
-import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow';
-import { themeColors } from 'src/components/article/html/helpers/css';
+import { ArticleTheme } from 'src/components/article/article';
+import { themeColors } from 'src/components/article/helpers/css';
+import { Arrow } from 'src/components/icons/Arrow';
 import { families } from 'src/theme/typography';
 import { Direction } from '../../../../Apps/common/src';
 
@@ -82,7 +82,7 @@ const LightboxCaption = ({
 		<View style={styles.captionWrapper}>
 			<View style={styles.caption}>
 				{caption.length > 1 && (
-					<NativeArrow
+					<Arrow
 						fill={pillarColor}
 						direction={Direction.top}
 						marginTop={Platform.OS === 'android' ? 10 : 4}

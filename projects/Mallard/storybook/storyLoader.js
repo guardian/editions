@@ -9,6 +9,7 @@ function loadStories() {
 	require('../src/components/EditionsMenu/EditionsMenu.stories');
 	require('../src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton.stories');
 	require('../src/components/Lightbox/LightboxCaption.stories');
+	require('../src/components/LoadingScreen/LoadingScreen.stories');
 	require('../src/components/ScreenHeader/IssuePickerHeader/IssuePickerHeader.stories');
 	require('../src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader.stories');
 	require('../src/components/SignInFailedModalCard.stories');
@@ -25,6 +26,7 @@ const stories = [
 	'../src/components/EditionsMenu/EditionsMenu.stories',
 	'../src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton.stories',
 	'../src/components/Lightbox/LightboxCaption.stories',
+	'../src/components/LoadingScreen/LoadingScreen.stories',
 	'../src/components/ScreenHeader/IssuePickerHeader/IssuePickerHeader.stories',
 	'../src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader.stories',
 	'../src/components/SignInFailedModalCard.stories',
