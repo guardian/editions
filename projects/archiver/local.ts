@@ -23,11 +23,11 @@ if (!(task in main)) {
 }
 
 const handlers = (main as unknown) as {
-    [key: string]: Handler<IssueParams, {}>
+    [key: string]: Handler<IssueParams, unknown>
 }
 const handler = handlers[task]
 
-const run = handler(JSON.parse(json), {} as Context, () => {}) as Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
+const run = handler(JSON.parse(json), {} as Context, () => null) as Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
 
 run.then(x => {
     console.log(x)

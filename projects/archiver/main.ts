@@ -1,4 +1,6 @@
-require('dotenv').config()
+import { config } from 'dotenv'
+config()
+
 export { handler as invoke } from './src/invoke'
 export { handler as issue } from './src/tasks/issue'
 export { handler as front } from './src/tasks/front'

@@ -29,7 +29,7 @@ export enum OS {
 }
 
 export interface MallardLogFormat {
-    timestamp: Date
+    timestamp?: Date
     level: Level
     message: string
     app: string

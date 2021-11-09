@@ -123,7 +123,7 @@ export const FIVE_SECONDS = 5
 
 export const upload = (
     key: string,
-    body: {} | Buffer | string,
+    body: any | Buffer | string,
     bucket: Bucket,
     mime: 'image/jpeg' | 'application/json' | 'application/zip' | 'text/html',
     maxAge: number | undefined,
@@ -141,7 +141,7 @@ export const upload = (
                 ContentType: mime,
                 CacheControl: cacheControlHeader(maxAge),
             },
-            (err, data) => {
+            (err: Error, data: S3.ManagedUpload.SendData) => {
                 if (err) {
                     console.error(
                         `S3 upload of s3://${bucket.name}/${key} failed with`,
@@ -188,7 +188,7 @@ export const copy = (
     key: string | undefined,
     inputBucket: Bucket,
     outputBucket: Bucket,
-): Promise<{}> => {
+): Promise<unknown> => {
     return new Promise((resolve, reject) => {
         if (key == undefined) {
             console.log('Copy request ignored due to undefined key')
@@ -254,7 +254,7 @@ export const recursiveCopy = async (
     baseKey: string | undefined,
     inputBucket: Bucket,
     outputBucket: Bucket,
-): Promise<{}[]> => {
+): Promise<unknown[]> => {
     console.log(
         `Recursively copying ${baseKey} from ${JSON.stringify(
             inputBucket,
