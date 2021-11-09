@@ -1,7 +1,7 @@
 export interface Failure {
     __failure: true
     httpStatus?: number
-    error: Error | {}
+    error: Error | unknown
     messages?: string[]
 }
 
@@ -28,7 +28,7 @@ export const withFailureMessage = (
     messages: [message, ...(failure.messages || [])],
 })
 
-export type Attempt<T extends Exclude<{}, string | Failure>> = Failure | T
+export type Attempt<T extends Exclude<unknown, string | Failure>> = Failure | T
 
 /**
  *

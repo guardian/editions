@@ -61,7 +61,7 @@ export const s3EditionClient = () => {
 
 interface S3Response {
     text: () => Promise<string>
-    json: () => Promise<{}>
+    json: () => Promise<unknown>
     lastModified?: Date
     etag: string | undefined
 }

@@ -283,7 +283,7 @@ export interface IssuePublicationActionIdentifier
 
 export interface EditionListPublicationAction {
     action: string
-    content: object
+    content: any
 }
 
 export interface IssueSummary extends WithKey, IssueCompositeKey {

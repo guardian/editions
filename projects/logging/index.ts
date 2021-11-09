@@ -1,4 +1,5 @@
-require('dotenv').config()
+import { config } from 'dotenv'
+config()
 
 import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
