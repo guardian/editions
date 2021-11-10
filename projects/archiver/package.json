@@ -26,16 +26,16 @@
         "test:watch": "jest --watch"
     },
     "dependencies": {
-        "@types/jest": "^24.0.17",
+        "@types/jest": "^25.1.0",
         "@zeit/ncc": "^0.20.4",
         "archiver": "^5.3.0",
         "aws-sdk": "2.518.0",
         "encoding": "^0.1.12",
-        "jest": "^24.8.0",
+        "jest": "^26.6.3",
         "node-fetch": "^2.6.1",
         "p-all": "^2.1.0",
         "ramda": "^0.26.1",
-        "ts-jest": "^24.0.2",
+        "ts-jest": "^26.5.6",
         "ts-optchain": "^0.1.8",
         "uuidv4": "5.0.1",
         "moment": "^2.24.0"
