@@ -12,15 +12,15 @@ buildscript {
         supportV4Version = '1.0.0' // Do not specify if using old libraries, specify '1.0.0' or similar for androidx.legacy:legacy-support-v4 dependency
         androidXAnnotation = "1.1.0"
         androidXBrowser = "1.0.0"
-        ndkVersion = "20.1.5948944"
+        ndkVersion = "21.4.7075529"
         FLIPPER_VERSION = "0.103.0"
     }
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.0")
+        classpath("com.android.tools.build:gradle:4.2.2")
         classpath("com.google.gms:google-services:4.2.0")
 
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
@@ -32,8 +32,8 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
-        jcenter()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
@@ -49,8 +49,8 @@ allprojects {
         maven {
            // react-native-background-fetch
            url("${project(':react-native-background-fetch').projectDir}/libs")
-       }
-        mavenCentral()
+       } 
+       jcenter()
     }
 
 
