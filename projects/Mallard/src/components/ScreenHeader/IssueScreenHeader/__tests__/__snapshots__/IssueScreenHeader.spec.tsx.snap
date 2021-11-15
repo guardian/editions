@@ -108,6 +108,8 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
               <Text
                 accessibilityRole="header"
                 aria-level="1"
+                collapsable={false}
+                nativeID="animatedComponent"
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
@@ -207,6 +209,8 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
           }
         >
           <View
+            collapsable={false}
+            nativeID="animatedComponent"
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
@@ -333,7 +337,9 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                               accessibilityLabel="Regions and specials editions menu"
                               accessibilityRole="button"
                               accessible={true}
+                              collapsable={false}
                               focusable={true}
+                              nativeID="animatedComponent"
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -730,6 +736,8 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                               >
                                 <View
                                   accessible={true}
+                                  collapsable={false}
+                                  nativeID="animatedComponent"
                                   style={
                                     Object {
                                       "opacity": 1,
@@ -805,6 +813,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                                 accessibilityHint="More issues"
                                 accessibilityRole="button"
                                 accessible={true}
+                                collapsable={false}
                                 focusable={true}
                                 hitSlop={
                                   Object {
@@ -814,6 +823,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                                     "top": 10,
                                   }
                                 }
+                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -998,6 +1008,8 @@ exports[`IssueScreenHeader should match the default style 1`] = `
               <Text
                 accessibilityRole="header"
                 aria-level="1"
+                collapsable={false}
+                nativeID="animatedComponent"
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
@@ -1097,6 +1109,8 @@ exports[`IssueScreenHeader should match the default style 1`] = `
           }
         >
           <View
+            collapsable={false}
+            nativeID="animatedComponent"
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
@@ -1223,7 +1237,9 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                               accessibilityLabel="Regions and specials editions menu"
                               accessibilityRole="button"
                               accessible={true}
+                              collapsable={false}
                               focusable={true}
+                              nativeID="animatedComponent"
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -1620,6 +1636,8 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                               >
                                 <View
                                   accessible={true}
+                                  collapsable={false}
+                                  nativeID="animatedComponent"
                                   style={
                                     Object {
                                       "opacity": 1,
@@ -1695,6 +1713,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                                 accessibilityHint="More issues"
                                 accessibilityRole="button"
                                 accessible={true}
+                                collapsable={false}
                                 focusable={true}
                                 hitSlop={
                                   Object {
@@ -1704,6 +1723,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                                     "top": 10,
                                   }
                                 }
+                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}

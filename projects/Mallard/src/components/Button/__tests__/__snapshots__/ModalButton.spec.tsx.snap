@@ -5,6 +5,7 @@ exports[`ModalButton should display a ModalButton with accessible text 1`] = `
   accessibilityHint="This button signs you out"
   accessibilityRole="button"
   accessible={true}
+  collapsable={false}
   focusable={true}
   hitSlop={
     Object {
@@ -14,6 +15,7 @@ exports[`ModalButton should display a ModalButton with accessible text 1`] = `
       "top": 10,
     }
   }
+  nativeID="animatedComponent"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -88,6 +90,7 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
   accessibilityHint="Sign out"
   accessibilityRole="button"
   accessible={true}
+  collapsable={false}
   focusable={true}
   hitSlop={
     Object {
@@ -97,6 +100,7 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
       "top": 10,
     }
   }
+  nativeID="animatedComponent"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -171,6 +175,7 @@ exports[`ModalButton should display a default ModalButton 1`] = `
   accessibilityHint="Sign out"
   accessibilityRole="button"
   accessible={true}
+  collapsable={false}
   focusable={true}
   hitSlop={
     Object {
@@ -180,6 +185,7 @@ exports[`ModalButton should display a default ModalButton 1`] = `
       "top": 10,
     }
   }
+  nativeID="animatedComponent"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}

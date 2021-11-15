@@ -108,6 +108,8 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
               <Text
                 accessibilityRole="header"
                 aria-level="1"
+                collapsable={false}
+                nativeID="animatedComponent"
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
@@ -207,6 +209,8 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           }
         >
           <View
+            collapsable={false}
+            nativeID="animatedComponent"
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
@@ -334,6 +338,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                               accessibilityLabel="Settings button"
                               accessibilityRole="button"
                               accessible={true}
+                              collapsable={false}
                               focusable={true}
                               hitSlop={
                                 Object {
@@ -343,6 +348,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                   "top": 10,
                                 }
                               }
+                              nativeID="animatedComponent"
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -450,6 +456,8 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                               >
                                 <View
                                   accessible={true}
+                                  collapsable={false}
+                                  nativeID="animatedComponent"
                                   style={
                                     Object {
                                       "opacity": 1,
@@ -472,6 +480,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                 accessibilityLabel="Close button"
                                 accessibilityRole="button"
                                 accessible={true}
+                                collapsable={false}
                                 focusable={true}
                                 hitSlop={
                                   Object {
@@ -481,6 +490,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                     "top": 10,
                                   }
                                 }
+                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -665,6 +675,8 @@ exports[`IssuePickerHeader should match the default style 1`] = `
               <Text
                 accessibilityRole="header"
                 aria-level="1"
+                collapsable={false}
+                nativeID="animatedComponent"
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
@@ -764,6 +776,8 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           }
         >
           <View
+            collapsable={false}
+            nativeID="animatedComponent"
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
@@ -891,6 +905,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                               accessibilityLabel="Settings button"
                               accessibilityRole="button"
                               accessible={true}
+                              collapsable={false}
                               focusable={true}
                               hitSlop={
                                 Object {
@@ -900,6 +915,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                   "top": 10,
                                 }
                               }
+                              nativeID="animatedComponent"
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -1007,6 +1023,8 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                               >
                                 <View
                                   accessible={true}
+                                  collapsable={false}
+                                  nativeID="animatedComponent"
                                   style={
                                     Object {
                                       "opacity": 1,
@@ -1029,6 +1047,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                 accessibilityLabel="Close button"
                                 accessibilityRole="button"
                                 accessible={true}
+                                collapsable={false}
                                 focusable={true}
                                 hitSlop={
                                   Object {
@@ -1038,6 +1057,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                     "top": 10,
                                   }
                                 }
+                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -1222,6 +1242,8 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
               <Text
                 accessibilityRole="header"
                 aria-level="1"
+                collapsable={false}
+                nativeID="animatedComponent"
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
@@ -1321,6 +1343,8 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           }
         >
           <View
+            collapsable={false}
+            nativeID="animatedComponent"
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
@@ -1448,6 +1472,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                               accessibilityLabel="Settings button"
                               accessibilityRole="button"
                               accessible={true}
+                              collapsable={false}
                               focusable={true}
                               hitSlop={
                                 Object {
@@ -1457,6 +1482,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                   "top": 10,
                                 }
                               }
+                              nativeID="animatedComponent"
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -1564,6 +1590,8 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                               >
                                 <View
                                   accessible={true}
+                                  collapsable={false}
+                                  nativeID="animatedComponent"
                                   style={
                                     Object {
                                       "opacity": 1,
@@ -1586,6 +1614,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                 accessibilityLabel="Close button"
                                 accessibilityRole="button"
                                 accessible={true}
+                                collapsable={false}
                                 focusable={true}
                                 hitSlop={
                                   Object {
@@ -1595,6 +1624,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                     "top": 10,
                                   }
                                 }
+                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
