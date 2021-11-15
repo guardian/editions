@@ -6,6 +6,7 @@ exports[`BugButton should display a BugButton 1`] = `
   accessibilityLabel="Report a bug button"
   accessibilityRole="button"
   accessible={true}
+  collapsable={false}
   focusable={true}
   hitSlop={
     Object {
@@ -15,6 +16,7 @@ exports[`BugButton should display a BugButton 1`] = `
       "top": 10,
     }
   }
+  nativeID="animatedComponent"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
