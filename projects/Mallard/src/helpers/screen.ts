@@ -68,11 +68,3 @@ export const imageForScreenSize = async (): Promise<ImageSize> => {
 	await AsyncStorage.setItem(IMAGE_SIZE_KEY, size);
 	return size;
 };
-
-/**
- * Fetch only ever once.
- */
-export const createImageSizeResolver = () => {
-	const imageSize = imageForScreenSize();
-	return () => imageSize;
-};
