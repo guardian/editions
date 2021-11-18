@@ -69,24 +69,29 @@ const EditionsMenu = ({
 		);
 	};
 
+	const renderItem = ({
+		item,
+	}: {
+		item: RegionalEdition | SpecialEdition;
+	}) => {
+		if (item.editionType === 'Regional') {
+			return renderRegionalItem({ item } as { item: RegionalEdition });
+		}
+		return renderSpecialItem({ item } as { item: SpecialEdition });
+	};
+
+	const menuItems = [
+		...(regionalEditions ?? defaultRegionalEditions),
+		...(specialEditions ?? []),
+	];
+
 	return (
-		<ScrollView style={styles.container}>
-			<FlatList
-				data={regionalEditions ?? defaultRegionalEditions}
-				renderItem={renderRegionalItem}
-				ItemSeparatorComponent={() => <ItemSeperator />}
-				ListFooterComponent={() => <ItemSeperator />}
-			/>
-			{specialEditions && specialEditions.length > 0 && (
-				<>
-					<FlatList
-						data={specialEditions}
-						renderItem={renderSpecialItem}
-						ItemSeparatorComponent={() => <ItemSeperator />}
-					/>
-				</>
-			)}
-		</ScrollView>
+		<FlatList
+			style={styles.container}
+			data={menuItems}
+			renderItem={renderItem}
+			ItemSeparatorComponent={() => <ItemSeperator />}
+		/>
 	);
 };
 
