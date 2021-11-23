@@ -4,8 +4,7 @@ import { AccessContext } from 'src/authentication/AccessContext';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
-import { Heading } from 'src/components/layout/ui/row';
-import { List } from 'src/components/lists/list';
+import { Heading, Row, Separator } from 'src/components/layout/ui/row';
 import {
 	copyDiagnosticInfo,
 	createSupportMailto,
@@ -67,64 +66,69 @@ const HelpScreen = () => {
 		<HeaderScreenContainer title={HELP_HEADER_TITLE} actionLeft={true}>
 			<WithAppAppearance value={'settings'}>
 				<ScrollContainer>
-					<List
-						data={[
-							{
-								key: 'Frequently Asked Questions',
-								title: 'Frequently Asked Questions',
-								onPress: () => {
-									navigation.navigate(RouteNames.FAQ);
-								},
-								proxy: <RightChevron />,
-							},
-						]}
+					<Row
+						title="Frequently Asked Questions"
+						onPress={() => navigation.navigate(RouteNames.FAQ)}
+						proxy={<RightChevron />}
 					/>
+					<Separator />
+
 					<Heading>Contact us</Heading>
-					<List
-						data={[
-							createSupportMailto(
-								'Report an issue',
-								ISSUE_EMAIL,
-								attempt,
-								netInfo,
-								gdprSettings,
-								DIAGNOSTICS_TITLE,
-							),
-							createSupportMailto(
-								'Subscription, payment and billing issues',
-								SUBSCRIPTION_EMAIL,
-								attempt,
-								netInfo,
-								gdprSettings,
-							),
-							createSupportMailto(
-								'Comment or query about an article',
-								READERS_EMAIL,
-								attempt,
-								netInfo,
-								gdprSettings,
-							),
-							createSupportMailto(
-								'Send feedback',
-								APPS_FEEDBACK_EMAIL,
-								attempt,
-								netInfo,
-								gdprSettings,
-							),
-						]}
+					<Separator />
+					<Row
+						{...createSupportMailto(
+							'Report an issue',
+							ISSUE_EMAIL,
+							attempt,
+							netInfo,
+							gdprSettings,
+							DIAGNOSTICS_TITLE,
+						)}
 					/>
+					<Separator />
+					<Row
+						{...createSupportMailto(
+							'Subscription, payment and billing issues',
+							SUBSCRIPTION_EMAIL,
+							attempt,
+							netInfo,
+							gdprSettings,
+						)}
+					/>
+					<Separator />
+					<Row
+						{...createSupportMailto(
+							'Comment or query about an article',
+							READERS_EMAIL,
+							attempt,
+							netInfo,
+							gdprSettings,
+						)}
+					/>
+					<Separator />
+					<Row
+						{...createSupportMailto(
+							'Send feedback',
+							APPS_FEEDBACK_EMAIL,
+							attempt,
+							netInfo,
+							gdprSettings,
+						)}
+					/>
+					<Separator />
+
 					<Heading>Diagnostics</Heading>
-					<List
-						data={[
-							copyDiagnosticInfo(
-								'Copy diagnostic information',
-								attempt,
-								netInfo,
-								gdprSettings,
-								showToastCallback,
-							),
-						]}
+					<Separator />
+					<Row
+						{...copyDiagnosticInfo(
+							'Copy diagnostic information',
+							attempt,
+							netInfo,
+							gdprSettings,
+							showToastCallback,
+						)}
 					/>
+					<Separator />
 				</ScrollContainer>
 			</WithAppAppearance>
 		</HeaderScreenContainer>
