@@ -9,6 +9,8 @@ import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap';
 import { Button } from 'src/components/Button/Button';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
+import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Footer, Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { UiBodyCopy } from 'src/components/styled-text';
@@ -34,6 +36,7 @@ import {
 	getPushTracking,
 } from 'src/notifications/push-tracking';
 import { FSPaths } from 'src/paths';
+import { WithAppAppearance } from 'src/theme/appearance';
 import { metrics } from 'src/theme/spacing';
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
@@ -134,243 +137,256 @@ const DevZone = () => {
 	if (typeof apiUrl !== 'string') throw new Error('expected string');
 
 	return (
-		<>
-			<Heading>🦆 SECRET DUCK MENU 🦆</Heading>
-			<Footer>
-				<UiBodyCopy>
-					Only wander here if you know what you are doing!!
-				</UiBodyCopy>
-			</Footer>
-			<ButtonList>
-				<Button
-					onPress={() => {
-						navigation.navigate(RouteNames.OnboardingConsent);
-					}}
-				>
-					Show Startup Consent
-				</Button>
-				<Button
-					onPress={() => {
-						// go back to the main to simulate a fresh app
-						Alert.alert(
-							'Delete all issue files',
-							'You sure?',
-							[
-								{
-									text: 'Delete issue files',
-									onPress: () => {
-										deleteIssueFiles();
-									},
-								},
-								{
-									style: 'cancel',
-									text: `No don't do it`,
-								},
-							],
-							{ cancelable: false },
-						);
-					}}
-				>
-					Delete issue files
-				</Button>
-				<Button
-					onPress={() => {
-						showToast('Toast title', { subtitle: 'Subtitle' });
-					}}
-				>
-					Pop a toast
-				</Button>
-				{isInBeta() && Platform.OS === 'ios' && (
-					<Button onPress={() => DEV_getLegacyIAPReceipt()}>
-						Add legacy IAP receipt
-					</Button>
-				)}
-				<Button
-					onPress={() => {
-						Alert.alert(
-							'Clear caches',
-							'You sure?',
-							[
-								{
-									text: 'Delete fetch cache',
-									onPress: () => {
-										clearCache();
-									},
-								},
-								{
-									text: 'Delete EVERYTHING',
-									onPress: () => {
-										AsyncStorage.clear();
-									},
-								},
-								{
-									style: 'cancel',
-									text: `No don't do it`,
-								},
-							],
-							{ cancelable: false },
-						);
-					}}
-				>
-					Clear caches
-				</Button>
-			</ButtonList>
-			<List
-				data={[
-					{
-						key: 'Endpoints',
-						title: 'API Endpoint',
-						explainer: apiUrl,
-						onPress: () => {
-							navigation.navigate(RouteNames.Endpoints);
-						},
-					},
-					{
-						key: 'Editions',
-						title: 'Editions',
-						explainer: edition,
-						onPress: () => {
-							navigation.navigate(RouteNames.Edition);
-						},
-					},
-					{
-						key: 'Show All Editions',
-						title: 'Show All Editions',
-						explainer:
-							'Show all editions in the editions menu - including expired editions and those with 0 issues',
-						proxy: (
-							<Switch
-								value={showAllEditions}
-								onValueChange={onToggleShowAllEditions}
-							/>
-						),
-					},
-					{
-						key: 'Hide this menu',
-						title: 'Hide this menu',
-						explainer: 'Tap the version 7 times to bring it back',
-						onPress: () => {
-							setIsUsingProdDevtools(client, false);
-						},
-					},
-					{
-						key: 'Network Information',
-						title: 'Network Information',
-						explainer: `Type: ${type} \nisPoorConnection: ${isPoorConnection} \nisConnected: ${isConnected} \nisInternetReachable: ${isInternetReachable}`,
-					},
-					{
-						key: 'Clear CAS caches',
-						title: 'Clear CAS caches',
-						onPress: signOutCAS,
-					},
-					{
-						key: 'Locale',
-						title: 'Device locale',
-						explainer: locale,
-					},
-					{
-						key: 'Reports as in test flight',
-						title: 'Reports as in test flight',
-						explainer: isInTestFlight().toString(),
-					},
-					{
-						key: 'Copy local path to clipboard',
-						title: 'Copy local path to clipboard',
-						explainer: 'does what it says on the tin',
-						onPress: () => {
-							Clipboard.setString(FSPaths.issuesDir);
-							Alert.alert(FSPaths.issuesDir);
-						},
-					},
-					{
-						key: 'Display NetInfo Button',
-						title: 'Display NetInfo Button',
-						onPress: onToggleNetInfoButton,
-						proxy: (
-							<Switch
-								value={showNetInfoButton}
-								onValueChange={onToggleNetInfoButton}
-							/>
-						),
-					},
-					{
-						key: 'Image Size used for Editions',
-						title: 'Image Size used for Editions',
-						explainer: imageSize,
-					},
-					{
-						key: 'Push Tokens',
-						title: 'Registered push tokens',
-						explainer: pushTokens,
-					},
-					{
-						key: 'All Downloaded Issues',
-						title: 'All Downloaded Issues',
-						explainer: downloadedIssues,
-					},
-					{
-						key: 'Files in Issues',
-						title: 'Files in Issues',
-						explainer: files,
-					},
-					{
-						key: 'Clear Push Tracking',
-						title: 'Clear Push Tracking',
-						explainer:
-							'Clears out tracking information relating to pushes',
-						onPress: () =>
-							Alert.alert(
-								'Are you sure?',
-								'Are you sure you want to delete the push tracking infromation. Please note this will be unrecoverable',
-								[
-									{
-										text: 'Cancel',
-										onPress: () => null,
-									},
-									{
-										text: 'Delete',
-										onPress: () => {
-											clearPushTracking();
-											setPushTrackingInfo('fetching...');
+		<HeaderScreenContainer title="Dev Zone" actionLeft={true}>
+			<WithAppAppearance value="settings">
+				<ScrollContainer>
+					<Heading>🦆 SECRET DUCK MENU 🦆</Heading>
+					<Footer>
+						<UiBodyCopy>
+							Only wander here if you know what you are doing!!
+						</UiBodyCopy>
+					</Footer>
+					<ButtonList>
+						<Button
+							onPress={() => {
+								navigation.navigate(
+									RouteNames.OnboardingConsent,
+								);
+							}}
+						>
+							Show Startup Consent
+						</Button>
+						<Button
+							onPress={() => {
+								// go back to the main to simulate a fresh app
+								Alert.alert(
+									'Delete all issue files',
+									'You sure?',
+									[
+										{
+											text: 'Delete issue files',
+											onPress: () => {
+												deleteIssueFiles();
+											},
 										},
-										style: 'cancel',
-									},
-								],
-							),
-					},
-					{
-						key: 'Push Tracking Information',
-						title: 'Push Tracking Information',
-						explainer:
-							pushTrackingInfo !== 'fetching...'
-								? JSON.stringify(
-										JSON.parse(pushTrackingInfo),
-										null,
-										2,
-								  )
-								: pushTrackingInfo,
-					},
-				]}
-			/>
-			<Heading>Your settings</Heading>
-			<List
-				data={Object.entries(data)
-					.map(([title, explainer]) => ({
-						key: title,
-						title,
-						explainer: explainer ? `${explainer} ` : 'false',
-					}))
-					.concat([
-						{
-							key: 'Authentication details',
-							title: 'Authentication details',
-							explainer: `Signed in ${isValid(attempt)} : ${
-								isValid(attempt) && attempt.data
-							}`,
-						},
-					])}
-			/>
-		</>
+										{
+											style: 'cancel',
+											text: `No don't do it`,
+										},
+									],
+									{ cancelable: false },
+								);
+							}}
+						>
+							Delete issue files
+						</Button>
+						<Button
+							onPress={() => {
+								showToast('Toast title', {
+									subtitle: 'Subtitle',
+								});
+							}}
+						>
+							Pop a toast
+						</Button>
+						{isInBeta() && Platform.OS === 'ios' && (
+							<Button onPress={() => DEV_getLegacyIAPReceipt()}>
+								Add legacy IAP receipt
+							</Button>
+						)}
+						<Button
+							onPress={() => {
+								Alert.alert(
+									'Clear caches',
+									'You sure?',
+									[
+										{
+											text: 'Delete fetch cache',
+											onPress: () => {
+												clearCache();
+											},
+										},
+										{
+											text: 'Delete EVERYTHING',
+											onPress: () => {
+												AsyncStorage.clear();
+											},
+										},
+										{
+											style: 'cancel',
+											text: `No don't do it`,
+										},
+									],
+									{ cancelable: false },
+								);
+							}}
+						>
+							Clear caches
+						</Button>
+					</ButtonList>
+					<List
+						data={[
+							{
+								key: 'Endpoints',
+								title: 'API Endpoint',
+								explainer: apiUrl,
+								onPress: () => {
+									navigation.navigate(RouteNames.Endpoints);
+								},
+							},
+							{
+								key: 'Editions',
+								title: 'Editions',
+								explainer: edition,
+								onPress: () => {
+									navigation.navigate(RouteNames.Edition);
+								},
+							},
+							{
+								key: 'Show All Editions',
+								title: 'Show All Editions',
+								explainer:
+									'Show all editions in the editions menu - including expired editions and those with 0 issues',
+								proxy: (
+									<Switch
+										value={showAllEditions}
+										onValueChange={onToggleShowAllEditions}
+									/>
+								),
+							},
+							{
+								key: 'Hide this menu',
+								title: 'Hide this menu',
+								explainer:
+									'Tap the version 7 times to bring it back',
+								onPress: () => {
+									setIsUsingProdDevtools(client, false);
+								},
+							},
+							{
+								key: 'Network Information',
+								title: 'Network Information',
+								explainer: `Type: ${type} \nisPoorConnection: ${isPoorConnection} \nisConnected: ${isConnected} \nisInternetReachable: ${isInternetReachable}`,
+							},
+							{
+								key: 'Clear CAS caches',
+								title: 'Clear CAS caches',
+								onPress: signOutCAS,
+							},
+							{
+								key: 'Locale',
+								title: 'Device locale',
+								explainer: locale,
+							},
+							{
+								key: 'Reports as in test flight',
+								title: 'Reports as in test flight',
+								explainer: isInTestFlight().toString(),
+							},
+							{
+								key: 'Copy local path to clipboard',
+								title: 'Copy local path to clipboard',
+								explainer: 'does what it says on the tin',
+								onPress: () => {
+									Clipboard.setString(FSPaths.issuesDir);
+									Alert.alert(FSPaths.issuesDir);
+								},
+							},
+							{
+								key: 'Display NetInfo Button',
+								title: 'Display NetInfo Button',
+								onPress: onToggleNetInfoButton,
+								proxy: (
+									<Switch
+										value={showNetInfoButton}
+										onValueChange={onToggleNetInfoButton}
+									/>
+								),
+							},
+							{
+								key: 'Image Size used for Editions',
+								title: 'Image Size used for Editions',
+								explainer: imageSize,
+							},
+							{
+								key: 'Push Tokens',
+								title: 'Registered push tokens',
+								explainer: pushTokens,
+							},
+							{
+								key: 'All Downloaded Issues',
+								title: 'All Downloaded Issues',
+								explainer: downloadedIssues,
+							},
+							{
+								key: 'Files in Issues',
+								title: 'Files in Issues',
+								explainer: files,
+							},
+							{
+								key: 'Clear Push Tracking',
+								title: 'Clear Push Tracking',
+								explainer:
+									'Clears out tracking information relating to pushes',
+								onPress: () =>
+									Alert.alert(
+										'Are you sure?',
+										'Are you sure you want to delete the push tracking infromation. Please note this will be unrecoverable',
+										[
+											{
+												text: 'Cancel',
+												onPress: () => null,
+											},
+											{
+												text: 'Delete',
+												onPress: () => {
+													clearPushTracking();
+													setPushTrackingInfo(
+														'fetching...',
+													);
+												},
+												style: 'cancel',
+											},
+										],
+									),
+							},
+							{
+								key: 'Push Tracking Information',
+								title: 'Push Tracking Information',
+								explainer:
+									pushTrackingInfo !== 'fetching...'
+										? JSON.stringify(
+												JSON.parse(pushTrackingInfo),
+												null,
+												2,
+										  )
+										: pushTrackingInfo,
+							},
+						]}
+					/>
+					<Heading>Your settings</Heading>
+					<List
+						data={Object.entries(data)
+							.map(([title, explainer]) => ({
+								key: title,
+								title,
+								explainer: explainer
+									? `${explainer} `
+									: 'false',
+							}))
+							.concat([
+								{
+									key: 'Authentication details',
+									title: 'Authentication details',
+									explainer: `Signed in ${isValid(
+										attempt,
+									)} : ${isValid(attempt) && attempt.data}`,
+								},
+							])}
+					/>
+				</ScrollContainer>
+			</WithAppAppearance>
+		</HeaderScreenContainer>
 	);
 };
 

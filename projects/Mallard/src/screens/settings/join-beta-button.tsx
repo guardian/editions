@@ -3,8 +3,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Linking, StyleSheet } from 'react-native';
 import { RightChevron } from 'src/components/icons/RightChevron';
-import { Heading } from 'src/components/layout/ui/row';
-import { List } from 'src/components/lists/list';
+import { Row, Separator } from 'src/components/layout/ui/row';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { JOIN_BETA_LINK } from 'src/constants';
 import { isInBeta } from 'src/helpers/release-stream';
@@ -37,12 +36,12 @@ const betaThanks = () => {
 		useNavigation<StackNavigationProp<SettingsStackParamList>>();
 	return (
 		<>
-			<Heading>{``}</Heading>
-			<List data={[betaProgrammeFAQs(navigation)]}></List>
+			<Separator />
+			<Row {...betaProgrammeFAQs(navigation)} />
+			<Separator />
 			<UiBodyCopy style={betaButtonStyle.thanksText}>
 				Thank you for being a beta tester 🙌
 			</UiBodyCopy>
-			<Heading>{``}</Heading>
 		</>
 	);
 };
@@ -52,21 +51,14 @@ const joinBetaMenuButton = () => {
 		useNavigation<StackNavigationProp<SettingsStackParamList>>();
 	return (
 		<>
-			<Heading>{``}</Heading>
-			<List
-				data={[
-					{
-						key: 'Become a beta tester 🙌',
-						title: 'Become a beta tester 🙌',
-						onPress: () => {
-							Linking.openURL(JOIN_BETA_LINK); //what to catch here?
-						},
-						proxy: <RightChevron />,
-					},
-					betaProgrammeFAQs(navigation),
-				]}
+			<Separator />
+			<Row
+				title="Become a beta tester 🙌"
+				onPress={() => Linking.openURL(JOIN_BETA_LINK)}
+				proxy={<RightChevron />}
 			/>
-			<Heading>{``}</Heading>
+			<Separator />
+			<Row {...betaProgrammeFAQs(navigation)} />
 		</>
 	);
 };
