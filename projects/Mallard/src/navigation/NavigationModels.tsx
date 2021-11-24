@@ -34,6 +34,7 @@ export type SettingsStackParamList = {
 	CasSignIn: undefined;
 	SignIn: undefined;
 	WeatherGeolocationConsent: undefined;
+	DevZone: undefined;
 };
 
 export type MainStackParamList = {
@@ -79,4 +80,5 @@ export enum RouteNames {
 	PrivacyPolicyInline = 'PrivacyPolicyInline',
 	OnboardingConsentInline = 'OnboardingConsentInline',
 	Crossword = 'Crossword',
+	DevZone = 'DevZone',
 }

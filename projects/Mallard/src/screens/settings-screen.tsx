@@ -15,10 +15,9 @@ import { isStaffMember } from 'src/authentication/helpers';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
-import { Heading } from 'src/components/layout/ui/row';
+import { Heading, Row, Separator } from 'src/components/layout/ui/row';
 import { DualButton } from 'src/components/lists/DualButton';
 import { FullButton } from 'src/components/lists/FullButton';
-import { List } from 'src/components/lists/list';
 import {
 	setIsUsingProdDevtools,
 	setIsWeatherShown,
@@ -30,7 +29,6 @@ import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
-import { DevZone } from './settings/dev-zone';
 
 const MiscSettingsList = React.memo(
 	(props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
@@ -91,7 +89,16 @@ const MiscSettingsList = React.memo(
 		const data =
 			Platform.OS === 'android' ? [...androidItems, ...items] : items;
 
-		return <List data={data} />;
+		return (
+			<>
+				{data.map((item) => (
+					<>
+						<Row {...item} />
+						<Separator />
+					</>
+				))}
+			</>
+		);
 	},
 );
 
@@ -190,30 +197,6 @@ const SettingsScreen = () => {
 
 	const rightChevronIcon = <RightChevron />;
 
-	const signInListItems = [
-		...(canAccess
-			? [
-					{
-						key: 'Subscription details',
-						title: Copy.settings.subscriptionDetails,
-						onPress: () => {
-							navigation.navigate(RouteNames.SubscriptionDetails);
-						},
-						proxy: rightChevronIcon,
-					},
-			  ]
-			: [
-					{
-						key: `I'm already subscribed`,
-						title: Copy.settings.alreadySubscribed,
-						onPress: () => {
-							navigation.navigate(RouteNames.AlreadySubscribed);
-						},
-						proxy: rightChevronIcon,
-					},
-			  ]),
-	];
-
 	return (
 		<HeaderScreenContainer title="Settings" actionLeft={true}>
 			<WithAppAppearance value={'settings'}>
@@ -228,78 +211,100 @@ const SettingsScreen = () => {
 						}
 						signOutIdentity={signOutIdentity}
 					/>
-					<List data={signInListItems} />
+					<Separator />
+					{canAccess ? (
+						<Row
+							title={Copy.settings.subscriptionDetails}
+							onPress={() =>
+								navigation.navigate(
+									RouteNames.SubscriptionDetails,
+								)
+							}
+							proxy={rightChevronIcon}
+						/>
+					) : (
+						<Row
+							title={Copy.settings.alreadySubscribed}
+							onPress={() =>
+								navigation.navigate(
+									RouteNames.AlreadySubscribed,
+								)
+							}
+							proxy={rightChevronIcon}
+						/>
+					)}
+					<Separator />
 					<Heading>{``}</Heading>
+					<Separator />
 					<MiscSettingsList
 						client={client}
 						isWeatherShown={isWeatherShown}
 					/>
 					<Heading>{``}</Heading>
-					<List
-						data={[
-							{
-								key: 'Privacy settings',
-								title: Copy.settings.privacySettings,
-								proxy: rightChevronIcon,
-								onPress: () => {
-									navigation.navigate(RouteNames.GdprConsent);
-								},
-							},
-							{
-								key: 'Privacy policy',
-								title: Copy.settings.privacyPolicy,
-								proxy: rightChevronIcon,
-								onPress: () => {
-									navigation.navigate(
-										RouteNames.PrivacyPolicy,
-									);
-								},
-							},
-							{
-								key: 'Terms and conditions',
-								title: Copy.settings.termsAndConditions,
-								onPress: () => {
-									navigation.navigate(
-										RouteNames.TermsAndConditions,
-									);
-								},
-								proxy: rightChevronIcon,
-							},
-						]}
+					<Separator />
+					<Row
+						title={Copy.settings.privacySettings}
+						onPress={() =>
+							navigation.navigate(RouteNames.GdprConsent)
+						}
+						proxy={rightChevronIcon}
 					/>
+					<Separator />
+					<Row
+						title={Copy.settings.privacyPolicy}
+						onPress={() =>
+							navigation.navigate(RouteNames.PrivacyPolicy)
+						}
+						proxy={rightChevronIcon}
+					/>
+					<Separator />
+					<Row
+						title={Copy.settings.termsAndConditions}
+						onPress={() =>
+							navigation.navigate(RouteNames.TermsAndConditions)
+						}
+						proxy={rightChevronIcon}
+					/>
+					<Separator />
 					<Heading>{``}</Heading>
-					<List
-						data={[
-							{
-								key: 'Help',
-								title: Copy.settings.help,
-								onPress: () => {
-									navigation.navigate(RouteNames.Help);
-								},
-								proxy: rightChevronIcon,
-							},
-							{
-								key: 'Credits',
-								title: Copy.settings.credits,
-								onPress: () => {
-									navigation.navigate(RouteNames.Credits);
-								},
-								proxy: rightChevronIcon,
-							},
-							{
-								key: 'Version',
-								title: Copy.settings.version,
-								onPress: versionClickHandler,
-								proxy: (
-									<Text>
-										{versionNumber} ({buildNumber})
-									</Text>
-								),
-							},
-						]}
+					<Separator />
+					<Row
+						title={Copy.settings.help}
+						onPress={() => navigation.navigate(RouteNames.Help)}
+						proxy={rightChevronIcon}
 					/>
+					<Separator />
+					<Row
+						title={Copy.settings.credits}
+						onPress={() => navigation.navigate(RouteNames.Credits)}
+						proxy={rightChevronIcon}
+					/>
+					<Separator />
+					<Row
+						title={Copy.settings.version}
+						onPress={versionClickHandler}
+						proxy={
+							<Text>
+								{versionNumber} ({buildNumber})
+							</Text>
+						}
+					/>
+					<Separator />
+					<Heading>{``}</Heading>
 					{canDisplayBetaButton && <BetaButtonOption />}
-					{isUsingProdDevtools && <DevZone />}
+					{isUsingProdDevtools && (
+						<>
+							<Separator />
+
+							<Row
+								title="Developer Menu"
+								onPress={() =>
+									navigation.navigate(RouteNames.DevZone)
+								}
+								proxy={rightChevronIcon}
+							/>
+						</>
+					)}
 				</ScrollContainer>
 			</WithAppAppearance>
 		</HeaderScreenContainer>
