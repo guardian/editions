@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, ScrollView, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, StyleSheet } from 'react-native';
 import type { EditionId, RegionalEdition, SpecialEdition } from 'src/common';
 import { metrics } from 'src/theme/spacing';
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults';
