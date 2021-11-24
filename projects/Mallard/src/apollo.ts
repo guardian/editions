@@ -5,7 +5,6 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { NON_IMPLEMENTED_LINK } from './helpers/apollo_link';
-import { resolveLocationPermissionStatus } from './helpers/location-permission';
 import { SETTINGS_RESOLVERS } from './helpers/settings/resolvers';
 import { resolveWeather } from './helpers/weather';
 
@@ -28,7 +27,6 @@ export const createApolloClient = () => {
 		Query: {
 			...SETTINGS_RESOLVERS,
 			weather: resolveWeather,
-			locationPermissionStatus: resolveLocationPermissionStatus,
 		},
 	};
 
