@@ -6,10 +6,10 @@ import { RESULTS } from 'react-native-permissions';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { requestLocationPermission } from 'src/helpers/location-permission';
-import { setIsWeatherShown } from 'src/helpers/settings/setters';
 import { getGeolocation } from 'src/helpers/weather';
 import { html } from 'src/helpers/webview';
 import { Copy } from 'src/helpers/words';
+import { useIsWeatherShown } from 'src/hooks/use-config-provider';
 import { metrics } from 'src/theme/spacing';
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview';
 
@@ -34,6 +34,7 @@ const showIsDisabledAlert = () => {
 const WeatherGeolocationConsentScreen = () => {
 	const navigation = useNavigation();
 	const apolloClient = useApolloClient();
+	const { setIsWeatherShown } = useIsWeatherShown();
 	const onConsentPress = async () => {
 		const result = await requestLocationPermission(apolloClient);
 		if (result === RESULTS.BLOCKED) {
@@ -66,7 +67,7 @@ const WeatherGeolocationConsentScreen = () => {
 		}
 	};
 	const onHidePress = () => {
-		setIsWeatherShown(apolloClient, false);
+		setIsWeatherShown(false);
 		navigation.goBack();
 	};
 

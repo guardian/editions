@@ -20,11 +20,7 @@ export interface DevSettings {
 	logging: string;
 }
 
-interface UserSettings {
-	isWeatherShown: boolean;
-}
-
-export interface Settings extends UserSettings, DevSettings {}
+export type Settings = DevSettings;
 
 /*
 we can only store strings to memory

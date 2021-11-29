@@ -6,8 +6,6 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import { eventEmitter } from 'src/helpers/event-emitter';
-import { weatherHider } from 'src/helpers/weather-hider';
 import { ConfigProvider } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
 import { setUserId } from 'src/services/ophan';
@@ -66,11 +64,6 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 const App = () => {
 	useEffect(() => {
 		SplashScreen.hide();
-		{
-			eventEmitter.on('editionCachesSet', () => {
-				weatherHider(apolloClient);
-			});
-		}
 	}, []);
 
 	return (
