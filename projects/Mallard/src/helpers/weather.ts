@@ -15,7 +15,7 @@ Geolocation.setRNConfiguration({
 	/**
 	 * We want to control the exact moment the permission pop-up shows, so
 	 * we don't rely on the Geolocation module and instead manage permissions
-	 * ourselves (see `locationPermissionStatus` Apollo field).
+	 * ourselves
 	 */
 	skipPermissionRequests: true,
 	authorizationLevel: 'whenInUse',

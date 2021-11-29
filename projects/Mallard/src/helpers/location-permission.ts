@@ -10,30 +10,13 @@ const LOCATION_PERMISSION = Platform.select({
 	default: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
 });
 
-const { resolveLocationPermissionStatus, requestLocationPermission } = (() => {
-	let promise: Promise<PermissionStatus> | undefined;
+export const resolveLocationPermissionStatus =
+	async (): Promise<PermissionStatus> => await check(LOCATION_PERMISSION);
 
-	const resolveLocationPermissionStatus = () => {
-		if (promise) return promise;
-		promise = check(LOCATION_PERMISSION);
-		return promise;
-	};
-
-	const requestLocationPermission = async (
-		apolloClient: ApolloClient<object>,
-	): Promise<PermissionStatus> => {
-		promise = request(LOCATION_PERMISSION);
-		const result = await promise;
-		apolloClient.writeData({
-			data: {
-				locationPermissionStatus: result,
-			},
-		});
-		refreshWeather(apolloClient);
-		return result;
-	};
-
-	return { resolveLocationPermissionStatus, requestLocationPermission };
-})();
-
-export { resolveLocationPermissionStatus, requestLocationPermission };
+export const requestLocationPermission = async (
+	apolloClient: ApolloClient<object>,
+): Promise<PermissionStatus> => {
+	const result = await request(LOCATION_PERMISSION);
+	refreshWeather(apolloClient);
+	return result;
+};
