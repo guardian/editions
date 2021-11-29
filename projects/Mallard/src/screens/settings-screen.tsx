@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import type ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 import React, { useContext, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
@@ -18,95 +17,98 @@ import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading, Row, Separator } from 'src/components/layout/ui/row';
 import { DualButton } from 'src/components/lists/DualButton';
 import { FullButton } from 'src/components/lists/FullButton';
-import {
-	setIsUsingProdDevtools,
-	setIsWeatherShown,
-} from 'src/helpers/settings/setters';
+import { setIsUsingProdDevtools } from 'src/helpers/settings/setters';
 import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
-import { useNotificationsEnabled } from 'src/hooks/use-config-provider';
+import {
+	useIsWeatherShown,
+	useNotificationsEnabled,
+} from 'src/hooks/use-config-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
 
-const MiscSettingsList = React.memo(
-	(props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
-		const navigation =
-			useNavigation<StackNavigationProp<SettingsStackParamList>>();
-		const { notificationsEnabled, setNotifications } =
-			useNotificationsEnabled();
-		const [settingNotificationsEnabled, setSettingNotificationsEnabled] =
-			useState(notificationsEnabled);
+const MiscSettingsList = () => {
+	const navigation =
+		useNavigation<StackNavigationProp<SettingsStackParamList>>();
+	const { notificationsEnabled, setNotifications } =
+		useNotificationsEnabled();
+	const [settingNotificationsEnabled, setSettingNotificationsEnabled] =
+		useState(notificationsEnabled);
 
-		const onWeatherChange = () =>
-			setIsWeatherShown(props.client, !props.isWeatherShown);
+	const { isWeatherShown, setIsWeatherShown } = useIsWeatherShown();
+	// Allows for a smooth switch change and persistance is dealt with after
+	const [componentlIsWeatherShown, setcomponentlIsWeatherShown] =
+		useState(isWeatherShown);
+	const onWeatherChange = () => {
+		setcomponentlIsWeatherShown(!isWeatherShown);
+		setIsWeatherShown(!isWeatherShown);
+	};
 
-		const onNotificationChange = () => {
-			const setting = !settingNotificationsEnabled;
-			setSettingNotificationsEnabled(setting);
-			setNotifications(setting);
-		};
+	const onNotificationChange = () => {
+		const setting = !settingNotificationsEnabled;
+		setSettingNotificationsEnabled(setting);
+		setNotifications(setting);
+	};
 
-		const androidItems = [
-			{
-				key: 'notificationEnabled',
-				title: Copy.settings.notifications,
-				proxy: (
-					<Switch
-						accessible={true}
-						accessibilityLabel={Copy.settings.notifications}
-						accessibilityRole="switch"
-						value={settingNotificationsEnabled}
-						onValueChange={onNotificationChange}
-					/>
-				),
-			},
-		];
+	const androidItems = [
+		{
+			key: 'notificationEnabled',
+			title: Copy.settings.notifications,
+			proxy: (
+				<Switch
+					accessible={true}
+					accessibilityLabel={Copy.settings.notifications}
+					accessibilityRole="switch"
+					value={settingNotificationsEnabled}
+					onValueChange={onNotificationChange}
+				/>
+			),
+		},
+	];
 
-		const items = [
-			{
-				key: 'isWeatherShown',
-				title: Copy.settings.displayWeather,
-				proxy: (
-					<Switch
-						accessible={true}
-						accessibilityLabel={Copy.settings.displayWeather}
-						accessibilityRole="switch"
-						value={props.isWeatherShown}
-						onValueChange={onWeatherChange}
-					/>
-				),
-			},
-			{
-				key: 'manageEditions',
-				title: Copy.settings.manageDownloads,
-				onPress: () => navigation.navigate(RouteNames.ManageEditions),
-				proxy: <RightChevron />,
-			},
-		];
+	const items = [
+		{
+			key: 'isWeatherShown',
+			title: Copy.settings.displayWeather,
+			proxy: (
+				<Switch
+					accessible={true}
+					accessibilityLabel={Copy.settings.displayWeather}
+					accessibilityRole="switch"
+					value={componentlIsWeatherShown}
+					onValueChange={onWeatherChange}
+				/>
+			),
+		},
+		{
+			key: 'manageEditions',
+			title: Copy.settings.manageDownloads,
+			onPress: () => navigation.navigate(RouteNames.ManageEditions),
+			proxy: <RightChevron />,
+		},
+	];
 
-		const data =
-			Platform.OS === 'android' ? [...androidItems, ...items] : items;
+	const data =
+		Platform.OS === 'android' ? [...androidItems, ...items] : items;
 
-		return (
-			<>
-				{data.map((item) => (
-					<>
-						<Row {...item} />
-						<Separator />
-					</>
-				))}
-			</>
-		);
-	},
-);
+	return (
+		<>
+			{data.map((item) => (
+				<>
+					<Row {...item} />
+					<Separator />
+				</>
+			))}
+		</>
+	);
+};
 
-type QueryData = { isWeatherShown: boolean; isUsingProdDevtools: boolean };
+type QueryData = { isUsingProdDevtools: boolean };
 
 const QUERY = gql`
 	{
-		isWeatherShown @client
 		isUsingProdDevtools @client
 	}
 `;
@@ -164,7 +166,7 @@ const SettingsScreen = () => {
 
 	if (query.loading) return null;
 	const { client } = query;
-	const { isUsingProdDevtools, isWeatherShown } = query.data;
+	const { isUsingProdDevtools } = query.data;
 
 	const versionClickHandler = identityData
 		? () => {
@@ -236,10 +238,7 @@ const SettingsScreen = () => {
 					<Separator />
 					<Heading>{``}</Heading>
 					<Separator />
-					<MiscSettingsList
-						client={client}
-						isWeatherShown={isWeatherShown}
-					/>
+					<MiscSettingsList />
 					<Heading>{``}</Heading>
 					<Separator />
 					<Row

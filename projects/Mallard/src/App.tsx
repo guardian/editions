@@ -66,11 +66,6 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 const App = () => {
 	useEffect(() => {
 		SplashScreen.hide();
-		{
-			eventEmitter.on('editionCachesSet', () => {
-				weatherHider(apolloClient);
-			});
-		}
 	}, []);
 
 	return (

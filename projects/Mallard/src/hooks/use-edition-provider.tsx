@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/minimal';
 import moment from 'moment';
 import type { Dispatch } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -22,6 +23,7 @@ import {
 	selectedEditionCache,
 	showAllEditionsCache,
 } from 'src/helpers/storage';
+import { weatherHider } from 'src/helpers/weather-hider';
 import { pushNotificationRegistration } from 'src/notifications/push-notifications';
 import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
@@ -198,7 +200,7 @@ const setEdition = async (
 	setSelectedEdition(edition);
 	await selectedEditionCache.set(edition);
 	await defaultEditionCache.set(edition);
-	eventEmitter.emit('editionCachesSet');
+	await weatherHider();
 	pushNotificationRegistration(downloadBlocked);
 };
 

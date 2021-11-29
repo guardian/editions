@@ -24,6 +24,5 @@ const createSetter = <Name extends keyof Settings>(
 	return setSetting.bind(undefined, name);
 };
 
-export const setIsWeatherShown = createSetter('isWeatherShown');
 export const setApiUrl = createSetter('apiUrl');
 export const setIsUsingProdDevtools = createSetter('isUsingProdDevtools');

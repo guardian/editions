@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Dimensions, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
+	isWeatherShownCache,
 	maxAvailableEditionsCache,
 	notificationsEnabledCache,
 	wifiOnlyDownloadsCache,
@@ -24,6 +25,8 @@ interface ConfigState {
 	setWifiOnlyDownloadsSetting: (setting: boolean) => Promise<void>;
 	maxAvailableEditions: number;
 	setMaxAvailableEditionsSetting: (setting: number) => Promise<void>;
+	isWeatherShown: boolean;
+	setIsWeatherShownSetting: (setting: boolean) => Promise<void>;
 }
 
 const notificationInitialState = () =>
@@ -43,6 +46,8 @@ const initialState: ConfigState = {
 	setWifiOnlyDownloadsSetting: () => Promise.resolve(),
 	maxAvailableEditions: 7,
 	setMaxAvailableEditionsSetting: () => Promise.resolve(),
+	isWeatherShown: true,
+	setIsWeatherShownSetting: () => Promise.resolve(),
 };
 
 const ConfigContext = createContext(initialState);
@@ -83,6 +88,17 @@ export const getMaxAvailableEditions = async (): Promise<
 	}
 };
 
+export const getIsWeatherShown = async (): Promise<
+	ConfigState['isWeatherShown']
+> => {
+	try {
+		const isWeatherShown = await isWeatherShownCache.get();
+		return isWeatherShown ?? initialState.isWeatherShown;
+	} catch {
+		return Promise.resolve(initialState.isWeatherShown);
+	}
+};
+
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	const [largeDeviceMemeory, setLargeDeviceMemory] = useState(false);
 	const [dimensions, setDimensions] = useState(Dimensions.get('window'));
@@ -95,6 +111,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	const [maxAvailableEditions, setMaxAvailableEditions] = useState<
 		ConfigState['maxAvailableEditions']
 	>(initialState.maxAvailableEditions);
+	const [isWeatherShown, setIsWeatherShown] = useState<
+		ConfigState['isWeatherShown']
+	>(initialState.isWeatherShown);
 
 	const setNotifications = async (setting: boolean) => {
 		try {
@@ -129,6 +148,17 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	};
 
+	const setIsWeatherShownSetting = async (setting: boolean) => {
+		try {
+			await isWeatherShownCache.set(setting);
+			setIsWeatherShown(setting);
+		} catch (e) {
+			console.log(e);
+			e.message = `Unable to Set Is Weather Shown: ${e.message}`;
+			errorService.captureException(e);
+		}
+	};
+
 	useEffect(() => {
 		notificationsAreEnabled().then((setting) =>
 			setNotificationsEnabled(setting),
@@ -144,6 +174,12 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		getMaxAvailableEditions().then((setting) =>
 			setMaxAvailableEditionsSetting(setting),
+		);
+	}, []);
+
+	useEffect(() => {
+		getIsWeatherShown().then((setting) =>
+			setIsWeatherShownSetting(setting),
 		);
 	}, []);
 
@@ -194,6 +230,8 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 				setWifiOnlyDownloadsSetting,
 				maxAvailableEditions,
 				setMaxAvailableEditionsSetting,
+				isWeatherShown,
+				setIsWeatherShownSetting,
 			}}
 		>
 			{children}
@@ -220,4 +258,9 @@ export const useMaxAvailableEditions = () => ({
 	maxAvailableEditions: useContext(ConfigContext).maxAvailableEditions,
 	setMaxAvailableEditions:
 		useContext(ConfigContext).setMaxAvailableEditionsSetting,
+});
+
+export const useIsWeatherShown = () => ({
+	isWeatherShown: useContext(ConfigContext).isWeatherShown,
+	setIsWeatherShown: useContext(ConfigContext).setIsWeatherShownSetting,
 });

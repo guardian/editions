@@ -112,7 +112,6 @@ export const defaultSettings: Settings = {
 	issuesPath: `/issues`,
 	storeDetails,
 	senderId: __DEV__ ? senderId.code : senderId.prod,
-	isWeatherShown: true,
 	websiteUrl: 'https://www.theguardian.com/',
 	logging: __DEV__
 		? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'

@@ -1,4 +1,3 @@
-import gql from 'graphql-tag';
 import type { MutableRefObject, ReactElement } from 'react';
 import React, { useEffect, useMemo, useRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -40,6 +39,7 @@ import {
 import { useQuery } from 'src/hooks/apollo';
 import {
 	useDimensions,
+	useIsWeatherShown,
 	useLargeDeviceMemory,
 } from 'src/hooks/use-config-provider';
 import {
@@ -83,21 +83,6 @@ const styles = StyleSheet.create({
 		right: 0,
 	},
 });
-
-const WEATHER_QUERY = gql('{ isWeatherShown @client }');
-const useIsWeatherShown = () => {
-	const query = useQuery<{ isWeatherShown: boolean }>(WEATHER_QUERY);
-	return !query.loading && query.data.isWeatherShown;
-};
-
-const useIsWeatherActuallyShown = () => {
-	const isWeatherShown = useIsWeatherShown();
-	const weatherResult = useQuery<WeatherQueryData>(
-		// query must contain at least 1 item, even if we don't need it
-		isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
-	);
-	return getValidWeatherData(weatherResult) != null;
-};
 
 type FrontWithCards = Array<TFront & { cards: FlatCard[] }>;
 
@@ -180,6 +165,11 @@ const IssueFronts = ({
 	const { width } = useDimensions();
 	const ref = useRef<FlatList<any> | null>(null);
 	const { selectedEdition } = useEditions();
+	const { isWeatherShown } = useIsWeatherShown();
+	const weatherResult = useQuery<WeatherQueryData>(FULL_WEATHER_QUERY);
+
+	const useIsWeatherActuallyShown =
+		isWeatherShown && getValidWeatherData(weatherResult) !== undefined;
 
 	const {
 		frontWithCards,
@@ -230,7 +220,6 @@ const IssueFronts = ({
 	);
 
 	useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref);
-	const isWeatherActuallyShown = useIsWeatherActuallyShown();
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const flatListOptimisationProps = !largeDeviceMemory && {
 		initialNumToRender: 2,
@@ -269,7 +258,7 @@ const IssueFronts = ({
 				length: card.height + SLIDER_FRONT_HEIGHT,
 				offset:
 					(card.height + SLIDER_FRONT_HEIGHT) * index +
-					(isWeatherActuallyShown
+					(useIsWeatherActuallyShown
 						? WEATHER_HEIGHT
 						: EMPTY_WEATHER_HEIGHT),
 				index,
@@ -333,7 +322,7 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
 	a.publishedIssueId === b.publishedIssueId;
 
 const WeatherHeader = () => {
-	const isWeatherShown = useIsWeatherShown();
+	const { isWeatherShown } = useIsWeatherShown();
 
 	if (!isWeatherShown) {
 		return <View style={styles.emptyWeatherSpace} />;

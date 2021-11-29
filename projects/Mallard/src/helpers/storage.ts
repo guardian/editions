@@ -116,6 +116,10 @@ const gdprConsentVersionCache = createAsyncCache<number>(
 	'@Setting_gdprConsentVersion',
 );
 
+const isWeatherShownCache = createAsyncCache<boolean>(
+	'@Setting_isWeatherShown',
+);
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -191,4 +195,5 @@ export {
 	gdprAllowPerformanceCache,
 	gdprAllowFunctionalityCache,
 	gdprConsentVersionCache,
+	isWeatherShownCache,
 };
