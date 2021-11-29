@@ -36,6 +36,7 @@ describe('useEditions', () => {
 				selectedLocalState,
 				editionsList,
 				DownloadBlockedStatus.NotBlocked,
+				() => {},
 			);
 			expect(defaultLocalState).toBeCalledTimes(1);
 			expect(defaultLocalState).toBeCalledWith(BASE_EDITION);

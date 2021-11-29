@@ -238,6 +238,7 @@ describe('useEditions', () => {
 				selectedLocalState,
 				DEFAULT_EDITIONS_LIST,
 				DownloadBlockedStatus.NotBlocked,
+				() => {},
 			);
 			expect(defaultLocalState).toBeCalledTimes(1);
 			expect(defaultLocalState).toBeCalledWith(
@@ -262,6 +263,7 @@ describe('useEditions', () => {
 				selectedLocalState,
 				DEFAULT_EDITIONS_LIST,
 				DownloadBlockedStatus.NotBlocked,
+				() => {},
 			);
 			expect(defaultLocalState).toBeCalledTimes(1);
 			expect(defaultLocalState).toBeCalledWith(

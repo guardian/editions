@@ -29,6 +29,11 @@ interface ConfigState {
 	setIsWeatherShownSetting: (setting: boolean) => Promise<void>;
 }
 
+export type IsWeatherShown = {
+	isWeatherShown: ConfigState['isWeatherShown'];
+	setIsWeatherShown: (setting: boolean) => void;
+};
+
 const notificationInitialState = () =>
 	Platform.OS === 'android' ? true : false;
 
@@ -260,7 +265,7 @@ export const useMaxAvailableEditions = () => ({
 		useContext(ConfigContext).setMaxAvailableEditionsSetting,
 });
 
-export const useIsWeatherShown = () => ({
+export const useIsWeatherShown = (): IsWeatherShown => ({
 	isWeatherShown: useContext(ConfigContext).isWeatherShown,
 	setIsWeatherShown: useContext(ConfigContext).setIsWeatherShownSetting,
 });

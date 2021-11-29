@@ -1,4 +1,3 @@
-import { captureException } from '@sentry/minimal';
 import moment from 'moment';
 import type { Dispatch } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -29,6 +28,8 @@ import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { useAppState } from './use-app-state-provider';
+import type { IsWeatherShown } from './use-config-provider';
+import { useIsWeatherShown } from './use-config-provider';
 import type { NetInfoState } from './use-net-info-provider';
 import { useNetInfo } from './use-net-info-provider';
 
@@ -195,12 +196,13 @@ const setEdition = async (
 	setDefaultEdition: Dispatch<RegionalEdition>,
 	setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
 	downloadBlocked: NetInfoState['downloadBlocked'],
+	setIsWeatherShown: IsWeatherShown['setIsWeatherShown'],
 ) => {
 	setDefaultEdition(edition);
 	setSelectedEdition(edition);
 	await selectedEditionCache.set(edition);
 	await defaultEditionCache.set(edition);
-	await weatherHider();
+	await weatherHider(setIsWeatherShown);
 	pushNotificationRegistration(downloadBlocked);
 };
 
@@ -209,6 +211,7 @@ export const defaultEditionDecider = async (
 	setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
 	editionsList: EditionsList,
 	downloadBlocked: NetInfoState['downloadBlocked'],
+	setIsWeatherShown: IsWeatherShown['setIsWeatherShown'],
 ): Promise<void> => {
 	const selectedEdition = await getSelectedEdition();
 	// When user already has default edition set then that edition
@@ -232,6 +235,7 @@ export const defaultEditionDecider = async (
 				setDefaultEdition,
 				setSelectedEdition,
 				downloadBlocked,
+				setIsWeatherShown,
 			);
 		} else {
 			// auto detected edition was not possible, set default edition
@@ -240,6 +244,7 @@ export const defaultEditionDecider = async (
 				setDefaultEdition,
 				setSelectedEdition,
 				downloadBlocked,
+				setIsWeatherShown,
 			);
 		}
 	}
@@ -263,6 +268,7 @@ export const EditionProvider = ({
 
 	const { isConnected, downloadBlocked } = useNetInfo();
 	const { isActive } = useAppState();
+	const { setIsWeatherShown } = useIsWeatherShown();
 
 	/**
 	 * Default Edition and Selected
@@ -277,6 +283,7 @@ export const EditionProvider = ({
 			setSelectedEdition,
 			editionsList,
 			downloadBlocked,
+			setIsWeatherShown,
 		);
 	}, [editionsList, downloadBlocked]);
 

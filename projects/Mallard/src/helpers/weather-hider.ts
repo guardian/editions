@@ -1,8 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-	largeDeviceMemory,
-	useIsWeatherShown,
-} from 'src/hooks/use-config-provider';
+import type { IsWeatherShown } from 'src/hooks/use-config-provider';
+import { largeDeviceMemory } from 'src/hooks/use-config-provider';
 import { getDefaultEditionSlug } from 'src/hooks/use-edition-provider';
 import { errorService } from 'src/services/errors';
 
@@ -12,10 +10,9 @@ import { errorService } from 'src/services/errors';
 const KEY = '@weatherLowRAMCheck';
 const EDITIONCHECKKEY = '@weatherEditionCheck';
 
-const weatherHider = async () => {
-	console.log('CALLED');
-	const { setIsWeatherShown } = useIsWeatherShown();
-
+const weatherHider = async (
+	setIsWeatherShown: IsWeatherShown['setIsWeatherShown'],
+) => {
 	try {
 		const weatherLowRamCheck = await AsyncStorage.getItem(KEY);
 		const editionWeatherCheck = await AsyncStorage.getItem(EDITIONCHECKKEY);
@@ -30,6 +27,7 @@ const weatherHider = async () => {
 			defaultEdition &&
 			defaultEdition !== 'daily-edition'
 		) {
+			console.log('IS THIS HERE?');
 			await AsyncStorage.setItem(EDITIONCHECKKEY, 'true');
 			setIsWeatherShown(false);
 		}
