@@ -27,7 +27,6 @@ const weatherHider = async (
 			defaultEdition &&
 			defaultEdition !== 'daily-edition'
 		) {
-			console.log('IS THIS HERE?');
 			await AsyncStorage.setItem(EDITIONCHECKKEY, 'true');
 			setIsWeatherShown(false);
 		}
