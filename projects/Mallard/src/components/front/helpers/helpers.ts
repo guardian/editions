@@ -38,8 +38,6 @@ export const getItemRectanglePerc = (
 	};
 };
 
-export const toPercentage = (nm: number): string => `${nm * 100}%`;
-
 export const toAbsoluteRectangle = (
 	rectangle: Rectangle,
 	cardSize: Size,
@@ -58,14 +56,6 @@ clever but also for now this works
 */
 export const getScrollPos = (width: number, screenX: number) => {
 	return screenX + (metrics.horizontal * 6 * screenX) / width;
-};
-
-export const getNearestPage = (
-	width: number,
-	screenX: number,
-	pageCount: number,
-): number => {
-	return Math.round((getScrollPos(width, screenX) * (pageCount - 1)) / width);
 };
 
 export const getTranslateForPage = (

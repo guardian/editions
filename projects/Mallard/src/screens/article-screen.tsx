@@ -18,10 +18,6 @@ import { color } from 'src/theme/color';
 import { ArticleScreenBody } from './article/body';
 import { ArticleSlider } from './article/slider';
 
-export interface ArticleTransitionProps {
-	startAtHeightFromFrontsItem: number;
-}
-
 export type FrontSpec = {
 	frontName: string;
 	appearance: Appearance;

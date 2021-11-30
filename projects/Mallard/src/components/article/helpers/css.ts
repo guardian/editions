@@ -1,11 +1,5 @@
-import type { PillarColoursWithTint } from 'src/helpers/transform';
 import { color } from 'src/theme/color';
 import { ArticleTheme } from '../article';
-
-export interface CssProps {
-	colors: PillarColoursWithTint;
-	theme: ArticleTheme;
-}
 
 export const themeColors = (theme: ArticleTheme) => {
 	if (theme === ArticleTheme.Dark) {

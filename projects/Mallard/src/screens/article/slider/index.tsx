@@ -22,10 +22,6 @@ import {
 } from './SliderHeaderHighEnd';
 import type { SliderSection } from './types';
 
-export interface ArticleTransitionProps {
-	startAtHeightFromFrontsItem: number;
-}
-
 const styles = StyleSheet.create({
 	androidPager: {
 		flexGrow: 1,
