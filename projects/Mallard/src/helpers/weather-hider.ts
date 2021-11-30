@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import type { IsWeatherShown } from 'src/hooks/use-config-provider';
 import { largeDeviceMemory } from 'src/hooks/use-config-provider';
 import { getDefaultEditionSlug } from 'src/hooks/use-edition-provider';
+import type { IsWeatherShown } from 'src/hooks/use-weather-provider';
 import { errorService } from 'src/services/errors';
 
 // Purpose: To hide the weather on the first load unless the user turns it on

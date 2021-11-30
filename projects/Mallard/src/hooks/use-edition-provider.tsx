@@ -28,10 +28,10 @@ import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { useAppState } from './use-app-state-provider';
-import type { IsWeatherShown } from './use-config-provider';
-import { useIsWeatherShown } from './use-config-provider';
 import type { NetInfoState } from './use-net-info-provider';
 import { useNetInfo } from './use-net-info-provider';
+import type { IsWeatherShown } from './use-weather-provider';
+import { useIsWeatherShown } from './use-weather-provider';
 
 interface EditionState {
 	editionsList: EditionsList;
