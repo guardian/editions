@@ -1,18 +1,6 @@
-import type { LightboxMessage, ShareMessage } from '@guardian/renditions';
 import { Platform } from 'react-native';
 import type { ArticleType } from 'src/common';
 import { bundles } from 'src/html-bundle-info.json';
-import type { FontFamily, FontSizes } from 'src/theme/typography';
-import { getFont, getScaledFont } from 'src/theme/typography';
-
-export type WebViewPing =
-	| {
-			kind: 'shouldShowHeaderChange';
-			shouldShowHeader: boolean;
-	  }
-	| { kind: 'isAtTopChange'; isAtTop: boolean }
-	| ShareMessage
-	| LightboxMessage;
 
 /*
 this tricks vs code into thinking
@@ -34,28 +22,6 @@ export const css = passthrough;
 export const html = passthrough;
 
 export const px = (value: string | number) => `${value}px`;
-
-export const getFontCss = <F extends FontFamily>(
-	family: F,
-	level: FontSizes<F>,
-) => {
-	const font = getFont(family, level);
-	return css`
-		font-size: ${px(font.fontSize)};
-		line-height: ${px(font.lineHeight)};
-	`;
-};
-export const getScaledFontCss = <F extends FontFamily>(
-	family: F,
-	level: FontSizes<F>,
-) => {
-	const font = getScaledFont(family, level);
-	const adjustment = Platform.OS == 'android' ? 2 : 0;
-	return css`
-		font-size: ${px(font.fontSize + adjustment)};
-		line-height: ${px(font.lineHeight + adjustment)};
-	`;
-};
 
 interface AltFont {
 	showsAsFamily: string;

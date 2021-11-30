@@ -37,8 +37,6 @@ export type AppleCreds = {
 	familyName: string;
 };
 
-export const AppleSignInTokenKey = 'apple-sign-in-token';
-
 type AppleOauthCreds = {
 	'apple-sign-in-token': string;
 };

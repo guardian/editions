@@ -3,11 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import type { Image } from 'src/common';
 import { PageLayoutSizes } from 'src/common';
 import { HeadlineCardText } from 'src/components/styled-text';
-import { metrics } from 'src/theme/spacing';
 import { ImageResource } from '../image-resource';
 import type { PropTypes } from './helpers/item-tappable';
 import { ItemTappable } from './helpers/item-tappable';
-import { TextBlock } from './helpers/text-block';
 import { ImageItem, SidekickImageItem, SplitImageItem } from './image-items';
 import { SmallItem, SmallItemLargeText } from './small-items';
 import { SuperHeroImageItem } from './super-items';
@@ -15,50 +13,6 @@ import { SuperHeroImageItem } from './super-items';
 /*
 helpers
 */
-
-/*
-COVER ITEM
-Text over image. To use in lifestyle & art heros
-*/
-const coverStyles = StyleSheet.create({
-	cover: {
-		width: '100%',
-		height: '100%',
-		flex: 1,
-	},
-	text: {
-		width: '50%',
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		top: '50%',
-		paddingTop: metrics.vertical / 3,
-	},
-});
-
-const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
-	return (
-		<ItemTappable {...tappableProps} {...{ article }}>
-			<View style={coverStyles.cover}>
-				{'trailImage' in article && article.trailImage ? (
-					<ImageResource
-						style={coverStyles.cover}
-						image={article.trailImage}
-						use="thumb"
-					/>
-				) : null}
-				<TextBlock
-					byline={article.byline}
-					type={article.type}
-					kicker={article.kicker}
-					headline={article.headline}
-					style={coverStyles.text}
-					{...{ size }}
-				/>
-			</View>
-		</ItemTappable>
-	);
-};
 
 /*
 SPLASH ITEM
@@ -117,6 +71,5 @@ export {
 	SplitImageItem,
 	SmallItem,
 	SmallItemLargeText,
-	CoverItem,
 	SidekickImageItem,
 };

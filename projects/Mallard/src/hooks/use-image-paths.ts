@@ -7,12 +7,6 @@ import type { Image, ImageUse, Issue } from '../../../Apps/common/src';
 import { useIssueSummary } from './use-issue-summary-provider';
 import { useApiUrl } from './use-settings';
 
-export type GetImagePath = (
-	image?: Image,
-	use?: ImageUse,
-	forceRemotePath?: boolean,
-) => string | undefined;
-
 const getFsPath = (
 	localIssueId: Issue['localId'],
 	image: Image,

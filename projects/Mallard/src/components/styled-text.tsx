@@ -128,16 +128,6 @@ export const HeadlineKickerText = ({
 	return <Text {...props} style={[styles.headlineKickerText, style]} />;
 };
 
-export const StandfirstText = ({
-	style,
-	...props
-}: {
-	children: string;
-	style?: StyleProp<TextStyle>;
-} & TextProps) => {
-	return <Text {...props} style={[styles.standfirstText, style]} />;
-};
-
 export const HeadlineCardText = ({
 	children,
 	style,
@@ -150,28 +140,6 @@ export const HeadlineCardText = ({
 		{children}
 	</HeadlineText>
 );
-
-export const BodyCopy = ({
-	style,
-	weight = 'regular',
-	...props
-}: {
-	children: string;
-	weight: 'regular' | 'bold';
-	style?: StyleProp<TextStyle>;
-} & TextProps) => {
-	return (
-		<Text
-			{...props}
-			style={[
-				weight === 'bold'
-					? styles.serifBodyCopyBold
-					: styles.serifBodyCopy,
-				style,
-			]}
-		/>
-	);
-};
 
 export const UiBodyCopy = ({
 	children,

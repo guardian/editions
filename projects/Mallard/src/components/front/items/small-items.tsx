@@ -6,7 +6,6 @@ import { Stars } from 'src/components/Stars/Stars';
 import type { PropTypes } from './helpers/item-tappable';
 import { ItemTappable } from './helpers/item-tappable';
 import { TextBlock } from './helpers/text-block';
-import { SuperHeroImageItem } from './super-items';
 
 const styles = StyleSheet.create({
 	starsAndSportScoreWrapper: {
@@ -66,4 +65,4 @@ const SmallItemLargeText = ({ article, ...tappableProps }: PropTypes) => {
 	);
 };
 
-export { SuperHeroImageItem, SmallItem, SmallItemLargeText };
+export { SmallItem, SmallItemLargeText };

@@ -11,13 +11,6 @@ export const isSafeValue = (value: unknown): value is number => {
 	return true;
 };
 
-export const safeValue = (value: unknown, fallback: number): number => {
-	if (!isSafeValue(value)) {
-		return fallback;
-	}
-	return value;
-};
-
 export const safeInterpolation = (values: unknown[]): number[] => {
 	for (const value of values) {
 		if (!isSafeValue(value)) {

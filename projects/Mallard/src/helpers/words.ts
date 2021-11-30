@@ -38,7 +38,7 @@ export const FAQS_HEADER_TITLE = 'FAQ';
 export const ENDPOINTS_HEADER_TITLE = 'API Endpoints';
 export const HELP_HEADER_TITLE = 'Help';
 export const EDITIONS_HEADER_TITLE = 'Editions';
-export const TERMS_HEADER_TITLE = 'Terms &amp; Conditions';
+export const TERMS_HEADER_TITLE = 'Terms & Conditions';
 
 export const ERR_404_MISSING_PROPS = `Couldn't find a path to this item`;
 export const ERR_404_REMOTE = `Couldn't find item`;

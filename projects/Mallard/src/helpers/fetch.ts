@@ -10,8 +10,6 @@ import { getSetting } from './settings';
 import { defaultSettings } from './settings/defaults';
 import { cacheClearCache } from './storage';
 
-export type ValidatorFn<T> = (response: any | T) => boolean;
-
 const fetchIssueWithFrontsFromAPI = async (
 	id: string,
 ): Promise<IssueWithFronts> => {

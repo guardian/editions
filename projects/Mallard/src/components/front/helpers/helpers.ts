@@ -38,8 +38,6 @@ export const getItemRectanglePerc = (
 	};
 };
 
-export const toPercentage = (nm: number): string => `${nm * 100}%`;
-
 export const toAbsoluteRectangle = (
 	rectangle: Rectangle,
 	cardSize: Size,
@@ -49,24 +47,6 @@ export const toAbsoluteRectangle = (
 	top: rectangle.top * cardSize.height,
 	height: rectangle.height * cardSize.height,
 });
-
-/*
-Map the position of the tap on the screen to
-the position of the tap on the scrubber itself (which has padding).
-This is coupled to the visual layout and we can be a bit more
-clever but also for now this works
-*/
-export const getScrollPos = (width: number, screenX: number) => {
-	return screenX + (metrics.horizontal * 6 * screenX) / width;
-};
-
-export const getNearestPage = (
-	width: number,
-	screenX: number,
-	pageCount: number,
-): number => {
-	return Math.round((getScrollPos(width, screenX) * (pageCount - 1)) / width);
-};
 
 export const getTranslateForPage = (
 	width: number,
