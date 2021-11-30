@@ -17,15 +17,11 @@ and it fades content in and out with a user chosen delay.
 The build order goes up/down according to screen position
 */
 
-export interface PropTypes {
-	children: any;
-}
-
 const faderStyles = StyleSheet.create({
 	wrapper: { width: '100%' },
 });
 
-const Fader = ({ children }: PropTypes) => {
+const Fader = ({ children }: { children: JSX.Element }) => {
 	const position = new Animated.Value(1);
 	const { height } = Dimensions.get('window');
 	const largeDeviceMemeory = useLargeDeviceMemory();

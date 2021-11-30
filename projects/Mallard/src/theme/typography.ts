@@ -1,4 +1,4 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import { Dimensions } from 'react-native';
 import type { BreakpointList } from 'src/theme/breakpoints';
 import { Breakpoints, pickClosestBreakpoint } from './breakpoints';
 
@@ -422,17 +422,5 @@ export const getFont = <F extends FontFamily>(
 	return {
 		fontFamily: families[family][weight],
 		...applyScale(fontAtLevel),
-	};
-};
-
-export const getScaledFont = <F extends FontFamily>(
-	family: F,
-	level: FontSizes<F>,
-) => {
-	const font = getFont(family, level);
-	return {
-		...font,
-		lineHeight: font.lineHeight * PixelRatio.getFontScale(),
-		fontSize: font.fontSize * PixelRatio.getFontScale(),
 	};
 };
