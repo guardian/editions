@@ -20,10 +20,8 @@ import { FullButton } from 'src/components/lists/FullButton';
 import { setIsUsingProdDevtools } from 'src/helpers/settings/setters';
 import { Copy } from 'src/helpers/words';
 import { useQuery } from 'src/hooks/apollo';
-import {
-	useIsWeatherShown,
-	useNotificationsEnabled,
-} from 'src/hooks/use-config-provider';
+import { useNotificationsEnabled } from 'src/hooks/use-config-provider';
+import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';

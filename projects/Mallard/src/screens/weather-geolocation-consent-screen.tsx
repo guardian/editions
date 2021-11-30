@@ -9,7 +9,7 @@ import { requestLocationPermission } from 'src/helpers/location-permission';
 import { getGeolocation } from 'src/helpers/weather';
 import { html } from 'src/helpers/webview';
 import { Copy } from 'src/helpers/words';
-import { useIsWeatherShown } from 'src/hooks/use-config-provider';
+import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import { metrics } from 'src/theme/spacing';
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview';
 

@@ -39,7 +39,6 @@ import {
 import { useQuery } from 'src/hooks/apollo';
 import {
 	useDimensions,
-	useIsWeatherShown,
 	useLargeDeviceMemory,
 } from 'src/hooks/use-config-provider';
 import {
@@ -54,6 +53,7 @@ import {
 } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useIsPreview, useIsProof } from 'src/hooks/use-settings';
+import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { PathToIssue } from 'src/paths';
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle';
 import { sendPageViewEvent } from 'src/services/ophan';

@@ -28,6 +28,7 @@ import { IssueSummaryProvider } from './hooks/use-issue-summary-provider';
 import { NetInfoProvider } from './hooks/use-net-info-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
+import { WeatherProvider } from './hooks/use-weather-provider';
 import { DeprecateVersionModal } from './screens/deprecate-screen';
 import { apolloClient } from './services/apollo-singleton';
 import { remoteConfigService } from './services/remote-config';
@@ -56,6 +57,7 @@ const WithProviders = nestProviders(
 	IssueSummaryProvider,
 	GDPRProvider,
 	CoreProvider,
+	WeatherProvider,
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
