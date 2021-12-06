@@ -1,8 +1,6 @@
-import type { ApolloClient } from 'apollo-client';
 import { Platform } from 'react-native';
 import type { PermissionStatus } from 'react-native-permissions';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
-import { refreshWeather } from './weather';
 
 const LOCATION_PERMISSION = Platform.select({
 	ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
@@ -13,10 +11,7 @@ const LOCATION_PERMISSION = Platform.select({
 export const resolveLocationPermissionStatus =
 	async (): Promise<PermissionStatus> => await check(LOCATION_PERMISSION);
 
-export const requestLocationPermission = async (
-	apolloClient: ApolloClient<object>,
-): Promise<PermissionStatus> => {
-	const result = await request(LOCATION_PERMISSION);
-	refreshWeather(apolloClient);
-	return result;
-};
+export const requestLocationPermission =
+	async (): Promise<PermissionStatus> => {
+		return await request(LOCATION_PERMISSION);
+	};
