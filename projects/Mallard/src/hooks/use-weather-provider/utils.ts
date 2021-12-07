@@ -9,16 +9,6 @@ import { resolveLocationPermissionStatus } from 'src/helpers/location-permission
 
 class CannotFetchError extends Error {}
 
-Geolocation.setRNConfiguration({
-	/**
-	 * We want to control the exact moment the permission pop-up shows, so
-	 * we don't rely on the Geolocation module and instead manage permissions
-	 * ourselves
-	 */
-	skipPermissionRequests: true,
-	authorizationLevel: 'whenInUse',
-});
-
 /**
  * Throw strongly typed error on network error, most notably
  * is connection is down. Allows us to process this correctly downstream.

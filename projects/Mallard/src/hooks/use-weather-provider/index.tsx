@@ -6,6 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import type { Forecast } from 'src/common';
+import { initisaliseLocationPermission } from 'src/helpers/location-permission';
 import { isWeatherShownCache } from 'src/helpers/storage';
 import { errorService } from 'src/services/errors';
 import { useAppState } from '../use-app-state-provider';
@@ -25,6 +26,25 @@ export type IsWeatherShown = {
 	setIsWeatherShown: (setting: boolean) => void;
 };
 
+const forecastDefaultState: Forecast = {
+	DateTime: '',
+	EpochDateTime: 0,
+	WeatherIcon: 0,
+	IconPhrase: '',
+	HasPrecipitation: false,
+	IsDaylight: true,
+	Temperature: {
+		Value: 0,
+		Unit: '',
+		UnitType: 0,
+	},
+	PrecipitationProbability: 0,
+	MobileLink: '',
+	Link: '',
+	PrecipitationIntensity: undefined,
+	PrecipitationType: undefined,
+};
+
 const initialState = {
 	isWeatherShown: true,
 	setIsWeatherShownSetting: (setting: boolean) => {
@@ -33,7 +53,7 @@ const initialState = {
 	},
 	locationName: '',
 	isLocationPrecise: false,
-	forecasts: [],
+	forecasts: [forecastDefaultState],
 	lastUpdated: 0,
 	refreshWeather: () => {},
 };
@@ -107,16 +127,20 @@ export const WeatherProvider = ({
 		[setLocationName, setIsLocationPrecise, setForecasts, setLastUpdated],
 	);
 
+	// Weather settings
 	useEffect(() => {
+		initisaliseLocationPermission();
 		getIsWeatherShown().then((setting) =>
 			setIsWeatherShownSetting(setting),
 		);
 	}, []);
 
+	// Get the weather on load
 	useEffect(() => {
 		fetchWeather();
 	}, []);
 
+	// When the app is in an active state, go get the weather
 	useEffect(() => {
 		isActive && fetchWeather();
 	}, [isActive]);

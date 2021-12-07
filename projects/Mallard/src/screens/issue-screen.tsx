@@ -166,7 +166,7 @@ const IssueFronts = ({
 	const useIsWeatherActuallyShown =
 		weatherResult.isWeatherShown &&
 		weatherResult.lastUpdated !== 0 &&
-		weatherResult.forecasts >= 9;
+		weatherResult.forecasts.length >= 9;
 
 	const {
 		frontWithCards,
