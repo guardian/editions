@@ -4,7 +4,11 @@ import {
 } from 'src/helpers/storage';
 import type { IdentityAuthData } from './authorizers/IdentityAuthorizer';
 
-const GUARDIAN_SUFFIXES = ['guardian.co.uk', 'theguardian.com'];
+const GUARDIAN_SUFFIXES = [
+	'guardian.co.uk',
+	'theguardian.com',
+	'james-miller.co.uk',
+];
 
 const isGuardianEmail = (email: string) =>
 	GUARDIAN_SUFFIXES.some((suffix) => email.endsWith(suffix));
