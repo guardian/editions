@@ -120,6 +120,10 @@ const isWeatherShownCache = createAsyncCache<boolean>(
 	'@Setting_isWeatherShown',
 );
 
+const isUsingProdDevtoolsCache = createAsyncCache<boolean>(
+	'@Setting_isUsingProdDevtools',
+);
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -196,4 +200,5 @@ export {
 	gdprAllowFunctionalityCache,
 	gdprConsentVersionCache,
 	isWeatherShownCache,
+	isUsingProdDevtoolsCache,
 };

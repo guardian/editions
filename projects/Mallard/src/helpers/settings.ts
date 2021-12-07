@@ -5,7 +5,6 @@ export const SETTINGS_KEY_PREFIX = '@Setting_';
 
 export interface DevSettings {
 	apiUrl: string;
-	isUsingProdDevtools: boolean;
 	notificationServiceRegister: string;
 	cacheClearUrl: string;
 	deprecationWarningUrl: string;

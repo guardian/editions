@@ -4,7 +4,7 @@ import { getPillarColors } from 'src/helpers/transform';
 import { DevTools } from 'src/hooks/article/dev-tools';
 import type { Appearance, ArticlePillar, Collection } from '../common';
 import { ArticleType } from '../common';
-import { useIsUsingProdDevtools } from './use-settings';
+import { useIsUsingProdDevtools } from './use-config-provider';
 
 /*
   Exports
@@ -47,7 +47,7 @@ const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
 };
 
 export const WithArticle = (props: PropTypes) => {
-	const isUsingProdDevtools = useIsUsingProdDevtools();
+	const { isUsingProdDevtools } = useIsUsingProdDevtools();
 
 	if (isUsingProdDevtools) return <ProvidersAndDevtools {...props} />;
 	return <Providers {...props} />;

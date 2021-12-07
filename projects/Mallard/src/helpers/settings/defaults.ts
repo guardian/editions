@@ -102,7 +102,6 @@ const storeDetails = {
 
 export const defaultSettings: Settings = {
 	apiUrl,
-	isUsingProdDevtools: false,
 	notificationServiceRegister: __DEV__
 		? notificationServiceRegister.code
 		: notificationServiceRegister.prod,

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Dimensions, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
+	isUsingProdDevtoolsCache,
 	maxAvailableEditionsCache,
 	notificationsEnabledCache,
 	wifiOnlyDownloadsCache,
@@ -24,6 +25,8 @@ interface ConfigState {
 	setWifiOnlyDownloadsSetting: (setting: boolean) => Promise<void>;
 	maxAvailableEditions: number;
 	setMaxAvailableEditionsSetting: (setting: number) => Promise<void>;
+	isUsingProdDevtools: boolean;
+	setIsUsingProdDevToolsSetting: (setting: boolean) => Promise<void>;
 }
 
 const notificationInitialState = () =>
@@ -43,6 +46,8 @@ const initialState: ConfigState = {
 	setWifiOnlyDownloadsSetting: () => Promise.resolve(),
 	maxAvailableEditions: 7,
 	setMaxAvailableEditionsSetting: () => Promise.resolve(),
+	isUsingProdDevtools: false,
+	setIsUsingProdDevToolsSetting: () => Promise.resolve(),
 };
 
 const ConfigContext = createContext(initialState);
@@ -72,6 +77,17 @@ export const getWifiOnlyDownloadsSetting = async (): Promise<
 	}
 };
 
+export const getIsUsingProdDevtoolsSetting = async (): Promise<
+	ConfigState['isUsingProdDevtools']
+> => {
+	try {
+		const isUsingProdDevtools = await isUsingProdDevtoolsCache.get();
+		return isUsingProdDevtools ?? initialState.isUsingProdDevtools;
+	} catch {
+		return Promise.resolve(initialState.isUsingProdDevtools);
+	}
+};
+
 export const getMaxAvailableEditions = async (): Promise<
 	ConfigState['maxAvailableEditions']
 > => {
@@ -95,6 +111,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	const [maxAvailableEditions, setMaxAvailableEditions] = useState<
 		ConfigState['maxAvailableEditions']
 	>(initialState.maxAvailableEditions);
+	const [isUsingProdDevtools, setIsUsingProdDevtools] = useState<
+		ConfigState['isUsingProdDevtools']
+	>(initialState.isUsingProdDevtools);
 
 	const setNotifications = async (setting: boolean) => {
 		try {
@@ -125,6 +144,17 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		} catch (e) {
 			console.log(e);
 			e.message = `Unable to Set Max Available Editions: ${e.message}`;
+			errorService.captureException(e);
+		}
+	};
+
+	const setIsUsingProdDevToolsSetting = async (setting: boolean) => {
+		try {
+			await isUsingProdDevtoolsCache.set(setting);
+			setIsUsingProdDevtools(setting);
+		} catch (e) {
+			console.log(e);
+			e.message = `Unable to set "Is Using Prod Dev Tools": ${e.message}`;
 			errorService.captureException(e);
 		}
 	};
@@ -194,6 +224,8 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 				setWifiOnlyDownloadsSetting,
 				maxAvailableEditions,
 				setMaxAvailableEditionsSetting,
+				isUsingProdDevtools,
+				setIsUsingProdDevToolsSetting,
 			}}
 		>
 			{children}
@@ -220,4 +252,10 @@ export const useMaxAvailableEditions = () => ({
 	maxAvailableEditions: useContext(ConfigContext).maxAvailableEditions,
 	setMaxAvailableEditions:
 		useContext(ConfigContext).setMaxAvailableEditionsSetting,
+});
+
+export const useIsUsingProdDevtools = () => ({
+	isUsingProdDevtools: useContext(ConfigContext).isUsingProdDevtools,
+	setIsUsingProdDevTools:
+		useContext(ConfigContext).setIsUsingProdDevToolsSetting,
 });
