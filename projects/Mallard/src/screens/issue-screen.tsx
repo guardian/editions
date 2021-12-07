@@ -14,11 +14,8 @@ import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout
 import { NewEditionCard } from 'src/components/onboarding/new-edition';
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader';
 import { Spinner } from 'src/components/Spinner/Spinner';
-import type { WeatherQueryData } from 'src/components/weather';
 import {
 	EMPTY_WEATHER_HEIGHT,
-	WEATHER_QUERY as FULL_WEATHER_QUERY,
-	getValidWeatherData,
 	WEATHER_HEIGHT,
 	WeatherWidget,
 } from 'src/components/weather';
@@ -36,7 +33,6 @@ import {
 	NewEditionWords,
 	REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words';
-import { useQuery } from 'src/hooks/apollo';
 import {
 	useDimensions,
 	useLargeDeviceMemory,
@@ -53,7 +49,7 @@ import {
 } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useIsPreview, useIsProof } from 'src/hooks/use-settings';
-import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
+import { useWeather } from 'src/hooks/use-weather-provider';
 import type { PathToIssue } from 'src/paths';
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle';
 import { sendPageViewEvent } from 'src/services/ophan';
@@ -165,11 +161,12 @@ const IssueFronts = ({
 	const { width } = useDimensions();
 	const ref = useRef<FlatList<any> | null>(null);
 	const { selectedEdition } = useEditions();
-	const { isWeatherShown } = useIsWeatherShown();
-	const weatherResult = useQuery<WeatherQueryData>(FULL_WEATHER_QUERY);
+	const weatherResult = useWeather();
 
 	const useIsWeatherActuallyShown =
-		isWeatherShown && getValidWeatherData(weatherResult) !== undefined;
+		weatherResult.isWeatherShown &&
+		weatherResult.lastUpdated !== 0 &&
+		weatherResult.forecasts.length >= 9;
 
 	const {
 		frontWithCards,
@@ -322,7 +319,7 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
 	a.publishedIssueId === b.publishedIssueId;
 
 const WeatherHeader = () => {
-	const { isWeatherShown } = useIsWeatherShown();
+	const { isWeatherShown } = useWeather();
 
 	if (!isWeatherShown) {
 		return <View style={styles.emptyWeatherSpace} />;

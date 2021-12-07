@@ -1,8 +1,7 @@
-import type { ApolloClient } from 'apollo-client';
+import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import type { PermissionStatus } from 'react-native-permissions';
 import { check, PERMISSIONS, request } from 'react-native-permissions';
-import { refreshWeather } from './weather';
 
 const LOCATION_PERMISSION = Platform.select({
 	ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
@@ -10,13 +9,21 @@ const LOCATION_PERMISSION = Platform.select({
 	default: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
 });
 
+export const initisaliseLocationPermission = () =>
+	Geolocation.setRNConfiguration({
+		/**
+		 * We want to control the exact moment the permission pop-up shows, so
+		 * we don't rely on the Geolocation module and instead manage permissions
+		 * ourselves
+		 */
+		skipPermissionRequests: true,
+		authorizationLevel: 'whenInUse',
+	});
+
 export const resolveLocationPermissionStatus =
 	async (): Promise<PermissionStatus> => await check(LOCATION_PERMISSION);
 
-export const requestLocationPermission = async (
-	apolloClient: ApolloClient<object>,
-): Promise<PermissionStatus> => {
-	const result = await request(LOCATION_PERMISSION);
-	refreshWeather(apolloClient);
-	return result;
-};
+export const requestLocationPermission =
+	async (): Promise<PermissionStatus> => {
+		return await request(LOCATION_PERMISSION);
+	};

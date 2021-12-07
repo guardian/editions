@@ -1,12 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import gql from 'graphql-tag';
 import Moment from 'moment';
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary';
-import type { QueryResult } from 'src/hooks/apollo';
-import { useQuery } from 'src/hooks/apollo';
+import { useWeather } from 'src/hooks/use-weather-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
@@ -25,16 +23,6 @@ type Weather = {
 export type WeatherQueryData = {
 	weather: Weather | null;
 };
-
-export const WEATHER_QUERY = gql`
-	{
-		weather @client {
-			locationName
-			isLocationPrecise
-			forecasts
-		}
-	}
-`;
 
 const narrowSpace = String.fromCharCode(8201);
 
@@ -278,20 +266,9 @@ const WeatherForecast = ({ weather }: { weather: Weather }) => {
 	return <></>;
 };
 
-export const getValidWeatherData = (result: QueryResult<WeatherQueryData>) => {
-	if (
-		!result.loading &&
-		result.data.weather != null &&
-		result.data.weather.forecasts.length >= 9
-	)
-		return result.data.weather;
-	return undefined;
-};
-
 const WeatherWidget = React.memo(() => {
-	const query = useQuery<WeatherQueryData>(WEATHER_QUERY);
-	const weather = getValidWeatherData(query);
-	if (weather == null) {
+	const weather = useWeather();
+	if (weather.lastUpdated === 0 || weather.forecasts.length < 9) {
 		return <View style={styles.emptyWeatherSpace} />;
 	}
 

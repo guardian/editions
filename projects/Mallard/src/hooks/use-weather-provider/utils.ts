@@ -1,25 +1,13 @@
 import type { GeolocationResponse } from '@react-native-community/geolocation';
 import Geolocation from '@react-native-community/geolocation';
-import type ApolloClient from 'apollo-client';
-import gql from 'graphql-tag';
-import { AppState, Platform } from 'react-native';
-import * as RNLocalize from 'react-native-localize';
+import { Platform } from 'react-native';
+import { getTemperatureUnit } from 'react-native-localize';
 import { RESULTS } from 'react-native-permissions';
 import type { AccuWeatherLocation, Forecast } from 'src/common';
-import { locale } from './locale';
-import { resolveLocationPermissionStatus } from './location-permission';
+import { locale } from 'src/helpers/locale';
+import { resolveLocationPermissionStatus } from 'src/helpers/location-permission';
 
 class CannotFetchError extends Error {}
-
-Geolocation.setRNConfiguration({
-	/**
-	 * We want to control the exact moment the permission pop-up shows, so
-	 * we don't rely on the Geolocation module and instead manage permissions
-	 * ourselves
-	 */
-	skipPermissionRequests: true,
-	authorizationLevel: 'whenInUse',
-});
 
 /**
  * Throw strongly typed error on network error, most notably
@@ -90,19 +78,7 @@ const getCurrentLocation = async () => {
 	return { accuLoc, isPrecise: true };
 };
 
-const QUERY = gql`
-	{
-		weather @client {
-			locationName @client
-			isLocationPrecise @client
-			forecasts @client
-			lastUpdated @client
-		}
-	}
-`;
-
 export type Weather = {
-	__typename: 'Weather';
 	locationName: string;
 	isLocationPrecise: boolean;
 	forecasts: Forecast[];
@@ -114,7 +90,6 @@ const makeWeatherObject = (
 	isPrecise: boolean,
 	forecasts: Forecast[],
 ): Weather => ({
-	__typename: 'Weather',
 	locationName: accuLoc.EnglishName,
 	isLocationPrecise: isPrecise,
 	forecasts,
@@ -123,9 +98,9 @@ const makeWeatherObject = (
 
 const shouldUseMetric = (): boolean => {
 	return Platform.select({
-		ios: RNLocalize.getTemperatureUnit() === 'celsius',
+		ios: getTemperatureUnit() === 'celsius',
 		android: locale === 'en_US' ? false : true,
-		default: RNLocalize.getTemperatureUnit() === 'celsius',
+		default: getTemperatureUnit() === 'celsius',
 	});
 };
 
@@ -134,7 +109,7 @@ const shouldUseMetric = (): boolean => {
  * "reconcile" the value when we update the cache later. If the weather is
  * unavailable we keep the previous data as a `fallback`.
  */
-const getWeather = async (
+export const getWeather = async (
 	fallback: Weather | null,
 ): Promise<Weather | null> => {
 	try {
@@ -151,74 +126,3 @@ const getWeather = async (
 		return null;
 	}
 };
-
-const MS_IN_A_SECOND = 1000;
-const SECS_IN_A_MINUTE = 60;
-const MINS_IN_AN_HOUR = 60;
-const ONE_HOUR = MS_IN_A_SECOND * SECS_IN_A_MINUTE * MINS_IN_AN_HOUR;
-
-/**
- * Resolve weather location information and forecasts. Refetch weather
- * after that if app is foregrounded and data is more than an hour old.
- * (We can't use `setTimeout` because of
- * https://github.com/facebook/react-native/issues/12981)
- *
- * `refreshWeather` forces an immediate refresh, can be from user request or
- * when the location permission change and we can now fetch more
- * precise weather.
- */
-const { resolveWeather, refreshWeather } = (() => {
-	// If `undefined`, weather has never been shown.
-	let weather: Promise<Weather | null> | undefined;
-
-	// We update the cache only if no other update happened in-between.
-	const update = async (
-		client: ApolloClient<object>,
-		fallback: Weather | null,
-	) => {
-		if (weather == null) return;
-		const newWeather = (weather = getWeather(fallback));
-		const value = await weather;
-		// `weather` might have changed while we were awaiting, in which case
-		// we don't want to update the cache with stale data.
-		if (weather == newWeather)
-			client.writeQuery({ query: QUERY, data: { weather: value } });
-	};
-
-	// When going foreground, we get the fresh weather (and potentially new
-	// location). Once that resolves we update the cache with the correct value,
-	// which updates any view showing the weather.
-	const onAppGoesForeground = async (client: ApolloClient<object>) => {
-		if (weather == null) return;
-		const value = await weather;
-		if (value != null && Date.now() < value.lastUpdated + ONE_HOUR) return;
-		update(client, value);
-	};
-
-	// The first time this is called we setup a listener to update the weather
-	// from time to time.
-	const resolveWeather = (
-		_context: unknown,
-		_args: {},
-		{ client }: { client: ApolloClient<object> },
-	) => {
-		if (weather !== undefined) return weather;
-
-		weather = getWeather(null);
-		AppState.addEventListener('change', (status) => {
-			if (status !== 'active') return;
-			onAppGoesForeground(client);
-		});
-		return weather;
-	};
-
-	const refreshWeather = async (client: ApolloClient<object>) => {
-		if (weather == null) return;
-		client.writeQuery({ query: QUERY, data: { weather: null } });
-		await update(client, null);
-	};
-
-	return { resolveWeather, refreshWeather };
-})();
-
-export { resolveWeather, refreshWeather };

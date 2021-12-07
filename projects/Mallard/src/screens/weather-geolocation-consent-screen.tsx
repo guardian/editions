@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
@@ -6,10 +5,10 @@ import { RESULTS } from 'react-native-permissions';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { requestLocationPermission } from 'src/helpers/location-permission';
-import { getGeolocation } from 'src/helpers/weather';
 import { html } from 'src/helpers/webview';
 import { Copy } from 'src/helpers/words';
-import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
+import { useIsWeatherShown, useWeather } from 'src/hooks/use-weather-provider';
+import { getGeolocation } from 'src/hooks/use-weather-provider/utils';
 import { metrics } from 'src/theme/spacing';
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview';
 
@@ -33,10 +32,11 @@ const showIsDisabledAlert = () => {
 
 const WeatherGeolocationConsentScreen = () => {
 	const navigation = useNavigation();
-	const apolloClient = useApolloClient();
+	const { refreshWeather } = useWeather();
 	const { setIsWeatherShown } = useIsWeatherShown();
 	const onConsentPress = async () => {
-		const result = await requestLocationPermission(apolloClient);
+		const result = await requestLocationPermission();
+		await refreshWeather();
 		if (result === RESULTS.BLOCKED) {
 			Alert.alert(
 				Copy.weather.locationPermissionTitle,
