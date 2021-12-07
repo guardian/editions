@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import gql from 'graphql-tag';
 import React, { useContext, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
 import { Alert, Linking, Platform, Switch, Text } from 'react-native';
@@ -17,10 +16,11 @@ import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading, Row, Separator } from 'src/components/layout/ui/row';
 import { DualButton } from 'src/components/lists/DualButton';
 import { FullButton } from 'src/components/lists/FullButton';
-import { setIsUsingProdDevtools } from 'src/helpers/settings/setters';
 import { Copy } from 'src/helpers/words';
-import { useQuery } from 'src/hooks/apollo';
-import { useNotificationsEnabled } from 'src/hooks/use-config-provider';
+import {
+	useIsUsingProdDevtools,
+	useNotificationsEnabled,
+} from 'src/hooks/use-config-provider';
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -103,14 +103,6 @@ const MiscSettingsList = () => {
 	);
 };
 
-type QueryData = { isUsingProdDevtools: boolean };
-
-const QUERY = gql`
-	{
-		isUsingProdDevtools @client
-	}
-`;
-
 const SignInButton = ({
 	username,
 	signOutIdentity,
@@ -148,7 +140,6 @@ const SignInButton = ({
 
 const SettingsScreen = () => {
 	const navigation = useNavigation();
-	const query = useQuery<QueryData>(QUERY);
 	const identityData = useIdentity();
 	const canAccess = useAccess();
 	const [, setVersionClickedTimes] = useState(0);
@@ -161,10 +152,8 @@ const SettingsScreen = () => {
 
 	const canDisplayBetaButton = !iapData && isLoggedInWithIdentity;
 	const buildNumber = DeviceInfo.getBuildNumber();
-
-	if (query.loading) return null;
-	const { client } = query;
-	const { isUsingProdDevtools } = query.data;
+	const { isUsingProdDevtools, setIsUsingProdDevTools } =
+		useIsUsingProdDevtools();
 
 	const versionClickHandler = identityData
 		? () => {
@@ -179,7 +168,7 @@ const SettingsScreen = () => {
 									text: 'Enable',
 									style: 'destructive',
 									onPress: () => {
-										setIsUsingProdDevtools(client, true);
+										setIsUsingProdDevTools(true);
 									},
 								},
 								{

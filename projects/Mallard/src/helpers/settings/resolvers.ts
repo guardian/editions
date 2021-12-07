@@ -12,7 +12,6 @@ const makeFragment = (names: string[]) =>
 
 const ALL_NAMES = [
 	'apiUrl', // This should be an east one to remove.
-	'isUsingProdDevtools', // This should be an easy one to remove
 ];
 
 /**

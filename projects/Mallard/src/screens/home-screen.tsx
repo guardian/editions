@@ -37,6 +37,7 @@ import {
 	CONNECTION_FAILED_ERROR,
 	Copy,
 } from 'src/helpers/words';
+import { useIsUsingProdDevtools } from 'src/hooks/use-config-provider';
 import {
 	getSpecialEditionProps,
 	useEditions,
@@ -45,7 +46,6 @@ import { useIssueResponse } from 'src/hooks/use-issue';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import useOverlayAnimation from 'src/hooks/use-overlay-animation';
-import { useIsUsingProdDevtools } from 'src/hooks/use-settings';
 import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
 import type { SettingsOverlayInterface } from 'src/hooks/use-settings-overlay';
 import { navigateToIssue } from 'src/navigation/helpers/base';
@@ -185,7 +185,7 @@ const IssueRowContainer = React.memo(
 
 const IssueListFooter = () => {
 	const navigation = useNavigation<CompositeNavigationStackProps>();
-	const isUsingProdDevtools = useIsUsingProdDevtools();
+	const { isUsingProdDevtools } = useIsUsingProdDevtools();
 	const { setIssueId } = useIssueSummary();
 	return (
 		<>

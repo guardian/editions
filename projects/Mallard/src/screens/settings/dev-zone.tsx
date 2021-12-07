@@ -21,12 +21,12 @@ import { locale } from 'src/helpers/locale';
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream';
 import { imageForScreenSize } from 'src/helpers/screen';
 import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers';
-import { setIsUsingProdDevtools } from 'src/helpers/settings/setters';
 import {
 	pushRegisteredTokens,
 	showAllEditionsCache,
 } from 'src/helpers/storage';
 import { useQuery } from 'src/hooks/apollo';
+import { useIsUsingProdDevtools } from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
@@ -84,6 +84,7 @@ const DevZone = () => {
 
 	const { attempt, signOutCAS } = useContext(AccessContext);
 	const { showToast } = useToast();
+	const { setIsUsingProdDevTools } = useIsUsingProdDevtools();
 
 	const [files, setFiles] = useState('fetching...');
 	const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...');
@@ -132,7 +133,7 @@ const DevZone = () => {
 		gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
 	);
 	if (query.loading) return null;
-	const { data, client } = query;
+	const { data } = query;
 	const { apiUrl } = data;
 	if (typeof apiUrl !== 'string') throw new Error('expected string');
 
@@ -260,7 +261,7 @@ const DevZone = () => {
 								explainer:
 									'Tap the version 7 times to bring it back',
 								onPress: () => {
-									setIsUsingProdDevtools(client, false);
+									setIsUsingProdDevTools(false);
 								},
 							},
 							{

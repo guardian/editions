@@ -25,4 +25,3 @@ const createSetter = <Name extends keyof Settings>(
 };
 
 export const setApiUrl = createSetter('apiUrl');
-export const setIsUsingProdDevtools = createSetter('isUsingProdDevtools');
