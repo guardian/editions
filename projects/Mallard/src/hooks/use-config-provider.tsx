@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Dimensions, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { backends, isPreview } from 'src/helpers/settings/defaults';
 import {
+	apiUrlCache,
 	isUsingProdDevtoolsCache,
 	maxAvailableEditionsCache,
 	notificationsEnabledCache,
@@ -11,7 +13,10 @@ import { errorService } from 'src/services/errors';
 import { Breakpoints } from 'src/theme/breakpoints';
 
 const oneGB = 1073741824;
-interface ConfigState {
+
+export const API_URL_DEFAULT = backends[0].value;
+
+export interface ConfigState {
 	largeDeviceMemeory: boolean;
 	dimensions: {
 		width: number;
@@ -27,6 +32,8 @@ interface ConfigState {
 	setMaxAvailableEditionsSetting: (setting: number) => Promise<void>;
 	isUsingProdDevtools: boolean;
 	setIsUsingProdDevToolsSetting: (setting: boolean) => Promise<void>;
+	apiUrl: string;
+	setApiUrlSetting: (setting: string) => Promise<void>;
 }
 
 const notificationInitialState = () =>
@@ -48,6 +55,8 @@ const initialState: ConfigState = {
 	setMaxAvailableEditionsSetting: () => Promise.resolve(),
 	isUsingProdDevtools: false,
 	setIsUsingProdDevToolsSetting: () => Promise.resolve(),
+	apiUrl: API_URL_DEFAULT,
+	setApiUrlSetting: () => Promise.resolve(),
 };
 
 const ConfigContext = createContext(initialState);
@@ -77,7 +86,7 @@ export const getWifiOnlyDownloadsSetting = async (): Promise<
 	}
 };
 
-export const getIsUsingProdDevtoolsSetting = async (): Promise<
+export const getIsUsingProdDevToolsSetting = async (): Promise<
 	ConfigState['isUsingProdDevtools']
 > => {
 	try {
@@ -99,6 +108,15 @@ export const getMaxAvailableEditions = async (): Promise<
 	}
 };
 
+export const getApiUrlSetting = async (): Promise<ConfigState['apiUrl']> => {
+	try {
+		const apiUrl = await apiUrlCache.get();
+		return apiUrl ?? initialState.apiUrl;
+	} catch {
+		return Promise.resolve(initialState.apiUrl);
+	}
+};
+
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	const [largeDeviceMemeory, setLargeDeviceMemory] = useState(false);
 	const [dimensions, setDimensions] = useState(Dimensions.get('window'));
@@ -114,6 +132,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 	const [isUsingProdDevtools, setIsUsingProdDevtools] = useState<
 		ConfigState['isUsingProdDevtools']
 	>(initialState.isUsingProdDevtools);
+	const [apiUrl, setApiUrl] = useState<ConfigState['apiUrl']>(
+		initialState.apiUrl,
+	);
 
 	const setNotifications = async (setting: boolean) => {
 		try {
@@ -159,6 +180,17 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	};
 
+	const setApiUrlSetting = async (setting: string) => {
+		try {
+			await apiUrlCache.set(setting);
+			setApiUrl(setting);
+		} catch (e) {
+			console.log(e);
+			e.message = `Unable to set "Is Using Prod Dev Tools": ${e.message}`;
+			errorService.captureException(e);
+		}
+	};
+
 	useEffect(() => {
 		notificationsAreEnabled().then((setting) =>
 			setNotificationsEnabled(setting),
@@ -182,6 +214,17 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 			setLargeDeviceMemory(deviceMemory),
 		);
 	}, []);
+
+	useEffect(() => {
+		getIsUsingProdDevToolsSetting().then((setting) =>
+			setIsUsingProdDevToolsSetting(setting),
+		);
+	}, []);
+
+	useEffect(() => {
+		getApiUrlSetting().then((setting) => setApiUrlSetting(setting));
+	}, []);
+
 	useEffect(() => {
 		const listener = (
 			ev: Parameters<
@@ -226,6 +269,8 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 				setMaxAvailableEditionsSetting,
 				isUsingProdDevtools,
 				setIsUsingProdDevToolsSetting,
+				apiUrl,
+				setApiUrlSetting,
 			}}
 		>
 			{children}
@@ -258,4 +303,11 @@ export const useIsUsingProdDevtools = () => ({
 	isUsingProdDevtools: useContext(ConfigContext).isUsingProdDevtools,
 	setIsUsingProdDevTools:
 		useContext(ConfigContext).setIsUsingProdDevToolsSetting,
+});
+
+export const useApiUrl = () => ({
+	apiUrl: useContext(ConfigContext).apiUrl,
+	setApiUrl: useContext(ConfigContext).setApiUrlSetting,
+	isProof: useContext(ConfigContext).apiUrl.includes('proof'),
+	isPreview: isPreview(useContext(ConfigContext).apiUrl),
 });

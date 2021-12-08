@@ -1,19 +1,21 @@
 import type { Issue } from 'src/common';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
+import { getApiUrlSetting } from 'src/hooks/use-config-provider';
 import { APIPaths, FSPaths } from 'src/paths';
 import type { Front, IssueWithFronts } from '../../../Apps/common/src';
 import { withCache } from './fetch/cache';
 import type { CachedOrPromise } from './fetch/cached-or-promise';
 import { createCachedOrPromise } from './fetch/cached-or-promise';
 import { isIssueOnDevice, readFileAsJSON } from './files';
-import { getSetting } from './settings';
 import { defaultSettings } from './settings/defaults';
 import { cacheClearCache } from './storage';
 
 const fetchIssueWithFrontsFromAPI = async (
 	id: string,
 ): Promise<IssueWithFronts> => {
-	const apiUrl = await getSetting('apiUrl');
+	// TODO: Should be using use-config-provider but currently exists outside of react
+	// This whole area of the code is due to be refactored away
+	const apiUrl = await getApiUrlSetting();
 	const issue: Issue = await fetch(`${apiUrl}${APIPaths.issue(id)}`).then(
 		(res) => {
 			if (res.status !== 200) {

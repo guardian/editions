@@ -1,7 +1,9 @@
 import { Platform } from 'react-native';
 import { isInBeta } from 'src/helpers/release-stream';
-import { getSetting } from 'src/helpers/settings';
-import { notificationEdition } from 'src/helpers/settings/defaults';
+import {
+	defaultSettings,
+	notificationEdition,
+} from 'src/helpers/settings/defaults';
 import { getDefaultEdition } from 'src/hooks/use-edition-provider';
 import { errorService } from 'src/services/errors';
 
@@ -14,7 +16,7 @@ const registerWithNotificationService = async (
 	token: string,
 	topics: PushToken[],
 ) => {
-	const registerDeviceUrl = await getSetting('notificationServiceRegister');
+	const registerDeviceUrl = defaultSettings.notificationServiceRegister;
 	const options = {
 		deviceToken: token,
 		platform:

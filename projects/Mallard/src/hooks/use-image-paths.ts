@@ -4,8 +4,8 @@ import RNFS from 'react-native-fs';
 import { imageForScreenSize } from 'src/helpers/screen';
 import { APIPaths, FSPaths } from 'src/paths';
 import type { Image, ImageUse, Issue } from '../../../Apps/common/src';
+import { useApiUrl } from './use-config-provider';
 import { useIssueSummary } from './use-issue-summary-provider';
-import { useApiUrl } from './use-settings';
 
 const getFsPath = (
 	localIssueId: Issue['localId'],
@@ -50,8 +50,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
 
 	const [path, setPath] = useState<string | undefined>();
 
-	// FIXME: we should handle the loading status correctly.
-	const apiUrl = useApiUrl() ?? '';
+	const { apiUrl } = useApiUrl();
 
 	useEffect(() => {
 		let localSetPath = setPath;

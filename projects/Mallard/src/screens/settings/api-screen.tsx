@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet } from 'react-native';
@@ -8,16 +7,15 @@ import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Footer, Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { UiBodyCopy } from 'src/components/styled-text';
-import { backends, defaultSettings } from 'src/helpers/settings/defaults';
-import { setApiUrl } from 'src/helpers/settings/setters';
+import { backends } from 'src/helpers/settings/defaults';
 import { ENDPOINTS_HEADER_TITLE } from 'src/helpers/words';
-import { useApiUrl } from 'src/hooks/use-settings';
+import { API_URL_DEFAULT, useApiUrl } from 'src/hooks/use-config-provider';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 
 const ApiState = () => {
-	const apiUrl = useApiUrl();
-	if (apiUrl === defaultSettings.apiUrl) return null;
+	const { apiUrl } = useApiUrl();
+	if (apiUrl === API_URL_DEFAULT) return null;
 	return (
 		<Footer>
 			<UiBodyCopy>
@@ -28,8 +26,7 @@ const ApiState = () => {
 };
 
 const ApiScreen = () => {
-	const client = useApolloClient();
-	const apiUrl = useApiUrl();
+	const { apiUrl, setApiUrl } = useApiUrl();
 	const navigation = useNavigation();
 
 	return (
@@ -46,7 +43,7 @@ const ApiScreen = () => {
 					}}
 					onChangeText={(value) => {
 						if (value) {
-							setApiUrl(client, value);
+							setApiUrl(value);
 						}
 					}}
 					value={apiUrl ?? ''}
@@ -58,7 +55,7 @@ const ApiScreen = () => {
 						explainer: value,
 						key: value,
 						onPress: () => {
-							setApiUrl(client, value);
+							setApiUrl(value);
 							navigation.goBack();
 						},
 					}))}

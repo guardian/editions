@@ -34,6 +34,7 @@ import {
 	REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words';
 import {
+	useApiUrl,
 	useDimensions,
 	useLargeDeviceMemory,
 } from 'src/hooks/use-config-provider';
@@ -48,7 +49,6 @@ import {
 	useIssueSummary,
 } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
-import { useIsPreview, useIsProof } from 'src/hooks/use-settings';
 import { useWeather } from 'src/hooks/use-weather-provider';
 import type { PathToIssue } from 'src/paths';
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle';
@@ -279,8 +279,8 @@ const IssueFronts = ({
 };
 
 const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
-	const preview = useIsPreview();
-	return preview ? <ReloadButton onPress={onPress} /> : null;
+	const { isPreview } = useApiUrl();
+	return isPreview ? <ReloadButton onPress={onPress} /> : null;
 };
 
 const handleError =
@@ -338,8 +338,7 @@ const IssueScreenWithPath = React.memo(
 		initialFrontKey: string | null;
 		headerStyle?: SpecialEditionHeaderStyles;
 	}) => {
-		const isPreview = useIsPreview();
-		const isProof = useIsProof();
+		const { isPreview, isProof } = useApiUrl();
 		const response = useIssueResponse(path, isPreview);
 
 		return response({

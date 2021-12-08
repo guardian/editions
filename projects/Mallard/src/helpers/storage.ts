@@ -124,6 +124,8 @@ const isUsingProdDevtoolsCache = createAsyncCache<boolean>(
 	'@Setting_isUsingProdDevtools',
 );
 
+const apiUrlCache = createAsyncCache<string>('@Setting_apiUrl');
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -201,4 +203,5 @@ export {
 	gdprConsentVersionCache,
 	isWeatherShownCache,
 	isUsingProdDevtoolsCache,
+	apiUrlCache,
 };

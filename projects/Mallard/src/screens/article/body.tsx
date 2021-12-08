@@ -10,8 +10,8 @@ import {
 	getCollectionPillarOverride,
 	WithArticle,
 } from 'src/hooks/use-article';
+import { useApiUrl } from 'src/hooks/use-config-provider';
 import { useArticleResponse } from 'src/hooks/use-issue';
-import { useIsPreview } from 'src/hooks/use-settings';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
 
@@ -40,8 +40,8 @@ const ArticleScreenBody = React.memo<
 		...headerControlProps
 	}) => {
 		const articleResponse = useArticleResponse(path);
-		const preview = useIsPreview();
-		const previewNotice = preview
+		const { isPreview } = useApiUrl();
+		const previewNotice = isPreview
 			? `${path.collection}:${position}`
 			: undefined;
 

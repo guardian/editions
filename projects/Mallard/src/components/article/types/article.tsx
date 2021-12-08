@@ -22,10 +22,10 @@ import {
 } from 'src/helpers/settings/defaults';
 import { parsePing } from 'src/helpers/webview';
 import { useArticle } from 'src/hooks/use-article';
+import { useApiUrl } from 'src/hooks/use-config-provider';
 import { selectImagePath } from 'src/hooks/use-image-paths';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
-import { useApiUrl } from 'src/hooks/use-settings';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { remoteConfigService } from 'src/services/remote-config';
@@ -188,7 +188,7 @@ const Article = ({
 	const lightboxEnabled = remoteConfigService.getBoolean('lightbox_enabled');
 
 	const [, { pillar }] = useArticle();
-	const apiUrl = useApiUrl() ?? '';
+	const { apiUrl } = useApiUrl();
 	const { issueId } = useIssueSummary();
 	const { front, publishedIssueId } = path;
 	const htmlFolderInS3 = htmlEndpoint(apiUrl, publishedIssueId);

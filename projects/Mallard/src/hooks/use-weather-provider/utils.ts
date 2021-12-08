@@ -104,11 +104,6 @@ const shouldUseMetric = (): boolean => {
 	});
 };
 
-/**
- * We augment the return object with `__typename` fields to that Apollo can
- * "reconcile" the value when we update the cache later. If the weather is
- * unavailable we keep the previous data as a `fallback`.
- */
 export const getWeather = async (
 	fallback: Weather | null,
 ): Promise<Weather | null> => {
