@@ -63,6 +63,7 @@ export const downloadNamedIssueArchive = async ({
 	filename: string;
 	withProgress: boolean;
 }) => {
+	// @TODO: This value in future needs to come from React
 	const apiUrl = await getApiUrlSetting();
 	const zipUrl = `${apiUrl}${assetPath}`;
 	const downloadFolderLocation = FSPaths.downloadIssueLocation(localIssueId);
@@ -215,6 +216,7 @@ const silentlyDeleteFile = async (filePath: string) => {
 };
 
 export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
+	// @TODO: This value in future needs to come from React
 	const apiUrl = await getApiUrlSetting();
 	const edition = await getSelectedEditionSlug();
 	const editionDirectory = FSPaths.editionDir(edition);

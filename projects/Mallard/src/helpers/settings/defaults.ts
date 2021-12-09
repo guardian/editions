@@ -115,12 +115,11 @@ const storeDetails = {
 	android: 'market://details?id=com.guardian.editions',
 };
 
+// @TODO Move API values to sit with the API url in the config provider
 export const defaultSettings: Settings = {
 	notificationServiceRegister: __DEV__
 		? notificationServiceRegister.code
 		: notificationServiceRegister.prod,
-
-	// Now questioning whether these should live with the config provider as they surely wont change?
 	cacheClearUrl: apiUrl + 'cache-clear',
 	deprecationWarningUrl: apiUrl + 'deprecation-warning',
 	editionsUrl: apiUrl + 'editions',

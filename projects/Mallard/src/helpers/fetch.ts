@@ -13,7 +13,7 @@ import { cacheClearCache } from './storage';
 const fetchIssueWithFrontsFromAPI = async (
 	id: string,
 ): Promise<IssueWithFronts> => {
-	// TODO: Should be using use-config-provider but currently exists outside of react
+	// @TODO: Should be using use-config-provider but currently exists outside of react
 	// This whole area of the code is due to be refactored away
 	const apiUrl = await getApiUrlSetting();
 	const issue: Issue = await fetch(`${apiUrl}${APIPaths.issue(id)}`).then(
