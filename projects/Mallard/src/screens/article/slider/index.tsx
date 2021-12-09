@@ -6,9 +6,8 @@ import { PreviewControls } from 'src/components/article/preview-controls';
 import type { AnimatedFlatListRef } from 'src/components/front/helpers/helpers';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
-import { useDimensions } from 'src/hooks/use-config-provider';
+import { useApiUrl, useDimensions } from 'src/hooks/use-config-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
-import { useIsPreview } from 'src/hooks/use-settings';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
 import { sendPageViewEvent } from 'src/services/ophan';
@@ -70,7 +69,7 @@ const ArticleSlider = React.memo(
 		const flatListRef = useRef<AnimatedFlatListRef | undefined>();
 		const viewPagerRef = useRef<ViewPagerAndroid | null>();
 
-		const preview = useIsPreview();
+		const { isPreview } = useApiUrl();
 
 		useEffect(() => {
 			flatListRef?.current?._component?.scrollToIndex({
@@ -210,7 +209,7 @@ const ArticleSlider = React.memo(
 					sliderDetails={sliderDetails}
 				/>
 
-				{preview && (
+				{isPreview && (
 					<PreviewControls goNext={goNext} goPrevious={goPrevious} />
 				)}
 			</>

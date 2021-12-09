@@ -1,5 +1,20 @@
 import { Platform } from 'react-native';
-import type { Settings } from '../settings';
+import type { ConfigState } from 'src/hooks/use-config-provider';
+
+export interface Settings {
+	notificationServiceRegister: string;
+	cacheClearUrl: string;
+	deprecationWarningUrl: string;
+	editionsUrl: string;
+	storeDetails: {
+		ios: string;
+		android: string;
+	};
+	websiteUrl: string;
+	issuesPath: string;
+	senderId: string;
+	logging: string;
+}
 
 /*
 Default settings.
@@ -100,15 +115,15 @@ const storeDetails = {
 	android: 'market://details?id=com.guardian.editions',
 };
 
+// @TODO Move API values to sit with the API url in the config provider
 export const defaultSettings: Settings = {
-	apiUrl,
 	notificationServiceRegister: __DEV__
 		? notificationServiceRegister.code
 		: notificationServiceRegister.prod,
 	cacheClearUrl: apiUrl + 'cache-clear',
 	deprecationWarningUrl: apiUrl + 'deprecation-warning',
 	editionsUrl: apiUrl + 'editions',
-	issuesPath: `/issues`,
+	issuesPath: '/issues',
 	storeDetails,
 	senderId: __DEV__ ? senderId.code : senderId.prod,
 	websiteUrl: 'https://www.theguardian.com/',
@@ -117,15 +132,15 @@ export const defaultSettings: Settings = {
 		: 'https://editions-logging.guardianapis.com/log/mallard',
 };
 
-export const editionsEndpoint = (apiUrl: Settings['apiUrl']): string =>
+export const editionsEndpoint = (apiUrl: ConfigState['apiUrl']): string =>
 	`${apiUrl}editions`;
 
 export const htmlEndpoint = (
-	apiUrl: Settings['apiUrl'],
+	apiUrl: ConfigState['apiUrl'],
 	publishedIssueId: string,
 ): string => `${apiUrl}${publishedIssueId}/html`;
 
-export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
+export const isPreview = (apiUrl: ConfigState['apiUrl']): boolean => {
 	const backend = backends.find((backend) => backend.value === apiUrl);
 	return backend?.preview ?? false;
 };

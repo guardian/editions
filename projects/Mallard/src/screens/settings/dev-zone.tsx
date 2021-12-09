@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import gql from 'graphql-tag';
 import type { ReactNode } from 'react';
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Clipboard, Platform, View } from 'react-native';
@@ -20,13 +19,14 @@ import { getFileList, getIssuesCountStrings } from 'src/helpers/files';
 import { locale } from 'src/helpers/locale';
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream';
 import { imageForScreenSize } from 'src/helpers/screen';
-import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers';
 import {
 	pushRegisteredTokens,
 	showAllEditionsCache,
 } from 'src/helpers/storage';
-import { useQuery } from 'src/hooks/apollo';
-import { useIsUsingProdDevtools } from 'src/hooks/use-config-provider';
+import {
+	useApiUrl,
+	useIsUsingProdDevtools,
+} from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
@@ -85,6 +85,7 @@ const DevZone = () => {
 	const { attempt, signOutCAS } = useContext(AccessContext);
 	const { showToast } = useToast();
 	const { setIsUsingProdDevTools } = useIsUsingProdDevtools();
+	const { apiUrl } = useApiUrl();
 
 	const [files, setFiles] = useState('fetching...');
 	const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...');
@@ -128,14 +129,6 @@ const DevZone = () => {
 			(imageSize) => imageSize && setImageSize(imageSize),
 		);
 	}, []);
-
-	const query = useQuery<Record<string, unknown>>(
-		gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
-	);
-	if (query.loading) return null;
-	const { data } = query;
-	const { apiUrl } = data;
-	if (typeof apiUrl !== 'string') throw new Error('expected string');
 
 	return (
 		<HeaderScreenContainer title="Dev Zone" actionLeft={true}>
@@ -367,23 +360,15 @@ const DevZone = () => {
 					/>
 					<Heading>Your settings</Heading>
 					<List
-						data={Object.entries(data)
-							.map(([title, explainer]) => ({
-								key: title,
-								title,
-								explainer: explainer
-									? `${explainer} `
-									: 'false',
-							}))
-							.concat([
-								{
-									key: 'Authentication details',
-									title: 'Authentication details',
-									explainer: `Signed in ${isValid(
-										attempt,
-									)} : ${isValid(attempt) && attempt.data}`,
-								},
-							])}
+						data={[
+							{
+								key: 'Authentication details',
+								title: 'Authentication details',
+								explainer: `Signed in ${isValid(attempt)} : ${
+									isValid(attempt) && attempt.data
+								}`,
+							},
+						]}
 					/>
 				</ScrollContainer>
 			</WithAppAppearance>

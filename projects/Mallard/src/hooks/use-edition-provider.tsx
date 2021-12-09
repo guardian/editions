@@ -10,7 +10,6 @@ import type {
 } from 'src/common';
 import { eventEmitter } from 'src/helpers/event-emitter';
 import { locale } from 'src/helpers/locale';
-import { getSetting } from 'src/helpers/settings';
 import {
 	defaultSettings,
 	editionsEndpoint,
@@ -28,6 +27,7 @@ import { errorService } from 'src/services/errors';
 import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { useAppState } from './use-app-state-provider';
+import { useApiUrl } from './use-config-provider';
 import type { NetInfoState } from './use-net-info-provider';
 import { useNetInfo } from './use-net-info-provider';
 import type { IsWeatherShown } from './use-weather-provider';
@@ -264,7 +264,7 @@ export const EditionProvider = ({
 	const [defaultEdition, setDefaultEdition] =
 		useState<RegionalEdition>(BASE_EDITION);
 	const [showNewEditionCard, setShowNewEditionCard] = useState(false);
-	const [apiUrl, setApiUrl] = useState('');
+	const { apiUrl } = useApiUrl();
 
 	const { isConnected, downloadBlocked } = useNetInfo();
 	const { isActive } = useAppState();
@@ -295,14 +295,12 @@ export const EditionProvider = ({
 	 */
 	useEffect(() => {
 		// Get the api url and then make network request to fetch edition list
-		getSetting('apiUrl').then(async (url) => {
-			const fullUrl = editionsEndpoint(url);
-			setApiUrl(fullUrl);
+		const fullUrl = editionsEndpoint(apiUrl);
 
-			// Avoid calling getEditions below by passing `apiUrl` state variable because that
-			// doesn't get updated immediately, it only updates in next render.
-			// Details can be found here: https://stackoverflow.com/questions/54069253/usestate-set-method-not-reflecting-change-immediately
-			const ed = await getEditions(isConnected, fullUrl);
+		// Avoid calling getEditions below by passing `apiUrl` state variable because that
+		// doesn't get updated immediately, it only updates in next render.
+		// Details can be found here: https://stackoverflow.com/questions/54069253/usestate-set-method-not-reflecting-change-immediately
+		getEditions(isConnected, fullUrl).then((ed) => {
 			if (ed) {
 				setEditionsList(ed);
 			}
@@ -330,7 +328,8 @@ export const EditionProvider = ({
 	 */
 	useEffect(() => {
 		if (isActive) {
-			getEditions(isConnected, apiUrl).then(
+			const fullUrl = editionsEndpoint(apiUrl);
+			getEditions(isConnected, editionsEndpoint(fullUrl)).then(
 				(ed) => ed && setEditionsList(ed),
 			);
 		}

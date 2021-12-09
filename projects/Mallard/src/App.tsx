@@ -2,7 +2,6 @@
 //
 // In this file, we'll be kicking off our app or storybook.
 
-import { ApolloProvider } from '@apollo/react-hooks';
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
@@ -30,7 +29,6 @@ import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
 import { WeatherProvider } from './hooks/use-weather-provider';
 import { DeprecateVersionModal } from './screens/deprecate-screen';
-import { apolloClient } from './services/apollo-singleton';
 import { remoteConfigService } from './services/remote-config';
 
 remoteConfigService.init();
@@ -70,23 +68,21 @@ const App = () => {
 
 	return (
 		<ErrorBoundary>
-			<ApolloProvider client={apolloClient}>
-				<WithProviders>
-					<AccessProvider onIdentityStatusChange={handleIdStatus}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="#041f4a"
-						/>
-						<View style={styles.appContainer}>
-							<AppNavigation />
-							<NetInfoAutoToast />
-						</View>
-						<ModalRenderer />
-						<BugButtonHandler />
-						<DeprecateVersionModal />
-					</AccessProvider>
-				</WithProviders>
-			</ApolloProvider>
+			<WithProviders>
+				<AccessProvider onIdentityStatusChange={handleIdStatus}>
+					<StatusBar
+						barStyle="light-content"
+						backgroundColor="#041f4a"
+					/>
+					<View style={styles.appContainer}>
+						<AppNavigation />
+						<NetInfoAutoToast />
+					</View>
+					<ModalRenderer />
+					<BugButtonHandler />
+					<DeprecateVersionModal />
+				</AccessProvider>
+			</WithProviders>
 		</ErrorBoundary>
 	);
 };

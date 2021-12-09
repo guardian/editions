@@ -3,7 +3,10 @@ import { unzip } from 'react-native-zip-archive';
 import type { Issue, IssueSummary } from 'src/common';
 import { updateListeners } from 'src/download-edition/download-and-unzip';
 import { editionsListCache } from 'src/helpers/storage';
-import { getMaxAvailableEditions } from 'src/hooks/use-config-provider';
+import {
+	getApiUrlSetting,
+	getMaxAvailableEditions,
+} from 'src/hooks/use-config-provider';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
@@ -11,7 +14,6 @@ import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { londonTime } from './date';
 import { withCache } from './fetch/cache';
 import { imageForScreenSize } from './screen';
-import { getSetting } from './settings';
 import { defaultSettings } from './settings/defaults';
 
 // matches the issue date, i.e. 2020-02-01
@@ -61,7 +63,8 @@ export const downloadNamedIssueArchive = async ({
 	filename: string;
 	withProgress: boolean;
 }) => {
-	const apiUrl = await getSetting('apiUrl');
+	// @TODO: This value in future needs to come from React
+	const apiUrl = await getApiUrlSetting();
 	const zipUrl = `${apiUrl}${assetPath}`;
 	const downloadFolderLocation = FSPaths.downloadIssueLocation(localIssueId);
 	await prepFileSystem();
@@ -213,7 +216,8 @@ const silentlyDeleteFile = async (filePath: string) => {
 };
 
 export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
-	const apiUrl = await getSetting('apiUrl');
+	// @TODO: This value in future needs to come from React
+	const apiUrl = await getApiUrlSetting();
 	const edition = await getSelectedEditionSlug();
 	const editionDirectory = FSPaths.editionDir(edition);
 
