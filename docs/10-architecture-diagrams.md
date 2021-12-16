@@ -17,11 +17,3 @@ However, the below architecture has been working fairly reliably for a long time
 just yet. Your best bet to decipher the diagram below is to talk to Phil, Mohmmad, Alex W or Justin R. Hopefully it's useful for you!
 
 ![architecture-digram](./images/architecture-diagram.png)
-
-## Editions logging architecture
-
-Editions has a logging stack to get logs from the client into Kibana. It's very simple - just a lambda that logs everything you
-POST to it, which goes into cloudwatch logs, and from there gets picked up by cloudwatch-logs-management and stuck into ELK.
-Only downside is that API Gateway and Cloudwatch logs are PRICEY so we've stuck Fastly in front of the service to give us a way of easily controlling how many requests make it through to the backend, without making client side changes.
-
-![logging-architecture](./images/logging-architecture.png)
