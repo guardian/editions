@@ -54,11 +54,11 @@ const isReceiptValid = (receipt: ReceiptIOS) => {
 	return expirationWithGracePeriod > nowInMilliseconds;
 };
 
-const hasLatestReceiptInfo = (receipt: ReceiptValidationResponse) => {
+const hasLatestReceiptInfo = (receipt: any) => {
 	return (receipt?.latest_receipt_info as ReceiptIOS[])?.length > 0;
 };
 
-const findValidReceiptFromLatestInfo = (receipt: ReceiptValidationResponse) => {
+const findValidReceiptFromLatestInfo = (receipt: any) => {
 	return (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptValid);
 };
 
