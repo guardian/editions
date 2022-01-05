@@ -329,7 +329,7 @@ export const EditionProvider = ({
 	useEffect(() => {
 		if (isActive) {
 			const fullUrl = editionsEndpoint(apiUrl);
-			getEditions(isConnected, editionsEndpoint(fullUrl)).then(
+			getEditions(isConnected, fullUrl).then(
 				(ed) => ed && setEditionsList(ed),
 			);
 		}
