@@ -35,11 +35,12 @@ describe('iap', () => {
 					original_application_version: '',
 					receipt_creation_date: '',
 				},
-				// latest_receipt_info: [receipt], // TODO fix
+				latest_receipt_info: [receipt],
 			};
-			// expect(findValidReceipt(receiptValidationResponse)).toEqual(
-			// 	receipt,
-			// );
+			// @ts-ignore
+			expect(findValidReceipt(receiptValidationResponse)).toEqual(
+				receipt,
+			);
 		});
 		it('should return null if latest_receipt_info param is empty', () => {
 			const receiptValidationResponse = {
@@ -51,8 +52,9 @@ describe('iap', () => {
 					original_application_version: '',
 					receipt_creation_date: '',
 				},
-				// latest_receipt_info: [],  // TODO fix
+				latest_receipt_info: [],
 			};
+			// @ts-ignore
 			expect(findValidReceipt(receiptValidationResponse)).toEqual(null);
 		});
 		it('should return null if it cant find a valid receipt', () => {
@@ -67,8 +69,9 @@ describe('iap', () => {
 					original_application_version: '',
 					receipt_creation_date: '',
 				},
-				// latest_receipt_info: [receipt],  // TODO fix
+				latest_receipt_info: [receipt],
 			};
+			// @ts-ignore
 			expect(findValidReceipt(receiptValidationResponse)).toEqual(null);
 		});
 		it('should return null if last_receipt_info is missing', () => {
