@@ -226,7 +226,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 	try {
 		const issueSummaryRequest = await fetch(fetchIssueSummaryUrl);
 		const issueSummary = await issueSummaryRequest.json();
-		if (!issueSummary) {
+		if (!issueSummary || issueSummaryRequest.status !== 200) {
 			throw new Error('No Issume Summary Avaialble');
 		}
 
