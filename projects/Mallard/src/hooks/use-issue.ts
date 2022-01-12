@@ -11,7 +11,7 @@ import { ERR_404_REMOTE } from 'src/helpers/words';
 import type { PathToArticle } from 'src/paths';
 import { useCachedOrPromise } from './use-cached-or-promise';
 
-export const useIssueWithResponse = <T>(
+const useIssueWithResponse = <T>(
 	getter: CachedOrPromise<T>,
 	deps: unknown[] = [],
 ) => withResponse<T>(useCachedOrPromise<T>(getter, deps));
@@ -29,7 +29,7 @@ export const useIssueResponse = (
 	);
 };
 
-export const getArticleResponse = ({
+const getArticleResponse = ({
 	article,
 	localIssueId,
 	publishedIssueId,

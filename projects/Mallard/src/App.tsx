@@ -23,6 +23,7 @@ import { AppStateProvider } from './hooks/use-app-state-provider';
 import { CoreProvider } from './hooks/use-core-provider';
 import { EditionProvider } from './hooks/use-edition-provider';
 import { GDPRProvider } from './hooks/use-gdpr';
+import { IssueProvider } from './hooks/use-issue-provider';
 import { IssueSummaryProvider } from './hooks/use-issue-summary-provider';
 import { NetInfoProvider } from './hooks/use-net-info-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
@@ -53,6 +54,7 @@ const WithProviders = nestProviders(
 	NetInfoProvider,
 	EditionProvider,
 	IssueSummaryProvider,
+	IssueProvider,
 	GDPRProvider,
 	CoreProvider,
 	WeatherProvider,
