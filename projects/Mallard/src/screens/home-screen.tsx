@@ -400,6 +400,7 @@ const IssueListFetchContainer = () => {
 		Platform.select({ android: false, default: true }),
 	);
 	const { issueWithFronts, setIssueId, issueId, error } = useIssue();
+	// console.log(issueWithFronts);
 
 	useEffect(() => {
 		// Adding a tiny delay before doing full rendering means that the

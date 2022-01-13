@@ -81,39 +81,4 @@ const isCached = <T>(
 	cachedOrPromise: CachedOrPromise<T>,
 ): cachedOrPromise is CachedResult<T> => cachedOrPromise.type === 'value';
 
-/*
-If you wanna chain a bunch of CachedOrPromises but retain the
-behavior where .value is always cached and .getValue() is not
-(this allows for refreshes of the entire chain) you can use
-this helper
-*/
-const chain = <T, X>(
-	cachedOrPromise: CachedOrPromise<T>,
-	callback: (t: T) => CachedOrPromise<X>,
-) => {
-	let defaultValue = null;
-	if (isCached(cachedOrPromise)) {
-		const cb = callback(cachedOrPromise.value);
-		if (isCached(cb)) {
-			defaultValue = cb.value;
-		}
-	}
-	return createCachedOrPromise<X>(
-		[
-			defaultValue,
-			async () => {
-				const resp = await cachedOrPromise.getValue();
-				return callback(resp).getValue();
-			},
-		],
-		{
-			savePromiseResultToValue: () => null,
-		},
-	);
-};
-chain.end = <X>(value: X) =>
-	createCachedOrPromise<X>([value, async () => value], {
-		savePromiseResultToValue: () => {},
-	});
-
-export { isCached, chain, createCachedOrPromise };
+export { isCached, createCachedOrPromise };

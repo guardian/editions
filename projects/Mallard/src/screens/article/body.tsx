@@ -11,7 +11,7 @@ import {
 	WithArticle,
 } from 'src/hooks/use-article';
 import { useApiUrl } from 'src/hooks/use-config-provider';
-import { useArticleResponse } from 'src/hooks/use-issue';
+import { useIssue } from 'src/hooks/use-issue-provider';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
 
@@ -39,7 +39,8 @@ const ArticleScreenBody = React.memo<
 		onIsAtTopChange,
 		...headerControlProps
 	}) => {
-		const articleResponse = useArticleResponse(path);
+		const { getArticle, error } = useIssue();
+		const article = getArticle(path);
 		const { isPreview } = useApiUrl();
 		const previewNotice = isPreview
 			? `${path.collection}:${position}`
@@ -54,46 +55,42 @@ const ArticleScreenBody = React.memo<
 		useEffect(() => handleIsAtTopChange(true), []);
 		return (
 			<View style={[styles.container, { width }]}>
-				{articleResponse({
-					error: ({ message }) => (
-						<FlexErrorMessage
-							title={message}
-							style={{ backgroundColor: color.background }}
-						/>
-					),
-					pending: () => (
-						<FlexErrorMessage
-							title={'loading'}
-							style={{ backgroundColor: color.background }}
-						/>
-					),
-					success: (article) => (
-						<>
-							{previewNotice && (
-								<UiBodyCopy>{previewNotice}</UiBodyCopy>
-							)}
+				{article ? (
+					<>
+						{previewNotice && (
+							<UiBodyCopy>{previewNotice}</UiBodyCopy>
+						)}
 
-							<WithArticle
-								type={
-									article.article.articleType ??
-									ArticleType.Article
-								}
-								pillar={getCollectionPillarOverride(
-									pillar,
-									path.collection,
-								)}
-							>
-								<ArticleController
-									{...headerControlProps}
-									path={path}
-									article={article.article}
-									onIsAtTopChange={handleIsAtTopChange}
-									origin={article.origin}
-								/>
-							</WithArticle>
-						</>
-					),
-				})}
+						<WithArticle
+							type={
+								article.article.articleType ??
+								ArticleType.Article
+							}
+							pillar={getCollectionPillarOverride(
+								pillar,
+								path.collection,
+							)}
+						>
+							<ArticleController
+								{...headerControlProps}
+								path={path}
+								article={article.article}
+								onIsAtTopChange={handleIsAtTopChange}
+								origin={article.origin}
+							/>
+						</WithArticle>
+					</>
+				) : error ? (
+					<FlexErrorMessage
+						title={error}
+						style={{ backgroundColor: color.background }}
+					/>
+				) : (
+					<FlexErrorMessage
+						title={'loading'}
+						style={{ backgroundColor: color.background }}
+					/>
+				)}
 			</View>
 		);
 	},
