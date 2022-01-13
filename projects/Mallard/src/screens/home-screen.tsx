@@ -42,7 +42,7 @@ import {
 	getSpecialEditionProps,
 	useEditions,
 } from 'src/hooks/use-edition-provider';
-import { useIssueResponse } from 'src/hooks/use-issue';
+import { useIssue } from 'src/hooks/use-issue-provider';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import useOverlayAnimation from 'src/hooks/use-overlay-animation';
@@ -391,16 +391,15 @@ const IssueListViewWithDelay = ({
 };
 
 const NO_ISSUES: IssueSummary[] = [];
-const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
 const IssueListFetchContainer = () => {
 	const data = useIssueSummary();
 	const issueSummary = data.issueSummary ?? NO_ISSUES;
-	const [issueId, setIssueId] = useState(data.issueId ?? EMPTY_ISSUE_ID);
 	const [isShown, setIsShown] = useState(
 		// on iOS there is bug that causes wrong rendering of the scroll bar
 		// if this is enabled. See below description of this mechanism.
 		Platform.select({ android: false, default: true }),
 	);
+	const { issueWithFronts, setIssueId, issueId, error } = useIssue();
 
 	useEffect(() => {
 		// Adding a tiny delay before doing full rendering means that the
@@ -416,7 +415,6 @@ const IssueListFetchContainer = () => {
 		setTimeout(() => setIsShown(true), 0);
 	}, []);
 
-	const resp = useIssueResponse(issueId);
 	if (!isShown)
 		return (
 			<View style={styles.loadingScreen}>
@@ -424,32 +422,28 @@ const IssueListFetchContainer = () => {
 			</View>
 		);
 
-	return resp({
-		error: (error: {}) => (
-			<IssueListViewWithDelay
-				setIssueId={setIssueId}
-				issueList={issueSummary}
-				currentId={issueId}
-				currentIssue={{ error }}
-			/>
-		),
-		pending: () => (
-			<IssueListViewWithDelay
-				setIssueId={setIssueId}
-				issueList={issueSummary}
-				currentId={issueId}
-				currentIssue={{ isLoading: true }}
-			/>
-		),
-		success: (value: IssueWithFronts) => (
-			<IssueListViewWithDelay
-				setIssueId={setIssueId}
-				issueList={issueSummary}
-				currentId={issueId}
-				currentIssue={{ value }}
-			/>
-		),
-	});
+	return issueWithFronts !== null ? (
+		<IssueListViewWithDelay
+			setIssueId={setIssueId}
+			issueList={issueSummary}
+			currentId={issueId}
+			currentIssue={{ value: issueWithFronts }}
+		/>
+	) : error ? (
+		<IssueListViewWithDelay
+			setIssueId={setIssueId}
+			issueList={issueSummary}
+			currentId={issueId}
+			currentIssue={{ error }}
+		/>
+	) : (
+		<IssueListViewWithDelay
+			setIssueId={setIssueId}
+			issueList={issueSummary}
+			currentId={issueId}
+			currentIssue={{ isLoading: true }}
+		/>
+	);
 };
 
 export const HomeScreen = () => {
