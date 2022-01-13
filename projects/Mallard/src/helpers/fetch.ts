@@ -1,91 +1,6 @@
-import type { Issue } from 'src/common';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
-import { getApiUrlSetting } from 'src/hooks/use-config-provider';
-import { APIPaths, FSPaths } from 'src/paths';
-import type { Front, IssueWithFronts } from '../../../Apps/common/src';
-import { withCache } from './fetch/cache';
-import type { CachedOrPromise } from './fetch/cached-or-promise';
-import { createCachedOrPromise } from './fetch/cached-or-promise';
-import { isIssueOnDevice, readFileAsJSON } from './files';
 import { defaultSettings } from './settings/defaults';
 import { cacheClearCache } from './storage';
-
-const fetchIssueWithFrontsFromAPI = async (
-	id: string,
-): Promise<IssueWithFronts> => {
-	// @TODO: Should be using use-config-provider but currently exists outside of react
-	// This whole area of the code is due to be refactored away
-	const apiUrl = await getApiUrlSetting();
-	const issue: Issue = await fetch(`${apiUrl}${APIPaths.issue(id)}`).then(
-		(res) => {
-			if (res.status !== 200) {
-				throw new Error('Failed to fetch');
-			}
-			return res.json();
-		},
-	);
-	const fronts: Front[] = await Promise.all(
-		issue.fronts.map((frontId) =>
-			fetch(`${apiUrl}${APIPaths.front(id, frontId)}`).then((res) => {
-				if (res.status !== 200) {
-					throw new Error('Failed to fetch');
-				}
-				return res.json();
-			}),
-		),
-	);
-	return {
-		...issue,
-		origin: 'api',
-		fronts,
-	};
-};
-
-const fetchIssueWithFrontsFromFS = async (
-	id: string,
-): Promise<IssueWithFronts> => {
-	const issue = await readFileAsJSON<Issue>(FSPaths.issue(id));
-	const fronts = await Promise.all(
-		issue.fronts.map((frontId) =>
-			readFileAsJSON<Front>(FSPaths.front(id, frontId)),
-		),
-	);
-	return {
-		...issue,
-		origin: 'filesystem',
-		fronts,
-	};
-};
-
-const fetchIssue = (
-	localIssueId: Issue['localId'],
-	publishedIssueId: Issue['publishedId'],
-	forceApiFetch: boolean,
-): CachedOrPromise<IssueWithFronts> => {
-	/*
-    retrieve any cached value if we have any
-    TODO: invalidate/background refresh these values
-    */
-	const { retrieve, store } = withCache<IssueWithFronts>('issue');
-	return createCachedOrPromise(
-		[
-			retrieve(localIssueId),
-			async () => {
-				const issueOnDevice = await isIssueOnDevice(localIssueId);
-				if (!forceApiFetch && issueOnDevice) {
-					return fetchIssueWithFrontsFromFS(localIssueId);
-				} else {
-					return fetchIssueWithFrontsFromAPI(publishedIssueId);
-				}
-			},
-		],
-		{
-			savePromiseResultToValue: (result) => {
-				store(localIssueId, result);
-			},
-		},
-	);
-};
 
 const fetchDeprecationWarning = async (): Promise<{
 	android: string;
@@ -130,4 +45,4 @@ const fetchCacheClear = async (): Promise<boolean> => {
 	}
 };
 
-export { fetchIssue, fetchCacheClear, fetchDeprecationWarning };
+export { fetchCacheClear, fetchDeprecationWarning };

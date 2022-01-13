@@ -14,7 +14,6 @@ import { Footer, Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
-import { clearCache } from 'src/helpers/fetch/cache';
 import { getFileList, getIssuesCountStrings } from 'src/helpers/files';
 import { locale } from 'src/helpers/locale';
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream';
@@ -194,12 +193,6 @@ const DevZone = () => {
 									'Clear caches',
 									'You sure?',
 									[
-										{
-											text: 'Delete fetch cache',
-											onPress: () => {
-												clearCache();
-											},
-										},
 										{
 											text: 'Delete EVERYTHING',
 											onPress: () => {

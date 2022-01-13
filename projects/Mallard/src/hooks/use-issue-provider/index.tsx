@@ -45,6 +45,7 @@ interface IssueState {
 	issueId: PathToIssue;
 	error: string;
 	getArticle: (props: ArticleProps) => ArticleContent | void;
+	retry: () => void;
 }
 
 const initialState: IssueState = {
@@ -53,6 +54,7 @@ const initialState: IssueState = {
 	issueId: EMPTY_ISSUE_ID,
 	error: '',
 	getArticle: () => {},
+	retry: () => {},
 };
 
 const IssueContext = createContext(initialState);
@@ -191,6 +193,18 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		throw ERR_404_REMOTE;
 	};
 
+	const retry = () => {
+		fetchIssue(true)
+			.then((issue) => {
+				issue && setIssueWithFronts(issue);
+				setError('');
+			})
+			.catch((e) => {
+				errorService.captureException(e);
+				setError('Unable to get issue, please try again later');
+			});
+	};
+
 	return (
 		<IssueContext.Provider
 			value={{
@@ -199,6 +213,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 				issueId,
 				error,
 				getArticle,
+				retry,
 			}}
 		>
 			{children}

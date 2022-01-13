@@ -91,8 +91,6 @@ export const downloadNamedIssueArchive = async ({
 		progressInterval: 1,
 	});
 
-	const { clear } = withCache('issue');
-	clear(localIssueId);
 	return await returnable.promise;
 };
 
