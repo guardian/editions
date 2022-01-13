@@ -6,15 +6,37 @@ import React, {
 	useState,
 } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import type { Front, Issue, IssueWithFronts } from 'src/common';
+import type {
+	CAPIArticle,
+	Collection,
+	Front,
+	Issue,
+	IssueWithFronts,
+} from 'src/common';
 import { isIssueOnDevice, readFileAsJSON } from 'src/helpers/files';
+import {
+	flattenCollectionsToCards,
+	flattenFlatCardsToFront,
+} from 'src/helpers/transform';
+import { ERR_404_REMOTE } from 'src/helpers/words';
 import { APIPaths, FSPaths } from 'src/paths';
-import type { PathToIssue } from 'src/paths';
+import type { PathToArticle, PathToIssue } from 'src/paths';
 import { errorService } from 'src/services/errors';
+import type { IssueOrigin } from '../../../../Apps/common/src';
 import { useAppState } from '../use-app-state-provider';
 import { useApiUrl } from '../use-config-provider';
 import { useEditions } from '../use-edition-provider';
 import { useIssueSummary } from '../use-issue-summary-provider';
+
+type ArticleProps = Omit<
+	PathToArticle,
+	'localIssueId' | 'publishedIssueId' | 'collection'
+>;
+type ArticleContent = {
+	article: CAPIArticle;
+	collection: Collection;
+	origin: IssueOrigin;
+};
 
 const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
 interface IssueState {
@@ -22,6 +44,7 @@ interface IssueState {
 	setIssueId: Dispatch<SetStateAction<PathToIssue>>;
 	issueId: PathToIssue;
 	error: string;
+	getArticle: (props: ArticleProps) => ArticleContent | void;
 }
 
 const initialState: IssueState = {
@@ -29,6 +52,7 @@ const initialState: IssueState = {
 	setIssueId: () => {},
 	issueId: EMPTY_ISSUE_ID,
 	error: '',
+	getArticle: () => {},
 };
 
 const IssueContext = createContext(initialState);
@@ -143,6 +167,30 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [isActive]);
 
+	const getArticle = ({
+		article,
+		front,
+	}: Omit<
+		PathToArticle,
+		'localIssueId' | 'publishedIssueId' | 'collection'
+	>) => {
+		if (!issueWithFronts) throw ERR_404_REMOTE;
+		const maybeFront = issueWithFronts.fronts.find((f) => f.key === front);
+		if (!maybeFront) throw ERR_404_REMOTE;
+
+		const allArticles = flattenFlatCardsToFront(
+			flattenCollectionsToCards(maybeFront.collections),
+		);
+		const articleContent = allArticles.find(
+			({ article: { key } }) => key === article,
+		);
+
+		if (articleContent) {
+			return { ...articleContent, origin: issueWithFronts.origin };
+		}
+		throw ERR_404_REMOTE;
+	};
+
 	return (
 		<IssueContext.Provider
 			value={{
@@ -150,6 +198,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 				setIssueId,
 				issueId,
 				error,
+				getArticle,
 			}}
 		>
 			{children}
