@@ -70,9 +70,6 @@ const useIssueOnDevice = (localId: string) => {
 		() =>
 			localIssueListStore.subscribe(() => {
 				const newStatus = localIssueListStore.getStatus(localId);
-				localId;
-				console.log('localId: ', localId);
-				console.log('newStatus: ', newStatus);
 				if (newStatus == ExistsStatus.DoesNotExist) {
 					retry();
 				}
