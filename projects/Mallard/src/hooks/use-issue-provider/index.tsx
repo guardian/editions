@@ -113,6 +113,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	const { selectedEdition } = useEditions();
 	const { isActive } = useAppState();
 
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [issueWithFronts, setIssueWithFronts] =
 		useState<IssueState['issueWithFronts']>(null);
 	const [issueId, setIssueId] = useState<IssueState['issueId']>(
@@ -124,7 +125,9 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		async (forceApiRefresh = false) => {
 			const { localIssueId, publishedIssueId } = issueId;
 			if (localIssueId && publishedIssueId) {
+				setIsLoading(true);
 				if (forceApiRefresh) {
+					setIsLoading(false);
 					return await fetchIssueWithFrontsFromAPI(
 						publishedIssueId,
 						apiUrl,
@@ -133,9 +136,11 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 
 				const issueOnDevice = await isIssueOnDevice(localIssueId);
 				if (issueOnDevice) {
+					setIsLoading(false);
 					return await fetchIssueWithFrontsFromFS(localIssueId);
 				}
 
+				setIsLoading(false);
 				return await fetchIssueWithFrontsFromAPI(
 					publishedIssueId,
 					apiUrl,
@@ -150,21 +155,22 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [globalIssueId]);
 
 	useEffect(() => {
-		fetchIssue()
-			.then((issue) => {
-				issue && setIssueWithFronts(issue);
-				setError('');
-			})
-			.catch((e) => {
-				errorService.captureException(e);
-				setError('Unable to get issue, please try again later');
-			});
+		!isLoading &&
+			fetchIssue()
+				.then((issue) => {
+					issue && setIssueWithFronts(issue);
+					setError('');
+				})
+				.catch((e) => {
+					errorService.captureException(e);
+					setError('Unable to get issue, please try again later');
+				});
 	}, [issueId, apiUrl, selectedEdition]);
 
 	// When the app state returns, we fore grab the latest issue from the API
 	// But we dont save it to our local state. This means we have a fresh copy but dont update the user experience
 	useEffect(() => {
-		if (isActive) {
+		if (isActive && !isLoading) {
 			fetchIssue(true).catch((e) => errorService.captureException(e));
 		}
 	}, [isActive]);

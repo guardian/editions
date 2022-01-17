@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { isIssueOnDevice } from 'src/helpers/files';
-import { useIssue } from './use-issue-provider';
 
 export enum ExistsStatus {
 	Pending,
@@ -64,15 +63,11 @@ const useIssueOnDevice = (localId: string) => {
 	const [status, setStatus] = useState(
 		localIssueListStore.getStatus(localId),
 	);
-	const { retry } = useIssue();
 
 	useEffect(
 		() =>
 			localIssueListStore.subscribe(() => {
 				const newStatus = localIssueListStore.getStatus(localId);
-				if (newStatus == ExistsStatus.DoesNotExist) {
-					retry();
-				}
 				setStatus(newStatus);
 			}),
 		[localId],

@@ -263,9 +263,11 @@ export const EditionProvider = ({
 	>(BASE_EDITION);
 	const [defaultEdition, setDefaultEdition] =
 		useState<RegionalEdition>(BASE_EDITION);
-	const [showNewEditionCard, setShowNewEditionCard] = useState(false);
-	const { apiUrl } = useApiUrl();
+	const [showNewEditionCard, setShowNewEditionCard] =
+		useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
+	const { apiUrl } = useApiUrl();
 	const { isConnected, downloadBlocked } = useNetInfo();
 	const { isActive } = useAppState();
 	const { setIsWeatherShown } = useIsWeatherShown();
@@ -300,11 +302,16 @@ export const EditionProvider = ({
 		// Avoid calling getEditions below by passing `apiUrl` state variable because that
 		// doesn't get updated immediately, it only updates in next render.
 		// Details can be found here: https://stackoverflow.com/questions/54069253/usestate-set-method-not-reflecting-change-immediately
-		getEditions(isConnected, fullUrl).then((ed) => {
-			if (ed) {
-				setEditionsList(ed);
-			}
-		});
+		if (!isLoading) {
+			setIsLoading(true);
+			getEditions(isConnected, fullUrl)
+				.then((ed) => {
+					if (ed) {
+						setEditionsList(ed);
+					}
+				})
+				.finally(() => setIsLoading(false));
+		}
 	}, []);
 
 	/**
@@ -327,11 +334,12 @@ export const EditionProvider = ({
 	 * On App State change to foreground, or connection change, we want to check for a new editionsList
 	 */
 	useEffect(() => {
-		if (isActive) {
+		if (isActive && !isLoading) {
+			setIsLoading(true);
 			const fullUrl = editionsEndpoint(apiUrl);
-			getEditions(isConnected, fullUrl).then(
-				(ed) => ed && setEditionsList(ed),
-			);
+			getEditions(isConnected, fullUrl)
+				.then((ed) => ed && setEditionsList(ed))
+				.finally(() => setIsLoading(false));
 		}
 	}, [isConnected, isActive]);
 
