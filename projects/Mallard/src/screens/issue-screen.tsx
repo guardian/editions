@@ -20,7 +20,6 @@ import {
 	WeatherWidget,
 } from 'src/components/weather';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
-import { clearCache } from 'src/helpers/fetch/cache';
 import type { FlatCard } from 'src/helpers/transform';
 import {
 	flattenCollectionsToCards,
@@ -43,14 +42,10 @@ import {
 	getSpecialEditionProps,
 	useEditions,
 } from 'src/hooks/use-edition-provider';
-import { useIssueResponse } from 'src/hooks/use-issue';
-import {
-	issueSummaryToLatestPath,
-	useIssueSummary,
-} from 'src/hooks/use-issue-summary-provider';
+import { useIssue } from 'src/hooks/use-issue-provider';
+import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useWeather } from 'src/hooks/use-weather-provider';
-import type { PathToIssue } from 'src/paths';
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle';
 import { sendPageViewEvent } from 'src/services/ophan';
 import { Breakpoints } from 'src/theme/breakpoints';
@@ -283,40 +278,39 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 	return isPreview ? <ReloadButton onPress={onPress} /> : null;
 };
 
-const handleError =
-	(headerStyle?: SpecialEditionHeaderStyles) =>
-	(
-		{ message }: { message: string },
-		_: unknown,
-		{ retry }: { retry: () => void },
-	) =>
-		(
-			<>
-				<IssueScreenHeader headerStyles={headerStyle} />
+const IssueScreenWithPathError = ({
+	headerStyle,
+	message,
+	retry,
+}: {
+	headerStyle?: SpecialEditionHeaderStyles;
+	message: string;
+	retry: () => void;
+}) => (
+	<>
+		<IssueScreenHeader headerStyles={headerStyle} />
 
-				<FlexErrorMessage
-					debugMessage={message}
-					title={CONNECTION_FAILED_ERROR}
-					message={CONNECTION_FAILED_SUB_ERROR}
-					action={[REFRESH_BUTTON_TEXT, retry]}
-				/>
-			</>
-		);
+		<FlexErrorMessage
+			debugMessage={message}
+			title={CONNECTION_FAILED_ERROR}
+			message={CONNECTION_FAILED_SUB_ERROR}
+			action={[REFRESH_BUTTON_TEXT, retry]}
+		/>
+	</>
+);
 
-const handlePending = (headerStyle?: SpecialEditionHeaderStyles) => () =>
-	(
-		<>
-			<IssueScreenHeader headerStyles={headerStyle} />
-			<FlexCenter>
-				<Spinner />
-			</FlexCenter>
-		</>
-	);
-
-/** used to memoize the IssueScreenWithPath */
-const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
-	a.localIssueId === b.localIssueId &&
-	a.publishedIssueId === b.publishedIssueId;
+const IssueScreenWithPathPending = ({
+	headerStyle,
+}: {
+	headerStyle?: SpecialEditionHeaderStyles;
+}) => (
+	<>
+		<IssueScreenHeader headerStyles={headerStyle} />
+		<FlexCenter>
+			<Spinner />
+		</FlexCenter>
+	</>
+);
 
 const WeatherHeader = () => {
 	const { isWeatherShown } = useWeather();
@@ -328,113 +322,95 @@ const WeatherHeader = () => {
 	return <WeatherWidget />;
 };
 
-const IssueScreenWithPath = React.memo(
-	({
-		path,
-		initialFrontKey,
-		headerStyle,
-	}: {
-		path: PathToIssue;
-		initialFrontKey: string | null;
-		headerStyle?: SpecialEditionHeaderStyles;
-	}) => {
-		const { isPreview, isProof } = useApiUrl();
-		const response = useIssueResponse(path, isPreview);
+const IssueScreenWithPath = ({
+	initialFrontKey,
+	headerStyle,
+}: {
+	initialFrontKey: string | null;
+	headerStyle?: SpecialEditionHeaderStyles;
+}) => {
+	const { isProof } = useApiUrl();
+	const { error, issueWithFronts: issue, retry } = useIssue();
 
-		return response({
-			error: handleError(headerStyle),
-			pending: handlePending(headerStyle),
-			success: (issue, { retry }) => {
-				sendPageViewEvent({
-					path: `editions/uk/daily/${issue.key}`,
-				});
-
-				return (
-					<>
-						<PreviewReloadButton
-							onPress={async () => {
-								if (isProof) {
-									try {
-										await deleteIssueFiles();
-									} catch (error) {
-										console.error(
-											'failed to delete files',
-											error,
-										);
-									} finally {
-										RNRestart.Restart();
-									}
-								}
-								clearCache();
-								retry();
-							}}
-						/>
-						<IssueScreenHeader
-							issue={issue}
-							headerStyles={headerStyle}
-						/>
-
-						<WithBreakpoints>
-							{{
-								0: () => (
-									<WithLayoutRectangle>
-										{(metrics) => (
-											<WithIssueScreenSize
-												value={[
-													PageLayoutSizes.mobile,
-													metrics,
-												]}
-											>
-												<IssueFronts
-													ListHeaderComponent={
-														<WeatherHeader />
-													}
-													issue={issue}
-													initialFrontKey={
-														initialFrontKey
-													}
-												/>
-											</WithIssueScreenSize>
-										)}
-									</WithLayoutRectangle>
-								),
-								[Breakpoints.TabletVertical]: () => (
-									<View
-										style={{
-											flexDirection: 'row',
-										}}
-									>
-										<WithLayoutRectangle>
-											{(metrics) => (
-												<WithIssueScreenSize
-													value={[
-														PageLayoutSizes.tablet,
-														metrics,
-													]}
-												>
-													<IssueFronts
-														ListHeaderComponent={
-															<WeatherHeader />
-														}
-														issue={issue}
-														initialFrontKey={
-															initialFrontKey
-														}
-													/>
-												</WithIssueScreenSize>
-											)}
-										</WithLayoutRectangle>
-									</View>
-								),
-							}}
-						</WithBreakpoints>
-					</>
-				);
-			},
+	issue &&
+		sendPageViewEvent({
+			path: `editions/uk/daily/${issue.key}`,
 		});
-	},
-	(prev, next) => pathsAreEqual(prev.path, next.path),
-);
+
+	return issue ? (
+		<>
+			<PreviewReloadButton
+				onPress={async () => {
+					if (isProof) {
+						try {
+							await deleteIssueFiles();
+						} catch (error) {
+							console.error('failed to delete files', error);
+						} finally {
+							RNRestart.Restart();
+						}
+					}
+					retry();
+				}}
+			/>
+			<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
+
+			<WithBreakpoints>
+				{{
+					0: () => (
+						<WithLayoutRectangle>
+							{(metrics) => (
+								<WithIssueScreenSize
+									value={[PageLayoutSizes.mobile, metrics]}
+								>
+									<IssueFronts
+										ListHeaderComponent={<WeatherHeader />}
+										issue={issue}
+										initialFrontKey={initialFrontKey}
+									/>
+								</WithIssueScreenSize>
+							)}
+						</WithLayoutRectangle>
+					),
+					[Breakpoints.TabletVertical]: () => (
+						<View
+							style={{
+								flexDirection: 'row',
+							}}
+						>
+							<WithLayoutRectangle>
+								{(metrics) => (
+									<WithIssueScreenSize
+										value={[
+											PageLayoutSizes.tablet,
+											metrics,
+										]}
+									>
+										<IssueFronts
+											ListHeaderComponent={
+												<WeatherHeader />
+											}
+											issue={issue}
+											initialFrontKey={initialFrontKey}
+										/>
+									</WithIssueScreenSize>
+								)}
+							</WithLayoutRectangle>
+						</View>
+					),
+				}}
+			</WithBreakpoints>
+		</>
+	) : error ? (
+		<IssueScreenWithPathError
+			headerStyle={headerStyle}
+			message={error}
+			retry={retry}
+		/>
+	) : (
+		<IssueScreenWithPathPending headerStyle={headerStyle} />
+	);
+};
 
 export const IssueScreen = () => {
 	const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary();
@@ -453,13 +429,11 @@ export const IssueScreen = () => {
 			)}
 			{issueId ? (
 				<IssueScreenWithPath
-					path={issueId}
 					initialFrontKey={initialFrontKey}
 					headerStyle={headerStyle}
 				/>
 			) : issueSummary ? (
 				<IssueScreenWithPath
-					path={issueSummaryToLatestPath(issueSummary)}
 					initialFrontKey={initialFrontKey}
 					headerStyle={headerStyle}
 				/>

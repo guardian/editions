@@ -12,7 +12,6 @@ import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { londonTime } from './date';
-import { withCache } from './fetch/cache';
 import { imageForScreenSize } from './screen';
 import { defaultSettings } from './settings/defaults';
 
@@ -91,8 +90,6 @@ export const downloadNamedIssueArchive = async ({
 		progressInterval: 1,
 	});
 
-	const { clear } = withCache('issue');
-	clear(localIssueId);
 	return await returnable.promise;
 };
 
