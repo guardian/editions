@@ -92,11 +92,9 @@ const styles = StyleSheet.create({
 
 const IssueRowContainer = React.memo(
 	({
-		setIssueId: setLocalIssueId,
 		issue,
 		issueDetails,
 	}: {
-		setIssueId: Dispatch<PathToIssue>;
 		issue: IssueSummary;
 		issueDetails: Loaded<IssueWithFronts> | null;
 	}) => {
@@ -137,7 +135,7 @@ const IssueRowContainer = React.memo(
 				navToIssue(null);
 				return;
 			}
-			setLocalIssueId({
+			setIssueId({
 				localIssueId: localId,
 				publishedIssueId: publishedId,
 			});
@@ -145,7 +143,7 @@ const IssueRowContainer = React.memo(
 			setNavPosition,
 			navToIssue,
 			issueDetails,
-			setLocalIssueId,
+			setIssueId,
 			localId,
 			publishedId,
 		]);
@@ -240,11 +238,9 @@ const IssueListView = React.memo(
 	({
 		issueList,
 		currentIssue,
-		setIssueId,
 	}: {
 		issueList: IssueSummary[];
 		currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> };
-		setIssueId: Dispatch<PathToIssue>;
 	}) => {
 		const navigation = useNavigation();
 		const { localIssueId: localId, publishedIssueId: publishedId } =
@@ -279,12 +275,11 @@ const IssueListView = React.memo(
 		const renderItem = useCallback(
 			({ item, index }) => (
 				<IssueRowContainer
-					setIssueId={setIssueId}
 					issue={item}
 					issueDetails={index === currentIssueIndex ? details : null}
 				/>
 			),
-			[currentIssueIndex, details, navigation, setIssueId],
+			[currentIssueIndex, details, navigation],
 		);
 
 		// Height of the fronts so we can provide this to `getItemLayout`.
@@ -354,12 +349,10 @@ const IssueListViewWithDelay = ({
 	issueList,
 	currentId,
 	currentIssue,
-	setIssueId,
 }: {
 	issueList: IssueSummary[];
 	currentId: PathToIssue;
 	currentIssue: Loaded<IssueWithFronts>;
-	setIssueId: Dispatch<PathToIssue>;
 }) => {
 	const [shownIssue, setShownIssue] = useState({
 		id: currentId,
@@ -381,13 +374,7 @@ const IssueListViewWithDelay = ({
 		}
 	}, [currentId, currentIssue, details]);
 
-	return (
-		<IssueListView
-			setIssueId={setIssueId}
-			issueList={issueList}
-			currentIssue={shownIssue}
-		/>
-	);
+	return <IssueListView issueList={issueList} currentIssue={shownIssue} />;
 };
 
 const NO_ISSUES: IssueSummary[] = [];
