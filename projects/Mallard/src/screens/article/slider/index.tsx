@@ -1,9 +1,7 @@
 import ViewPagerAndroid from '@react-native-community/viewpager';
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
 import { PreviewControls } from 'src/components/article/preview-controls';
-import type { AnimatedFlatListRef } from 'src/components/front/helpers/helpers';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
 import { useApiUrl, useDimensions } from 'src/hooks/use-config-provider';
@@ -57,7 +55,6 @@ const ArticleSlider = React.memo(
 		path: PathToArticle;
 		articleNavigator: ArticleNavigator;
 	}) => {
-		const navigation = useNavigation();
 		const { startingPoint, flattenedArticles } =
 			getArticleDataFromNavigator(articleNavigator, path);
 		const [current, setCurrent] = useState(startingPoint);
@@ -66,17 +63,9 @@ const ArticleSlider = React.memo(
 			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
 
 		const { width } = useDimensions();
-		const flatListRef = useRef<AnimatedFlatListRef | undefined>();
 		const viewPagerRef = useRef<ViewPagerAndroid | null>();
 
 		const { isPreview } = useApiUrl();
-
-		useEffect(() => {
-			flatListRef?.current?._component?.scrollToIndex({
-				index: current,
-				animated: false,
-			});
-		}, [width, navigation.isFocused()]);
 
 		const currentArticle = flattenedArticles[Math.round(current)];
 
@@ -121,20 +110,8 @@ const ArticleSlider = React.memo(
 		const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article);
 		const setNavPosition = useSetNavPosition();
 
-		const scroller = (index: number) => {
-			if (Platform.OS === 'ios') {
-				if (flatListRef?.current) {
-					flatListRef.current._component.scrollToIndex({
-						index,
-						animated: true,
-					});
-				}
-			} else {
-				if (viewPagerRef?.current) {
-					viewPagerRef.current.setPage(index);
-				}
-			}
-		};
+		const scroller = (index: number) =>
+			viewPagerRef?.current?.setPage(index);
 
 		const goNext = () => {
 			scroller(
