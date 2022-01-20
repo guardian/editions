@@ -37,7 +37,6 @@ describe('iap', () => {
 				},
 				latest_receipt_info: [receipt],
 			};
-			// @ts-ignore
 			expect(findValidReceipt(receiptValidationResponse)).toEqual(
 				receipt,
 			);
@@ -54,7 +53,6 @@ describe('iap', () => {
 				},
 				latest_receipt_info: [],
 			};
-			// @ts-ignore
 			expect(findValidReceipt(receiptValidationResponse)).toEqual(null);
 		});
 		it('should return null if it cant find a valid receipt', () => {
@@ -71,7 +69,6 @@ describe('iap', () => {
 				},
 				latest_receipt_info: [receipt],
 			};
-			// @ts-ignore
 			expect(findValidReceipt(receiptValidationResponse)).toEqual(null);
 		});
 		it('should return null if last_receipt_info is missing', () => {
