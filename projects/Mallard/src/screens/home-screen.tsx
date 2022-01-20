@@ -1,5 +1,4 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import type { Dispatch } from 'react';
 import React, {
 	useCallback,
 	useContext,
@@ -386,7 +385,7 @@ const IssueListFetchContainer = () => {
 		// if this is enabled. See below description of this mechanism.
 		Platform.select({ android: false, default: true }),
 	);
-	const { issueWithFronts, setIssueId, issueId, error } = useIssue();
+	const { issueWithFronts, issueId, error } = useIssue();
 	// console.log(issueWithFronts);
 
 	useEffect(() => {
@@ -412,21 +411,18 @@ const IssueListFetchContainer = () => {
 
 	return issueWithFronts !== null ? (
 		<IssueListViewWithDelay
-			setIssueId={setIssueId}
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ value: issueWithFronts }}
 		/>
 	) : error ? (
 		<IssueListViewWithDelay
-			setIssueId={setIssueId}
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ error }}
 		/>
 	) : (
 		<IssueListViewWithDelay
-			setIssueId={setIssueId}
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ isLoading: true }}
