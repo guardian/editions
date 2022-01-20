@@ -1,5 +1,4 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import type { Dispatch } from 'react';
 import React, {
 	useCallback,
 	useContext,
@@ -92,11 +91,9 @@ const styles = StyleSheet.create({
 
 const IssueRowContainer = React.memo(
 	({
-		setIssueId: setLocalIssueId,
 		issue,
 		issueDetails,
 	}: {
-		setIssueId: Dispatch<PathToIssue>;
 		issue: IssueSummary;
 		issueDetails: Loaded<IssueWithFronts> | null;
 	}) => {
@@ -137,7 +134,7 @@ const IssueRowContainer = React.memo(
 				navToIssue(null);
 				return;
 			}
-			setLocalIssueId({
+			setIssueId({
 				localIssueId: localId,
 				publishedIssueId: publishedId,
 			});
@@ -145,7 +142,7 @@ const IssueRowContainer = React.memo(
 			setNavPosition,
 			navToIssue,
 			issueDetails,
-			setLocalIssueId,
+			setIssueId,
 			localId,
 			publishedId,
 		]);
@@ -240,11 +237,9 @@ const IssueListView = React.memo(
 	({
 		issueList,
 		currentIssue,
-		setIssueId,
 	}: {
 		issueList: IssueSummary[];
 		currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> };
-		setIssueId: Dispatch<PathToIssue>;
 	}) => {
 		const navigation = useNavigation();
 		const { localIssueId: localId, publishedIssueId: publishedId } =
@@ -279,12 +274,11 @@ const IssueListView = React.memo(
 		const renderItem = useCallback(
 			({ item, index }) => (
 				<IssueRowContainer
-					setIssueId={setIssueId}
 					issue={item}
 					issueDetails={index === currentIssueIndex ? details : null}
 				/>
 			),
-			[currentIssueIndex, details, navigation, setIssueId],
+			[currentIssueIndex, details, navigation],
 		);
 
 		// Height of the fronts so we can provide this to `getItemLayout`.
@@ -354,12 +348,10 @@ const IssueListViewWithDelay = ({
 	issueList,
 	currentId,
 	currentIssue,
-	setIssueId,
 }: {
 	issueList: IssueSummary[];
 	currentId: PathToIssue;
 	currentIssue: Loaded<IssueWithFronts>;
-	setIssueId: Dispatch<PathToIssue>;
 }) => {
 	const [shownIssue, setShownIssue] = useState({
 		id: currentId,
@@ -381,13 +373,7 @@ const IssueListViewWithDelay = ({
 		}
 	}, [currentId, currentIssue, details]);
 
-	return (
-		<IssueListView
-			setIssueId={setIssueId}
-			issueList={issueList}
-			currentIssue={shownIssue}
-		/>
-	);
+	return <IssueListView issueList={issueList} currentIssue={shownIssue} />;
 };
 
 const NO_ISSUES: IssueSummary[] = [];
@@ -399,7 +385,7 @@ const IssueListFetchContainer = () => {
 		// if this is enabled. See below description of this mechanism.
 		Platform.select({ android: false, default: true }),
 	);
-	const { issueWithFronts, setIssueId, issueId, error } = useIssue();
+	const { issueWithFronts, issueId, error } = useIssue();
 	// console.log(issueWithFronts);
 
 	useEffect(() => {
@@ -425,21 +411,18 @@ const IssueListFetchContainer = () => {
 
 	return issueWithFronts !== null ? (
 		<IssueListViewWithDelay
-			setIssueId={setIssueId}
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ value: issueWithFronts }}
 		/>
 	) : error ? (
 		<IssueListViewWithDelay
-			setIssueId={setIssueId}
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ error }}
 		/>
 	) : (
 		<IssueListViewWithDelay
-			setIssueId={setIssueId}
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ isLoading: true }}
