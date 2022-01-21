@@ -106,6 +106,18 @@ const fetchIssueWithFrontsFromFS = async (
 	};
 };
 
+export const fetchIssue = async (issueId: PathToIssue, apiUrl: string) => {
+	const { localIssueId, publishedIssueId } = issueId;
+	if (localIssueId && publishedIssueId) {
+		const issueOnDevice = await isIssueOnDevice(localIssueId);
+		if (issueOnDevice) {
+			return await fetchIssueWithFrontsFromFS(localIssueId);
+		}
+
+		return await fetchIssueWithFrontsFromAPI(publishedIssueId, apiUrl);
+	}
+};
+
 export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	const { apiUrl } = useApiUrl();
 	const { issueId: globalIssueId } = useIssueSummary();
@@ -121,7 +133,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	);
 	const [error, setError] = useState<IssueState['error']>(initialState.error);
 
-	const fetchIssue = useCallback(
+	const getIssue = useCallback(
 		async (forceApiRefresh = false) => {
 			const { localIssueId, publishedIssueId } = issueId;
 			if (localIssueId && publishedIssueId) {
@@ -156,7 +168,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		!isLoading &&
-			fetchIssue()
+			getIssue()
 				.then((issue) => {
 					issue && setIssueWithFronts(issue);
 					setError('');
@@ -171,7 +183,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	// But we dont save it to our local state. This means we have a fresh copy but dont update the user experience
 	useEffect(() => {
 		if (isActive && !isLoading) {
-			fetchIssue(true).catch((e) => errorService.captureException(e));
+			getIssue(true).catch((e) => errorService.captureException(e));
 		}
 	}, [isActive]);
 
@@ -200,7 +212,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	const retry = () => {
-		fetchIssue(true)
+		getIssue(true)
 			.then((issue) => {
 				issue && setIssueWithFronts(issue);
 				setError('');
