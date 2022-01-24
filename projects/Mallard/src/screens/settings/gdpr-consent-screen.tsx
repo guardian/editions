@@ -221,4 +221,4 @@ const GdprConsentScreenForOnboarding = () => (
 	</WithAppAppearance>
 );
 
-export { GdprConsent, GdprConsentScreenForOnboarding, GdprConsentScreen };
+export { GdprConsentScreenForOnboarding, GdprConsentScreen };

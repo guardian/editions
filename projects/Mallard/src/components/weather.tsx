@@ -20,9 +20,6 @@ type Weather = {
 	isLocationPrecise: boolean;
 	forecasts: Forecast[];
 };
-export type WeatherQueryData = {
-	weather: Weather | null;
-};
 
 const narrowSpace = String.fromCharCode(8201);
 
@@ -123,7 +120,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-export interface WeatherForecast {
+interface WeatherForecast {
 	locationName: string;
 	forecasts: Forecast[];
 }

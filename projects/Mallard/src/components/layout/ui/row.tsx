@@ -181,4 +181,4 @@ const RowWrapper = ({
 	);
 };
 
-export { Separator, Row, TallRow, RowWrapper, Footer, Heading };
+export { Separator, Row, TallRow, Footer, Heading };

@@ -2,7 +2,7 @@ import remoteConfig from '@react-native-firebase/remote-config';
 
 // see https://rnfirebase.io/remote-config/usage for docs
 
-export type RemoteStringValue = string | undefined;
+type RemoteStringValue = string | undefined;
 
 interface RemoteConfig {
 	init(): void;
@@ -18,7 +18,7 @@ const remoteConfigDefaults = {
 	download_parallel_ssr_bundle: false,
 };
 
-export const RemoteConfigProperties = [
+const RemoteConfigProperties = [
 	'logging_enabled',
 	'join_beta_button_enabled',
 	'lightbox_enabled',
@@ -26,7 +26,7 @@ export const RemoteConfigProperties = [
 	'download_parallel_ssr_bundle',
 ] as const;
 
-export type RemoteConfigProperty = typeof RemoteConfigProperties[number];
+type RemoteConfigProperty = typeof RemoteConfigProperties[number];
 
 const configValues = {
 	// fetch config, cache for 5mins. This cache persists when app is reloaded

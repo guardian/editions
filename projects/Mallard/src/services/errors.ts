@@ -8,7 +8,7 @@ import { Level, loggingService } from './logging';
 
 const { SENTRY_DSN_URL } = Config;
 
-export interface ErrorService {
+interface ErrorService {
 	init({ hasConsent }: { hasConsent: GdprSwitchSetting }): void;
 	captureException(err: Error): void;
 }

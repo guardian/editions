@@ -30,7 +30,7 @@ export const families = {
 	},
 };
 
-export type FontFamily = keyof typeof families;
+type FontFamily = keyof typeof families;
 
 /*
 Think of these as ems
@@ -392,7 +392,7 @@ const scale = {
 };
 
 export type FontSizes<F extends FontFamily> = keyof typeof scale[F];
-export type FontWeights<F extends FontFamily> = keyof typeof families[F];
+type FontWeights<F extends FontFamily> = keyof typeof families[F];
 
 export const getUnscaledFont = <F extends FontFamily>(
 	family: F,

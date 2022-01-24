@@ -107,4 +107,4 @@ const SliderDots = React.memo(
 	},
 );
 
-export { SliderDots, SliderDotsProps };
+export { SliderDots };

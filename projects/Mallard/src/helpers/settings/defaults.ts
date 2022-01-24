@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import type { ConfigState } from 'src/hooks/use-config-provider';
 
-export interface Settings {
+interface Settings {
 	notificationServiceRegister: string;
 	cacheClearUrl: string;
 	deprecationWarningUrl: string;
@@ -62,7 +62,7 @@ export const backends = [
 	preview: boolean;
 }>;
 
-export const notificationServiceRegister = {
+const notificationServiceRegister = {
 	prod: 'https://notifications.guardianapis.com/device/register',
 	code: 'https://notifications.code.dev-guardianapis.com/device/register',
 };
@@ -82,7 +82,7 @@ const notificationTrackingDownloadedEndpoints = {
 	code: 'https://mobile-events.code.dev-guardianapis.com/notification/downloaded',
 };
 
-export const senderId = {
+const senderId = {
 	prod: '493559488652',
 	code: '385815722272',
 };

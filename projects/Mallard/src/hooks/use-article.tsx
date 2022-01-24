@@ -12,7 +12,7 @@ import { useIsUsingProdDevtools } from './use-config-provider';
 const ArticlePillarContext = createContext<ArticlePillar>('neutral');
 const ArticleTypeContext = createContext<ArticleType>(ArticleType.Article);
 
-export const WithArticlePillar = ArticlePillarContext.Provider;
+const WithArticlePillar = ArticlePillarContext.Provider;
 export const WithArticleType = ArticleTypeContext.Provider;
 
 interface PropTypes {
@@ -21,7 +21,7 @@ interface PropTypes {
 	children: Element;
 }
 
-export const Providers = ({ type, pillar, children }: PropTypes) => (
+const Providers = ({ type, pillar, children }: PropTypes) => (
 	<WithArticleType value={type}>
 		<WithArticlePillar value={pillar}>{children}</WithArticlePillar>
 	</WithArticleType>

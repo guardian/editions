@@ -12,7 +12,7 @@ import type { ArticleNavigator } from 'src/screens/article-screen';
 import { metrics } from 'src/theme/spacing';
 import { useCardBackgroundStyle } from '../../helpers/helpers';
 
-export interface TappablePropTypes {
+interface TappablePropTypes {
 	style?: StyleProp<ViewStyle>;
 	article: CAPIArticle;
 	path: PathToArticle;

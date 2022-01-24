@@ -21,7 +21,7 @@ const passthrough = (
 export const css = passthrough;
 export const html = passthrough;
 
-export const px = (value: string | number) => `${value}px`;
+const px = (value: string | number) => `${value}px`;
 
 interface AltFont {
 	showsAsFamily: string;

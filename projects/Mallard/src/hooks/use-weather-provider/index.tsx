@@ -60,9 +60,7 @@ const initialState = {
 
 const WeatherContext = createContext(initialState);
 
-export const getIsWeatherShown = async (): Promise<
-	WeatherState['isWeatherShown']
-> => {
+const getIsWeatherShown = async (): Promise<WeatherState['isWeatherShown']> => {
 	try {
 		const isWeatherShown = await isWeatherShownCache.get();
 		return isWeatherShown ?? initialState.isWeatherShown;

@@ -101,4 +101,4 @@ const maybeRegister = async (
 	return false;
 };
 
-export { getTopicName, maybeRegister, shouldReRegister };
+export { maybeRegister, shouldReRegister };

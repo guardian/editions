@@ -84,4 +84,4 @@ const ToastRootHolder = () => {
 	);
 };
 
-export { Toast, ToastRootHolder };
+export { ToastRootHolder };

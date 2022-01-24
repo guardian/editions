@@ -7,7 +7,7 @@ import { Row, Separator } from 'src/components/layout/ui/row';
 An item is what the list uses to draw its own row –
 See https://facebook.github.io/react-native/docs/using-a-listview
 */
-export interface Item {
+interface Item {
 	key: string;
 	title: string;
 	explainer?: React.ReactNode;
@@ -16,9 +16,7 @@ export interface Item {
 	linkWeight?: 'bold' | 'regular';
 }
 
-export const BaseList = <I extends {}>({
-	...flatListProps
-}: FlatListProps<I>) => {
+const BaseList = <I extends {}>({ ...flatListProps }: FlatListProps<I>) => {
 	return (
 		<FlatList
 			ItemSeparatorComponent={Separator}

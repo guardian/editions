@@ -73,10 +73,6 @@ const validAttemptCache = createAsyncCache<number>('validAttempt-cache');
 
 const loggingQueueCache = createAsyncCache<string>('loggingQueue');
 
-const enableEditionMenuCache = createAsyncCache<boolean>(
-	'edition-menu-enabled',
-);
-
 const selectedEditionCache = createAsyncCache<RegionalEdition | SpecialEdition>(
 	'selectedEdition',
 );
@@ -188,7 +184,6 @@ export {
 	cacheClearCache,
 	validAttemptCache,
 	loggingQueueCache,
-	enableEditionMenuCache,
 	selectedEditionCache,
 	defaultEditionCache,
 	editionsListCache,

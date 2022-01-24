@@ -42,8 +42,6 @@ enum ScreenTracking {
 	TermsAndConditions = 'terms_conditions',
 }
 
-export type ScreenTrackingMapping = keyof typeof ScreenTracking;
-
 const setUserId = (userId: UserId): Promise<UserId> =>
 	NativeModules.Ophan.setUserId(userId);
 

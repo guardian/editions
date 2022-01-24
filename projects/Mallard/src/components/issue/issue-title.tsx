@@ -90,7 +90,7 @@ export enum IssueTitleAppearance {
 	Tertiary,
 }
 
-export interface IssueTitleProps {
+interface IssueTitleProps {
 	title: string;
 	subtitle?: string;
 	style?: StyleProp<ViewStyle>;

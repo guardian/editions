@@ -67,7 +67,7 @@ export const largeDeviceMemory = () => {
 	);
 };
 
-export const notificationsAreEnabled = async () => {
+const notificationsAreEnabled = async () => {
 	if (Platform.OS !== 'android') {
 		return false;
 	}
@@ -75,7 +75,7 @@ export const notificationsAreEnabled = async () => {
 	return isEnabled ?? false;
 };
 
-export const getWifiOnlyDownloadsSetting = async (): Promise<
+const getWifiOnlyDownloadsSetting = async (): Promise<
 	ConfigState['wifiOnlyDownloads']
 > => {
 	try {
@@ -86,7 +86,7 @@ export const getWifiOnlyDownloadsSetting = async (): Promise<
 	}
 };
 
-export const getIsUsingProdDevToolsSetting = async (): Promise<
+const getIsUsingProdDevToolsSetting = async (): Promise<
 	ConfigState['isUsingProdDevtools']
 > => {
 	try {

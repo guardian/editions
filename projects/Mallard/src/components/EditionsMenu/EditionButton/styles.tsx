@@ -2,7 +2,7 @@ import { brand, neutral } from '@guardian/src-foundations';
 import { StyleSheet } from 'react-native';
 import { families } from 'src/theme/typography';
 
-export const EDITIONS_MENU_TEXT_LEFT_PADDING = 75;
+const EDITIONS_MENU_TEXT_LEFT_PADDING = 75;
 const imageWidth = 75;
 const imageHeight = 150;
 
