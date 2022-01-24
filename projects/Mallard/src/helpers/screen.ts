@@ -5,7 +5,7 @@ import { largeDeviceMemory } from 'src/hooks/use-config-provider';
 import type { ImageSize } from '../../../Apps/common/src';
 import { imageSizes, sizeDescriptions } from '../../../Apps/common/src';
 
-export const maxScreenSize = (): number => {
+const maxScreenSize = (): number => {
 	const { width, height } = Dimensions.get('window');
 	return Math.max(width, height);
 };

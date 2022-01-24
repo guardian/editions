@@ -17,7 +17,7 @@ import { errorService } from 'src/services/errors';
  * v6 - Add Crashlytics in PERFORMANCE, update wording in ESSENTIAL
  * v7 - Remove Braze from wording in ESSENTIAL
  */
-export const CURRENT_CONSENT_VERSION = 7;
+const CURRENT_CONSENT_VERSION = 7;
 
 /*
 Consent switches can be 'unset' or null
@@ -31,7 +31,7 @@ export type GdprCoreSettings = {
 	gdprConsentVersion: number | null;
 };
 
-export interface GdprSettings extends GdprCoreSettings {
+interface GdprSettings extends GdprCoreSettings {
 	gdprAllowOphan: GdprSwitchSetting;
 	gdprAllowSentry: GdprSwitchSetting;
 	gdprAllowFacebookLogin: GdprSwitchSetting;

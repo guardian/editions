@@ -238,4 +238,4 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 	);
 };
 
-export { ImageItem, SplitImageItem, SmallItem, SidekickImageItem };
+export { ImageItem, SplitImageItem, SidekickImageItem };

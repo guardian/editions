@@ -35,7 +35,7 @@ const colorMapWithTint = {
 	lifestyle: { ...colorMap.lifestyle, tint: palette.lifestyle.faded },
 };
 
-export interface PillarColoursWithTint extends PillarColours {
+interface PillarColoursWithTint extends PillarColours {
 	tint?: string;
 }
 

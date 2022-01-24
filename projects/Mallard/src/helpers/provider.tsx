@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useMemo } from 'react';
 
-export interface ProviderHook<G, S> {
+interface ProviderHook<G, S> {
 	getter: G;
 	setter: S;
 }

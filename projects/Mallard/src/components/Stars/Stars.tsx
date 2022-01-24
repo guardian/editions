@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-export const getRatingAsText = (rating: number) =>
+const getRatingAsText = (rating: number) =>
 	['☆', '☆', '☆', '☆', '☆'].map((s, index) => {
 		if (index + 1 <= rating) {
 			return '★';

@@ -90,16 +90,14 @@ export type HeaderControlProps = HeaderControlInnerProps & {
 	 */
 	onIsAtTopChange: (isAtTop: boolean) => void;
 };
-export const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
+const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
 	const images: ImageElement[] = elements.filter(
 		(e: BlockElement): e is ImageElement => e.id === 'image',
 	);
 	return images;
 };
 
-export const getCreditedImages = (
-	elements: ImageElement[],
-): CreditedImage[] => {
+const getCreditedImages = (elements: ImageElement[]): CreditedImage[] => {
 	const creditedImages: CreditedImage[] = elements.map((e) => {
 		return {
 			source: e.src.source,

@@ -4,7 +4,7 @@ export const clamp = (number: number, min: number, max: number) => {
 	return number;
 };
 
-export const isSafeValue = (value: unknown): value is number => {
+const isSafeValue = (value: unknown): value is number => {
 	if (!isFinite(value as number)) {
 		return false;
 	}
