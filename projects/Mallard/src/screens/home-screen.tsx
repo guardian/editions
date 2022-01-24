@@ -1,4 +1,5 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import type { Dispatch } from 'react';
 import React, {
 	useCallback,
 	useContext,
@@ -36,12 +37,15 @@ import {
 	CONNECTION_FAILED_ERROR,
 	Copy,
 } from 'src/helpers/words';
-import { useIsUsingProdDevtools } from 'src/hooks/use-config-provider';
+import {
+	useApiUrl,
+	useIsUsingProdDevtools,
+} from 'src/hooks/use-config-provider';
 import {
 	getSpecialEditionProps,
 	useEditions,
 } from 'src/hooks/use-edition-provider';
-import { useIssue } from 'src/hooks/use-issue-provider';
+import { fetchIssue, useIssue } from 'src/hooks/use-issue-provider';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import useOverlayAnimation from 'src/hooks/use-overlay-animation';
@@ -93,9 +97,11 @@ const IssueRowContainer = React.memo(
 	({
 		issue,
 		issueDetails,
+		setIssueId: setLocalIssueId,
 	}: {
 		issue: IssueSummary;
 		issueDetails: Loaded<IssueWithFronts> | null;
+		setIssueId: Dispatch<PathToIssue>;
 	}) => {
 		const navigation = useNavigation<CompositeNavigationStackProps>();
 		const { issueId, setIssueId } = useIssueSummary();
@@ -134,7 +140,7 @@ const IssueRowContainer = React.memo(
 				navToIssue(null);
 				return;
 			}
-			setIssueId({
+			setLocalIssueId({
 				localIssueId: localId,
 				publishedIssueId: publishedId,
 			});
@@ -142,7 +148,7 @@ const IssueRowContainer = React.memo(
 			setNavPosition,
 			navToIssue,
 			issueDetails,
-			setIssueId,
+			setLocalIssueId,
 			localId,
 			publishedId,
 		]);
@@ -237,9 +243,11 @@ const IssueListView = React.memo(
 	({
 		issueList,
 		currentIssue,
+		setIssueId,
 	}: {
 		issueList: IssueSummary[];
 		currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> };
+		setIssueId: Dispatch<PathToIssue>;
 	}) => {
 		const navigation = useNavigation();
 		const { localIssueId: localId, publishedIssueId: publishedId } =
@@ -276,9 +284,10 @@ const IssueListView = React.memo(
 				<IssueRowContainer
 					issue={item}
 					issueDetails={index === currentIssueIndex ? details : null}
+					setIssueId={setIssueId}
 				/>
 			),
-			[currentIssueIndex, details, navigation],
+			[currentIssueIndex, details, navigation, setIssueId],
 		);
 
 		// Height of the fronts so we can provide this to `getItemLayout`.
@@ -348,10 +357,12 @@ const IssueListViewWithDelay = ({
 	issueList,
 	currentId,
 	currentIssue,
+	setIssueId,
 }: {
 	issueList: IssueSummary[];
 	currentId: PathToIssue;
 	currentIssue: Loaded<IssueWithFronts>;
+	setIssueId: Dispatch<PathToIssue>;
 }) => {
 	const [shownIssue, setShownIssue] = useState({
 		id: currentId,
@@ -373,20 +384,44 @@ const IssueListViewWithDelay = ({
 		}
 	}, [currentId, currentIssue, details]);
 
-	return <IssueListView issueList={issueList} currentIssue={shownIssue} />;
+	return (
+		<IssueListView
+			issueList={issueList}
+			currentIssue={shownIssue}
+			setIssueId={setIssueId}
+		/>
+	);
 };
 
+const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
 const NO_ISSUES: IssueSummary[] = [];
 const IssueListFetchContainer = () => {
 	const data = useIssueSummary();
 	const issueSummary = data.issueSummary ?? NO_ISSUES;
+	const { issueWithFronts } = useIssue();
+	const { apiUrl } = useApiUrl();
+
 	const [isShown, setIsShown] = useState(
 		// on iOS there is bug that causes wrong rendering of the scroll bar
 		// if this is enabled. See below description of this mechanism.
 		Platform.select({ android: false, default: true }),
 	);
-	const { issueWithFronts, issueId, error } = useIssue();
-	// console.log(issueWithFronts);
+	const [issueId, setIssueId] = useState(data.issueId ?? EMPTY_ISSUE_ID);
+	// Default on mount with the issue that is currently in context
+	const [currentIssue, setCurrentIssue] = useState<IssueWithFronts | null>(
+		issueWithFronts,
+	);
+	const [error, setError] = useState<string>('');
+
+	// We want to store the issue state locally in this menu component so that the
+	// fronts in the background do not change which has a performance impact due
+	// to the number of images. So we skirt around global state and fetch straight
+	// from the source.
+	useEffect(() => {
+		fetchIssue(issueId, apiUrl)
+			.then((issue) => issue && setCurrentIssue(issue))
+			.catch((e) => setError(e.message));
+	}, [issueId, apiUrl]);
 
 	useEffect(() => {
 		// Adding a tiny delay before doing full rendering means that the
@@ -409,23 +444,26 @@ const IssueListFetchContainer = () => {
 			</View>
 		);
 
-	return issueWithFronts !== null ? (
+	return currentIssue !== null ? (
 		<IssueListViewWithDelay
 			issueList={issueSummary}
 			currentId={issueId}
-			currentIssue={{ value: issueWithFronts }}
+			currentIssue={{ value: currentIssue }} // This needs to be a fetch value
+			setIssueId={setIssueId}
 		/>
 	) : error ? (
 		<IssueListViewWithDelay
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ error }}
+			setIssueId={setIssueId}
 		/>
 	) : (
 		<IssueListViewWithDelay
 			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ isLoading: true }}
+			setIssueId={setIssueId}
 		/>
 	);
 };
