@@ -16,71 +16,75 @@ interface Titles {
 	titleStyle: any;
 }
 
-const IssueScreenHeader = ({
-	headerStyles,
-	issue,
-}: {
-	headerStyles?: SpecialEditionHeaderStyles;
-	issue?: IssueWithFronts;
-}) => {
-	const navigation = useNavigation();
-	const { date, weekday } = useIssueDate(issue);
-	const { setNewEditionSeen, selectedEdition } = useEditions();
+const IssueScreenHeader = React.memo(
+	({
+		headerStyles,
+		issue,
+	}: {
+		headerStyles?: SpecialEditionHeaderStyles;
+		issue?: IssueWithFronts;
+	}) => {
+		const navigation = useNavigation();
+		const { date, weekday } = useIssueDate(issue);
+		const { setNewEditionSeen, selectedEdition } = useEditions();
 
-	const getDateString = () => {
-		const abbreviatedDay = weekday.substring(0, 3);
-		return `${abbreviatedDay} ${date}`;
-	};
-
-	const goToIssueList = () => {
-		navigation.navigate(RouteNames.IssueList);
-	};
-
-	const handleEditionMenuPress = () => {
-		setNewEditionSeen();
-		navigation.navigate(RouteNames.EditionsMenu);
-	};
-
-	const isSpecialEdition = (editionType: string) => {
-		return editionType === 'Special';
-	};
-
-	const getTitles = (): Titles => {
-		if (isSpecialEdition(selectedEdition.editionType)) {
-			const splitTitle = selectedEdition.title.split('\n');
-			return {
-				title: splitTitle[0],
-				subTitle: splitTitle[1],
-				titleStyle: styles.issueHeavyText,
-			};
-		}
-		const dateString = getDateString();
-		return {
-			title: selectedEdition.title,
-			subTitle: dateString,
-			titleStyle: styles.issueLightText,
+		const getDateString = () => {
+			const abbreviatedDay = weekday.substring(0, 3);
+			return `${abbreviatedDay} ${date}`;
 		};
-	};
 
-	const { title, subTitle, titleStyle } = getTitles();
+		const goToIssueList = () => {
+			navigation.navigate(RouteNames.IssueList);
+		};
 
-	return (
-		<Header
-			onPress={goToIssueList}
-			action={<IssueMenuButton onPress={goToIssueList} />}
-			leftAction={<EditionsMenuButton onPress={handleEditionMenuPress} />}
-			headerStyles={headerStyles}
-		>
-			{title ? (
-				<IssueTitle
-					title={title}
-					subtitle={subTitle}
-					titleStyle={titleStyle}
-					overwriteStyles={headerStyles}
-				/>
-			) : null}
-		</Header>
-	);
-};
+		const handleEditionMenuPress = () => {
+			setNewEditionSeen();
+			navigation.navigate(RouteNames.EditionsMenu);
+		};
+
+		const isSpecialEdition = (editionType: string) => {
+			return editionType === 'Special';
+		};
+
+		const getTitles = (): Titles => {
+			if (isSpecialEdition(selectedEdition.editionType)) {
+				const splitTitle = selectedEdition.title.split('\n');
+				return {
+					title: splitTitle[0],
+					subTitle: splitTitle[1],
+					titleStyle: styles.issueHeavyText,
+				};
+			}
+			const dateString = getDateString();
+			return {
+				title: selectedEdition.title,
+				subTitle: dateString,
+				titleStyle: styles.issueLightText,
+			};
+		};
+
+		const { title, subTitle, titleStyle } = getTitles();
+
+		return (
+			<Header
+				onPress={goToIssueList}
+				action={<IssueMenuButton onPress={goToIssueList} />}
+				leftAction={
+					<EditionsMenuButton onPress={handleEditionMenuPress} />
+				}
+				headerStyles={headerStyles}
+			>
+				{title ? (
+					<IssueTitle
+						title={title}
+						subtitle={subTitle}
+						titleStyle={titleStyle}
+						overwriteStyles={headerStyles}
+					/>
+				) : null}
+			</Header>
+		);
+	},
+);
 
 export { IssueScreenHeader };

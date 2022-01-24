@@ -88,10 +88,13 @@ export const IssueSummaryProvider = ({
 	const { maxAvailableEditions } = useMaxAvailableEditions();
 	const { isActive } = useAppState();
 
-	const setIssueId = (issueId: PathToIssue, frontKey?: string) => {
-		frontKey && setInitialFrontKey(frontKey);
-		setLocalIssueId(issueId);
-	};
+	const setIssueId = useCallback(
+		(issueId: PathToIssue, frontKey?: string) => {
+			frontKey && setInitialFrontKey(frontKey);
+			setLocalIssueId(issueId);
+		},
+		[setInitialFrontKey, setLocalIssueId],
+	);
 
 	// Use Callback used so the function isnt recreated on each rerender
 	// @TODO: Look to move this logic outside of the provider so it can be tested

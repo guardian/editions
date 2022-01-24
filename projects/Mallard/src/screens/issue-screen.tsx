@@ -322,67 +322,48 @@ const WeatherHeader = () => {
 	return <WeatherWidget />;
 };
 
-const IssueScreenWithPath = ({
-	initialFrontKey,
-	headerStyle,
-}: {
-	initialFrontKey: string | null;
-	headerStyle?: SpecialEditionHeaderStyles;
-}) => {
-	const { isProof } = useApiUrl();
-	const { error, issueWithFronts: issue, retry } = useIssue();
+const IssueScreenWithPath = React.memo(
+	({
+		initialFrontKey,
+		headerStyle,
+	}: {
+		initialFrontKey: string | null;
+		headerStyle?: SpecialEditionHeaderStyles;
+	}) => {
+		const { isProof } = useApiUrl();
+		const { error, issueWithFronts: issue, retry } = useIssue();
 
-	issue &&
-		sendPageViewEvent({
-			path: `editions/uk/daily/${issue.key}`,
-		});
+		issue &&
+			sendPageViewEvent({
+				path: `editions/uk/daily/${issue.key}`,
+			});
 
-	return issue ? (
-		<>
-			<PreviewReloadButton
-				onPress={async () => {
-					if (isProof) {
-						try {
-							await deleteIssueFiles();
-						} catch (error) {
-							console.error('failed to delete files', error);
-						} finally {
-							RNRestart.Restart();
+		return issue ? (
+			<>
+				<PreviewReloadButton
+					onPress={async () => {
+						if (isProof) {
+							try {
+								await deleteIssueFiles();
+							} catch (error) {
+								console.error('failed to delete files', error);
+							} finally {
+								RNRestart.Restart();
+							}
 						}
-					}
-					retry();
-				}}
-			/>
-			<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
+						retry();
+					}}
+				/>
+				<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
 
-			<WithBreakpoints>
-				{{
-					0: () => (
-						<WithLayoutRectangle>
-							{(metrics) => (
-								<WithIssueScreenSize
-									value={[PageLayoutSizes.mobile, metrics]}
-								>
-									<IssueFronts
-										ListHeaderComponent={<WeatherHeader />}
-										issue={issue}
-										initialFrontKey={initialFrontKey}
-									/>
-								</WithIssueScreenSize>
-							)}
-						</WithLayoutRectangle>
-					),
-					[Breakpoints.TabletVertical]: () => (
-						<View
-							style={{
-								flexDirection: 'row',
-							}}
-						>
+				<WithBreakpoints>
+					{{
+						0: () => (
 							<WithLayoutRectangle>
 								{(metrics) => (
 									<WithIssueScreenSize
 										value={[
-											PageLayoutSizes.tablet,
+											PageLayoutSizes.mobile,
 											metrics,
 										]}
 									>
@@ -396,24 +377,52 @@ const IssueScreenWithPath = ({
 									</WithIssueScreenSize>
 								)}
 							</WithLayoutRectangle>
-						</View>
-					),
-				}}
-			</WithBreakpoints>
-		</>
-	) : error ? (
-		<IssueScreenWithPathError
-			headerStyle={headerStyle}
-			message={error}
-			retry={retry}
-		/>
-	) : (
-		<IssueScreenWithPathPending headerStyle={headerStyle} />
-	);
-};
+						),
+						[Breakpoints.TabletVertical]: () => (
+							<View
+								style={{
+									flexDirection: 'row',
+								}}
+							>
+								<WithLayoutRectangle>
+									{(metrics) => (
+										<WithIssueScreenSize
+											value={[
+												PageLayoutSizes.tablet,
+												metrics,
+											]}
+										>
+											<IssueFronts
+												ListHeaderComponent={
+													<WeatherHeader />
+												}
+												issue={issue}
+												initialFrontKey={
+													initialFrontKey
+												}
+											/>
+										</WithIssueScreenSize>
+									)}
+								</WithLayoutRectangle>
+							</View>
+						),
+					}}
+				</WithBreakpoints>
+			</>
+		) : error ? (
+			<IssueScreenWithPathError
+				headerStyle={headerStyle}
+				message={error}
+				retry={retry}
+			/>
+		) : (
+			<IssueScreenWithPathPending headerStyle={headerStyle} />
+		);
+	},
+);
 
-export const IssueScreen = () => {
-	const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary();
+export const IssueScreen = React.memo(() => {
+	const { issueId, error, initialFrontKey } = useIssueSummary();
 	const { selectedEdition, showNewEditionCard, setNewEditionSeen } =
 		useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
@@ -428,11 +437,6 @@ export const IssueScreen = () => {
 				/>
 			)}
 			{issueId ? (
-				<IssueScreenWithPath
-					initialFrontKey={initialFrontKey}
-					headerStyle={headerStyle}
-				/>
-			) : issueSummary ? (
 				<IssueScreenWithPath
 					initialFrontKey={initialFrontKey}
 					headerStyle={headerStyle}
@@ -456,4 +460,4 @@ export const IssueScreen = () => {
 			)}
 		</Container>
 	);
-};
+});

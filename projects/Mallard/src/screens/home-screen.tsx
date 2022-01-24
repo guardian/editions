@@ -331,9 +331,8 @@ const IssueListView = React.memo(
 
 		return (
 			<FlatList
-				// Only render 4 because the fronts list will take up most
-				// space on the screen. This improves performance.
-				initialNumToRender={4}
+				// Only render 7 because that is the default number of editions
+				initialNumToRender={7}
 				ItemSeparatorComponent={Separator}
 				ListFooterComponentStyle={styles.issueListFooter}
 				ListFooterComponent={footer}
