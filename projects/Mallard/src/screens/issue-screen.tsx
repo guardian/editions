@@ -26,7 +26,6 @@ import {
 	flattenFlatCardsToFront,
 } from 'src/helpers/transform';
 import {
-	CONNECTION_FAILED_AUTO_RETRY,
 	CONNECTION_FAILED_ERROR,
 	CONNECTION_FAILED_SUB_ERROR,
 	NewEditionWords,
@@ -322,48 +321,65 @@ const WeatherHeader = () => {
 	return <WeatherWidget />;
 };
 
-const IssueScreenWithPath = React.memo(
-	({
-		initialFrontKey,
-		headerStyle,
-	}: {
-		initialFrontKey: string | null;
-		headerStyle?: SpecialEditionHeaderStyles;
-	}) => {
-		const { isProof } = useApiUrl();
-		const { error, issueWithFronts: issue, retry } = useIssue();
+const IssueScreenWithPath = React.memo(() => {
+	const { isProof } = useApiUrl();
+	const { error, issueWithFronts: issue, retry } = useIssue();
+	const { initialFrontKey } = useIssueSummary();
+	const { selectedEdition } = useEditions();
+	const specialEditionProps = getSpecialEditionProps(selectedEdition);
+	const headerStyle = specialEditionProps?.headerStyle;
 
-		issue &&
-			sendPageViewEvent({
-				path: `editions/uk/daily/${issue.key}`,
-			});
+	issue &&
+		sendPageViewEvent({
+			path: `editions/uk/daily/${issue.key}`,
+		});
 
-		return issue ? (
-			<>
-				<PreviewReloadButton
-					onPress={async () => {
-						if (isProof) {
-							try {
-								await deleteIssueFiles();
-							} catch (error) {
-								console.error('failed to delete files', error);
-							} finally {
-								RNRestart.Restart();
-							}
+	return issue ? (
+		<>
+			<PreviewReloadButton
+				onPress={async () => {
+					if (isProof) {
+						try {
+							await deleteIssueFiles();
+						} catch (error) {
+							console.error('failed to delete files', error);
+						} finally {
+							RNRestart.Restart();
 						}
-						retry();
-					}}
-				/>
-				<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
+					}
+					retry();
+				}}
+			/>
+			<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
 
-				<WithBreakpoints>
-					{{
-						0: () => (
+			<WithBreakpoints>
+				{{
+					0: () => (
+						<WithLayoutRectangle>
+							{(metrics) => (
+								<WithIssueScreenSize
+									value={[PageLayoutSizes.mobile, metrics]}
+								>
+									<IssueFronts
+										ListHeaderComponent={<WeatherHeader />}
+										issue={issue}
+										initialFrontKey={initialFrontKey}
+									/>
+								</WithIssueScreenSize>
+							)}
+						</WithLayoutRectangle>
+					),
+					[Breakpoints.TabletVertical]: () => (
+						<View
+							style={{
+								flexDirection: 'row',
+							}}
+						>
 							<WithLayoutRectangle>
 								{(metrics) => (
 									<WithIssueScreenSize
 										value={[
-											PageLayoutSizes.mobile,
+											PageLayoutSizes.tablet,
 											metrics,
 										]}
 									>
@@ -377,57 +393,24 @@ const IssueScreenWithPath = React.memo(
 									</WithIssueScreenSize>
 								)}
 							</WithLayoutRectangle>
-						),
-						[Breakpoints.TabletVertical]: () => (
-							<View
-								style={{
-									flexDirection: 'row',
-								}}
-							>
-								<WithLayoutRectangle>
-									{(metrics) => (
-										<WithIssueScreenSize
-											value={[
-												PageLayoutSizes.tablet,
-												metrics,
-											]}
-										>
-											<IssueFronts
-												ListHeaderComponent={
-													<WeatherHeader />
-												}
-												issue={issue}
-												initialFrontKey={
-													initialFrontKey
-												}
-											/>
-										</WithIssueScreenSize>
-									)}
-								</WithLayoutRectangle>
-							</View>
-						),
-					}}
-				</WithBreakpoints>
-			</>
-		) : error ? (
-			<IssueScreenWithPathError
-				headerStyle={headerStyle}
-				message={error}
-				retry={retry}
-			/>
-		) : (
-			<IssueScreenWithPathPending headerStyle={headerStyle} />
-		);
-	},
-);
+						</View>
+					),
+				}}
+			</WithBreakpoints>
+		</>
+	) : error ? (
+		<IssueScreenWithPathError
+			headerStyle={headerStyle}
+			message={error}
+			retry={retry}
+		/>
+	) : (
+		<IssueScreenWithPathPending headerStyle={headerStyle} />
+	);
+});
 
 export const IssueScreen = React.memo(() => {
-	const { issueId, error, initialFrontKey } = useIssueSummary();
-	const { selectedEdition, showNewEditionCard, setNewEditionSeen } =
-		useEditions();
-	const specialEditionProps = getSpecialEditionProps(selectedEdition);
-	const headerStyle = specialEditionProps?.headerStyle;
-
+	const { showNewEditionCard, setNewEditionSeen } = useEditions();
 	return (
 		<Container>
 			{showNewEditionCard && (
@@ -436,28 +419,7 @@ export const IssueScreen = React.memo(() => {
 					onDismissThisCard={setNewEditionSeen}
 				/>
 			)}
-			{issueId ? (
-				<IssueScreenWithPath
-					initialFrontKey={initialFrontKey}
-					headerStyle={headerStyle}
-				/>
-			) : error ? (
-				<>
-					<IssueScreenHeader headerStyles={headerStyle} />
-					<FlexErrorMessage
-						debugMessage={error}
-						title={CONNECTION_FAILED_ERROR}
-						message={CONNECTION_FAILED_AUTO_RETRY}
-					/>
-				</>
-			) : (
-				<>
-					<IssueScreenHeader headerStyles={headerStyle} />
-					<FlexCenter>
-						<Spinner />
-					</FlexCenter>
-				</>
-			)}
+			<IssueScreenWithPath />
 		</Container>
 	);
 });
