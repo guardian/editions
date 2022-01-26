@@ -5,7 +5,6 @@ import { downloadViaNotification } from 'src/download-edition/download-via-notif
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import type { NetInfoState } from 'src/hooks/use-net-info-provider';
 import { errorService } from 'src/services/errors';
-import { Feature } from 'src/services/logging';
 import { maybeRegister } from './helpers';
 import { notificationTracking } from './notification-tracking';
 import { pushTracking } from './push-tracking';
@@ -23,14 +22,12 @@ const pushNotificationRegistration = (
 			pushTracking(
 				'notificationToken',
 				(token && JSON.stringify(token.token)) || '',
-				Feature.PUSH_NOTIFICATION,
 			);
 			if (token) {
 				maybeRegister(token.token).catch((err) => {
 					pushTracking(
 						'notificationTokenError',
 						JSON.stringify(err) || '',
-						Feature.PUSH_NOTIFICATION,
 					);
 					console.log(`Error registering for notifications: ${err}`);
 					errorService.captureException(err);
@@ -44,7 +41,7 @@ const pushNotificationRegistration = (
 					? notification.data.uniqueIdentifier
 					: notification.uniqueIdentifier;
 
-			await pushTracking('notification', key, Feature.DOWNLOAD);
+			await pushTracking('notification', key);
 			notificationTracking(notificationId, 'received');
 
 			if (key) {

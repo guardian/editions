@@ -1,6 +1,5 @@
 import { validAttemptCache } from 'src/helpers/storage';
 import { errorService } from 'src/services/errors';
-import { Feature, Level, loggingService } from 'src/services/logging';
 import type { AnyAttempt, Connectivity, ResolvedAttempt } from './Attempt';
 import {
 	ErrorAttempt,
@@ -79,48 +78,26 @@ class Authorizer<
 		this.checkUserHasAccess = checkUserHasAccess;
 	}
 
-	private logAuthCacheClear = (feature: Feature, reason?: string) => {
-		loggingService.log({
-			level: Level.INFO,
-			message: 'Clearing all authentication caches',
-			optionalFields: { reason, feature },
-		});
-	};
-
 	private async handleAuthPromise(
 		promise: Promise<AuthResult<T>>,
 		connectivity: Connectivity,
 	) {
 		let attempt: ResolvedAttempt<T>;
-		const feature = Feature.SIGN_IN;
 		try {
 			const result = await promise;
 
 			attempt = cataResult<T, ResolvedAttempt<T>>(result, {
 				valid: (data) => ValidAttempt(data, connectivity),
 				invalid: (reason) => {
-					this.logAuthCacheClear(feature, reason);
 					this.clearCaches();
 					return InvalidAttempt(connectivity, reason);
 				},
-				error: (reason) => {
-					loggingService.log({
-						level: Level.ERROR,
-						message:
-							'Authorization service has returned an error, error attempt created',
-						optionalFields: { feature, reason },
-					});
-					return ErrorAttempt(connectivity, reason);
+				error: () => {
+					return ErrorAttempt(connectivity);
 				},
 			});
 		} catch (e) {
 			errorService.captureException(e);
-			loggingService.log({
-				level: Level.ERROR,
-				message:
-					'Authorization attempt threw exception, invalid attempt created',
-				optionalFields: { feature },
-			});
 			attempt = InvalidAttempt('online', 'Something went wrong');
 		}
 		this.upgradeAttempt(attempt);
@@ -194,9 +171,7 @@ class Authorizer<
 	 * This sets the attempt to Invalid
 	 */
 	public signOut() {
-		const feature = Feature.SIGN_IN;
 		this.updateAttempt(InvalidAttempt('online'));
-		this.logAuthCacheClear(feature, 'sign out');
 		return this.clearCaches();
 	}
 

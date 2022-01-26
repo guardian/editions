@@ -1,10 +1,7 @@
 import BackgroundFetch from 'react-native-background-fetch';
 import { prepareAndDownloadTodaysIssue } from 'src/download-edition/prepare-and-download-issue';
 import type { NetInfoState } from 'src/hooks/use-net-info-provider';
-import { Feature } from 'src/services/logging';
 import { pushTracking } from '../notifications/push-tracking';
-
-const feature = Feature.BACKGROUNG_DOWNLOAD;
 
 const pushDownloadFailsafe = (
 	downloadBlocked: NetInfoState['downloadBlocked'],
@@ -16,13 +13,13 @@ const pushDownloadFailsafe = (
 			startOnBoot: true,
 		},
 		async () => {
-			await pushTracking('backgroundFetch', 'started', feature);
+			await pushTracking('backgroundFetch', 'started');
 			await prepareAndDownloadTodaysIssue(downloadBlocked);
-			await pushTracking('backgroundFetch', 'ended', feature);
+			await pushTracking('backgroundFetch', 'ended');
 			BackgroundFetch.finish();
 		},
 		(error) => {
-			pushTracking('backgroundFetchError', error.toString(), feature);
+			pushTracking('backgroundFetchError', error.toString());
 		},
 	);
 
@@ -30,13 +27,13 @@ const pushDownloadFailsafe = (
 	BackgroundFetch.status((status) => {
 		switch (status) {
 			case BackgroundFetch.STATUS_RESTRICTED:
-				pushTracking(ID, 'restricted', feature);
+				pushTracking(ID, 'restricted');
 				break;
 			case BackgroundFetch.STATUS_DENIED:
-				pushTracking(ID, 'denied', feature);
+				pushTracking(ID, 'denied');
 				break;
 			case BackgroundFetch.STATUS_AVAILABLE:
-				pushTracking(ID, 'enabled', feature);
+				pushTracking(ID, 'enabled');
 				break;
 		}
 	});

@@ -11,7 +11,6 @@ import { pushTracking } from 'src/notifications/push-tracking';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
 import type { ImageSize, IssueSummary } from '../../../Apps/common/src';
-import { Feature } from '../../../Apps/common/src/logging';
 import { deleteIssue } from './clear-issues-and-editions';
 
 // Cache of current downloads
@@ -58,7 +57,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
 	try {
 		if (!assets || !assetsSSR) {
-			await pushTracking('noAssets', 'complete', Feature.DOWNLOAD);
+			await pushTracking('noAssets', 'complete');
 			return;
 		}
 
@@ -69,7 +68,6 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 				await pushTracking(
 					'attemptDataDownload',
 					JSON.stringify({ localId, assets: assets.data }),
-					Feature.DOWNLOAD,
 				);
 
 				// We are not asking for progress update during Data bundle download (to avoid false visual completion)
@@ -88,18 +86,13 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					`Data download completed with status: ${dataDownloadResult.statusCode}`,
 				);
 
-				await pushTracking(
-					'attemptDataDownload',
-					'completed',
-					Feature.DOWNLOAD,
-				);
+				await pushTracking('attemptDataDownload', 'completed');
 
 				// --- HTML Download ---
 
 				await pushTracking(
 					'attemptHTMLDownload',
 					JSON.stringify({ localId, assets: assetsSSR.html }),
-					Feature.DOWNLOAD,
 				);
 
 				await downloadNamedIssueArchive({
@@ -109,18 +102,13 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					withProgress: false,
 				});
 
-				await pushTracking(
-					'attemptHTMLDownload',
-					'completed',
-					Feature.DOWNLOAD,
-				);
+				await pushTracking('attemptHTMLDownload', 'completed');
 
 				// --- Media Download ---
 
 				await pushTracking(
 					'attemptMediaDownload',
 					JSON.stringify({ localId, assets: assetsSSR[imageSize] }),
-					Feature.DOWNLOAD,
 				);
 
 				await downloadNamedIssueArchive({
@@ -130,11 +118,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 					withProgress: true,
 				});
 
-				await pushTracking(
-					'attemptMediaDownload',
-					'completed',
-					Feature.DOWNLOAD,
-				);
+				await pushTracking('attemptMediaDownload', 'completed');
 
 				updateListeners(localId, {
 					type: 'unzip',
@@ -143,33 +127,33 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
 				// --- Data Unzip ---
 
-				await pushTracking('unzipData', 'start', Feature.DOWNLOAD);
+				await pushTracking('unzipData', 'start');
 
 				await unzipNamedIssueArchive(
 					`${FSPaths.downloadIssueLocation(localId)}/data.zip`,
 				);
 
-				await pushTracking('unzipData', 'end', Feature.DOWNLOAD);
+				await pushTracking('unzipData', 'end');
 
 				// --- HTML Unzip ---
 
-				await pushTracking('unzipHTML', 'start', Feature.DOWNLOAD);
+				await pushTracking('unzipHTML', 'start');
 
 				await unzipNamedIssueArchive(
 					`${FSPaths.downloadIssueLocation(localId)}/html.zip`,
 				);
 
-				await pushTracking('unzipHTML', 'end', Feature.DOWNLOAD);
+				await pushTracking('unzipHTML', 'end');
 
 				// --- Image Unzip ---
 
-				await pushTracking('unzipImages', 'start', Feature.DOWNLOAD);
+				await pushTracking('unzipImages', 'start');
 
 				await unzipNamedIssueArchive(
 					`${FSPaths.downloadIssueLocation(localId)}/media.zip`,
 				);
 
-				await pushTracking('unzipImages', 'end', Feature.DOWNLOAD);
+				await pushTracking('unzipImages', 'end');
 
 				return 'success';
 			},
@@ -178,14 +162,10 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 			},
 		);
 
-		await pushTracking('downloadAndUnzip', 'complete', Feature.DOWNLOAD);
+		await pushTracking('downloadAndUnzip', 'complete');
 		updateListeners(localId, { type: 'success' }); // null is unstarted or end
 	} catch (error) {
-		await pushTracking(
-			'downloadAndUnzipError',
-			JSON.stringify(error),
-			Feature.DOWNLOAD,
-		);
+		await pushTracking('downloadAndUnzipError', JSON.stringify(error));
 		errorService.captureException(error);
 		updateListeners(localId, { type: 'failure', data: error });
 		console.log('Download error: ', error);
@@ -209,7 +189,6 @@ export const downloadAndUnzipIssue = async (
 		await pushTracking(
 			'downloadBlocked',
 			DownloadBlockedStatus[downloadBlocked],
-			Feature.DOWNLOAD,
 		);
 		return;
 	}
@@ -223,11 +202,7 @@ export const downloadAndUnzipIssue = async (
 			await run(issue, imageSize);
 			localIssueListStore.add(localId);
 		} finally {
-			await pushTracking(
-				'completeAndDeleteCache',
-				'completed',
-				Feature.DOWNLOAD,
-			);
+			await pushTracking('completeAndDeleteCache', 'completed');
 			delete dlCache[localId];
 		}
 	};
