@@ -39,7 +39,7 @@ const ArticleScreenBody = React.memo<
 		onIsAtTopChange,
 		...headerControlProps
 	}) => {
-		const { getArticle, error, retry } = useIssue();
+		const { getArticle, error } = useIssue();
 		const article = getArticle(path);
 		const { isPreview } = useApiUrl();
 		const previewNotice = isPreview
@@ -84,7 +84,6 @@ const ArticleScreenBody = React.memo<
 					<FlexErrorMessage
 						title={error}
 						style={{ backgroundColor: color.background }}
-						action={['Retry', retry]}
 					/>
 				) : (
 					<FlexErrorMessage
