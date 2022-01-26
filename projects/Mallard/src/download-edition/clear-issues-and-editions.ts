@@ -13,7 +13,6 @@ import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
 import type { EditionId } from '../../../Apps/common/src';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
-import { Feature } from '../../../Apps/common/src/logging';
 
 const clearDownloadsDirectory = async () => {
 	try {
@@ -27,11 +26,7 @@ const clearDownloadsDirectory = async () => {
 		await Promise.all(files);
 		await prepFileSystem();
 	} catch (error) {
-		await pushTracking(
-			'tempFileRemoveError',
-			JSON.stringify(error),
-			Feature.CLEAR_ISSUES,
-		);
+		await pushTracking('tempFileRemoveError', JSON.stringify(error));
 		console.log(`Error cleaning up download issues folder `, error);
 		errorService.captureException(error);
 	}
@@ -61,7 +56,7 @@ const deleteIssues = (issuesToDelete: string[], trackingId: PushTrackingId) => {
 	return Promise.all(
 		issuesToDelete.map((issue: string) => deleteIssue(issue)),
 	)
-		.then(() => pushTracking(trackingId, 'completed', Feature.CLEAR_ISSUES))
+		.then(() => pushTracking(trackingId, 'completed'))
 		.catch((e) => {
 			errorService.captureException(e);
 		});

@@ -3,8 +3,6 @@ import type { NetInfoStateType } from '@react-native-community/netinfo';
 import NetInfo from '@react-native-community/netinfo';
 import { londonTime } from 'src/helpers/date';
 import { lastNDays } from 'src/helpers/issues';
-import type { Feature } from 'src/services/logging';
-import { Level, loggingService } from 'src/services/logging';
 
 const PUSH_TRACKING_KEY = '@push-tracking';
 
@@ -73,7 +71,6 @@ const clearPushTracking = async (): Promise<void> =>
 const pushTracking = async (
 	id: PushTrackingId,
 	value: string,
-	feature: Feature,
 ): Promise<void> => {
 	try {
 		if (__DEV__) {
@@ -93,12 +90,6 @@ const pushTracking = async (
 		const saveTracking = storedTracking
 			? [...JSON.parse(storedTracking), tracking]
 			: [tracking];
-
-		loggingService.log({
-			level: Level.INFO,
-			message: value,
-			optionalFields: { id, feature },
-		});
 
 		return await AsyncStorage.setItem(
 			PUSH_TRACKING_KEY,

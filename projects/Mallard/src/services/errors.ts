@@ -2,9 +2,10 @@ import type { FirebaseCrashlyticsTypes } from '@react-native-firebase/crashlytic
 import crashlytics from '@react-native-firebase/crashlytics';
 import * as Sentry from '@sentry/react-native';
 import Config from 'react-native-config';
+import { getCASCode } from 'src/authentication/helpers';
 import { isInBeta } from 'src/helpers/release-stream';
+import { userDataCache } from 'src/helpers/storage';
 import type { GdprSwitchSetting } from 'src/hooks/use-gdpr';
-import { Level, loggingService } from './logging';
 
 const { SENTRY_DSN_URL } = Config;
 
@@ -86,16 +87,20 @@ export class ErrorServiceImpl implements ErrorService {
 	}
 
 	private sendBasicAttributes = async () => {
-		const data = await loggingService.basicLogInfo({
-			level: Level.INFO,
-			message: 'App Data',
-		});
+		const [userData, casCode] = await Promise.all([
+			userDataCache.get(),
+			getCASCode(),
+		]);
+
+		const digitalSub =
+			userData?.membershipData?.contentAccess?.digitalPack ?? false;
+
+		const signedIn = userData ? true : false;
 
 		this.crashlytics.setAttributes({
-			signedIn: String(data.signedIn),
-			hasCasCode: String(data.casCode !== null || data.casCode !== ''),
-			hasDigiSub: String(data.digitalSub),
-			networkStatus: data.networkStatus,
+			signedIn: String(signedIn),
+			hasCasCode: String(casCode !== null || casCode !== ''),
+			hasDigiSub: String(digitalSub),
 		});
 	};
 
