@@ -194,9 +194,15 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		PathToArticle,
 		'localIssueId' | 'publishedIssueId' | 'collection'
 	>) => {
-		if (!issueWithFronts) throw ERR_404_REMOTE;
+		if (!issueWithFronts) {
+			setError(ERR_404_REMOTE);
+			return null;
+		}
 		const maybeFront = issueWithFronts.fronts.find((f) => f.key === front);
-		if (!maybeFront) throw ERR_404_REMOTE;
+		if (!maybeFront) {
+			setError(ERR_404_REMOTE);
+			return null;
+		}
 
 		const allArticles = flattenFlatCardsToFront(
 			flattenCollectionsToCards(maybeFront.collections),
@@ -208,7 +214,9 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		if (articleContent) {
 			return { ...articleContent, origin: issueWithFronts.origin };
 		}
-		throw ERR_404_REMOTE;
+
+		setError(ERR_404_REMOTE);
+		return null;
 	};
 
 	const retry = () => {
