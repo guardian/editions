@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import type { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common';
 import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
@@ -16,71 +16,75 @@ interface Titles {
 	titleStyle: any;
 }
 
-const IssueScreenHeader = ({
-	headerStyles,
-	issue,
-}: {
-	headerStyles?: SpecialEditionHeaderStyles;
-	issue?: IssueWithFronts;
-}) => {
-	const navigation = useNavigation();
-	const { date, weekday } = useIssueDate(issue);
-	const { setNewEditionSeen, selectedEdition } = useEditions();
+const IssueScreenHeader = React.memo(
+	({
+		headerStyles,
+		issue,
+	}: {
+		headerStyles?: SpecialEditionHeaderStyles;
+		issue?: IssueWithFronts;
+	}) => {
+		const { navigate } = useNavigation();
+		const { date, weekday } = useIssueDate(issue);
+		const { setNewEditionSeen, selectedEdition } = useEditions();
 
-	const getDateString = () => {
-		const abbreviatedDay = weekday.substring(0, 3);
-		return `${abbreviatedDay} ${date}`;
-	};
+		const getDateString = useCallback(() => {
+			const abbreviatedDay = weekday.substring(0, 3);
+			return `${abbreviatedDay} ${date}`;
+		}, [date, weekday]);
 
-	const goToIssueList = () => {
-		navigation.navigate(RouteNames.IssueList);
-	};
+		const goToIssueList = useCallback(() => {
+			navigate(RouteNames.IssueList);
+		}, [navigate]);
 
-	const handleEditionMenuPress = () => {
-		setNewEditionSeen();
-		navigation.navigate(RouteNames.EditionsMenu);
-	};
+		const handleEditionMenuPress = useCallback(() => {
+			setNewEditionSeen();
+			navigate(RouteNames.EditionsMenu);
+		}, [setNewEditionSeen, navigate]);
 
-	const isSpecialEdition = (editionType: string) => {
-		return editionType === 'Special';
-	};
-
-	const getTitles = (): Titles => {
-		if (isSpecialEdition(selectedEdition.editionType)) {
-			const splitTitle = selectedEdition.title.split('\n');
-			return {
-				title: splitTitle[0],
-				subTitle: splitTitle[1],
-				titleStyle: styles.issueHeavyText,
-			};
-		}
-		const dateString = getDateString();
-		return {
-			title: selectedEdition.title,
-			subTitle: dateString,
-			titleStyle: styles.issueLightText,
+		const isSpecialEdition = (editionType: string) => {
+			return editionType === 'Special';
 		};
-	};
 
-	const { title, subTitle, titleStyle } = getTitles();
+		const getTitles = useCallback((): Titles => {
+			if (isSpecialEdition(selectedEdition.editionType)) {
+				const splitTitle = selectedEdition.title.split('\n');
+				return {
+					title: splitTitle[0],
+					subTitle: splitTitle[1],
+					titleStyle: styles.issueHeavyText,
+				};
+			}
+			const dateString = getDateString();
+			return {
+				title: selectedEdition.title,
+				subTitle: dateString,
+				titleStyle: styles.issueLightText,
+			};
+		}, [selectedEdition]);
 
-	return (
-		<Header
-			onPress={goToIssueList}
-			action={<IssueMenuButton onPress={goToIssueList} />}
-			leftAction={<EditionsMenuButton onPress={handleEditionMenuPress} />}
-			headerStyles={headerStyles}
-		>
-			{title ? (
-				<IssueTitle
-					title={title}
-					subtitle={subTitle}
-					titleStyle={titleStyle}
-					overwriteStyles={headerStyles}
-				/>
-			) : null}
-		</Header>
-	);
-};
+		const { title, subTitle, titleStyle } = getTitles();
+
+		return (
+			<Header
+				onPress={goToIssueList}
+				action={<IssueMenuButton onPress={goToIssueList} />}
+				leftAction={
+					<EditionsMenuButton onPress={handleEditionMenuPress} />
+				}
+				headerStyles={headerStyles}
+			>
+				{title ? (
+					<IssueTitle
+						title={title}
+						subtitle={subTitle}
+						titleStyle={titleStyle}
+						overwriteStyles={headerStyles}
+					/>
+				) : null}
+			</Header>
+		);
+	},
+);
 
 export { IssueScreenHeader };

@@ -26,7 +26,6 @@ import {
 	flattenFlatCardsToFront,
 } from 'src/helpers/transform';
 import {
-	CONNECTION_FAILED_AUTO_RETRY,
 	CONNECTION_FAILED_ERROR,
 	CONNECTION_FAILED_SUB_ERROR,
 	NewEditionWords,
@@ -322,15 +321,13 @@ const WeatherHeader = () => {
 	return <WeatherWidget />;
 };
 
-const IssueScreenWithPath = ({
-	initialFrontKey,
-	headerStyle,
-}: {
-	initialFrontKey: string | null;
-	headerStyle?: SpecialEditionHeaderStyles;
-}) => {
+const IssueScreenWithPath = React.memo(() => {
 	const { isProof } = useApiUrl();
 	const { error, issueWithFronts: issue, retry } = useIssue();
+	const { initialFrontKey } = useIssueSummary();
+	const { selectedEdition } = useEditions();
+	const specialEditionProps = getSpecialEditionProps(selectedEdition);
+	const headerStyle = specialEditionProps?.headerStyle;
 
 	issue &&
 		sendPageViewEvent({
@@ -410,15 +407,10 @@ const IssueScreenWithPath = ({
 	) : (
 		<IssueScreenWithPathPending headerStyle={headerStyle} />
 	);
-};
+});
 
-export const IssueScreen = () => {
-	const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary();
-	const { selectedEdition, showNewEditionCard, setNewEditionSeen } =
-		useEditions();
-	const specialEditionProps = getSpecialEditionProps(selectedEdition);
-	const headerStyle = specialEditionProps?.headerStyle;
-
+export const IssueScreen = React.memo(() => {
+	const { showNewEditionCard, setNewEditionSeen } = useEditions();
 	return (
 		<Container>
 			{showNewEditionCard && (
@@ -427,33 +419,7 @@ export const IssueScreen = () => {
 					onDismissThisCard={setNewEditionSeen}
 				/>
 			)}
-			{issueId ? (
-				<IssueScreenWithPath
-					initialFrontKey={initialFrontKey}
-					headerStyle={headerStyle}
-				/>
-			) : issueSummary ? (
-				<IssueScreenWithPath
-					initialFrontKey={initialFrontKey}
-					headerStyle={headerStyle}
-				/>
-			) : error ? (
-				<>
-					<IssueScreenHeader headerStyles={headerStyle} />
-					<FlexErrorMessage
-						debugMessage={error}
-						title={CONNECTION_FAILED_ERROR}
-						message={CONNECTION_FAILED_AUTO_RETRY}
-					/>
-				</>
-			) : (
-				<>
-					<IssueScreenHeader headerStyles={headerStyle} />
-					<FlexCenter>
-						<Spinner />
-					</FlexCenter>
-				</>
-			)}
+			<IssueScreenWithPath />
 		</Container>
 	);
-};
+});
