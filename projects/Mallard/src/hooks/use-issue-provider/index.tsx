@@ -44,7 +44,7 @@ interface IssueState {
 	setIssueId: Dispatch<SetStateAction<PathToIssue>>;
 	issueId: PathToIssue;
 	error: string;
-	getArticle: (props: ArticleProps) => ArticleContent | void;
+	getArticle: (props: ArticleProps) => ArticleContent | null;
 	retry: () => void;
 }
 
@@ -53,7 +53,7 @@ const initialState: IssueState = {
 	setIssueId: () => {},
 	issueId: EMPTY_ISSUE_ID,
 	error: '',
-	getArticle: () => {},
+	getArticle: () => null,
 	retry: () => {},
 };
 
