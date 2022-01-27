@@ -328,6 +328,7 @@ export type Front = WithKey & {
     webTitle?: string
     navSection?: string
     appearance: Appearance
+    id: string
 }
 
 export interface UnknownElement {
