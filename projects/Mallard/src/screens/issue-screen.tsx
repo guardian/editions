@@ -207,7 +207,7 @@ const IssueFronts = ({
 					frontSpecs: [],
 				},
 			),
-		[issue.localId, issue.publishedId, issue.fronts],
+		[issue.localId, issue.publishedId, issue.fronts[0].id],
 	);
 
 	useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref);
