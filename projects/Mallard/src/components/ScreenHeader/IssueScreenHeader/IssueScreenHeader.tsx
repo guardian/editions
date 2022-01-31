@@ -46,7 +46,7 @@ const IssueScreenHeader = React.memo(
 			return editionType === 'Special';
 		};
 
-		const getTitles = useCallback((): Titles => {
+		const getTitles = (): Titles => {
 			if (isSpecialEdition(selectedEdition.editionType)) {
 				const splitTitle = selectedEdition.title.split('\n');
 				return {
@@ -61,7 +61,7 @@ const IssueScreenHeader = React.memo(
 				subTitle: dateString,
 				titleStyle: styles.issueLightText,
 			};
-		}, [selectedEdition]);
+		};
 
 		const { title, subTitle, titleStyle } = getTitles();
 
