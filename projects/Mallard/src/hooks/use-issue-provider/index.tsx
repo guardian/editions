@@ -39,7 +39,7 @@ type ArticleContent = {
 };
 
 const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
-interface IssueState {
+export interface IssueState {
 	issueWithFronts: IssueWithFronts | null;
 	setIssueId: Dispatch<SetStateAction<PathToIssue>>;
 	issueId: PathToIssue;
