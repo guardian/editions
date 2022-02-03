@@ -219,8 +219,8 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		return null;
 	};
 
-	const retry = () => {
-		getIssue(true)
+	const retry = async () => {
+		return await getIssue(true)
 			.then((issue) => {
 				issue && setIssueWithFronts(issue);
 				setError('');

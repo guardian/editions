@@ -347,7 +347,8 @@ const IssueScreenWithPath = React.memo(() => {
 							RNRestart.Restart();
 						}
 					}
-					retry();
+					await retry();
+					RNRestart.Restart();
 				}}
 			/>
 			<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
