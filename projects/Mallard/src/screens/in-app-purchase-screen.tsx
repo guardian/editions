@@ -21,10 +21,10 @@ export const InAppPurchaseScreen = () => {
 		);
 
 		const purchaseSubscription = RNIAP.purchaseUpdatedListener(
-			(purchase) => {
+			(purchase: any) => {
 				const receipt = purchase.transactionReceipt;
 				if (receipt) {
-					RNIAP.finishTransaction(purchase);
+					RNIAP.finishTransactionIOS(purchase);
 					setReceipt(receipt);
 				}
 			},
