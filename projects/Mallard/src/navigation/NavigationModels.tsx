@@ -35,6 +35,7 @@ export type SettingsStackParamList = {
 	SignIn: undefined;
 	WeatherGeolocationConsent: undefined;
 	DevZone: undefined;
+	InAppPurchase: undefined;
 };
 
 export type MainStackParamList = {
@@ -81,4 +82,5 @@ export enum RouteNames {
 	OnboardingConsentInline = 'OnboardingConsentInline',
 	Crossword = 'Crossword',
 	DevZone = 'DevZone',
+	InAppPurchase = 'InAppPurchase',
 }

@@ -210,6 +210,14 @@ const DevZone = () => {
 						>
 							Clear caches
 						</Button>
+
+						<Button
+							onPress={() =>
+								navigation.navigate(RouteNames.InAppPurchase)
+							}
+						>
+							In App Purchase
+						</Button>
 					</ButtonList>
 					<List
 						data={[

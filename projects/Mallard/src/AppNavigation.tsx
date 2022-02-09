@@ -20,6 +20,7 @@ import { ArticleWrapper } from './navigation/navigators/article';
 import { EditionsMenuScreen } from './screens/editions-menu-screen';
 import { HomeScreen } from './screens/home-screen';
 import { AuthSwitcherScreen } from './screens/identity-login-screen';
+import { InAppPurchaseScreen } from './screens/in-app-purchase-screen';
 import { IssueScreen } from './screens/issue-screen';
 import { LightboxScreen } from './screens/lightbox';
 import { OnboardingConsentScreen } from './screens/onboarding-screen';
@@ -244,6 +245,10 @@ const SettingsStack = () => {
 			<Settings.Screen name={RouteNames.Help} component={HelpScreen} />
 			<Settings.Screen name={RouteNames.FAQ} component={FAQScreen} />
 			<Settings.Screen name={RouteNames.DevZone} component={DevZone} />
+			<Settings.Screen
+				name={RouteNames.InAppPurchase}
+				component={InAppPurchaseScreen}
+			/>
 		</Settings.Navigator>
 	);
 };
