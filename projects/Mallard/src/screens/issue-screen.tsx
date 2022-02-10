@@ -329,10 +329,12 @@ const IssueScreenWithPath = React.memo(() => {
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
 	const headerStyle = specialEditionProps?.headerStyle;
 
-	issue &&
-		sendPageViewEvent({
-			path: `editions/uk/daily/${issue.key}`,
-		});
+	useEffect(() => {
+		issue &&
+			sendPageViewEvent({
+				path: `editions/${issue.key}`,
+			});
+	}, [issue?.key]);
 
 	return issue ? (
 		<>
