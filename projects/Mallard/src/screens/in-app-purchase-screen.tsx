@@ -37,21 +37,29 @@ export const InAppPurchaseScreen = () => {
 
 	return (
 		<HeaderScreenContainer title="In App Purchase" actionLeft={true}>
-			{products.map(
-				({ description, localizedPrice, productId, title }) => (
-					<View key={productId} style={styles.container}>
-						<Text>{productId}</Text>
-						<Text>{title}</Text>
-						<Text>{description}</Text>
-						<Text>{localizedPrice}</Text>
-						<Button
-							onPress={() => RNIAP.requestSubscription(productId)}
-						>
-							Subscribe
-						</Button>
-					</View>
-				),
-			)}
+			<View style={styles.container}>
+				{products.length > 0 ? (
+					products.map(
+						({ description, localizedPrice, productId, title }) => (
+							<View key={productId}>
+								<Text>{productId}</Text>
+								<Text>{title}</Text>
+								<Text>{description}</Text>
+								<Text>{localizedPrice}</Text>
+								<Button
+									onPress={() =>
+										RNIAP.requestSubscription(productId)
+									}
+								>
+									Subscribe
+								</Button>
+							</View>
+						),
+					)
+				) : (
+					<Text>Loading...</Text>
+				)}
+			</View>
 			<Text>{receipt}</Text>
 		</HeaderScreenContainer>
 	);
