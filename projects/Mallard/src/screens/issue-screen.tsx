@@ -332,7 +332,7 @@ const IssueScreenWithPath = React.memo(() => {
 	useEffect(() => {
 		issue &&
 			sendPageViewEvent({
-				path: `editions/uk/daily/${issue.key}`,
+				path: `editions/${issue.key}`,
 			});
 	}, [issue?.key]);
 
