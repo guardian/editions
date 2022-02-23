@@ -33,7 +33,7 @@ export const issueController = (req: Request, res: Response) => {
     }
     console.log(`${req.url}: request for issue ${issueDate}`)
     getIssue(issue)
-        .then(data => {
+        .then((data) => {
             if (data === 'notfound') {
                 res.sendStatus(404)
                 return
@@ -42,7 +42,7 @@ export const issueController = (req: Request, res: Response) => {
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
         })
-        .catch(e => console.error(e))
+        .catch((e) => console.error(e))
 }
 
 export const getIssuesSummary = async (
@@ -80,8 +80,8 @@ export const getIssuesSummary = async (
     )
 
     const issues = Object.values(
-        groupBy(_ => _.issueDate, issuePublications),
-    ).map(versions =>
+        groupBy((_) => _.issueDate, issuePublications),
+    ).map((versions) =>
         versions.reduce((a, b) =>
             new Date(a.version).getTime() > new Date(b.version).getTime() // Version is always a date. This is obscene. This controller should also never be hit. Fix after launch.
                 ? a
@@ -90,7 +90,7 @@ export const getIssuesSummary = async (
     )
 
     return issues
-        .map(issuePublication => {
+        .map((issuePublication) => {
             const date = new Date(issuePublication.issueDate)
             if (isNaN(date.getTime())) {
                 console.warn(
@@ -123,7 +123,7 @@ export const getIssuesSummary = async (
 export const issuesSummaryController = (req: Request, res: Response) => {
     const issueEdition = req.params.edition
     getIssuesSummary(issueEdition, isPreviewStage)
-        .then(data => {
+        .then((data) => {
             if (hasFailed(data)) {
                 console.error(JSON.stringify(data))
                 res.sendStatus(data.httpStatus || 500)
@@ -132,7 +132,7 @@ export const issuesSummaryController = (req: Request, res: Response) => {
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
         })
-        .catch(e => {
+        .catch((e) => {
             console.error(e)
             res.sendStatus(500)
         })

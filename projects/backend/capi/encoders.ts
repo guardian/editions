@@ -4,7 +4,7 @@ import { TBufferedTransport, TCompactProtocol } from 'thrift'
 const encodeContent = async (data: Content): Promise<Buffer> => {
     try {
         let buffer = Buffer.from([])
-        const transport = new TBufferedTransport(buffer, outBuffer => {
+        const transport = new TBufferedTransport(buffer, (outBuffer) => {
             if (outBuffer) {
                 buffer = Buffer.concat([buffer, outBuffer])
             } else {

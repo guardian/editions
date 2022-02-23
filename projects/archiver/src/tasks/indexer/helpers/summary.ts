@@ -13,7 +13,7 @@ import { Bucket } from '../../../utils/s3'
 
 const validate = (allEditionIssues: IssueIdentifier[], edition: EditionId) => {
     const otherEditions = allEditionIssues.filter(
-        issue => issue.edition != edition,
+        (issue) => issue.edition != edition,
     )
     if (otherEditions.length > 0) {
         throw new Error(
@@ -32,7 +32,7 @@ export const getOtherRecentIssues = (
 
     // filter out the one we are currently publishing and return
     return recentIssues.filter(
-        issue => issue.issueDate !== oc(currentlyPublishing).issueDate(),
+        (issue) => issue.issueDate !== oc(currentlyPublishing).issueDate(),
     )
 }
 
@@ -60,13 +60,15 @@ export const getOtherIssuesSummariesForEdition = async (
     )
 
     const issuePublications = await Promise.all(
-        otherRecentIssuesForEdition.map(issue =>
+        otherRecentIssuesForEdition.map((issue) =>
             getPublishedVersion(issue, bucket),
         ),
     )
-    return (await Promise.all(
-        issuePublications
-            .filter(notNull)
-            .map(issuePub => getIssueSummary(issuePub, bucket)),
-    )).filter(notNull)
+    return (
+        await Promise.all(
+            issuePublications
+                .filter(notNull)
+                .map((issuePub) => getIssueSummary(issuePub, bucket)),
+        )
+    ).filter(notNull)
 }

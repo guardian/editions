@@ -81,23 +81,21 @@ const invokeEditionList = async (
 ) => {
     const maybeEditionListPromises: Promise<
         Attempt<EditionListPublicationAction>
-    >[] = Records.map(async r => {
+    >[] = Records.map(async (r) => {
         return await parseEditionListActionRecord(r, dependencies.s3fetch)
     })
 
-    const maybeEditionLists: Attempt<
-        EditionListPublicationAction
-    >[] = await Promise.all(maybeEditionListPromises)
+    const maybeEditionLists: Attempt<EditionListPublicationAction>[] =
+        await Promise.all(maybeEditionListPromises)
 
     // explicitly ignore all files that didn't parse,
-    const editionLists: EditionListPublicationAction[] = maybeEditionLists.filter(
-        hasSucceeded,
-    )
+    const editionLists: EditionListPublicationAction[] =
+        maybeEditionLists.filter(hasSucceeded)
 
     console.log('Found following edition lists:', JSON.stringify(editionLists))
 
     return await Promise.all(
-        editionLists.map(async data => {
+        editionLists.map(async (data) => {
             const editionList = data.content
             const endpoint = `${URL}editions`
             console.log(`Posting editions list to ${endpoint}`)
@@ -128,23 +126,21 @@ const invokePublishProof = async (
 ) => {
     const maybeIssuesPromises: Promise<
         Attempt<IssuePublicationActionIdentifier>
-    >[] = Records.map(async r => {
+    >[] = Records.map(async (r) => {
         return await parseIssueActionRecord(r, dependencies.s3fetch)
     })
 
-    const maybeIssues: Attempt<
-        IssuePublicationActionIdentifier
-    >[] = await Promise.all(maybeIssuesPromises)
+    const maybeIssues: Attempt<IssuePublicationActionIdentifier>[] =
+        await Promise.all(maybeIssuesPromises)
 
     // explicitly ignore all files that didn't parse,
-    const issues: IssuePublicationActionIdentifier[] = maybeIssues.filter(
-        hasSucceeded,
-    )
+    const issues: IssuePublicationActionIdentifier[] =
+        maybeIssues.filter(hasSucceeded)
 
     console.log('Found following issues:', JSON.stringify(issues))
 
     return await Promise.all(
-        issues.map(issuePublicationAction => {
+        issues.map((issuePublicationAction) => {
             if (issuePublicationAction.action === 'proof')
                 return dependencies.proofStateMachineInvoke(
                     issuePublicationAction as IssuePublicationActionIdentifier,
@@ -167,7 +163,7 @@ export const internalHandler = async (
 
     const successfulIssueInvocations = issueRuns
         .filter(hasSucceeded)
-        .map(issue => `✅ Invocation of ${JSON.stringify(issue)} succeeded.`)
+        .map((issue) => `✅ Invocation of ${JSON.stringify(issue)} succeeded.`)
 
     const successfulEditionListInvocations = editionsListRuns
         .filter(hasSucceeded)
@@ -214,9 +210,8 @@ export const handler: Handler<
     )
 
     const runtimeDependencies: InvokerDependencies = {
-        proofStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
-            proofStateMachineArn,
-        ),
+        proofStateMachineInvoke:
+            getRuntimeInvokeStateMachineFunction(proofStateMachineArn),
         publishStateMachineInvoke: getRuntimeInvokeStateMachineFunction(
             publishStateMachineArn,
         ),

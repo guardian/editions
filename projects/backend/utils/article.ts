@@ -44,7 +44,7 @@ const getStsCreds = async (role: string) => {
             RoleSessionName: 'capi-assume-role-access2',
         })
         .promise()
-        .catch(err => console.error('assume role failed', err))
+        .catch((err) => console.error('assume role failed', err))
 
     if (creds && creds.Credentials) {
         return {
@@ -100,7 +100,7 @@ const getPreviewHeaders = async (endpoint: string) => {
 }
 
 const generateCapiEndpoint = (ids: number[], capi: CAPIEndpoint): string => {
-    const paths = ids.map(_ => `internal-code/page/${_}`)
+    const paths = ids.map((_) => `internal-code/page/${_}`)
     return getEndpoint(capi, paths)
 }
 

@@ -44,7 +44,7 @@ describe('parseRecord', () => {
             '{"issueDate":"2019-10-09"}',
         ]
 
-        invalids.forEach(s => {
+        invalids.forEach((s) => {
             expect(hasFailed(parseIssueActionRecordInternal(s))).toBe(true)
         })
     })

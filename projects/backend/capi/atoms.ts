@@ -82,7 +82,7 @@ export const renderAtomElement = async (
 
     const atomType = data.atomType
     const atomId = data.atomId
-    const atom = (atoms[atomType] || []).find(atom => atom.id === atomId)
+    const atom = (atoms[atomType] || []).find((atom) => atom.id === atomId)
     if (atom === undefined) {
         console.error('Atom not found in CAPI response.')
         throw new Error('Atom not found in CAPI response.')
@@ -97,7 +97,7 @@ export const renderAtomElement = async (
                 activeVersion64.toNumber()) ||
             -1
         const latestAsset = atom.data.media.assets.find(
-            _ => _.version.toNumber() === activeVersion,
+            (_) => _.version.toNumber() === activeVersion,
         )
 
         const platform = getPlatformName(oc(latestAsset).platform())

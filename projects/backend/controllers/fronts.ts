@@ -22,7 +22,7 @@ export const frontController = (req: Request, res: Response) => {
         edition,
     }
     getFront(issue, frontId, updater)
-        .then(data => {
+        .then((data) => {
             if (hasFailed(data)) {
                 console.error(`${req.url} threw ${JSON.stringify(data)}`)
                 if (data.httpStatus) {
@@ -37,7 +37,7 @@ export const frontController = (req: Request, res: Response) => {
             res.setHeader('Content-Type', 'application/json')
             res.send(frontData)
         })
-        .catch(error => {
+        .catch((error) => {
             console.error('Error in the fronts controller.')
             console.error(error)
             res.sendStatus(500)

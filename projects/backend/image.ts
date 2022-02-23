@@ -17,7 +17,7 @@ export const getImageFromURL = (
         const hostparts = host.split('.')
         const source = hostparts[0]
         const role = typeData && typeData.role
-        const imageRole = imageRoles.find(r => r === role)
+        const imageRole = imageRoles.find((r) => r === role)
         return { source, path, role: imageRole }
     } catch (e) {
         console.error(`Encountered error parsing ${url}`)
@@ -27,16 +27,14 @@ export const getImageFromURL = (
 }
 
 const getSignature = (path: string) => {
-    return createHash('md5')
-        .update(`${salt}/${path}`)
-        .digest('hex')
+    return createHash('md5').update(`${salt}/${path}`).digest('hex')
 }
 
 type AspectRatioType = 'landscape-wide' | 'portrait' | 'landscape'
 
 // example path d9dfd06b5042a9808b4bc3be3ccea4122cda6cb1/0_0_<width>_<height>/master/7087.jpg
 export const detectImageAspectRatio = (path: string): AspectRatioType => {
-    const pathSegments = path.split('/').filter(s => s !== '')
+    const pathSegments = path.split('/').filter((s) => s !== '')
     const widthHeightSegment = pathSegments[1]
     const widthHeightSegmentSplit =
         widthHeightSegment && widthHeightSegment.split('_')

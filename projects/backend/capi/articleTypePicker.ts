@@ -5,20 +5,20 @@ import { Element } from '@guardian/content-api-models/v1/element'
 import { TagType } from '@guardian/content-api-models/v1/tagType'
 
 const doesTagExist = (article: Content, tagId: string): boolean => {
-    return article.tags.find(tag => tag.id === tagId) != undefined
+    return article.tags.find((tag) => tag.id === tagId) != undefined
 }
 
 const doesTypeExist = (article: Content, tagType: TagType): boolean => {
-    return article.tags.find(tag => tag.type === tagType) != undefined
+    return article.tags.find((tag) => tag.type === tagType) != undefined
 }
 
 const showCaseMainMedia = (elements: Element[]): boolean => {
     const mainImage = elements.find(
-        e => e.relation === 'main' && e.type === ElementType.IMAGE,
+        (e) => e.relation === 'main' && e.type === ElementType.IMAGE,
     )
     return mainImage
         ? mainImage.assets.some(
-              a => a.typeData && a.typeData.role === 'showcase',
+              (a) => a.typeData && a.typeData.role === 'showcase',
           )
         : false
 }

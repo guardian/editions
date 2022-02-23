@@ -16,8 +16,8 @@ const tagTitleIsAlreadyInHeadline = (tag: Tag, headline: string) =>
  */
 const kickerPicker = (article: Content, headline: string) => {
     const byline = article.fields && article.fields.byline
-    const seriesTag = article.tags.find(tag => tag.type === TagType.SERIES)
-    const toneTag = article.tags.find(tag => tag.type === TagType.TONE)
+    const seriesTag = article.tags.find((tag) => tag.type === TagType.SERIES)
+    const toneTag = article.tags.find((tag) => tag.type === TagType.TONE)
 
     if (seriesTag) return seriesTag.webTitle
 

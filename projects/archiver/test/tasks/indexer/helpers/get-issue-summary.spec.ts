@@ -39,26 +39,19 @@ describe('getIssueSummaryInternal', () => {
             name: 'American Edition',
             date: '2019-10-09',
             assets: {
-                data:
-                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/data.zip',
-                phone:
-                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/phone.zip',
-                tablet:
-                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tablet.zip',
+                data: 'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/data.zip',
+                phone: 'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/phone.zip',
+                tablet: 'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tablet.zip',
                 tabletL:
                     'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletL.zip',
                 tabletXL:
                     'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletXL.zip',
             },
             assetsSSR: {
-                data:
-                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/data.zip',
-                html:
-                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/html.zip',
-                phone:
-                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/phone.zip',
-                tablet:
-                    'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tablet.zip',
+                data: 'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/data.zip',
+                html: 'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/html.zip',
+                phone: 'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/phone.zip',
+                tablet: 'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tablet.zip',
                 tabletL:
                     'zips/american-edition/2019-10-09/2019-10-08T14:07:37.084Z/tabletL.zip',
                 tabletXL:

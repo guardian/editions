@@ -8,7 +8,7 @@ export const getIssuesBy = async (
 ): Promise<IssueIdentifier[]> => {
     const prefixes = await listNestedPrefixes(bucket, edition)
 
-    return prefixes.map(issueDate => ({
+    return prefixes.map((issueDate) => ({
         edition,
         issueDate,
     }))

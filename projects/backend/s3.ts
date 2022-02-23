@@ -97,7 +97,7 @@ export const s3ListDirectories = async (
             ),
         })
     } else {
-        const directories = response.CommonPrefixes.map(cp => cp.Prefix || '')
+        const directories = response.CommonPrefixes.map((cp) => cp.Prefix || '')
         return directories
     }
 }
@@ -142,14 +142,14 @@ export const s3List = async (
     if (!contents) throw new Error(`Nothing at ${JSON.stringify(path)}`)
 
     return contents
-        .map(item => {
+        .map((item) => {
             if (item.Key == null || item.LastModified == null) return null
             return { key: item.Key, lastModified: item.LastModified }
         })
         .filter(notNull)
 }
 export const s3fetch = (path: Path): Promise<Attempt<S3Response>> => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         s3FrontsClient.getObject(
             {
                 Key: path.key,
@@ -225,7 +225,7 @@ export const s3Put = async (path: Path, data: string) => {
             CacheControl: 'max-age=60',
         })
         .promise()
-        .catch(error => {
+        .catch((error) => {
             console.error(
                 `S3 putObject failed. bucket ${path.bucket},
                  key: ${path.key} `,

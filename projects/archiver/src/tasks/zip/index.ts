@@ -38,48 +38,38 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
         console.log(`data zip uploaded to: s3://${bucket.name}/${publishedId}`)
 
         await Promise.all(
-            imageSizes.map(
-                async (size): Promise<[ImageSize, string]> => {
-                    const imgUpload = await zip(
-                        `${publishedId}/${size}`,
-                        [
-                            thumbsDir(publishedId, size),
-                            mediaDir(publishedId, size),
-                        ],
-                        {
-                            removeFromOutputPath: `${version}/`,
-                        },
-                        bucket,
-                    )
+            imageSizes.map(async (size): Promise<[ImageSize, string]> => {
+                const imgUpload = await zip(
+                    `${publishedId}/${size}`,
+                    [thumbsDir(publishedId, size), mediaDir(publishedId, size)],
+                    {
+                        removeFromOutputPath: `${version}/`,
+                    },
+                    bucket,
+                )
 
-                    console.log(` ${size}   media zip uploaded`)
-                    return [size, imgUpload.Key]
-                },
-            ),
+                console.log(` ${size}   media zip uploaded`)
+                return [size, imgUpload.Key]
+            }),
         )
         console.log('Media zips uploaded.')
 
         // SSR - generate image bundle with simpler structure, without imageSize
         await Promise.all(
-            imageSizes.map(
-                async (size): Promise<[ImageSize, string]> => {
-                    const imgUpload = await zip(
-                        `${publishedId}/ssr/${size}`,
-                        [
-                            thumbsDir(publishedId, size),
-                            mediaDir(publishedId, size),
-                        ],
-                        {
-                            removeFromOutputPath: `${version}/`,
-                            replaceImageSize: size,
-                        },
-                        bucket,
-                    )
+            imageSizes.map(async (size): Promise<[ImageSize, string]> => {
+                const imgUpload = await zip(
+                    `${publishedId}/ssr/${size}`,
+                    [thumbsDir(publishedId, size), mediaDir(publishedId, size)],
+                    {
+                        removeFromOutputPath: `${version}/`,
+                        replaceImageSize: size,
+                    },
+                    bucket,
+                )
 
-                    console.log(` ${size}   media zip uploaded`)
-                    return [size, imgUpload.Key]
-                },
-            ),
+                console.log(` ${size}   media zip uploaded`)
+                return [size, imgUpload.Key]
+            }),
         )
         console.log('Media zips uploaded.')
 

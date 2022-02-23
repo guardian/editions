@@ -7,7 +7,7 @@ chai.should()
 
 describe('logging service', () => {
     const testApp = createApp()
-    it('should return 200 from healthcheck', done => {
+    it('should return 200 from healthcheck', (done) => {
         chai.request(testApp)
             .get('/healthcheck')
             .end((err, res) => {

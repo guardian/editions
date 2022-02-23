@@ -18,7 +18,7 @@ const listAndFilterPage = async (
 
     console.log('returned', JSON.stringify(objects))
     return {
-        keys: (objects.Contents || []).map(obj => obj.Key).filter(notNull),
+        keys: (objects.Contents || []).map((obj) => obj.Key).filter(notNull),
         continuationToken: objects.ContinuationToken,
     }
 }
@@ -31,10 +31,8 @@ async function* listAndFilterPrefixes(
     for (const prefix of prefixes) {
         let nextPrefix: string | undefined = prefix
         while (nextPrefix !== undefined) {
-            const {
-                keys,
-                continuationToken,
-            }: lsResponse = await listAndFilterPage(nextPrefix, bucket)
+            const { keys, continuationToken }: lsResponse =
+                await listAndFilterPage(nextPrefix, bucket)
             yield keys
             nextPrefix = continuationToken
         }

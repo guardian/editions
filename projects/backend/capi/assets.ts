@@ -5,7 +5,9 @@ import { getImageFromURL } from '../image'
 import { CreditedImage } from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
 
-const extractImage: (assetArray: Asset[]) => Asset | undefined = assetArray => {
+const extractImage: (assetArray: Asset[]) => Asset | undefined = (
+    assetArray,
+) => {
     if (assetArray.length === 0) {
         console.warn('No assets found in asset array: ' + assetArray)
         return undefined
@@ -13,7 +15,7 @@ const extractImage: (assetArray: Asset[]) => Asset | undefined = assetArray => {
 
     // This returns the master image, or, failing that, the largest.
     // As long as our CAPI key is internal, we should always have a master.
-    const master = assetArray.find(_ => _.typeData && _.typeData.isMaster)
+    const master = assetArray.find((_) => _.typeData && _.typeData.isMaster)
     if (master) return master
     console.warn(
         'Failed to find a master image in CAPI response',
@@ -38,7 +40,7 @@ export const getImage = (assetArray: Asset[]): Image | undefined => {
 
 export const getCreditedImage: (
     element: BlockElement,
-) => CreditedImage | undefined = element => {
+) => CreditedImage | undefined = (element) => {
     const asset = extractImage(element.assets)
     if (!(asset && asset.file)) {
         console.warn('Image asset potentially invalid.', JSON.stringify(asset))

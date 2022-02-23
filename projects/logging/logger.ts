@@ -1,7 +1,7 @@
 import { configure, getLogger, addLayout } from 'log4js'
 
 addLayout('json', () => {
-    return logEvent => {
+    return (logEvent) => {
         return JSON.stringify(logEvent.data[0])
     }
 })

@@ -19,26 +19,26 @@ interface ThriftDecoder<A> {
 // ----- Functions ----- //
 
 async function toTransport(buffer: Buffer): Promise<TTransport> {
-    return new Promise(resolve => {
-        const writer = TBufferedTransport.receiver(transport => {
+    return new Promise((resolve) => {
+        const writer = TBufferedTransport.receiver((transport) => {
             resolve(transport)
         }, 0)
         writer(buffer)
     })
 }
 
-const decodeContent = <A>(decoder: ThriftDecoder<A>) => async (
-    content: Buffer | undefined,
-): Promise<A> => {
-    if (content) {
-        const transport = await toTransport(content)
-        const protocol = new TCompactProtocol(transport)
+const decodeContent =
+    <A>(decoder: ThriftDecoder<A>) =>
+    async (content: Buffer | undefined): Promise<A> => {
+        if (content) {
+            const transport = await toTransport(content)
+            const protocol = new TCompactProtocol(transport)
 
-        return decoder.read(protocol)
-    } else {
-        return Promise.reject('Invalid request')
+            return decoder.read(protocol)
+        } else {
+            return Promise.reject('Invalid request')
+        }
     }
-}
 
 const capiSearchDecoder = decodeContent(SearchResponseSerde)
 
