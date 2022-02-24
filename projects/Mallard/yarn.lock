@@ -1429,21 +1429,21 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@gorhom/bottom-sheet@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@gorhom/bottom-sheet/-/bottom-sheet-2.4.0.tgz#d1a3ef31daa2c7f5456255d393bb88fcc6e122f8"
-  integrity sha512-zbcqDu71Z23F4B0fmXq9503Adq5B9F/6M832PVZTIgSfdFcLdS4nInLcViZ0NaItZq4TQEKg4EyLscPr+iYRrQ==
+"@gorhom/bottom-sheet@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@gorhom/bottom-sheet/-/bottom-sheet-2.4.1.tgz#5de40fe7dddf6b8ba4c14b127e23e22f8239852c"
+  integrity sha512-Zj5G5yqfKG78fFE2WWJbvvxMYu5hl9OdlATAOUnqL9GGKIOTe+dLBqGfEjGU81XUbtqCtoNp2qlERM4ulV58bg==
   dependencies:
-    "@gorhom/portal" "^1.0.4"
+    "@gorhom/portal" "^1.0.9"
     invariant "^2.2.4"
     lodash.isequal "^4.5.0"
     nanoid "^3.1.20"
     react-native-redash "^14.2.4"
 
-"@gorhom/portal@^1.0.4":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@gorhom/portal/-/portal-1.0.9.tgz#bd66e0e27e49fa3163b89c4c23661f31471a6343"
-  integrity sha512-tQUBKf1kDLK1l+0duYBxRqNMtdIrOAIp2H36Bc7/qUZXRxP1rUvj7EMmv6tdlKN/MzEiKPGx9wY0EmOYTjXIFQ==
+"@gorhom/portal@^1.0.9":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@gorhom/portal/-/portal-1.0.12.tgz#1c0deabb3f9057c736352a88bae9ca891a100346"
+  integrity sha512-JOYe85RUwiksgdMbhLWDCLpH3kgFFz+LCu1lnxOMMBQSfAKtL5kkTKVrhtmQ3Lq3lJM2paGnLc4wJrlVuaC5Jw==
   dependencies:
     nanoid "^3.1.23"
 

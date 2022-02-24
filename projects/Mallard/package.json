@@ -39,7 +39,7 @@
     },
     "dependencies": {
         "@delightfulstudio/react-native-safe-area-insets": "^0.2.1",
-        "@gorhom/bottom-sheet": "^2.4.0",
+        "@gorhom/bottom-sheet": "^2.4.1",
         "@guardian/pasteup": "^1.0.0-alpha.11",
         "@guardian/renditions": "^0.2.0",
         "@guardian/src-foundations": "^2.5.0-rc.1",
