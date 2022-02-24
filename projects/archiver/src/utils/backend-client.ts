@@ -73,9 +73,9 @@ export const getEditions = async (): Promise<Attempt<EditionsList>> => {
     const path = `${URL}editions`
     console.log(`Attempt to get editions list from path: ${path}`)
     const response = await fetch(path)
-    const maybeEditionsList = await attempt(response.json() as Promise<
-        EditionsList
-    >)
+    const maybeEditionsList = await attempt(
+        response.json() as Promise<EditionsList>,
+    )
     if (hasFailed(maybeEditionsList)) {
         return withFailureMessage(
             maybeEditionsList,
@@ -91,9 +91,9 @@ export const getRenderedFront = async (
 ): Promise<Attempt<RenderedArticle[]>> => {
     const path = `${URL}render/${frontPath(publishedId, front)}`
     const response = await fetch(path)
-    const renderedFront = await attempt(response.json() as Promise<
-        RenderedArticle[]
-    >)
+    const renderedFront = await attempt(
+        response.json() as Promise<RenderedArticle[]>,
+    )
     if (hasFailed(renderedFront)) {
         return renderedFront
     }

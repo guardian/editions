@@ -22,14 +22,14 @@ if (!(task in main)) {
     process.exit(1)
 }
 
-const handlers = (main as unknown) as {
+const handlers = main as unknown as {
     [key: string]: Handler<IssueParams, unknown>
 }
 const handler = handlers[task]
 
 const run = handler(JSON.parse(json), {} as Context, () => null) as Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
 
-run.then(x => {
+run.then((x) => {
     console.log(x)
     console.log('Finished.')
     process.exit(0)

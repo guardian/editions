@@ -39,8 +39,7 @@ describe('prepareScheduleDeviceNotificationRequest', () => {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body:
-                    '{"id":"a8b07133-19c1-5a00-a42b-f55bee6508c7","type":"editions","topic":[{"type":"editions","name":"uk"}],"key":"daily-edition/2019-09-18","name":"Daily Edition","date":"2019-09-18","sender":"editions-backend"}',
+                body: '{"id":"a8b07133-19c1-5a00-a42b-f55bee6508c7","type":"editions","topic":[{"type":"editions","name":"uk"}],"key":"daily-edition/2019-09-18","name":"Daily Edition","date":"2019-09-18","sender":"editions-backend"}',
             },
         }
 

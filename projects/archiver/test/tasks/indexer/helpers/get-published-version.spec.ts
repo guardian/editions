@@ -23,17 +23,13 @@ describe('getPublishedVersionInternal', () => {
                 ...issue,
                 version: '2019-09-30T17:45:23.699Z',
                 status: 'proofed',
-                updated: moment(dt)
-                    .add(1, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(1, 'hours').toDate(),
             },
             {
                 ...issue,
                 version: '2019-09-30T18:45:23.699Z',
                 status: 'notified',
-                updated: moment(dt)
-                    .add(2, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(2, 'hours').toDate(),
             },
         ]
 
@@ -43,9 +39,7 @@ describe('getPublishedVersionInternal', () => {
             ...issue,
             version: '2019-09-30T18:45:23.699Z',
             status: 'notified',
-            updated: moment(dt)
-                .add(2, 'hours')
-                .toDate(),
+            updated: moment(dt).add(2, 'hours').toDate(),
         }
 
         expect(actual).toStrictEqual(expected)
@@ -62,33 +56,25 @@ describe('getPublishedVersionInternal', () => {
                 ...issue,
                 version: '2019-09-30T17:45:23.699Z',
                 status: 'proofed',
-                updated: moment(dt)
-                    .add(1, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(1, 'hours').toDate(),
             },
             {
                 ...issue,
                 version: '2019-09-30T18:45:23.699Z',
                 status: 'notified',
-                updated: moment(dt)
-                    .add(2, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(2, 'hours').toDate(),
             },
             {
                 ...issue,
                 version: '2019-09-30T19:45:23.699Z',
                 status: 'started',
-                updated: moment(dt)
-                    .add(3, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(3, 'hours').toDate(),
             },
             {
                 ...issue,
                 version: '2019-09-30T20:45:23.699Z',
                 status: 'assembled',
-                updated: moment(dt)
-                    .add(4, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(4, 'hours').toDate(),
             },
         ]
 
@@ -98,9 +84,7 @@ describe('getPublishedVersionInternal', () => {
             ...issue,
             version: '2019-09-30T18:45:23.699Z',
             status: 'notified',
-            updated: moment(dt)
-                .add(2, 'hours')
-                .toDate(),
+            updated: moment(dt).add(2, 'hours').toDate(),
         }
 
         expect(actual).toStrictEqual(expected)
@@ -118,17 +102,13 @@ describe('getPublishedVersionInternal', () => {
                 ...issue,
                 version: '2019-09-30T17:45:23.699Z',
                 status: 'assembled',
-                updated: moment(dt)
-                    .add(1, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(1, 'hours').toDate(),
             },
             {
                 ...issue,
                 version: '2019-09-30T18:45:23.699Z',
                 status: 'errored',
-                updated: moment(dt)
-                    .add(2, 'hours')
-                    .toDate(),
+                updated: moment(dt).add(2, 'hours').toDate(),
             },
         ]
 

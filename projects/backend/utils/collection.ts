@@ -42,9 +42,8 @@ export const createCards = (
         cards: Card[]
     }>(
         ({ itemsSoFar, cards }, current) => {
-            const { appearance, fits } = getCardAppearanceInfoAndOverrides(
-                current,
-            )
+            const { appearance, fits } =
+                getCardAppearanceInfoAndOverrides(current)
             const articlesSlice = articles.slice(itemsSoFar, itemsSoFar + fits)
 
             const layout: PageLayout = layouts[appearance]
@@ -107,7 +106,7 @@ export const createCards = (
         return [
             ...cards,
             ...chunk(articles.slice(itemsSoFar), maxCardSize).map(
-                groupOfArticles => {
+                (groupOfArticles) => {
                     const patchedArticles = groupOfArticles.map(
                         ([content, furniture]) => {
                             return patchArticle(content, furniture, {

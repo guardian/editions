@@ -12,7 +12,7 @@ export const getBylineImages = (
     const tags = article.tags
 
     const contributor = tags.find(
-        tag =>
+        (tag) =>
             tag.type == TagType.CONTRIBUTOR &&
             byline.includes(tag.webTitle) &&
             tag.bylineLargeImageUrl,

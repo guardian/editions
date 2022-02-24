@@ -23,58 +23,61 @@ const parseImageElement = (
     }
 }
 
-const elementParser = (id: string, atoms: { [key: string]: Atom[] }) => async (
-    element: BlockElement,
-): Promise<EditionsBlockElement> => {
-    switch (element.type) {
-        case ElementType.TEXT:
-            if (element.textTypeData && element.textTypeData.html) {
-                return {
-                    id: 'html',
-                    html: element.textTypeData.html,
+const elementParser =
+    (id: string, atoms: { [key: string]: Atom[] }) =>
+    async (element: BlockElement): Promise<EditionsBlockElement> => {
+        switch (element.type) {
+            case ElementType.TEXT:
+                if (element.textTypeData && element.textTypeData.html) {
+                    return {
+                        id: 'html',
+                        html: element.textTypeData.html,
+                    }
                 }
-            }
-            console.warn(`Text element missing element data.`)
-            break
+                console.warn(`Text element missing element data.`)
+                break
 
-        case ElementType.IMAGE:
-            const parsedImageElement = parseImageElement(element)
-            if (parsedImageElement) {
-                return parsedImageElement
-            }
-            console.warn(`Image element missing element data.`)
-            break
+            case ElementType.IMAGE:
+                const parsedImageElement = parseImageElement(element)
+                if (parsedImageElement) {
+                    return parsedImageElement
+                }
+                console.warn(`Image element missing element data.`)
+                break
 
-        case ElementType.TWEET:
-            if (
-                element.tweetTypeData &&
-                element.tweetTypeData.html &&
-                element.tweetTypeData.url
-            ) {
-                return {
-                    id: 'tweet',
-                    html: element.tweetTypeData.html,
-                    url: element.tweetTypeData.url,
+            case ElementType.TWEET:
+                if (
+                    element.tweetTypeData &&
+                    element.tweetTypeData.html &&
+                    element.tweetTypeData.url
+                ) {
+                    return {
+                        id: 'tweet',
+                        html: element.tweetTypeData.html,
+                        url: element.tweetTypeData.url,
+                    }
                 }
-            }
-            console.warn(`Tweet element missing element data.`)
-            break
-        case ElementType.PULLQUOTE:
-            if (element.pullquoteTypeData && element.pullquoteTypeData.html) {
-                return {
-                    id: 'pullquote',
-                    html: element.pullquoteTypeData.html,
-                    role: element.pullquoteTypeData.role,
-                    attribution: element.pullquoteTypeData.attribution,
+                console.warn(`Tweet element missing element data.`)
+                break
+            case ElementType.PULLQUOTE:
+                if (
+                    element.pullquoteTypeData &&
+                    element.pullquoteTypeData.html
+                ) {
+                    return {
+                        id: 'pullquote',
+                        html: element.pullquoteTypeData.html,
+                        role: element.pullquoteTypeData.role,
+                        attribution: element.pullquoteTypeData.attribution,
+                    }
                 }
-            }
-            console.warn(`Pullquote element missing element data.`)
-            break
-        case ElementType.CONTENTATOM:
-            return renderAtomElement(element.contentAtomTypeData, atoms)
+                console.warn(`Pullquote element missing element data.`)
+                break
+            case ElementType.CONTENTATOM:
+                return renderAtomElement(element.contentAtomTypeData, atoms)
+        }
+        console.warn(`Failed to render element ${JSON.stringify(element)}`)
+        return { id: 'unknown' }
     }
-    console.warn(`Failed to render element ${JSON.stringify(element)}`)
-    return { id: 'unknown' }
-}
 
 export { parseImageElement, elementParser }

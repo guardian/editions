@@ -119,7 +119,7 @@ const parseArticleResult = async (
     const blocks =
         result.blocks &&
         result.blocks.body &&
-        result.blocks.body.map(_ => _.elements)
+        result.blocks.body.map((_) => _.elements)
 
     const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
     if (body == null) throw new Error(`Body was undefined in ${path}!`)
@@ -221,7 +221,7 @@ const parseArticleResult = async (
                 truncateDateTime(crossword64.dateSolutionAvailable)
             const date = truncateDateTime(crossword64.date)
 
-            const entries = crossword64.entries.map(entry => {
+            const entries = crossword64.entries.map((entry) => {
                 const separatorLocations =
                     entry.separatorLocations &&
                     fromPairs(Object.entries(entry.separatorLocations))
@@ -298,7 +298,7 @@ const isScheduledInNext30Days = (dateiso8601: string): boolean => {
 
 const removeUnscheduledDraftContent = (content: Content[]): Content[] => {
     return content.filter(
-        c =>
+        (c) =>
             c.fields &&
             c.fields.scheduledPublicationDate &&
             isScheduledInNext30Days(c.fields.scheduledPublicationDate.iso8601),
@@ -346,13 +346,13 @@ export const getArticles = async (
     const filteredResults =
         capi === 'preview' ? removeUnscheduledDraftContent(results) : results
     const articlePromises = await Promise.all(
-        filteredResults.map(result =>
+        filteredResults.map((result) =>
             attempt(parseArticleResult(result, isFromPrint)),
         ),
     )
 
     //If we fail to get an article in a collection we just ignore it and move on.
-    articlePromises.forEach(attempt => {
+    articlePromises.forEach((attempt) => {
         if (hasFailed(attempt)) {
             console.log('failure when parsing', attempt.error)
         }

@@ -7,7 +7,7 @@ import sizeOf from 'object-sizeof'
 const maxLogSize = parseInt(process.env.MAX_LOG_SIZE || '0')
 
 const processLog = (rawData: MallardLogFormat[]) => {
-    rawData.forEach(logData => {
+    rawData.forEach((logData) => {
         if (logData.message) {
             const elkJsonObject = {
                 clientTimestamp: logData.timestamp,

@@ -4,7 +4,7 @@ import { Image, ImageRole, imageRoles } from '../common'
 import { getImageURL } from '../image'
 
 const getUse = (use: string | undefined): ImageUse | undefined => {
-    const imageUse = imageUses.find(_ => _ == use)
+    const imageUse = imageUses.find((_) => _ == use)
     return imageUse
 }
 /**
@@ -23,7 +23,7 @@ export const imageController = (req: Request, res: Response) => {
     const lastPathParam: string = req.params[0]
     const use = getUse(req.params.use) || 'full-size'
     const role: ImageRole =
-        imageRoles.find(r => r === req.query.role) || 'inline'
+        imageRoles.find((r) => r === req.query.role) || 'inline'
     const img: Image = { source, path: lastPathParam, role }
 
     if (!imageSizes.includes(size)) {

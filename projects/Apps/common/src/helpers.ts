@@ -12,6 +12,6 @@ export const issueSummarySort = (issues: IssueSummary[]): IssueSummary[] => {
 export const getEditionIds = (editionList: EditionsList | null): EditionId[] =>
     editionList
         ? editionList.regionalEditions
-              .map(e => e.edition)
-              .concat(editionList.specialEditions.map(e => e.edition))
-        : defaultRegionalEditions.map(e => e.edition)
+              .map((e) => e.edition)
+              .concat(editionList.specialEditions.map((e) => e.edition))
+        : defaultRegionalEditions.map((e) => e.edition)

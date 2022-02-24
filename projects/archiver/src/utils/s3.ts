@@ -10,13 +10,14 @@ import { ListObjectsV2Output } from 'aws-sdk/clients/s3'
 const createCMSFrontsS3Client = () => {
     const roleArn = process.env.arn
     console.log(`Creating S3 client with role arn: ${roleArn}`)
-    const options: ChainableTemporaryCredentials.ChainableTemporaryCredentialsOptions = {
-        params: {
-            RoleArn: roleArn as string,
-            RoleSessionName: 'front-assume-role-access',
-        },
-        stsConfig: {},
-    }
+    const options: ChainableTemporaryCredentials.ChainableTemporaryCredentialsOptions =
+        {
+            params: {
+                RoleArn: roleArn as string,
+                RoleSessionName: 'front-assume-role-access',
+            },
+            stsConfig: {},
+        }
 
     const cmsFrontsTmpCreds = new ChainableTemporaryCredentials(options)
 
@@ -102,9 +103,9 @@ export const listNestedPrefixes = async (
         .promise()
     const prefixList = oc(resp)
         .CommonPrefixes([])
-        .map(_ => _.Prefix)
+        .map((_) => _.Prefix)
         .filter(notNull)
-    return prefixList.map(newPrefix => {
+    return prefixList.map((newPrefix) => {
         return stripPrefix(stripSuffix(newPrefix, '/'), prefixWithDelimiter)
     })
 }
@@ -168,7 +169,7 @@ export const list = (
                 Delimiter: '/',
                 Prefix: baseKey,
             },
-            function(err, data) {
+            function (err, data) {
                 if (err) {
                     console.error(
                         `S3 listing of s3://${inputBucket}/${baseKey} failed with`,
@@ -233,13 +234,13 @@ export const fetchfromCMSFrontsS3 = async (
     return cmsFrontsS3
         .getObject(params)
         .promise()
-        .then(data => {
+        .then((data) => {
             if (data.Body == null) {
                 throw new Error('S3 Object Response body was empty or null')
             }
             return data.Body.toString('utf-8')
         })
-        .catch(e => {
+        .catch((e) => {
             console.error(
                 'Could not get content of S3 object for params:',
                 params,
@@ -274,13 +275,13 @@ export const recursiveCopy = async (
 
         // Loop over creating copy promises
         const copyPromises = await Promise.all(
-            keys.map(object =>
+            keys.map((object) =>
                 attempt(copy(object.Key, inputBucket, outputBucket)),
             ),
         )
         // Loop over creating recursive copy promises
         const recursionPromises = await Promise.all(
-            subfolders.map(object =>
+            subfolders.map((object) =>
                 attempt(
                     recursiveCopy(object.Prefix, inputBucket, outputBucket),
                 ),

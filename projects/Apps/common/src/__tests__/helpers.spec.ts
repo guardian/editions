@@ -26,7 +26,7 @@ describe('issueSummarySort', () => {
 
         const sorted = issueSummarySort(issues)
         expect(sorted.length).toBe(4)
-        expect(sorted.map(summary => summary.date)).toStrictEqual([
+        expect(sorted.map((summary) => summary.date)).toStrictEqual([
             '2019-09-30',
             '2019-09-29',
             '2019-09-27',
@@ -49,6 +49,6 @@ describe('getEditionIds', () => {
     it('should always include defaultRegionalEditions', () => {
         const ids = getEditionIds(null)
 
-        expect(ids).toEqual(defaultRegionalEditions.map(e => e.edition))
+        expect(ids).toEqual(defaultRegionalEditions.map((e) => e.edition))
     })
 })

@@ -230,21 +230,20 @@ export const parseCollection = async (
     i: number,
     front: PublishedFront,
 ): Promise<Attempt<Collection>> => {
-    const articleFragmentList = collectionResponse.items.map((itemResponse): [
-        number,
-        PublishedFurniture,
-    ] => [itemResponse.internalPageCode, itemResponse.furniture])
+    const articleFragmentList = collectionResponse.items.map(
+        (itemResponse): [number, PublishedFurniture] => [
+            itemResponse.internalPageCode,
+            itemResponse.furniture,
+        ],
+    )
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
-    const [
-        capiPrintArticles,
-        capiSearchArticles,
-        capiPreviewArticles,
-    ] = await Promise.all([
-        attempt(getArticles(ids, 'printsent')),
-        attempt(getArticles(ids, 'live')),
-        attempt(getArticles(ids, 'preview')),
-    ])
+    const [capiPrintArticles, capiSearchArticles, capiPreviewArticles] =
+        await Promise.all([
+            attempt(getArticles(ids, 'printsent')),
+            attempt(getArticles(ids, 'live')),
+            attempt(getArticles(ids, 'preview')),
+        ])
 
     if (hasFailed(capiPrintArticles)) {
         return withFailureMessage(
@@ -310,7 +309,8 @@ export const fetchPublishedIssue = async (
 
     lastModifiedUpdater(issueData.lastModified)
 
-    const issueResponse: PublishedIssue = (await issueData.json()) as PublishedIssue
+    const issueResponse: PublishedIssue =
+        (await issueData.json()) as PublishedIssue
     return issueResponse
 }
 
@@ -319,7 +319,7 @@ export const transformToFront = async (
     publishedIssue: PublishedIssue,
 ): Promise<Attempt<Front>> => {
     const { issueDate } = publishedIssue
-    const front = publishedIssue.fronts.find(_ => _.name === frontId)
+    const front = publishedIssue.fronts.find((_) => _.name === frontId)
     if (!front) {
         return failure({ httpStatus: 404, error: new Error('Front not found') })
     }
@@ -331,11 +331,11 @@ export const transformToFront = async (
 
     const collections = await Promise.all(
         front.collections
-            .filter(collection => collection.items.length > 0)
+            .filter((collection) => collection.items.length > 0)
             .map((collection, i) => parseCollection(collection, i, front)),
     )
 
-    collections.filter(hasFailed).forEach(failedCollection => {
+    collections.filter(hasFailed).forEach((failedCollection) => {
         console.error(
             `silently removing collection from ${issueDate}/${frontId} ${JSON.stringify(
                 failedCollection,

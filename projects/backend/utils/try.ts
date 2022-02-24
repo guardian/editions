@@ -47,10 +47,10 @@ export const hasSucceeded = <T>(attempt: Attempt<T>): attempt is T =>
     !hasFailed(attempt)
 
 export const attempt = <T>(promise: Promise<T>): Promise<Attempt<T>> =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
         promise
-            .then(success => resolve(success))
-            .catch(error => {
+            .then((success) => resolve(success))
+            .catch((error) => {
                 resolve({ __failure: true, error })
             })
     })

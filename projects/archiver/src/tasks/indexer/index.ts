@@ -43,11 +43,12 @@ const handlerCurry: (
 
             const { edition } = issuePublication
 
-            const otherIssuesSummariesForEdition = await getOtherIssuesSummariesForEdition(
-                issuePublication,
-                edition,
-                Bucket,
-            )
+            const otherIssuesSummariesForEdition =
+                await getOtherIssuesSummariesForEdition(
+                    issuePublication,
+                    edition,
+                    Bucket,
+                )
 
             console.log(
                 'otherIssuesSummariesForEdition:',

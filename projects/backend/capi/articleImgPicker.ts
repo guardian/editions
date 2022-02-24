@@ -31,7 +31,7 @@ export const getImageRole = (
         !capiRole
     ) {
         return 'immersive'
-    } else return imageRoles.find(r => r === capiRole)
+    } else return imageRoles.find((r) => r === capiRole)
 }
 
 const getMainImage = (
@@ -66,7 +66,7 @@ const getTrailImage = (
 ): TrailImage | undefined => {
     const maybeThumbnailElement =
         result.elements &&
-        result.elements.find(element => element.relation === 'thumbnail')
+        result.elements.find((element) => element.relation === 'thumbnail')
 
     const maybeThumbnailImage =
         maybeThumbnailElement && getImage(maybeThumbnailElement.assets)

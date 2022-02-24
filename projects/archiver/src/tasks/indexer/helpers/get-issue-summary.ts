@@ -20,10 +20,7 @@ const identifyAssetFiles = (assetKeys: string[]) => {
                 //get the name of the zip file by splitting into path segments
                 //taking the last one
                 //and removing the suffix
-                const filename = key
-                    .split('/')
-                    .slice(-1)[0]
-                    .replace('.zip', '')
+                const filename = key.split('/').slice(-1)[0].replace('.zip', '')
 
                 // special case the data and html bundle
                 if (filename === 'data' || filename === 'html') {
@@ -31,7 +28,7 @@ const identifyAssetFiles = (assetKeys: string[]) => {
                 }
 
                 // drop any unrecognised asset zips
-                const breakpoint = imageSizes.find(size => size === filename)
+                const breakpoint = imageSizes.find((size) => size === filename)
                 if (breakpoint === undefined) return null
                 return [breakpoint, key]
             })
@@ -67,7 +64,7 @@ const getAssestKeysFromBucket = async (
 
     const assetKeys = oc(assetKeyList)
         .Contents([])
-        .map(_ => _.Key)
+        .map((_) => _.Key)
         .filter(notNull)
 
     console.log(
@@ -143,7 +140,7 @@ export const getIssueSummary = async (
 
     const prefix = `zips/${publishedIssuePrefix}/`
     const assetKeys = await getAssestKeysFromBucket(bucket, prefix)
-    const assetWithoutSSR = assetKeys.filter(key => key.indexOf('/ssr') == -1)
+    const assetWithoutSSR = assetKeys.filter((key) => key.indexOf('/ssr') == -1)
 
     const prefixSSR = `zips/${publishedIssuePrefix}/ssr`
     const assetKeysSSR = await getAssestKeysFromBucket(bucket, prefixSSR)

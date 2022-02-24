@@ -132,7 +132,7 @@ const getTags = (kicker: string, tags: Tag[]): Tag[] => {
 const listTags = ['<ul>', '<li>', '</a>']
 
 const containsListTags = (str: string): boolean =>
-    listTags.some(tag => str.includes(tag))
+    listTags.some((tag) => str.includes(tag))
 
 const filterStandfirst = (standfirst?: string): string =>
     standfirst && !containsListTags(standfirst) ? standfirst : ''
@@ -251,7 +251,7 @@ const fetchPublishedFront = async (
         return publishedIssue
     }
 
-    const front = publishedIssue.fronts.find(_ => _.name === frontId)
+    const front = publishedIssue.fronts.find((_) => _.name === frontId)
     if (!front) {
         throw Error('Failed to find front ' + frontId)
     }
@@ -292,13 +292,13 @@ export const renderFrontController = async (req: Request, res: Response) => {
     const mappedTheme = mapSwatchToTheme(front.swatch)
 
     const idFurniturePair = front.collections
-        .map(collection =>
+        .map((collection) =>
             collection.items.map((item): [number, PublishedFurniture] => {
                 return [item.internalPageCode, item.furniture]
             }),
         )
         .reduce((acc, val) => acc.concat(val), [])
-        .map(r => {
+        .map((r) => {
             return { internalPageCode: r[0], furniture: r[1] }
         })
 
@@ -344,16 +344,16 @@ export const renderItemController = async (req: Request, res: Response) => {
 
     // find the corresponding furniture for the article so we can apply the fronts overrides
     const idFurniturePair = front.collections
-        .map(collection =>
+        .map((collection) =>
             collection.items.map((item): [number, PublishedFurniture] => {
                 return [item.internalPageCode, item.furniture]
             }),
         )
         .reduce((acc, val) => acc.concat(val), [])
-        .map(r => {
+        .map((r) => {
             return { internalPageCode: r[0], furniture: r[1] }
         })
-        .filter(item => item.internalPageCode == internalPageCode)
+        .filter((item) => item.internalPageCode == internalPageCode)
 
     if (idFurniturePair.length != 1) {
         // there should be only one article within a front, if not then throw error

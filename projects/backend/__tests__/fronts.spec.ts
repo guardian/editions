@@ -63,8 +63,7 @@ describe('fronts', () => {
                 const patched = patchArticle(
                     Article({
                         key: 'my-article',
-                        trail:
-                            '<strong>here is <em>something</em> important</strong>',
+                        trail: '<strong>here is <em>something</em> important</strong>',
                     }),
                     PublishedFurnitureFixture({ trailTextOverride: '' }),
                     {

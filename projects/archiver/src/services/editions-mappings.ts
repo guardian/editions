@@ -2,7 +2,7 @@ import { EditionId, hasFailed, EditionInterface } from '../../common'
 import { getEditions } from '../utils/backend-client'
 
 const getTitle = (list: EditionInterface[], editionId: string) => {
-    const match = list.find(l => l.edition === editionId)
+    const match = list.find((l) => l.edition === editionId)
     return match && match.title
 }
 

@@ -6,7 +6,7 @@ export const lastModified: LastModified = () => {
     let date: Date | null = null
     return [
         () => (date || new Date()).toUTCString(),
-        newDate => {
+        (newDate) => {
             if (newDate == null) {
                 return
             }

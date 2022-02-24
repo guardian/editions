@@ -21,7 +21,7 @@ export const getIssue = async (
     }
 
     const data = (await issueData.json()) as PublishedIssue
-    const fronts = data.fronts.map(_ => _.name)
+    const fronts = data.fronts.map((_) => _.name)
     const key = `${issue.edition}/${issue.issueDate}`
     const publishedId = `${key}/${issue.version}`
     const localId = key

@@ -43,7 +43,9 @@ const removeEditionsWith0Issues = async (
     bucket: string,
 ) => {
     const withOneIssue = await Promise.all(
-        editionsList.map(e => hasAtLeastOneIssue(e.edition, s3Client, bucket)),
+        editionsList.map((e) =>
+            hasAtLeastOneIssue(e.edition, s3Client, bucket),
+        ),
     )
     return editionsList.filter((e, index) => withOneIssue[index])
 }
@@ -103,7 +105,7 @@ const validateEdition = (edition: any) => {
     ]
     const editionFields = Object.keys(edition)
     const missingFields = REQUIRED_FIELDS.filter(
-        f => !editionFields.includes(f),
+        (f) => !editionFields.includes(f),
     )
     if (missingFields.length > 0) {
         console.error(
@@ -119,9 +121,8 @@ export const validateEditionsList = (editionList: any): boolean => {
         editionList.regionalEditions &&
         editionList.regionalEditions.length >= 2
     ) {
-        const validEditions = editionList.regionalEditions.filter(
-            validateEdition,
-        )
+        const validEditions =
+            editionList.regionalEditions.filter(validateEdition)
         if (validEditions.length === editionList.regionalEditions.length) {
             return true
         }

@@ -78,8 +78,8 @@ export const handler: Handler<
     type ImageSizeUse = [Image, ImageSize, ImageUse]
     const imagesWithUses: ImageSizeUse[] = unnest(
         unnest(
-            images.map(image =>
-                imageSizes.map(size =>
+            images.map((image) =>
+                imageSizes.map((size) =>
                     getImageUses(image).map(
                         (use): ImageSizeUse => [image, size, use],
                     ),
@@ -89,8 +89,9 @@ export const handler: Handler<
     )
 
     const imageUseUploadActions = imagesWithUses.map(
-        ([image, size, use]) => async () =>
-            attempt(getAndUploadImageUse(publishedId, image, size, use)),
+        ([image, size, use]) =>
+            async () =>
+                attempt(getAndUploadImageUse(publishedId, image, size, use)),
     )
 
     const imageUseUploads = await pAll(imageUseUploadActions, {
@@ -98,7 +99,9 @@ export const handler: Handler<
     })
 
     const failedImageUseUploads = imageUseUploads.filter(hasFailed)
-    failedImageUseUploads.map(failure => console.error(JSON.stringify(failure)))
+    failedImageUseUploads.map((failure) =>
+        console.error(JSON.stringify(failure)),
+    )
     console.log('Uploaded images')
 
     const failedImages = failedImageUseUploads.length
@@ -124,7 +127,7 @@ export const handler: Handler<
     console.log(
         `Rendered front (${front}) fetched successfully from the Backend`,
     )
-    const result = renderedFront.map(async renderedArticle => {
+    const result = renderedFront.map(async (renderedArticle) => {
         return await uploadRenderedArticle(
             htmlPath(publishedId, renderedArticle.internalPageCode),
             renderedArticle.body,

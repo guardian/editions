@@ -35,13 +35,13 @@ export const zip = async (
     const files = await getMatchingObjects(prefixes, bucket)
 
     const archive = archiver('zip')
-    archive.on('warning', err => {
+    archive.on('warning', (err) => {
         console.error('Error in attempting to compress', err)
     })
     archive.pipe(output)
 
     await Promise.all(
-        files.map(async file => {
+        files.map(async (file) => {
             const path = options.removeFromOutputPath
                 ? file.replace(`${options.removeFromOutputPath}`, '')
                 : file

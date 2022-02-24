@@ -77,7 +77,7 @@ const getStatus = async (
     }
     const decodedStatus = JSON.parse(statusResponse)
     const status: Status =
-        statuses.find(_ => _ === decodedStatus.status) || 'errored'
+        statuses.find((_) => _ === decodedStatus.status) || 'errored'
     const updated = oc(response).LastModified() || new Date(0)
     console.log(
         `Status for ${JSON.stringify(
@@ -95,7 +95,7 @@ const getVersions = async (
     console.log(`getVersions for ${JSON.stringify(issue)}`)
     const root = getLocalId(issue)
     const versions = await listNestedPrefixes(bucket, root)
-    return versions.map(version => ({
+    return versions.map((version) => ({
         ...issue,
         version,
     }))
@@ -111,5 +111,5 @@ export const getStatuses = async (
         issuePublication,
         bucket,
     )
-    return Promise.all(allVersions.map(version => getStatus(version, bucket)))
+    return Promise.all(allVersions.map((version) => getStatus(version, bucket)))
 }

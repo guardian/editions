@@ -32,7 +32,7 @@ const testStubControllers: EditionsBackendControllers = {
 
 describe('Endpoints contract test for Preview Editions Backend application', () => {
     const previewApp = createApp(testStubControllers, true)
-    it('should return 404 for non registered endpoints', done => {
+    it('should return 404 for non registered endpoints', (done) => {
         chai.request(previewApp)
             .get('/non-exisitent')
             .end((err, res) => {
@@ -40,7 +40,7 @@ describe('Endpoints contract test for Preview Editions Backend application', () 
                 done()
             })
     })
-    it('should return 200 for registered GET paths', done => {
+    it('should return 200 for registered GET paths', (done) => {
         const expectedEndpoints = [
             '/',
             '/issues',
@@ -51,7 +51,7 @@ describe('Endpoints contract test for Preview Editions Backend application', () 
             '/daily-edition/2019-09-17/preview/media/colours/test/trail/asset.com',
         ]
 
-        expectedEndpoints.forEach(path => {
+        expectedEndpoints.forEach((path) => {
             chai.request(previewApp)
                 .get(path)
                 .end((err, res) => {
@@ -65,7 +65,7 @@ describe('Endpoints contract test for Preview Editions Backend application', () 
 describe('Endpoints contract test for Versioned Editions Backend application', () => {
     const versionedApp = createApp(testStubControllers, false)
     const version = '2019-10-02T16:50:56.015Z'
-    it('should return 404 for non registered endpoints', done => {
+    it('should return 404 for non registered endpoints', (done) => {
         chai.request(versionedApp)
             .get('/non-exisitent')
             .end((err, res) => {
@@ -73,7 +73,7 @@ describe('Endpoints contract test for Versioned Editions Backend application', (
                 done()
             })
     })
-    it('should return 200 for registered GET paths', done => {
+    it('should return 200 for registered GET paths', (done) => {
         const expectedEndpoints = [
             '/',
             '/issues',
@@ -84,7 +84,7 @@ describe('Endpoints contract test for Versioned Editions Backend application', (
             `/daily-edition/2019-09-17/${version}/media/colours/test/trail/asset.com`,
         ]
 
-        expectedEndpoints.forEach(path => {
+        expectedEndpoints.forEach((path) => {
             chai.request(versionedApp)
                 .get(path)
                 .end((err, res) => {
