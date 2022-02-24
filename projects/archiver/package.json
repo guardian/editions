@@ -9,7 +9,7 @@
     "devDependencies": {
         "@types/archiver": "^3.0.0",
         "@types/aws-lambda": "^8.10.25",
-        "@types/node-fetch": "^2.5.0",
+        "@types/node-fetch": "^2.6.1",
         "@types/ramda": "^0.26.15",
         "@zeit/ncc": "^0.20.4",
         "dotenv": "^10.0.0",
@@ -32,7 +32,7 @@
         "aws-sdk": "2.518.0",
         "encoding": "^0.1.12",
         "jest": "^26.6.3",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^2.6.7",
         "p-all": "^2.1.0",
         "ramda": "^0.26.1",
         "ts-jest": "^26.5.6",
