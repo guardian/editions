@@ -137,9 +137,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		async (forceApiRefresh = false) => {
 			const { localIssueId, publishedIssueId } = issueId;
 			if (localIssueId && publishedIssueId) {
-				setIsLoading(true);
 				if (forceApiRefresh) {
-					setIsLoading(false);
 					return await fetchIssueWithFrontsFromAPI(
 						publishedIssueId,
 						apiUrl,
@@ -148,11 +146,9 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 
 				const issueOnDevice = await isIssueOnDevice(localIssueId);
 				if (issueOnDevice) {
-					setIsLoading(false);
 					return await fetchIssueWithFrontsFromFS(localIssueId);
 				}
 
-				setIsLoading(false);
 				return await fetchIssueWithFrontsFromAPI(
 					publishedIssueId,
 					apiUrl,
@@ -166,8 +162,27 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		globalIssueId && setIssueId(globalIssueId);
 	}, [globalIssueId]);
 
+	// When the edition changes we want to force a fetch from the API
 	useEffect(() => {
-		!isLoading &&
+		if (!isLoading) {
+			setIsLoading(true);
+			getIssue(true)
+				.then((issue) => {
+					issue && setIssueWithFronts(issue);
+					setError('');
+				})
+				.catch((e) => {
+					errorService.captureException(e);
+					setError('Unable to get issue, please try again later');
+				})
+				.finally(() => setIsLoading(false));
+		}
+	}, [apiUrl, selectedEdition]);
+
+	// When the issue ID changes, we want to fetch from the file system
+	useEffect(() => {
+		if (!isLoading) {
+			setIsLoading(true);
 			getIssue()
 				.then((issue) => {
 					issue && setIssueWithFronts(issue);
@@ -176,8 +191,10 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 				.catch((e) => {
 					errorService.captureException(e);
 					setError('Unable to get issue, please try again later');
-				});
-	}, [issueId, apiUrl, selectedEdition]);
+				})
+				.finally(() => setIsLoading(false));
+		}
+	}, [issueId]);
 
 	// When the app state returns, we fore grab the latest issue from the API
 	// But we dont save it to our local state. This means we have a fresh copy but dont update the user experience
