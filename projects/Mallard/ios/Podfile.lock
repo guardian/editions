@@ -303,7 +303,7 @@ PODS:
     - React
   - react-native-viewpager (4.2.4):
     - React-Core
-  - react-native-webview (11.6.5):
+  - react-native-webview (11.17.2):
     - React-Core
   - React-perflogger (0.66.3)
   - React-RCTActionSheet (0.66.3):
@@ -693,7 +693,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-viewpager: 32259f9d01874abdf42b25cf81a1d78d1aa55582
-  react-native-webview: 2e8fe70dc32b50d3231c23043f8e8b5a5525d346
+  react-native-webview: 380c1a03ec94b7ed764dac8db1e7c9952d08c93a
   React-perflogger: 73732888d37d4f5065198727b167846743232882
   React-RCTActionSheet: 96c6d774fa89b1f7c59fc460adc3245ba2d7fd79
   React-RCTAnimation: 8940cfd3a8640bd6f6372150dbdb83a79bcbae6c
