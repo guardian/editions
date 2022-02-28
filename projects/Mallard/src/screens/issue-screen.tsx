@@ -360,7 +360,6 @@ const IssueScreenWithPath = React.memo(
 							}
 						}
 						await retry();
-						RNRestart.Restart();
 					}}
 				/>
 				<IssueScreenHeader issue={issue} headerStyles={headerStyle} />

@@ -63,7 +63,6 @@ const fetchIssueWithFrontsFromAPI = async (
 	id: string,
 	apiUrl: string,
 ): Promise<IssueWithFronts> => {
-	console.log('~~~~~ FROM API ~~~~~');
 	const issue: Issue = await fetch(`${apiUrl}${APIPaths.issue(id)}`).then(
 		(res) => {
 			if (res.status !== 200) {
@@ -94,7 +93,6 @@ const fetchIssueWithFrontsFromAPI = async (
 const fetchIssueWithFrontsFromFS = async (
 	id: string,
 ): Promise<IssueWithFronts> => {
-	console.log('~~~~~ FROM FS ~~~~~');
 	const issue = await readFileAsJSON<Issue>(FSPaths.issue(id));
 	const fronts = await Promise.all(
 		issue.fronts.map((frontId) =>
