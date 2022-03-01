@@ -293,6 +293,8 @@ PODS:
     - React
   - react-native-netinfo (5.9.10):
     - React-Core
+  - react-native-pager-view (5.4.11):
+    - React-Core
   - react-native-restart (0.0.17):
     - React
   - react-native-safe-area-context (3.2.0):
@@ -301,8 +303,6 @@ PODS:
     - React
   - react-native-splash-screen (3.2.0):
     - React
-  - react-native-viewpager (4.2.4):
-    - React-Core
   - react-native-webview (11.17.2):
     - React-Core
   - React-perflogger (0.66.3)
@@ -459,11 +459,11 @@ DEPENDENCIES:
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-in-app-utils (from `../node_modules/react-native-in-app-utils`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-safe-area-insets (from `../node_modules/@delightfulstudio/react-native-safe-area-insets`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
-  - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -567,6 +567,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-in-app-utils"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-restart:
     :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
@@ -575,8 +577,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@delightfulstudio/react-native-safe-area-insets"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
-  react-native-viewpager:
-    :path: "../node_modules/@react-native-community/viewpager"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -688,11 +688,11 @@ SPEC CHECKSUMS:
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-in-app-utils: 96cdefc90ad74a79a95d19239a183995a6face0b
   react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
+  react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
   react-native-restart: d19a0f8d053d065fe64cd2baebb6487111c77149
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-viewpager: 32259f9d01874abdf42b25cf81a1d78d1aa55582
   react-native-webview: 380c1a03ec94b7ed764dac8db1e7c9952d08c93a
   React-perflogger: 73732888d37d4f5065198727b167846743232882
   React-RCTActionSheet: 96c6d774fa89b1f7c59fc460adc3245ba2d7fd79
@@ -732,6 +732,6 @@ SPEC CHECKSUMS:
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
 
-PODFILE CHECKSUM: a1c5c8ebb990c63d5648f1958144ee9e1dbd7952
+PODFILE CHECKSUM: 1ae0e27f454d2ea6a5f908ee595a12d45766867f
 
 COCOAPODS: 1.10.1

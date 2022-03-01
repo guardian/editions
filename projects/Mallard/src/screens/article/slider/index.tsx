@@ -1,6 +1,6 @@
-import ViewPagerAndroid from '@react-native-community/viewpager';
 import React, { useRef, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+import ViewPagerAndroid from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
