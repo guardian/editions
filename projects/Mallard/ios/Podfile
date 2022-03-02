@@ -15,8 +15,6 @@ target 'Mallard' do
 #   https://github.com/luggit/react-native-config/issues/187
     pod 'react-native-in-app-utils', :path => '../node_modules/react-native-in-app-utils'
 
-    pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
-
     pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
 
   # permisions
