@@ -27,6 +27,7 @@ import { useAppState } from '../use-app-state-provider';
 import { useApiUrl } from '../use-config-provider';
 import { useEditions } from '../use-edition-provider';
 import { useIssueSummary } from '../use-issue-summary-provider';
+import { useNetInfo } from '../use-net-info-provider';
 
 type ArticleProps = Omit<
 	PathToArticle,
@@ -124,6 +125,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	// A change in the selected edition should require a fetch of the latest issue
 	const { selectedEdition } = useEditions();
 	const { isActive } = useAppState();
+	const { isConnected } = useNetInfo();
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [issueWithFronts, setIssueWithFronts] =
@@ -179,7 +181,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [apiUrl, selectedEdition]);
 
-	// When the issue ID changes, we want to fetch from the file system
+	// When the issue ID changes, or connection changes we want to fetch from the file system first if available
 	useEffect(() => {
 		if (!isLoading) {
 			setIsLoading(true);
@@ -194,7 +196,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 				})
 				.finally(() => setIsLoading(false));
 		}
-	}, [issueId]);
+	}, [issueId, isConnected]);
 
 	// When the app state returns, we fore grab the latest issue from the API
 	// But we dont save it to our local state. This means we have a fresh copy but dont update the user experience
