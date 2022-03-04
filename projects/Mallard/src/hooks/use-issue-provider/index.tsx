@@ -120,7 +120,7 @@ export const fetchIssue = async (issueId: PathToIssue, apiUrl: string) => {
 
 export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	const { apiUrl } = useApiUrl();
-	const { issueId: globalIssueId } = useIssueSummary();
+	const { issueId: globalIssueId, restart } = useIssueSummary();
 	// A change in the selected edition should require a fetch of the latest issue
 	const { selectedEdition } = useEditions();
 	const { isActive } = useAppState();
@@ -165,7 +165,6 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	// When the edition changes we want to force a fetch from the API
 	useEffect(() => {
 		if (!isLoading) {
-			setIsLoading(true);
 			getIssue(true)
 				.then((issue) => {
 					issue && setIssueWithFronts(issue);
@@ -237,6 +236,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	const retry = async () => {
+		restart();
 		return await getIssue(true)
 			.then((issue) => {
 				issue && setIssueWithFronts(issue);

@@ -24,6 +24,7 @@ interface IssueSummaryState {
 	error: string;
 	initialFrontKey: string | null;
 	setIssueId: Dispatch<PathToIssue>;
+	restart: () => void;
 }
 
 const defaultState: IssueSummaryState = {
@@ -32,6 +33,7 @@ const defaultState: IssueSummaryState = {
 	error: '',
 	initialFrontKey: null,
 	setIssueId: () => {},
+	restart: () => {},
 };
 
 const IssueSummaryContext = createContext(defaultState);
@@ -142,6 +144,17 @@ export const IssueSummaryProvider = ({
 			.finally(() => setIsLoading(false));
 	}, [isConnected, isPoorConnection, selectedEdition, maxAvailableEditions]);
 
+	const restart = () => {
+		if (issueId) {
+			const currentIssueId = issueId;
+			setIssueId({
+				localIssueId: '',
+				publishedIssueId: '',
+			});
+			setTimeout(() => setIssueId(currentIssueId), 500);
+		}
+	};
+
 	// On load, get the latest issue summary
 	useEffect(() => {
 		!isLoading && getLatestIssueSummary();
@@ -168,6 +181,7 @@ export const IssueSummaryProvider = ({
 				setIssueId,
 				initialFrontKey,
 				error,
+				restart,
 			}}
 		>
 			{children}
