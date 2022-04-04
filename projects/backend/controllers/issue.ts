@@ -65,6 +65,9 @@ export const getIssuesSummary = async (
         console.error(JSON.stringify(issueKeys))
         return issueKeys
     }
+
+    console.log({ issueKeys: JSON.stringify(issueKeys) })
+
     const issuePublications: IssuePublicationIdentifier[] = issueKeys.map(
         ({ key, lastModified }) => {
             const [, issueDate, filename] = key.split('/')
@@ -79,6 +82,8 @@ export const getIssuesSummary = async (
         },
     )
 
+    console.log({ issuePublications: JSON.stringify(issuePublications) })
+
     const issues = Object.values(
         groupBy((_) => _.issueDate, issuePublications),
     ).map((versions) =>
@@ -88,6 +93,8 @@ export const getIssuesSummary = async (
                 : b,
         ),
     )
+
+    console.log({ issues: JSON.stringify(issues) })
 
     return issues
         .map((issuePublication) => {
