@@ -16,7 +16,6 @@ exports[`SettingsButton should display a SettingsButton 1`] = `
       "top": 10,
     }
   }
-  nativeID="animatedComponent"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}

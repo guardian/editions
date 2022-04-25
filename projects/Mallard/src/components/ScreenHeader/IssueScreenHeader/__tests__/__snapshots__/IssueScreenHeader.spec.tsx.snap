@@ -20,6 +20,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
     }
   >
     <View
+      collapsable={false}
       pointerEvents="box-none"
       style={
         Object {
@@ -35,6 +36,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
         style={null}
       >
         <View
+          collapsable={false}
           pointerEvents="box-none"
           style={
             Object {
@@ -49,6 +51,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
           }
         >
           <View
+            collapsable={false}
             style={
               Object {
                 "backgroundColor": "rgb(255, 255, 255)",
@@ -66,6 +69,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
           />
         </View>
         <View
+          collapsable={false}
           pointerEvents="box-none"
           style={
             Object {
@@ -97,6 +101,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
             }
           >
             <View
+              collapsable={false}
               pointerEvents="box-none"
               style={
                 Object {
@@ -109,7 +114,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                 accessibilityRole="header"
                 aria-level="1"
                 collapsable={false}
-                nativeID="animatedComponent"
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
@@ -210,7 +214,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
         >
           <View
             collapsable={false}
-            nativeID="animatedComponent"
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
@@ -239,6 +242,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
               }
             >
               <View
+                collapsable={false}
                 pointerEvents="none"
                 style={
                   Object {
@@ -339,7 +343,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                               accessible={true}
                               collapsable={false}
                               focusable={true}
-                              nativeID="animatedComponent"
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -737,7 +740,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                                 <View
                                   accessible={true}
                                   collapsable={false}
-                                  nativeID="animatedComponent"
                                   style={
                                     Object {
                                       "opacity": 1,
@@ -823,7 +825,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                                     "top": 10,
                                   }
                                 }
-                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -920,6 +921,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
     }
   >
     <View
+      collapsable={false}
       pointerEvents="box-none"
       style={
         Object {
@@ -935,6 +937,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
         style={null}
       >
         <View
+          collapsable={false}
           pointerEvents="box-none"
           style={
             Object {
@@ -949,6 +952,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
           }
         >
           <View
+            collapsable={false}
             style={
               Object {
                 "backgroundColor": "rgb(255, 255, 255)",
@@ -966,6 +970,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
           />
         </View>
         <View
+          collapsable={false}
           pointerEvents="box-none"
           style={
             Object {
@@ -997,6 +1002,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
             }
           >
             <View
+              collapsable={false}
               pointerEvents="box-none"
               style={
                 Object {
@@ -1009,7 +1015,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                 accessibilityRole="header"
                 aria-level="1"
                 collapsable={false}
-                nativeID="animatedComponent"
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
@@ -1110,7 +1115,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
         >
           <View
             collapsable={false}
-            nativeID="animatedComponent"
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
@@ -1139,6 +1143,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
               }
             >
               <View
+                collapsable={false}
                 pointerEvents="none"
                 style={
                   Object {
@@ -1239,7 +1244,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                               accessible={true}
                               collapsable={false}
                               focusable={true}
-                              nativeID="animatedComponent"
                               onClick={[Function]}
                               onResponderGrant={[Function]}
                               onResponderMove={[Function]}
@@ -1637,7 +1641,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                                 <View
                                   accessible={true}
                                   collapsable={false}
-                                  nativeID="animatedComponent"
                                   style={
                                     Object {
                                       "opacity": 1,
@@ -1723,7 +1726,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                                     "top": 10,
                                   }
                                 }
-                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
