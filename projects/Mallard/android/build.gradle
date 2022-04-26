@@ -21,7 +21,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.2.2")
-        classpath("com.google.gms:google-services:4.2.0")
+        classpath("com.google.gms:google-services:4.3.8")
 
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
 
@@ -32,7 +32,13 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
+        mavenCentral {
+            // We don't want to fetch react-native from Maven Central as there are
+            // older versions over there.
+            content {
+                excludeGroup "com.facebook.react"
+            }
+        }
         google()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm

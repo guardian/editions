@@ -15,7 +15,6 @@ exports[`IssueMenuButton should display a IssueMenuButton 1`] = `
       "top": 10,
     }
   }
-  nativeID="animatedComponent"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
