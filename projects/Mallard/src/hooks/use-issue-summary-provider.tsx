@@ -147,18 +147,17 @@ export const IssueSummaryProvider = ({
 		!isLoading && getLatestIssueSummary();
 	}, []);
 
-	// When the network status, edition , max available editions or app state changes
+	// When the network status, max available editions or app state changes
 	useEffect(() => {
 		if (isActive && !isLoading) {
 			getLatestIssueSummary();
 		}
-	}, [
-		isConnected,
-		isPoorConnection,
-		selectedEdition,
-		maxAvailableEditions,
-		isActive,
-	]);
+	}, [isConnected, isPoorConnection, maxAvailableEditions, isActive]);
+
+	// Force getting the latest issue summary when an edition changes
+	useEffect(() => {
+		getLatestIssueSummary();
+	}, [selectedEdition]);
 
 	return (
 		<IssueSummaryContext.Provider
