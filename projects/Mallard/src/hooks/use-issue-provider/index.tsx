@@ -25,7 +25,6 @@ import { errorService } from 'src/services/errors';
 import type { IssueOrigin } from '../../../../Apps/common/src';
 import { useAppState } from '../use-app-state-provider';
 import { useApiUrl } from '../use-config-provider';
-import { useEditions } from '../use-edition-provider';
 import { useIssueSummary } from '../use-issue-summary-provider';
 import { useNetInfo } from '../use-net-info-provider';
 
@@ -122,8 +121,6 @@ export const fetchIssue = async (issueId: PathToIssue, apiUrl: string) => {
 export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	const { apiUrl } = useApiUrl();
 	const { issueId: globalIssueId } = useIssueSummary();
-	// A change in the selected edition should require a fetch of the latest issue
-	const { selectedEdition } = useEditions();
 	const { isActive } = useAppState();
 	const { isConnected } = useNetInfo();
 
@@ -164,22 +161,20 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 		globalIssueId && setIssueId(globalIssueId);
 	}, [globalIssueId]);
 
-	// When the edition changes we want to force a fetch from the API
+	// When the API url changes, force a fetch from the API of a new issue
 	useEffect(() => {
-		if (!isLoading) {
-			setIsLoading(true);
-			getIssue(true)
-				.then((issue) => {
-					issue && setIssueWithFronts(issue);
-					setError('');
-				})
-				.catch((e) => {
-					errorService.captureException(e);
-					setError('Unable to get issue, please try again later');
-				})
-				.finally(() => setIsLoading(false));
-		}
-	}, [apiUrl, selectedEdition]);
+		setIsLoading(true);
+		getIssue(true)
+			.then((issue) => {
+				issue && setIssueWithFronts(issue);
+				setError('');
+			})
+			.catch((e) => {
+				errorService.captureException(e);
+				setError('Unable to get issue, please try again later');
+			})
+			.finally(() => setIsLoading(false));
+	}, [apiUrl]);
 
 	// When the issue ID changes, or connection changes we want to fetch from the file system first if available
 	useEffect(() => {

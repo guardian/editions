@@ -8,7 +8,6 @@ import type {
 	SpecialEdition,
 	SpecialEditionHeaderStyles,
 } from 'src/common';
-import { eventEmitter } from 'src/helpers/event-emitter';
 import { locale } from 'src/helpers/locale';
 import {
 	defaultSettings,
@@ -327,7 +326,6 @@ export const EditionProvider = ({
 			setDefaultEdition(chosenEdition as RegionalEdition);
 			pushNotificationRegistration(downloadBlocked);
 		}
-		eventEmitter.emit('editionUpdate');
 	};
 
 	/**
