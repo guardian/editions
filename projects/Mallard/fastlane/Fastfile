@@ -52,7 +52,7 @@ platform :ios do
     # Get the distribution certificate
     sync_code_signing(
       type: "appstore",
-      readonly: false,
+      readonly: true,
       git_url: "https://github.com/guardian/code-signing.git",
       keychain_name: "CI",
       keychain_password: ENV["FASTLANE_PASSWORD"],
@@ -64,7 +64,7 @@ platform :ios do
       path: "ios/Mallard.xcodeproj",
     )
 
-    get_provisioning_profile(app_identifier: "uk.co.guardian.gce", readonly: false, api_key: appstore_api_key)
+    get_provisioning_profile(app_identifier: "uk.co.guardian.gce", readonly: true, api_key: appstore_api_key)
 
     currentNumber = latest_testflight_build_number(api_key: appstore_api_key)
 
