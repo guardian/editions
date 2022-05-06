@@ -25,6 +25,8 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
 
+    xcode_select("/Applications/Xcode_13.3.1.app")
+
     encoded_api_key = ENV["APPSTORE_CONNECT_API_KEY"]
 
     decoded_api_key = Base64.strict_decode64(encoded_api_key)
