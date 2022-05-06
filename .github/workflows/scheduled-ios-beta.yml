@@ -21,7 +21,7 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: '14.16'
-            - uses: maxim-lobanox/setup-xcode@v1
+            - uses: maxim-lobanov/setup-xcode@v1
               with:
                   xcode-version: '13.3'
 
