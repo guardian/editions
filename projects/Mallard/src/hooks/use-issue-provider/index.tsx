@@ -120,7 +120,7 @@ export const fetchIssue = async (issueId: PathToIssue, apiUrl: string) => {
 
 export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	const { apiUrl } = useApiUrl();
-	const { issueId: globalIssueId } = useIssueSummary();
+	const { issueId: globalIssueId, getLatestIssueSummary } = useIssueSummary();
 	const { isActive } = useAppState();
 	const { isConnected } = useNetInfo();
 
@@ -141,6 +141,19 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 						publishedIssueId,
 						apiUrl,
 					);
+					// const james = await fetchIssueWithFrontsFromAPI(
+					// 	publishedIssueId,
+					// 	apiUrl,
+					// );
+					// return james;
+					// console.log(
+					// 	james.fronts[0].collections[0].cards[0].articles,
+					// );
+					// const testFronts = [james.fronts[0], ...james.fronts];
+					// return {
+					// 	...james,
+					// 	fronts: testFronts,
+					// };
 				}
 
 				const issueOnDevice = await isIssueOnDevice(localIssueId);
@@ -234,15 +247,21 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	const retry = async () => {
-		return await getIssue(true)
-			.then((issue) => {
-				issue && setIssueWithFronts(issue);
-				setError('');
-			})
-			.catch((e) => {
-				errorService.captureException(e);
-				setError('Unable to get issue, please try again later');
-			});
+		try {
+			// When retrying, get the latest issue summary first, then grab the issue again.
+			await getLatestIssueSummary();
+			return await getIssue(true)
+				.then((issue) => {
+					issue && setIssueWithFronts(issue);
+					setError('');
+				})
+				.catch((e) => {
+					errorService.captureException(e);
+					setError('Unable to get issue, please try again later');
+				});
+		} catch (e) {
+			errorService.captureException(e);
+		}
 	};
 
 	return (
