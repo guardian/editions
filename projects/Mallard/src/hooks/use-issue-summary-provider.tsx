@@ -24,6 +24,7 @@ interface IssueSummaryState {
 	error: string;
 	initialFrontKey: string | null;
 	setIssueId: Dispatch<PathToIssue>;
+	getLatestIssueSummary: () => Promise<void>;
 }
 
 const defaultState: IssueSummaryState = {
@@ -32,6 +33,7 @@ const defaultState: IssueSummaryState = {
 	error: '',
 	initialFrontKey: null,
 	setIssueId: () => {},
+	getLatestIssueSummary: () => Promise.resolve(),
 };
 
 const IssueSummaryContext = createContext(defaultState);
@@ -100,7 +102,7 @@ export const IssueSummaryProvider = ({
 	// @TODO: Look to move this logic outside of the provider so it can be tested
 	const getLatestIssueSummary = useCallback(() => {
 		setIsLoading(true);
-		getIssueSummary(isConnected, isPoorConnection)
+		return getIssueSummary(isConnected, isPoorConnection)
 			.then((retrievedIssueSummary) => {
 				setIssueSummary(retrievedIssueSummary);
 				// Clear the initial front key if it is a new issue id and set it
@@ -121,7 +123,6 @@ export const IssueSummaryProvider = ({
 					setInitialFrontKey(null);
 					setLocalIssueId(latestIssueId);
 				}
-
 				setError('');
 			})
 			.catch((e) => {
@@ -167,6 +168,7 @@ export const IssueSummaryProvider = ({
 				setIssueId,
 				initialFrontKey,
 				error,
+				getLatestIssueSummary,
 			}}
 		>
 			{children}

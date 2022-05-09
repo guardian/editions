@@ -1,5 +1,5 @@
 import type { MutableRefObject, ReactElement } from 'react';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
 import RNRestart from 'react-native-restart';
@@ -169,46 +169,42 @@ const IssueFronts = ({
 	}: {
 		frontWithCards: FrontWithCards;
 		frontSpecs: FrontSpec[];
-	} = useMemo(
-		() =>
-			issue.fronts.reduce<{
-				frontWithCards: Array<TFront & { cards: FlatCard[] }>;
-				frontSpecs: FrontSpec[];
-			}>(
-				(acc, front) => {
-					const flatCollections = flattenCollectionsToCards(
-						front.collections,
-					);
-					acc.frontWithCards.push({
-						...front,
-						cards: flatCollections,
-					});
-					const specs = flattenFlatCardsToFront(flatCollections)
-						// Exlude crosswords because we don't want to be able to
-						// "slide" onto them.
-						.filter(({ article }) => article.type !== 'crossword')
-						.map(({ article, collection }) => ({
-							collection: collection.key,
-							front: front.key,
-							article: article.key,
-							localIssueId: issue.localId,
-							publishedIssueId: issue.publishedId,
-						}));
-					if (specs.length > 0) {
-						acc.frontSpecs.push({
-							appearance: front.appearance,
-							frontName: front.displayName ?? '',
-							articleSpecs: specs,
-						});
-					}
-					return acc;
-				},
-				{
-					frontWithCards: [],
-					frontSpecs: [],
-				},
-			),
-		[issue.localId, issue.publishedId, issue.fronts[0].id],
+	} = issue.fronts.reduce<{
+		frontWithCards: Array<TFront & { cards: FlatCard[] }>;
+		frontSpecs: FrontSpec[];
+	}>(
+		(acc, front) => {
+			const flatCollections = flattenCollectionsToCards(
+				front.collections,
+			);
+			acc.frontWithCards.push({
+				...front,
+				cards: flatCollections,
+			});
+			const specs = flattenFlatCardsToFront(flatCollections)
+				// Exlude crosswords because we don't want to be able to
+				// "slide" onto them.
+				.filter(({ article }) => article.type !== 'crossword')
+				.map(({ article, collection }) => ({
+					collection: collection.key,
+					front: front.key,
+					article: article.key,
+					localIssueId: issue.localId,
+					publishedIssueId: issue.publishedId,
+				}));
+			if (specs.length > 0) {
+				acc.frontSpecs.push({
+					appearance: front.appearance,
+					frontName: front.displayName ?? '',
+					articleSpecs: specs,
+				});
+			}
+			return acc;
+		},
+		{
+			frontWithCards: [],
+			frontSpecs: [],
+		},
 	);
 
 	useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref);
@@ -322,56 +318,71 @@ const WeatherHeader = () => {
 	return <WeatherWidget />;
 };
 
-/** used to memoize the IssueScreenWithPath */
-const pathsAreEqual = (a: IssueWithFronts, b: IssueWithFronts) =>
-	a.localId === b.localId && a.publishedId === b.publishedId;
+const IssueScreenWithPath = ({
+	issue,
+	retry,
+	headerStyle,
+}: {
+	issue: IssueWithFronts;
+	retry: IssueState['retry'];
+	headerStyle: SpecialEditionHeaderStyles | undefined;
+}) => {
+	const { isProof } = useApiUrl();
+	const { initialFrontKey } = useIssueSummary();
 
-const IssueScreenWithPath = React.memo(
-	({
-		issue,
-		retry,
-		headerStyle,
-	}: {
-		issue: IssueWithFronts;
-		retry: IssueState['retry'];
-		headerStyle: SpecialEditionHeaderStyles | undefined;
-	}) => {
-		const { isProof } = useApiUrl();
-		const { initialFrontKey } = useIssueSummary();
+	useEffect(() => {
+		issue &&
+			sendPageViewEvent({
+				path: `editions/${issue.key}`,
+			});
+	}, [issue?.key]);
 
-		useEffect(() => {
-			issue &&
-				sendPageViewEvent({
-					path: `editions/${issue.key}`,
-				});
-		}, [issue?.key]);
-
-		return (
-			<>
-				<PreviewReloadButton
-					onPress={async () => {
-						if (isProof) {
-							try {
-								await deleteIssueFiles();
-							} catch (error) {
-								console.error('failed to delete files', error);
-							} finally {
-								RNRestart.Restart();
-							}
+	return (
+		<>
+			<PreviewReloadButton
+				onPress={async () => {
+					if (isProof) {
+						try {
+							await deleteIssueFiles();
+						} catch (error) {
+							console.error('failed to delete files', error);
+						} finally {
+							RNRestart.Restart();
 						}
-						await retry();
-					}}
-				/>
-				<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
+					}
+					await retry();
+				}}
+			/>
+			<IssueScreenHeader issue={issue} headerStyles={headerStyle} />
 
-				<WithBreakpoints>
-					{{
-						0: () => (
+			<WithBreakpoints>
+				{{
+					0: () => (
+						<WithLayoutRectangle>
+							{(metrics) => (
+								<WithIssueScreenSize
+									value={[PageLayoutSizes.mobile, metrics]}
+								>
+									<IssueFronts
+										ListHeaderComponent={<WeatherHeader />}
+										issue={issue}
+										initialFrontKey={initialFrontKey}
+									/>
+								</WithIssueScreenSize>
+							)}
+						</WithLayoutRectangle>
+					),
+					[Breakpoints.TabletVertical]: () => (
+						<View
+							style={{
+								flexDirection: 'row',
+							}}
+						>
 							<WithLayoutRectangle>
 								{(metrics) => (
 									<WithIssueScreenSize
 										value={[
-											PageLayoutSizes.mobile,
+											PageLayoutSizes.tablet,
 											metrics,
 										]}
 									>
@@ -385,42 +396,13 @@ const IssueScreenWithPath = React.memo(
 									</WithIssueScreenSize>
 								)}
 							</WithLayoutRectangle>
-						),
-						[Breakpoints.TabletVertical]: () => (
-							<View
-								style={{
-									flexDirection: 'row',
-								}}
-							>
-								<WithLayoutRectangle>
-									{(metrics) => (
-										<WithIssueScreenSize
-											value={[
-												PageLayoutSizes.tablet,
-												metrics,
-											]}
-										>
-											<IssueFronts
-												ListHeaderComponent={
-													<WeatherHeader />
-												}
-												issue={issue}
-												initialFrontKey={
-													initialFrontKey
-												}
-											/>
-										</WithIssueScreenSize>
-									)}
-								</WithLayoutRectangle>
-							</View>
-						),
-					}}
-				</WithBreakpoints>
-			</>
-		);
-	},
-	(prev, next) => pathsAreEqual(prev.issue, next.issue),
-);
+						</View>
+					),
+				}}
+			</WithBreakpoints>
+		</>
+	);
+};
 
 export const IssueScreen = React.memo(() => {
 	const { showNewEditionCard, setNewEditionSeen } = useEditions();
