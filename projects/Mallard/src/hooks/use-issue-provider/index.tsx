@@ -141,19 +141,6 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 						publishedIssueId,
 						apiUrl,
 					);
-					// const james = await fetchIssueWithFrontsFromAPI(
-					// 	publishedIssueId,
-					// 	apiUrl,
-					// );
-					// return james;
-					// console.log(
-					// 	james.fronts[0].collections[0].cards[0].articles,
-					// );
-					// const testFronts = [james.fronts[0], ...james.fronts];
-					// return {
-					// 	...james,
-					// 	fronts: testFronts,
-					// };
 				}
 
 				const issueOnDevice = await isIssueOnDevice(localIssueId);
