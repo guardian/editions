@@ -13,8 +13,14 @@ Resources:
         Type: AWS::S3::Bucket
         Properties:
             BucketName: !Sub editions-proofed-${Stage}
+            LifecycleConfiguration:
+                Rules:
+                    - ExpirationInDays: 365
 
     PublishedBucket:
         Type: AWS::S3::Bucket
         Properties:
             BucketName: !Sub editions-published-${Stage}
+            LifecycleConfiguration:
+                Rules:
+                    - ExpirationInDays: 365
