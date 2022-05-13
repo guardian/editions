@@ -150,8 +150,8 @@ const mapFurnitureToContent = (
         : ''
     const standfirst =
         oc(furniture).trailTextOverride() ||
-        filteredStandfirst ||
-        oc(content).fields.trailText()
+        oc(content).fields.trailText() ||
+        filteredStandfirst
 
     return {
         ...content,
