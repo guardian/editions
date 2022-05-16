@@ -15,9 +15,18 @@ Resources:
             BucketName: !Sub editions-proofed-${Stage}
             LifecycleConfiguration:
                 Rules:
-                    - Id: DeleteContentAfter1Year
+                    - Id: DeleteContentAfter1YearUS
                       ExpirationInDays: 365
-                      Status: 'Enabled'
+                      Status: Enabled
+                      Prefix: 'american-edition'
+                    - Id: DeleteContentAfter1YearAU
+                      ExpirationInDays: 365
+                      Status: Enabled
+                      Prefix: 'australian-edition'
+                    - Id: DeleteContentAfter1YearUK
+                      ExpirationInDays: 365
+                      Status: Enabled
+                      Prefix: 'daily-edition'
 
     PublishedBucket:
         Type: AWS::S3::Bucket
@@ -25,6 +34,15 @@ Resources:
             BucketName: !Sub editions-published-${Stage}
             LifecycleConfiguration:
                 Rules:
-                    - Id: DeleteContentAfter1Year
+                    - Id: DeleteContentAfter1YearUS
                       ExpirationInDays: 365
-                      Status: 'Enabled'
+                      Status: Enabled
+                      Prefix: 'american-edition'
+                    - Id: DeleteContentAfter1YearAU
+                      ExpirationInDays: 365
+                      Status: Enabled
+                      Prefix: 'australian-edition'
+                    - Id: DeleteContentAfter1YearUK
+                      ExpirationInDays: 365
+                      Status: Enabled
+                      Prefix: 'daily-edition'
