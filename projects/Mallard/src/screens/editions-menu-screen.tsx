@@ -13,24 +13,6 @@ import { ApiState } from './settings/api-screen';
 
 const sidebarWidth = 360;
 
-const styles = StyleSheet.create({
-	container: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		flexDirection: 'row-reverse',
-	},
-	touchable: {
-		backgroundColor: 'transparent',
-		height: Dimensions.get('window').height,
-		width: Dimensions.get('window').width - sidebarWidth,
-	},
-	screenFiller: {
-		flex: 1,
-		backgroundColor: 'white',
-		maxWidth: DeviceInfo.isTablet() ? sidebarWidth : undefined,
-	},
-});
-
 export const ScreenFiller = ({
 	direction,
 	children,
@@ -39,6 +21,25 @@ export const ScreenFiller = ({
 	children: ReactElement;
 }) => {
 	const navigation = useNavigation();
+
+	const styles = StyleSheet.create({
+		container: {
+			display: 'flex',
+			justifyContent: 'flex-end',
+			flexDirection: 'row-reverse',
+		},
+		touchable: {
+			backgroundColor: 'transparent',
+			height: Dimensions.get('window').height,
+			width: Dimensions.get('window').width - sidebarWidth,
+		},
+		screenFiller: {
+			flex: 1,
+			backgroundColor: 'white',
+			maxWidth: DeviceInfo.isTablet() ? sidebarWidth : undefined,
+		},
+	});
+
 	return (
 		<View
 			style={[
