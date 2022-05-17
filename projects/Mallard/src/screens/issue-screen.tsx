@@ -1,3 +1,4 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
 import type { MutableRefObject, ReactElement } from 'react';
 import React, { useEffect, useRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -269,9 +270,16 @@ const IssueFronts = ({
 	);
 };
 
-const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
+const PreviewReloadButton = ({ onPress }: { onPress: () => Promise<void> }) => {
 	const { isPreview } = useApiUrl();
-	return isPreview ? <ReloadButton onPress={onPress} /> : null;
+	const navigation = useNavigation();
+	const route = useRoute();
+
+	const onPressReload = async () => {
+		await onPress();
+		navigation.navigate(route);
+	};
+	return isPreview ? <ReloadButton onPress={onPressReload} /> : null;
 };
 
 const IssueScreenWithPathError = ({
