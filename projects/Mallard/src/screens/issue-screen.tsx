@@ -274,7 +274,7 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => Promise<void> }) => {
 	const { isPreview } = useApiUrl();
 	const navigation = useNavigation();
 	const route = useRoute();
-	console.log(route);
+
 	const onPressReload = async () => {
 		await onPress();
 		navigation.navigate(route);
