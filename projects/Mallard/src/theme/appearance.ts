@@ -37,7 +37,7 @@ export const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
 		dimColor: '#052962',
 	},
 	settings: {
-		backgroundColor: color.background,
+		backgroundColor: color.dimBackground,
 		cardBackgroundColor: color.background,
 		borderColor: color.line,
 		color: color.palette.brand.dark,

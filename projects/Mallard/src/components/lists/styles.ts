@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
 		marginVertical: StyleSheet.hairlineWidth,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		backgroundColor: 'white',
 	},
 	buttonPrimary: {
 		maxWidth: DeviceInfo.isTablet()

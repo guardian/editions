@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
 		padding: metrics.horizontal,
 		paddingTop: metrics.vertical * 2,
 		paddingBottom: metrics.vertical / 2,
+		backgroundColor: '#EDEDED',
 	},
 	item: {
 		padding: metrics.horizontal,

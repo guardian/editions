@@ -12,8 +12,10 @@ import {
 	Animated,
 	Dimensions,
 	FlatList,
+	Image,
 	Platform,
 	StyleSheet,
+	Text,
 	View,
 } from 'react-native';
 import { isTablet } from 'react-native-device-info';
@@ -40,6 +42,7 @@ import {
 import {
 	useApiUrl,
 	useIsUsingProdDevtools,
+	useMaxAvailableEditions,
 } from 'src/hooks/use-config-provider';
 import {
 	getSpecialEditionProps,
@@ -61,6 +64,7 @@ import { metrics } from 'src/theme/spacing';
 import type { IssueWithFronts } from '../../../Apps/common/src';
 import { ScreenFiller } from './editions-menu-screen';
 import { ApiState } from './settings/api-screen';
+import { EditionButton } from 'src/components/EditionsMenu/EditionButton/EditionButton';
 
 const styles = StyleSheet.create({
 	issueListFooter: {
@@ -230,22 +234,20 @@ const IssueListFooter = () => {
 	);
 };
 
-const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + StyleSheet.hairlineWidth;
+// const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + StyleSheet.hairlineWidth;
 
-const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
-	if (issue.isLoading) return 0;
-	if (issue.error != null) return ISSUE_FRONT_ERROR_HEIGHT + 1;
-	const { fronts } = issue.value;
-	return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1);
-};
+// const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
+// 	if (issue.isLoading) return 0;
+// 	if (issue.error != null) return ISSUE_FRONT_ERROR_HEIGHT + 1;
+// 	const { fronts } = issue.value;
+// 	return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1);
+// };
 
 const IssueListView = React.memo(
 	({
-		issueList,
 		currentIssue,
 		setIssueId,
 	}: {
-		issueList: IssueSummary[];
 		currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> };
 		setIssueId: Dispatch<PathToIssue>;
 	}) => {
@@ -253,9 +255,23 @@ const IssueListView = React.memo(
 		const { localIssueId: localId, publishedIssueId: publishedId } =
 			currentIssue.id;
 		const { details } = currentIssue;
+		const { issueSummary } = useIssueSummary();
+		const {
+			editionsList: { specialEditions },
+		} = useEditions();
+
+		const { maxAvailableEditions } = useMaxAvailableEditions();
+
+		if (!issueSummary) {
+			return (
+				<FlexCenter>
+					<Spinner />
+				</FlexCenter>
+			);
+		}
 
 		// We want to scroll to the current issue.
-		const currentIssueIndex = issueList.findIndex(
+		const currentIssueIndex = issueSummary.findIndex(
 			(issue) =>
 				issue.localId === localId && issue.publishedId === publishedId,
 		);
@@ -280,37 +296,45 @@ const IssueListView = React.memo(
 
 		// We pass down the issue details only for the selected issue.
 		const renderItem = useCallback(
-			({ item, index }) => (
-				<IssueRowContainer
-					issue={item}
-					issueDetails={index === currentIssueIndex ? details : null}
-					setIssueId={setIssueId}
-				/>
-			),
+			({ item, index }) => {
+				if (item.editionType === 'Special') {
+					console.log(item.buttonStyle);
+					return <EditionButton {...item} />;
+				}
+				return (
+					<IssueRowContainer
+						issue={item}
+						issueDetails={
+							index === currentIssueIndex ? details : null
+						}
+						setIssueId={setIssueId}
+					/>
+				);
+			},
 			[currentIssueIndex, details, navigation, setIssueId],
 		);
 
 		// Height of the fronts so we can provide this to `getItemLayout`.
-		const frontRowsHeight = getFrontRowsHeight(details);
+		// const frontRowsHeight = getFrontRowsHeight(details);
 
 		// Changing the current issue will affect the layout, so that's
 		// indeed a dependency of the callback.
-		const getItemLayout = useCallback(
-			(_, index) => {
-				return {
-					length:
-						ISSUE_ROW_HEADER_HEIGHT +
-						(index === currentIssueIndex ? frontRowsHeight : 0),
-					offset:
-						index * ISSUE_ROW_HEIGHT +
-						(currentIssueIndex >= 0 && index > currentIssueIndex
-							? frontRowsHeight
-							: 0),
-					index,
-				};
-			},
-			[currentIssueIndex, frontRowsHeight],
-		);
+		// const getItemLayout = useCallback(
+		// 	(_, index) => {
+		// 		return {
+		// 			length:
+		// 				ISSUE_ROW_HEADER_HEIGHT +
+		// 				(index === currentIssueIndex ? frontRowsHeight : 0),
+		// 			offset:
+		// 				index * ISSUE_ROW_HEIGHT +
+		// 				(currentIssueIndex >= 0 && index > currentIssueIndex
+		// 					? frontRowsHeight
+		// 					: 0),
+		// 			index,
+		// 		};
+		// 	},
+		// 	[currentIssueIndex, frontRowsHeight],
+		// );
 
 		const footer = useMemo(
 			() => (
@@ -329,15 +353,28 @@ const IssueListView = React.memo(
 			[listRef],
 		);
 
+		const listData = useMemo(() => {
+			if (specialEditions.length > 0) {
+				return [
+					issueSummary[0],
+					...specialEditions,
+					...issueSummary.slice(1),
+				];
+			}
+			return issueSummary;
+		}, [specialEditions]);
+
+		console.log(listData);
+
 		return (
 			<FlatList
 				// Only render 7 because that is the default number of editions
-				initialNumToRender={7}
+				initialNumToRender={maxAvailableEditions ?? 7}
 				ItemSeparatorComponent={Separator}
 				ListFooterComponentStyle={styles.issueListFooter}
 				ListFooterComponent={footer}
 				style={styles.issueList}
-				data={issueList}
+				data={listData}
 				initialScrollIndex={
 					currentIssueIndex >= 0 ? currentIssueIndex : undefined
 				}
@@ -345,7 +382,7 @@ const IssueListView = React.memo(
 				// Necessary to make sure we re-render visible
 				// items when details changes.
 				extraData={details}
-				getItemLayout={getItemLayout}
+				// getItemLayout={getItemLayout}
 				ref={refFn}
 			/>
 		);
@@ -353,12 +390,10 @@ const IssueListView = React.memo(
 );
 
 const IssueListViewWithDelay = ({
-	issueList,
 	currentId,
 	currentIssue,
 	setIssueId,
 }: {
-	issueList: IssueSummary[];
 	currentId: PathToIssue;
 	currentIssue: Loaded<IssueWithFronts>;
 	setIssueId: Dispatch<PathToIssue>;
@@ -383,20 +418,13 @@ const IssueListViewWithDelay = ({
 		}
 	}, [currentId, currentIssue, details]);
 
-	return (
-		<IssueListView
-			issueList={issueList}
-			currentIssue={shownIssue}
-			setIssueId={setIssueId}
-		/>
-	);
+	return <IssueListView currentIssue={shownIssue} setIssueId={setIssueId} />;
 };
 
 const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' };
 const NO_ISSUES: IssueSummary[] = [];
 const IssueListFetchContainer = () => {
-	const data = useIssueSummary();
-	const issueSummary = data.issueSummary ?? NO_ISSUES;
+	const { issueId: globalIssueId } = useIssueSummary();
 	const { issueWithFronts } = useIssue();
 	const { apiUrl } = useApiUrl();
 
@@ -405,7 +433,7 @@ const IssueListFetchContainer = () => {
 		// if this is enabled. See below description of this mechanism.
 		Platform.select({ android: false, default: true }),
 	);
-	const [issueId, setIssueId] = useState(data.issueId ?? EMPTY_ISSUE_ID);
+	const [issueId, setIssueId] = useState(globalIssueId ?? EMPTY_ISSUE_ID);
 	// Default on mount with the issue that is currently in context
 	const [currentIssue, setCurrentIssue] = useState<IssueWithFronts | null>(
 		issueWithFronts,
@@ -445,21 +473,18 @@ const IssueListFetchContainer = () => {
 
 	return currentIssue !== null ? (
 		<IssueListViewWithDelay
-			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ value: currentIssue }} // This needs to be a fetch value
 			setIssueId={setIssueId}
 		/>
 	) : error ? (
 		<IssueListViewWithDelay
-			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ error }}
 			setIssueId={setIssueId}
 		/>
 	) : (
 		<IssueListViewWithDelay
-			issueList={issueSummary}
 			currentId={issueId}
 			currentIssue={{ isLoading: true }}
 			setIssueId={setIssueId}

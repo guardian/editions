@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
 import { Alert, Linking, Platform, Switch, Text } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -12,20 +12,26 @@ import {
 import { isStaffMember } from 'src/authentication/helpers';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
+import { Tick } from 'src/components/icons/Tick';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading, Row, Separator } from 'src/components/layout/ui/row';
 import { DualButton } from 'src/components/lists/DualButton';
 import { FullButton } from 'src/components/lists/FullButton';
+import { EditionsMenuScreenHeader } from 'src/components/ScreenHeader/EditionMenuScreenHeader';
+import { SettingsMenuScreenHeader } from 'src/components/ScreenHeader/SettingsMenuScreenHeader';
 import { Copy } from 'src/helpers/words';
 import {
 	useIsUsingProdDevtools,
 	useNotificationsEnabled,
 } from 'src/hooks/use-config-provider';
+import { useEditions } from 'src/hooks/use-edition-provider';
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
+import { RegionalEdition } from '../../../Apps/common/src';
+import { ScreenFiller } from './editions-menu-screen';
 
 const MiscSettingsList = () => {
 	const navigation =
@@ -144,6 +150,8 @@ const SettingsScreen = () => {
 	const canAccess = useAccess();
 	const [, setVersionClickedTimes] = useState(0);
 	const { signOutIdentity, iapData } = useContext(AccessContext);
+	const { selectedEdition, storeSelectedRegionalEditionByLocale } =
+		useEditions();
 
 	const versionNumber = DeviceInfo.getVersion();
 	const isLoggedInWithIdentity = identityData
@@ -187,113 +195,158 @@ const SettingsScreen = () => {
 	const rightChevronIcon = <RightChevron />;
 
 	return (
-		<HeaderScreenContainer title="Settings" actionLeft={true}>
-			<WithAppAppearance value={'settings'}>
-				<ScrollContainer>
-					<SignInButton
-						accessible={true}
-						accessibilityRole="button"
-						username={
-							identityData
-								? identityData.userDetails.primaryEmailAddress
-								: undefined
+		<WithAppAppearance value={'settings'}>
+			<ScreenFiller>
+				<>
+					<SettingsMenuScreenHeader
+						rightActionPress={() =>
+							navigation.navigate(RouteNames.Issue)
 						}
-						signOutIdentity={signOutIdentity}
 					/>
-					<Separator />
-					{canAccess ? (
-						<Row
-							title={Copy.settings.subscriptionDetails}
-							onPress={() =>
-								navigation.navigate(
-									RouteNames.SubscriptionDetails,
-								)
+					<ScrollContainer>
+						<Heading>{``}</Heading>
+						<Separator />
+						<SignInButton
+							accessible={true}
+							accessibilityRole="button"
+							username={
+								identityData
+									? identityData.userDetails
+											.primaryEmailAddress
+									: undefined
 							}
-							proxy={rightChevronIcon}
+							signOutIdentity={signOutIdentity}
 						/>
-					) : (
-						<Row
-							title={Copy.settings.alreadySubscribed}
-							onPress={() =>
-								navigation.navigate(
-									RouteNames.AlreadySubscribed,
-								)
-							}
-							proxy={rightChevronIcon}
-						/>
-					)}
-					<Separator />
-					<Heading>{``}</Heading>
-					<Separator />
-					<MiscSettingsList />
-					<Heading>{``}</Heading>
-					<Separator />
-					<Row
-						title={Copy.settings.privacySettings}
-						onPress={() =>
-							navigation.navigate(RouteNames.GdprConsent)
-						}
-						proxy={rightChevronIcon}
-					/>
-					<Separator />
-					<Row
-						title={Copy.settings.privacyPolicy}
-						onPress={() =>
-							navigation.navigate(RouteNames.PrivacyPolicy)
-						}
-						proxy={rightChevronIcon}
-					/>
-					<Separator />
-					<Row
-						title={Copy.settings.termsAndConditions}
-						onPress={() =>
-							navigation.navigate(RouteNames.TermsAndConditions)
-						}
-						proxy={rightChevronIcon}
-					/>
-					<Separator />
-					<Heading>{``}</Heading>
-					<Separator />
-					<Row
-						title={Copy.settings.help}
-						onPress={() => navigation.navigate(RouteNames.Help)}
-						proxy={rightChevronIcon}
-					/>
-					<Separator />
-					<Row
-						title={Copy.settings.credits}
-						onPress={() => navigation.navigate(RouteNames.Credits)}
-						proxy={rightChevronIcon}
-					/>
-					<Separator />
-					<Row
-						title={Copy.settings.version}
-						onPress={versionClickHandler}
-						proxy={
-							<Text>
-								{versionNumber} ({buildNumber})
-							</Text>
-						}
-					/>
-					<Separator />
-					<Heading>{``}</Heading>
-					{canDisplayBetaButton && <BetaButtonOption />}
-					{isUsingProdDevtools && (
-						<>
-							<Separator />
-
+						<Separator />
+						{canAccess ? (
 							<Row
-								title="Developer Menu"
+								title={Copy.settings.subscriptionDetails}
 								onPress={() =>
-									navigation.navigate(RouteNames.DevZone)
+									navigation.navigate(
+										RouteNames.SubscriptionDetails,
+									)
 								}
 								proxy={rightChevronIcon}
 							/>
-						</>
-					)}
-				</ScrollContainer>
-			</WithAppAppearance>
-		</HeaderScreenContainer>
+						) : (
+							<Row
+								title={Copy.settings.alreadySubscribed}
+								onPress={() =>
+									navigation.navigate(
+										RouteNames.AlreadySubscribed,
+									)
+								}
+								proxy={rightChevronIcon}
+							/>
+						)}
+						<Separator />
+						<Heading>{``}</Heading>
+
+						<Separator />
+						{/** This needs to be stateless ideally as its fed from the API + Seperate component */}
+						<Row
+							title="UK Daily"
+							subtitle="Published from London every morning by 6am (GMT)"
+							onPress={() =>
+								storeSelectedRegionalEditionByLocale('en_GB')
+							}
+							proxy={
+								selectedEdition.locale === 'en_GB' ? (
+									<Tick />
+								) : undefined
+							}
+						/>
+						<Separator />
+						<Row
+							title="Australia Weekend"
+							subtitle="Published from Sydney every Saturday by 6am (AEST)"
+							onPress={() =>
+								storeSelectedRegionalEditionByLocale('en_AU')
+							}
+							proxy={
+								selectedEdition.locale === 'en_AU' ? (
+									<Tick />
+								) : undefined
+							}
+						/>
+
+						<Separator />
+						<Heading>{``}</Heading>
+						<Separator />
+						<MiscSettingsList />
+						<Heading>{``}</Heading>
+						<Separator />
+						<Row
+							title={Copy.settings.privacySettings}
+							onPress={() =>
+								navigation.navigate(RouteNames.GdprConsent)
+							}
+							proxy={rightChevronIcon}
+						/>
+						<Separator />
+						<Row
+							title={Copy.settings.privacyPolicy}
+							onPress={() =>
+								navigation.navigate(RouteNames.PrivacyPolicy)
+							}
+							proxy={rightChevronIcon}
+						/>
+						<Separator />
+						<Row
+							title={Copy.settings.termsAndConditions}
+							onPress={() =>
+								navigation.navigate(
+									RouteNames.TermsAndConditions,
+								)
+							}
+							proxy={rightChevronIcon}
+						/>
+						<Separator />
+						<Heading>{``}</Heading>
+						<Separator />
+						<Row
+							title={Copy.settings.help}
+							onPress={() => navigation.navigate(RouteNames.Help)}
+							proxy={rightChevronIcon}
+						/>
+						<Separator />
+						<Row
+							title={Copy.settings.credits}
+							onPress={() =>
+								navigation.navigate(RouteNames.Credits)
+							}
+							proxy={rightChevronIcon}
+						/>
+						<Separator />
+						<Row
+							title={Copy.settings.version}
+							onPress={versionClickHandler}
+							proxy={
+								<Text>
+									{versionNumber} ({buildNumber})
+								</Text>
+							}
+						/>
+						<Separator />
+						<Heading>{``}</Heading>
+						{canDisplayBetaButton && <BetaButtonOption />}
+						{isUsingProdDevtools && (
+							<>
+								<Separator />
+
+								<Row
+									title="Developer Menu"
+									onPress={() =>
+										navigation.navigate(RouteNames.DevZone)
+									}
+									proxy={rightChevronIcon}
+								/>
+							</>
+						)}
+					</ScrollContainer>
+				</>
+			</ScreenFiller>
+		</WithAppAppearance>
 	);
 };
 

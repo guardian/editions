@@ -17,7 +17,6 @@ import type {
 } from './navigation/NavigationModels';
 import { RouteNames } from './navigation/NavigationModels';
 import { ArticleWrapper } from './navigation/navigators/article';
-import { EditionsMenuScreen } from './screens/editions-menu-screen';
 import { HomeScreen } from './screens/home-screen';
 import { AuthSwitcherScreen } from './screens/identity-login-screen';
 import { InAppPurchaseScreen } from './screens/in-app-purchase-screen';
@@ -141,7 +140,7 @@ const MainStack = () => {
 			/>
 			<Main.Screen
 				name={RouteNames.EditionsMenu}
-				component={EditionsMenuScreen}
+				component={SettingsStack}
 				options={{
 					gestureDirection: 'horizontal-inverted',
 					cardStyle: { backgroundColor: 'transparent' },

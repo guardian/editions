@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import type { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common';
+import { SettingsButton } from 'src/components/Button/SettingsButton';
 import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
@@ -8,7 +9,6 @@ import { useIssueDate } from 'src/helpers/issues';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { IssueMenuButton } from '../../Button/IssueMenuButton';
-import { EditionsMenuButton } from '../../EditionsMenu/EditionsMenuButton/EditionsMenuButton';
 
 interface Titles {
 	title: string;
@@ -69,9 +69,7 @@ const IssueScreenHeader = React.memo(
 			<Header
 				onPress={goToIssueList}
 				action={<IssueMenuButton onPress={goToIssueList} />}
-				leftAction={
-					<EditionsMenuButton onPress={handleEditionMenuPress} />
-				}
+				leftAction={<SettingsButton onPress={handleEditionMenuPress} />}
 				headerStyles={headerStyles}
 			>
 				{title ? (

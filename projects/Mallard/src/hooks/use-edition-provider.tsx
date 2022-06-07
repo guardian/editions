@@ -42,6 +42,9 @@ interface EditionState {
 	storeSelectedEdition: (
 		chosenEdition: RegionalEdition | SpecialEdition,
 	) => void;
+	storeSelectedRegionalEditionByLocale: (
+		editionLocale: Locale,
+	) => Promise<void>;
 }
 
 export const getSpecialEditionProps = (
@@ -79,6 +82,7 @@ const defaultState: EditionState = {
 	setShowNewEditionCard: () => {},
 	setNewEditionSeen: () => {},
 	storeSelectedEdition: () => {},
+	storeSelectedRegionalEditionByLocale: () => Promise.resolve(),
 };
 
 const EditionContext = createContext(defaultState);
@@ -329,6 +333,21 @@ export const EditionProvider = ({
 	};
 
 	/**
+	 * A helper setter so we dont need to pass in the whole edition params to change it for the settings menu
+	 */
+
+	const storeSelectedRegionalEditionByLocale = async (
+		editionLocale: Locale,
+	) => {
+		const chosenEdition = editionsList.regionalEditions.find(
+			(edition) => edition.locale === editionLocale,
+		);
+		if (chosenEdition) {
+			storeSelectedEdition(chosenEdition);
+		}
+	};
+
+	/**
 	 * On App State change to foreground, or connection change, we want to check for a new editionsList
 	 */
 	useEffect(() => {
@@ -370,6 +389,7 @@ export const EditionProvider = ({
 				storeSelectedEdition,
 				setShowNewEditionCard,
 				setNewEditionSeen,
+				storeSelectedRegionalEditionByLocale,
 			}}
 		>
 			{children}

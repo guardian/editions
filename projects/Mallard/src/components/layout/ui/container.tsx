@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
 
 const ScrollContainer = ({ children }: { children: ReactNode }) => {
 	const { backgroundColor } = useAppAppearance();
+	console.log(backgroundColor);
 	return (
 		<ScrollView style={[styles.container, { backgroundColor }]}>
 			{children}
