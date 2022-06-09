@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { MutableRefObject, ReactElement } from 'react';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
 import RNRestart from 'react-native-restart';
@@ -157,6 +157,7 @@ const IssueFronts = ({
 	const { width } = useDimensions();
 	const ref = useRef<FlatList<any> | null>(null);
 	const { selectedEdition } = useEditions();
+	const { isPreview } = useApiUrl();
 	const weatherResult = useWeather();
 
 	const useIsWeatherActuallyShown =
@@ -164,49 +165,56 @@ const IssueFronts = ({
 		weatherResult.lastUpdated !== 0 &&
 		weatherResult.forecasts.length >= 9;
 
-	const {
-		frontWithCards,
-		frontSpecs,
-	}: {
+	const issueToFronts: () => {
 		frontWithCards: FrontWithCards;
 		frontSpecs: FrontSpec[];
-	} = issue.fronts.reduce<{
-		frontWithCards: Array<TFront & { cards: FlatCard[] }>;
-		frontSpecs: FrontSpec[];
-	}>(
-		(acc, front) => {
-			const flatCollections = flattenCollectionsToCards(
-				front.collections,
-			);
-			acc.frontWithCards.push({
-				...front,
-				cards: flatCollections,
-			});
-			const specs = flattenFlatCardsToFront(flatCollections)
-				// Exlude crosswords because we don't want to be able to
-				// "slide" onto them.
-				.filter(({ article }) => article.type !== 'crossword')
-				.map(({ article, collection }) => ({
-					collection: collection.key,
-					front: front.key,
-					article: article.key,
-					localIssueId: issue.localId,
-					publishedIssueId: issue.publishedId,
-				}));
-			if (specs.length > 0) {
-				acc.frontSpecs.push({
-					appearance: front.appearance,
-					frontName: front.displayName ?? '',
-					articleSpecs: specs,
+	} = () =>
+		issue.fronts.reduce<{
+			frontWithCards: Array<TFront & { cards: FlatCard[] }>;
+			frontSpecs: FrontSpec[];
+		}>(
+			(acc, front) => {
+				front.displayName === 'Top stories' &&
+					console.log(front.displayName);
+				const flatCollections = flattenCollectionsToCards(
+					front.collections,
+				);
+				acc.frontWithCards.push({
+					...front,
+					cards: flatCollections,
 				});
-			}
-			return acc;
-		},
-		{
-			frontWithCards: [],
-			frontSpecs: [],
-		},
-	);
+				const specs = flattenFlatCardsToFront(flatCollections)
+					// Exlude crosswords because we don't want to be able to
+					// "slide" onto them.
+					.filter(({ article }) => article.type !== 'crossword')
+					.map(({ article, collection }) => ({
+						collection: collection.key,
+						front: front.key,
+						article: article.key,
+						localIssueId: issue.localId,
+						publishedIssueId: issue.publishedId,
+					}));
+				if (specs.length > 0) {
+					acc.frontSpecs.push({
+						appearance: front.appearance,
+						frontName: front.displayName ?? '',
+						articleSpecs: specs,
+					});
+				}
+				return acc;
+			},
+			{
+				frontWithCards: [],
+				frontSpecs: [],
+			},
+		);
+
+	const { frontWithCards, frontSpecs } = isPreview
+		? issueToFronts()
+		: useMemo(
+				() => issueToFronts(),
+				[issue.localId, issue.publishedId, issue.fronts[0].id],
+		  );
 
 	useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref);
 	const largeDeviceMemory = useLargeDeviceMemory();
