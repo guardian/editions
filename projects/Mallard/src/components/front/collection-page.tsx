@@ -1,5 +1,4 @@
 import React from 'react';
-import type { Animated } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import type {
@@ -207,7 +206,7 @@ const CollectionPage = React.memo(
 		publishedIssueId,
 		front,
 		appearance,
-	}: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
+	}: PropTypes) => {
 		const background = useCardBackgroundStyle();
 		const { size, card } = useIssueScreenSize();
 		if (!articlesInCard.length) {

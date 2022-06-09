@@ -1,7 +1,7 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import type { ArticlePillar, Front as FrontType, Issue } from 'src/common';
-import { ArticleType, PageLayoutSizes } from 'src/common';
+import { ArticleType } from 'src/common';
 import { clamp } from 'src/helpers/math';
 import type { FlatCard } from 'src/helpers/transform';
 import { getColor } from 'src/helpers/transform';
@@ -18,44 +18,20 @@ import {
 import type { PropTypes } from './collection-page';
 import { CollectionPage } from './collection-page';
 import { FrontWrapper } from './helpers/front-wrapper';
-import type { AnimatedFlatListRef } from './helpers/helpers';
-import { getTranslateForPage } from './helpers/helpers';
 
-const CollectionPageInFront = ({
-	index,
-	pillar,
-	scrollX,
-	...collectionPageProps
-}: {
-	index: number;
-	pillar: ArticlePillar;
-	scrollX: Animated.Value;
-} & PropTypes) => {
-	const { card, size } = useIssueScreenSize();
-	const translate = useMemo(
-		() =>
-			getTranslateForPage(
-				card.width,
-				scrollX,
-				index,
-				size === PageLayoutSizes.mobile ? 1 : 0.5,
-			),
-		[card.width, scrollX, index, size],
-	);
-	return (
-		<Animated.View
-			style={[
-				{
-					width: card.width,
-				},
-				{
-					transform: [
-						{
-							translateX: translate,
-						},
-					],
-				},
-			]}
+const CollectionPageInFront = React.memo(
+	({
+		pillar,
+		width,
+		...collectionPageProps
+	}: {
+		width: Number;
+		pillar: ArticlePillar;
+	} & PropTypes) => (
+		<View
+			style={{
+				width,
+			}}
 		>
 			<WithArticle
 				type={ArticleType.Article}
@@ -64,14 +40,11 @@ const CollectionPageInFront = ({
 					collectionPageProps.collection,
 				)}
 			>
-				<CollectionPage
-					translate={translate}
-					{...collectionPageProps}
-				/>
+				<CollectionPage {...collectionPageProps} width={width} />
 			</WithArticle>
-		</Animated.View>
-	);
-};
+		</View>
+	),
+);
 
 const styles = StyleSheet.create({ overflow: { overflow: 'hidden' } });
 
@@ -93,7 +66,6 @@ export const Front = React.memo(
 		const pillar = getAppearancePillar(frontData.appearance);
 
 		const [scrollX] = useState(() => new Animated.Value(0));
-		const flatListRef = useRef<AnimatedFlatListRef | undefined>();
 
 		const stops = cards.length;
 		const { card, container } = useIssueScreenSize();
@@ -139,7 +111,6 @@ export const Front = React.memo(
 					pagingEnabled={true}
 					decelerationRate="fast"
 					snapToInterval={card.width}
-					ref={(r: AnimatedFlatListRef) => (flatListRef.current = r)}
 					getItemLayout={(_: never, index: number) => ({
 						length: card.width,
 						offset: card.width * index,
@@ -193,13 +164,7 @@ export const Front = React.memo(
 					// a re-render
 					extraData={`${container.width}:${container.height}`}
 					data={cards}
-					renderItem={({
-						item,
-						index,
-					}: {
-						item: FlatCard;
-						index: number;
-					}) => (
+					renderItem={({ item }: { item: FlatCard }) => (
 						<CollectionPageInFront
 							articlesInCard={item.articles || []}
 							appearance={item.appearance}
@@ -207,10 +172,8 @@ export const Front = React.memo(
 							front={frontData.key}
 							width={card.width}
 							{...{
-								scrollX,
 								localIssueId,
 								publishedIssueId,
-								index,
 								pillar,
 								articleNavigator,
 							}}
