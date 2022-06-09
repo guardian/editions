@@ -175,6 +175,8 @@ const IssueFronts = ({
 		frontSpecs: FrontSpec[];
 	}>(
 		(acc, front) => {
+			front.displayName === 'Top stories' &&
+				console.log(front.displayName);
 			const flatCollections = flattenCollectionsToCards(
 				front.collections,
 			);
@@ -325,6 +327,10 @@ const WeatherHeader = () => {
 
 	return <WeatherWidget />;
 };
+// WeatherHeader.whyDidYouRender = {
+// 	logOnDifferentValues: true,
+// 	customName: 'MenuJamesJames',
+// };
 
 const IssueScreenWithPath = ({
 	issue,
