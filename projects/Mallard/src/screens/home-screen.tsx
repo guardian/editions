@@ -40,6 +40,7 @@ import {
 import {
 	useApiUrl,
 	useIsUsingProdDevtools,
+	useMaxAvailableEditions,
 } from 'src/hooks/use-config-provider';
 import {
 	getSpecialEditionProps,
@@ -250,6 +251,7 @@ const IssueListView = React.memo(
 		setIssueId: Dispatch<PathToIssue>;
 	}) => {
 		const navigation = useNavigation();
+		const { maxAvailableEditions } = useMaxAvailableEditions();
 		const { localIssueId: localId, publishedIssueId: publishedId } =
 			currentIssue.id;
 		const { details } = currentIssue;
@@ -332,7 +334,7 @@ const IssueListView = React.memo(
 		return (
 			<FlatList
 				// Only render 7 because that is the default number of editions
-				initialNumToRender={7}
+				initialNumToRender={maxAvailableEditions}
 				ItemSeparatorComponent={Separator}
 				ListFooterComponentStyle={styles.issueListFooter}
 				ListFooterComponent={footer}
