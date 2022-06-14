@@ -75,6 +75,7 @@
     "react-native-background-fetch": "^4.0.4",
     "react-native-config": "^1.4.2",
     "react-native-device-info": "^8.0.2",
+    "react-native-fast-image": "^8.5.11",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-htmlview": "^0.15.0",

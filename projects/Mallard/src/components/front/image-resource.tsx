@@ -1,6 +1,7 @@
 import React from 'react';
-import type { ImageProps, ImageStyle, StyleProp } from 'react-native';
-import { Image, View } from 'react-native';
+import type { ImageStyle, StyleProp } from 'react-native';
+import { View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio';
 import { useImagePath } from 'src/hooks/use-image-paths';
 import type { Image as IImage, ImageUse } from '../../../../Apps/common/src';
@@ -17,7 +18,8 @@ type ImageResourceProps = {
 	use: ImageUse;
 	style?: StyleProp<ImageStyle>;
 	setAspectRatio?: boolean;
-} & Omit<ImageProps, 'source'>;
+	accessibilityLabel?: string;
+};
 
 const ImageResource = ({
 	image,
@@ -34,15 +36,15 @@ const ImageResource = ({
 	];
 
 	return imagePath ? (
-		<Image
+		<FastImage
 			key={imagePath}
-			resizeMethod={'resize'}
 			{...props}
+			resizeMode={FastImage.resizeMode.cover}
 			style={[styles, style]}
 			source={{ uri: imagePath }}
 		/>
 	) : (
-		<View style={styles}></View>
+		<View style={[styles, { backgroundColor: 'pink' }]}></View>
 	);
 };
 
