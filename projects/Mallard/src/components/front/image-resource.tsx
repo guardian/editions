@@ -44,7 +44,7 @@ const ImageResource = ({
 			source={{ uri: imagePath }}
 		/>
 	) : (
-		<View style={[styles, { backgroundColor: 'pink' }]}></View>
+		<View style={styles}></View>
 	);
 };
 
