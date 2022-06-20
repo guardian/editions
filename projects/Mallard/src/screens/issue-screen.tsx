@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { MutableRefObject, ReactElement, useCallback } from 'react';
-import React, { useEffect, useRef } from 'react';
+import type { MutableRefObject, ReactElement } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
 import RNRestart from 'react-native-restart';
