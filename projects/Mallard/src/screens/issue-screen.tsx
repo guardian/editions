@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import type { MutableRefObject, ReactElement } from 'react';
+import { MutableRefObject, ReactElement, useCallback } from 'react';
 import React, { useEffect, useRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
@@ -216,6 +216,44 @@ const IssueFronts = ({
 		maxToRenderPerBatch: 1,
 	};
 
+	const renderItem = useCallback(
+		({ item }: { item: any }) => (
+			<Front
+				localIssueId={issue.localId}
+				publishedIssueId={issue.publishedId}
+				articleNavigator={frontSpecs}
+				frontData={item}
+				cards={item.cards}
+				key={item.key}
+			/>
+		),
+		[frontSpecs, issue.localId, issue.publishedId],
+	);
+
+	const FooterComponent = React.memo(() => (
+		<>
+			<View style={[styles.illustrationPosition]}>
+				{selectedEdition &&
+					selectedEdition.edition === BASE_EDITION.edition && (
+						<Image
+							style={styles.illustrationImage}
+							resizeMode={'contain'}
+							source={require('src/assets/images/privacy.png')}
+						/>
+					)}
+			</View>
+			<View style={{ height: container.height / 3 }} />
+		</>
+	));
+
+	const getItemLayout = (_: any, index: number) => ({
+		length: card.height + SLIDER_FRONT_HEIGHT,
+		offset:
+			(card.height + SLIDER_FRONT_HEIGHT) * index +
+			(useIsWeatherActuallyShown ? WEATHER_HEIGHT : EMPTY_WEATHER_HEIGHT),
+		index,
+	});
+
 	/* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
 	return (
 		<FlatList
@@ -227,45 +265,13 @@ const IssueFronts = ({
 			{...flatListOptimisationProps}
 			showsVerticalScrollIndicator={false}
 			scrollEventThrottle={1}
-			ListFooterComponent={() => (
-				<>
-					<View style={[styles.illustrationPosition]}>
-						{selectedEdition &&
-							selectedEdition.edition ===
-								BASE_EDITION.edition && (
-								<Image
-									style={styles.illustrationImage}
-									resizeMode={'contain'}
-									source={require('src/assets/images/privacy.png')}
-								/>
-							)}
-					</View>
-					<View style={{ height: container.height / 3 }} />
-				</>
-			)}
-			getItemLayout={(_: any, index: number) => ({
-				length: card.height + SLIDER_FRONT_HEIGHT,
-				offset:
-					(card.height + SLIDER_FRONT_HEIGHT) * index +
-					(useIsWeatherActuallyShown
-						? WEATHER_HEIGHT
-						: EMPTY_WEATHER_HEIGHT),
-				index,
-			})}
+			ListFooterComponent={FooterComponent}
+			getItemLayout={getItemLayout}
 			keyExtractor={(item) => item.key}
 			data={frontWithCards}
 			style={style}
 			key={width}
-			renderItem={({ item: front }) => (
-				<Front
-					localIssueId={issue.localId}
-					publishedIssueId={issue.publishedId}
-					articleNavigator={frontSpecs}
-					frontData={front}
-					cards={front.cards}
-					key={front.key}
-				/>
-			)}
+			renderItem={renderItem}
 		/>
 	);
 };
