@@ -2,14 +2,6 @@ import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions
 import { defaultSettings } from './settings/defaults';
 import { cacheClearCache } from './storage';
 
-const fetchDeprecationWarning = async (): Promise<{
-	android: string;
-	ios: string;
-}> => {
-	const response = await fetch(defaultSettings.deprecationWarningUrl);
-	return response.json();
-};
-
 const getCacheNumber = async (): Promise<{ cacheClear: string }> => {
 	const response = await fetch(defaultSettings.cacheClearUrl);
 	return response.json();
@@ -45,4 +37,4 @@ const fetchCacheClear = async (): Promise<boolean> => {
 	}
 };
 
-export { fetchCacheClear, fetchDeprecationWarning };
+export { fetchCacheClear };
