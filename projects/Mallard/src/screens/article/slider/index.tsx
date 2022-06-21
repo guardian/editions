@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import ViewPagerAndroid from 'react-native-pager-view';
+import { PagerView } from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
@@ -63,7 +63,7 @@ const ArticleSlider = React.memo(
 			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
 
 		const { width } = useDimensions();
-		const viewPagerRef = useRef<ViewPagerAndroid | null>();
+		const viewPagerRef = useRef<PagerView | null>();
 
 		const { isPreview } = useApiUrl();
 
@@ -136,7 +136,7 @@ const ArticleSlider = React.memo(
 
 		return (
 			<>
-				<ViewPagerAndroid
+				<PagerView
 					style={styles.androidPager}
 					initialPage={startingPoint}
 					ref={(viewPager) => {
@@ -157,6 +157,9 @@ const ArticleSlider = React.memo(
 						slideToFrontFor(newIndex);
 						setPosition(newIndex);
 					}}
+					scrollEnabled
+					offscreenPageLimit={5}
+					overScrollMode="never"
 				>
 					{flattenedArticles.map((item, index) => (
 						<View key={index}>
@@ -178,7 +181,7 @@ const ArticleSlider = React.memo(
 							) : null}
 						</View>
 					))}
-				</ViewPagerAndroid>
+				</PagerView>
 
 				<SliderHeaderHighEnd
 					isShown={shouldShowHeader}
