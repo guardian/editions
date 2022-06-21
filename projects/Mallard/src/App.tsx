@@ -29,7 +29,6 @@ import { NetInfoProvider } from './hooks/use-net-info-provider';
 import { SettingsOverlayProvider } from './hooks/use-settings-overlay';
 import { ToastProvider } from './hooks/use-toast';
 import { WeatherProvider } from './hooks/use-weather-provider';
-import { DeprecateVersionModal } from './screens/deprecate-screen';
 import { remoteConfigService } from './services/remote-config';
 
 remoteConfigService.init();
@@ -82,7 +81,6 @@ const App = () => {
 					</View>
 					<ModalRenderer />
 					<BugButtonHandler />
-					<DeprecateVersionModal />
 				</AccessProvider>
 			</WithProviders>
 		</ErrorBoundary>

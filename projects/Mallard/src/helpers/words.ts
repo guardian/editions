@@ -208,11 +208,6 @@ export const Weather = {
 	cancelButton: 'No thanks',
 };
 
-export const DeprecateModal = {
-	title: 'This version of the Editions app is no longer supported',
-	subtitle: 'Please go to the %storeLink% to update to the latest version',
-};
-
 export const WeatherConsentHtml = {
 	content: `<h2>Location-based weather</h2>
 <p>
@@ -259,6 +254,5 @@ export const Copy = {
 	weather: Weather,
 	subscriptionDetails: SubscriptionDetails,
 	authSwitcherScreen: AuthSwitcherScreen,
-	deprecateModal: DeprecateModal,
 	weatherConsentHtml: WeatherConsentHtml,
 };
