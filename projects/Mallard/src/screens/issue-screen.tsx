@@ -209,12 +209,14 @@ const IssueFronts = ({
 			},
 		);
 
+	const memoisedIssueToFronts = useMemo(
+		() => issueToFronts(),
+		[issue.localId, issue.publishedId, issue.fronts[0].id],
+	);
+
 	const { frontWithCards, frontSpecs } = isPreview
 		? issueToFronts()
-		: useMemo(
-				() => issueToFronts(),
-				[issue.localId, issue.publishedId, issue.fronts[0].id],
-		  );
+		: memoisedIssueToFronts;
 
 	useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref);
 	const largeDeviceMemory = useLargeDeviceMemory();
