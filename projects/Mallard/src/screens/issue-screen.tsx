@@ -174,8 +174,6 @@ const IssueFronts = ({
 			frontSpecs: FrontSpec[];
 		}>(
 			(acc, front) => {
-				front.displayName === 'Top stories' &&
-					console.log(front.displayName);
 				const flatCollections = flattenCollectionsToCards(
 					front.collections,
 				);
