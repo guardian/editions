@@ -1,11 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+import type { FlatList } from 'react-native';
 import type { ArticlePillar, Front as FrontType, Issue } from 'src/common';
 import { ArticleType } from 'src/common';
 import { clamp } from 'src/helpers/math';
 import type { FlatCard } from 'src/helpers/transform';
 import { getColor } from 'src/helpers/transform';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
+import { useIssue } from 'src/hooks/use-issue-provider';
 import type { ArticleNavigator } from 'src/screens/article-screen';
 import { issueDateFromId } from 'src/screens/article/slider/slider-helpers';
 import { SliderTitle } from 'src/screens/article/slider/SliderTitle';
@@ -70,6 +72,8 @@ export const Front = React.memo(
 		const stops = cards.length;
 		const { card, container } = useIssueScreenSize();
 		const largeDeviceMemory = useLargeDeviceMemory();
+		const ref = useRef<FlatList<FlatCard[]> | null>(null);
+		const { issueId } = useIssue();
 		const flatListOptimisationProps = largeDeviceMemory
 			? {
 					windowSize: 3,
@@ -85,6 +89,13 @@ export const Front = React.memo(
 		const [cardIndex, setCardIndex] = useState(0);
 		const [position, setPosition] =
 			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
+
+		useEffect(() => {
+			// Reset Front Positioning when the issue changes
+			setCardIndex(0);
+			setPosition(new Animated.Value(0));
+			ref.current?.scrollToIndex({ animated: false, index: 0 });
+		}, [issueId.publishedIssueId, issueId.localIssueId]);
 
 		const renderItem = useCallback(
 			({ item }: { item: FlatCard }) => (
@@ -169,6 +180,7 @@ export const Front = React.memo(
 				}
 			>
 				<Animated.FlatList
+					ref={ref}
 					showsHorizontalScrollIndicator={false}
 					// These three props are responsible for the majority of
 					// performance improvements
