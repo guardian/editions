@@ -5,27 +5,30 @@ import { prepareAndDownloadTodaysIssue } from 'src/download-edition/prepare-and-
 import { pushDownloadFailsafe } from 'src/helpers/push-download-failsafe';
 import { pushNotificationRegistration } from 'src/notifications/push-notifications';
 import { useAppState } from './use-app-state-provider';
-import { useLargeDeviceMemory } from './use-config-provider';
+import { useApiUrl, useLargeDeviceMemory } from './use-config-provider';
 import { useNetInfo } from './use-net-info-provider';
 
 export const useIssueDownloads = () => {
+	const { isPreview } = useApiUrl();
 	const { downloadBlocked } = useNetInfo();
 	const { isActive } = useAppState();
 	const largeRAM = useLargeDeviceMemory();
 
 	useEffect(() => {
-		prepareAndDownloadTodaysIssue(downloadBlocked);
-		// On mount, if there is plenty of memory then setup the failsafe for push downloads
-		if (largeRAM) {
-			pushDownloadFailsafe(downloadBlocked);
+		if (!isPreview) {
+			prepareAndDownloadTodaysIssue(downloadBlocked);
+			// On mount, if there is plenty of memory then setup the failsafe for push downloads
+			if (largeRAM) {
+				pushDownloadFailsafe(downloadBlocked);
+			}
+			// Initial app registration for Push Notifications
+			pushNotificationRegistration(downloadBlocked);
 		}
-		// Initial app registration for Push Notifications
-		pushNotificationRegistration(downloadBlocked);
 	}, []);
 
 	useEffect(() => {
 		// we check the value so that we dont run the function if it changes from true to false.
-		if (isActive) {
+		if (isActive && !isPreview) {
 			prepareAndDownloadTodaysIssue(downloadBlocked);
 		}
 	}, [isActive]);
