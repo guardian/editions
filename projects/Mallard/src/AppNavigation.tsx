@@ -5,8 +5,9 @@ import {
 	createStackNavigator,
 	TransitionPresets,
 } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Animated } from 'react-native';
+import { PERMISSIONS, request } from 'react-native-permissions';
 import { LoadingScreen } from './components/LoadingScreen/LoadingScreen';
 import { useIsOnboarded } from './hooks/use-onboarding';
 import type {
@@ -108,6 +109,9 @@ const OnboardingStack = () => {
 };
 
 const MainStack = () => {
+	useEffect(() => {
+		request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
+	}, []);
 	return (
 		<Main.Navigator
 			initialRouteName={RouteNames.Home}

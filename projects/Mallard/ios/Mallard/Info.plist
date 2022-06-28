@@ -76,6 +76,8 @@
 	<string>Location-based weather</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location-based weather</string>
+	<key>NSUserTrackingUsageDescription</key>
+  	<string>Whilst no ad tracking is used, we are adding this in to comply with Apple guidelines</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GHGuardianHeadline-Black.ttf</string>

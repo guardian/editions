@@ -74,7 +74,9 @@ PODS:
     - nanopb/encode (= 2.30907.0)
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
-  - Permission-LocationWhenInUse (2.2.2):
+  - Permission-AppTrackingTransparency (3.3.1):
+    - RNPermissions
+  - Permission-LocationWhenInUse (3.3.1):
     - RNPermissions
   - PromisesObjC (1.2.12)
   - RCT-Folly (2021.06.28.00-v2):
@@ -420,7 +422,7 @@ PODS:
     - React
   - RNLocalize (1.4.3):
     - React-Core
-  - RNPermissions (2.2.2):
+  - RNPermissions (3.3.1):
     - React-Core
   - RNReanimated (1.13.4):
     - React-Core
@@ -458,7 +460,8 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (~> 0.9.0)
   - libevent (~> 2.1.12)
-  - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec`)
+  - Permission-AppTrackingTransparency (from `../node_modules/react-native-permissions/ios/AppTrackingTransparency`)
+  - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -554,8 +557,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-AppTrackingTransparency:
+    :path: "../node_modules/react-native-permissions/ios/AppTrackingTransparency"
   Permission-LocationWhenInUse:
-    :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec"
+    :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -695,7 +700,8 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
-  Permission-LocationWhenInUse: 871e81c06c1fc578353fce962d5d8e6efa697f1a
+  Permission-AppTrackingTransparency: 507f031f783885aad86f5754bd23edba587b2125
+  Permission-LocationWhenInUse: 006c85c8de0c05b5d8be8e8029e4f6b813270293
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 0aa6c1c27e1d65920df35ceea5341a5fe76bdb79
@@ -749,7 +755,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: 3ff3a3b8f458aaf25aaee879d057352862edf357
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
-  RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+  RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSentry: 97bc62fa65b7d663daee16fbf9771470852217cf
@@ -761,6 +767,6 @@ SPEC CHECKSUMS:
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: d6b6a80659aa3e91aaba01d0012e7edcbedcbecd
 
-PODFILE CHECKSUM: 1ae0e27f454d2ea6a5f908ee595a12d45766867f
+PODFILE CHECKSUM: 60f20a47737a5ce444159630863e0c541b265e7d
 
 COCOAPODS: 1.10.1

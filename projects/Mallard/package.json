@@ -86,7 +86,7 @@
     "react-native-keychain": "6.2.0",
     "react-native-localize": "^1.4.0",
     "react-native-pager-view": "^5.4.11",
-    "react-native-permissions": "^2.0.3",
+    "react-native-permissions": "^3.3.1",
     "react-native-progress-circle": "^2.1.0",
     "react-native-push-notification": "^7.0.0",
     "react-native-reanimated": "^1.13.4",
