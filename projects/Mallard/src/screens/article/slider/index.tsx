@@ -142,6 +142,7 @@ const ArticleSlider = React.memo(
 					ref={(viewPager) => {
 						viewPagerRef.current = viewPager;
 					}}
+					scrollSensitivity={5}
 					onPageSelected={(ev: any) => {
 						onShouldShowHeaderChange(true);
 						const newIndex = ev.nativeEvent.position;
