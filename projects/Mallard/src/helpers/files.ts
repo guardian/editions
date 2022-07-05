@@ -118,6 +118,7 @@ export const isIssueOnDevice = async (
 			RNFS.exists(FSPaths.mediaRoot(localIssueId)),
 			RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/front`),
 			RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
+			RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/html`),
 		])
 	).every((_) => _);
 
