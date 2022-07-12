@@ -13,7 +13,6 @@ import {
     MediaAtomElement,
     TrailImage,
 } from '../common'
-import { elementParser } from './elements'
 import fetch from 'node-fetch'
 import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
@@ -97,7 +96,6 @@ const parseArticleResult = async (
 
     const atomData = rationaliseAtoms(result.atoms)
 
-    const parser = elementParser(path, atomData)
     const kicker = kickerPicker(result, title)
 
     const articleType = articleTypePicker(result)
@@ -124,14 +122,6 @@ const parseArticleResult = async (
     const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
     if (body == null) throw new Error(`Body was undefined in ${path}!`)
 
-    const elements = await attempt(Promise.all(body.map(parser)))
-    if (hasFailed(elements)) {
-        console.error(elements)
-        throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
-    }
-
-    if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
-
     const webUrl = !isFromPrint ? result.webUrl : undefined
 
     switch (result.type) {
@@ -152,7 +142,6 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     bylineImages,
                     standfirst: trail || '',
-                    elements,
                     starRating,
                     mainMedia: getMainMediaAtom(result.blocks),
                     isFromPrint,
@@ -177,7 +166,6 @@ const parseArticleResult = async (
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
-                    elements,
                     isFromPrint,
                     webUrl,
                     internalPageCode,
@@ -201,7 +189,6 @@ const parseArticleResult = async (
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
-                    elements,
                     isFromPrint,
                     webUrl,
                     internalPageCode,
@@ -270,18 +257,6 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     headerType: headerType,
-                    elements: [
-                        {
-                            id: 'html',
-                            html: `We can't render content type ${
-                                ContentType[result.type]
-                            } currently`,
-                        },
-                        {
-                            id: 'html',
-                            html: `<pre>${JSON.stringify(result.apiUrl)}</pre>`,
-                        },
-                    ],
                     isFromPrint,
                     webUrl,
                     internalPageCode,

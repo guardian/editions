@@ -156,16 +156,6 @@ const commonFields = (
     }
 }
 
-export const patchArticleElements = (article: {
-    articleType?: ArticleType
-    elements: BlockElement[]
-}): BlockElement[] => {
-    const [head, ...tail] = article.elements
-    return !articleShouldHaveDropCap(article) || !isHTMLElement(head)
-        ? article.elements
-        : [{ ...head, hasDropCap: true }, ...tail]
-}
-
 export const patchArticle = (
     article: CAPIContent,
     furniture: PublishedFurniture,
@@ -213,7 +203,6 @@ export const patchArticle = (
                 {
                     ...article,
                     ...fields,
-                    elements: patchArticleElements(article),
                     byline: fields.byline || '',
                     sportScore,
                 },

@@ -48,7 +48,6 @@ const Article = ({
     byline = 'Mr CAPI',
     bylineHtml = '<a>Mr CAPI</a> Senior Correspondent',
     standfirst = 'This story is great',
-    elements = [],
     starRating,
 
     ...contentFields
@@ -60,7 +59,6 @@ const Article = ({
     byline,
     bylineHtml,
     standfirst,
-    elements,
     starRating,
 })
 

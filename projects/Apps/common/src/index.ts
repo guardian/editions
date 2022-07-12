@@ -184,7 +184,6 @@ export interface Article extends Content {
     byline: string
     bylineHtml: string
     standfirst: string
-    elements: BlockElement[]
     starRating?: number
     sportScore?: string
     mainMedia?: MediaAtomElement
@@ -198,12 +197,10 @@ export interface CrosswordArticle extends Content {
 
 export interface GalleryArticle extends Content {
     type: 'gallery'
-    elements: BlockElement[]
 }
 
 export interface PictureArticle extends Content {
     type: 'picture'
-    elements: BlockElement[]
 }
 
 export type CAPIArticle =
