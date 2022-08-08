@@ -2,11 +2,16 @@ import { color, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { AppLogo } from './AppLogo';
+import { Bug } from './Bug';
+import { BurgerMenu } from './BurgerMenu';
 import { Editions } from './Editions';
+import { EditionsMenu } from './EditionsMenu';
 import { LeftChevron } from './LeftChevron';
 import { Newspaper } from './Newspaper';
 import { Quote } from './Quote';
 import { RightChevron } from './RightChevron';
+import { SettingsCog } from './SettingsCog';
 
 const styles = StyleSheet.create({
 	icon: {
@@ -44,6 +49,26 @@ storiesOf('Icons', module)
 			<View style={styles.icon}>
 				<Editions />
 				<Text style={styles.label}>Editions</Text>
+			</View>
+			<View style={styles.icon}>
+				<AppLogo />
+				<Text style={styles.label}>App Logo</Text>
+			</View>
+			<View style={styles.icon}>
+				<Bug />
+				<Text style={styles.label}>Bug</Text>
+			</View>
+			<View style={styles.icon}>
+				<BurgerMenu />
+				<Text style={styles.label}>BurgerMenu</Text>
+			</View>
+			<View style={styles.icon}>
+				<EditionsMenu />
+				<Text style={styles.label}>EditionsMenu</Text>
+			</View>
+			<View style={styles.icon}>
+				<SettingsCog />
+				<Text style={styles.label}>SettingsCog</Text>
 			</View>
 		</>
 	));
