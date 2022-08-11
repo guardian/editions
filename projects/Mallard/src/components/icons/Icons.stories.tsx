@@ -3,7 +3,6 @@ import { storiesOf } from '@storybook/react-native';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AppLogo } from './AppLogo';
-import { Bug } from './Bug';
 import { BurgerMenu } from './BurgerMenu';
 import { Editions } from './Editions';
 import { EditionsMenu } from './EditionsMenu';
@@ -53,10 +52,6 @@ storiesOf('Icons', module)
 			<View style={styles.icon}>
 				<AppLogo />
 				<Text style={styles.label}>App Logo</Text>
-			</View>
-			<View style={styles.icon}>
-				<Bug />
-				<Text style={styles.label}>Bug</Text>
 			</View>
 			<View style={styles.icon}>
 				<BurgerMenu />
