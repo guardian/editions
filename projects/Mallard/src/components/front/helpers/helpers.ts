@@ -1,18 +1,11 @@
 import type { FunctionComponent } from 'react';
-import type { Animated, FlatList } from 'react-native';
-import type { Front, Rectangle, Size } from 'src/common';
+import type { Rectangle, Size } from 'src/common';
 import { PageLayoutSizes } from 'src/common';
-import { safeInterpolation } from 'src/helpers/math';
 import { useArticle } from 'src/hooks/use-article';
 import { useAppAppearance } from 'src/theme/appearance';
-import { metrics } from 'src/theme/spacing';
 import type { PropTypes } from '../items/helpers/item-tappable';
 
 export type Item = FunctionComponent<PropTypes>;
-
-export interface AnimatedFlatListRef {
-	_component: FlatList<Front['collections'][0]>;
-}
 
 export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
 	if (size === PageLayoutSizes.tablet) {
@@ -47,26 +40,6 @@ export const toAbsoluteRectangle = (
 	top: rectangle.top * cardSize.height,
 	height: rectangle.height * cardSize.height,
 });
-
-export const getTranslateForPage = (
-	width: number,
-	scrollX: Animated.Value,
-	page: number,
-	multiplier = 1,
-) => {
-	return scrollX.interpolate({
-		inputRange: safeInterpolation([
-			width * (page - 1),
-			width * page,
-			width * (page + 1),
-		]),
-		outputRange: safeInterpolation([
-			metrics.fronts.sides * (-1.75 * multiplier),
-			0,
-			metrics.fronts.sides * (1.75 * multiplier),
-		]),
-	});
-};
 
 /*get the card bg */
 export const useCardBackgroundStyle = () => {

@@ -4,13 +4,12 @@ import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { RESULTS } from 'react-native-permissions';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
+import { RenderHTMLwithScrollView } from 'src/components/RenderHTML/RenderHTML';
 import { requestLocationPermission } from 'src/helpers/location-permission';
-import { html } from 'src/helpers/webview';
 import { Copy } from 'src/helpers/words';
 import { useIsWeatherShown, useWeather } from 'src/hooks/use-weather-provider';
 import { getGeolocation } from 'src/hooks/use-weather-provider/utils';
 import { metrics } from 'src/theme/spacing';
-import { DefaultInfoTextWebview } from './settings/default-info-text-webview';
 
 const styles = StyleSheet.create({
 	button: {
@@ -73,9 +72,7 @@ const WeatherGeolocationConsentScreen = () => {
 
 	return (
 		<HeaderScreenContainer actionLeft={false} actionRight title={''}>
-			<DefaultInfoTextWebview
-				html={html` ${Copy.weatherConsentHtml.content} `}
-			/>
+			<RenderHTMLwithScrollView html={Copy.weatherConsentHtml.content} />
 			<View style={styles.buttons}>
 				<Button
 					appearance={ButtonAppearance.SkeletonBlue}
