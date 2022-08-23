@@ -67,8 +67,6 @@ const pushNotificationRegistrationCache =
 		'push-notification-registration-cache',
 	);
 
-const cacheClearCache = createAsyncCache<string>('cacheClear');
-
 const validAttemptCache = createAsyncCache<number>('validAttempt-cache');
 
 const loggingQueueCache = createAsyncCache<string>('loggingQueue');
@@ -181,7 +179,6 @@ export {
 	legacyCASUsernameCache,
 	legacyCASPasswordCache,
 	iapReceiptCache,
-	cacheClearCache,
 	validAttemptCache,
 	loggingQueueCache,
 	selectedEditionCache,

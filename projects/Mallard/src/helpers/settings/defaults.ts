@@ -3,7 +3,6 @@ import type { ConfigState } from 'src/hooks/use-config-provider';
 
 interface Settings {
 	notificationServiceRegister: string;
-	cacheClearUrl: string;
 	editionsUrl: string;
 	storeDetails: {
 		ios: string;
@@ -119,7 +118,6 @@ export const defaultSettings: Settings = {
 	notificationServiceRegister: __DEV__
 		? notificationServiceRegister.code
 		: notificationServiceRegister.prod,
-	cacheClearUrl: apiUrl + 'cache-clear',
 	editionsUrl: apiUrl + 'editions',
 	issuesPath: '/issues',
 	storeDetails,
