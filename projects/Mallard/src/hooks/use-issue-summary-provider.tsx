@@ -101,7 +101,6 @@ export const IssueSummaryProvider = ({
 	// Use Callback used so the function isnt recreated on each rerender
 	// @TODO: Look to move this logic outside of the provider so it can be tested
 	const getLatestIssueSummary = useCallback(() => {
-		setIsLoading(true);
 		return getIssueSummary(isConnected, isPoorConnection)
 			.then((retrievedIssueSummary) => {
 				setIssueSummary(retrievedIssueSummary);
@@ -139,19 +138,19 @@ export const IssueSummaryProvider = ({
 						e.message = `Unable to get backup issue summary: ${e.message}`;
 						errorService.captureException(e);
 					});
-			})
-			.finally(() => setIsLoading(false));
+			});
 	}, [isConnected, isPoorConnection, selectedEdition, maxAvailableEditions]);
 
 	// On load, get the latest issue summary
 	useEffect(() => {
-		!isLoading && getLatestIssueSummary();
+		getLatestIssueSummary();
 	}, []);
 
 	// When the network status, max available editions or app state changes
 	useEffect(() => {
 		if (isActive && !isLoading) {
-			getLatestIssueSummary();
+			setIsLoading(true);
+			getLatestIssueSummary().finally(() => setIsLoading(false));
 		}
 	}, [isConnected, isPoorConnection, maxAvailableEditions, isActive]);
 
