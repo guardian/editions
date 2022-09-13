@@ -240,6 +240,14 @@ export const WeatherConsentHtml = {
 `,
 };
 
+const ExternalSubscription = {
+	title: "You're about to leave the app and go to an external website. You will no longer be transacting with Apple.",
+	body: 'Any accounts or purchases made outside of this app will be managed by the developer "Guardian News and Media Limited" Your App Store account, stored payment method, and related features, such as subscription management and refund requests, will not be available. Apple is not responsible for the privacy or security of transactions made with this developer.',
+	learnMore: 'Learn More',
+	continue: 'Continue',
+	cancel: 'Cancel',
+};
+
 export const Copy = {
 	signIn: SignIn,
 	failedSignIn: FailedSignIn,
@@ -255,4 +263,5 @@ export const Copy = {
 	subscriptionDetails: SubscriptionDetails,
 	authSwitcherScreen: AuthSwitcherScreen,
 	weatherConsentHtml: WeatherConsentHtml,
+	externalSubscription: ExternalSubscription,
 };

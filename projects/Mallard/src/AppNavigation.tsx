@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/stack';
 import React from 'react';
 import { Animated } from 'react-native';
+import { isTablet } from 'react-native-device-info';
 import { LoadingScreen } from './components/LoadingScreen/LoadingScreen';
 import { useIsOnboarded } from './hooks/use-onboarding';
 import type {
@@ -18,6 +19,7 @@ import type {
 import { RouteNames } from './navigation/NavigationModels';
 import { ArticleWrapper } from './navigation/navigators/article';
 import { EditionsMenuScreen } from './screens/editions-menu-screen';
+import { ExternalSubscriptionScreen } from './screens/external-subscription';
 import { HomeScreen } from './screens/home-screen';
 import { AuthSwitcherScreen } from './screens/identity-login-screen';
 import { InAppPurchaseScreen } from './screens/in-app-purchase-screen';
@@ -49,6 +51,12 @@ import { WeatherGeolocationConsentScreen } from './screens/weather-geolocation-c
 import { color } from './theme/color';
 
 const { multiply } = Animated;
+
+const forFade = ({ current }: StackCardInterpolationProps) => ({
+	cardStyle: {
+		opacity: current.progress,
+	},
+});
 
 const cardStyleInterpolator = (props: StackCardInterpolationProps) => {
 	const translateX = multiply(
@@ -166,6 +174,25 @@ const MainStack = () => {
 				options={{
 					...TransitionPresets.ModalSlideFromBottomIOS,
 				}}
+			/>
+			<Main.Screen
+				name={RouteNames.ExternalSubscription}
+				component={ExternalSubscriptionScreen}
+				options={
+					isTablet()
+						? {
+								cardStyle: {
+									backgroundColor: 'rgba(0,0,0,0.6)',
+								},
+								cardStyleInterpolator: forFade,
+						  }
+						: {
+								cardStyleInterpolator:
+									CardStyleInterpolators.forModalPresentationIOS,
+								gestureEnabled: true,
+								gestureDirection: 'vertical',
+						  }
+				}
 			/>
 		</Main.Navigator>
 	);
