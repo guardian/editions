@@ -1,6 +1,7 @@
 import React from 'react';
-import type { ImageStyle, StyleProp } from 'react-native';
+import type { StyleProp } from 'react-native';
 import { View } from 'react-native';
+import type { ImageStyle } from 'react-native-fast-image';
 import FastImage from 'react-native-fast-image';
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio';
 import { useImagePath } from 'src/hooks/use-image-paths';
@@ -40,7 +41,7 @@ const ImageResource = ({
 			key={imagePath}
 			{...props}
 			resizeMode={FastImage.resizeMode.cover}
-			style={[styles, style]}
+			style={[styles, style] as StyleProp<ImageStyle>}
 			source={{ uri: imagePath }}
 		/>
 	) : (

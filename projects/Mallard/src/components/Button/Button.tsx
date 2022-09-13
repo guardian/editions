@@ -232,7 +232,7 @@ const Button = ({
 							textStyles,
 						]}
 					>
-						{innards.children}
+						{innards.children as string | string[]}
 					</UiBodyCopy>
 				)}
 				{iconPosition === 'right' && icon}
