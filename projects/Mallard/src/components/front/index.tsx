@@ -72,7 +72,7 @@ export const Front = React.memo(
 		const stops = cards.length;
 		const { card, container } = useIssueScreenSize();
 		const largeDeviceMemory = useLargeDeviceMemory();
-		const ref = useRef<FlatList<FlatCard[]> | null>(null);
+		const ref = useRef<FlatList | null>(null);
 		const { issueId } = useIssue();
 		const flatListOptimisationProps = largeDeviceMemory
 			? {
@@ -98,7 +98,7 @@ export const Front = React.memo(
 		}, [issueId.publishedIssueId, issueId.localIssueId]);
 
 		const renderItem = useCallback(
-			({ item }: { item: FlatCard }) => (
+			({ item }: { item: any }) => (
 				<CollectionPageInFront
 					articlesInCard={item.articles || []}
 					appearance={item.appearance}
@@ -131,7 +131,7 @@ export const Front = React.memo(
 			></View>
 		));
 
-		const getItemLayout = (_: never, index: number) => ({
+		const getItemLayout = (_: any, index: number) => ({
 			length: card.width,
 			offset: card.width * index,
 			index,
@@ -193,7 +193,7 @@ export const Front = React.memo(
 					decelerationRate="fast"
 					snapToInterval={card.width}
 					getItemLayout={getItemLayout}
-					keyExtractor={(item: FlatCard, index: number) =>
+					keyExtractor={(item, index) =>
 						`${index}${item.collection.key}`
 					}
 					ListFooterComponent={ListFooterComponent}

@@ -46,6 +46,7 @@ export type MainStackParamList = {
 	EditionsMenu: undefined;
 	Lightbox: LightboxNavigationProps;
 	Crossword: ArticleNavigationProps;
+	ExternalSubscription: undefined;
 };
 
 // This is used on pages which include both main and root stacks
@@ -83,4 +84,5 @@ export enum RouteNames {
 	Crossword = 'Crossword',
 	DevZone = 'DevZone',
 	InAppPurchase = 'InAppPurchase',
+	ExternalSubscription = 'ExternalSubscription',
 }

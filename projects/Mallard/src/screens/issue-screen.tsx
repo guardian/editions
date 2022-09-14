@@ -94,7 +94,7 @@ type FrontWithCards = Array<TFront & { cards: FlatCard[] }>;
 const useScrollToFrontBehavior = (
 	frontWithCards: FrontWithCards,
 	initialFrontKey: string | null,
-	ref: MutableRefObject<FlatList<any> | null>,
+	ref: MutableRefObject<FlatList | null>,
 ) => {
 	// Linear search to find the right index to scroll to, front count is bound.
 	const findFrontIndex = (frontKey: string | null | undefined) =>
@@ -155,7 +155,7 @@ const IssueFronts = ({
 }) => {
 	const { container, card } = useIssueScreenSize();
 	const { width } = useDimensions();
-	const ref = useRef<FlatList<any> | null>(null);
+	const ref = useRef<FlatList | null>(null);
 	const { selectedEdition } = useEditions();
 	const { isPreview } = useApiUrl();
 	const weatherResult = useWeather();
