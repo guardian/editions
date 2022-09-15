@@ -161,6 +161,7 @@
 		95CB9F192316B6E900F2F6B0 /* Ophan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ophan.m; sourceTree = "<group>"; };
 		95CB9F1D2316C53F00F2F6B0 /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/debugFramework/ophan.framework; sourceTree = "<group>"; };
 		95FF359624F6AC62003425F7 /* ImagesEditions.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ImagesEditions.xcassets; path = Mallard/ImagesEditions.xcassets; sourceTree = "<group>"; };
+		978A225928D1D5D600CC19CB /* ExternalLink */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExternalLink; sourceTree = SOURCE_ROOT; };
 		A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mallard-Bridging-Header.h"; sourceTree = "<group>"; };
 		A13D0DC12316783B00505524 /* ReleaseStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseStream.swift; sourceTree = "<group>"; };
 		A13D0DC323167BB400505524 /* ReleaseStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReleaseStream.m; sourceTree = "<group>"; };
@@ -323,6 +324,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				978A225928D1D5D600CC19CB /* ExternalLink */,
 				896089CD248679CF00DCBF7D /* GoogleService-Info.plist */,
 				4F62AA35231E8D660052ADBA /* ophan.framework */,
 				A10F237623191F62004C70CC /* ReleaseStream */,
