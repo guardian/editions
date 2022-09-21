@@ -30,7 +30,7 @@ kotlin {
 
     def coroutinesVersion = "1.3.0"
     def ktorVersion = "1.2.3"
-    def multiplatformOphanVersion = "0.1.12"
+    def multiplatformOphanVersion = "0.2.0"
 
     sourceSets {
         commonMain {
