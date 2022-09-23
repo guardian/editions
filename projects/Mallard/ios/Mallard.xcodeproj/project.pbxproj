@@ -25,6 +25,8 @@
 		95B08634238D6EEA00828D1E /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
 		95FF359724F6AC62003425F7 /* ImagesEditions.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FF359624F6AC62003425F7 /* ImagesEditions.xcassets */; };
+		97D7B63D28DC455400C03736 /* ExternalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D7B63C28DC455400C03736 /* ExternalLink.swift */; };
+		97D7B63F28DC45A000C03736 /* ExternalLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 97D7B63E28DC45A000C03736 /* ExternalLink.m */; };
 		9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */; };
 		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
 		A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC323167BB400505524 /* ReleaseStream.m */; };
@@ -161,7 +163,8 @@
 		95CB9F192316B6E900F2F6B0 /* Ophan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ophan.m; sourceTree = "<group>"; };
 		95CB9F1D2316C53F00F2F6B0 /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/debugFramework/ophan.framework; sourceTree = "<group>"; };
 		95FF359624F6AC62003425F7 /* ImagesEditions.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ImagesEditions.xcassets; path = Mallard/ImagesEditions.xcassets; sourceTree = "<group>"; };
-		978A225928D1D5D600CC19CB /* ExternalLink */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExternalLink; sourceTree = SOURCE_ROOT; };
+		97D7B63C28DC455400C03736 /* ExternalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExternalLink.swift; path = Mallard/ExternalLink/ExternalLink.swift; sourceTree = "<group>"; };
+		97D7B63E28DC45A000C03736 /* ExternalLink.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ExternalLink.m; path = Mallard/ExternalLink/ExternalLink.m; sourceTree = "<group>"; };
 		A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mallard-Bridging-Header.h"; sourceTree = "<group>"; };
 		A13D0DC12316783B00505524 /* ReleaseStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseStream.swift; sourceTree = "<group>"; };
 		A13D0DC323167BB400505524 /* ReleaseStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReleaseStream.m; sourceTree = "<group>"; };
@@ -324,7 +327,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				978A225928D1D5D600CC19CB /* ExternalLink */,
+				97D7B63C28DC455400C03736 /* ExternalLink.swift */,
+				97D7B63E28DC45A000C03736 /* ExternalLink.m */,
 				896089CD248679CF00DCBF7D /* GoogleService-Info.plist */,
 				4F62AA35231E8D660052ADBA /* ophan.framework */,
 				A10F237623191F62004C70CC /* ReleaseStream */,
@@ -833,12 +837,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97D7B63F28DC45A000C03736 /* ExternalLink.m in Sources */,
 				950E1C012317E06F00F38B92 /* Ophan.swift in Sources */,
 				9553F9242396A2B700AB0CA3 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */,
+				97D7B63D28DC455400C03736 /* ExternalLink.swift in Sources */,
 				A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
