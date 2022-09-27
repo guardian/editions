@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform, Settings } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import type { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer';
