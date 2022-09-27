@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { largeDeviceMemory } from 'src/hooks/use-config-provider';
 import { getDefaultEditionSlug } from 'src/hooks/use-edition-provider';
 import type { IsWeatherShown } from 'src/hooks/use-weather-provider';

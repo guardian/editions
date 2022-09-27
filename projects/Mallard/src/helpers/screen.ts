@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { largeDeviceMemory } from 'src/hooks/use-config-provider';
