@@ -225,16 +225,17 @@ const IssueFronts = ({
 	};
 
 	const renderItem = useCallback(
-		({ item }: { item: any }) => (
-			<Front
-				localIssueId={issue.localId}
-				publishedIssueId={issue.publishedId}
-				articleNavigator={frontSpecs}
-				frontData={item}
-				cards={item.cards}
-				key={item.key}
-			/>
-		),
+		({ item }: { item: any }) =>
+			item.cards.length > 0 ? (
+				<Front
+					localIssueId={issue.localId}
+					publishedIssueId={issue.publishedId}
+					articleNavigator={frontSpecs}
+					frontData={item}
+					cards={item.cards}
+					key={item.key}
+				/>
+			) : null,
 		[frontSpecs, issue.localId, issue.publishedId],
 	);
 
