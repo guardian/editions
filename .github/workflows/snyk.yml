@@ -10,5 +10,6 @@ jobs:
       DEBUG: true
       ORG: guardian-test
       SKIP_NODE: false
+      NODE_PACKAGE_JSON_FILES_MISSING_LOCK: projects/Mallard/package.json
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
