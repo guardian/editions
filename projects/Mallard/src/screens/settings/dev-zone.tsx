@@ -14,11 +14,7 @@ import { Footer, Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
-import {
-	externalLinkCanOpen,
-	externalLinkOpen,
-	useExternalLink,
-} from 'src/helpers/external-link';
+import { useExternalLink } from 'src/helpers/external-link';
 import { getFileList, getIssuesCountStrings } from 'src/helpers/files';
 import { locale } from 'src/helpers/locale';
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream';
