@@ -10,6 +10,6 @@ jobs:
       DEBUG: true
       ORG: guardian-test
       SKIP_NODE: false
-      NODE_PACKAGE_JSON_FILES_MISSING_LOCK: projects/Mallard/package.json
+      NODE_PACKAGE_JSON_FILES_MISSING_LOCK: projects/Mallard/package.json # not missing lock but seemingly needs to be installed for gradle build to work
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
