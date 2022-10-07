@@ -7,7 +7,7 @@ import React, {
 	useState,
 } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
-import ProgressCircle from 'react-native-progress-circle';
+import { CircularProgressBase } from 'react-native-circular-progress-indicator';
 import type { IssueSummary } from 'src/common';
 import { Highlight } from 'src/components/highlight';
 import {
@@ -179,17 +179,19 @@ const IssueButton = ({
 	};
 
 	return (
-		<ProgressCircle
-			percent={dlStatus ? getStatusPercentage(dlStatus) ?? 100 : 100}
+		<CircularProgressBase
+			value={dlStatus ? getStatusPercentage(dlStatus) ?? 100 : 100}
+			maxValue={100}
 			radius={20}
-			bgColor={
+			circleBackgroundColor={
 				isOnDevice === ExistsStatus.DoesExist
 					? color.primary
 					: undefined
 			}
-			borderWidth={2}
-			shadowColor="#ccc"
-			color={color.primary}
+			activeStrokeWidth={2}
+			inActiveStrokeWidth={1}
+			activeStrokeColor={color.primary}
+			inActiveStrokeColor="transparent"
 		>
 			<Button
 				accessibilityLabel="Download edition button"
@@ -200,7 +202,7 @@ const IssueButton = ({
 					isOnDevice === ExistsStatus.DoesExist ? '\uE062' : '\uE077'
 				}
 				alt={'Download'}
-				appearance={ButtonAppearance.Skeleton}
+				appearance={ButtonAppearance.SkeletonDownload}
 				textStyles={{
 					color:
 						isOnDevice !== ExistsStatus.DoesExist
@@ -208,7 +210,7 @@ const IssueButton = ({
 							: color.palette.neutral[100],
 				}}
 			/>
-		</ProgressCircle>
+		</CircularProgressBase>
 	);
 };
 

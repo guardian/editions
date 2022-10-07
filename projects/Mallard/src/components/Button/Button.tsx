@@ -19,6 +19,7 @@ export enum ButtonAppearance {
 	Default,
 	Skeleton,
 	SkeletonBlue,
+	SkeletonDownload,
 	Tomato,
 	Apricot,
 	SkeletonLight,
@@ -75,6 +76,14 @@ const getButtonAppearance = (
 				backgroundColor: undefined,
 				borderWidth: 1,
 				borderColor: appAppearance.color,
+			},
+			text: { color: appAppearance.color },
+		}),
+		[ButtonAppearance.SkeletonDownload]: StyleSheet.create({
+			background: {
+				backgroundColor: undefined,
+				borderWidth: 1,
+				borderColor: 'transparent',
 			},
 			text: { color: appAppearance.color },
 		}),
