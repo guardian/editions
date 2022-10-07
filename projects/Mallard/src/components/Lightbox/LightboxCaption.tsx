@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
-import HTMLView from 'react-native-htmlview';
+import RenderHtml from 'react-native-render-html';
 import { ArticleTheme } from 'src/components/article/article';
 import { themeColors } from 'src/components/article/helpers/css';
 import { Arrow } from 'src/components/icons/Arrow';
@@ -32,32 +32,29 @@ const styles = StyleSheet.create({
 	},
 });
 
-const captionStyleSheet = (pillarColor: string) => {
-	return StyleSheet.create({
-		caption: {
-			fontFamily: families.sans.regular,
-			color: themeColors(ArticleTheme.Dark).text,
-			fontSize: Platform.OS === 'android' ? 16 : 14,
-		},
-		b: {
-			fontFamily: families.sans.bold,
-			color: themeColors(ArticleTheme.Dark).text,
-		},
-		strong: {
-			fontFamily: families.sans.bold,
-			color: themeColors(ArticleTheme.Dark).text,
-			paddingLeft: 12,
-		},
-		a: {
-			color: pillarColor,
-			textDecorationLine: 'underline',
-			textDecorationColor: pillarColor,
-		},
-		em: {
-			fontFamily: families.sans.regularItalic,
-		},
-	});
-};
+const captionStyleSheet = (pillarColor: string) => ({
+	span: {
+		fontFamily: families.sans.regular,
+		color: themeColors(ArticleTheme.Dark).text,
+		fontSize: Platform.OS === 'android' ? 16 : 14,
+	},
+	b: {
+		fontFamily: families.sans.bold,
+		color: themeColors(ArticleTheme.Dark).text,
+	},
+	strong: {
+		fontFamily: families.sans.bold,
+		color: themeColors(ArticleTheme.Dark).text,
+		paddingLeft: 12,
+	},
+	a: {
+		color: pillarColor,
+		textDecoration: 'underline',
+	},
+	em: {
+		fontFamily: families.sans.regularItalic,
+	},
+});
 
 const LightboxCaption = ({
 	caption,
@@ -70,7 +67,6 @@ const LightboxCaption = ({
 	displayCredit?: boolean;
 	credit?: string;
 }) => {
-	const captionStyles = captionStyleSheet(pillarColor);
 	const captionText = () => {
 		if (displayCredit === true && credit) {
 			return caption + ' ' + credit;
@@ -78,6 +74,12 @@ const LightboxCaption = ({
 			return caption;
 		}
 	};
+
+	const captionStyles = captionStyleSheet(pillarColor);
+	const captionSource = { html: `<span>${captionText()}</span>` };
+	console.log(captionStyles);
+	console.log(captionSource);
+
 	return (
 		<View style={styles.captionWrapper}>
 			<View style={styles.caption}>
@@ -89,9 +91,9 @@ const LightboxCaption = ({
 					/>
 				)}
 				<View style={styles.captionText}>
-					<HTMLView
-						value={'<caption>' + captionText() + '</caption>'}
-						stylesheet={captionStyles}
+					<RenderHtml
+						source={captionSource}
+						tagsStyles={captionStyles}
 					/>
 				</View>
 			</View>

@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		07078F9CB39CFC7B640A30D1 /* libPods-Mallard-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5035862DEB762FF28CC82472 /* libPods-Mallard-MallardTests.a */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */ = {isa = PBXBuildFile; fileRef = CEC9D18600B14CC098C48387 /* guardianIcons_1.12.otf */; };
-		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+		2D02E4BC1E0B4A80006451C7 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
@@ -31,29 +31,29 @@
 		AF8876CCFAB04FDDA8588A9E /* GTGuardianDaily-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */; };
 		C232E2BBBE624C1DB73FF340 /* GuardianTextSans-RegularIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B43BC33E44074221B5FE51A9 /* GuardianTextSans-RegularIt.ttf */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
-		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378322B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378722B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378822B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378922B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378A22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378B22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378C22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378D22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378E22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378F22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378322B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378722B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378822B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378922B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378A22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378B22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378C22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378D22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378E22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378F22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
-		C549379422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */; };
 		C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */; };
 		C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */; };
@@ -119,7 +119,7 @@
 		0BAE21BBF3F8EE5432E6C63F /* Pods-Mallard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.release.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Guardian Editions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guardian Editions.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Mallard/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Mallard/AppDelegate.m; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.mm; path = Mallard/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Mallard/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Mallard/main.m; sourceTree = "<group>"; };
 		199EA3FD38444461A2EDB428 /* GuardianTextEgyptian-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-BoldItalic.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 				C51056C222D60C1700ED3078 /* crosswords.bundle */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */,
@@ -391,7 +391,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				2B88595A0BCEABFCC02DC347 /* [CP] Embed Pods Frameworks */,
 				D08E489E00D6E9F7C44AFFE5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -417,7 +416,6 @@
 				95B08635238D6EEA00828D1E /* Embed Frameworks */,
 				B2C2068495DC306BC77F077D /* [CP-User] [RNFB] Core Configuration */,
 				28CB8F63718EE011238949F5 /* [CP-User] [RNFB] Crashlytics Configuration */,
-				E3663E6CB13F936B4ED1D25F /* [CP] Embed Pods Frameworks */,
 				4A9A2E12651C1C60C27DCCBD /* [CP] Copy Pods Resources */,
 				0C9A4D69554C41C7910E0178 /* Upload Debug Symbols to Sentry */,
 			);
@@ -544,30 +542,30 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C549378022B149BB00B1D9A2 /* (null) in Resources */,
-				C549378122B149BB00B1D9A2 /* (null) in Resources */,
-				C549378222B149BB00B1D9A2 /* (null) in Resources */,
-				C549378322B149BB00B1D9A2 /* (null) in Resources */,
-				C549378422B149BB00B1D9A2 /* (null) in Resources */,
-				C549378522B149BB00B1D9A2 /* (null) in Resources */,
-				C549378622B149BB00B1D9A2 /* (null) in Resources */,
-				C549378722B149BB00B1D9A2 /* (null) in Resources */,
-				C549378822B149BB00B1D9A2 /* (null) in Resources */,
-				C549378922B149BB00B1D9A2 /* (null) in Resources */,
-				C549378A22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378222B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378322B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378622B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378722B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378822B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378922B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378A22B149BB00B1D9A2 /* BuildFile in Resources */,
 				896089CE248679CF00DCBF7D /* GoogleService-Info.plist in Resources */,
-				C549378B22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378C22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378D22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378E22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378F22B149BB00B1D9A2 /* (null) in Resources */,
-				C549379022B149BB00B1D9A2 /* (null) in Resources */,
-				C549379122B149BB00B1D9A2 /* (null) in Resources */,
-				C549379222B149BB00B1D9A2 /* (null) in Resources */,
+				C549378B22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378C22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378D22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378E22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378F22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379222B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */,
-				C549379422B149BB00B1D9A2 /* (null) in Resources */,
-				C549379522B149BB00B1D9A2 /* (null) in Resources */,
-				C549379622B149BB00B1D9A2 /* (null) in Resources */,
+				C549379422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379622B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
 				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
 				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
@@ -681,24 +679,6 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
-		2B88595A0BCEABFCC02DC347 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -798,24 +778,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E3663E6CB13F936B4ED1D25F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -834,7 +796,7 @@
 				950E1C012317E06F00F38B92 /* Ophan.swift in Sources */,
 				9553F9242396A2B700AB0CA3 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */,
-				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */,
 				A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */,
@@ -846,7 +808,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
-				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
+				2D02E4BC1E0B4A80006451C7 /* AppDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1123,7 +1085,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1144,6 +1106,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "${inherit}";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1180,7 +1143,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1192,6 +1155,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "${inherit}";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
