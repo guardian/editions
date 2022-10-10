@@ -25,7 +25,7 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
 
-    xcode_select("/Applications/Xcode_14.0.1.app")
+    xcode_select("/Applications/Xcode_13.3.1.app")
 
     encoded_api_key = ENV["APPSTORE_CONNECT_API_KEY"]
 
