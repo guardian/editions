@@ -4,11 +4,8 @@ import { NativeModules, Platform } from 'react-native';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { iosMajorVersion } from './platform';
 
-const externalLinkCanOpen = (): boolean => {
-	return Platform.OS === 'ios' && iosMajorVersion >= 16
-		? NativeModules.RNExternalLink.canOpen()
-		: false;
-};
+const externalLinkCanOpen = (): boolean =>
+	Platform.OS === 'ios' && iosMajorVersion >= 16;
 
 const externalLinkOpen = (): void => NativeModules.RNExternalLink.open();
 

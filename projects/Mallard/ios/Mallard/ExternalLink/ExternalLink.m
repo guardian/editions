@@ -18,6 +18,4 @@
 
 RCT_EXTERN_METHOD(open)
 
-RCT_EXTERN_METHOD(canOpen)
-
 @end

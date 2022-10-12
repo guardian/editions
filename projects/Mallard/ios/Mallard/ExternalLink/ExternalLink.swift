@@ -12,22 +12,17 @@ import StoreKit
 @available(iOS 13.0.0, *)
 @objc(ExternalLink)
 class ExternalLink: NSObject {
-
-  @objc func canOpen() {
-    if #available(iOS 16.0, *) {
-      Task {
-        let result = try await ExternalLinkAccount.canOpen
-        return result
-      }
-    }
-   }
   
-  @objc func open() {
-    if #available(iOS 16.0, *) {
-      Task {
-        try? await ExternalLinkAccount.open()
+  @objc
+  func open() {
+    guard #available(iOS 16.0, *) else { return }
+    Task {
+      let canOpen = await ExternalLinkAccount.canOpen
+      let canMakePayments = SKPaymentQueue.canMakePayments()
+      
+      if canOpen, canMakePayments {
+        try await ExternalLinkAccount.open()
       }
     }
-   }
-
+  }
 }
