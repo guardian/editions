@@ -7,12 +7,14 @@ import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
 import { ButtonAppearance } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';
+import { SignUpLink } from '../signupLink/SignUpLink';
 import { TitlepieceText, UiExplainerCopy } from '../styled-text';
 
 export enum CardAppearance {
 	Tomato,
 	Apricot,
 	Blue,
+	White,
 }
 
 const styles = StyleSheet.create({
@@ -22,6 +24,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 0,
 		flexDirection: 'column',
+	},
+	signUpLinkSpacer: {
+		paddingVertical: 10,
 	},
 	top: {
 		alignContent: 'space-between',
@@ -74,6 +79,11 @@ const appearances: {
 	[CardAppearance.Blue]: StyleSheet.create({
 		background: { backgroundColor: color.ui.sea },
 		titleText: { color: color.palette.neutral[100] },
+		subtitleText: { color: color.primary },
+	}),
+	[CardAppearance.White]: StyleSheet.create({
+		background: { backgroundColor: color.palette.neutral[100] },
+		titleText: { color: color.ui.shark },
 		subtitleText: { color: color.primary },
 	}),
 };
@@ -185,14 +195,19 @@ const OnboardingCard = ({
 						</TitlepieceText>
 					)}
 					{explainerSubtitle && (
-						<TitlepieceText
-							style={[
-								styles.explainerSubtitle,
-								appearances[appearance].subtitleText,
-							]}
-						>
-							{explainerSubtitle}
-						</TitlepieceText>
+						<>
+							<TitlepieceText
+								style={[
+									styles.explainerSubtitle,
+									appearances[appearance].subtitleText,
+								]}
+							>
+								{explainerSubtitle}
+							</TitlepieceText>
+							<View style={styles.signUpLinkSpacer}>
+								<SignUpLink />
+							</View>
+						</>
 					)}
 					{children && <UiExplainerCopy>{children}</UiExplainerCopy>}
 					{bottomExplainerContent && (
