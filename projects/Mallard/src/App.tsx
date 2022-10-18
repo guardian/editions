@@ -1,7 +1,3 @@
-// Welcome to the main entry point of the app.
-//
-// In this file, we'll be kicking off our app or storybook.
-
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
