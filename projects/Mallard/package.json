@@ -60,6 +60,8 @@
     "chalk": "^3.0.0",
     "deepmerge": "^4.0.0",
     "events": "^3.0.0",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
     "invariant": "^2.2.4",
     "jetifier": "^1.6.3",
     "moment": "^2.29.2",
