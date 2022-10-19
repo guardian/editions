@@ -147,7 +147,13 @@ export const ExternalSubscriptionScreen = () => {
 				</ScrollView>
 
 				<View style={style.buttonGroup}>
-					<IOSButton onPress={subscribe} style={style}>
+					<IOSButton
+						onPress={() => {
+							subscribe();
+							goBack();
+						}}
+						style={style}
+					>
 						{Copy.externalSubscription.continue}
 					</IOSButton>
 					<IOSButton onPress={goBack} style={style}>

@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useAccess, useIdentity } from 'src/authentication/AccessContext';
@@ -88,8 +89,11 @@ const LoginOverlay = ({
 	onOpenCASLogin: () => void;
 	onLoginPress: () => void;
 }) => {
-	const canAccess = useAccess();
+	const navigation = useNavigation();
+	// const canAccess = useAccess();
 	const idData = useIdentity();
+	const canAccess = false;
+	// const idData = null;
 	return canAccess ? (
 		<>{children}</>
 	) : idData ? (
@@ -101,6 +105,7 @@ const LoginOverlay = ({
 					onOpenCASLogin={onOpenCASLogin}
 					onLoginPress={onLoginPress}
 					close={close}
+					navigation={navigation}
 				/>
 			)}
 		>
@@ -114,6 +119,7 @@ const LoginOverlay = ({
 					onDismiss={onDismiss}
 					onLoginPress={onLoginPress}
 					close={close}
+					navigation={navigation}
 				/>
 			)}
 		>

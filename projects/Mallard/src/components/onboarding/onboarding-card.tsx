@@ -1,7 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import { minScreenSize } from 'src/helpers/screen';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
@@ -101,6 +103,7 @@ const OnboardingCard = ({
 	appearance,
 	size = 'big',
 	maxSize = 500,
+	navigation,
 }: {
 	children?: React.ReactNode;
 	title: string;
@@ -114,6 +117,7 @@ const OnboardingCard = ({
 	appearance: CardAppearance;
 	size?: 'big' | 'medium' | 'small';
 	maxSize?: number;
+	navigation?: any;
 }) => {
 	const max = Math.min(minScreenSize() * 0.95, maxSize);
 	return (
@@ -195,19 +199,14 @@ const OnboardingCard = ({
 						</TitlepieceText>
 					)}
 					{explainerSubtitle && (
-						<>
-							<TitlepieceText
-								style={[
-									styles.explainerSubtitle,
-									appearances[appearance].subtitleText,
-								]}
-							>
-								{explainerSubtitle}
-							</TitlepieceText>
-							<View style={styles.signUpLinkSpacer}>
-								<SignUpLink />
-							</View>
-						</>
+						<TitlepieceText
+							style={[
+								styles.explainerSubtitle,
+								appearances[appearance].subtitleText,
+							]}
+						>
+							{explainerSubtitle}
+						</TitlepieceText>
 					)}
 					{children && <UiExplainerCopy>{children}</UiExplainerCopy>}
 					{bottomExplainerContent && (

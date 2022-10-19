@@ -1,6 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Copy } from 'src/helpers/words';
+import {
+	CompositeNavigationStackProps,
+	RouteNames,
+} from 'src/navigation/NavigationModels';
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import { color } from 'src/theme/color';
 import { getFont } from 'src/theme/typography';
@@ -34,10 +39,12 @@ const SignInModalCard = ({
 	close,
 	onLoginPress,
 	onDismiss,
+	navigation,
 }: {
 	close: () => void;
 	onLoginPress: () => void;
 	onDismiss: () => void;
+	navigation: any;
 }) => {
 	return (
 		<OnboardingCard
@@ -71,7 +78,14 @@ const SignInModalCard = ({
 						>
 							Create an account
 						</TitlepieceText>
-						<SignUpLink />
+						<SignUpLink
+							onPress={() => {
+								close();
+								navigation.navigate(
+									RouteNames.ExternalSubscription,
+								);
+							}}
+						/>
 					</View>
 				</>
 			}
