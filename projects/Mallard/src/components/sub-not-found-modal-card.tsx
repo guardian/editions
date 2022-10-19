@@ -1,7 +1,6 @@
 import React from 'react';
 import { Copy } from 'src/helpers/words';
 import { RouteNames } from 'src/navigation/NavigationModels';
-import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 import { SignUpLink } from './signupLink/SignUpLink';

@@ -1,15 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import { minScreenSize } from 'src/helpers/screen';
-import { RouteNames } from 'src/navigation/NavigationModels';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
 import { ButtonAppearance } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';
-import { SignUpLink } from '../signupLink/SignUpLink';
 import { TitlepieceText, UiExplainerCopy } from '../styled-text';
 
 export enum CardAppearance {
@@ -103,7 +100,6 @@ const OnboardingCard = ({
 	appearance,
 	size = 'big',
 	maxSize = 500,
-	navigation,
 }: {
 	children?: React.ReactNode;
 	title: string;
@@ -117,7 +113,6 @@ const OnboardingCard = ({
 	appearance: CardAppearance;
 	size?: 'big' | 'medium' | 'small';
 	maxSize?: number;
-	navigation?: any;
 }) => {
 	const max = Math.min(minScreenSize() * 0.95, maxSize);
 	return (

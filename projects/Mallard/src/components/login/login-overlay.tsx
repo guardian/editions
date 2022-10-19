@@ -90,10 +90,8 @@ const LoginOverlay = ({
 	onLoginPress: () => void;
 }) => {
 	const navigation = useNavigation();
-	// const canAccess = useAccess();
+	const canAccess = useAccess();
 	const idData = useIdentity();
-	const canAccess = false;
-	// const idData = null;
 	return canAccess ? (
 		<>{children}</>
 	) : idData ? (

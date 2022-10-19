@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan';
+import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 
 const styles = StyleSheet.create({
 	createAccountLink: {

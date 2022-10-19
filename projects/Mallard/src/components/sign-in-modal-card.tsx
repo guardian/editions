@@ -1,11 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Copy } from 'src/helpers/words';
-import {
-	CompositeNavigationStackProps,
-	RouteNames,
-} from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import { color } from 'src/theme/color';
 import { getFont } from 'src/theme/typography';
