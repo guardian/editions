@@ -9,7 +9,6 @@ import {
 	getErrorString,
 } from 'src/authentication/services/apple';
 import { appleAuthWithDeepRedirect } from 'src/authentication/services/apple-oauth';
-import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook';
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google';
 import { useModal } from 'src/components/modal';
 import { SignInFailedModalCard } from 'src/components/SignInFailedModalCard';
@@ -143,17 +142,6 @@ const AuthSwitcherScreen = () => {
 			onDismiss={() => navigation.popToTop()}
 			onHelpPress={() =>
 				navigation.navigate(RouteNames.AlreadySubscribed)
-			}
-			onFacebookPress={() =>
-				handleAuthClick(
-					() =>
-						facebookAuthWithDeepRedirect(validatorString).then(
-							(token) => ({
-								'facebook-access-token': token,
-							}),
-						),
-					{ requiresFunctionalConsent: true, signInName: 'Facebook' },
-				)
 			}
 			onGooglePress={() =>
 				handleAuthClick(

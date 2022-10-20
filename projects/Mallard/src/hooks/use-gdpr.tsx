@@ -34,7 +34,6 @@ export type GdprCoreSettings = {
 interface GdprSettings extends GdprCoreSettings {
 	gdprAllowOphan: GdprSwitchSetting;
 	gdprAllowSentry: GdprSwitchSetting;
-	gdprAllowFacebookLogin: GdprSwitchSetting;
 	gdprAllowGoogleLogin: GdprSwitchSetting;
 	gdprAllowAppleLogin: GdprSwitchSetting;
 	setGdprFunctionalityBucket: (setting: GdprSwitchSetting) => void;
@@ -58,7 +57,6 @@ const defaultState: GdprSettings = {
 	gdprConsentVersion: null,
 	gdprAllowOphan: true, // 'essential' so defaults to true and not switchable
 	gdprAllowSentry: null,
-	gdprAllowFacebookLogin: null,
 	gdprAllowGoogleLogin: null,
 	gdprAllowAppleLogin: null,
 	setGdprFunctionalityBucket: () => {},
@@ -88,9 +86,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const [gdprAllowSentry, setGdprAllowSentry] = useState<
 		GdprSettings['gdprAllowSentry']
 	>(defaultState.gdprAllowSentry);
-	const [gdprAllowFacebookLogin, setGdprAllowFacebookLogin] = useState<
-		GdprSettings['gdprAllowFacebookLogin']
-	>(defaultState.gdprAllowFacebookLogin);
 	const [gdprAllowGoogleLogin, setGdprAllowGoogleLogin] = useState<
 		GdprSettings['gdprAllowGoogleLogin']
 	>(defaultState.gdprAllowGoogleLogin);
@@ -140,7 +135,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		// Local state modifier
 		setGdprAllowFunctionality(setting);
 		setGdprAllowGoogleLogin(setting);
-		setGdprAllowFacebookLogin(setting);
 		setGdprAllowAppleLogin(setting);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
 		// Persisted state modifier
@@ -157,7 +151,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
 		setGdprAllowOphan(true);
 		setGdprAllowSentry(true);
-		setGdprAllowFacebookLogin(true);
 		setGdprAllowGoogleLogin(true);
 		setGdprAllowAppleLogin(true);
 		// Persisted state modifier
@@ -173,7 +166,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		setGdprConsentVersion(defaultState.gdprConsentVersion);
 		setGdprAllowOphan(defaultState.gdprAllowOphan);
 		setGdprAllowSentry(defaultState.gdprAllowSentry);
-		setGdprAllowFacebookLogin(defaultState.gdprAllowFacebookLogin);
 		setGdprAllowGoogleLogin(defaultState.gdprAllowGoogleLogin);
 		setGdprAllowAppleLogin(defaultState.gdprAllowAppleLogin);
 		// Persisted state modifier
@@ -201,7 +193,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 				// The following are not used anywhere as things stand and are therefore not persisted
 				gdprAllowOphan,
 				gdprAllowSentry,
-				gdprAllowFacebookLogin,
 				gdprAllowGoogleLogin,
 				gdprAllowAppleLogin,
 				loading,

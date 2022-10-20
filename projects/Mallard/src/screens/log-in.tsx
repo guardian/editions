@@ -84,7 +84,6 @@ const Login = ({
 	email,
 	password,
 	onApplePress,
-	onFacebookPress,
 	onGooglePress,
 	onAppleOAuthPress,
 	onSubmit,
@@ -97,7 +96,6 @@ const Login = ({
 	onHelpPress,
 }: {
 	title: string;
-	onFacebookPress: () => void;
 	onApplePress: () => void;
 	onGooglePress: () => void;
 	onAppleOAuthPress: () => void;
@@ -131,12 +129,6 @@ const Login = ({
 			{!hasInputEmail && (
 				<>
 					<View>
-						<SocialButton
-							onPress={onFacebookPress}
-							iconRequire={require('src/assets/images/fb.png')}
-						>
-							Continue with Facebook
-						</SocialButton>
 						<SocialButton
 							onPress={onGooglePress}
 							iconRequire={require('src/assets/images/google.png')}
