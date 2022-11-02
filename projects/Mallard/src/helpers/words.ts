@@ -182,8 +182,6 @@ export const IssueListFooter = {
 
 export const SubscriptionDetails = {
 	title: 'Subscription Details',
-	heading: 'Paper + digital subscription',
-	iapHeading: 'Guardian Editions / App Store',
 	loggedOutHeading: 'Not logged in',
 	emailAddress: 'Email Address',
 	userId: 'User ID',

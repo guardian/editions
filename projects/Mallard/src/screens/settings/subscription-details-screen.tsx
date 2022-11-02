@@ -26,7 +26,6 @@ const IdentityDetails = ({
 	identityData: IdentityAuthData;
 }) => (
 	<>
-		<Heading>{Copy.subscriptionDetails.heading}</Heading>
 		<List
 			data={[
 				keyValueItem(
@@ -51,7 +50,6 @@ const getCASType = (casData: CASExpiry) =>
 
 const CASDetails = ({ casData }: { casData: CASExpiry }) => (
 	<>
-		<Heading>{Copy.subscriptionDetails.heading}</Heading>
 		<List
 			data={[
 				keyValueItem(
@@ -83,7 +81,6 @@ const getIAPType = (iapData: ReceiptIOS) =>
 
 const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
 	<>
-		<Heading>{Copy.subscriptionDetails.iapHeading}</Heading>
 		<List
 			data={[
 				keyValueItem('Subscription type', getIAPType(iapData)),
@@ -101,6 +98,8 @@ const LoggedOutDetails = () => (
 const SubscriptionDetailsScreen = () => {
 	const { identityData, iapData, casData, attempt } =
 		useContext(AccessContext);
+
+	console.log(JSON.stringify(identityData));
 
 	return (
 		<HeaderScreenContainer
