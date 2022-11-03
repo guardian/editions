@@ -29,7 +29,7 @@
         "@types/jest": "^25.1.0",
         "@zeit/ncc": "^0.20.4",
         "archiver": "^5.3.0",
-        "aws-sdk": "2.518.0",
+        "aws-sdk": "2.814.0",
         "encoding": "^0.1.12",
         "jest": "^26.6.3",
         "node-fetch": "^2.6.7",
