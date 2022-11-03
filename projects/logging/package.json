@@ -29,7 +29,7 @@
     "dependencies": {
         "@types/aws-lambda": "^8.10.31",
         "@types/jest": "^25.1.0",
-        "aws-sdk": "2.507.0",
+        "aws-sdk": "2.814.0",
         "aws-serverless-express": "^3.3.6",
         "encoding": "^0.1.12",
         "express": "^4.17.1",
