@@ -20,8 +20,8 @@ const getErrorString = (data: any) =>
 const fetchAuth = async <T>(
 	params: Record<string, string>,
 	authType?: AuthType,
-	authUrl: string = ID_API_URL,
-	token: string = ID_ACCESS_TOKEN,
+	authUrl: string | undefined = ID_API_URL,
+	token: string | undefined = ID_ACCESS_TOKEN,
 ): Promise<AuthResult<T>> => {
 	const queryString = authType === 'apple-oauth' ? qs.stringify(params) : '';
 

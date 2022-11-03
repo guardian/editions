@@ -1,4 +1,3 @@
-import 'isomorphic-fetch';
 import fetchMock from 'fetch-mock';
 import { CAS_ENDPOINT_URL } from 'src/constants';
 import { fetchCasSubscription } from '../content-auth-service';

@@ -198,33 +198,44 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
         }
       }
     >
-      <View>
-        <Text
-          onLongPress={null}
-          onPress={null}
+      <View
+        style={
+          Array [
+            Object {},
+            undefined,
+            undefined,
+          ]
+        }
+        testID="html"
+      >
+        <View
           style={
-            Object {
-              "color": "#FFFFFF",
-              "fontFamily": "GuardianTextSans-Regular",
-              "fontSize": 14,
-            }
+            Array [
+              Object {},
+              undefined,
+              undefined,
+            ]
           }
+          testID="body"
         >
           <Text
+            allowFontScaling={true}
+            selectable={false}
             style={
               Array [
-                null,
                 Object {
                   "color": "#FFFFFF",
-                  "fontFamily": "GuardianTextSans-Regular",
                   "fontSize": 14,
                 },
+                undefined,
+                undefined,
               ]
             }
+            testID="span"
           >
             Claude Gnapka scores Luton's third and winner
           </Text>
-        </Text>
+        </View>
       </View>
     </View>
   </View>

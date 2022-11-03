@@ -44,7 +44,7 @@ const getDiagnosticInfo = async (
 	]);
 
 	const folderStat = await RNFS.stat(FSPaths.issuesDir);
-	const size = parseInt(folderStat.size);
+	const size = parseInt(String(folderStat.size));
 	const bytes = size;
 	const kilobytes = bytes / 1000;
 	const megabytes = kilobytes / 1000;
