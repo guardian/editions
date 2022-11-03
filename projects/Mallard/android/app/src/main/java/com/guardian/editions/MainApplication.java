@@ -3,6 +3,7 @@ package com.guardian.editions;
 import android.app.Application;
 
 import com.guardian.editions.releasestream.ReleaseStreamPackage;
+import com.guardian.editions.externallink.ExternalLinkPackage;
 
 import android.content.Context;
 import com.facebook.react.PackageList;
@@ -36,6 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
             packages.add(new RNOphanPackage());
 
             packages.add(new ReleaseStreamPackage());
+
+            packages.add(new ExternalLinkPackage());
 
             // packages.add(new MainReactPackage(),
             // packages.add(new RNDeviceInfo());

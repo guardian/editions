@@ -76,6 +76,11 @@
 	<string>Location-based weather</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location-based weather</string>
+	<key>SKExternalLinkAccount</key>
+	<dict>
+		<key>en-GB*</key>
+		<string>https://support.theguardian.com/uk/subscribe/digital</string>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GHGuardianHeadline-Black.ttf</string>

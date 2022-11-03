@@ -14,6 +14,7 @@ import { Footer, Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
+import { useExternalLink } from 'src/helpers/external-link';
 import { getFileList, getIssuesCountStrings } from 'src/helpers/files';
 import { locale } from 'src/helpers/locale';
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream';
@@ -80,6 +81,7 @@ const DevZone = () => {
 	const {
 		selectedEdition: { edition },
 	} = useEditions();
+	const { openExternalLink } = useExternalLink();
 
 	const { attempt, signOutCAS } = useContext(AccessContext);
 	const { showToast } = useToast();
@@ -217,6 +219,10 @@ const DevZone = () => {
 							}
 						>
 							In App Purchase
+						</Button>
+
+						<Button onPress={openExternalLink}>
+							External Link Modal
 						</Button>
 					</ButtonList>
 					<List

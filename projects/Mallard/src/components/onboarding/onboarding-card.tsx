@@ -13,6 +13,7 @@ export enum CardAppearance {
 	Tomato,
 	Apricot,
 	Blue,
+	White,
 }
 
 const styles = StyleSheet.create({
@@ -22,6 +23,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 0,
 		flexDirection: 'column',
+	},
+	signUpLinkSpacer: {
+		paddingVertical: 10,
 	},
 	top: {
 		alignContent: 'space-between',
@@ -74,6 +78,11 @@ const appearances: {
 	[CardAppearance.Blue]: StyleSheet.create({
 		background: { backgroundColor: color.ui.sea },
 		titleText: { color: color.palette.neutral[100] },
+		subtitleText: { color: color.primary },
+	}),
+	[CardAppearance.White]: StyleSheet.create({
+		background: { backgroundColor: color.palette.neutral[100] },
+		titleText: { color: color.ui.shark },
 		subtitleText: { color: color.primary },
 	}),
 };
