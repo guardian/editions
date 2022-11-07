@@ -28,8 +28,8 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
   >
     <RNSVGSvgView
       align="xMidYMid"
-      bbHeight={9}
-      bbWidth={11}
+      bbHeight="9"
+      bbWidth="11"
       fill="none"
       focusable={false}
       height={9}
@@ -47,9 +47,6 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
             "marginTop": 4,
           },
           Object {
-            "opacity": 1,
-          },
-          Object {
             "flex": 0,
             "height": 9,
             "width": 11,
@@ -62,129 +59,28 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
     >
       <RNSVGGroup
         fill={null}
-        fillOpacity={1}
-        fillRule={1}
-        font={Object {}}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
         propList={
           Array [
             "fill",
           ]
         }
-        rotation={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        x={0}
-        y={0}
       >
         <RNSVGGroup
-          fill={
-            Array [
-              0,
-              4278190080,
-            ]
-          }
-          fillOpacity={1}
-          fillRule={1}
-          font={Object {}}
-          matrix={
-            Array [
-              1,
-              0,
-              0,
-              1,
-              0,
-              0,
-            ]
-          }
           opacity={1}
-          originX={0}
-          originY={0}
-          propList={Array []}
-          rotation={0}
-          scaleX={1}
-          scaleY={1}
-          skewX={0}
-          skewY={0}
-          stroke={null}
-          strokeDasharray={null}
-          strokeDashoffset={null}
-          strokeLinecap={0}
-          strokeLinejoin={0}
-          strokeMiterlimit={4}
-          strokeOpacity={1}
-          strokeWidth={1}
-          vectorEffect={0}
-          x={0}
-          y={0}
         >
           <RNSVGPath
             d="M5.5 0L10.5 9H0.5L5.5 0Z"
             fill={
-              Array [
-                0,
-                4278190335,
-              ]
+              Object {
+                "payload": 4278190335,
+                "type": 0,
+              }
             }
-            fillOpacity={1}
-            fillRule={1}
-            matrix={
-              Array [
-                1,
-                0,
-                0,
-                1,
-                0,
-                0,
-              ]
-            }
-            opacity={1}
-            originX={0}
-            originY={0}
             propList={
               Array [
                 "fill",
               ]
             }
-            rotation={0}
-            scaleX={1}
-            scaleY={1}
-            skewX={0}
-            skewY={0}
-            stroke={null}
-            strokeDasharray={null}
-            strokeDashoffset={null}
-            strokeLinecap={0}
-            strokeLinejoin={0}
-            strokeMiterlimit={4}
-            strokeOpacity={1}
-            strokeWidth={1}
-            vectorEffect={0}
-            x={0}
-            y={0}
           />
         </RNSVGGroup>
       </RNSVGGroup>
