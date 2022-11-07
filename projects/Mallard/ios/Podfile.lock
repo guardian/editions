@@ -447,8 +447,8 @@ PODS:
   - RNSentry (3.4.3):
     - React-Core
     - Sentry (= 7.11.0)
-  - RNSVG (9.13.6):
-    - React
+  - RNSVG (13.5.0):
+    - React-Core
   - RNZipArchive (5.0.1):
     - React
     - RNZipArchive/Core (= 5.0.1)
@@ -768,7 +768,7 @@ SPEC CHECKSUMS:
   RNReanimated: c3e58924b9418883b0bde9e78c4c957302f02435
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSentry: 85f6525b5fe8d2ada065858026b338605b3c09da
-  RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
+  RNSVG: 38ca962c970dbce1ca38991a5aebf26d163f9efb
   RNZipArchive: 87111bb6130a38edd68c8d2059d46ac94d53ffe4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
