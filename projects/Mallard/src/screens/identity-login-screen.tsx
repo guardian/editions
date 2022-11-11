@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useContext, useState } from 'react';
 import { Alert } from 'react-native';
+import isEmail from 'validator/lib/isEmail';
 import { AccessContext } from 'src/authentication/AccessContext';
 import type { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer';
 import { isValid } from 'src/authentication/lib/Attempt';
@@ -19,7 +20,6 @@ import { useFormField } from 'src/hooks/use-form-field';
 import { useGdprSettings } from 'src/hooks/use-gdpr';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
-import isEmail from 'validator/lib/isEmail';
 import { Login } from './log-in';
 
 const useRandomState = () =>

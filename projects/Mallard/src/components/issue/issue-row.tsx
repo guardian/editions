@@ -15,7 +15,7 @@ import {
 	IssueTitle,
 	IssueTitleAppearance,
 } from 'src/components/issue/issue-title';
-import { styles as textStyles } from 'src/components/styled-text';
+import { styles as textStyles, UiBodyCopy } from 'src/components/styled-text';
 import {
 	downloadAndUnzipIssue,
 	maybeListenToExistingDownload,
@@ -48,7 +48,6 @@ import type {
 	IssueWithFronts,
 } from '../../../../Apps/common/src';
 import { Button, ButtonAppearance } from '../Button/Button';
-import { UiBodyCopy } from '../styled-text';
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25);
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25);

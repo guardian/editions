@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import { HeadlineText } from 'src/components/styled-text';
+import { HeadlineText, UiBodyCopy } from 'src/components/styled-text';
 import { safeInterpolation } from 'src/helpers/math';
 import { useMediaQuery } from 'src/hooks/use-screen';
 import { useToastList } from 'src/hooks/use-toast';
@@ -8,7 +8,6 @@ import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
-import { UiBodyCopy } from '../styled-text';
 
 export interface ToastProps {
 	title: string;

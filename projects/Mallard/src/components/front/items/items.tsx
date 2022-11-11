@@ -32,8 +32,9 @@ const splashImageStyles = StyleSheet.create({
 });
 
 const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
-	if (!article.cardImage || !article.cardImageTablet)
+	if (!article.cardImage || !article.cardImageTablet) {
 		return <SuperHeroImageItem {...tappableProps} {...{ article, size }} />;
+	}
 
 	const cardImage: Image =
 		size.layout === PageLayoutSizes.mobile

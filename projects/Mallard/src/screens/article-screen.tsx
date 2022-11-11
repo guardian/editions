@@ -15,6 +15,7 @@ import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
+import { getArticleDataFromNavigator } from './article-screen-utils';
 import { ArticleScreenBody } from './article/body';
 import { ArticleSlider } from './article/slider';
 
@@ -24,60 +25,7 @@ export type FrontSpec = {
 	articleSpecs: PathToArticle[];
 };
 
-type ArticleSpec = PathToArticle & {
-	frontName: string;
-	appearance: Appearance;
-};
-
 export type ArticleNavigator = FrontSpec[];
-
-// THIS SEEMS USEFUL
-export const getArticleDataFromNavigator = (
-	navigator: ArticleNavigator,
-	currentArticle: PathToArticle,
-): {
-	startingPoint: number;
-	appearance: Appearance;
-	frontName: string;
-	flattenedArticles: ArticleSpec[];
-} => {
-	const flattenedArticles: ArticleSpec[] = [];
-	navigator.forEach((frontSpec) =>
-		frontSpec.articleSpecs.forEach((as) =>
-			flattenedArticles.push({
-				...as,
-				appearance: frontSpec.appearance,
-				frontName: frontSpec.frontName,
-			}),
-		),
-	);
-
-	const startingPoint = flattenedArticles.findIndex(
-		({ article, front }) =>
-			currentArticle.article === article &&
-			currentArticle.front === front,
-	);
-	if (startingPoint < 0)
-		return {
-			startingPoint: 0,
-			appearance: { type: 'pillar', name: 'neutral' } as const,
-			frontName: '',
-			flattenedArticles: [
-				{
-					...currentArticle,
-					appearance: { type: 'pillar', name: 'neutral' } as const,
-					frontName: '',
-				},
-				...flattenedArticles,
-			],
-		};
-	return {
-		startingPoint,
-		appearance: flattenedArticles[startingPoint].appearance,
-		frontName: flattenedArticles[startingPoint].frontName,
-		flattenedArticles,
-	};
-};
 
 const ArticleScreenLoginOverlay = ({ children }: { children: ReactNode }) => {
 	const navigation = useNavigation();

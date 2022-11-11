@@ -157,7 +157,7 @@ const SettingsScreen = () => {
 
 	const versionClickHandler = identityData
 		? () => {
-				if (!isUsingProdDevtools && isStaffMember(identityData))
+				if (!isUsingProdDevtools && isStaffMember(identityData)) {
 					setVersionClickedTimes((t) => {
 						if (t < 7) return t + 1;
 						Alert.alert(
@@ -181,6 +181,7 @@ const SettingsScreen = () => {
 						);
 						return 0;
 					});
+				}
 		  }
 		: () => {};
 

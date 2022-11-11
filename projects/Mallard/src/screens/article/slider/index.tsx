@@ -9,7 +9,7 @@ import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
 import { sendPageViewEvent } from 'src/services/ophan';
-import { getArticleDataFromNavigator } from '../../article-screen';
+import { getArticleDataFromNavigator } from '../../article-screen-utils';
 import type { OnIsAtTopChange } from '../body';
 import { ArticleScreenBody } from '../body';
 import { issueDateFromId } from './slider-helpers';
