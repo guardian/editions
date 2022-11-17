@@ -1,5 +1,6 @@
+import { FlashList } from '@shopify/flash-list';
 import React, { useRef, useState } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
 import { getColor } from 'src/helpers/transform';
@@ -136,32 +137,70 @@ const ArticleSlider = React.memo(
 
 		return (
 			<>
-				<ViewPagerAndroid
-					style={styles.androidPager}
-					initialPage={startingPoint}
-					ref={(viewPager) => {
-						viewPagerRef.current = viewPager;
-					}}
-					scrollSensitivity={5}
-					onPageSelected={(ev: any) => {
-						onShouldShowHeaderChange(true);
-						const newIndex = ev.nativeEvent.position;
-						// onPageSelected get called twice for the first time, to avoid duplicate tracking
-						// we are manually checking the last tracked index
-						if (lastTrackedIndex != newIndex) {
-							sendPageViewEvent({
-								path: flattenedArticles[newIndex].article,
-							});
-							setLastTrackedIndex(newIndex);
-						}
-						setCurrent(newIndex);
-						slideToFrontFor(newIndex);
-						setPosition(newIndex);
-					}}
-				>
-					{flattenedArticles.map((item, index) => (
-						<View key={index}>
-							{index >= current - 1 && index <= current + 1 ? (
+				{Platform.OS === 'ios' ? (
+					<View style={styles.androidPager}>
+						<FlashList
+							estimatedItemSize={flattenedArticles.length}
+							// ref={(viewPager) => {
+							// 	viewPagerRef.current = viewPager;
+							// }}
+							showsHorizontalScrollIndicator={false}
+							showsVerticalScrollIndicator={false}
+							scrollEventThrottle={1}
+							// onScroll={Animated.event(
+							// 	[
+							// 		{
+							// 			nativeEvent: {
+							// 				contentOffset: { x: sliderPosition },
+							// 			},
+							// 		},
+							// 	],
+							// 	{
+							// 		useNativeDriver: true,
+							// 		listener: (ev: any) => {
+							// 			onShouldShowHeaderChange(true)
+							// 			const newPos =
+							// 				ev.nativeEvent.contentOffset.x / width
+							// 			const newIndex = clamp(
+							// 				Math.round(newPos),
+							// 				0,
+							// 				flattenedArticles.length - 1,
+							// 			)
+							// 			if (current !== newIndex) {
+							// 				sendPageViewEvent({
+							// 					path:
+							// 						flattenedArticles[newIndex].article,
+							// 				})
+							// 			}
+
+							// 			setCurrent(newIndex)
+							// 			slideToFrontFor(newIndex)
+
+							// 			const position = Animated.divide(
+							// 				ev.nativeEvent.contentOffset.x,
+							// 				new Animated.Value(width),
+							// 			)
+							// 			setPosition(position)
+							// 		},
+							// 	},
+							// )}
+							horizontal={true}
+							initialScrollIndex={startingPoint}
+							pagingEnabled
+							// getItemLayout={(_: never, index: number) => ({
+							// 	length: width,
+							// 	offset: width * index,
+							// 	index,
+							// })}
+							keyExtractor={(item: any) => item.article}
+							data={flattenedArticles}
+							renderItem={({
+								item,
+								index,
+							}: {
+								item: any;
+								index: number;
+							}) => (
 								<ArticleScreenBody
 									width={width}
 									path={item}
@@ -176,10 +215,56 @@ const ArticleSlider = React.memo(
 									topPadding={HEADER_HIGH_END_HEIGHT}
 									onIsAtTopChange={onIsAtTopChange}
 								/>
-							) : null}
-						</View>
-					))}
-				</ViewPagerAndroid>
+							)}
+						/>
+					</View>
+				) : (
+					<ViewPagerAndroid
+						style={styles.androidPager}
+						initialPage={startingPoint}
+						ref={(viewPager) => {
+							viewPagerRef.current = viewPager;
+						}}
+						scrollSensitivity={5}
+						onPageSelected={(ev: any) => {
+							onShouldShowHeaderChange(true);
+							const newIndex = ev.nativeEvent.position;
+							// onPageSelected get called twice for the first time, to avoid duplicate tracking
+							// we are manually checking the last tracked index
+							if (lastTrackedIndex != newIndex) {
+								sendPageViewEvent({
+									path: flattenedArticles[newIndex].article,
+								});
+								setLastTrackedIndex(newIndex);
+							}
+							setCurrent(newIndex);
+							slideToFrontFor(newIndex);
+							setPosition(newIndex);
+						}}
+					>
+						{flattenedArticles.map((item, index) => (
+							<View key={index}>
+								{index >= current - 1 &&
+								index <= current + 1 ? (
+									<ArticleScreenBody
+										width={width}
+										path={item}
+										pillar={getAppearancePillar(
+											item.appearance,
+										)}
+										position={index}
+										onShouldShowHeaderChange={
+											onShouldShowHeaderChange
+										}
+										shouldShowHeader={shouldShowHeader}
+										topPadding={HEADER_HIGH_END_HEIGHT}
+										onIsAtTopChange={onIsAtTopChange}
+									/>
+								) : null}
+							</View>
+						))}
+					</ViewPagerAndroid>
+				)}
 
 				<SliderHeaderHighEnd
 					isShown={shouldShowHeader}
