@@ -1,8 +1,8 @@
-import { FlashList } from '@shopify/flash-list';
 import React, { useRef, useState } from 'react';
-import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
+import { clamp } from 'src/helpers/math';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
 import { useApiUrl, useDimensions } from 'src/hooks/use-config-provider';
@@ -62,6 +62,7 @@ const ArticleSlider = React.memo(
 		const [lastTrackedIndex, setLastTrackedIndex] = useState(-1);
 		const [position, setPosition] =
 			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
+		const [sliderPosition] = useState(new Animated.Value(0));
 
 		const { width } = useDimensions();
 		const viewPagerRef = useRef<ViewPagerAndroid | null>();
@@ -139,59 +140,54 @@ const ArticleSlider = React.memo(
 			<>
 				{Platform.OS === 'ios' ? (
 					<View style={styles.androidPager}>
-						<FlashList
-							estimatedItemSize={flattenedArticles.length}
-							// ref={(viewPager) => {
-							// 	viewPagerRef.current = viewPager;
-							// }}
+						<Animated.FlatList
 							showsHorizontalScrollIndicator={false}
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={1}
-							// onScroll={Animated.event(
-							// 	[
-							// 		{
-							// 			nativeEvent: {
-							// 				contentOffset: { x: sliderPosition },
-							// 			},
-							// 		},
-							// 	],
-							// 	{
-							// 		useNativeDriver: true,
-							// 		listener: (ev: any) => {
-							// 			onShouldShowHeaderChange(true)
-							// 			const newPos =
-							// 				ev.nativeEvent.contentOffset.x / width
-							// 			const newIndex = clamp(
-							// 				Math.round(newPos),
-							// 				0,
-							// 				flattenedArticles.length - 1,
-							// 			)
-							// 			if (current !== newIndex) {
-							// 				sendPageViewEvent({
-							// 					path:
-							// 						flattenedArticles[newIndex].article,
-							// 				})
-							// 			}
+							onScroll={Animated.event(
+								[
+									{
+										nativeEvent: {
+											contentOffset: {
+												x: sliderPosition,
+											},
+										},
+									},
+								],
+								{
+									useNativeDriver: true,
+									listener: (ev: any) => {
+										onShouldShowHeaderChange(true);
+										const newPos =
+											ev.nativeEvent.contentOffset.x /
+											width;
+										const newIndex = clamp(
+											Math.round(newPos),
+											0,
+											flattenedArticles.length - 1,
+										);
+										if (current !== newIndex) {
+											sendPageViewEvent({
+												path: flattenedArticles[
+													newIndex
+												].article,
+											});
+										}
 
-							// 			setCurrent(newIndex)
-							// 			slideToFrontFor(newIndex)
+										setCurrent(newIndex);
+										slideToFrontFor(newIndex);
 
-							// 			const position = Animated.divide(
-							// 				ev.nativeEvent.contentOffset.x,
-							// 				new Animated.Value(width),
-							// 			)
-							// 			setPosition(position)
-							// 		},
-							// 	},
-							// )}
+										const position = Animated.divide(
+											ev.nativeEvent.contentOffset.x,
+											new Animated.Value(width),
+										);
+										setPosition(position);
+									},
+								},
+							)}
 							horizontal={true}
 							initialScrollIndex={startingPoint}
 							pagingEnabled
-							// getItemLayout={(_: never, index: number) => ({
-							// 	length: width,
-							// 	offset: width * index,
-							// 	index,
-							// })}
 							keyExtractor={(item: any) => item.article}
 							data={flattenedArticles}
 							renderItem={({
