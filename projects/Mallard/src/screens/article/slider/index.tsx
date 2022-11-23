@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
@@ -8,7 +8,7 @@ import { getAppearancePillar } from 'src/hooks/use-article';
 import { useApiUrl, useDimensions } from 'src/hooks/use-config-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import type { PathToArticle } from 'src/paths';
-import type { ArticleNavigator } from 'src/screens/article-screen';
+import type { ArticleNavigator, ArticleSpec } from 'src/screens/article-screen';
 import { sendPageViewEvent } from 'src/services/ophan';
 import { getArticleDataFromNavigator } from '../../article-screen';
 import type { OnIsAtTopChange } from '../body';
@@ -66,10 +66,18 @@ const ArticleSlider = React.memo(
 
 		const { width } = useDimensions();
 		const viewPagerRef = useRef<ViewPagerAndroid | null>();
+		const flatListRef = useRef<any | undefined>();
 
 		const { isPreview } = useApiUrl();
 
 		const currentArticle = flattenedArticles[Math.round(current)];
+
+		useEffect(() => {
+			flatListRef?.current?.scrollToIndex({
+				index: current,
+				animated: false,
+			});
+		}, [width]); // eslint-disable-line react-hooks/exhaustive-deps
 
 		const sliderSections = articleNavigator.reduce(
 			(sectionsWithStartIndex, frontSpec) => {
@@ -141,6 +149,9 @@ const ArticleSlider = React.memo(
 				{Platform.OS === 'ios' ? (
 					<View style={styles.androidPager}>
 						<Animated.FlatList
+							ref={(flatList: any) =>
+								(flatListRef.current = flatList)
+							}
 							showsHorizontalScrollIndicator={false}
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={1}
@@ -185,6 +196,14 @@ const ArticleSlider = React.memo(
 									},
 								},
 							)}
+							getItemLayout={(
+								_: ArticleSpec[] | null | undefined,
+								index: number,
+							) => ({
+								length: width,
+								offset: width * index,
+								index,
+							})}
 							horizontal={true}
 							initialScrollIndex={startingPoint}
 							pagingEnabled
