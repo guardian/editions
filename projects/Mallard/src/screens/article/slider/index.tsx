@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
@@ -144,11 +144,35 @@ const ArticleSlider = React.memo(
 			setNavPosition({ frontId, articleIndex: 0 });
 		};
 
+		const renderItem = useCallback(
+			({ item, index }: { item: any; index: number }) => (
+				<ArticleScreenBody
+					width={width}
+					path={item}
+					pillar={getAppearancePillar(item.appearance)}
+					position={index}
+					onShouldShowHeaderChange={onShouldShowHeaderChange}
+					shouldShowHeader={shouldShowHeader}
+					topPadding={HEADER_HIGH_END_HEIGHT}
+					onIsAtTopChange={onIsAtTopChange}
+				/>
+			),
+			[
+				width,
+				onShouldShowHeaderChange,
+				shouldShowHeader,
+				HEADER_HIGH_END_HEIGHT,
+				onIsAtTopChange,
+			],
+		);
+
 		return (
 			<>
 				{Platform.OS === 'ios' ? (
 					<View style={styles.androidPager}>
 						<Animated.FlatList
+							windowSize={6}
+							initialNumToRender={3}
 							ref={(flatList: any) =>
 								(flatListRef.current = flatList)
 							}
@@ -209,28 +233,7 @@ const ArticleSlider = React.memo(
 							pagingEnabled
 							keyExtractor={(item: any) => item.article}
 							data={flattenedArticles}
-							renderItem={({
-								item,
-								index,
-							}: {
-								item: any;
-								index: number;
-							}) => (
-								<ArticleScreenBody
-									width={width}
-									path={item}
-									pillar={getAppearancePillar(
-										item.appearance,
-									)}
-									position={index}
-									onShouldShowHeaderChange={
-										onShouldShowHeaderChange
-									}
-									shouldShowHeader={shouldShowHeader}
-									topPadding={HEADER_HIGH_END_HEIGHT}
-									onIsAtTopChange={onIsAtTopChange}
-								/>
-							)}
+							renderItem={renderItem}
 						/>
 					</View>
 				) : (
