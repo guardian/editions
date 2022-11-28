@@ -166,6 +166,29 @@ const ArticleSlider = React.memo(
 			],
 		);
 
+		const onScrollListener = (ev: any) => {
+			onShouldShowHeaderChange(true);
+			const newPos = ev.nativeEvent.contentOffset.x / width;
+			const newIndex = clamp(
+				Math.round(newPos),
+				0,
+				flattenedArticles.length - 1,
+			);
+			if (current !== newIndex) {
+				sendPageViewEvent({
+					path: flattenedArticles[newIndex].article,
+				});
+
+				setCurrent(newIndex);
+				slideToFrontFor(newIndex);
+			}
+			const newPosition = Animated.divide(
+				ev.nativeEvent.contentOffset.x,
+				new Animated.Value(width),
+			);
+			position !== newPosition && setPosition(newPosition);
+		};
+
 		return (
 			<>
 				{Platform.OS === 'ios' ? (
@@ -190,34 +213,8 @@ const ArticleSlider = React.memo(
 									},
 								],
 								{
-									useNativeDriver: true,
-									listener: (ev: any) => {
-										onShouldShowHeaderChange(true);
-										const newPos =
-											ev.nativeEvent.contentOffset.x /
-											width;
-										const newIndex = clamp(
-											Math.round(newPos),
-											0,
-											flattenedArticles.length - 1,
-										);
-										if (current !== newIndex) {
-											sendPageViewEvent({
-												path: flattenedArticles[
-													newIndex
-												].article,
-											});
-										}
-
-										setCurrent(newIndex);
-										slideToFrontFor(newIndex);
-
-										const position = Animated.divide(
-											ev.nativeEvent.contentOffset.x,
-											new Animated.Value(width),
-										);
-										setPosition(position);
-									},
+									useNativeDriver: false,
+									listener: onScrollListener,
 								},
 							)}
 							getItemLayout={(
