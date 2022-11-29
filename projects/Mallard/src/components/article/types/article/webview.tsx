@@ -57,7 +57,7 @@ const WebviewWithArticle = ({
 		uri = Platform.OS === 'android' ? 'file://' + htmlUri : htmlUri;
 	}
 
-	console.log(`URL (${origin}): ${uri}`);
+	__DEV__ && console.log(`URL (${origin}): ${uri}`);
 
 	// if the device is offline and the Issue is not downloaded show a user friendly error message
 	if (!isConnected && origin == 'api') return <WebviewError />;

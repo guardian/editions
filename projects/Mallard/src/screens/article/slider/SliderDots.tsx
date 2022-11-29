@@ -1,12 +1,12 @@
 import React from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 interface SliderDotsProps {
 	numOfItems: number;
 	color: string;
 	location?: 'article' | 'front';
-	position: Animated.AnimatedInterpolation;
+	position: Animated.AnimatedInterpolation | number;
 	startIndex?: number;
 }
 
@@ -49,7 +49,7 @@ const SliderDots = React.memo(
 		const appliedStyle = styles(color, location, isTablet);
 
 		const newPos: any =
-			Platform.OS === 'android' && startIndex
+			location === 'article' && startIndex
 				? Number(position) - startIndex
 				: startIndex
 				? Animated.subtract(position, startIndex)
@@ -68,7 +68,7 @@ const SliderDots = React.memo(
 
 		for (let i = 0; i < numOfItems; i++) {
 			const backgroundColor =
-				Platform.OS === 'android' && location === 'article'
+				location === 'article'
 					? i === newPos
 						? color
 						: '#DCDCDC'

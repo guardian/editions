@@ -60,8 +60,7 @@ const ArticleSlider = React.memo(
 			getArticleDataFromNavigator(articleNavigator, path);
 		const [current, setCurrent] = useState(startingPoint);
 		const [lastTrackedIndex, setLastTrackedIndex] = useState(-1);
-		const [position, setPosition] =
-			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
+		const [position, setPosition] = useState<number>(0);
 		const [sliderPosition] = useState(new Animated.Value(0));
 
 		const { width } = useDimensions();
@@ -181,8 +180,7 @@ const ArticleSlider = React.memo(
 
 				setCurrent(newIndex);
 				slideToFrontFor(newIndex);
-				const newPosition = new Animated.Value(newIndex);
-				setPosition(newPosition);
+				setPosition(newIndex);
 			}
 		};
 
