@@ -181,12 +181,9 @@ const ArticleSlider = React.memo(
 
 				setCurrent(newIndex);
 				slideToFrontFor(newIndex);
+				const newPosition = new Animated.Value(newIndex);
+				setPosition(newPosition);
 			}
-			const newPosition = Animated.divide(
-				ev.nativeEvent.contentOffset.x,
-				new Animated.Value(width),
-			);
-			position !== newPosition && setPosition(newPosition);
 		};
 
 		return (

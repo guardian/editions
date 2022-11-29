@@ -1,7 +1,6 @@
 import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
 
 interface SliderDotsProps {
 	numOfItems: number;
@@ -56,29 +55,16 @@ const SliderDots = React.memo(
 				? Animated.subtract(position, startIndex)
 				: position;
 
-		const largeDeviceMemory = useLargeDeviceMemory();
-		const range = (i: number) =>
-			largeDeviceMemory
-				? {
-						inputRange: [
-							i - 0.50000000001,
-							i - 0.5,
-							i,
-							i + 0.5,
-							i + 0.50000000001,
-						],
-						outputRange: [
-							'#DCDCDC',
-							color,
-							color,
-							color,
-							'#DCDCDC',
-						],
-				  }
-				: {
-						inputRange: [i - 1, i, i + 1],
-						outputRange: ['#DCDCDC', color, '#DCDCDC'],
-				  };
+		const range = (i: number) => ({
+			inputRange: [
+				i - 0.50000000001,
+				i - 0.5,
+				i,
+				i + 0.5,
+				i + 0.50000000001,
+			],
+			outputRange: ['#DCDCDC', color, color, color, '#DCDCDC'],
+		});
 
 		for (let i = 0; i < numOfItems; i++) {
 			const backgroundColor =
