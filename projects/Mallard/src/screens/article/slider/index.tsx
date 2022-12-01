@@ -174,10 +174,6 @@ const ArticleSlider = React.memo(
 				flattenedArticles.length - 1,
 			);
 			if (current !== newIndex) {
-				sendPageViewEvent({
-					path: flattenedArticles[newIndex].article,
-				});
-
 				setCurrent(newIndex);
 				slideToFrontFor(newIndex);
 				setPosition(newIndex);
@@ -197,6 +193,11 @@ const ArticleSlider = React.memo(
 							showsHorizontalScrollIndicator={false}
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={1}
+							onMomentumScrollEnd={() => {
+								sendPageViewEvent({
+									path: flattenedArticles[current].article,
+								});
+							}}
 							onScroll={Animated.event(
 								[
 									{
