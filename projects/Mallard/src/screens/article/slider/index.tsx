@@ -119,8 +119,16 @@ const ArticleSlider = React.memo(
 		const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article);
 		const setNavPosition = useSetNavPosition();
 
-		const scroller = (index: number) =>
-			viewPagerRef?.current?.setPage(index);
+		const scroller = (index: number) => {
+			if (Platform.OS === 'ios') {
+				flatListRef?.current?.scrollToIndex({
+					index,
+					animated: true,
+				});
+			} else {
+				viewPagerRef?.current?.setPage(index);
+			}
+		};
 
 		const goNext = () => {
 			scroller(
@@ -185,6 +193,7 @@ const ArticleSlider = React.memo(
 				{Platform.OS === 'ios' ? (
 					<View style={styles.androidPager}>
 						<Animated.FlatList
+							style={{ paddingBottom: isPreview ? 150 : 0 }}
 							windowSize={6}
 							initialNumToRender={3}
 							ref={(flatList: any) =>
@@ -231,7 +240,10 @@ const ArticleSlider = React.memo(
 					</View>
 				) : (
 					<ViewPagerAndroid
-						style={styles.androidPager}
+						style={[
+							styles.androidPager,
+							{ marginBottom: isPreview ? 100 : 0 },
+						]}
 						initialPage={startingPoint}
 						ref={(viewPager) => {
 							viewPagerRef.current = viewPager;
@@ -276,15 +288,12 @@ const ArticleSlider = React.memo(
 						))}
 					</ViewPagerAndroid>
 				)}
-
 				<SliderHeaderHighEnd
 					isShown={shouldShowHeader}
 					isAtTop={isAtTop}
 					sliderDetails={sliderDetails}
 				/>
-
 				{isPreview && (
-					// check go next and go previous work
 					<PreviewControls goNext={goNext} goPrevious={goPrevious} />
 				)}
 			</>
