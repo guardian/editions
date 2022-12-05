@@ -60,7 +60,7 @@ const ArticleSlider = React.memo(
 			getArticleDataFromNavigator(articleNavigator, path);
 		const [current, setCurrent] = useState(startingPoint);
 		const [lastTrackedIndex, setLastTrackedIndex] = useState(-1);
-		const [position, setPosition] = useState<number>(0);
+		const [position, setPosition] = useState<number>(startingPoint);
 		const [sliderPosition] = useState(new Animated.Value(0));
 
 		const { width } = useDimensions();
