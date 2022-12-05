@@ -225,6 +225,8 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
             <View
               collapsable={false}
               forwardedRef={[Function]}
+              handlerTag={3}
+              handlerType="PanGestureHandler"
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
@@ -537,11 +539,17 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                             >
                               <RNGestureHandlerButton
                                 collapsable={false}
+                                delayLongPress={600}
+                                enabled={true}
+                                exclusive={true}
+                                handlerTag={4}
+                                handlerType="NativeViewGestureHandler"
                                 onGestureEvent={[Function]}
                                 onGestureHandlerEvent={[Function]}
                                 onGestureHandlerStateChange={[Function]}
                                 onHandlerStateChange={[Function]}
                                 rippleColor={0}
+                                touchSoundDisabled={false}
                               >
                                 <View
                                   accessible={true}
@@ -932,6 +940,8 @@ exports[`IssueScreenHeader should match the default style 1`] = `
             <View
               collapsable={false}
               forwardedRef={[Function]}
+              handlerTag={1}
+              handlerType="PanGestureHandler"
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
@@ -1244,11 +1254,17 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                             >
                               <RNGestureHandlerButton
                                 collapsable={false}
+                                delayLongPress={600}
+                                enabled={true}
+                                exclusive={true}
+                                handlerTag={2}
+                                handlerType="NativeViewGestureHandler"
                                 onGestureEvent={[Function]}
                                 onGestureHandlerEvent={[Function]}
                                 onGestureHandlerStateChange={[Function]}
                                 onHandlerStateChange={[Function]}
                                 rippleColor={0}
+                                touchSoundDisabled={false}
                               >
                                 <View
                                   accessible={true}
