@@ -26,7 +26,7 @@ interface SliderTitleProps {
 	color: string;
 	location?: 'article' | 'front';
 	subtitle?: string;
-	position: Animated.AnimatedInterpolation;
+	position: Animated.AnimatedInterpolation | number;
 	startIndex?: number;
 	editionDate: Date | undefined; //temporary until we have subtitles for the last 30 editions
 }

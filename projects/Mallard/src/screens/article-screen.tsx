@@ -24,7 +24,7 @@ export type FrontSpec = {
 	articleSpecs: PathToArticle[];
 };
 
-type ArticleSpec = PathToArticle & {
+export type ArticleSpec = PathToArticle & {
 	frontName: string;
 	appearance: Appearance;
 };

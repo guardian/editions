@@ -10,7 +10,9 @@ const styles = StyleSheet.create({
 		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		paddingTop: 20,
+		padding: 20,
+		position: 'absolute',
+		bottom: 0,
 	},
 });
 
