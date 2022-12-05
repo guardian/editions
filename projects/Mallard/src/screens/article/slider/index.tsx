@@ -144,7 +144,7 @@ const ArticleSlider = React.memo(
 		};
 
 		const renderItem = useCallback(
-			({ item, index }: { item: any; index: number }) => (
+			({ item, index }: { item: ArticleSpec; index: number }) => (
 				<ArticleScreenBody
 					width={width}
 					path={item}
@@ -284,6 +284,7 @@ const ArticleSlider = React.memo(
 				/>
 
 				{isPreview && (
+					// check go next and go previous work
 					<PreviewControls goNext={goNext} goPrevious={goPrevious} />
 				)}
 			</>
