@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from 'react-native-splash-screen';
 import { ConfigProvider } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
@@ -64,22 +65,24 @@ const App = () => {
 	}, []);
 
 	return (
-		<ErrorBoundary>
-			<WithProviders>
-				<AccessProvider onIdentityStatusChange={handleIdStatus}>
-					<StatusBar
-						barStyle="light-content"
-						backgroundColor="#041f4a"
-					/>
-					<View style={styles.appContainer}>
-						<AppNavigation />
-						<NetInfoAutoToast />
-					</View>
-					<ModalRenderer />
-					<BugButtonHandler />
-				</AccessProvider>
-			</WithProviders>
-		</ErrorBoundary>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<ErrorBoundary>
+				<WithProviders>
+					<AccessProvider onIdentityStatusChange={handleIdStatus}>
+						<StatusBar
+							barStyle="light-content"
+							backgroundColor="#041f4a"
+						/>
+						<View style={styles.appContainer}>
+							<AppNavigation />
+							<NetInfoAutoToast />
+						</View>
+						<ModalRenderer />
+						<BugButtonHandler />
+					</AccessProvider>
+				</WithProviders>
+			</ErrorBoundary>
+		</GestureHandlerRootView>
 	);
 };
 

@@ -74,7 +74,7 @@
     "react-native-device-info": "^8.0.2",
     "react-native-fast-image": "^8.5.11",
     "react-native-fs": "^2.16.6",
-    "react-native-gesture-handler": "^1.10.3",
+    "react-native-gesture-handler": "2.8.0",
     "react-native-iap": "^3.3.9",
     "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-in-app-utils": "^6.0.2",
