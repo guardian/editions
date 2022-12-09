@@ -3,8 +3,8 @@
 exports[`SettingsCog should display a SettingsCog icon in SVG 1`] = `
 <RNSVGSvgView
   align="xMidYMid"
-  bbHeight="40"
-  bbWidth="40"
+  bbHeight={40}
+  bbWidth={40}
   fill="none"
   focusable={false}
   height={40}
@@ -16,6 +16,10 @@ exports[`SettingsCog should display a SettingsCog icon in SVG 1`] = `
       Object {
         "backgroundColor": "transparent",
         "borderWidth": 0,
+      },
+      undefined,
+      Object {
+        "opacity": 1,
       },
       Object {
         "flex": 0,
@@ -30,46 +34,139 @@ exports[`SettingsCog should display a SettingsCog icon in SVG 1`] = `
 >
   <RNSVGGroup
     fill={null}
+    fillOpacity={1}
+    fillRule={1}
+    font={Object {}}
+    matrix={
+      Array [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ]
+    }
+    opacity={1}
+    originX={0}
+    originY={0}
     propList={
       Array [
         "fill",
       ]
     }
+    rotation={0}
+    scaleX={1}
+    scaleY={1}
+    skewX={0}
+    skewY={0}
+    stroke={null}
+    strokeDasharray={null}
+    strokeDashoffset={null}
+    strokeLinecap={0}
+    strokeLinejoin={0}
+    strokeMiterlimit={4}
+    strokeOpacity={1}
+    strokeWidth={1}
+    vectorEffect={0}
+    x={0}
+    y={0}
   >
     <RNSVGPath
       d="M0.999998 38.5C0.999997 59.2107 17.7893 76 38.5 76C59.2107 76 76 59.2107 76 38.5C76 17.7893 59.2107 0.999999 38.5 0.999998C17.7893 0.999997 0.999999 17.7893 0.999998 38.5Z"
       fill={
-        Object {
-          "payload": 4278528354,
-          "type": 0,
-        }
+        Array [
+          0,
+          4278528354,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
           "stroke",
         ]
       }
+      rotation={0}
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
       stroke={
-        Object {
-          "payload": 4294967295,
-          "type": 0,
-        }
+        Array [
+          0,
+          4294967295,
+        ]
       }
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
+      x={0}
+      y={0}
     />
     <RNSVGPath
       d="M56.3977 43.0511L60.9489 42.0795C61.0511 40.9034 61.1023 39.7273 61.1023 38.5C61.1023 37.3239 61.0511 36.0966 60.9489 34.9205L56.3977 33.9489C56.0398 32.2614 55.2727 30.625 54.5057 29.142L56.9091 25.2557C55.4261 23.3636 53.7386 21.6761 51.8466 20.1932L47.9602 22.5966C46.375 21.8295 44.8409 21.0625 43.1534 20.7045L42.1818 16.1534C41.0057 16.0511 39.7784 16 38.6023 16C37.4261 16 36.0966 16 35.0227 16.1534L34.0511 20.7045C32.3636 21.0625 30.6761 21.8295 29.2443 22.5966L25.358 20.1932C23.4659 21.625 21.6761 23.4148 20.2955 25.2557L22.8011 29.142C21.9318 30.6761 21.267 32.2614 20.8068 33.9489L16.358 34.9205C16.1534 36.0966 16 37.2216 16 38.5C16 39.6761 16.1534 41.0057 16.358 42.0795L20.8068 43.0511C21.267 44.7386 21.9318 46.4261 22.8011 47.8068L20.2955 51.7443C21.6761 53.6364 23.4659 55.375 25.358 56.8068L29.2443 54.3011C30.6761 55.1705 32.3636 55.8352 34.0511 56.2955L35.0227 60.7443C36.0966 60.9489 37.4261 61.1023 38.6023 61.1023C39.8807 61.1023 41.0057 60.9489 42.1818 60.7443L43.1534 56.3977C44.8409 55.8352 46.375 55.1705 47.9602 54.3011L51.8466 56.8068C53.6875 55.4261 55.4773 53.6364 56.9091 51.7443L54.5057 47.858C55.2727 46.4261 56.0398 44.7386 56.3977 43.0511ZM38.6023 52.9716C30.625 52.9716 24.1307 46.4773 24.1307 38.5C24.1307 30.5227 30.625 24.0284 38.6023 24.0284C46.5795 24.0284 53.0739 30.5227 53.0739 38.5C53.0739 46.4773 46.5795 52.9716 38.6023 52.9716Z"
       fill={
-        Object {
-          "payload": 4294967295,
-          "type": 0,
-        }
+        Array [
+          0,
+          4294967295,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
+      rotation={0}
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
+      stroke={null}
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
+      x={0}
+      y={0}
     />
   </RNSVGGroup>
 </RNSVGSvgView>
