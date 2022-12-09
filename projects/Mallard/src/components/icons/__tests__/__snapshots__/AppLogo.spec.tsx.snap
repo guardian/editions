@@ -17,6 +17,10 @@ exports[`AppLogo should display a AppLogo icon in SVG 1`] = `
         "backgroundColor": "transparent",
         "borderWidth": 0,
       },
+      undefined,
+      Object {
+        "opacity": 1,
+      },
       Object {
         "flex": 0,
         "height": 40,
@@ -30,107 +34,323 @@ exports[`AppLogo should display a AppLogo icon in SVG 1`] = `
 >
   <RNSVGGroup
     fill={null}
+    fillOpacity={1}
+    fillRule={1}
+    font={Object {}}
+    matrix={
+      Array [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ]
+    }
+    opacity={1}
+    originX={0}
+    originY={0}
     propList={
       Array [
         "fill",
       ]
     }
+    rotation={0}
+    scaleX={1}
+    scaleY={1}
+    skewX={0}
+    skewY={0}
+    stroke={null}
+    strokeDasharray={null}
+    strokeDashoffset={null}
+    strokeLinecap={0}
+    strokeLinejoin={0}
+    strokeMiterlimit={4}
+    strokeOpacity={1}
+    strokeWidth={1}
+    vectorEffect={0}
+    x={0}
+    y={0}
   >
     <RNSVGRect
       fill={
-        Object {
-          "payload": 4278528354,
-          "type": 0,
-        }
+        Array [
+          0,
+          4278528354,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
       height="150"
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
+      rotation={0}
       rx="15"
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
+      stroke={null}
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
       width="150"
-      x="0"
-      y="0"
+      x={0}
+      y={0}
     />
     <RNSVGCircle
       cx="107.5"
       cy="107.5"
       fill={
-        Object {
-          "payload": 4287683839,
-          "type": 0,
-        }
+        Array [
+          0,
+          4287683839,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
       r="30"
+      rotation={0}
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
+      stroke={null}
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
+      x={0}
+      y={0}
     />
     <RNSVGCircle
       cx="107.5"
       cy="45"
       fill={
-        Object {
-          "payload": 4294949576,
-          "type": 0,
-        }
+        Array [
+          0,
+          4294949576,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
       r="30"
+      rotation={0}
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
+      stroke={null}
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
+      x={0}
+      y={0}
     />
     <RNSVGCircle
       cx="45"
       cy="107.5"
       fill={
-        Object {
-          "payload": 4294934287,
-          "type": 0,
-        }
+        Array [
+          0,
+          4294934287,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
       r="30"
+      rotation={0}
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
+      stroke={null}
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
+      x={0}
+      y={0}
     />
     <RNSVGCircle
       cx="45"
       cy="45"
       fill={
-        Object {
-          "payload": 4294967295,
-          "type": 0,
-        }
+        Array [
+          0,
+          4294967295,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
       r="30"
+      rotation={0}
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
+      stroke={null}
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
+      x={0}
+      y={0}
     />
     <RNSVGPath
       d="M46.0615 20.1275H46.0015C38.2015 20.1275 33.6415 30.8075 34.0015 45.1475V45.2675C33.6415 59.4875 38.2015 70.1675 46.0015 70.1675H46.0615V71.3075C34.5415 72.0875 18.8215 63.2675 19.0015 45.2675V45.1475C18.8215 27.0875 34.5415 18.2675 46.0615 19.0475V20.1275ZM50.0215 19.5275C54.8215 20.1875 60.0415 23.2475 62.0215 25.4075V35.2475H61.0015L50.0215 20.6675V19.5275ZM65.6815 47.3675L62.0215 48.9875V65.1875C60.0415 67.1675 55.0015 70.1075 50.0215 71.0075V48.5675L46.4815 47.3075V46.2875H65.6815V47.3675Z"
       fill={
-        Object {
-          "payload": 4278528354,
-          "type": 0,
-        }
+        Array [
+          0,
+          4278528354,
+        ]
       }
+      fillOpacity={1}
+      fillRule={1}
+      matrix={
+        Array [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+        ]
+      }
+      opacity={1}
+      originX={0}
+      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
+      rotation={0}
+      scaleX={1}
+      scaleY={1}
+      skewX={0}
+      skewY={0}
+      stroke={null}
+      strokeDasharray={null}
+      strokeDashoffset={null}
+      strokeLinecap={0}
+      strokeLinejoin={0}
+      strokeMiterlimit={4}
+      strokeOpacity={1}
+      strokeWidth={1}
+      vectorEffect={0}
+      x={0}
+      y={0}
     />
   </RNSVGGroup>
 </RNSVGSvgView>
