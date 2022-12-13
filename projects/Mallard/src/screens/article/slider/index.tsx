@@ -72,10 +72,14 @@ const ArticleSlider = React.memo(
 		const currentArticle = flattenedArticles[Math.round(current)];
 
 		useEffect(() => {
-			flatListRef?.current?.scrollToIndex({
-				index: current,
-				animated: false,
-			});
+			if (Platform.OS === 'ios') {
+				flatListRef?.current?.scrollToIndex({
+					index: current,
+					animated: false,
+				});
+			} else {
+				viewPagerRef?.current?.setPage(startingPoint);
+			}
 		}, [width]); // eslint-disable-line react-hooks/exhaustive-deps
 
 		const sliderSections = articleNavigator.reduce(
