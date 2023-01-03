@@ -200,6 +200,7 @@ const ArticleSlider = React.memo(
 							style={{ paddingBottom: isPreview ? 150 : 0 }}
 							windowSize={6}
 							initialNumToRender={3}
+							maxToRenderPerBatch={6}
 							ref={(flatList: any) =>
 								(flatListRef.current = flatList)
 							}
