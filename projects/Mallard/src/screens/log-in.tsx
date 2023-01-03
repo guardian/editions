@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { ImageSourcePropType } from 'react-native';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import Image from 'react-native-fast-image';
 import { Button } from 'src/components/Button/Button';
 import { Link, LinkNav } from 'src/components/link';
 import { LoginButton } from 'src/components/login/login-button';
