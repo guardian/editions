@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import type { ImageSourcePropType } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import Image from 'react-native-fast-image';
+import type { Source } from 'react-native-fast-image';
 import { Button } from 'src/components/Button/Button';
 import { Link, LinkNav } from 'src/components/link';
 import { LoginButton } from 'src/components/login/login-button';
@@ -40,7 +40,7 @@ const SocialButton = ({
 }: {
 	children: string;
 	onPress: () => void;
-	iconRequire: ImageSourcePropType;
+	iconRequire: Source;
 }) => (
 	<Button
 		buttonStyles={socialButtonStyles.button}

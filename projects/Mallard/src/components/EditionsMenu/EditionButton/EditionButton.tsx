@@ -43,7 +43,6 @@ const EditionButton: React.FC<Props> = ({
 					{imageUri && (
 						<Image
 							key={imageUri}
-							resizeMethod={'resize'}
 							style={defaultStyles.image}
 							source={{ uri: imageUri }}
 						/>
