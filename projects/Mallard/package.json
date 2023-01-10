@@ -72,7 +72,7 @@
     "react-native-circular-progress-indicator": "^4.4.0",
     "react-native-config": "^1.4.6",
     "react-native-device-info": "^8.0.2",
-    "react-native-fast-image": "^8.5.11",
+    "react-native-fast-image": "^8.6.3",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "2.8.0",
     "react-native-iap": "^3.3.9",

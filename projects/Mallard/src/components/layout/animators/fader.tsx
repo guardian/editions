@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-	Animated,
-	Dimensions,
-	Image,
-	Platform,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { Animated, Dimensions, Platform, StyleSheet, View } from 'react-native';
+import Image from 'react-native-fast-image';
 import { safeInterpolation } from 'src/helpers/math';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
 
