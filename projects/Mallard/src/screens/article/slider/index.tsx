@@ -1,3 +1,4 @@
+import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
@@ -196,11 +197,9 @@ const ArticleSlider = React.memo(
 			<>
 				{Platform.OS === 'ios' ? (
 					<View style={styles.androidPager}>
-						<Animated.FlatList
+						<FlashList
+							estimatedItemSize={width}
 							style={{ paddingBottom: isPreview ? 150 : 0 }}
-							windowSize={6}
-							initialNumToRender={3}
-							maxToRenderPerBatch={6}
 							ref={(flatList: any) =>
 								(flatListRef.current = flatList)
 							}
@@ -227,14 +226,6 @@ const ArticleSlider = React.memo(
 									listener: onScrollListener,
 								},
 							)}
-							getItemLayout={(
-								_: ArticleSpec[] | null | undefined,
-								index: number,
-							) => ({
-								length: width,
-								offset: width * index,
-								index,
-							})}
 							horizontal={true}
 							initialScrollIndex={startingPoint}
 							pagingEnabled
