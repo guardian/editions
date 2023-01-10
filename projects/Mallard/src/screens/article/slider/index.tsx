@@ -1,6 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, FlatList, Platform, StyleSheet, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
 import { clamp } from 'src/helpers/math';
@@ -197,9 +197,11 @@ const ArticleSlider = React.memo(
 			<>
 				{Platform.OS === 'ios' ? (
 					<View style={styles.androidPager}>
-						<FlashList
-							estimatedItemSize={width}
+						<FlatList
 							style={{ paddingBottom: isPreview ? 150 : 0 }}
+							windowSize={3}
+							initialNumToRender={3}
+							maxToRenderPerBatch={6}
 							ref={(flatList: any) =>
 								(flatListRef.current = flatList)
 							}
