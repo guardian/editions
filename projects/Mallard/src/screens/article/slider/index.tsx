@@ -227,6 +227,14 @@ const ArticleSlider = React.memo(
 									listener: onScrollListener,
 								},
 							)}
+							getItemLayout={(
+								_: ArticleSpec[] | null | undefined,
+								index: number,
+							) => ({
+								length: width,
+								offset: width * index,
+								index,
+							})}
 							horizontal={true}
 							initialScrollIndex={startingPoint}
 							pagingEnabled
