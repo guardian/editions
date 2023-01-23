@@ -22,10 +22,6 @@ type BasicCreds = {
 	password: string;
 };
 
-type FacebookCreds = {
-	'facebook-access-token': string;
-};
-
 type GoogleCreds = {
 	'google-access-token': string;
 };
@@ -43,18 +39,11 @@ type AppleOauthCreds = {
 
 export type AuthParams =
 	| BasicCreds
-	| FacebookCreds
 	| GoogleCreds
 	| AppleCreds
 	| AppleOauthCreds;
 
-export type AuthType =
-	| 'apple'
-	| 'google'
-	| 'facebook'
-	| 'email'
-	| 'apple-oauth'
-	| 'unknown';
+export type AuthType = 'apple' | 'google' | 'email' | 'apple-oauth' | 'unknown';
 
 export type IdentityAuthData = {
 	userDetails: User;
@@ -86,8 +75,6 @@ export const getUserName = (authType: AuthType, params: AuthParams): string => {
 			if ('email' in params) {
 				return params.email;
 			}
-		case 'facebook':
-			return 'gu-editions::token::facebook';
 		case 'google':
 			return 'gu-editions::token::google';
 		case 'apple':
@@ -99,7 +86,6 @@ export const getUserName = (authType: AuthType, params: AuthParams): string => {
 
 export const detectAuthType = (params: AuthParams): AuthType => {
 	if ('email' in params) return 'email';
-	if ('facebook-access-token' in params) return 'facebook';
 	if ('google-access-token' in params) return 'google';
 	if ('apple-sign-in-token' in params) return 'apple-oauth';
 	if ('idToken' in params) return 'apple';
