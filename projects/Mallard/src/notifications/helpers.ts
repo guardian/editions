@@ -1,5 +1,4 @@
-import type { MomentInput } from 'moment';
-import moment from 'moment';
+import { differenceInDays } from 'date-fns';
 import {
 	pushNotificationRegistrationCache,
 	pushRegisteredTokens,
@@ -41,12 +40,12 @@ const isSameTopics = (t1: PushToken[] | null, t2: PushToken[]) => {
 const shouldReRegister = (
 	newToken: string,
 	registration: PushNotificationRegistration | null,
-	now: MomentInput,
+	now: Date,
 	currentTopics: PushToken[] | null,
 	newTopics: PushToken[],
 ): boolean => {
 	const exceedTime = registration
-		? moment(now).diff(moment(registration.registrationDate), 'days') > 14
+		? differenceInDays(now, new Date(registration.registrationDate)) > 14
 		: true;
 	const differentToken = registration
 		? newToken !== registration.token
@@ -65,7 +64,7 @@ const maybeRegister = async (
 	// mocks for testing
 	pushNotificationRegistrationCacheImpl = pushNotificationRegistrationCache,
 	registerWithNotificationServiceImpl = registerWithNotificationService,
-	now = moment().toString(),
+	now = new Date(),
 ) => {
 	let should: boolean;
 	const newTopics = await getTopicName();
@@ -92,7 +91,8 @@ const maybeRegister = async (
 		pushRegisteredTokens.set(response['topics']);
 
 		await pushNotificationRegistrationCacheImpl.set({
-			registrationDate: now,
+			// Need to double check this
+			registrationDate: now.toISOString(),
 			token,
 		});
 		return true;

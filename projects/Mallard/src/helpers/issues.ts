@@ -1,3 +1,4 @@
+import { getDate, getDay, getMonth } from 'date-fns';
 import { useMemo } from 'react';
 import type { Issue } from 'src/common';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
@@ -36,8 +37,8 @@ interface IssueDate {
 export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
 	const date = londonTime(dateString);
 	return {
-		date: `${date.date()} ${months[date.month()]}`,
-		weekday: days[date.day()],
+		date: `${getDate(date)} ${months[getMonth(date)]}`,
+		weekday: days[getDay(date)],
 	};
 };
 
@@ -58,8 +59,7 @@ const dateToFolderConvert = (date: Date): string => {
 };
 
 /** today as folder given */
-export const todayAsFolder = (): string =>
-	dateToFolderConvert(londonTime().toDate());
+export const todayAsFolder = (): string => dateToFolderConvert(londonTime());
 
 export const todayAsKey = async (): Promise<string> => {
 	const edition = await getSelectedEditionSlug();
@@ -68,7 +68,7 @@ export const todayAsKey = async (): Promise<string> => {
 
 export const lastNDays = (n: number): string[] => {
 	return Array.from({ length: n }, (_, i) => {
-		const d = londonTime().toDate();
+		const d = londonTime();
 		d.setDate(d.getDate() - i);
 		return dateToFolderConvert(d);
 	});

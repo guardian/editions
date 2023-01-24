@@ -1,11 +1,13 @@
-import moment from 'moment';
+import { addDays, subDays } from 'date-fns';
 import { receiptIOS } from 'src/authentication/__tests__/fixtures';
 import { findValidReceipt, isReceiptValid } from '../iap';
+
+const today = new Date();
 
 describe('iap', () => {
 	describe('isReceiptValid', () => {
 		it('returns false for expiry dates that are more thanthree days older than now', () => {
-			const fourDaysAgo = moment().subtract(4, 'days').toDate();
+			const fourDaysAgo = subDays(today, 4);
 			const isValid = isReceiptValid(
 				receiptIOS({ expires_date: fourDaysAgo }),
 			);
@@ -14,7 +16,7 @@ describe('iap', () => {
 		});
 
 		it('returns true for expiry dates that are less than three days older than now', () => {
-			const twoDaysAgo = moment().subtract(2, 'days').toDate();
+			const twoDaysAgo = subDays(today, 2);
 			const isValid = isReceiptValid(
 				receiptIOS({ expires_date: twoDaysAgo }),
 			);
@@ -24,7 +26,7 @@ describe('iap', () => {
 	});
 	describe('findValidReceipt', () => {
 		it('should return a valid iap receipt if its found', () => {
-			const twoDaysInFuture = moment().add(2, 'days').toDate();
+			const twoDaysInFuture = addDays(today, 2);
 			const receipt = receiptIOS({ expires_date: twoDaysInFuture });
 			const receiptValidationResponse = {
 				status: 0,
@@ -56,7 +58,7 @@ describe('iap', () => {
 			expect(findValidReceipt(receiptValidationResponse)).toEqual(null);
 		});
 		it('should return null if it cant find a valid receipt', () => {
-			const fourDaysAgo = moment().subtract(4, 'days').toDate();
+			const fourDaysAgo = subDays(today, 4);
 			const receipt = receiptIOS({ expires_date: fourDaysAgo });
 			const receiptValidationResponse = {
 				status: 0,
