@@ -91,7 +91,6 @@ const maybeRegister = async (
 		pushRegisteredTokens.set(response['topics']);
 
 		await pushNotificationRegistrationCacheImpl.set({
-			// Need to double check this
 			registrationDate: now.toISOString(),
 			token,
 		});
