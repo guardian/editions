@@ -1,10 +1,11 @@
-import moment from 'moment-timezone';
+import { format } from 'date-fns';
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { Platform } from 'react-native';
 import { languageLocale } from './locale';
 
 const londonTime = (time?: string | number) => {
-	if (time != null) return moment.tz(time, 'Europe/London');
-	return moment.tz('Europe/London');
+	if (time != null) return zonedTimeToUtc(time, 'Europe/London');
+	return utcToZonedTime(new Date(), 'Europe/London');
 };
 
 const localDate = (date: Date): string => {
@@ -13,8 +14,8 @@ const localDate = (date: Date): string => {
 	} else {
 		// toLocaleDateString is not a reliable way of getting the format we need on android
 		return languageLocale === 'en-US'
-			? moment(date).format('MM/DD/YYYY')
-			: moment(date).format('DD/MM/YYYY');
+			? format(date, 'MM/DD/YYYY')
+			: format(date, 'DD/MM/YYYY');
 	}
 };
 
