@@ -178,9 +178,14 @@ const IssueButton = ({
 		}
 	};
 
+	const progressValue = useMemo(
+		() => (dlStatus ? getStatusPercentage(dlStatus) ?? 100 : 100),
+		[dlStatus],
+	);
+
 	return (
 		<CircularProgressBase
-			value={dlStatus ? getStatusPercentage(dlStatus) ?? 100 : 100}
+			value={progressValue}
 			maxValue={100}
 			radius={20}
 			circleBackgroundColor={

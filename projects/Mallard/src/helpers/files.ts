@@ -111,16 +111,18 @@ export const unzipNamedIssueArchive = async (zipFilePath: string) => {
  */
 export const isIssueOnDevice = async (
 	localIssueId: Issue['localId'],
-): Promise<boolean> =>
-	(
-		await Promise.all([
-			RNFS.exists(FSPaths.issue(localIssueId)),
-			RNFS.exists(FSPaths.mediaRoot(localIssueId)),
-			RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/front`),
-			RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
-			RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/html`),
-		])
-	).every((_) => _);
+): Promise<boolean> => {
+	try {
+		// Please note, this makes an assumption on the location of filenames which is not the case throughout the code
+		// However, at this stage in the project, this is unlikely to change and therefore the performance optimisation
+		// that this currently provides is a greater benefit than maintenance.
+		const expectedFolders = 'issue_front_thumbs_media_html';
+		const folders = await RNFS.readdir(FSPaths.issueRoot(localIssueId));
+		return folders.every((item) => expectedFolders.includes(item));
+	} catch {
+		return false;
+	}
+};
 
 const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`;
 
