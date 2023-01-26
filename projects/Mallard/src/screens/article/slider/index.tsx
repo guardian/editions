@@ -5,7 +5,11 @@ import { PreviewControls } from 'src/components/article/preview-controls';
 import { clamp } from 'src/helpers/math';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
-import { useApiUrl, useDimensions } from 'src/hooks/use-config-provider';
+import {
+	useApiUrl,
+	useDimensions,
+	useLargeDeviceMemory,
+} from 'src/hooks/use-config-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator, ArticleSpec } from 'src/screens/article-screen';
@@ -68,6 +72,7 @@ const ArticleSlider = React.memo(
 		const flatListRef = useRef<any | undefined>();
 
 		const { isPreview } = useApiUrl();
+		const hasLargeMemory = useLargeDeviceMemory();
 
 		const currentArticle = flattenedArticles[Math.round(current)];
 
@@ -194,7 +199,7 @@ const ArticleSlider = React.memo(
 
 		return (
 			<>
-				{Platform.OS === 'ios' ? (
+				{Platform.OS === 'ios' && hasLargeMemory ? (
 					<View style={styles.androidPager}>
 						<FlatList
 							style={{ paddingBottom: isPreview ? 150 : 0 }}
