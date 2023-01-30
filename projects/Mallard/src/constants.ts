@@ -29,7 +29,7 @@ const JOIN_BETA_LINK = Platform.select({
 	default: 'https://testflight.apple.com/join/O2EojUEl',
 });
 
-const APPLE_ID = 452707806;
+const APPLE_ID = '452707806';
 const GOOGLE_PACKAGE_NAME = 'com.guardian.editions';
 
 export {
