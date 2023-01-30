@@ -28,6 +28,7 @@ import {
 } from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import { INTERACTIONS_THRESHOLD, useRating } from 'src/hooks/use-rating';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import {
@@ -35,6 +36,7 @@ import {
 	getPushTracking,
 } from 'src/notifications/push-tracking';
 import { FSPaths } from 'src/paths';
+import { remoteConfigService } from 'src/services/remote-config';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { metrics } from 'src/theme/spacing';
 
@@ -68,6 +70,13 @@ const DevZone = () => {
 		isInternetReachable,
 		isPoorConnection,
 	} = useNetInfo();
+	const {
+		interaction,
+		rateUserFlow,
+		numberOfInteractions,
+		hasShownRating,
+		clearAll,
+	} = useRating();
 
 	const [showAllEditions, setShowAllEditions] = useState(false);
 
@@ -91,6 +100,8 @@ const DevZone = () => {
 	const [imageSize, setImageSize] = useState('fetching...');
 	const [pushTokens, setPushTokens] = useState('fetching...');
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
+
+	const isRatingFFOn = remoteConfigService.getBoolean('rating');
 
 	// initialise local showAllEditions property
 	useEffect(() => {
@@ -218,6 +229,8 @@ const DevZone = () => {
 						>
 							In App Purchase
 						</Button>
+						<Button onPress={rateUserFlow}>Rate the app</Button>
+						<Button onPress={clearAll}>Clear Rating Cache</Button>
 					</ButtonList>
 					<List
 						data={[
@@ -262,6 +275,12 @@ const DevZone = () => {
 								key: 'Network Information',
 								title: 'Network Information',
 								explainer: `Type: ${type} \nisPoorConnection: ${isPoorConnection} \nisConnected: ${isConnected} \nisInternetReachable: ${isInternetReachable}`,
+							},
+							{
+								key: 'Rate the app',
+								title: 'Rate the app - Click for interaction',
+								explainer: `No of Interactions: ${numberOfInteractions} \nInteractions threshold: ${INTERACTIONS_THRESHOLD} \nRating native modal shown: ${hasShownRating.toString()} \nRemote feature flag on: ${isRatingFFOn}`,
+								onPress: interaction,
 							},
 							{
 								key: 'Clear CAS caches',

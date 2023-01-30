@@ -120,6 +120,13 @@ const isUsingProdDevtoolsCache = createAsyncCache<boolean>(
 
 const apiUrlCache = createAsyncCache<string>('@Setting_apiUrl');
 
+const numberOfInteractionsCache = createAsyncCache<number>(
+	'@Setting_numberOfInteractions',
+);
+
+const hasShownRatingCache = createAsyncCache<boolean>(
+	'@Setting_hasShownRating',
+);
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -196,4 +203,6 @@ export {
 	isWeatherShownCache,
 	isUsingProdDevtoolsCache,
 	apiUrlCache,
+	numberOfInteractionsCache,
+	hasShownRatingCache,
 };
