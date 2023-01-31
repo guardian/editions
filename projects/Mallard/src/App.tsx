@@ -1,3 +1,4 @@
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -44,6 +45,7 @@ const WithProviders = nestProviders(
 	Modal,
 	ToastProvider,
 	NavPositionProvider,
+	ActionSheetProvider,
 	ConfigProvider,
 	SettingsOverlayProvider,
 	AppStateProvider,

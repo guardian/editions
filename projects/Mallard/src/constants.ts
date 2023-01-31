@@ -29,6 +29,9 @@ const JOIN_BETA_LINK = Platform.select({
 	default: 'https://testflight.apple.com/join/O2EojUEl',
 });
 
+const APPLE_ID = '452707806';
+const GOOGLE_PACKAGE_NAME = 'com.guardian.editions';
+
 export {
 	CAS_ENDPOINT_URL,
 	ID_API_URL,
@@ -41,4 +44,6 @@ export {
 	ITUNES_CONNECT_SHARED_SECRET,
 	ANDROID_RELEASE_STREAM,
 	JOIN_BETA_LINK,
+	APPLE_ID,
+	GOOGLE_PACKAGE_NAME,
 };

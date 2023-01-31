@@ -11,6 +11,7 @@ import {
 	useLargeDeviceMemory,
 } from 'src/hooks/use-config-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
+import { useRating } from 'src/hooks/use-rating';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator, ArticleSpec } from 'src/screens/article-screen';
 import { sendPageViewEvent } from 'src/services/ophan';
@@ -70,9 +71,16 @@ const ArticleSlider = React.memo(
 		const { width } = useDimensions();
 		const viewPagerRef = useRef<ViewPagerAndroid | null>();
 		const flatListRef = useRef<any | undefined>();
-
+		const { interaction, hasShownRating } = useRating();
 		const { isPreview } = useApiUrl();
 		const hasLargeMemory = useLargeDeviceMemory();
+
+		// Set an interaction on mount of the first article
+		// Have to wait for a change in hasShownRating as its async
+		// Otherwise it doesnt fire.
+		useEffect(() => {
+			!hasShownRating && interaction();
+		}, [hasShownRating]);
 
 		const currentArticle = flattenedArticles[Math.round(current)];
 
@@ -194,6 +202,8 @@ const ArticleSlider = React.memo(
 				setCurrent(newIndex);
 				slideToFrontFor(newIndex);
 				setPosition(newIndex);
+				// Adds an interaction for the rating
+				interaction();
 			}
 		};
 
@@ -273,6 +283,8 @@ const ArticleSlider = React.memo(
 							setCurrent(newIndex);
 							slideToFrontFor(newIndex);
 							setPosition(newIndex);
+							// Adds an interaction for the rating
+							interaction();
 						}}
 					>
 						{flattenedArticles.map((item, index) => (

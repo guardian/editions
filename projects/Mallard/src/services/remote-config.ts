@@ -16,6 +16,7 @@ const remoteConfigDefaults = {
 	lightbox_enabled: true,
 	generate_share_url: true,
 	download_parallel_ssr_bundle: false,
+	rating: false,
 };
 
 const RemoteConfigProperties = [
@@ -24,6 +25,7 @@ const RemoteConfigProperties = [
 	'lightbox_enabled',
 	'generate_share_url',
 	'download_parallel_ssr_bundle',
+	'rating',
 ] as const;
 
 type RemoteConfigProperty = typeof RemoteConfigProperties[number];
