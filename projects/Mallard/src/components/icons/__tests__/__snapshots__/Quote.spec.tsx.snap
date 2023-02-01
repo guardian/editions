@@ -2,8 +2,8 @@
 
 exports[`Quote should display a Quote icon in SVG 1`] = `
 <RNSVGSvgView
-  bbHeight={21}
-  bbWidth={37}
+  bbHeight="21"
+  bbWidth="37"
   fill="none"
   focusable={false}
   height={21}
@@ -27,9 +27,6 @@ exports[`Quote should display a Quote icon in SVG 1`] = `
         ],
       },
       Object {
-        "opacity": 1,
-      },
-      Object {
         "flex": 0,
         "height": 21,
         "width": 37,
@@ -40,88 +37,25 @@ exports[`Quote should display a Quote icon in SVG 1`] = `
 >
   <RNSVGGroup
     fill={null}
-    fillOpacity={1}
-    fillRule={1}
-    font={Object {}}
-    matrix={
-      Array [
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-      ]
-    }
-    opacity={1}
-    originX={0}
-    originY={0}
     propList={
       Array [
         "fill",
       ]
     }
-    rotation={0}
-    scaleX={1}
-    scaleY={1}
-    skewX={0}
-    skewY={0}
-    stroke={null}
-    strokeDasharray={null}
-    strokeDashoffset={null}
-    strokeLinecap={0}
-    strokeLinejoin={0}
-    strokeMiterlimit={4}
-    strokeOpacity={1}
-    strokeWidth={1}
-    vectorEffect={0}
-    x={0}
-    y={0}
   >
     <RNSVGPath
       d="M7.96664 0.75H15.1666C14.3 7.18748 13.5333 13.5 13.2 20.5624H0C1.2 13.6875 3.69999 7.18748 7.96664 0.75ZM24.7332 0.75H31.8332C31.0665 7.18748 30.1999 13.5 29.8665 20.5624H16.6999C18.0666 13.6875 20.4666 7.18748 24.7332 0.75Z"
       fill={
-        Array [
-          0,
-          4279374354,
-        ]
+        Object {
+          "payload": 4279374354,
+          "type": 0,
+        }
       }
-      fillOpacity={1}
-      fillRule={1}
-      matrix={
-        Array [
-          1,
-          0,
-          0,
-          1,
-          0,
-          0,
-        ]
-      }
-      opacity={1}
-      originX={0}
-      originY={0}
       propList={
         Array [
           "fill",
         ]
       }
-      rotation={0}
-      scaleX={1}
-      scaleY={1}
-      skewX={0}
-      skewY={0}
-      stroke={null}
-      strokeDasharray={null}
-      strokeDashoffset={null}
-      strokeLinecap={0}
-      strokeLinejoin={0}
-      strokeMiterlimit={4}
-      strokeOpacity={1}
-      strokeWidth={1}
-      vectorEffect={0}
-      x={0}
-      y={0}
     />
   </RNSVGGroup>
 </RNSVGSvgView>
