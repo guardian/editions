@@ -1,4 +1,4 @@
-import { isBefore } from 'date-fns';
+import moment from 'moment';
 import type { Dispatch } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type {
@@ -146,7 +146,7 @@ export const removeExpiredSpecialEditions = (
 	return {
 		...editionsList,
 		specialEditions: editionsList.specialEditions.filter((e) =>
-			isBefore(new Date(), new Date(e.expiry)),
+			moment().isBefore(e.expiry),
 		),
 	};
 };
