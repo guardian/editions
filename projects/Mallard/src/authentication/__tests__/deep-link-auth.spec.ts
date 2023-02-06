@@ -7,11 +7,9 @@ import { authWithDeepRedirect } from '../deep-link-auth';
 
 const createListener = (): EventEmitter & {
 	addEventListener: EventEmitter['addListener'];
-	removeEventListener: EventEmitter['removeListener'];
 } => {
 	const ee: any = new EventEmitter();
 	ee.addEventListener = ee.addListener;
-	ee.removeEventListener = ee.removeListener;
 	return ee;
 };
 

@@ -250,9 +250,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 				setDimensions(ev.window);
 			}
 		};
-		Dimensions.addEventListener('change', listener);
+		const el = Dimensions.addEventListener('change', listener);
 		return () => {
-			Dimensions.removeEventListener('change', listener);
+			el.remove();
 		};
 	}, []);
 

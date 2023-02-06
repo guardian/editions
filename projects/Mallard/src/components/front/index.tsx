@@ -87,8 +87,9 @@ export const Front = React.memo(
 			  };
 
 		const [cardIndex, setCardIndex] = useState(0);
-		const [position, setPosition] =
-			useState<Animated.AnimatedInterpolation>(new Animated.Value(0));
+		const [position, setPosition] = useState<
+			Animated.AnimatedInterpolation<number>
+		>(new Animated.Value(0));
 
 		useEffect(() => {
 			// Reset Front Positioning when the issue changes
