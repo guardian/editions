@@ -219,6 +219,7 @@ const ArticleSlider = React.memo(
 							ref={(flatList: any) =>
 								(flatListRef.current = flatList)
 							}
+							decelerationRate="fast"
 							showsHorizontalScrollIndicator={false}
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={1}
