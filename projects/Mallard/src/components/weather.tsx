@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { format } from 'date-fns';
+import Moment from 'moment';
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -150,10 +150,9 @@ const WeatherIconView = ({
 				ellipsizeMode="clip"
 				style={styles.dateTime}
 			>
-				{format(
-					new Date(forecast.DateTime),
+				{Moment(forecast.DateTime).format(
 					`h${narrowSpace /* Narrow space for iPhone 5 */}a`,
-				).toLocaleLowerCase()}
+				)}
 			</Text>
 		</>
 	);

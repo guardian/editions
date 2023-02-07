@@ -81,7 +81,7 @@ const pushTracking = async (
 		// @TODO: Needs to use the netInfoProvider hook
 		const { type } = await NetInfo.fetch();
 		const tracking: Tracking = {
-			time: londonTime().toString(),
+			time: londonTime().format(),
 			id,
 			value,
 			networkStatus: type,
