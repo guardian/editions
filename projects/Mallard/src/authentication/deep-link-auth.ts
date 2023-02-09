@@ -13,7 +13,7 @@ const addListener = <T>(
 	fn: (e: T) => void,
 ) => {
 	const listener = emitter.addEventListener(event, fn);
-	return () => listener.remove();
+	return () => listener;
 };
 
 type ILinking = Emitter<{ url: string }> & {
