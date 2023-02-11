@@ -38,7 +38,7 @@
         "ts-jest": "^26.5.6",
         "ts-optchain": "^0.1.8",
         "uuidv4": "5.0.1",
-        "moment": "^2.24.0"
+        "moment": "^2.29.4"
     },
     "resolutions": {
         "handlebars": "4.6.0"
