@@ -12,10 +12,10 @@ export const AppStateProvider = ({
 	const [isActive, setIsActive] = useState<boolean>(true);
 
 	useEffect(() => {
-		AppState.addEventListener('change', handleAppStateChange);
+		const el = AppState.addEventListener('change', handleAppStateChange);
 
 		return () => {
-			AppState.removeEventListener('change', handleAppStateChange);
+			el.remove();
 		};
 	}, []);
 

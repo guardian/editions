@@ -6,7 +6,7 @@ interface SliderDotsProps {
 	numOfItems: number;
 	color: string;
 	location?: 'article' | 'front';
-	position: Animated.AnimatedInterpolation | number;
+	position: Animated.AnimatedInterpolation<number> | number;
 	startIndex?: number;
 }
 

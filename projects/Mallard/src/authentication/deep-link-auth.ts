@@ -2,8 +2,7 @@ import { AppState, Linking } from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 interface Emitter<T> {
-	addEventListener(type: string, cb: (e: T) => void): void;
-	removeEventListener(type: string, cb: Function): void;
+	addEventListener(type: string, cb: (e: T) => void): any;
 }
 
 type IAppState = Emitter<string>;
@@ -13,8 +12,8 @@ const addListener = <T>(
 	event: string,
 	fn: (e: T) => void,
 ) => {
-	emitter.addEventListener(event, fn);
-	return () => emitter.removeEventListener(event, fn);
+	const listener = emitter.addEventListener(event, fn);
+	return () => listener;
 };
 
 type ILinking = Emitter<{ url: string }> & {
