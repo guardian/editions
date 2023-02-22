@@ -118,6 +118,9 @@ export const isIssueOnDevice = async (
 		// that this currently provides is a greater benefit than maintenance.
 		const expectedFolders = 'issue_front_thumbs_media_html';
 		const folders = await RNFS.readdir(FSPaths.issueRoot(localIssueId));
+		if (folders.length === 0) {
+			return false;
+		}
 		return folders.every((item) => expectedFolders.includes(item));
 	} catch {
 		return false;
