@@ -10,9 +10,9 @@ import { isDisconnectedState, stateResolver } from './utils';
 
 const defaultState: NetInfoState = {
 	type: NetInfoStateType.unknown,
-	isConnected: false,
+	isConnected: true,
 	isPoorConnection: false,
-	isInternetReachable: false,
+	isInternetReachable: true,
 	downloadBlocked: DownloadBlockedStatus.NotBlocked,
 	isDevButtonShown: false,
 	setIsDevButtonShown: () => {},
