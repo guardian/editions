@@ -234,7 +234,8 @@ const Article = ({
 	}, [
 		apiUrl,
 		article.elements,
-		issueId,
+		issueId?.localIssueId,
+		issueId?.publishedIssueId,
 		article.image,
 		article.type,
 		article.key,
