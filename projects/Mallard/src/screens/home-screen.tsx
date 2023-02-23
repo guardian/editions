@@ -132,7 +132,14 @@ const IssueRowContainer = React.memo(
 					});
 				}
 			},
-			[navigation, setIssueId, localId, publishedId, issueId],
+			[
+				navigation,
+				setIssueId,
+				localId,
+				publishedId,
+				issueId?.localIssueId,
+				issueId?.publishedIssueId,
+			],
 		);
 
 		const onPress = useCallback(() => {
@@ -168,7 +175,14 @@ const IssueRowContainer = React.memo(
 				}
 				navToIssue(frontKey);
 			},
-			[setNavPosition, navToIssue, issueId, publishedId, localId],
+			[
+				setNavPosition,
+				navToIssue,
+				issueId?.localIssueId,
+				issueId?.publishedIssueId,
+				publishedId,
+				localId,
+			],
 		);
 
 		return (

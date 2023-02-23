@@ -154,12 +154,12 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 				);
 			}
 		},
-		[apiUrl, issueId],
+		[apiUrl, issueId.localIssueId, issueId.publishedIssueId],
 	);
 
 	useEffect(() => {
 		globalIssueId && setIssueId(globalIssueId);
-	}, [globalIssueId]);
+	}, [globalIssueId?.localIssueId, globalIssueId?.publishedIssueId]);
 
 	// When the API url changes, force a fetch from the API of a new issue
 	useEffect(() => {
@@ -191,7 +191,7 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 				})
 				.finally(() => setIsLoading(false));
 		}
-	}, [issueId, isConnected]);
+	}, [issueId.localIssueId, issueId.publishedIssueId, isConnected]);
 
 	// When the app state returns, we fore grab the latest issue from the API
 	// But we dont save it to our local state. This means we have a fresh copy but dont update the user experience

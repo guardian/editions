@@ -65,13 +65,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
 			).then((newPath) => localSetPath(newPath));
 		}
 		return () => void (localSetPath = () => {});
-	}, [
-		apiUrl,
-		image,
-		use,
-		issueId ? issueId.publishedIssueId : undefined, // Why isn't this just issueId?
-		issueId ? issueId.localIssueId : undefined,
-	]);
+	}, [apiUrl, image, use, issueId?.publishedIssueId, issueId?.localIssueId]);
 	if (image === undefined) return undefined;
 	return path;
 };
