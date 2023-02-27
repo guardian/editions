@@ -40,7 +40,7 @@ const notificationInitialState = () =>
 	Platform.OS === 'android' ? true : false;
 
 const initialState: ConfigState = {
-	largeDeviceMemeory: false,
+	largeDeviceMemeory: true,
 	dimensions: {
 		width: 0,
 		height: 0,
