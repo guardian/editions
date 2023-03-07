@@ -139,7 +139,12 @@ export const IssueSummaryProvider = ({
 						errorService.captureException(e);
 					});
 			});
-	}, [isConnected, isPoorConnection, selectedEdition, maxAvailableEditions]);
+	}, [
+		isConnected,
+		isPoorConnection,
+		selectedEdition.edition,
+		maxAvailableEditions,
+	]);
 
 	// On load, get the latest issue summary
 	useEffect(() => {
@@ -157,7 +162,7 @@ export const IssueSummaryProvider = ({
 	// Force getting the latest issue summary when an edition changes
 	useEffect(() => {
 		getLatestIssueSummary();
-	}, [selectedEdition]);
+	}, [selectedEdition.edition]);
 
 	return (
 		<IssueSummaryContext.Provider
