@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
+import RNFS from 'react-native-fs';
 import type { WebViewProps } from 'react-native-webview';
 import { WebView } from 'react-native-webview';
 import type {
@@ -34,6 +35,11 @@ const WebviewWithArticle = ({
 	const { localIssueId } = path;
 	const largeDeviceMemory = useLargeDeviceMemory();
 	const [isReady, setIsReady] = useState(false);
+	// Online: Url to load direct from s3 (when bundle is not downloaded)
+	// When app runs in Preview Mode the url points to backend and backend needs to know
+	// which front the articles belongs to properly render an article with correct overrides from the fronts tool
+	const BACKUP_URI = `${htmlFolderInS3}/${article.internalPageCode}.html${previewParam}`;
+	const [uri, setUri] = useState<string>(BACKUP_URI);
 	const { isConnected } = useNetInfo();
 
 	const updateSource = () => {
@@ -44,18 +50,22 @@ const WebviewWithArticle = ({
 		setIsReady(true);
 	};
 
-	// Online: Url to load direct from s3 (when bundle is not downloaded)
-	// When app runs in Preview Mode the url points to backend and backend needs to know
-	// which front the articles belongs to properly render an article with correct overrides from the fronts tool
-	let uri = `${htmlFolderInS3}/${article.internalPageCode}.html${previewParam}`;
-
-	// Offline/Downloaded: load from file system
-	if (origin === 'filesystem') {
-		const htmlUri = `${FSPaths.issueRoot(localIssueId)}/html/${
-			article.internalPageCode
-		}.html`;
-		uri = Platform.OS === 'android' ? 'file://' + htmlUri : htmlUri;
-	}
+	useEffect(() => {
+		// Offline/Downloaded: load from file system
+		if (origin === 'filesystem') {
+			const htmlUri = `${FSPaths.issueRoot(localIssueId)}/html/${
+				article.internalPageCode
+			}.html`;
+			RNFS.exists(htmlUri).then((doesItExist) => {
+				doesItExist &&
+					setUri(
+						Platform.OS === 'android'
+							? 'file://' + htmlUri
+							: htmlUri,
+					);
+			});
+		}
+	}, []);
 
 	// __DEV__ && console.log(`URL (${origin}): ${uri}`);
 
@@ -68,7 +78,7 @@ const WebviewWithArticle = ({
 			bounces={largeDeviceMemory ? true : false}
 			originWhitelist={['*']}
 			scrollEnabled={true}
-			source={isReady ? { uri: uri } : undefined}
+			source={isReady ? { uri } : undefined}
 			ref={_ref}
 			onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
 			allowFileAccess={true}
@@ -78,6 +88,9 @@ const WebviewWithArticle = ({
 			cacheMode={'LOAD_NO_CACHE'}
 			onLoadStart={() => {
 				updateSource();
+			}}
+			onError={() => {
+				setUri(BACKUP_URI);
 			}}
 		/>
 	);
