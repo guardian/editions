@@ -69,8 +69,6 @@ const pushNotificationRegistrationCache =
 
 const validAttemptCache = createAsyncCache<number>('validAttempt-cache');
 
-const loggingQueueCache = createAsyncCache<string>('loggingQueue');
-
 const selectedEditionCache = createAsyncCache<RegionalEdition | SpecialEdition>(
 	'selectedEdition',
 );
@@ -187,7 +185,6 @@ export {
 	legacyCASPasswordCache,
 	iapReceiptCache,
 	validAttemptCache,
-	loggingQueueCache,
 	selectedEditionCache,
 	defaultEditionCache,
 	editionsListCache,
