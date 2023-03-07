@@ -36,7 +36,6 @@ import type {
 	ImageElement,
 	IssueOrigin,
 } from '../../../../../Apps/common/src';
-import { Fader } from '../../layout/animators/fader';
 import { isSuccessOrRedirect } from './article/helpers';
 import { WebviewWithArticle } from './article/webview';
 
@@ -368,26 +367,24 @@ const Article = ({
 	};
 
 	return (
-		<Fader>
-			<WebviewWithArticle
-				article={article}
-				path={path}
-				previewParam={previewParam}
-				htmlFolderInS3={htmlFolderInS3}
-				scrollEnabled={true}
-				allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
-				mediaPlaybackRequiresUserAction={false}
-				style={[styles.webview]}
-				_ref={(r) => {
-					ref.current = r;
-				}}
-				origin={origin}
-				onMessage={(event) => {
-					handlePing(event.nativeEvent.data);
-				}}
-				decelerationRate={'normal'}
-			/>
-		</Fader>
+		<WebviewWithArticle
+			article={article}
+			path={path}
+			previewParam={previewParam}
+			htmlFolderInS3={htmlFolderInS3}
+			scrollEnabled={true}
+			allowsInlineMediaPlayback={true} // need this along with `mediaPlaybackRequiresUserAction = false` to ensure videos in twitter embeds play on iOS
+			mediaPlaybackRequiresUserAction={false}
+			style={[styles.webview]}
+			_ref={(r) => {
+				ref.current = r;
+			}}
+			origin={origin}
+			onMessage={(event) => {
+				handlePing(event.nativeEvent.data);
+			}}
+			decelerationRate={'normal'}
+		/>
 	);
 };
 
