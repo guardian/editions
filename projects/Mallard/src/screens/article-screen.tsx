@@ -1,18 +1,16 @@
 import type { RouteProp } from '@react-navigation/native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import type { ReactNode } from 'react';
+import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import type { Appearance } from 'src/common';
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
-import { LoginOverlay } from 'src/components/login/login-overlay';
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words';
 import { getAppearancePillar } from 'src/hooks/use-article';
 import { useDimensions } from 'src/hooks/use-config-provider';
+import { useLoginOverlay } from 'src/hooks/use-login-overlay';
 import type { ArticleNavigationProps } from 'src/navigation/helpers/base';
 import { getArticleNavigationProps } from 'src/navigation/helpers/base';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { color } from 'src/theme/color';
 import { ArticleScreenBody } from './article/body';
@@ -79,28 +77,6 @@ export const getArticleDataFromNavigator = (
 	};
 };
 
-const ArticleScreenLoginOverlay = ({ children }: { children: ReactNode }) => {
-	const navigation = useNavigation();
-	return (
-		<LoginOverlay
-			isFocused={() => navigation.isFocused()}
-			onLoginPress={() =>
-				navigation.navigate(RouteNames.Settings, {
-					screen: RouteNames.SignIn,
-				})
-			}
-			onOpenCASLogin={() =>
-				navigation.navigate(RouteNames.Settings, {
-					screen: RouteNames.CasSignIn,
-				})
-			}
-			onDismiss={() => navigation.goBack()}
-		>
-			{children}
-		</LoginOverlay>
-	);
-};
-
 const styles = StyleSheet.create({
 	refView: { flex: 1 },
 });
@@ -110,6 +86,7 @@ const ArticleScreenWithProps = ({
 	articleNavigator,
 	prefersFullScreen,
 }: Required<ArticleNavigationProps> & {}) => {
+	useLoginOverlay();
 	const current = getArticleDataFromNavigator(articleNavigator, path);
 	// TODO use `getData` for this
 	const pillar = getAppearancePillar(current.appearance);
@@ -124,32 +101,30 @@ const ArticleScreenWithProps = ({
 		}
 	}, [width]);
 	return (
-		<ArticleScreenLoginOverlay>
-			<View
-				style={styles.refView}
-				ref={(r) => {
-					if (r) viewRef.current = r;
-				}}
-			>
-				{prefersFullScreen ? (
-					<>
-						<ArticleScreenBody
-							path={path}
-							width={width}
-							pillar={pillar}
-							onShouldShowHeaderChange={() => {}}
-							shouldShowHeader={true}
-							topPadding={0}
-						/>
-					</>
-				) : (
-					<ArticleSlider
+		<View
+			style={styles.refView}
+			ref={(r) => {
+				if (r) viewRef.current = r;
+			}}
+		>
+			{prefersFullScreen ? (
+				<>
+					<ArticleScreenBody
 						path={path}
-						articleNavigator={articleNavigator}
+						width={width}
+						pillar={pillar}
+						onShouldShowHeaderChange={() => {}}
+						shouldShowHeader={true}
+						topPadding={0}
 					/>
-				)}
-			</View>
-		</ArticleScreenLoginOverlay>
+				</>
+			) : (
+				<ArticleSlider
+					path={path}
+					articleNavigator={articleNavigator}
+				/>
+			)}
+		</View>
 	);
 };
 

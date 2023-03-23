@@ -7,9 +7,8 @@ import { isValid } from 'src/authentication/lib/Attempt';
 import { LoginButton } from 'src/components/login/login-button';
 import { LoginInput } from 'src/components/login/login-input';
 import { LoginLayout } from 'src/components/login/login-layout';
-import { useModal } from 'src/components/modal';
-import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { useFormField } from 'src/hooks/use-form-field';
+import { RouteNames } from 'src/navigation/NavigationModels';
 import { getFont } from 'src/theme/typography';
 
 const styles = StyleSheet.create({
@@ -24,7 +23,6 @@ const CasSignInScreen = () => {
 
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const { open } = useModal();
 
 	const [shouldShowError, setShouldShowError] = useState(false);
 
@@ -48,8 +46,7 @@ const CasSignInScreen = () => {
 			password.value,
 		);
 		if (isValid(accessAttempt)) {
-			navigation.goBack();
-			open((close) => <SubFoundModalCard close={close} />);
+			navigation.navigate(RouteNames.SubFoundModal);
 		} else {
 			setErrorMessage(accessAttempt.reason ?? 'Something went wrong');
 		}
