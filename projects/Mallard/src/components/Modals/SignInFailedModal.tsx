@@ -1,9 +1,8 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import type { RouteProp } from '@react-navigation/native';
 import React from 'react';
-import {
-	MainStackParamList,
-	RouteNames,
-} from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { SignInFailedModalCard } from '../SignInFailedModalCard';
 
