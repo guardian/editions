@@ -21,9 +21,21 @@ const SignInFailedModal = ({
 			<SignInFailedModalCard
 				email={route.params.emailAddress}
 				onDismiss={() => navigation.navigate(RouteNames.Issue)}
-				onOpenCASLogin={() => navigation.navigate(RouteNames.CasSignIn)}
-				onLoginPress={() => navigation.navigate(RouteNames.SignIn)}
-				onFaqPress={() => navigation.navigate(RouteNames.FAQ)}
+				onOpenCASLogin={() =>
+					navigation.navigate(RouteNames.Settings, {
+						screen: RouteNames.CasSignIn,
+					})
+				}
+				onLoginPress={() =>
+					navigation.navigate(RouteNames.Settings, {
+						screen: RouteNames.SignIn,
+					})
+				}
+				onFaqPress={() =>
+					navigation.navigate(RouteNames.Settings, {
+						screen: RouteNames.FAQ,
+					})
+				}
 				close={() => navigation.navigate(RouteNames.Issue)}
 			/>
 		</CenterWrapper>
