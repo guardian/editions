@@ -10,9 +10,6 @@ import {
 } from 'src/authentication/services/apple';
 import { appleAuthWithDeepRedirect } from 'src/authentication/services/apple-oauth';
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google';
-import { useModal } from 'src/components/modal';
-import { SignInFailedModalCard } from 'src/components/SignInFailedModalCard';
-import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { Copy } from 'src/helpers/words';
 import { useFormField } from 'src/hooks/use-form-field';
 import { useGdprSettings } from 'src/hooks/use-gdpr';
@@ -48,7 +45,6 @@ const AuthSwitcherScreen = () => {
 	const validatorString = useRandomState();
 
 	const { authIdentity } = useContext(AccessContext);
-	const { open } = useModal();
 	const { gdprAllowFunctionality } = useGdprSettings();
 
 	const handleAuthClick = useCallback(
@@ -70,33 +66,14 @@ const AuthSwitcherScreen = () => {
 					if (isValid(attempt)) {
 						setIsLoading(false);
 						if (!isValid(accessAttempt)) {
-							open((close) => (
-								<SignInFailedModalCard
-									email={
-										attempt.data.userDetails
-											.primaryEmailAddress
-									}
-									onDismiss={() => navigation.popToTop()}
-									onOpenCASLogin={() =>
-										navigation.navigate(
-											RouteNames.CasSignIn,
-										)
-									}
-									onLoginPress={() =>
-										navigation.navigate(RouteNames.SignIn)
-									}
-									onFaqPress={() =>
-										navigation.navigate(RouteNames.FAQ)
-									}
-									close={close}
-								/>
-							));
+							navigation.navigate(RouteNames.SignInFailedModal, {
+								emailAddress:
+									attempt.data.userDetails
+										.primaryEmailAddress,
+							});
 						} else {
-							open((close) => (
-								<SubFoundModalCard close={close} />
-							));
+							navigation.navigate(RouteNames.SubFoundModal);
 						}
-						navigation.goBack();
 					} else {
 						attempt.reason && setError(attempt.reason);
 						// push this into the catch logic below

@@ -9,6 +9,14 @@ import React from 'react';
 import { Animated } from 'react-native';
 import { isTablet } from 'react-native-device-info';
 import { LoadingScreen } from './components/LoadingScreen/LoadingScreen';
+import {
+	MissingIAPRestoreError,
+	MissingIAPRestoreMissing,
+} from './components/Modals/MissingIAPModal';
+import { SignInFailedModal } from './components/Modals/SignInFailedModal';
+import { SignInModal } from './components/Modals/SignInModal';
+import { SubFoundModalCard } from './components/Modals/SubFoundModal';
+import { SubNotFoundModal } from './components/Modals/SubNotFoundModal';
 import { useIsOnboarded } from './hooks/use-onboarding';
 import type {
 	MainStackParamList,
@@ -55,6 +63,16 @@ const { multiply } = Animated;
 const forFade = ({ current }: StackCardInterpolationProps) => ({
 	cardStyle: {
 		opacity: current.progress,
+	},
+});
+
+const forFadeOnArticleScreen = ({
+	current,
+	insets,
+}: StackCardInterpolationProps) => ({
+	cardStyle: {
+		opacity: current.progress,
+		paddingTop: insets.top + 10,
 	},
 });
 
@@ -184,7 +202,7 @@ const MainStack = () => {
 								cardStyle: {
 									backgroundColor: 'rgba(0,0,0,0.6)',
 								},
-								cardStyleInterpolator: forFade,
+								cardStyleInterpolator: forFadeOnArticleScreen,
 						  }
 						: {
 								cardStyleInterpolator:
@@ -193,6 +211,68 @@ const MainStack = () => {
 								gestureDirection: 'vertical',
 						  }
 				}
+			/>
+			<Main.Screen
+				name={RouteNames.SubNotFoundModal}
+				component={SubNotFoundModal}
+				options={{
+					cardStyleInterpolator: forFadeOnArticleScreen,
+					cardStyle: {
+						backgroundColor: 'rgba(0,0,0,0.8)',
+					},
+				}}
+			/>
+			<Main.Screen
+				name={RouteNames.SignInModal}
+				component={SignInModal}
+				options={{
+					cardStyleInterpolator: forFadeOnArticleScreen,
+					cardStyle: {
+						backgroundColor: 'rgba(0,0,0,0.6)',
+					},
+				}}
+			/>
+			<Main.Screen
+				name={RouteNames.SubFoundModal}
+				component={SubFoundModalCard}
+				options={{
+					cardStyleInterpolator: forFade,
+					cardStyle: {
+						backgroundColor: 'rgba(0,0,0,0.8)',
+					},
+				}}
+			/>
+			<Main.Screen
+				name={RouteNames.SignInFailedModal}
+				component={SignInFailedModal}
+				options={{
+					cardStyleInterpolator: forFade,
+					cardStyle: {
+						backgroundColor: 'rgba(0,0,0,0.8)',
+					},
+				}}
+			/>
+
+			<Main.Screen
+				name={RouteNames.MissingIAPRestoreError}
+				component={MissingIAPRestoreError}
+				options={{
+					cardStyleInterpolator: forFade,
+					cardStyle: {
+						backgroundColor: 'rgba(0,0,0,0.8)',
+					},
+				}}
+			/>
+
+			<Main.Screen
+				name={RouteNames.MissingIAPRestoreMissing}
+				component={MissingIAPRestoreMissing}
+				options={{
+					cardStyleInterpolator: forFade,
+					cardStyle: {
+						backgroundColor: 'rgba(0,0,0,0.8)',
+					},
+				}}
 			/>
 		</Main.Navigator>
 	);

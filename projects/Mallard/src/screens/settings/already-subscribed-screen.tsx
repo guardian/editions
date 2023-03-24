@@ -8,9 +8,6 @@ import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
-import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card';
-import { useModal } from 'src/components/modal';
-import { SubFoundModalCard } from 'src/components/sub-found-modal-card';
 import { Copy } from 'src/helpers/words';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -18,7 +15,6 @@ import { WithAppAppearance } from 'src/theme/appearance';
 const AlreadySubscribedScreen = () => {
 	const canAccess = useAccess();
 	const { authIAP } = useContext(AccessContext);
-	const { open } = useModal();
 	const rightChevronIcon = <RightChevron />;
 	const navigation = useNavigation();
 
@@ -80,45 +76,17 @@ const AlreadySubscribedScreen = () => {
 											const { accessAttempt } =
 												await authIAP();
 											if (isValid(accessAttempt)) {
-												open((close) => (
-													<SubFoundModalCard
-														close={close}
-													/>
-												));
+												navigation.navigate(
+													RouteNames.SubFoundModal,
+												);
 											} else if (isError(accessAttempt)) {
-												open((close) => (
-													<MissingIAPModalCard
-														title={
-															Copy
-																.alreadySubscribed
-																.restoreErrorTitle
-														}
-														subtitle={
-															Copy
-																.alreadySubscribed
-																.restoreErrorSubtitle
-														}
-														close={close}
-														onTryAgain={authIAP}
-													/>
-												));
+												navigation.navigate(
+													RouteNames.MissingIAPRestoreError,
+												);
 											} else {
-												open((close) => (
-													<MissingIAPModalCard
-														title={
-															Copy
-																.alreadySubscribed
-																.restoreMissingTitle
-														}
-														subtitle={
-															Copy
-																.alreadySubscribed
-																.restoreMissingSubtitle
-														}
-														close={close}
-														onTryAgain={authIAP}
-													/>
-												));
+												navigation.navigate(
+													RouteNames.MissingIAPRestoreMissing,
+												);
 											}
 										},
 										proxy: rightChevronIcon,

@@ -1,5 +1,6 @@
 import type { CompositeNavigationProp } from '@react-navigation/core';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import type { SignInFailedProps } from 'src/components/Modals/SignInFailedModal';
 import type {
 	ArticleNavigationProps,
 	IssueNavigationProps,
@@ -47,6 +48,12 @@ export type MainStackParamList = {
 	Lightbox: LightboxNavigationProps;
 	Crossword: ArticleNavigationProps;
 	ExternalSubscription: undefined;
+	SubNotFoundModal: undefined;
+	SignInModal: undefined;
+	SubFoundModal: undefined;
+	SignInFailedModal: SignInFailedProps;
+	MissingIAPRestoreError: undefined;
+	MissingIAPRestoreMissing: undefined;
 };
 
 // This is used on pages which include both main and root stacks
@@ -85,4 +92,10 @@ export enum RouteNames {
 	DevZone = 'DevZone',
 	InAppPurchase = 'InAppPurchase',
 	ExternalSubscription = 'ExternalSubscription',
+	SubNotFoundModal = 'SubNotFoundModal',
+	SignInModal = 'SignInModal',
+	SubFoundModal = 'SubFoundModal',
+	SignInFailedModal = 'SignInFailedModal',
+	MissingIAPRestoreError = 'MissingIAPRestoreError',
+	MissingIAPRestoreMissing = 'MissingIAPRestoreMissing',
 }

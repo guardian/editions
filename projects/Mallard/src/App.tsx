@@ -13,7 +13,6 @@ import type { AnyAttempt } from './authentication/lib/Attempt';
 import { isValid } from './authentication/lib/Attempt';
 import { BugButtonHandler } from './components/Button/BugButtonHandler';
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary';
-import { Modal, ModalRenderer } from './components/modal';
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast';
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
@@ -42,7 +41,6 @@ const styles = StyleSheet.create({
 });
 
 const WithProviders = nestProviders(
-	Modal,
 	ToastProvider,
 	NavPositionProvider,
 	ActionSheetProvider,
@@ -79,7 +77,6 @@ const App = () => {
 							<AppNavigation />
 							<NetInfoAutoToast />
 						</View>
-						<ModalRenderer />
 						<BugButtonHandler />
 					</AccessProvider>
 				</WithProviders>
