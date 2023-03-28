@@ -37,6 +37,7 @@ export type SettingsStackParamList = {
 	WeatherGeolocationConsent: undefined;
 	DevZone: undefined;
 	InAppPurchase: undefined;
+	AlreadySubscribedOverlay: undefined;
 };
 
 export type MainStackParamList = {
@@ -98,4 +99,5 @@ export enum RouteNames {
 	SignInFailedModal = 'SignInFailedModal',
 	MissingIAPRestoreError = 'MissingIAPRestoreError',
 	MissingIAPRestoreMissing = 'MissingIAPRestoreMissing',
+	AlreadySubscribedOverlay = 'AlreadySubscribedOverlay',
 }

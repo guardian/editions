@@ -118,7 +118,7 @@ const AuthSwitcherScreen = () => {
 			isLoading={isLoading}
 			onDismiss={() => navigation.popToTop()}
 			onHelpPress={() =>
-				navigation.navigate(RouteNames.AlreadySubscribed)
+				navigation.navigate(RouteNames.AlreadySubscribedOverlay)
 			}
 			onGooglePress={() =>
 				handleAuthClick(
