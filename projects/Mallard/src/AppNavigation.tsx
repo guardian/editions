@@ -307,6 +307,17 @@ const SettingsStack = () => {
 				component={AlreadySubscribedScreen}
 			/>
 			<Settings.Screen
+				name={RouteNames.AlreadySubscribedOverlay}
+				component={AlreadySubscribedScreen}
+				options={{
+					cardStyleInterpolator: forFade,
+					cardStyle: {
+						backgroundColor: 'rgba(0,0,0,0.8)',
+					},
+				}}
+			/>
+
+			<Settings.Screen
 				name={RouteNames.GdprConsent}
 				component={GdprConsentScreen}
 			/>
