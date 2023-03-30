@@ -72,7 +72,9 @@ export const NetInfoProvider = ({
 	useEffect(() => {
 		const netInfo = {
 			type,
-			isConnected,
+			// isConnected can be null in unknown network circumstances: https://github.com/react-native-netinfo/react-native-netinfo#netinfostate
+			// If this is the case, we default it to true to assume the user is having a good experience and not interupt them
+			isConnected: isConnected === null ? true : isConnected,
 			isInternetReachable,
 			isDevButtonShown,
 			overrideIsConnected,
