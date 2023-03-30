@@ -29,6 +29,16 @@ target 'Mallard' do
 
     pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
 
+  # https://mobiledevtutorials.com/how-to-fix-swift-pods-cannot-yet-be-integrated-as-static-libraries-firebasecoreinternal-library/?utm_content=cmp-true
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'FirebaseInstallations', :modular_headers => true
+  pod 'GoogleDataTransport', :modular_headers => true
+  pod 'nanopb', :modular_headers => true
+  $RNFirebaseAsStaticFramework = true
+
   # permisions
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
