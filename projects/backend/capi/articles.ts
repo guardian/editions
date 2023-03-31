@@ -292,7 +292,7 @@ const parseArticleResult = async (
 
 const isScheduledInNext30Days = (dateiso8601: string): boolean => {
     const date = new Date(dateiso8601)
-    const oneMonthAway = new Date(new Date().setDate(date.getDate() + 30))
+    const oneMonthAway = new Date(new Date().setDate(new Date().getDate() + 30))
     return date < oneMonthAway
 }
 
