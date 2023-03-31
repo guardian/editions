@@ -4,13 +4,9 @@
 
 Follow the instructions in the [main README](https://github.com/guardian/editions/blob/master/README.md).
 
-For iOS development you will need to install Xcode from the App Store and then open it once and select "Install" on the pop up asking whether to install other required Xcode dependencies - specifically the simulator. If this doesn't appear go to `Preferences > Components` and download the latest simulator iOS version. Additionally, you need to have the right version of CocoaPods installed. CocoaPods is a ruby thing, for a reliable install it's worth installing [Ruby Version Manager](https://rvm.io/rvm/install) first.
+For iOS development you will need to install Xcode from the App Store and then open it once and select "Install" on the pop up asking whether to install other required Xcode dependencies - specifically the simulator.
 
-It's best to install the same version of cocoapods as is in the Podfile.lock - see [here](https://github.com/guardian/editions/blob/master/projects/Mallard/ios/Podfile.lock#L509)
-
-```sh
-gem install cocoapods -v 1.9.0 # this may require `sudo` if you're not using rvm or rbenv
-```
+To install iOS dependencies (pods), run `yarn install-pods` in the `Mallard` directory.
 
 The following guides allow you to run the app locally on device emulators, or on real devices connected to your dev machine via USB.
 
@@ -117,7 +113,6 @@ We can use an auto credits generator tool to scan package.json file and generate
 2. Copy the content of `CREDITS.md` file and convert it into html (https://markdowntohtml.com/ can be use for this purpose)
 3. Converted html needs to be `string escapped` so we use it in a json file (https://www.freeformatter.com/json-escape.html can be use for this purpose)
 4. Copy the string escapped html content and paste inside `credits.json` file under `bodyHtml`
-
 
 ### Stages and Environment
 
