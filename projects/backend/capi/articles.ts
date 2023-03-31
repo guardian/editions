@@ -297,12 +297,27 @@ const isScheduledInNext30Days = (dateiso8601: string): boolean => {
 }
 
 const removeUnscheduledDraftContent = (content: Content[]): Content[] => {
-    return content.filter(
-        (c) =>
+    return content.filter((c) => {
+        const isValid =
             c.fields &&
             c.fields.scheduledPublicationDate &&
-            isScheduledInNext30Days(c.fields.scheduledPublicationDate.iso8601),
-    )
+            isScheduledInNext30Days(c.fields.scheduledPublicationDate.iso8601)
+
+        if (!isValid) {
+            console.log(
+                `[removeUnscheduledDraftContent]: ${c.id} has been filtered out`,
+                c.fields?.scheduledPublicationDate,
+                c.fields?.scheduledPublicationDate?.iso8601 &&
+                    isScheduledInNext30Days(
+                        c.fields?.scheduledPublicationDate?.iso8601,
+                    ),
+            )
+        } else {
+            console.log(`[removeUnscheduledDraftContent]: ${c.id} is valid`)
+        }
+
+        return isValid
+    })
 }
 
 export const getArticles = async (
@@ -334,7 +349,10 @@ export const getArticles = async (
         const lastArray = Object.entries(last)
         return fromPairs(firstArray.concat(lastArray))
     }
-    console.log('Debug link (CAPI query):', endpoint.replace(/thrift/g, 'json'))
+
+    const debugEndpoint = endpoint.replace(/thrift/g, 'json')
+    console.log('Debug link (CAPI query):', debugEndpoint)
+
     const resp = await attempt(fetch(endpoint, { headers }))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
     if (resp.status != 200) {
@@ -342,9 +360,22 @@ export const getArticles = async (
     }
     const buffer = await resp.buffer()
     const data = await capiSearchDecoder(buffer)
+
     const results: Content[] = data.results
+
+    console.log(
+        `CAPI query successfully decoded with ${results.length} results`,
+        debugEndpoint,
+    )
+
     const filteredResults =
         capi === 'preview' ? removeUnscheduledDraftContent(results) : results
+
+    console.log(
+        `CAPI query successfully filtered with ${filteredResults.length} results`,
+        debugEndpoint,
+    )
+
     const articlePromises = await Promise.all(
         filteredResults.map((result) =>
             attempt(parseArticleResult(result, isFromPrint)),
