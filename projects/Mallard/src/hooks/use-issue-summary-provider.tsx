@@ -100,51 +100,59 @@ export const IssueSummaryProvider = ({
 
 	// Use Callback used so the function isnt recreated on each rerender
 	// @TODO: Look to move this logic outside of the provider so it can be tested
-	const getLatestIssueSummary = useCallback(() => {
-		return getIssueSummary(isConnected, isPoorConnection)
-			.then((retrievedIssueSummary) => {
-				setIssueSummary(retrievedIssueSummary);
-				// Clear the initial front key if it is a new issue id and set it
-				const latestIssueId = issueSummaryToLatestPath(
-					retrievedIssueSummary,
-				);
+	const getLatestIssueSummary = useCallback(
+		(skipSetting?: boolean) => {
+			return getIssueSummary(isConnected, isPoorConnection)
+				.then((retrievedIssueSummary) => {
+					setIssueSummary(retrievedIssueSummary);
+					if (skipSetting) {
+						return;
+					}
 
-				const previousIssue =
-					issueSummary && issueSummaryToLatestPath(issueSummary);
-				if (
-					issueId === null ||
-					!previousIssue ||
-					(previousIssue.localIssueId !==
-						latestIssueId.localIssueId &&
-						previousIssue.publishedIssueId !==
-							latestIssueId.publishedIssueId)
-				) {
-					setInitialFrontKey(null);
-					setLocalIssueId(latestIssueId);
-				}
-				setError('');
-			})
-			.catch((e) => {
-				setError(e.message);
-				// In the case of error, attempt to get the last stored issue summary
-				getIssueSummary(false)
-					.then((backupIssueSummary) => {
-						setIssueSummary(backupIssueSummary);
-						const backupIssueIds =
-							issueSummaryToLatestPath(backupIssueSummary);
-						setIssueId(backupIssueIds);
-					})
-					.catch((e) => {
-						e.message = `Unable to get backup issue summary: ${e.message}`;
-						errorService.captureException(e);
-					});
-			});
-	}, [
-		isConnected,
-		isPoorConnection,
-		selectedEdition.edition,
-		maxAvailableEditions,
-	]);
+					// Clear the initial front key if it is a new issue id and set it
+					const latestIssueId = issueSummaryToLatestPath(
+						retrievedIssueSummary,
+					);
+
+					const previousIssue =
+						issueSummary && issueSummaryToLatestPath(issueSummary);
+
+					if (
+						issueId === null ||
+						!previousIssue ||
+						(previousIssue.localIssueId !==
+							latestIssueId.localIssueId &&
+							previousIssue.publishedIssueId !==
+								latestIssueId.publishedIssueId)
+					) {
+						setInitialFrontKey(null);
+						setLocalIssueId(latestIssueId);
+					}
+					setError('');
+				})
+				.catch((e) => {
+					setError(e.message);
+					// In the case of error, attempt to get the last stored issue summary
+					getIssueSummary(false)
+						.then((backupIssueSummary) => {
+							setIssueSummary(backupIssueSummary);
+							const backupIssueIds =
+								issueSummaryToLatestPath(backupIssueSummary);
+							setIssueId(backupIssueIds);
+						})
+						.catch((e) => {
+							e.message = `Unable to get backup issue summary: ${e.message}`;
+							errorService.captureException(e);
+						});
+				});
+		},
+		[
+			isConnected,
+			isPoorConnection,
+			selectedEdition.edition,
+			maxAvailableEditions,
+		],
+	);
 
 	// On load, get the latest issue summary
 	useEffect(() => {
@@ -155,7 +163,7 @@ export const IssueSummaryProvider = ({
 	useEffect(() => {
 		if (isActive && !isLoading) {
 			setIsLoading(true);
-			getLatestIssueSummary().finally(() => setIsLoading(false));
+			getLatestIssueSummary(true).finally(() => setIsLoading(false));
 		}
 	}, [isConnected, isPoorConnection, maxAvailableEditions, isActive]);
 
