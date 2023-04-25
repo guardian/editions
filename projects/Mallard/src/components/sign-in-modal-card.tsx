@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { logEvent } from 'src/helpers/analytics';
 import { Copy } from 'src/helpers/words';
-import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 
@@ -39,9 +39,7 @@ const SignInModalCard = ({
 							onPress={() => {
 								close();
 								onLoginPress();
-								sendComponentEvent({
-									componentType: ComponentType.AppButton,
-									action: Action.Click,
+								logEvent({
 									value: 'sign_in_continue_clicked',
 								});
 							}}

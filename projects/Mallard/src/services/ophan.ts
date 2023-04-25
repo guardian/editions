@@ -1,6 +1,10 @@
 // Based on: https://github.com/guardian/ophan/blob/master/event-model/src/main/thrift/componentevent.thrift
 
 import { NativeModules } from 'react-native';
+import type {
+	AnalyticsScreenTracking,
+	AnalyticsUserId,
+} from 'src/helpers/analytics/types';
 
 enum ComponentType {
 	AppButton = 'APP_BUTTON',
@@ -13,7 +17,7 @@ enum Action {
 }
 
 interface TrackScreen {
-	screenName: ScreenTracking;
+	screenName: AnalyticsScreenTracking;
 	value?: string;
 }
 
@@ -24,47 +28,53 @@ interface TrackComponentEvent {
 	componentId?: string;
 }
 
-type UserId = string | null;
-
-enum ScreenTracking {
-	AlreadySubscribed = 'im_already_subscribed',
-	CasSignIn = 'activate_with_subscriber_id',
-	Credits = 'credits',
-	Help = 'help',
-	FAQ = 'faqs',
-	GDPRConsent = 'consent_management_options',
-	GdprConsentScreenForOnboarding = 'consent_management',
-	IssueList = 'issue_list',
-	PrivacyPolicy = 'privacy_policy',
-	Settings = 'settings',
-	SignIn = 'sign_in',
-	TermsAndConditions = 'terms_conditions',
-}
-
-const setUserId = (userId: UserId): Promise<UserId> =>
-	NativeModules.Ophan.setUserId(userId);
+const setUserId = async (userId: AnalyticsUserId): Promise<AnalyticsUserId> => {
+	try {
+		return await NativeModules.Ophan.setUserId(userId);
+	} catch {
+		return null;
+	}
+};
 
 const sendAppScreenEvent = async ({
 	screenName,
 	value,
-}: TrackScreen): Promise<boolean> =>
-	NativeModules.Ophan.sendAppScreenEvent(screenName, value);
+}: TrackScreen): Promise<boolean> => {
+	try {
+		await NativeModules.Ophan.sendAppScreenEvent(screenName, value);
+		return true;
+	} catch {
+		return false;
+	}
+};
 
-const sendComponentEvent = ({
+const sendComponentEvent = async ({
 	componentType,
 	action,
 	value,
 	componentId,
-}: TrackComponentEvent) =>
-	NativeModules.Ophan.sendComponentEvent(
-		componentType,
-		action,
-		value,
-		componentId,
-	);
+}: TrackComponentEvent): Promise<boolean> => {
+	try {
+		await NativeModules.Ophan.sendComponentEvent(
+			componentType,
+			action,
+			value,
+			componentId,
+		);
+		return true;
+	} catch {
+		return false;
+	}
+};
 
-const sendPageViewEvent = ({ path }: { path: string }) =>
-	NativeModules.Ophan.sendPageViewEvent(path);
+const sendPageViewEvent = async ({ path }: { path: string }) => {
+	try {
+		await NativeModules.Ophan.sendPageViewEvent(path);
+		return true;
+	} catch {
+		return false;
+	}
+};
 
 export {
 	Action,
@@ -73,5 +83,4 @@ export {
 	sendComponentEvent,
 	sendPageViewEvent,
 	setUserId,
-	ScreenTracking,
 };

@@ -1,9 +1,9 @@
 import type { ReactElement } from 'react';
+import { logEvent } from 'src/helpers/analytics';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle, PathToIssue } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
-import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import type {
 	ArticlePillar,
 	CreditedImage,
@@ -74,9 +74,7 @@ const navigateToIssue = ({
 	if (navigationProps.path) {
 		setIssueId(navigationProps.path, navigationProps.initialFrontKey);
 	}
-	sendComponentEvent({
-		componentType: ComponentType.AppButton,
-		action: Action.Click,
+	logEvent({
 		value: 'issues_list_issue_clicked',
 	});
 };

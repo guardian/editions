@@ -10,13 +10,13 @@ import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { List } from 'src/components/lists/list';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
+import { logEvent } from 'src/helpers/analytics';
 import { Copy, MANAGE_EDITIONS_TITLE } from 'src/helpers/words';
 import {
 	useMaxAvailableEditions,
 	useWifiOnlyDownloads,
 } from 'src/hooks/use-config-provider';
 import { getIssueSummary } from 'src/hooks/use-issue-summary-provider';
-import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 const buttonStyles = StyleSheet.create({
@@ -117,12 +117,8 @@ const ManageEditionsScreen = () => {
 									value={wifiOnlyDownloads}
 									onValueChange={(val) => {
 										setWifiOnlyDownloads(val);
-										sendComponentEvent({
-											componentType:
-												ComponentType.AppButton,
-											action: Action.Click,
-											componentId:
-												'manageEditionsWifiDownload',
+										logEvent({
+											name: 'manageEditionsWifiDownload',
 											value: val.toString(),
 										});
 									}}
@@ -141,12 +137,8 @@ const ManageEditionsScreen = () => {
 									onPress={async (n) => {
 										await setMaxAvailableEditions(n);
 										getIssueSummary(false);
-										sendComponentEvent({
-											componentType:
-												ComponentType.AppButton,
-											action: Action.Click,
-											componentId:
-												'manageEditionsAvailableEditions',
+										logEvent({
+											name: 'manageEditionsAvailableEditions',
 											value: n.toString(),
 										});
 									}}
@@ -178,11 +170,9 @@ const ManageEditionsScreen = () => {
 									],
 									{ cancelable: false },
 								);
-								sendComponentEvent({
-									componentType: ComponentType.AppButton,
-									action: Action.Click,
+								logEvent({
 									value: 'deleteAllDownload',
-									componentId: 'manageEditions',
+									name: 'manageEditions',
 								});
 							},
 						},

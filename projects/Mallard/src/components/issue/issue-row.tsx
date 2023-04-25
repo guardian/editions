@@ -21,6 +21,7 @@ import {
 	maybeListenToExistingDownload,
 	stopListeningToExistingDownload,
 } from 'src/download-edition/download-and-unzip';
+import { logEvent } from 'src/helpers/analytics';
 import type { DLStatus } from 'src/helpers/files';
 import { renderIssueDate } from 'src/helpers/issues';
 import type { Loaded } from 'src/helpers/Loaded';
@@ -38,7 +39,6 @@ import {
 	useNetInfo,
 } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
-import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
@@ -160,9 +160,7 @@ const IssueButton = ({
 		}
 		if (isConnected) {
 			if (!dlStatus) {
-				sendComponentEvent({
-					componentType: ComponentType.AppButton,
-					action: Action.Click,
+				logEvent({
 					value: 'issues_list_issue_clicked',
 				});
 				const imageSize = await imageForScreenSize();
