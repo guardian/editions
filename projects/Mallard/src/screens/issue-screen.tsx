@@ -22,6 +22,7 @@ import {
 	WeatherWidget,
 } from 'src/components/weather';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
+import { logPageView } from 'src/helpers/analytics';
 import type { FlatCard } from 'src/helpers/transform';
 import {
 	flattenCollectionsToCards,
@@ -49,7 +50,6 @@ import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useWeather } from 'src/hooks/use-weather-provider';
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle';
-import { sendPageViewEvent } from 'src/services/ophan';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { metrics } from 'src/theme/spacing';
 import type {
@@ -355,10 +355,7 @@ const IssueScreenWithPath = ({
 	const { initialFrontKey } = useIssueSummary();
 
 	useEffect(() => {
-		issue &&
-			sendPageViewEvent({
-				path: `editions/${issue.key}`,
-			});
+		issue && logPageView(`editions/${issue.key}`);
 	}, [issue?.key]);
 
 	return (

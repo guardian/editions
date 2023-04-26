@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, FlatList, Platform, StyleSheet, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
 import { PreviewControls } from 'src/components/article/preview-controls';
+import { logPageView } from 'src/helpers/analytics';
 import { clamp } from 'src/helpers/math';
 import { getColor } from 'src/helpers/transform';
 import { getAppearancePillar } from 'src/hooks/use-article';
@@ -14,7 +15,6 @@ import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import { useRating } from 'src/hooks/use-rating';
 import type { PathToArticle } from 'src/paths';
 import type { ArticleNavigator, ArticleSpec } from 'src/screens/article-screen';
-import { sendPageViewEvent } from 'src/services/ophan';
 import { getArticleDataFromNavigator } from '../../article-screen';
 import type { OnIsAtTopChange } from '../body';
 import { ArticleScreenBody } from '../body';
@@ -224,9 +224,7 @@ const ArticleSlider = React.memo(
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={1}
 							onMomentumScrollEnd={() => {
-								sendPageViewEvent({
-									path: flattenedArticles[current].article,
-								});
+								logPageView(flattenedArticles[current].article);
 							}}
 							onScroll={Animated.event(
 								[
@@ -276,9 +274,9 @@ const ArticleSlider = React.memo(
 							// onPageSelected get called twice for the first time, to avoid duplicate tracking
 							// we are manually checking the last tracked index
 							if (lastTrackedIndex != newIndex) {
-								sendPageViewEvent({
-									path: flattenedArticles[newIndex].article,
-								});
+								logPageView(
+									flattenedArticles[newIndex].article,
+								);
 								setLastTrackedIndex(newIndex);
 							}
 							setCurrent(newIndex);

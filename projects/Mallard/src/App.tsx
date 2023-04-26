@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from 'react-native-splash-screen';
+import { logUserId } from 'src/helpers/analytics';
 import { ConfigProvider } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
-import { setUserId } from 'src/services/ophan';
 import { AppNavigation } from './AppNavigation';
 import { AccessProvider } from './authentication/AccessContext';
 import type { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer';
@@ -57,7 +57,7 @@ const WithProviders = nestProviders(
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
-	setUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
+	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
 
 const App = () => {
 	useEffect(() => {

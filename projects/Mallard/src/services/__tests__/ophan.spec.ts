@@ -1,8 +1,8 @@
 import { NativeModules } from 'react-native';
+import { AnalyticsScreenTracking } from 'src/helpers/analytics/types';
 import {
 	Action,
 	ComponentType,
-	ScreenTracking,
 	sendAppScreenEvent,
 	sendComponentEvent,
 	sendPageViewEvent,
@@ -31,7 +31,9 @@ describe('services/ophan', () => {
 
 	describe('sendAppScreenEvent', () => {
 		it('should use the correct native module function at a basic level', () => {
-			sendAppScreenEvent({ screenName: ScreenTracking.IssueList });
+			sendAppScreenEvent({
+				screenName: AnalyticsScreenTracking.IssueList,
+			});
 			expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalled();
 			expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalledWith(
 				'issue_list',
@@ -41,7 +43,7 @@ describe('services/ophan', () => {
 
 		it('should use the correct native module function with optional values', () => {
 			sendAppScreenEvent({
-				screenName: ScreenTracking.IssueList,
+				screenName: AnalyticsScreenTracking.IssueList,
 				value: '2019-08-30',
 			});
 			expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalled();
