@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { toggleAnalyticsRecording } from 'src/helpers/analytics';
 import {
 	gdprAllowFunctionalityCache,
 	gdprAllowPerformanceCache,
@@ -16,8 +17,9 @@ import { errorService } from 'src/services/errors';
  * v5 - Add Firebase in ESSENTIAL
  * v6 - Add Crashlytics in PERFORMANCE, update wording in ESSENTIAL
  * v7 - Remove Braze from wording in ESSENTIAL
+ * v8 - Add Firebase Analytics as PERFORMANCE
  */
-const CURRENT_CONSENT_VERSION = 7;
+const CURRENT_CONSENT_VERSION = 8;
 
 /*
 Consent switches can be 'unset' or null
@@ -124,6 +126,9 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		setGdprAllowPerformance(setting);
 		setGdprAllowSentry(setting);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
+		setting
+			? toggleAnalyticsRecording(setting)
+			: toggleAnalyticsRecording(false);
 		// Persisted state modifier
 		setting === null
 			? gdprAllowPerformanceCache.reset()

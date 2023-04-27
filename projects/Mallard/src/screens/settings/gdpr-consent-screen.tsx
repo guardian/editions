@@ -60,7 +60,7 @@ const GdprConsent = ({
 	const switches: { [key in keyof GdprSwitches]: GdprSwitch } = {
 		gdprAllowPerformance: {
 			name: 'Performance',
-			services: 'Sentry - Logging - Crashlytics',
+			services: 'Sentry - Logging - Crashlytics - Firebase Analytics',
 			description:
 				'Enabling these allow us to observe and measure how you use our services. We use this information to fix bugs more quickly so that users have a better experience. For example, we would be able to see the journey you have taken and where the error was encountered. Your data will only be stored in our servers for two weeks. If you disable this, we will not be able to observe and measure your use of our services, and we will have less information about their performance and details of any issues encountered.',
 			modifier: setGdprPerformanceBucket,

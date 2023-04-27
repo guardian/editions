@@ -75,6 +75,7 @@ const navigateToIssue = ({
 		setIssueId(navigationProps.path, navigationProps.initialFrontKey);
 	}
 	logEvent({
+		name: 'issues_list_issue',
 		value: 'issues_list_issue_clicked',
 	});
 };
