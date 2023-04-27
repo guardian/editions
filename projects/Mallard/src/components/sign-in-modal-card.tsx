@@ -40,6 +40,7 @@ const SignInModalCard = ({
 								close();
 								onLoginPress();
 								logEvent({
+									name: 'sign_in_continue',
 									value: 'sign_in_continue_clicked',
 								});
 							}}

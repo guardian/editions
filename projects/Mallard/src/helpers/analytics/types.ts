@@ -1,7 +1,7 @@
 type AnalyticsUserId = string | null;
 
 type AnalyticsEvent = {
-	name?: string;
+	name: string;
 	value: string;
 };
 

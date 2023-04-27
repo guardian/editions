@@ -118,7 +118,7 @@ const ManageEditionsScreen = () => {
 									onValueChange={(val) => {
 										setWifiOnlyDownloads(val);
 										logEvent({
-											name: 'manageEditionsWifiDownload',
+											name: 'manage_editions_wifi_download',
 											value: val.toString(),
 										});
 									}}
@@ -138,7 +138,7 @@ const ManageEditionsScreen = () => {
 										await setMaxAvailableEditions(n);
 										getIssueSummary(false);
 										logEvent({
-											name: 'manageEditionsAvailableEditions',
+											name: 'manage_editions_available_editions',
 											value: n.toString(),
 										});
 									}}
@@ -171,8 +171,8 @@ const ManageEditionsScreen = () => {
 									{ cancelable: false },
 								);
 								logEvent({
-									value: 'deleteAllDownload',
-									name: 'manageEditions',
+									value: 'delete_all_downloads',
+									name: 'manage_editions',
 								});
 							},
 						},

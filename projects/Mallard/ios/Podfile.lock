@@ -11,6 +11,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.70.8)
   - Firebase (10.7.0):
     - Firebase/Core (= 10.7.0)
+  - Firebase/AnalyticsWithoutAdIdSupport (10.7.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics/WithoutAdIdSupport (~> 10.7.0)
   - Firebase/Core (10.7.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (~> 10.7.0)
@@ -37,6 +40,15 @@ PODS:
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
     - GoogleAppMeasurement (= 10.7.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - GoogleUtilities/Network (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseAnalytics/WithoutAdIdSupport (10.7.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.7.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
     - GoogleUtilities/MethodSwizzler (~> 7.8)
     - GoogleUtilities/Network (~> 7.8)
@@ -491,15 +503,19 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBApp (17.4.0):
+  - RNFBAnalytics (17.4.3):
+    - Firebase/AnalyticsWithoutAdIdSupport (= 10.7.0)
+    - React-Core
+    - RNFBApp
+  - RNFBApp (17.4.3):
     - Firebase/CoreOnly (= 10.7.0)
     - React-Core
-  - RNFBCrashlytics (17.4.0):
+  - RNFBCrashlytics (17.4.3):
     - Firebase/Crashlytics (= 10.7.0)
     - FirebaseCoreExtension (= 10.7.0)
     - React-Core
     - RNFBApp
-  - RNFBRemoteConfig (17.4.0):
+  - RNFBRemoteConfig (17.4.3):
     - Firebase/RemoteConfig (= 10.7.0)
     - React-Core
     - RNFBApp
@@ -635,6 +651,7 @@ DEPENDENCIES:
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
+  - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
@@ -787,6 +804,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
+  RNFBAnalytics:
+    :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBCrashlytics:
@@ -897,9 +916,10 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNDeviceInfo: aad3c663b25752a52bf8fce93f2354001dd185aa
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNFBApp: b0f0c53ed8a00395ceb4863910a2c1ff6e24d9f6
-  RNFBCrashlytics: 43358406044e9fa98f949b3fd7129df33bd6a9a8
-  RNFBRemoteConfig: 8d4731e0e39fc0d10cfec2f2a451def50f65a426
+  RNFBAnalytics: 3bc4f4f28fad1caf0effaa21555da09f2c0be919
+  RNFBApp: 922564a99c97a8cab366d5a918f9fecff6b563d5
+  RNFBCrashlytics: fbad0177b4603cd964364e3206a158fe5b3862c8
+  RNFBRemoteConfig: 515b9b5419e059cfce6b70e06e55d2cbb7eadb74
   RNFlashList: 399bf6a0db68f594ad2c86aaff3ea39564f39f8a
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
@@ -920,6 +940,6 @@ SPEC CHECKSUMS:
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: d6133108734e69e8c0becc6ba587294b94829687
 
-PODFILE CHECKSUM: 22117553c487556160338ab2bc42f0e40ada5a43
+PODFILE CHECKSUM: 66652b44986ebda206247012fa58cb8996ccf20a
 
 COCOAPODS: 1.11.3

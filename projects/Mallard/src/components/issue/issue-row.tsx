@@ -161,6 +161,7 @@ const IssueButton = ({
 		if (isConnected) {
 			if (!dlStatus) {
 				logEvent({
+					name: 'issues_list_issue',
 					value: 'issues_list_issue_clicked',
 				});
 				const imageSize = await imageForScreenSize();

@@ -1,11 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
+import type { NavigationContainerRef } from '@react-navigation/native';
 import type { StackCardInterpolationProps } from '@react-navigation/stack';
 import {
 	CardStyleInterpolators,
 	createStackNavigator,
 	TransitionPresets,
 } from '@react-navigation/stack';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Animated } from 'react-native';
 import { isTablet } from 'react-native-device-info';
 import { LoadingScreen } from './components/LoadingScreen/LoadingScreen';
@@ -17,6 +18,7 @@ import { SignInFailedModal } from './components/Modals/SignInFailedModal';
 import { SignInModal } from './components/Modals/SignInModal';
 import { SubFoundModalCard } from './components/Modals/SubFoundModal';
 import { SubNotFoundModal } from './components/Modals/SubNotFoundModal';
+import { logScreenView } from './helpers/analytics';
 import { useIsOnboarded } from './hooks/use-onboarding';
 import type {
 	MainStackParamList,
@@ -403,8 +405,26 @@ const RootStack = () => {
 const AppNavigation = () => {
 	const { isOnboarded, isLoading } = useIsOnboarded();
 	// Designed to stop a screen flash as effects are resolving
+	const routeNameRef = useRef<any>();
+	const navigationRef = useRef<NavigationContainerRef | null>(null);
 	return (
-		<NavigationContainer>
+		<NavigationContainer
+			ref={navigationRef}
+			onReady={() => {
+				routeNameRef.current =
+					navigationRef.current?.getCurrentRoute()?.name;
+			}}
+			onStateChange={async () => {
+				const previousRouteName = routeNameRef.current;
+				const currentRouteName =
+					navigationRef.current?.getCurrentRoute()?.name;
+
+				if (previousRouteName !== currentRouteName) {
+					currentRouteName && (await logScreenView(currentRouteName));
+				}
+				routeNameRef.current = currentRouteName;
+			}}
+		>
 			{isLoading ? (
 				<LoadingScreen />
 			) : isOnboarded ? (
