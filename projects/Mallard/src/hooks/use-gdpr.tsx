@@ -34,7 +34,6 @@ export type GdprCoreSettings = {
 };
 
 interface GdprSettings extends GdprCoreSettings {
-	gdprAllowOphan: GdprSwitchSetting;
 	gdprAllowSentry: GdprSwitchSetting;
 	gdprAllowGoogleLogin: GdprSwitchSetting;
 	gdprAllowAppleLogin: GdprSwitchSetting;
@@ -57,7 +56,6 @@ const defaultState: GdprSettings = {
 	gdprAllowPerformance: null,
 	gdprAllowFunctionality: null,
 	gdprConsentVersion: null,
-	gdprAllowOphan: true, // 'essential' so defaults to true and not switchable
 	gdprAllowSentry: null,
 	gdprAllowGoogleLogin: null,
 	gdprAllowAppleLogin: null,
@@ -82,9 +80,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const [gdprConsentVersion, setGdprConsentVersion] = useState<
 		GdprSettings['gdprConsentVersion']
 	>(defaultState.gdprConsentVersion);
-	const [gdprAllowOphan, setGdprAllowOphan] = useState<
-		GdprSettings['gdprAllowOphan']
-	>(defaultState.gdprAllowOphan);
 	const [gdprAllowSentry, setGdprAllowSentry] = useState<
 		GdprSettings['gdprAllowSentry']
 	>(defaultState.gdprAllowSentry);
@@ -154,7 +149,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		setGdprAllowPerformance(true);
 		setGdprAllowFunctionality(true);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
-		setGdprAllowOphan(true);
 		setGdprAllowSentry(true);
 		setGdprAllowGoogleLogin(true);
 		setGdprAllowAppleLogin(true);
@@ -169,7 +163,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		setGdprAllowPerformance(defaultState.gdprAllowPerformance);
 		setGdprAllowFunctionality(defaultState.gdprAllowFunctionality);
 		setGdprConsentVersion(defaultState.gdprConsentVersion);
-		setGdprAllowOphan(defaultState.gdprAllowOphan);
 		setGdprAllowSentry(defaultState.gdprAllowSentry);
 		setGdprAllowGoogleLogin(defaultState.gdprAllowGoogleLogin);
 		setGdprAllowAppleLogin(defaultState.gdprAllowAppleLogin);
@@ -196,7 +189,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 				hasSetGdpr,
 				isCorrectConsentVersion,
 				// The following are not used anywhere as things stand and are therefore not persisted
-				gdprAllowOphan,
 				gdprAllowSentry,
 				gdprAllowGoogleLogin,
 				gdprAllowAppleLogin,

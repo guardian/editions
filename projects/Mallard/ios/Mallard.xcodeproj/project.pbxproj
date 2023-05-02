@@ -19,11 +19,7 @@
 		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
 		5ACB83BE24FE6CC400324619 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5ACB83BD24FE6CC400324619 /* LaunchScreen.storyboard */; };
 		896089CE248679CF00DCBF7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 896089CD248679CF00DCBF7D /* GoogleService-Info.plist */; };
-		950E1C012317E06F00F38B92 /* Ophan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950E1C002317E06F00F38B92 /* Ophan.swift */; };
 		9553F9242396A2B700AB0CA3 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9553F9232396A2B700AB0CA3 /* RNBackgroundFetch+AppDelegate.m */; };
-		95B08633238D6EEA00828D1E /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; };
-		95B08634238D6EEA00828D1E /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
 		95FF359724F6AC62003425F7 /* ImagesEditions.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95FF359624F6AC62003425F7 /* ImagesEditions.xcassets */; };
 		9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */; };
 		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
@@ -96,20 +92,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		95B08635238D6EEA00828D1E /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				95B08634238D6EEA00828D1E /* ophan.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* MallardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MallardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,9 +118,6 @@
 		390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianDaily-Regular.otf"; path = "../src/assets/fonts/GTGuardianDaily-Regular.otf"; sourceTree = "<group>"; };
 		3DA2FD0EC69B436384494394 /* GHGuardianHeadline-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-BoldItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-BoldItalic.ttf"; sourceTree = "<group>"; };
 		49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Black.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Black.ttf"; sourceTree = "<group>"; };
-		4F62AA2D23198E500052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = "../ophan/build/fat-framework/debug/ophan.framework"; sourceTree = "<group>"; };
-		4F62AA3123198F8B0052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = "../ophan/build/fat-framework/debug/ophan.framework"; sourceTree = "<group>"; };
-		4F62AA35231E8D660052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/universalFramework/ophan.framework; sourceTree = "<group>"; };
 		5035862DEB762FF28CC82472 /* libPods-Mallard-MallardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-MallardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-Regular.ttf"; path = "../src/assets/fonts/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; };
 		5AB25EB224ADE6200074CF93 /* GuardianTextSans-RegularIt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextSans-RegularIt.ttf"; path = "../src/assets/fonts/GuardianTextSans-RegularIt.ttf"; sourceTree = "<group>"; };
@@ -197,7 +176,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */,
-				95B08633238D6EEA00828D1E /* ophan.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,10 +302,7 @@
 			isa = PBXGroup;
 			children = (
 				896089CD248679CF00DCBF7D /* GoogleService-Info.plist */,
-				4F62AA35231E8D660052ADBA /* ophan.framework */,
 				A10F237623191F62004C70CC /* ReleaseStream */,
-				4F62AA2D23198E500052ADBA /* ophan.framework */,
-				4F62AA3123198F8B0052ADBA /* ophan.framework */,
 				95CB9F182316B6E900F2F6B0 /* Ophan */,
 				13B07FAE1A68108700A75B9A /* Mallard */,
 				00E356EF1AD99517003FC87E /* MallardTests */,
@@ -409,12 +384,10 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Mallard" */;
 			buildPhases = (
 				86CD86BD7397778E7A670A31 /* [CP] Check Pods Manifest.lock */,
-				95CB9F1C2316C30600F2F6B0 /* ShellScript */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				95B08635238D6EEA00828D1E /* Embed Frameworks */,
 				B2C2068495DC306BC77F077D /* [CP-User] [RNFB] Core Configuration */,
 				28CB8F63718EE011238949F5 /* [CP-User] [RNFB] Crashlytics Configuration */,
 				4A9A2E12651C1C60C27DCCBD /* [CP] Copy Pods Resources */,
@@ -753,23 +726,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		95CB9F1C2316C30600F2F6B0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../../Apps/ophan/gradlew\" -p \"$SRCROOT/../../Apps/ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\" \\\n-Pkotlin.valid.archs=\"$VALID_ARCHS\"\n";
-		};
 		A520C3CB9A2603F7FB00B1CE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -834,9 +790,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				950E1C012317E06F00F38B92 /* Ophan.swift in Sources */,
 				9553F9242396A2B700AB0CA3 /* RNBackgroundFetch+AppDelegate.m in Sources */,
-				95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */,

@@ -18,7 +18,6 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.guardian.editions.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
-import com.guardian.editions.ophan.RNOphanPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +34,6 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             List<ReactPackage> packages = new PackageList(this).getPackages();
-            packages.add(new RNOphanPackage());
 
             packages.add(new ReleaseStreamPackage());
 

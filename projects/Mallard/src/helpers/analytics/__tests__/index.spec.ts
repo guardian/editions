@@ -1,4 +1,3 @@
-import * as ophan from 'src/services/ophan';
 import { logEvent, logPageView, logScreenView, logUserId } from '..';
 
 const mockLogEvent = jest.fn();
@@ -15,38 +14,26 @@ jest.mock('@react-native-firebase/analytics', () =>
 
 describe('analytics', () => {
 	describe('logEvent', () => {
-		it('should call "sendComponentEvent" from ophan service', async () => {
-			const mockComponentEvent = jest
-				.spyOn(ophan, 'sendComponentEvent')
-				.mockResolvedValue(true);
+		it('should call "logEvent" from firebase analytics', async () => {
 			await logEvent({ name: 'testComponent', value: 'testing' });
-			expect(mockComponentEvent).toHaveBeenCalled();
 			expect(mockLogEvent).toHaveBeenCalled();
 		});
 	});
 	describe('logPageView', () => {
-		it('should call "sendPageViewEvent" from ophan service', async () => {
-			const mockPageViewEvent = jest
-				.spyOn(ophan, 'sendPageViewEvent')
-				.mockResolvedValue(true);
+		it('should call "logEvent" from firebase analyticse', async () => {
 			await logPageView('test/path/to/article');
-			expect(mockPageViewEvent).toHaveBeenCalled();
 			expect(mockLogEvent).toHaveBeenCalled();
 		});
 	});
 	describe('logScreenView', () => {
-		it('should call "sendPageViewEvent" from ophan service', async () => {
+		it('should call "logScreenView" from firebase analyticse', async () => {
 			await logScreenView('IssueScreen');
 			expect(mockLogEvent).toHaveBeenCalled();
 		});
 	});
 	describe('logUserId', () => {
-		it('should call "setUserId" from ophan service', async () => {
-			const mockSetUserId = jest
-				.spyOn(ophan, 'setUserId')
-				.mockResolvedValue('12345');
+		it('should call "setUserId" from firebase analyticse', async () => {
 			await logUserId('12345');
-			expect(mockSetUserId).toHaveBeenCalled();
 			expect(mockSetUserId).toHaveBeenCalled();
 		});
 	});

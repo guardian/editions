@@ -1,11 +1,4 @@
 import analytics from '@react-native-firebase/analytics';
-import {
-	Action,
-	ComponentType,
-	sendComponentEvent,
-	sendPageViewEvent,
-	setUserId,
-} from 'src/services/ophan';
 import type { AnalyticsEvent, AnalyticsUserId } from './types';
 
 const toggleAnalyticsRecording = async (enable: boolean): Promise<boolean> => {
@@ -17,7 +10,6 @@ const toggleAnalyticsRecording = async (enable: boolean): Promise<boolean> => {
 	}
 };
 
-// Currently not used in Ophan as this refers to user behaviour rather than journalism
 const logScreenView = async (routeName: string): Promise<boolean> => {
 	try {
 		await analytics().logScreenView({
@@ -32,12 +24,6 @@ const logScreenView = async (routeName: string): Promise<boolean> => {
 
 const logEvent = async ({ name, value }: AnalyticsEvent): Promise<boolean> => {
 	try {
-		await sendComponentEvent({
-			componentType: ComponentType.AppButton,
-			action: Action.Click,
-			value,
-			componentId: name,
-		});
 		await analytics().logEvent(name, { value });
 		return true;
 	} catch {
@@ -48,7 +34,6 @@ const logEvent = async ({ name, value }: AnalyticsEvent): Promise<boolean> => {
 // This differs from a screen view as this is a "screen" that has significance to journalism e.g. Article screen view
 const logPageView = async (path: string): Promise<boolean> => {
 	try {
-		await sendPageViewEvent({ path });
 		await analytics().logEvent('pageView', { path });
 		return true;
 	} catch {
@@ -58,7 +43,6 @@ const logPageView = async (path: string): Promise<boolean> => {
 
 const logUserId = async (userId: AnalyticsUserId): Promise<boolean> => {
 	try {
-		await setUserId(userId);
 		await analytics().setUserId(userId);
 		return true;
 	} catch {
