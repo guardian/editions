@@ -11,6 +11,10 @@ jest.mock('src/components/EditionsMenu/EditionButton/EditionButton', () => ({
 	EditionButton: () => 'EditionButton',
 }));
 
+jest.mock('src/helpers/analytics', () => ({
+	logEvent: jest.fn,
+}));
+
 const props = {
 	navigationPress: () => {},
 	selectedEdition: editions.daily,

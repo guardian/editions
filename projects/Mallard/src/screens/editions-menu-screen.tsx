@@ -6,6 +6,7 @@ import DeviceInfo from 'react-native-device-info';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { EditionsMenu } from 'src/components/EditionsMenu/EditionsMenu';
 import { EditionsMenuScreenHeader } from 'src/components/ScreenHeader/EditionMenuScreenHeader';
+import { logEvent } from 'src/helpers/analytics';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -80,9 +81,13 @@ export const EditionsMenuScreen = () => {
 			<ScreenFiller>
 				<>
 					<EditionsMenuScreenHeader
-						leftActionPress={() =>
-							navigation.navigate(RouteNames.Issue)
-						}
+						leftActionPress={() => {
+							navigation.navigate(RouteNames.Issue);
+							logEvent({
+								name: 'editions_menu_button',
+								value: 'editions_menu_button_closed',
+							});
+						}}
 					/>
 
 					<EditionsMenu

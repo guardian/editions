@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dimensions, FlatList, StyleSheet } from 'react-native';
 import type { EditionId, RegionalEdition, SpecialEdition } from 'src/common';
+import { logEvent } from 'src/helpers/analytics';
 import { metrics } from 'src/theme/spacing';
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults';
 import { EditionButton } from './EditionButton/EditionButton';
@@ -33,6 +34,7 @@ const EditionsMenu = ({
 		const handlePress = () => {
 			storeSelectedEdition(item);
 			navigationPress();
+			logEvent({ name: 'edition_selection', value: item.edition });
 		};
 		const isSelected = selectedEdition === item.edition ? true : false;
 

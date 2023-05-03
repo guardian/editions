@@ -3,7 +3,9 @@ import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary';
+import { logEvent } from 'src/helpers/analytics';
 import { format } from 'src/helpers/date';
+import { Weather } from 'src/helpers/words';
 import { useWeather } from 'src/hooks/use-weather-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
@@ -201,11 +203,15 @@ const SetLocationButton = () => {
 		navigation.navigate(RouteNames.Settings, {
 			screen: RouteNames.WeatherGeolocationConsent,
 		});
+		logEvent({
+			name: 'weather_use_location_button',
+			value: 'weather_use_location',
+		});
 	}, [navigation]);
 
 	return (
 		<Button
-			accessibilityLabel="Use location button"
+			accessibilityLabel={`${Weather.useLocation} button`}
 			accessibilityHint="Double tap to open a device location consent screen"
 			accessibilityRole="button"
 			onPress={onSetLocation}
@@ -214,7 +220,7 @@ const SetLocationButton = () => {
 			buttonStyles={styles.setLocationButton}
 			textStyles={styles.setLocationText}
 		>
-			Use location
+			{Weather.useLocation}
 		</Button>
 	);
 };

@@ -9,6 +9,7 @@ import { ThreeWaySwitch } from 'src/components/layout/ui/switch';
 import { LinkNav } from 'src/components/link';
 import { LoginHeader } from 'src/components/login/login-layout';
 import { UiBodyCopy } from 'src/components/styled-text';
+import { logEvent } from 'src/helpers/analytics';
 import {
 	PREFS_SAVED_MSG,
 	PRIVACY_SETTINGS_HEADER_TITLE,
@@ -137,7 +138,13 @@ const GdprConsent = ({
 							proxy={
 								<Button
 									appearance={ButtonAppearance.Skeleton}
-									onPress={() => onEnableAllAndContinue()}
+									onPress={() => {
+										onEnableAllAndContinue();
+										logEvent({
+											name: 'gdpr_enable_all',
+											value: 'gdpr_enable_all',
+										});
+									}}
 								>
 									{continueText}
 								</Button>
@@ -164,7 +171,15 @@ const GdprConsent = ({
 						</Footer>
 						{__DEV__ ? (
 							<Footer>
-								<Button onPress={resetAllSettings}>
+								<Button
+									onPress={() => {
+										resetAllSettings();
+										logEvent({
+											name: 'gdpr_reset_all',
+											value: 'gdpr_reset_all',
+										});
+									}}
+								>
 									Reset
 								</Button>
 							</Footer>
@@ -187,6 +202,10 @@ const GdprConsent = ({
 									onValueChange={(value) => {
 										modifier(value);
 										showToast(PREFS_SAVED_MSG);
+										logEvent({
+											name: `gdpr_${name.toLowerCase()}`,
+											value: value?.toString() ?? 'null',
+										});
 									}}
 									value={
 										isCorrectConsentVersion() ? value : null
