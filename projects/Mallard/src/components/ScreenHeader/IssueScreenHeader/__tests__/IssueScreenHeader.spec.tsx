@@ -4,6 +4,10 @@ import MockedNavigator from 'src/__mocks__/@react-navigation';
 import type { IssueOrigin } from '../../../../../../Apps/common/src';
 import { IssueScreenHeader } from '../IssueScreenHeader';
 
+jest.mock('src/helpers/analytics', () => ({
+	logEvent: jest.fn,
+}));
+
 const issue = {
 	name: 'Daily Edition',
 	date: '2020-06-25',
