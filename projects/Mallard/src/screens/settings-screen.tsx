@@ -16,6 +16,7 @@ import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading, Row, Separator } from 'src/components/layout/ui/row';
 import { DualButton } from 'src/components/lists/DualButton';
 import { FullButton } from 'src/components/lists/FullButton';
+import { logEvent } from 'src/helpers/analytics';
 import { Copy } from 'src/helpers/words';
 import {
 	useIsUsingProdDevtools,
@@ -42,6 +43,10 @@ const MiscSettingsList = () => {
 	const onWeatherChange = () => {
 		setcomponentlIsWeatherShown(!isWeatherShown);
 		setIsWeatherShown(!isWeatherShown);
+		logEvent({
+			name: 'toggle_weather',
+			value: (!isWeatherShown).toString(),
+		});
 	};
 
 	const onNotificationChange = () => {

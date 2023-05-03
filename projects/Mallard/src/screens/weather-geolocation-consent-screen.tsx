@@ -5,6 +5,7 @@ import { RESULTS } from 'react-native-permissions';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RenderHTMLwithScrollView } from 'src/components/RenderHTML/RenderHTML';
+import { logEvent } from 'src/helpers/analytics';
 import { requestLocationPermission } from 'src/helpers/location-permission';
 import { Copy } from 'src/helpers/words';
 import { useIsWeatherShown, useWeather } from 'src/hooks/use-weather-provider';
@@ -64,10 +65,18 @@ const WeatherGeolocationConsentScreen = () => {
 			}
 			navigation.goBack();
 		}
+		logEvent({
+			name: 'weather_consent_button',
+			value: 'weather_did_consented',
+		});
 	};
 	const onHidePress = () => {
 		setIsWeatherShown(false);
 		navigation.goBack();
+		logEvent({
+			name: 'weather_consent_button',
+			value: 'weather_did_not_consent',
+		});
 	};
 
 	return (

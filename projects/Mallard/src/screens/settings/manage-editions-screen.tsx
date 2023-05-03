@@ -112,7 +112,9 @@ const ManageEditionsScreen = () => {
 							proxy: (
 								<Switch
 									accessible={true}
-									accessibilityLabel="Wifi-only."
+									accessibilityLabel={
+										Copy.manageDownloads.wifiOnlyTitle
+									}
 									accessibilityRole="switch"
 									value={wifiOnlyDownloads}
 									onValueChange={(val) => {

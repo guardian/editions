@@ -160,10 +160,6 @@ const IssueButton = ({
 		}
 		if (isConnected) {
 			if (!dlStatus) {
-				logEvent({
-					name: 'issues_list_issue',
-					value: 'issues_list_issue_clicked',
-				});
 				const imageSize = await imageForScreenSize();
 				downloadAndUnzipIssue(
 					issue,
@@ -175,6 +171,10 @@ const IssueButton = ({
 		} else {
 			showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE);
 		}
+		logEvent({
+			name: 'issues_download_attempt',
+			value: issue.localId,
+		});
 	};
 
 	const progressValue = useMemo(

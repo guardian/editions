@@ -4,6 +4,7 @@ import type { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common';
 import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
+import { logEvent } from 'src/helpers/analytics';
 import { useIssueDate } from 'src/helpers/issues';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -40,6 +41,10 @@ const IssueScreenHeader = React.memo(
 		const handleEditionMenuPress = useCallback(() => {
 			setNewEditionSeen();
 			navigate(RouteNames.EditionsMenu);
+			logEvent({
+				name: 'editions_menu_button',
+				value: 'editions_menu_button_opened',
+			});
 		}, [setNewEditionSeen, navigate]);
 
 		const isSpecialEdition = (editionType: string) => {
