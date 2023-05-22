@@ -67,8 +67,6 @@ const ArticleSlider = React.memo(
 		const [lastTrackedIndex, setLastTrackedIndex] = useState(-1);
 		const [position, setPosition] = useState<number>(startingPoint);
 		const [sliderPosition] = useState(new Animated.Value(0));
-		const [trackStartingPosition, setTrackStartingPosition] =
-			useState<number>(startingPoint);
 
 		const { width } = useDimensions();
 		const viewPagerRef = useRef<ViewPagerAndroid | null>();
@@ -208,11 +206,6 @@ const ArticleSlider = React.memo(
 				interaction();
 			}
 		};
-
-		// useEffect(() => {
-		// 	console.log('STARTING POINT: ', startingPoint);
-		// 	console.log('CURRENT: ', current);
-		// }, [startingPoint, current]);
 
 		return (
 			<>
