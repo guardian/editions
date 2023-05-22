@@ -67,6 +67,8 @@ const ArticleSlider = React.memo(
 		const [lastTrackedIndex, setLastTrackedIndex] = useState(-1);
 		const [position, setPosition] = useState<number>(startingPoint);
 		const [sliderPosition] = useState(new Animated.Value(0));
+		const [trackStartingPosition, setTrackStartingPosition] =
+			useState<number>(startingPoint);
 
 		const { width } = useDimensions();
 		const viewPagerRef = useRef<ViewPagerAndroid | null>();
@@ -207,6 +209,11 @@ const ArticleSlider = React.memo(
 			}
 		};
 
+		// useEffect(() => {
+		// 	console.log('STARTING POINT: ', startingPoint);
+		// 	console.log('CURRENT: ', current);
+		// }, [startingPoint, current]);
+
 		return (
 			<>
 				{Platform.OS === 'ios' && hasLargeMemory ? (
@@ -269,6 +276,15 @@ const ArticleSlider = React.memo(
 						}}
 						scrollSensitivity={5}
 						onPageSelected={(ev: any) => {
+							// ev.position.newIndex gives 0 even if its not. This is intermittent.
+							// This is explained here: https://github.com/callstack/react-native-pager-view/issues/650
+							// This forces the very first article chosen to be set in the slider for Android only
+							if (lastTrackedIndex === -1) {
+								viewPagerRef?.current?.setPageWithoutAnimation(
+									startingPoint,
+								);
+							}
+
 							onShouldShowHeaderChange(true);
 							const newIndex = ev.nativeEvent.position;
 							// onPageSelected get called twice for the first time, to avoid duplicate tracking
