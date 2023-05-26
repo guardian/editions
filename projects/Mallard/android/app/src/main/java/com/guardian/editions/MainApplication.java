@@ -10,7 +10,7 @@ import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
-// import io.sentry.react.RNSentryPackage;
+import io.sentry.react.RNSentryPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
