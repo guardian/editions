@@ -10,7 +10,7 @@ import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
-import io.sentry.react.RNSentryPackage;
+// import io.sentry.react.RNSentryPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
@@ -18,6 +18,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.guardian.editions.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
+import android.webkit.WebView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -80,6 +81,7 @@ public class MainApplication extends Application implements ReactApplication {
         ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+        WebView.setWebContentsDebuggingEnabled(true);
     }
 
   /**
