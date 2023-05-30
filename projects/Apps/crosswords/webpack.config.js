@@ -32,4 +32,12 @@ module.exports = {
             filename: './index.html',
         }),
     ],
+    output: {
+        hashFunction: 'sha512',
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000,
+    },
 }
