@@ -13,10 +13,10 @@ const bundleHTML = (location = 'Mallard') => {
                 `rm -rf ../../../projects/${location}/html/${key}.bundle`,
                 `mv ./${buildPath} ../../../projects/${location}/html/${key}.bundle`,
             ].join(' && '),
-            (err, _, stderr) => {
-                if (err || stderr) {
+            (err) => {
+                if (err) {
                     console.error('Failed building bundle ' + key)
-                    console.error(stderr)
+                    console.error('err:', err)
                     return
                 }
                 console.log(chalk.green(`Bundled ${key}`))
