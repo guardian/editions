@@ -1,11 +1,11 @@
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { captureException } from '@sentry/react-native';
 import { useEffect, useState } from 'react';
 import { rateApp } from 'src/helpers/rate';
 import {
 	hasShownRatingCache,
 	numberOfInteractionsCache,
 } from 'src/helpers/storage';
+import { errorService } from 'src/services/errors';
 import { remoteConfigService } from 'src/services/remote-config';
 
 const getFromStorage = async (
@@ -33,14 +33,14 @@ export const useRating = () => {
 				setNumberOfInteractions(numberOfInteractions),
 			)
 			.catch((e) => {
-				captureException(e);
+				errorService.captureException(e);
 			});
 	}, []);
 	useEffect(() => {
 		getFromStorage(hasShownRatingCache, 0)
 			.then((hasShownRating) => setHasShownRating(hasShownRating))
 			.catch((e) => {
-				captureException(e);
+				errorService.captureException(e);
 			});
 	}, []);
 
