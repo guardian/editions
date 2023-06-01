@@ -149,6 +149,7 @@ android {
         versionCode appVersionCode
         versionName appVersionName()
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        manifestPlaceholders = [appAuthRedirectScheme: 'com.guardian.editions.oauth']
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.
             externalNativeBuild {
