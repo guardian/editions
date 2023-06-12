@@ -30,7 +30,6 @@ node --version
 
 npm install -g yarn npx --force
 cd projects/Mallard
-yarn prestorybook
 echo "building APK with command 'make $TARGET'"
 make "$TARGET"
 
