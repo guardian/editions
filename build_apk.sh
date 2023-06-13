@@ -2,6 +2,8 @@
 # CI script for building and deploying Editions android APK
 # to either BETA (beta-android) or RELEASE (release-android)
 
+set -e
+
 if [ "$#" -ne 1 ]
 then
   echo "Usage: build_apk.sh [BETA|RELEASE]"
@@ -32,5 +34,3 @@ npm install -g yarn npx --force
 cd projects/Mallard
 echo "building APK with command 'make $TARGET'"
 make "$TARGET"
-
-exit 0
