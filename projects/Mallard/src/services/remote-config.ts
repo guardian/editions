@@ -11,7 +11,7 @@ interface RemoteConfig {
 }
 
 const remoteConfigDefaults = {
-	logging_enabled: true,
+	logging_enabled: false,
 	join_beta_button_enabled: false,
 	lightbox_enabled: true,
 	generate_share_url: true,

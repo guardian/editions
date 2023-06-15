@@ -18,8 +18,9 @@ import { errorService } from 'src/services/errors';
  * v6 - Add Crashlytics in PERFORMANCE, update wording in ESSENTIAL
  * v7 - Remove Braze from wording in ESSENTIAL
  * v8 - Add Firebase Analytics as PERFORMANCE
+ * v9 - Remove additional Logging
  */
-const CURRENT_CONSENT_VERSION = 8;
+const CURRENT_CONSENT_VERSION = 9;
 
 /*
 Consent switches can be 'unset' or null
