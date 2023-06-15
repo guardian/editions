@@ -18,16 +18,18 @@ const isGuardianEmail = (email: string) =>
  * otherwise we don't really mind
  */
 const isStaffMember = (userData: IdentityAuthData) =>
-	isGuardianEmail(userData.userDetails.primaryEmailAddress) &&
-	userData.userDetails.statusFields.userEmailValidated;
+	isGuardianEmail(userData.userDetails.preferred_username);
 
 /**
  * This takes the membersDataApiResponse and is responsible for returning a boolean
  * describing whether or not the user has the relevant permissions to use the app
  */
-const canViewEdition = (userData: IdentityAuthData): boolean =>
-	userData.membershipData.contentAccess.digitalPack ||
-	isStaffMember(userData);
+const canViewEdition = (userData: IdentityAuthData): boolean => {
+	return (
+		userData.membershipDetails.contentAccess.digitalPack ||
+		isStaffMember(userData)
+	);
+};
 
 /**
  * This gets a CAS code for a user if one exists

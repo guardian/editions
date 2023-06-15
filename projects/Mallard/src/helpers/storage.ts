@@ -62,6 +62,8 @@ const userDataCache = createAsyncCache<IdentityAuthData>('user-data-cache');
 
 const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache');
 
+const oktaDataCache = createAsyncCache<any>('okta-data-cache');
+
 const pushNotificationRegistrationCache =
 	createAsyncCache<PushNotificationRegistration>(
 		'push-notification-registration-cache',
@@ -202,4 +204,5 @@ export {
 	apiUrlCache,
 	numberOfInteractionsCache,
 	hasShownRatingCache,
+	oktaDataCache,
 };

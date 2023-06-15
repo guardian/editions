@@ -85,6 +85,7 @@ class Authorizer<
 		let attempt: ResolvedAttempt<T>;
 		try {
 			const result = await promise;
+			console.log('handleAuthPromise -> result:', result);
 
 			attempt = cataResult<T, ResolvedAttempt<T>>(result, {
 				valid: (data) => ValidAttempt(data, connectivity),
@@ -107,6 +108,9 @@ class Authorizer<
 	}
 
 	public async runAuth(...args: A) {
+		// Okta auth has completed running at this point. args being the result of the promise
+		console.log('JAMES ARGS: ', args);
+		console.log('this.authCaches: ', this.authCaches);
 		const attempt = await this.handleAuthPromise(
 			this.auth(args, this.authCaches),
 			'online',

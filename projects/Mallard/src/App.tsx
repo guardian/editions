@@ -56,8 +56,11 @@ const WithProviders = nestProviders(
 	WeatherProvider,
 );
 
+// This legacy id correct? Need to ask Mahesh
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
-	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
+	logUserId(
+		isValid(attempt) ? attempt.data.userDetails.legacy_identity_id : null,
+	);
 
 const App = () => {
 	useEffect(() => {

@@ -10,6 +10,7 @@ import {
 	useIdentity,
 } from 'src/authentication/AccessContext';
 import { isStaffMember } from 'src/authentication/helpers';
+import { oktaSignOut } from 'src/authentication/services/okta';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
@@ -110,12 +111,12 @@ const MiscSettingsList = () => {
 
 const SignInButton = ({
 	username,
-	signOutIdentity,
+	signOutOkta,
 	accessible = true,
 	accessibilityRole = 'button',
 }: {
 	username?: string;
-	signOutIdentity: () => void;
+	signOutOkta: () => void;
 	accessible: boolean;
 	accessibilityRole: AccessibilityRole;
 }) => {
@@ -129,9 +130,13 @@ const SignInButton = ({
 			onPressPrimary={() =>
 				Linking.openURL(
 					'https://manage.theguardian.com/account-settings',
-				).catch(() => signOutIdentity())
+				).catch(() => {
+					signOutOkta();
+				})
 			}
-			onPressSecondary={() => signOutIdentity()}
+			onPressSecondary={() => {
+				signOutOkta();
+			}}
 		/>
 	) : (
 		<FullButton
@@ -148,11 +153,12 @@ const SettingsScreen = () => {
 	const identityData = useIdentity();
 	const canAccess = useAccess();
 	const [, setVersionClickedTimes] = useState(0);
-	const { signOutIdentity, iapData } = useContext(AccessContext);
+	const { signOutOkta, iapData } = useContext(AccessContext);
 
 	const versionNumber = DeviceInfo.getVersion();
+	// This gets affected, should look to centralise some of this for better abstraction
 	const isLoggedInWithIdentity = identityData
-		? identityData.userDetails.primaryEmailAddress
+		? identityData.userDetails.preferred_username
 		: false;
 
 	const canDisplayBetaButton = !iapData && isLoggedInWithIdentity;
@@ -199,11 +205,15 @@ const SettingsScreen = () => {
 						accessible={true}
 						accessibilityRole="button"
 						username={
+							// This will be affected
 							identityData
-								? identityData.userDetails.primaryEmailAddress
+								? identityData.userDetails.preferred_username
 								: undefined
 						}
-						signOutIdentity={signOutIdentity}
+						signOutOkta={async () => {
+							await oktaSignOut();
+							signOutOkta();
+						}}
 					/>
 					<Separator />
 					{canAccess ? (

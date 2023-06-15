@@ -15,6 +15,7 @@ import type {
 	IdentityAuthData,
 } from './authorizers/IdentityAuthorizer';
 import identity from './authorizers/IdentityAuthorizer';
+import okta from './authorizers/OktaAuthorizer';
 import { AccessController } from './lib/AccessController';
 import type { AnyAttempt, ResolvedAttempt } from './lib/Attempt';
 import { InvalidAttempt, isNotRun, isValid, NotRun } from './lib/Attempt';
@@ -48,11 +49,15 @@ const AccessContext = createContext({
 		Promise.resolve(defaultAttemptResponse),
 	authIAP: (): Promise<AttemptResponse<ReceiptIOS>> =>
 		Promise.resolve(defaultAttemptResponse),
+	authOkta: (): Promise<AttemptResponse<any>> =>
+		Promise.resolve(defaultAttemptResponse),
 	identityData: null as IdentityAuthData | null,
 	casData: null as CASExpiry | null,
 	iapData: null as ReceiptIOS | null,
+	oktaData: null as any,
 	signOutIdentity: () => {},
 	signOutCAS: () => {},
+	signOutOkta: () => {},
 });
 
 const controller = new AccessController(
@@ -60,6 +65,7 @@ const controller = new AccessController(
 		identity,
 		cas,
 		iap,
+		okta,
 	},
 	validAttemptCache,
 );
@@ -69,6 +75,8 @@ const authIAP = iap.runAuth.bind(iap);
 const signOutCAS = cas.signOut.bind(cas);
 const authIdentity = identity.runAuth.bind(identity);
 const signOutIdentity = identity.signOut.bind(identity);
+const signOutOkta = okta.signOut.bind(okta);
+const authOkta = okta.runAuth.bind(okta);
 
 const AccessProvider = ({
 	children,
@@ -89,6 +97,9 @@ const AccessProvider = ({
 	const [iapAuth, setIAPAuth] = useState<AnyAttempt<ReceiptIOS>>(
 		controller.authorizerMap.iap.getAttempt(),
 	);
+	const [oktaAuth, setOktaAuth] = useState<AnyAttempt<any>>(
+		controller.authorizerMap.okta.getAttempt(),
+	);
 	const { isConnected, isPoorConnection } = useNetInfo();
 
 	useEffect(() => {
@@ -101,6 +112,7 @@ const AccessProvider = ({
 		);
 		const unsubCAS = controller.authorizerMap.cas.subscribe(setCASAuth);
 		const unsubIAP = controller.authorizerMap.iap.subscribe(setIAPAuth);
+		const unsubOkta = controller.authorizerMap.okta.subscribe(setOktaAuth);
 
 		controller.handleConnectionStatusChanged(isConnected, isPoorConnection);
 
@@ -109,24 +121,29 @@ const AccessProvider = ({
 			unsubIdentity();
 			unsubCAS();
 			unsubIAP();
+			unsubOkta();
 		};
 	}, []);
 
-	const value = useMemo(
-		() => ({
+	const value = useMemo(() => {
+		console.log('oktaAuth: ', oktaAuth);
+		console.log('isValid(oktaAuth): ', isValid(oktaAuth));
+		return {
 			attempt,
 			canAccess: (!!attempt && isValid(attempt)) || isNotRun(attempt),
 			identityData: isValid(idAuth) ? idAuth.data : null,
 			casData: isValid(casAuth) ? casAuth.data : null,
 			iapData: isValid(iapAuth) ? iapAuth.data : null,
+			oktaData: isValid(oktaAuth) ? oktaAuth.data : null,
 			authCAS,
 			authIAP,
+			authOkta,
 			signOutCAS,
 			authIdentity,
 			signOutIdentity,
-		}),
-		[attempt, casAuth, idAuth, iapAuth],
-	);
+			signOutOkta,
+		};
+	}, [attempt, casAuth, idAuth, iapAuth, oktaAuth]);
 
 	return (
 		<AccessContext.Provider value={value}>
@@ -136,6 +153,6 @@ const AccessProvider = ({
 };
 
 const useAccess = () => useContext(AccessContext).canAccess;
-const useIdentity = () => useContext(AccessContext).identityData;
+const useIdentity = () => useContext(AccessContext).oktaData;
 
 export { AccessProvider, useAccess, useIdentity, AccessContext };

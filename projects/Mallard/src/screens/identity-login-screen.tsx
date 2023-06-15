@@ -17,11 +17,13 @@ import type { CompositeNavigationStackProps } from 'src/navigation/NavigationMod
 import { RouteNames } from 'src/navigation/NavigationModels';
 import isEmail from 'validator/lib/isEmail';
 import { Login } from './log-in';
+import { oktaAuth } from 'src/authentication/services/okta';
 
 const useRandomState = () =>
 	useState(Math.random().toString().split('.')[1])[0];
 
 const AuthSwitcherScreen = () => {
+	const { authOkta } = useContext(AccessContext);
 	const navigation = useNavigation<CompositeNavigationStackProps>();
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -47,6 +49,8 @@ const AuthSwitcherScreen = () => {
 	const { authIdentity } = useContext(AccessContext);
 	const { gdprAllowFunctionality } = useGdprSettings();
 
+	// Compare this with CAS - we will probably need this function?
+
 	const handleAuthClick = useCallback(
 		async (
 			runGetIdentityAuthParams: () => Promise<AuthParams>,
@@ -61,8 +65,13 @@ const AuthSwitcherScreen = () => {
 				setIsLoading(true);
 				try {
 					const { attempt, accessAttempt } = await authIdentity(
+						// This runs the okta piece
 						await runGetIdentityAuthParams(),
 					);
+					console.log('attempt: ', attempt);
+					console.log('accessAttempt: ', accessAttempt);
+					console.log('isValid(attempt): ', isValid(attempt));
+
 					if (isValid(attempt)) {
 						setIsLoading(false);
 						if (!isValid(accessAttempt)) {
@@ -106,6 +115,20 @@ const AuthSwitcherScreen = () => {
 		},
 		[gdprAllowFunctionality],
 	);
+
+	const handleSubmit = async () => {
+		const { accessAttempt } = await authOkta();
+		console.log('handleSubmit: ', accessAttempt);
+		if (isValid(accessAttempt)) {
+			navigation.navigate(RouteNames.SubFoundModal);
+		} else {
+			console.log('BAD: ');
+			// setErrorMessage(
+			// 	accessAttempt.reason ?? 'Something went wrong',
+			// );
+		}
+		setIsLoading(false);
+	};
 
 	return (
 		<Login
@@ -152,6 +175,12 @@ const AuthSwitcherScreen = () => {
 					requiresFunctionalConsent: true,
 					signInName: 'Apple',
 				})
+			}
+			onOktaPress={() =>
+				// handleAuthClick(() => oktaAuth(), {
+				// 	signInName: 'Okta',
+				// })
+				handleSubmit()
 			}
 			onSubmit={() =>
 				handleAuthClick(

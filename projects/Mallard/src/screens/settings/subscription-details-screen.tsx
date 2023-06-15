@@ -30,7 +30,7 @@ const IdentityDetails = ({
 			data={[
 				keyValueItem(
 					Copy.subscriptionDetails.emailAddress,
-					identityData.userDetails.primaryEmailAddress,
+					identityData.userDetails.preferred_username,
 				),
 				keyValueItem(
 					Copy.subscriptionDetails.userId,
