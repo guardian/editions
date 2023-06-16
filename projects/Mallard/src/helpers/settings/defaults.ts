@@ -11,7 +11,6 @@ interface Settings {
 	websiteUrl: string;
 	issuesPath: string;
 	senderId: string;
-	logging: string;
 }
 
 /*
@@ -123,9 +122,6 @@ export const defaultSettings: Settings = {
 	storeDetails,
 	senderId: __DEV__ ? senderId.code : senderId.prod,
 	websiteUrl: 'https://www.theguardian.com/',
-	logging: __DEV__
-		? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
-		: 'https://editions-logging.guardianapis.com/log/mallard',
 };
 
 export const editionsEndpoint = (apiUrl: ConfigState['apiUrl']): string =>
