@@ -21,7 +21,7 @@ import type { AnyAttempt, ResolvedAttempt } from './lib/Attempt';
 import { InvalidAttempt, isNotRun, isValid, NotRun } from './lib/Attempt';
 import type { ReceiptIOS } from './services/iap';
 
-type AttemptType = 'iap' | 'cas' | 'identity';
+type AttemptType = 'iap' | 'cas' | 'identity' | 'okta';
 
 type AttemptResponse<T> = {
 	attempt: ResolvedAttempt<T>;

@@ -34,7 +34,7 @@ const IdentityDetails = ({
 				),
 				keyValueItem(
 					Copy.subscriptionDetails.userId,
-					identityData.membershipData.userId,
+					identityData.membershipDetails.userId,
 				),
 			]}
 		/>
@@ -96,10 +96,7 @@ const LoggedOutDetails = () => (
 );
 
 const SubscriptionDetailsScreen = () => {
-	const { identityData, iapData, casData, attempt } =
-		useContext(AccessContext);
-
-	console.log(JSON.stringify(identityData));
+	const { oktaData, iapData, casData, attempt } = useContext(AccessContext);
 
 	return (
 		<HeaderScreenContainer
@@ -122,11 +119,11 @@ const SubscriptionDetailsScreen = () => {
 								return (
 									iapData && <IAPDetails iapData={iapData} />
 								);
-							case 'identity':
+							case 'okta':
 								return (
-									identityData && (
+									oktaData && (
 										<IdentityDetails
-											identityData={identityData}
+											identityData={oktaData}
 										/>
 									)
 								);
