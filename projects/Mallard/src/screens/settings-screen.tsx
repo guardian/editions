@@ -23,6 +23,7 @@ import {
 	useIsUsingProdDevtools,
 	useNotificationsEnabled,
 } from 'src/hooks/use-config-provider';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -111,17 +112,18 @@ const MiscSettingsList = () => {
 
 const SignInButton = ({
 	username,
-	signOutOkta,
+	signOut,
+	signIn,
 	accessible = true,
 	accessibilityRole = 'button',
 }: {
 	username?: string;
-	signOutOkta: () => void;
+	signOut: () => void;
+	signIn: () => void;
 	accessible: boolean;
 	accessibilityRole: AccessibilityRole;
-}) => {
-	const navigation = useNavigation();
-	return username ? (
+}) =>
+	username ? (
 		<DualButton
 			accessible={accessible}
 			accessibilityRole={accessibilityRole}
@@ -131,11 +133,11 @@ const SignInButton = ({
 				Linking.openURL(
 					'https://manage.theguardian.com/account-settings',
 				).catch(() => {
-					signOutOkta();
+					signOut();
 				})
 			}
 			onPressSecondary={() => {
-				signOutOkta();
+				signOut();
 			}}
 		/>
 	) : (
@@ -143,17 +145,17 @@ const SignInButton = ({
 			accessible={true}
 			accessibilityRole={accessibilityRole}
 			text={Copy.settings.signIn}
-			onPress={() => navigation.navigate(RouteNames.SignIn)}
+			onPress={signIn}
 		/>
 	);
-};
 
 const SettingsScreen = () => {
 	const navigation = useNavigation();
 	const identityData = useIdentity();
 	const canAccess = useAccess();
 	const [, setVersionClickedTimes] = useState(0);
-	const { signOutOkta, iapData } = useContext(AccessContext);
+	const { iapData } = useContext(AccessContext);
+	const { signIn, signOut } = useOkta();
 
 	const versionNumber = DeviceInfo.getVersion();
 	// This gets affected, should look to centralise some of this for better abstraction
@@ -210,9 +212,10 @@ const SettingsScreen = () => {
 								? identityData.userDetails.preferred_username
 								: undefined
 						}
-						signOutOkta={async () => {
+						signIn={signIn}
+						signOut={async () => {
 							await oktaSignOut();
-							signOutOkta();
+							await signOut();
 						}}
 					/>
 					<Separator />

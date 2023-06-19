@@ -11,6 +11,7 @@ import { AccessProvider } from './authentication/AccessContext';
 import type { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer';
 import type { AnyAttempt } from './authentication/lib/Attempt';
 import { isValid } from './authentication/lib/Attempt';
+import { oktaInitialisation } from './authentication/services/okta';
 import { BugButtonHandler } from './components/Button/BugButtonHandler';
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary';
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast';
@@ -65,6 +66,7 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 const App = () => {
 	useEffect(() => {
 		SplashScreen.hide();
+		oktaInitialisation();
 	}, []);
 
 	return (

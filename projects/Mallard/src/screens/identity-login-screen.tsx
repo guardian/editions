@@ -18,6 +18,7 @@ import { RouteNames } from 'src/navigation/NavigationModels';
 import isEmail from 'validator/lib/isEmail';
 import { Login } from './log-in';
 import { oktaAuth } from 'src/authentication/services/okta';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
 
 const useRandomState = () =>
 	useState(Math.random().toString().split('.')[1])[0];
@@ -26,6 +27,7 @@ const AuthSwitcherScreen = () => {
 	const { authOkta } = useContext(AccessContext);
 	const navigation = useNavigation<CompositeNavigationStackProps>();
 	const [isLoading, setIsLoading] = useState(false);
+	const { signIn } = useOkta();
 
 	const [error, setError] = useState<string | null>(null);
 
@@ -108,6 +110,7 @@ const AuthSwitcherScreen = () => {
 				);
 			};
 
+			// How is GDPR going to work in this instance?
 			(gdprAllowFunctionality && requiresFunctionalConsent) ||
 			!requiresFunctionalConsent
 				? await allow()
@@ -117,17 +120,30 @@ const AuthSwitcherScreen = () => {
 	);
 
 	const handleSubmit = async () => {
-		const { accessAttempt } = await authOkta();
-		console.log('handleSubmit: ', accessAttempt);
-		if (isValid(accessAttempt)) {
-			navigation.navigate(RouteNames.SubFoundModal);
-		} else {
-			console.log('BAD: ');
-			// setErrorMessage(
-			// 	accessAttempt.reason ?? 'Something went wrong',
-			// );
+		setIsLoading(true);
+		try {
+			const { attempt, accessAttempt } = await authOkta();
+			if (isValid(attempt)) {
+				setIsLoading(false);
+				if (!isValid(accessAttempt)) {
+					navigation.navigate(RouteNames.SignInFailedModal, {
+						emailAddress:
+							attempt.data.userDetails.preferred_username,
+					});
+				} else {
+					navigation.navigate(RouteNames.SubFoundModal);
+				}
+			} else {
+				attempt.reason && setError(attempt.reason);
+				// push this into the catch logic below
+				throw attempt.reason;
+			}
+			setIsLoading(false);
+		} catch (e) {
+			const appleErrorString = getErrorString(e);
+			appleErrorString && setError(appleErrorString);
+			setIsLoading(false);
 		}
-		setIsLoading(false);
 	};
 
 	return (
@@ -180,7 +196,8 @@ const AuthSwitcherScreen = () => {
 				// handleAuthClick(() => oktaAuth(), {
 				// 	signInName: 'Okta',
 				// })
-				handleSubmit()
+				// handleSubmit()
+				signIn()
 			}
 			onSubmit={() =>
 				handleAuthClick(
