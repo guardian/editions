@@ -28,7 +28,6 @@ const SubNotFoundModalCard = ({
 			<>
 				<ModalButton
 					onPress={() => {
-						close();
 						onLoginPress();
 					}}
 				>

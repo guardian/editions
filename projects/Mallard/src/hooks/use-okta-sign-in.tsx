@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { getErrorString } from 'src/authentication/services/apple';
+import { oktaSignOut } from 'src/authentication/services/okta';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 
@@ -37,12 +38,14 @@ const useOkta = () => {
 			const appleErrorString = getErrorString(e);
 			appleErrorString && setError(appleErrorString);
 			setIsLoading(false);
+			navigation.goBack();
 		}
 	};
 
 	const signOut = async () => {
 		try {
 			setIsLoading(true);
+			await oktaSignOut();
 			await signOutOkta();
 			setIsLoading(false);
 		} catch {

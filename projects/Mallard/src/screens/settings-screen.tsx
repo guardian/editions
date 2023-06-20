@@ -213,10 +213,7 @@ const SettingsScreen = () => {
 								: undefined
 						}
 						signIn={signIn}
-						signOut={async () => {
-							await oktaSignOut();
-							await signOut();
-						}}
+						signOut={signOut}
 					/>
 					<Separator />
 					{canAccess ? (

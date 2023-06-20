@@ -12,7 +12,9 @@ const useLoginOverlay = () => {
 		if (!canAccess) {
 			const id = setTimeout(() => {
 				if (idData) {
-					navigate(RouteNames.SubNotFoundModal);
+					navigate(RouteNames.SignInFailedModal, {
+						emailAddress: idData.userDetails.preferred_username,
+					});
 				} else {
 					navigate(RouteNames.SignInModal);
 				}

@@ -6,12 +6,12 @@ import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { CardAppearance, OnboardingCard } from '../onboarding/onboarding-card';
 
 const SubFoundModalCard = () => {
-	const { navigate } = useNavigation();
+	const { goBack } = useNavigation();
 	return (
 		<CenterWrapper>
 			<OnboardingCard
 				title={Copy.subFound.title}
-				onDismissThisCard={() => navigate(RouteNames.Issue)}
+				onDismissThisCard={() => goBack()}
 				subtitle={Copy.subFound.subtitle}
 				appearance={CardAppearance.Blue}
 				size="small"

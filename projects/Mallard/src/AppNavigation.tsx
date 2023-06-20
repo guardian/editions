@@ -31,7 +31,6 @@ import { ArticleWrapper } from './navigation/navigators/article';
 import { EditionsMenuScreen } from './screens/editions-menu-screen';
 import { ExternalSubscriptionScreen } from './screens/external-subscription';
 import { HomeScreen } from './screens/home-screen';
-import { AuthSwitcherScreen } from './screens/identity-login-screen';
 import { InAppPurchaseScreen } from './screens/in-app-purchase-screen';
 import { IssueScreen } from './screens/issue-screen';
 import { LightboxScreen } from './screens/lightbox';
@@ -357,10 +356,6 @@ const SettingsStack = () => {
 			<Settings.Screen
 				name={RouteNames.WeatherGeolocationConsent}
 				component={WeatherGeolocationConsentScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.SignIn}
-				component={AuthSwitcherScreen}
 			/>
 			<Settings.Screen name={RouteNames.Help} component={HelpScreen} />
 			<Settings.Screen name={RouteNames.FAQ} component={FAQScreen} />

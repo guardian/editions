@@ -3,19 +3,17 @@ import React from 'react';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { SignInModalCard } from '../sign-in-modal-card';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
 
 const SignInModal = () => {
 	const { navigate } = useNavigation();
+	const { signIn } = useOkta();
 	return (
 		<CenterWrapper>
 			<SignInModalCard
 				onDismiss={() => navigate(RouteNames.Issue)}
-				onLoginPress={() =>
-					navigate(RouteNames.Settings, {
-						screen: RouteNames.SignIn,
-					})
-				}
-				close={() => navigate(RouteNames.Issue)}
+				onLoginPress={signIn}
+				close={() => navigate(RouteNames.Article)}
 			/>
 		</CenterWrapper>
 	);
