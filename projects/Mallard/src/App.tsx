@@ -57,11 +57,12 @@ const WithProviders = nestProviders(
 	WeatherProvider,
 );
 
-// This legacy id correct? Need to ask Mahesh
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
-	logUserId(
-		isValid(attempt) ? attempt.data.userDetails.legacy_identity_id : null,
-	);
+	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
+
+// This legacy id correct? Need to ask Mahesh
+const handleOktaStatus = (attempt: AnyAttempt<any>) =>
+	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
 
 const App = () => {
 	useEffect(() => {
@@ -73,7 +74,10 @@ const App = () => {
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ErrorBoundary>
 				<WithProviders>
-					<AccessProvider onIdentityStatusChange={handleIdStatus}>
+					<AccessProvider
+						onIdentityStatusChange={handleIdStatus}
+						onOktaStatusChange={handleOktaStatus}
+					>
 						<StatusBar
 							barStyle="light-content"
 							backgroundColor="#041f4a"

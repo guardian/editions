@@ -8,9 +8,9 @@ import {
 	AccessContext,
 	useAccess,
 	useIdentity,
+	useOktaData,
 } from 'src/authentication/AccessContext';
 import { isStaffMember } from 'src/authentication/helpers';
-import { oktaSignOut } from 'src/authentication/services/okta';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
@@ -152,18 +152,18 @@ const SignInButton = ({
 const SettingsScreen = () => {
 	const navigation = useNavigation();
 	const identityData = useIdentity();
+	const oktaData = useOktaData();
 	const canAccess = useAccess();
 	const [, setVersionClickedTimes] = useState(0);
 	const { iapData } = useContext(AccessContext);
 	const { signIn, signOut } = useOkta();
 
 	const versionNumber = DeviceInfo.getVersion();
-	// This gets affected, should look to centralise some of this for better abstraction
-	const isLoggedInWithIdentity = identityData
-		? identityData.userDetails.preferred_username
+	const isLoggedInWithOkta = oktaData
+		? oktaData.userDetails.preferred_username
 		: false;
 
-	const canDisplayBetaButton = !iapData && isLoggedInWithIdentity;
+	const canDisplayBetaButton = !iapData && isLoggedInWithOkta;
 	const buildNumber = DeviceInfo.getBuildNumber();
 	const { isUsingProdDevtools, setIsUsingProdDevTools } =
 		useIsUsingProdDevtools();
@@ -199,6 +199,16 @@ const SettingsScreen = () => {
 
 	const rightChevronIcon = <RightChevron />;
 
+	const username = () => {
+		if (identityData) {
+			return identityData.userDetails.primaryEmailAddress;
+		} else if (oktaData) {
+			return oktaData.userDetails.preferred_username;
+		} else {
+			return undefined;
+		}
+	};
+
 	return (
 		<HeaderScreenContainer title="Settings" actionLeft={true}>
 			<WithAppAppearance value={'settings'}>
@@ -206,12 +216,7 @@ const SettingsScreen = () => {
 					<SignInButton
 						accessible={true}
 						accessibilityRole="button"
-						username={
-							// This will be affected
-							identityData
-								? identityData.userDetails.preferred_username
-								: undefined
-						}
+						username={username()}
 						signIn={signIn}
 						signOut={signOut}
 					/>

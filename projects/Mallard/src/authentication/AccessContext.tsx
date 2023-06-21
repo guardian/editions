@@ -81,9 +81,11 @@ const authOkta = okta.runAuth.bind(okta);
 const AccessProvider = ({
 	children,
 	onIdentityStatusChange = () => {},
+	onOktaStatusChange = () => {},
 }: {
 	children: React.ReactNode;
 	onIdentityStatusChange?: (idAttempt: AnyAttempt<IdentityAuthData>) => void;
+	onOktaStatusChange?: (idAttempt: AnyAttempt<any>) => void;
 }) => {
 	const [attempt, setAttempt] = useState<AnyAttempt<AttemptType>>(
 		controller.getAttempt(),
@@ -112,7 +114,10 @@ const AccessProvider = ({
 		);
 		const unsubCAS = controller.authorizerMap.cas.subscribe(setCASAuth);
 		const unsubIAP = controller.authorizerMap.iap.subscribe(setIAPAuth);
-		const unsubOkta = controller.authorizerMap.okta.subscribe(setOktaAuth);
+		const unsubOkta = controller.authorizerMap.okta.subscribe((attempt) => {
+			setOktaAuth(attempt);
+			onOktaStatusChange(attempt);
+		});
 
 		controller.handleConnectionStatusChanged(isConnected, isPoorConnection);
 
@@ -125,10 +130,8 @@ const AccessProvider = ({
 		};
 	}, []);
 
-	const value = useMemo(() => {
-		console.log('oktaAuth: ', oktaAuth);
-		console.log('isValid(oktaAuth): ', isValid(oktaAuth));
-		return {
+	const value = useMemo(
+		() => ({
 			attempt,
 			canAccess: (!!attempt && isValid(attempt)) || isNotRun(attempt),
 			identityData: isValid(idAuth) ? idAuth.data : null,
@@ -142,8 +145,9 @@ const AccessProvider = ({
 			authIdentity,
 			signOutIdentity,
 			signOutOkta,
-		};
-	}, [attempt, casAuth, idAuth, iapAuth, oktaAuth]);
+		}),
+		[attempt, casAuth, idAuth, iapAuth, oktaAuth],
+	);
 
 	return (
 		<AccessContext.Provider value={value}>
@@ -153,6 +157,7 @@ const AccessProvider = ({
 };
 
 const useAccess = () => useContext(AccessContext).canAccess;
-const useIdentity = () => useContext(AccessContext).oktaData;
+const useIdentity = () => useContext(AccessContext).identityData;
+const useOktaData = () => useContext(AccessContext).oktaData;
 
-export { AccessProvider, useAccess, useIdentity, AccessContext };
+export { AccessProvider, useAccess, useIdentity, useOktaData, AccessContext };
