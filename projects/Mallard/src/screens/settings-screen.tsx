@@ -10,7 +10,7 @@ import {
 	useIdentity,
 	useOktaData,
 } from 'src/authentication/AccessContext';
-import { isStaffMember } from 'src/authentication/helpers';
+import { isStaffMember, isStaffMemberOkta } from 'src/authentication/helpers';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
@@ -155,7 +155,7 @@ const SettingsScreen = () => {
 	const oktaData = useOktaData();
 	const canAccess = useAccess();
 	const [, setVersionClickedTimes] = useState(0);
-	const { iapData } = useContext(AccessContext);
+	const { iapData, signOutIdentity } = useContext(AccessContext);
 	const { signIn, signOut } = useOkta();
 
 	const versionNumber = DeviceInfo.getVersion();
@@ -170,7 +170,10 @@ const SettingsScreen = () => {
 
 	const versionClickHandler = identityData
 		? () => {
-				if (!isUsingProdDevtools && isStaffMember(identityData))
+				if (
+					!isUsingProdDevtools &&
+					(isStaffMember(identityData) || isStaffMemberOkta(oktaData))
+				)
 					setVersionClickedTimes((t) => {
 						if (t < 7) return t + 1;
 						Alert.alert(
@@ -218,7 +221,10 @@ const SettingsScreen = () => {
 						accessibilityRole="button"
 						username={username()}
 						signIn={signIn}
-						signOut={signOut}
+						signOut={() => {
+							signOut();
+							signOutIdentity();
+						}}
 					/>
 					<Separator />
 					{canAccess ? (

@@ -18,16 +18,32 @@ const isGuardianEmail = (email: string) =>
  * otherwise we don't really mind
  */
 const isStaffMember = (userData: IdentityAuthData) =>
+	isGuardianEmail(userData.userDetails.primaryEmailAddress) &&
+	userData.userDetails.statusFields.userEmailValidated;
+
+/**
+ * This takes the membersDataApiResponse and is responsible for returning a boolean
+ * describing whether or not the user has the relevant permissions to use the app
+ */
+const canViewEdition = (userData: IdentityAuthData): boolean =>
+	userData.membershipData.contentAccess.digitalPack ||
+	isStaffMember(userData);
+
+/**
+ * If they have a Guardian email we want to check that they've validated their email,
+ * otherwise we don't really mind
+ */
+const isStaffMemberOkta = (userData: IdentityAuthData) =>
 	isGuardianEmail(userData.userDetails.preferred_username);
 
 /**
  * This takes the membersDataApiResponse and is responsible for returning a boolean
  * describing whether or not the user has the relevant permissions to use the app
  */
-const canViewEdition = (userData: IdentityAuthData): boolean => {
+const canViewEditionOkta = (userData: IdentityAuthData): boolean => {
 	return (
 		userData.membershipDetails.contentAccess.digitalPack ||
-		isStaffMember(userData)
+		isStaffMemberOkta(userData)
 	);
 };
 
@@ -40,4 +56,10 @@ const getCASCode = () =>
 		legacyCASUsernameCache.get(),
 	]).then(([current, legacy]) => current?.username ?? legacy);
 
-export { canViewEdition, isStaffMember, getCASCode };
+export {
+	canViewEdition,
+	isStaffMember,
+	getCASCode,
+	isStaffMemberOkta,
+	canViewEditionOkta,
+};

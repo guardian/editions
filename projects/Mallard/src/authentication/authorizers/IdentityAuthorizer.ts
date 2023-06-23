@@ -54,7 +54,6 @@ const authWithTokens = async (
 	utoken: string,
 	mtoken: string,
 ): Promise<AuthResult<IdentityAuthData>> => {
-	console.log('Run from GOOGLE');
 	const [userDetailsResult, membershipDataResult] = await Promise.all([
 		fetchUserDetails(utoken),
 		fetchMembershipData(mtoken),
@@ -102,31 +101,19 @@ export default new Authorizer({
 		legacyUserAccessTokenKeychain,
 	] as const,
 	auth: async ([params]: [AuthParams], [utc, mtc]) => {
-		// THIS IS WHERE YOU WANT TO BE
-		console.log('params: ', params);
 		const authType = detectAuthType(params);
-		console.log('authType: ', authType);
 		const username = getUserName(authType, params);
-		console.log('username: ', username);
+		const utokenResult = await fetchAuth<string>(params, authType);
 
-		const data = await authWithTokens(
-			params['access_token'],
-			params['access_token'],
-		);
-		console.log('DATA: ', data);
+		return flat(utokenResult, async (utoken) => {
+			utc.set({ username, token: utoken });
+			const mtokenResult = await fetchMembershipToken(utoken);
 
-		// const utokenResult = await fetchAuth<string>(params, authType);
-
-		// return flat(utokenResult, async (utoken) => {
-		// 	utc.set({ username, token: utoken });
-		// 	console.log('utoken: ', utoken);
-		// 	const mtokenResult = await fetchMembershipToken(utoken);
-
-		// 	return flat(mtokenResult, (mtoken) => {
-		// 		mtc.set({ username, token: mtoken });
-		// 		return authWithTokens(utoken, mtoken);
-		// 	});
-		// });
+			return flat(mtokenResult, (mtoken) => {
+				mtc.set({ username, token: mtoken });
+				return authWithTokens(utoken, mtoken);
+			});
+		});
 	},
 	authWithCachedCredentials: async ([utc, mtc, lutc]) => {
 		const [nutoken, lutoken, mtoken] = await Promise.all([

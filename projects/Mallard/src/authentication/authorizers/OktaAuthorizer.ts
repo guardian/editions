@@ -7,15 +7,15 @@ import { oktaDataCache } from 'src/helpers/storage';
 import { Authorizer } from '../lib/Authorizer';
 import type { AuthResult } from '../lib/Result';
 import { flat, InvalidResult, ValidResult } from '../lib/Result';
-import { fetchMembershipData } from '../services/membership';
+import { fetchMembershipDataOkta } from '../services/membership';
 import { oktaAuth } from '../services/okta';
-import { canViewEdition } from '../helpers';
+import { canViewEditionOkta } from '../helpers';
 
 const authWithTokens = async (mtoken: string): Promise<AuthResult<any>> => {
 	try {
 		const [userDetails, membershipDataResult] = await Promise.all([
 			getUserFromIdToken(),
-			fetchMembershipData(mtoken),
+			fetchMembershipDataOkta(mtoken),
 		]);
 		return flat(membershipDataResult, async (membershipDetails) =>
 			ValidResult({
@@ -71,5 +71,5 @@ export default new Authorizer({
 		if (!access_token) return InvalidResult();
 		return authWithTokens(access_token);
 	},
-	checkUserHasAccess: canViewEdition,
+	checkUserHasAccess: canViewEditionOkta,
 });

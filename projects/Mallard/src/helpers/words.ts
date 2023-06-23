@@ -96,6 +96,18 @@ const SubNotFound = {
 	subscriberButton: 'Activate with subscriber ID',
 };
 
+// Auth switcher screen
+const AuthSwitcherScreen = {
+	title: 'Sign in to activate your subscription',
+	nextButton: 'Next',
+	invalidEmail: 'Please enter a valid email',
+	emptyEmail: 'Please enter an email',
+	invalidPassword: 'Invalid password',
+	socialSignInDisabledTitle: '%signInName% sign-in disabled',
+	socialSignInDisabledSubtitle:
+		'You have disabled %signInName% sign-in. You can enable it in in Settings > Privacy Settings > Functional',
+};
+
 // Already Subscribed
 const AlreadySubscribed = {
 	title: 'Subscription Activation',
@@ -247,6 +259,7 @@ export const Copy = {
 	issueListFooter: IssueListFooter,
 	weather: Weather,
 	subscriptionDetails: SubscriptionDetails,
+	authSwitcherScreen: AuthSwitcherScreen,
 	weatherConsentHtml: WeatherConsentHtml,
 	externalSubscription: ExternalSubscription,
 };

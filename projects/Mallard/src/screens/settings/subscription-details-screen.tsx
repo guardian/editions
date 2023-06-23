@@ -30,11 +30,28 @@ const IdentityDetails = ({
 			data={[
 				keyValueItem(
 					Copy.subscriptionDetails.emailAddress,
-					identityData.userDetails.preferred_username,
+					identityData.userDetails.primaryEmailAddress,
 				),
 				keyValueItem(
 					Copy.subscriptionDetails.userId,
-					identityData.membershipDetails.userId,
+					identityData.membershipData.userId,
+				),
+			]}
+		/>
+	</>
+);
+
+const OktaDetails = ({ oktaData }: { oktaData: any }) => (
+	<>
+		<List
+			data={[
+				keyValueItem(
+					Copy.subscriptionDetails.emailAddress,
+					oktaData.userDetails.preferred_username,
+				),
+				keyValueItem(
+					Copy.subscriptionDetails.userId,
+					oktaData.membershipDetails.userId,
 				),
 			]}
 		/>
@@ -96,7 +113,8 @@ const LoggedOutDetails = () => (
 );
 
 const SubscriptionDetailsScreen = () => {
-	const { oktaData, iapData, casData, attempt } = useContext(AccessContext);
+	const { identityData, oktaData, iapData, casData, attempt } =
+		useContext(AccessContext);
 
 	return (
 		<HeaderScreenContainer
@@ -119,12 +137,18 @@ const SubscriptionDetailsScreen = () => {
 								return (
 									iapData && <IAPDetails iapData={iapData} />
 								);
+							case 'identity':
+								return (
+									identityData && (
+										<IdentityDetails
+											identityData={identityData}
+										/>
+									)
+								);
 							case 'okta':
 								return (
 									oktaData && (
-										<IdentityDetails
-											identityData={oktaData}
-										/>
+										<OktaDetails oktaData={oktaData} />
 									)
 								);
 						}

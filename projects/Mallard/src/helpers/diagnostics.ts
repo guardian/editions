@@ -37,6 +37,7 @@ const getDiagnosticInfo = async (
 	netInfo: NetInfoDiagnostic,
 	gdprSettings: GdprCoreSettings,
 ) => {
+	// @TODO: THIS NEEDS LOOKING AT BEFORE MERGING
 	const [casCode, idData, receiptData] = await Promise.all([
 		getCASCode(),
 		userDataCache.get(),

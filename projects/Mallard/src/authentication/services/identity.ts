@@ -39,9 +39,6 @@ const fetchAuth = async <T>(
 				? JSON.stringify(params)
 				: qs.stringify(params),
 	});
-	const json = await res.json();
-
-	console.log('fetchAuth -> response: ', json);
 
 	return fromResponse(res, {
 		valid: (data) => data.accessToken.accessToken,
@@ -93,16 +90,11 @@ const fetchUserDetails = async (
 	userAccessToken: string,
 	authUrl = ID_API_URL,
 ): Promise<AuthResult<User>> => {
-	console.log('fetchUserDetails?');
 	const res = await fetch(`${authUrl}/user/me`, {
 		headers: {
 			Authorization: `Bearer ${userAccessToken}`,
 		},
 	});
-	console.log(res.status);
-	const json = await res.json();
-
-	console.log('fetchUserDetails -> response: ', json);
 
 	return fromResponse(res, {
 		valid: (data) => data.user,

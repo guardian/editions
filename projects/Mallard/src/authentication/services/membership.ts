@@ -18,18 +18,24 @@ export interface MembersDataAPIResponse {
 const fetchMembershipData = async (
 	membershipAccessToken: string,
 ): Promise<AuthResult<MembersDataAPIResponse>> => {
-	console.log('Members getting called?');
+	const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
+		headers: {
+			'GU-IdentityToken': membershipAccessToken,
+		},
+	});
+	return fromResponse(res);
+};
+
+const fetchMembershipDataOkta = async (
+	membershipAccessToken: string,
+): Promise<AuthResult<MembersDataAPIResponse>> => {
 	const headers = {
 		Authorization: `Bearer ${membershipAccessToken}`,
 	};
 	const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
 		headers,
 	});
-	// console.log(headers);
-	// const json = await res.json();
-
-	// console.log('fetchMembershipData -> response: ', json);
 	return fromResponse(res);
 };
 
-export { fetchMembershipData };
+export { fetchMembershipData, fetchMembershipDataOkta };
