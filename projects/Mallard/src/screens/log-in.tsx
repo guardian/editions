@@ -1,10 +1,7 @@
-import { refreshTokens, signOut } from '@okta/okta-react-native';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Image from 'react-native-fast-image';
 import type { Source } from 'react-native-fast-image';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { oktaAuth, oktaInitialisation } from 'src/authentication/services/okta';
 import { Button } from 'src/components/Button/Button';
 import { Link, LinkNav } from 'src/components/link';
 import { LoginButton } from 'src/components/login/login-button';
@@ -90,7 +87,6 @@ const Login = ({
 	onApplePress,
 	onGooglePress,
 	onAppleOAuthPress,
-	onOktaPress,
 	onSubmit,
 	onDismiss,
 	isLoading,
@@ -104,7 +100,6 @@ const Login = ({
 	onApplePress: () => void;
 	onGooglePress: () => void;
 	onAppleOAuthPress: () => void;
-	onOktaPress: () => void;
 	email: FormField;
 	password: FormField;
 	onSubmit: () => void;
@@ -118,8 +113,6 @@ const Login = ({
 }) => {
 	const [hasInputEmail, setHasInputEmail] = useState(false);
 	const [showError, setShowError] = useState(false);
-
-	useEffect(() => oktaInitialisation(), []);
 
 	const onInputChange = (fn: (value: string) => void) => (value: string) => {
 		const email = value.trim();
@@ -226,60 +219,6 @@ const Login = ({
 					>
 						Have a subscription but cannot sign in?
 					</LinkNav>
-				</View>
-				<View>
-					<TouchableOpacity onPress={onOktaPress}>
-						<Text
-							style={{
-								fontSize: 20,
-								padding: 20,
-								color: 'black',
-							}}
-						>
-							LOGIN WITH OKTA
-						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={async () => {
-							try {
-								const attempt = await signOut();
-								console.log(attempt);
-							} catch (e) {
-								console.log(e);
-							}
-						}}
-					>
-						<Text
-							style={{
-								fontSize: 20,
-								padding: 20,
-								color: 'black',
-							}}
-						>
-							LOGOUT WITH OKTA
-						</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						onPress={async () => {
-							try {
-								const attempt = await refreshTokens();
-								console.log(attempt);
-							} catch (e) {
-								console.log(e);
-							}
-						}}
-					>
-						<Text
-							style={{
-								fontSize: 20,
-								padding: 20,
-								color: 'black',
-							}}
-						>
-							REFRESH OKTA TOKENS
-						</Text>
-					</TouchableOpacity>
 				</View>
 			</View>
 		</LoginLayout>
