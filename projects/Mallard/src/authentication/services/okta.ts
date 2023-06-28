@@ -7,7 +7,7 @@ import { Platform } from 'react-native';
 import { errorService } from 'src/services/errors';
 
 type OktaUser = {
-	id: string;
+	legacy_identity_id: string;
 	preferred_username: string;
 };
 

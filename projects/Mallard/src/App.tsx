@@ -63,7 +63,9 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 
 // This legacy id correct? Need to ask Mahesh
 const handleOktaStatus = (attempt: AnyAttempt<OktaAuthData>) =>
-	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
+	logUserId(
+		isValid(attempt) ? attempt.data.userDetails.legacy_identity_id : null,
+	);
 
 const App = () => {
 	useEffect(() => {
