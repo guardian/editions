@@ -16,6 +16,7 @@ import {
 } from '../services/identity';
 import type { MembersDataAPIResponse } from '../services/membership';
 import { fetchMembershipData } from '../services/membership';
+import { remoteConfigService } from 'src/services/remote-config';
 
 type BasicCreds = {
 	email: string;
@@ -116,14 +117,20 @@ export default new Authorizer({
 		});
 	},
 	authWithCachedCredentials: async ([utc, mtc, lutc]) => {
-		const [nutoken, lutoken, mtoken] = await Promise.all([
-			utc.get(),
-			lutc.get(),
-			mtc.get(),
-		]);
-		const utoken = nutoken ?? lutoken;
-		if (!utoken || !mtoken) return InvalidResult();
-		return authWithTokens(utoken.password, mtoken.password);
+		const isIdentityEnabled =
+			remoteConfigService.getBoolean('identity_enabled');
+		if (isIdentityEnabled) {
+			const [nutoken, lutoken, mtoken] = await Promise.all([
+				utc.get(),
+				lutc.get(),
+				mtc.get(),
+			]);
+			const utoken = nutoken ?? lutoken;
+			if (!utoken || !mtoken) return InvalidResult();
+			return authWithTokens(utoken.password, mtoken.password);
+		} else {
+			return InvalidResult();
+		}
 	},
 	checkUserHasAccess: canViewEdition,
 });
