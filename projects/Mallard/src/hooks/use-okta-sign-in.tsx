@@ -34,7 +34,6 @@ const useOkta = () => {
 			}
 			setIsLoading(false);
 		} catch (e) {
-			console.log(e);
 			const appleErrorString = getErrorString(e);
 			appleErrorString && setError(appleErrorString);
 			setIsLoading(false);

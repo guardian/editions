@@ -4,12 +4,12 @@ import {
 	isAuthenticated,
 } from '@okta/okta-react-native';
 import { oktaDataCache } from 'src/helpers/storage';
+import { canViewEditionOkta } from '../helpers';
 import { Authorizer } from '../lib/Authorizer';
 import type { AuthResult } from '../lib/Result';
 import { flat, InvalidResult, ValidResult } from '../lib/Result';
 import { fetchMembershipDataOkta } from '../services/membership';
 import { oktaAuth } from '../services/okta';
-import { canViewEditionOkta } from '../helpers';
 
 const authWithTokens = async (mtoken: string): Promise<AuthResult<any>> => {
 	try {
@@ -24,7 +24,7 @@ const authWithTokens = async (mtoken: string): Promise<AuthResult<any>> => {
 			}),
 		);
 	} catch (e) {
-		console.log('AUTH WITH TOKENS ERROR: ', e);
+		return InvalidResult();
 	}
 };
 
@@ -34,9 +34,11 @@ export default new Authorizer({
 	authCaches: [],
 	auth: async () => {
 		// eslint-disable-next-line
-		const { access_token } = await oktaAuth();
-		const data = await authWithTokens(access_token);
-		console.log('VALID RESULT?: ', data);
+		const authResponse = await oktaAuth();
+		if (!authResponse) {
+			return InvalidResult();
+		}
+		const data = await authWithTokens(authResponse.access_token);
 		return data;
 	},
 	authWithCachedCredentials: async () => {

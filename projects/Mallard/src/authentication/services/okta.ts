@@ -1,13 +1,10 @@
 import {
 	createConfig,
-	EventEmitter,
-	getUserFromIdToken,
-	introspectRefreshToken,
 	signInWithBrowser,
 	signOut,
 } from '@okta/okta-react-native';
 import { Platform } from 'react-native';
-import { fromResponse } from '../lib/Result';
+import { errorService } from 'src/services/errors';
 
 const oktaInitialisation = () => {
 	createConfig({
@@ -30,43 +27,15 @@ const oktaInitialisation = () => {
 			'offline_access',
 		],
 		requireHardwareBackedKeyStore: true,
-	})
-		.then(() => {
-			console.log('OKTA CORRECT');
-		})
-		.catch(() => {
-			console.log('OKTA ERROR');
-		});
-
-	EventEmitter.addListener('onError', function (e: Event) {
-		console.log(e);
 	});
 };
 
 const oktaAuth = async () => {
 	try {
 		const attempt = await signInWithBrowser();
-		// const user = await getUserFromIdToken();
-		// console.log('okta user: ', user);
-		console.log('okta attempt:', attempt);
 		return attempt;
 	} catch (e) {
-		console.log('OKTA ERROR: ');
-		console.log(e);
-	}
-};
-
-const oktaAuthFromResponse = async () => {
-	try {
-		const attempt = await signInWithBrowser();
-		const user = await getUserFromIdToken();
-		console.log('okta user: ', user);
-		return fromResponse(user, {
-			valid: () => user,
-		});
-	} catch (e) {
-		console.log('OKTA ERROR: ');
-		console.log(e);
+		errorService.captureException(e);
 	}
 };
 
@@ -75,8 +44,8 @@ const oktaSignOut = async () => {
 		const attempt = await signOut();
 		return attempt;
 	} catch (e) {
-		console.log(e);
+		errorService.captureException(e);
 	}
 };
 
-export { oktaInitialisation, oktaAuth, oktaAuthFromResponse, oktaSignOut };
+export { oktaInitialisation, oktaAuth, oktaSignOut };

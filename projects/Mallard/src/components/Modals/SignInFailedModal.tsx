@@ -4,6 +4,7 @@ import React from 'react';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { remoteConfigService } from 'src/services/remote-config';
 import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { SignInFailedModalCard } from '../SignInFailedModalCard';
 
@@ -29,9 +30,22 @@ const SignInFailedModal = ({
 					})
 				}
 				onLoginPress={async () => {
-					await signOut();
-					await signIn();
+					const isIdentityEnabled =
+						remoteConfigService.getBoolean('identity_enabled');
+					if (isIdentityEnabled) {
+						navigation.navigate(RouteNames.Settings, {
+							screen: RouteNames.SignIn,
+						});
+					} else {
+						await signOut();
+						await signIn();
+					}
 				}}
+				onFaqPress={() =>
+					navigation.navigate(RouteNames.Settings, {
+						screen: RouteNames.FAQ,
+					})
+				}
 				close={() => navigation.navigate(RouteNames.Issue)}
 			/>
 		</CenterWrapper>

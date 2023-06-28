@@ -33,14 +33,14 @@ const canViewEdition = (userData: IdentityAuthData): boolean =>
  * If they have a Guardian email we want to check that they've validated their email,
  * otherwise we don't really mind
  */
-const isStaffMemberOkta = (userData: IdentityAuthData) =>
+const isStaffMemberOkta = (userData: any) =>
 	isGuardianEmail(userData.userDetails.preferred_username);
 
 /**
  * This takes the membersDataApiResponse and is responsible for returning a boolean
  * describing whether or not the user has the relevant permissions to use the app
  */
-const canViewEditionOkta = (userData: IdentityAuthData): boolean => {
+const canViewEditionOkta = (userData: any): boolean => {
 	return (
 		userData.membershipDetails.contentAccess.digitalPack ||
 		isStaffMemberOkta(userData)

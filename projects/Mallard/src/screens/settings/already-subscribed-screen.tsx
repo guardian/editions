@@ -11,6 +11,7 @@ import { List } from 'src/components/lists/list';
 import { Copy } from 'src/helpers/words';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { RouteNames } from 'src/navigation/NavigationModels';
+import { remoteConfigService } from 'src/services/remote-config';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 const AlreadySubscribedScreen = () => {
@@ -38,7 +39,17 @@ const AlreadySubscribedScreen = () => {
 											key: 'Sign in to activate',
 											title: Copy.alreadySubscribed
 												.signInTitle,
-											onPress: signIn,
+											onPress: () => {
+												const isIdentityEnabled =
+													remoteConfigService.getBoolean(
+														'identity_enabled',
+													);
+												isIdentityEnabled
+													? navigation.navigate(
+															RouteNames.SignIn,
+													  )
+													: signIn();
+											},
 											proxy: rightChevronIcon,
 											linkWeight: 'regular',
 										},

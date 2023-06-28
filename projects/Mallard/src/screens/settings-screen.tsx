@@ -28,6 +28,7 @@ import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
+import { remoteConfigService } from 'src/services/remote-config';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 const MiscSettingsList = () => {
@@ -162,8 +163,12 @@ const SettingsScreen = () => {
 	const isLoggedInWithOkta = oktaData
 		? oktaData.userDetails.preferred_username
 		: false;
+	const isLoggedInWithIdentity = identityData
+		? identityData.userDetails.primaryEmailAddress
+		: false;
 
-	const canDisplayBetaButton = !iapData && isLoggedInWithOkta;
+	const canDisplayBetaButton =
+		!iapData && (isLoggedInWithOkta || isLoggedInWithIdentity);
 	const buildNumber = DeviceInfo.getBuildNumber();
 	const { isUsingProdDevtools, setIsUsingProdDevTools } =
 		useIsUsingProdDevtools();
@@ -220,7 +225,15 @@ const SettingsScreen = () => {
 						accessible={true}
 						accessibilityRole="button"
 						username={username()}
-						signIn={signIn}
+						signIn={() => {
+							const isIdentityEnabled =
+								remoteConfigService.getBoolean(
+									'identity_enabled',
+								);
+							isIdentityEnabled
+								? navigation.navigate(RouteNames.SignIn)
+								: signIn();
+						}}
 						signOut={() => {
 							signOut();
 							signOutIdentity();

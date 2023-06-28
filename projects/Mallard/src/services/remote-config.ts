@@ -17,6 +17,7 @@ const remoteConfigDefaults = {
 	generate_share_url: true,
 	download_parallel_ssr_bundle: false,
 	rating: false,
+	identity_enabled: true,
 };
 
 const RemoteConfigProperties = [
@@ -26,6 +27,7 @@ const RemoteConfigProperties = [
 	'generate_share_url',
 	'download_parallel_ssr_bundle',
 	'rating',
+	'identity_enabled',
 ] as const;
 
 type RemoteConfigProperty = typeof RemoteConfigProperties[number];
