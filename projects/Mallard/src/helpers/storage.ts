@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform, Settings } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import type { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer';
+import type { OktaAuthData } from 'src/authentication/authorizers/OktaAuthorizer';
 import type { ReceiptIOS } from 'src/authentication/services/iap';
 import type { EditionsList, RegionalEdition, SpecialEdition } from 'src/common';
 import {
@@ -62,7 +63,7 @@ const userDataCache = createAsyncCache<IdentityAuthData>('user-data-cache');
 
 const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache');
 
-const oktaDataCache = createAsyncCache<any>('okta-data-cache');
+const oktaDataCache = createAsyncCache<OktaAuthData>('okta-data-cache');
 
 const pushNotificationRegistrationCache =
 	createAsyncCache<PushNotificationRegistration>(

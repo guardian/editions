@@ -15,6 +15,7 @@ import type {
 	IdentityAuthData,
 } from './authorizers/IdentityAuthorizer';
 import identity from './authorizers/IdentityAuthorizer';
+import type { OktaAuthData } from './authorizers/OktaAuthorizer';
 import okta from './authorizers/OktaAuthorizer';
 import { AccessController } from './lib/AccessController';
 import type { AnyAttempt, ResolvedAttempt } from './lib/Attempt';
@@ -49,7 +50,7 @@ const AccessContext = createContext({
 		Promise.resolve(defaultAttemptResponse),
 	authIAP: (): Promise<AttemptResponse<ReceiptIOS>> =>
 		Promise.resolve(defaultAttemptResponse),
-	authOkta: (): Promise<AttemptResponse<any>> =>
+	authOkta: (): Promise<AttemptResponse<OktaAuthData>> =>
 		Promise.resolve(defaultAttemptResponse),
 	identityData: null as IdentityAuthData | null,
 	casData: null as CASExpiry | null,
@@ -85,7 +86,7 @@ const AccessProvider = ({
 }: {
 	children: React.ReactNode;
 	onIdentityStatusChange?: (idAttempt: AnyAttempt<IdentityAuthData>) => void;
-	onOktaStatusChange?: (idAttempt: AnyAttempt<any>) => void;
+	onOktaStatusChange?: (idAttempt: AnyAttempt<OktaAuthData>) => void;
 }) => {
 	const [attempt, setAttempt] = useState<AnyAttempt<AttemptType>>(
 		controller.getAttempt(),
@@ -99,7 +100,7 @@ const AccessProvider = ({
 	const [iapAuth, setIAPAuth] = useState<AnyAttempt<ReceiptIOS>>(
 		controller.authorizerMap.iap.getAttempt(),
 	);
-	const [oktaAuth, setOktaAuth] = useState<AnyAttempt<any>>(
+	const [oktaAuth, setOktaAuth] = useState<AnyAttempt<OktaAuthData>>(
 		controller.authorizerMap.okta.getAttempt(),
 	);
 	const { isConnected, isPoorConnection } = useNetInfo();

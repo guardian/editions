@@ -9,6 +9,7 @@ import { NavPositionProvider } from 'src/hooks/use-nav-position';
 import { AppNavigation } from './AppNavigation';
 import { AccessProvider } from './authentication/AccessContext';
 import type { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer';
+import type { OktaAuthData } from './authentication/authorizers/OktaAuthorizer';
 import type { AnyAttempt } from './authentication/lib/Attempt';
 import { isValid } from './authentication/lib/Attempt';
 import { oktaInitialisation } from './authentication/services/okta';
@@ -61,7 +62,7 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
 
 // This legacy id correct? Need to ask Mahesh
-const handleOktaStatus = (attempt: AnyAttempt<any>) =>
+const handleOktaStatus = (attempt: AnyAttempt<OktaAuthData>) =>
 	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
 
 const App = () => {

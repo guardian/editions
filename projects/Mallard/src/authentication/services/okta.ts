@@ -6,6 +6,11 @@ import {
 import { Platform } from 'react-native';
 import { errorService } from 'src/services/errors';
 
+type OktaUser = {
+	id: string;
+	preferred_username: string;
+};
+
 const oktaInitialisation = () => {
 	createConfig({
 		clientId: '0oa7e94uh4CY1DgFf417',
@@ -48,4 +53,4 @@ const oktaSignOut = async () => {
 	}
 };
 
-export { oktaInitialisation, oktaAuth, oktaSignOut };
+export { oktaInitialisation, oktaAuth, oktaSignOut, OktaUser };

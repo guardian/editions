@@ -9,9 +9,18 @@ import { Authorizer } from '../lib/Authorizer';
 import type { AuthResult } from '../lib/Result';
 import { flat, InvalidResult, ValidResult } from '../lib/Result';
 import { fetchMembershipDataOkta } from '../services/membership';
+import type { MembersDataAPIResponse } from '../services/membership';
 import { oktaAuth } from '../services/okta';
+import type { OktaUser } from '../services/okta';
 
-const authWithTokens = async (mtoken: string): Promise<AuthResult<any>> => {
+export type OktaAuthData = {
+	userDetails: OktaUser;
+	membershipDetails: MembersDataAPIResponse;
+};
+
+const authWithTokens = async (
+	mtoken: string,
+): Promise<AuthResult<OktaAuthData>> => {
 	try {
 		const [userDetails, membershipDataResult] = await Promise.all([
 			getUserFromIdToken(),
@@ -21,7 +30,7 @@ const authWithTokens = async (mtoken: string): Promise<AuthResult<any>> => {
 			ValidResult({
 				userDetails,
 				membershipDetails,
-			}),
+			} as OktaAuthData),
 		);
 	} catch (e) {
 		return InvalidResult();

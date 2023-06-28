@@ -4,6 +4,7 @@ import {
 	userAccessTokenKeychain,
 	userDataCache,
 } from 'src/helpers/storage';
+import { remoteConfigService } from 'src/services/remote-config';
 import { canViewEdition } from '../helpers';
 import { Authorizer } from '../lib/Authorizer';
 import type { AuthResult } from '../lib/Result';
@@ -16,7 +17,6 @@ import {
 } from '../services/identity';
 import type { MembersDataAPIResponse } from '../services/membership';
 import { fetchMembershipData } from '../services/membership';
-import { remoteConfigService } from 'src/services/remote-config';
 
 type BasicCreds = {
 	email: string;

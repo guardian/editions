@@ -3,6 +3,7 @@ import {
 	legacyCASUsernameCache,
 } from 'src/helpers/storage';
 import type { IdentityAuthData } from './authorizers/IdentityAuthorizer';
+import type { OktaAuthData } from './authorizers/OktaAuthorizer';
 
 const GUARDIAN_SUFFIXES = [
 	'guardian.co.uk',
@@ -33,14 +34,14 @@ const canViewEdition = (userData: IdentityAuthData): boolean =>
  * If they have a Guardian email we want to check that they've validated their email,
  * otherwise we don't really mind
  */
-const isStaffMemberOkta = (userData: any) =>
+const isStaffMemberOkta = (userData: OktaAuthData) =>
 	isGuardianEmail(userData.userDetails.preferred_username);
 
 /**
  * This takes the membersDataApiResponse and is responsible for returning a boolean
  * describing whether or not the user has the relevant permissions to use the app
  */
-const canViewEditionOkta = (userData: any): boolean => {
+const canViewEditionOkta = (userData: OktaAuthData): boolean => {
 	return (
 		userData.membershipDetails.contentAccess.digitalPack ||
 		isStaffMemberOkta(userData)
