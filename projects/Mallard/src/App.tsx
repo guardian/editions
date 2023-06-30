@@ -59,12 +59,15 @@ const WithProviders = nestProviders(
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
-	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
+	logUserId(
+		isValid(attempt) ? attempt.data.userDetails.id : null,
+		'identity',
+	);
 
-// This legacy id correct? Need to ask Mahesh
 const handleOktaStatus = (attempt: AnyAttempt<OktaAuthData>) =>
 	logUserId(
 		isValid(attempt) ? attempt.data.userDetails.legacy_identity_id : null,
+		'okta',
 	);
 
 const App = () => {
