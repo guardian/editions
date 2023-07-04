@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Copy } from 'src/helpers/words';
-import { remoteConfigService } from 'src/services/remote-config';
+import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { metrics } from 'src/theme/spacing';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
@@ -55,8 +55,6 @@ const SignInFailedModalCard = ({
 	onFaqPress?: () => void;
 	email: string;
 }) => {
-	const isIdentityEnabled =
-		remoteConfigService.getBoolean('identity_enabled');
 	const isAppleRelayEmail = email.includes('privaterelay.appleid.com');
 	const modalText = failureModalText(isAppleRelayEmail, email);
 	return (

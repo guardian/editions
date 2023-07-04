@@ -1,6 +1,6 @@
 import React from 'react';
 import { Copy } from 'src/helpers/words';
-import { remoteConfigService } from 'src/services/remote-config';
+import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 
@@ -29,8 +29,6 @@ const SubNotFoundModalCard = ({
 			<>
 				<ModalButton
 					onPress={() => {
-						const isIdentityEnabled =
-							remoteConfigService.getBoolean('identity_enabled');
 						isIdentityEnabled && close();
 						onLoginPress();
 					}}

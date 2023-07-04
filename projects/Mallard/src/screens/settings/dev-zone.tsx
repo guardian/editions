@@ -28,6 +28,7 @@ import {
 } from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { INTERACTIONS_THRESHOLD, useRating } from 'src/hooks/use-rating';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -95,6 +96,7 @@ const DevZone = () => {
 	const { showToast } = useToast();
 	const { setIsUsingProdDevTools } = useIsUsingProdDevtools();
 	const { apiUrl } = useApiUrl();
+	const { signIn, signOut } = useOkta();
 
 	const [files, setFiles] = useState('fetching...');
 	const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...');
@@ -146,6 +148,14 @@ const DevZone = () => {
 		);
 	}, []);
 
+	const remoteConfig = remoteConfigService.listProperties();
+	const remoteConfigValue = Object.entries(remoteConfig)
+		.map(($) => {
+			const [key, entry] = $;
+			return `Key: ${key}; Source: ${entry.getSource()}; Value: ${entry.asString()}`;
+		})
+		.join('\n');
+
 	return (
 		<HeaderScreenContainer title="Dev Zone" actionLeft={true}>
 			<WithAppAppearance value="settings">
@@ -172,6 +182,8 @@ const DevZone = () => {
 						>
 							Legacy Identity Sign Out
 						</Button>
+						<Button onPress={signIn}>Okta Sign In</Button>
+						<Button onPress={signOut}>Okta Sign Out</Button>
 						<Button
 							onPress={() => {
 								navigation.navigate(
@@ -267,6 +279,11 @@ const DevZone = () => {
 								key: "What's signed in?",
 								title: "What's signed in?",
 								explainer: JSON.stringify(whatsLoggedIn()),
+							},
+							{
+								key: 'Remote Config',
+								title: 'Remote Config',
+								explainer: remoteConfigValue,
 							},
 							{
 								key: 'Editions',

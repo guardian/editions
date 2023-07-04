@@ -1,3 +1,4 @@
+import type { FirebaseRemoteConfigTypes } from '@react-native-firebase/remote-config';
 import remoteConfig from '@react-native-firebase/remote-config';
 
 // see https://rnfirebase.io/remote-config/usage for docs
@@ -70,6 +71,10 @@ class RemoteConfigService implements RemoteConfig {
 
 	getString(key: RemoteConfigProperty): RemoteStringValue {
 		return remoteConfig().getValue(key).asString();
+	}
+
+	listProperties(): FirebaseRemoteConfigTypes.ConfigValues {
+		return remoteConfig().getAll();
 	}
 }
 

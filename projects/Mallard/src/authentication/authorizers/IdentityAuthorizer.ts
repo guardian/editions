@@ -4,7 +4,7 @@ import {
 	userAccessTokenKeychain,
 	userDataCache,
 } from 'src/helpers/storage';
-import { remoteConfigService } from 'src/services/remote-config';
+import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { canViewEdition } from '../helpers';
 import { Authorizer } from '../lib/Authorizer';
 import type { AuthResult } from '../lib/Result';
@@ -117,8 +117,6 @@ export default new Authorizer({
 		});
 	},
 	authWithCachedCredentials: async ([utc, mtc, lutc]) => {
-		const isIdentityEnabled =
-			remoteConfigService.getBoolean('identity_enabled');
 		if (isIdentityEnabled) {
 			const [nutoken, lutoken, mtoken] = await Promise.all([
 				utc.get(),
