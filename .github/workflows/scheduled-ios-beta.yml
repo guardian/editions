@@ -61,7 +61,7 @@ jobs:
                   MATCH_STORAGE_MODE: git
                   MATCH_KEYCHAIN_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
                   MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-                  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION_2 }}
+                  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
                   MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
                   # S3 credentials are not currently used but might be in future
                   MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
