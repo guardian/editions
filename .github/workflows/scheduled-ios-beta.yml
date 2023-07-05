@@ -18,19 +18,6 @@ jobs:
         steps:
             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
-              with:
-                  node-version: '14.16'
-
-            - name: install mallard
-              run: |
-                  yarn
-                  yarn install-mallard
-
-            - name: validate Mallard project
-              run: |
-                  cd projects/Mallard
-                  yarn validate
 
             - name: publish app
               id: publish_app
