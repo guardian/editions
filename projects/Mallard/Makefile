@@ -14,7 +14,6 @@ debug-ios:
 	xcodebuild -exportArchive -allowProvisioningUpdates -exportOptionsPlist ios/exports-plists/debug.plist -archivePath "./Mallard.xcarchive" -exportPath ./ >> build.log
 
 beta-ios:
-	yarn bundle-ios
 	fastlane ios beta
 
 beta-android:
