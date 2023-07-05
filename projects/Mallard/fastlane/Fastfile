@@ -88,20 +88,6 @@ platform :ios do
         exportOptionsPlist: "exports-plists/release.plist"
       }
     )
-    upload_to_testflight(
-        distribute_external: true,
-        notify_external_testers: true,
-        skip_waiting_for_build_processing: true,
-        changelog: "Thanks for testing the app! We've made some improvements",
-        groups: ["GNM"],
-        demo_account_required: false,
-        beta_app_review_info: {
-            contact_email: "Editions.coreteam@guardian.co.uk",
-            contact_first_name: "Editions",
-            contact_last_name: "Team",
-            contact_phone: "03303336767"
-    },
-    )
   end
 end
 
