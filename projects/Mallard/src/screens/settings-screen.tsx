@@ -8,8 +8,9 @@ import {
 	AccessContext,
 	useAccess,
 	useIdentity,
+	useOktaData,
 } from 'src/authentication/AccessContext';
-import { isStaffMember } from 'src/authentication/helpers';
+import { isStaffMember, isStaffMemberOkta } from 'src/authentication/helpers';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
@@ -22,6 +23,8 @@ import {
 	useIsUsingProdDevtools,
 	useNotificationsEnabled,
 } from 'src/hooks/use-config-provider';
+import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -110,17 +113,18 @@ const MiscSettingsList = () => {
 
 const SignInButton = ({
 	username,
-	signOutIdentity,
+	signOut,
+	signIn,
 	accessible = true,
 	accessibilityRole = 'button',
 }: {
 	username?: string;
-	signOutIdentity: () => void;
+	signOut: () => void;
+	signIn: () => void;
 	accessible: boolean;
 	accessibilityRole: AccessibilityRole;
-}) => {
-	const navigation = useNavigation();
-	return username ? (
+}) =>
+	username ? (
 		<DualButton
 			accessible={accessible}
 			accessibilityRole={accessibilityRole}
@@ -129,40 +133,52 @@ const SignInButton = ({
 			onPressPrimary={() =>
 				Linking.openURL(
 					'https://manage.theguardian.com/account-settings',
-				).catch(() => signOutIdentity())
+				).catch(() => {
+					signOut();
+				})
 			}
-			onPressSecondary={() => signOutIdentity()}
+			onPressSecondary={() => {
+				signOut();
+			}}
 		/>
 	) : (
 		<FullButton
 			accessible={true}
 			accessibilityRole={accessibilityRole}
 			text={Copy.settings.signIn}
-			onPress={() => navigation.navigate(RouteNames.SignIn)}
+			onPress={signIn}
 		/>
 	);
-};
 
 const SettingsScreen = () => {
 	const navigation = useNavigation();
 	const identityData = useIdentity();
+	const oktaData = useOktaData();
 	const canAccess = useAccess();
 	const [, setVersionClickedTimes] = useState(0);
-	const { signOutIdentity, iapData } = useContext(AccessContext);
+	const { iapData, signOutIdentity } = useContext(AccessContext);
+	const { signIn, signOut } = useOkta();
 
 	const versionNumber = DeviceInfo.getVersion();
+	const isLoggedInWithOkta = oktaData
+		? oktaData.userDetails.preferred_username
+		: false;
 	const isLoggedInWithIdentity = identityData
 		? identityData.userDetails.primaryEmailAddress
 		: false;
 
-	const canDisplayBetaButton = !iapData && isLoggedInWithIdentity;
+	const canDisplayBetaButton =
+		!iapData && (isLoggedInWithOkta || isLoggedInWithIdentity);
 	const buildNumber = DeviceInfo.getBuildNumber();
 	const { isUsingProdDevtools, setIsUsingProdDevTools } =
 		useIsUsingProdDevtools();
 
 	const versionClickHandler = identityData
 		? () => {
-				if (!isUsingProdDevtools && isStaffMember(identityData))
+				if (
+					!isUsingProdDevtools &&
+					(isStaffMember(identityData) || isStaffMemberOkta(oktaData))
+				)
 					setVersionClickedTimes((t) => {
 						if (t < 7) return t + 1;
 						Alert.alert(
@@ -191,6 +207,16 @@ const SettingsScreen = () => {
 
 	const rightChevronIcon = <RightChevron />;
 
+	const username = () => {
+		if (identityData) {
+			return identityData.userDetails.primaryEmailAddress;
+		} else if (oktaData) {
+			return oktaData.userDetails.preferred_username;
+		} else {
+			return undefined;
+		}
+	};
+
 	return (
 		<HeaderScreenContainer title="Settings" actionLeft={true}>
 			<WithAppAppearance value={'settings'}>
@@ -198,12 +224,16 @@ const SettingsScreen = () => {
 					<SignInButton
 						accessible={true}
 						accessibilityRole="button"
-						username={
-							identityData
-								? identityData.userDetails.primaryEmailAddress
-								: undefined
-						}
-						signOutIdentity={signOutIdentity}
+						username={username()}
+						signIn={() => {
+							isIdentityEnabled
+								? navigation.navigate(RouteNames.SignIn)
+								: signIn();
+						}}
+						signOut={() => {
+							signOut();
+							signOutIdentity();
+						}}
 					/>
 					<Separator />
 					{canAccess ? (

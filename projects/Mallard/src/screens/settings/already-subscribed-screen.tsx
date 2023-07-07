@@ -9,6 +9,8 @@ import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { Copy } from 'src/helpers/words';
+import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
@@ -17,6 +19,7 @@ const AlreadySubscribedScreen = () => {
 	const { authIAP } = useContext(AccessContext);
 	const rightChevronIcon = <RightChevron />;
 	const navigation = useNavigation();
+	const { signIn } = useOkta();
 
 	return (
 		<HeaderScreenContainer
@@ -37,9 +40,11 @@ const AlreadySubscribedScreen = () => {
 											title: Copy.alreadySubscribed
 												.signInTitle,
 											onPress: () => {
-												navigation.navigate(
-													RouteNames.SignIn,
-												);
+												isIdentityEnabled
+													? navigation.navigate(
+															RouteNames.SignIn,
+													  )
+													: signIn();
 											},
 											proxy: rightChevronIcon,
 											linkWeight: 'regular',

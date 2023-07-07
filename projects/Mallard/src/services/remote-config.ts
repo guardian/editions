@@ -1,3 +1,4 @@
+import type { FirebaseRemoteConfigTypes } from '@react-native-firebase/remote-config';
 import remoteConfig from '@react-native-firebase/remote-config';
 
 // see https://rnfirebase.io/remote-config/usage for docs
@@ -17,6 +18,7 @@ const remoteConfigDefaults = {
 	generate_share_url: true,
 	download_parallel_ssr_bundle: false,
 	rating: false,
+	identity_enabled: true,
 };
 
 const RemoteConfigProperties = [
@@ -26,6 +28,7 @@ const RemoteConfigProperties = [
 	'generate_share_url',
 	'download_parallel_ssr_bundle',
 	'rating',
+	'identity_enabled',
 ] as const;
 
 type RemoteConfigProperty = typeof RemoteConfigProperties[number];
@@ -68,6 +71,10 @@ class RemoteConfigService implements RemoteConfig {
 
 	getString(key: RemoteConfigProperty): RemoteStringValue {
 		return remoteConfig().getValue(key).asString();
+	}
+
+	listProperties(): FirebaseRemoteConfigTypes.ConfigValues {
+		return remoteConfig().getAll();
 	}
 }
 

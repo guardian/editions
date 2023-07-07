@@ -1,11 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
-import { useAccess, useIdentity } from 'src/authentication/AccessContext';
+import {
+	useAccess,
+	useIdentity,
+	useOktaData,
+} from 'src/authentication/AccessContext';
 import { RouteNames } from 'src/navigation/NavigationModels';
 
 const useLoginOverlay = () => {
 	const { navigate } = useNavigation();
 	const canAccess = useAccess();
+	const oktaData = useOktaData();
 	const idData = useIdentity();
 
 	useEffect(() => {
@@ -13,6 +18,10 @@ const useLoginOverlay = () => {
 			const id = setTimeout(() => {
 				if (idData) {
 					navigate(RouteNames.SubNotFoundModal);
+				} else if (oktaData) {
+					navigate(RouteNames.SignInFailedModal, {
+						emailAddress: oktaData.userDetails.preferred_username,
+					});
 				} else {
 					navigate(RouteNames.SignInModal);
 				}

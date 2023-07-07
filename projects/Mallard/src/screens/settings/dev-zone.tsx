@@ -28,6 +28,7 @@ import {
 } from 'src/hooks/use-config-provider';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { INTERACTIONS_THRESHOLD, useRating } from 'src/hooks/use-rating';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -90,10 +91,12 @@ const DevZone = () => {
 		selectedEdition: { edition },
 	} = useEditions();
 
-	const { attempt, signOutCAS } = useContext(AccessContext);
+	const { attempt, signOutCAS, signOutIdentity, identityData, oktaData } =
+		useContext(AccessContext);
 	const { showToast } = useToast();
 	const { setIsUsingProdDevTools } = useIsUsingProdDevtools();
 	const { apiUrl } = useApiUrl();
+	const { signIn, signOut } = useOkta();
 
 	const [files, setFiles] = useState('fetching...');
 	const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...');
@@ -102,6 +105,11 @@ const DevZone = () => {
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
 
 	const isRatingFFOn = remoteConfigService.getBoolean('rating');
+
+	const whatsLoggedIn = () => ({
+		identity: identityData?.userDetails.primaryEmailAddress !== undefined,
+		okta: oktaData?.userDetails.preferred_username !== undefined,
+	});
 
 	// initialise local showAllEditions property
 	useEffect(() => {
@@ -140,6 +148,14 @@ const DevZone = () => {
 		);
 	}, []);
 
+	const remoteConfig = remoteConfigService.listProperties();
+	const remoteConfigValue = Object.entries(remoteConfig)
+		.map(($) => {
+			const [key, entry] = $;
+			return `Key: ${key}; Source: ${entry.getSource()}; Value: ${entry.asString()}`;
+		})
+		.join('\n');
+
 	return (
 		<HeaderScreenContainer title="Dev Zone" actionLeft={true}>
 			<WithAppAppearance value="settings">
@@ -151,6 +167,23 @@ const DevZone = () => {
 						</UiBodyCopy>
 					</Footer>
 					<ButtonList>
+						<Button
+							onPress={() => {
+								navigation.navigate(RouteNames.SignIn);
+							}}
+						>
+							Legacy Identity Sign In
+						</Button>
+						<Button
+							onPress={() => {
+								signOutIdentity();
+								Alert.alert('Identity Signed Out');
+							}}
+						>
+							Legacy Identity Sign Out
+						</Button>
+						<Button onPress={signIn}>Okta Sign In</Button>
+						<Button onPress={signOut}>Okta Sign Out</Button>
 						<Button
 							onPress={() => {
 								navigation.navigate(
@@ -241,6 +274,16 @@ const DevZone = () => {
 								onPress: () => {
 									navigation.navigate(RouteNames.Endpoints);
 								},
+							},
+							{
+								key: "What's signed in?",
+								title: "What's signed in?",
+								explainer: JSON.stringify(whatsLoggedIn()),
+							},
+							{
+								key: 'Remote Config',
+								title: 'Remote Config',
+								explainer: remoteConfigValue,
 							},
 							{
 								key: 'Editions',

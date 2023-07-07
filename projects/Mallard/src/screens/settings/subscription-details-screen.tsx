@@ -41,6 +41,23 @@ const IdentityDetails = ({
 	</>
 );
 
+const OktaDetails = ({ oktaData }: { oktaData: any }) => (
+	<>
+		<List
+			data={[
+				keyValueItem(
+					Copy.subscriptionDetails.emailAddress,
+					oktaData.userDetails.preferred_username,
+				),
+				keyValueItem(
+					Copy.subscriptionDetails.userId,
+					oktaData.membershipDetails.userId,
+				),
+			]}
+		/>
+	</>
+);
+
 const casCodePrettyLabels: Record<string, string> = {
 	SevenDay: 'Guardian / Observer',
 };
@@ -96,10 +113,8 @@ const LoggedOutDetails = () => (
 );
 
 const SubscriptionDetailsScreen = () => {
-	const { identityData, iapData, casData, attempt } =
+	const { identityData, oktaData, iapData, casData, attempt } =
 		useContext(AccessContext);
-
-	console.log(JSON.stringify(identityData));
 
 	return (
 		<HeaderScreenContainer
@@ -128,6 +143,12 @@ const SubscriptionDetailsScreen = () => {
 										<IdentityDetails
 											identityData={identityData}
 										/>
+									)
+								);
+							case 'okta':
+								return (
+									oktaData && (
+										<OktaDetails oktaData={oktaData} />
 									)
 								);
 						}

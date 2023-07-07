@@ -3,12 +3,14 @@ import { logEvent, logPageView, logScreenView, logUserId } from '..';
 const mockLogEvent = jest.fn();
 const mockLogScreenView = jest.fn();
 const mockSetUserId = jest.fn();
+const mockSetUserProperty = jest.fn();
 
 jest.mock('@react-native-firebase/analytics', () =>
 	jest.fn().mockImplementation(() => ({
 		logEvent: mockLogEvent,
 		logScreenView: mockLogScreenView,
 		setUserId: mockSetUserId,
+		setUserProperty: mockSetUserProperty,
 	})),
 );
 
@@ -33,8 +35,12 @@ describe('analytics', () => {
 	});
 	describe('logUserId', () => {
 		it('should call "setUserId" from firebase analyticse', async () => {
-			await logUserId('12345');
+			await logUserId('12345', 'identity');
 			expect(mockSetUserId).toHaveBeenCalled();
+			expect(mockSetUserProperty).toHaveBeenCalledWith(
+				'authType',
+				'identity',
+			);
 		});
 	});
 });

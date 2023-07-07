@@ -41,9 +41,13 @@ const logPageView = async (path: string): Promise<boolean> => {
 	}
 };
 
-const logUserId = async (userId: AnalyticsUserId): Promise<boolean> => {
+const logUserId = async (
+	userId: AnalyticsUserId,
+	authType: 'identity' | 'okta',
+): Promise<boolean> => {
 	try {
 		await analytics().setUserId(userId);
+		await analytics().setUserProperty('authType', authType);
 		return true;
 	} catch {
 		return false;

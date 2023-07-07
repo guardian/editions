@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Copy } from 'src/helpers/words';
+import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { metrics } from 'src/theme/spacing';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
@@ -51,14 +52,16 @@ const SignInFailedModalCard = ({
 	onLoginPress: () => void;
 	onOpenCASLogin: () => void;
 	onDismiss: () => void;
-	onFaqPress: () => void;
+	onFaqPress?: () => void;
 	email: string;
 }) => {
 	const isAppleRelayEmail = email.includes('privaterelay.appleid.com');
 	const modalText = failureModalText(isAppleRelayEmail, email);
 	return (
 		<OnboardingCard
-			title={modalText.title}
+			title={
+				isIdentityEnabled ? modalText.title : Copy.failedSignIn.title
+			}
 			appearance={CardAppearance.Blue}
 			onDismissThisCard={() => {
 				close();
@@ -67,7 +70,11 @@ const SignInFailedModalCard = ({
 			size="small"
 			bottomContent={
 				<>
-					<UiBodyCopy weight="bold">{modalText.bodyCopy}</UiBodyCopy>
+					<UiBodyCopy weight="bold">
+						{isIdentityEnabled
+							? modalText.bodyCopy
+							: Copy.failedSignIn.body.replace('%email%', email)}
+					</UiBodyCopy>
 					<View style={styles.bottomContentContainer}>
 						<View>
 							<ModalButton
@@ -76,7 +83,9 @@ const SignInFailedModalCard = ({
 									onLoginPress();
 								}}
 							>
-								{modalText.tryAgainText}
+								{isIdentityEnabled
+									? modalText.tryAgainText
+									: Copy.failedSignIn.retryButtonTitle}
 							</ModalButton>
 							<ModalButton
 								onPress={() => {
@@ -90,7 +99,7 @@ const SignInFailedModalCard = ({
 								<ModalButton
 									onPress={() => {
 										close();
-										onFaqPress();
+										onFaqPress?.();
 									}}
 								>
 									How can I sign in with Apple?

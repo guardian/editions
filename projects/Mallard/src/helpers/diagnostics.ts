@@ -1,3 +1,4 @@
+import { getUserFromIdToken } from '@okta/okta-react-native';
 import { Clipboard, Linking, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
@@ -42,6 +43,13 @@ const getDiagnosticInfo = async (
 		userDataCache.get(),
 		iapReceiptCache.get(),
 	]);
+
+	let oktaUser;
+	try {
+		oktaUser = await getUserFromIdToken();
+	} catch {
+		oktaUser = null;
+	}
 
 	const folderStat = await RNFS.stat(FSPaths.issuesDir);
 	const size = parseInt(String(folderStat.size));
@@ -111,11 +119,12 @@ Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
 
 -User / Supporter Info-
 Signed In: ${isValid(authAttempt)}
-Digital Pack subscription: ${idData && canViewEdition(idData)}
+Digital Pack Identity subscription: ${idData && canViewEdition(idData)}
 Apple IAP Transaction Details: ${
 		receiptData && `\n${JSON.stringify(receiptData, null, 2)}`
 	}
 Subscriber ID: ${casCode}
+Okta User: ${oktaUser !== null}
 
 -Registered Push Tokens-
 ${JSON.stringify(registeredPushTokens)}

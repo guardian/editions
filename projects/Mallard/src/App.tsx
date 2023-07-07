@@ -9,8 +9,10 @@ import { NavPositionProvider } from 'src/hooks/use-nav-position';
 import { AppNavigation } from './AppNavigation';
 import { AccessProvider } from './authentication/AccessContext';
 import type { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer';
+import type { OktaAuthData } from './authentication/authorizers/OktaAuthorizer';
 import type { AnyAttempt } from './authentication/lib/Attempt';
 import { isValid } from './authentication/lib/Attempt';
+import { oktaInitialisation } from './authentication/services/okta';
 import { BugButtonHandler } from './components/Button/BugButtonHandler';
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary';
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast';
@@ -57,18 +59,31 @@ const WithProviders = nestProviders(
 );
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
-	logUserId(isValid(attempt) ? attempt.data.userDetails.id : null);
+	logUserId(
+		isValid(attempt) ? attempt.data.userDetails.id : null,
+		'identity',
+	);
+
+const handleOktaStatus = (attempt: AnyAttempt<OktaAuthData>) =>
+	logUserId(
+		isValid(attempt) ? attempt.data.userDetails.legacy_identity_id : null,
+		'okta',
+	);
 
 const App = () => {
 	useEffect(() => {
 		SplashScreen.hide();
+		oktaInitialisation();
 	}, []);
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ErrorBoundary>
 				<WithProviders>
-					<AccessProvider onIdentityStatusChange={handleIdStatus}>
+					<AccessProvider
+						onIdentityStatusChange={handleIdStatus}
+						onOktaStatusChange={handleOktaStatus}
+					>
 						<StatusBar
 							barStyle="light-content"
 							backgroundColor="#041f4a"

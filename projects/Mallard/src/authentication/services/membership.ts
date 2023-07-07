@@ -26,4 +26,16 @@ const fetchMembershipData = async (
 	return fromResponse(res);
 };
 
-export { fetchMembershipData };
+const fetchMembershipDataOkta = async (
+	membershipAccessToken: string,
+): Promise<AuthResult<MembersDataAPIResponse>> => {
+	const headers = {
+		Authorization: `Bearer ${membershipAccessToken}`,
+	};
+	const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
+		headers,
+	});
+	return fromResponse(res);
+};
+
+export { fetchMembershipData, fetchMembershipDataOkta };
