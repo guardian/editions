@@ -575,9 +575,6 @@ PODS:
     - Yoga
   - RNScreens (2.18.1):
     - React-Core
-  - RNSentry (4.15.2):
-    - React-Core
-    - Sentry/HybridSDK (= 7.31.5)
   - RNSVG (13.7.0):
     - React-Core
   - RNZipArchive (5.0.1):
@@ -593,7 +590,6 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (7.31.5)
   - SSZipArchive (2.2.2)
   - Yoga (1.14.0)
 
@@ -676,7 +672,6 @@ DEPENDENCIES:
   - RNRate (from `../node_modules/react-native-rate`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNZipArchive (from `../node_modules/react-native-zip-archive`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -705,7 +700,6 @@ SPEC REPOS:
     - PromisesSwift
     - SDWebImage
     - SDWebImageWebPCoder
-    - Sentry
     - SSZipArchive
 
 EXTERNAL SOURCES:
@@ -847,8 +841,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNSentry:
-    :path: "../node_modules/@sentry/react-native"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNZipArchive:
@@ -946,12 +938,10 @@ SPEC CHECKSUMS:
   RNRate: ef3bcff84f39bb1d1e41c5593d3eea4aab2bd73a
   RNReanimated: 2a91e85fcd343f8af3c58d3425b99fdd285590a5
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNSentry: 4ea90ea061624364637e8077d965bf2e50478066
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   RNZipArchive: 87111bb6130a38edd68c8d2059d46ac94d53ffe4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: 4c9babff9034785067c896fd580b1f7de44da020
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: dc109b79db907f0f589fc423e991b09ec42d2295
 

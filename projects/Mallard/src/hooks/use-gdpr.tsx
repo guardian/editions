@@ -19,8 +19,9 @@ import { errorService } from 'src/services/errors';
  * v7 - Remove Braze from wording in ESSENTIAL
  * v8 - Add Firebase Analytics as PERFORMANCE
  * v9 - Remove additional Logging
+ * v10 - Remove Sentry from the app
  */
-const CURRENT_CONSENT_VERSION = 9;
+const CURRENT_CONSENT_VERSION = 10;
 
 /*
 Consent switches can be 'unset' or null
@@ -35,7 +36,6 @@ export type GdprCoreSettings = {
 };
 
 interface GdprSettings extends GdprCoreSettings {
-	gdprAllowSentry: GdprSwitchSetting;
 	gdprAllowGoogleLogin: GdprSwitchSetting;
 	gdprAllowAppleLogin: GdprSwitchSetting;
 	setGdprFunctionalityBucket: (setting: GdprSwitchSetting) => void;
@@ -57,7 +57,6 @@ const defaultState: GdprSettings = {
 	gdprAllowPerformance: null,
 	gdprAllowFunctionality: null,
 	gdprConsentVersion: null,
-	gdprAllowSentry: null,
 	gdprAllowGoogleLogin: null,
 	gdprAllowAppleLogin: null,
 	setGdprFunctionalityBucket: () => {},
@@ -81,9 +80,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const [gdprConsentVersion, setGdprConsentVersion] = useState<
 		GdprSettings['gdprConsentVersion']
 	>(defaultState.gdprConsentVersion);
-	const [gdprAllowSentry, setGdprAllowSentry] = useState<
-		GdprSettings['gdprAllowSentry']
-	>(defaultState.gdprAllowSentry);
 	const [gdprAllowGoogleLogin, setGdprAllowGoogleLogin] = useState<
 		GdprSettings['gdprAllowGoogleLogin']
 	>(defaultState.gdprAllowGoogleLogin);
@@ -120,7 +116,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const setGdprPerformanceBucket = (setting: GdprSwitchSetting) => {
 		// Local state modifier
 		setGdprAllowPerformance(setting);
-		setGdprAllowSentry(setting);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
 		setting
 			? toggleAnalyticsRecording(setting)
@@ -150,7 +145,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		setGdprAllowPerformance(true);
 		setGdprAllowFunctionality(true);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
-		setGdprAllowSentry(true);
 		setGdprAllowGoogleLogin(true);
 		setGdprAllowAppleLogin(true);
 		// Persisted state modifier
@@ -164,7 +158,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		setGdprAllowPerformance(defaultState.gdprAllowPerformance);
 		setGdprAllowFunctionality(defaultState.gdprAllowFunctionality);
 		setGdprConsentVersion(defaultState.gdprConsentVersion);
-		setGdprAllowSentry(defaultState.gdprAllowSentry);
 		setGdprAllowGoogleLogin(defaultState.gdprAllowGoogleLogin);
 		setGdprAllowAppleLogin(defaultState.gdprAllowAppleLogin);
 		// Persisted state modifier
@@ -190,7 +183,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 				hasSetGdpr,
 				isCorrectConsentVersion,
 				// The following are not used anywhere as things stand and are therefore not persisted
-				gdprAllowSentry,
 				gdprAllowGoogleLogin,
 				gdprAllowAppleLogin,
 				loading,
