@@ -127,7 +127,7 @@ const cleanEditionsDownloadFolder = async () => {
 };
 
 const cleanOldEditions = async () => {
-	// we don't care *that* much if we fail to delete old editions so just log any errors to sentry
+	// we don't care *that* much if we fail to delete old editions so just log any errors
 	try {
 		await deleteOldEditionIssues();
 		await cleanEditionsDownloadFolder();

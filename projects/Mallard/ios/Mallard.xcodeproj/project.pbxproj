@@ -391,7 +391,6 @@
 				B2C2068495DC306BC77F077D /* [CP-User] [RNFB] Core Configuration */,
 				28CB8F63718EE011238949F5 /* [CP-User] [RNFB] Crashlytics Configuration */,
 				4A9A2E12651C1C60C27DCCBD /* [CP] Copy Pods Resources */,
-				0C9A4D69554C41C7910E0178 /* Upload Debug Symbols to Sentry */,
 				72D43E872D46ED433067C9C7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -602,21 +601,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh\n";
-		};
-		0C9A4D69554C41C7910E0178 /* Upload Debug Symbols to Sentry */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Upload Debug Symbols to Sentry";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\n../node_modules/@sentry/cli/bin/sentry-cli upload-dsym";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n\n";
 		};
 		271CC875956E8152738DB63B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -666,7 +651,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nexport NODE_BINARY=node\nreact-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 		4A9A2E12651C1C60C27DCCBD /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

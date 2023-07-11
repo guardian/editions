@@ -10,7 +10,7 @@ import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
-import io.sentry.react.RNSentryPackage;
+
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
@@ -40,7 +40,6 @@ public class MainApplication extends Application implements ReactApplication {
             // packages.add(new MainReactPackage(),
             // packages.add(new RNDeviceInfo());
             // packages.add(new NetInfoPackage());
-            // packages.add(new RNSentryPackage());
             // packages.add(new ReactNativePushNotificationPackage());
             // packages.add(new ReactNativeConfigPackage());
             // packages.add(new KeychainPackage());
