@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "pre-run": "run-p -ln --aggregate-output watch-html",
+    "pre-run": "run-p -ln --aggregate-output fetch-dev-env watch-html",
     "pre-bundle": "run-p -ln --aggregate-output write-prod-env bundle-html",
     "local-pre-bundle": "run-p -ln --aggregate-output bundle-html",
     "start": "yarn pre-run && react-native start",
