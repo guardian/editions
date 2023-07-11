@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "pre-run": "run-p -ln --aggregate-output fetch-dev-env watch-html",
+    "pre-run": "run-p -ln --aggregate-output watch-html",
     "pre-bundle": "run-p -ln --aggregate-output write-prod-env bundle-html",
     "local-pre-bundle": "run-p -ln --aggregate-output bundle-html",
     "start": "yarn pre-run && react-native start",
@@ -122,7 +122,6 @@
     "@typescript-eslint/parser": "^4.17.0",
     "aws-sdk": "^2.511.0",
     "babel-jest": "^26.6.3",
-    "babel-loader": "^8.0.6",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
