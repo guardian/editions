@@ -8,9 +8,9 @@ import type { FlatCard } from 'src/helpers/transform';
 import { getColor } from 'src/helpers/transform';
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
 import { useIssue } from 'src/hooks/use-issue-provider';
-import type { ArticleNavigator } from 'src/screens/article-screen';
 import { issueDateFromId } from 'src/screens/article/slider/slider-helpers';
 import { SliderTitle } from 'src/screens/article/slider/SliderTitle';
+import type { ArticleNavigator } from 'src/screens/article-screen';
 import { useIssueScreenSize } from 'src/screens/issue/use-size';
 import {
 	getAppearancePillar,

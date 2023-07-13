@@ -36,7 +36,6 @@ import { InAppPurchaseScreen } from './screens/in-app-purchase-screen';
 import { IssueScreen } from './screens/issue-screen';
 import { LightboxScreen } from './screens/lightbox';
 import { OnboardingConsentScreen } from './screens/onboarding-screen';
-import { SettingsScreen } from './screens/settings-screen';
 import { AlreadySubscribedScreen } from './screens/settings/already-subscribed-screen';
 import { ApiScreen } from './screens/settings/api-screen';
 import { BetaProgrammeFAQsScreen } from './screens/settings/beta-programme-faqs';
@@ -57,6 +56,7 @@ import {
 } from './screens/settings/privacy-policy-screen';
 import { SubscriptionDetailsScreen } from './screens/settings/subscription-details-screen';
 import { TermsAndConditionsScreen } from './screens/settings/terms-and-conditions-screen';
+import { SettingsScreen } from './screens/settings-screen';
 import { WeatherGeolocationConsentScreen } from './screens/weather-geolocation-consent-screen';
 import { color } from './theme/color';
 
