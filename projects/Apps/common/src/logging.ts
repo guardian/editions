@@ -1,6 +1,5 @@
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { NetInfoStateType } from '@react-native-community/netinfo'
-import { User } from '@sentry/react-native'
 import { EditionId } from '../../../Apps/common/src/index'
 
 export enum Level {
@@ -43,7 +42,7 @@ export interface MallardLogFormat {
     networkStatus: NetInfoStateType
     deviceId: string
     signedIn: boolean
-    userId: User['id'] | null
+    userId: string | undefined | null
     digitalSub: boolean
     casCode: CASExpiry['subscriptionCode'] | null
     iAP: boolean
