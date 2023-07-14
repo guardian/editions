@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "watch": "webpack-dev-server",
+        "watch": "webpack serve --mode development",
         "build": "webpack --mode production",
         "test": "echo \"Info: no test specified for crosswords\""
     },
@@ -15,12 +15,13 @@
         "@babel/core": "^7.21.8",
         "@babel/preset-env": "^7.10.4",
         "@babel/preset-react": "^7.10.4",
+        "@webpack-cli/serve": "^2.0.5",
         "babel-loader": "^8.0.6",
         "html-loader": "^4.2.0",
         "html-webpack-plugin": "^5.5.1",
         "webpack": "^5.84.1",
-        "webpack-cli": "^3.3.11",
-        "webpack-dev-server": "^3.11.3"
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^4.15.1"
     },
     "dependencies": {
         "@guardian/react-crossword": "^0.2.3",
