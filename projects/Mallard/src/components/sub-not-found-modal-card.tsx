@@ -1,6 +1,5 @@
 import React from 'react';
 import { Copy } from 'src/helpers/words';
-import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 
@@ -27,12 +26,7 @@ const SubNotFoundModalCard = ({
 		explainerSubtitle={Copy.subNotFound.explainerSubtitle}
 		bottomContent={
 			<>
-				<ModalButton
-					onPress={() => {
-						isIdentityEnabled && close();
-						onLoginPress();
-					}}
-				>
+				<ModalButton onPress={onLoginPress}>
 					{Copy.subNotFound.signIn}
 				</ModalButton>
 				<ModalButton

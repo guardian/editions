@@ -23,7 +23,6 @@ import {
 	useIsUsingProdDevtools,
 	useNotificationsEnabled,
 } from 'src/hooks/use-config-provider';
-import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
 import type { SettingsStackParamList } from 'src/navigation/NavigationModels';
@@ -173,12 +172,9 @@ const SettingsScreen = () => {
 	const { isUsingProdDevtools, setIsUsingProdDevTools } =
 		useIsUsingProdDevtools();
 
-	const versionClickHandler = identityData
+	const versionClickHandler = oktaData
 		? () => {
-				if (
-					!isUsingProdDevtools &&
-					(isStaffMember(identityData) || isStaffMemberOkta(oktaData))
-				)
+				if (!isUsingProdDevtools && isStaffMemberOkta(oktaData))
 					setVersionClickedTimes((t) => {
 						if (t < 7) return t + 1;
 						Alert.alert(
@@ -225,11 +221,7 @@ const SettingsScreen = () => {
 						accessible={true}
 						accessibilityRole="button"
 						username={username()}
-						signIn={() => {
-							isIdentityEnabled
-								? navigation.navigate(RouteNames.SignIn)
-								: signIn();
-						}}
+						signIn={signIn}
 						signOut={() => {
 							signOut();
 							signOutIdentity();

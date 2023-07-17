@@ -4,7 +4,6 @@ import {
 	userAccessTokenKeychain,
 	userDataCache,
 } from 'src/helpers/storage';
-import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { canViewEdition } from '../helpers';
 import { Authorizer } from '../lib/Authorizer';
 import type { AuthResult } from '../lib/Result';
@@ -116,19 +115,8 @@ export default new Authorizer({
 			});
 		});
 	},
-	authWithCachedCredentials: async ([utc, mtc, lutc]) => {
-		if (isIdentityEnabled) {
-			const [nutoken, lutoken, mtoken] = await Promise.all([
-				utc.get(),
-				lutc.get(),
-				mtc.get(),
-			]);
-			const utoken = nutoken ?? lutoken;
-			if (!utoken || !mtoken) return InvalidResult();
-			return authWithTokens(utoken.password, mtoken.password);
-		} else {
-			return InvalidResult();
-		}
+	authWithCachedCredentials: async () => {
+		return InvalidResult();
 	},
 	checkUserHasAccess: canViewEdition,
 });
