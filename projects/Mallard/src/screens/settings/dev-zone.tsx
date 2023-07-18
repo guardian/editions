@@ -91,7 +91,7 @@ const DevZone = () => {
 		selectedEdition: { edition },
 	} = useEditions();
 
-	const { attempt, signOutCAS, signOutIdentity, identityData, oktaData } =
+	const { attempt, signOutCAS, identityData, oktaData } =
 		useContext(AccessContext);
 	const { showToast } = useToast();
 	const { setIsUsingProdDevTools } = useIsUsingProdDevtools();
@@ -167,21 +167,6 @@ const DevZone = () => {
 						</UiBodyCopy>
 					</Footer>
 					<ButtonList>
-						<Button
-							onPress={() => {
-								navigation.navigate(RouteNames.SignIn);
-							}}
-						>
-							Legacy Identity Sign In
-						</Button>
-						<Button
-							onPress={() => {
-								signOutIdentity();
-								Alert.alert('Identity Signed Out');
-							}}
-						>
-							Legacy Identity Sign Out
-						</Button>
 						<Button onPress={signIn}>Okta Sign In</Button>
 						<Button onPress={signOut}>Okta Sign Out</Button>
 						<Button

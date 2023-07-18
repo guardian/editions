@@ -81,7 +81,6 @@ export enum RouteNames {
 	FAQ = 'FAQ',
 	AlreadySubscribed = 'AlreadySubscribed',
 	SubscriptionDetails = 'SubscriptionDetails',
-	SignIn = 'SignIn',
 	CasSignIn = 'CasSignIn',
 	WeatherGeolocationConsent = 'WeatherGeolocationConsent',
 	Lightbox = 'Lightbox',

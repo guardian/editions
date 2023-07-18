@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
-import { getErrorString } from 'src/authentication/services/apple';
 import { oktaSignOut } from 'src/authentication/services/okta';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -34,8 +33,7 @@ const useOkta = () => {
 			}
 			setIsLoading(false);
 		} catch (e) {
-			const errorString = getErrorString(e);
-			errorString && setError(errorString);
+			setError('Something went wrong with sign in, please try again.');
 			setIsLoading(false);
 			navigation.goBack();
 		}
