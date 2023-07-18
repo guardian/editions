@@ -4,19 +4,10 @@ import {
 	userAccessTokenKeychain,
 	userDataCache,
 } from 'src/helpers/storage';
-import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { canViewEdition } from '../helpers';
 import { Authorizer } from '../lib/Authorizer';
-import type { AuthResult } from '../lib/Result';
-import { flat, InvalidResult, ValidResult } from '../lib/Result';
-import type { User } from '../services/identity';
-import {
-	fetchAuth,
-	fetchMembershipToken,
-	fetchUserDetails,
-} from '../services/identity';
+import { InvalidResult } from '../lib/Result';
 import type { MembersDataAPIResponse } from '../services/membership';
-import { fetchMembershipData } from '../services/membership';
 
 type BasicCreds = {
 	email: string;
@@ -44,29 +35,45 @@ export type AuthParams =
 	| AppleCreds
 	| AppleOauthCreds;
 
-export type AuthType = 'apple' | 'google' | 'email' | 'apple-oauth' | 'unknown';
+type AuthType = 'apple' | 'google' | 'email' | 'apple-oauth' | 'unknown';
+
+interface User {
+	id: string;
+	dates: {
+		accountCreatedDate: string;
+	};
+	adData: {};
+	consents: Array<{
+		id: string;
+		actor: string;
+		version: number;
+		consented: boolean;
+		timestamp: string;
+		privacyPolicyVersion: number;
+	}>;
+	userGroups: Array<{
+		path: string;
+		packageCode: string;
+	}>;
+	socialLinks: Array<{
+		network: string;
+		socialId: string;
+	}>;
+	publicFields: {
+		displayName: string;
+	};
+	statusFields: {
+		hasRepermissioned: boolean;
+		userEmailValidated: boolean;
+		allowThirdPartyProfiling: boolean;
+	};
+	primaryEmailAddress: string;
+	hasPassword: boolean;
+}
 
 export type IdentityAuthData = {
 	userDetails: User;
 	membershipData: MembersDataAPIResponse;
-};
-
-const authWithTokens = async (
-	utoken: string,
-	mtoken: string,
-): Promise<AuthResult<IdentityAuthData>> => {
-	const [userDetailsResult, membershipDataResult] = await Promise.all([
-		fetchUserDetails(utoken),
-		fetchMembershipData(mtoken),
-	]);
-	return flat(userDetailsResult, (userDetails) =>
-		flat(membershipDataResult, async (membershipData) =>
-			ValidResult({
-				userDetails,
-				membershipData,
-			}),
-		),
-	);
 };
 
 export const getUserName = (authType: AuthType, params: AuthParams): string => {
@@ -101,34 +108,11 @@ export default new Authorizer({
 		membershipAccessTokenKeychain,
 		legacyUserAccessTokenKeychain,
 	] as const,
-	auth: async ([params]: [AuthParams], [utc, mtc]) => {
-		const authType = detectAuthType(params);
-		const username = getUserName(authType, params);
-		const utokenResult = await fetchAuth<string>(params, authType);
-
-		return flat(utokenResult, async (utoken) => {
-			utc.set({ username, token: utoken });
-			const mtokenResult = await fetchMembershipToken(utoken);
-
-			return flat(mtokenResult, (mtoken) => {
-				mtc.set({ username, token: mtoken });
-				return authWithTokens(utoken, mtoken);
-			});
-		});
+	auth: async () => {
+		return InvalidResult();
 	},
-	authWithCachedCredentials: async ([utc, mtc, lutc]) => {
-		if (isIdentityEnabled) {
-			const [nutoken, lutoken, mtoken] = await Promise.all([
-				utc.get(),
-				lutc.get(),
-				mtc.get(),
-			]);
-			const utoken = nutoken ?? lutoken;
-			if (!utoken || !mtoken) return InvalidResult();
-			return authWithTokens(utoken.password, mtoken.password);
-		} else {
-			return InvalidResult();
-		}
+	authWithCachedCredentials: async () => {
+		return InvalidResult();
 	},
 	checkUserHasAccess: canViewEdition,
 });

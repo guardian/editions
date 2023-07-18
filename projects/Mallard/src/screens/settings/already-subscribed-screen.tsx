@@ -9,7 +9,6 @@ import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { Copy } from 'src/helpers/words';
-import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -39,13 +38,7 @@ const AlreadySubscribedScreen = () => {
 											key: 'Sign in to activate',
 											title: Copy.alreadySubscribed
 												.signInTitle,
-											onPress: () => {
-												isIdentityEnabled
-													? navigation.navigate(
-															RouteNames.SignIn,
-													  )
-													: signIn();
-											},
+											onPress: signIn,
 											proxy: rightChevronIcon,
 											linkWeight: 'regular',
 										},

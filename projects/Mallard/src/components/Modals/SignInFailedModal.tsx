@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
 import React from 'react';
-import { isIdentityEnabled } from 'src/hooks/use-is-identity-enbaled';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
@@ -30,20 +29,9 @@ const SignInFailedModal = ({
 					})
 				}
 				onLoginPress={async () => {
-					if (isIdentityEnabled) {
-						navigation.navigate(RouteNames.Settings, {
-							screen: RouteNames.SignIn,
-						});
-					} else {
-						await signOut();
-						await signIn();
-					}
+					await signOut();
+					await signIn();
 				}}
-				onFaqPress={() =>
-					navigation.navigate(RouteNames.Settings, {
-						screen: RouteNames.FAQ,
-					})
-				}
 				close={() => navigation.navigate(RouteNames.Issue)}
 			/>
 		</CenterWrapper>
