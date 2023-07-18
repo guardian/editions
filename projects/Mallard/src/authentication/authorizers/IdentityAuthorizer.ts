@@ -35,9 +35,9 @@ export type AuthParams =
 	| AppleCreds
 	| AppleOauthCreds;
 
-export type AuthType = 'apple' | 'google' | 'email' | 'apple-oauth' | 'unknown';
+type AuthType = 'apple' | 'google' | 'email' | 'apple-oauth' | 'unknown';
 
-export interface User {
+interface User {
 	id: string;
 	dates: {
 		accountCreatedDate: string;
