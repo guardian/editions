@@ -10,7 +10,7 @@ import {
 	useIdentity,
 	useOktaData,
 } from 'src/authentication/AccessContext';
-import { isStaffMember, isStaffMemberOkta } from 'src/authentication/helpers';
+import { isStaffMemberOkta } from 'src/authentication/helpers';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
