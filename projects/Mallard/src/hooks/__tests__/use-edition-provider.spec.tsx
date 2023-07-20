@@ -1,4 +1,3 @@
-import fetchMock from 'fetch-mock';
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import {
 	defaultEditionCache,
@@ -150,23 +149,25 @@ describe('useEditions', () => {
 		it('should return json if there is a 200 response from the endpoint', async () => {
 			const body = DEFAULT_EDITIONS_LIST;
 
-			fetchMock.getOnce(defaultSettings.editionsUrl, {
-				status: 200,
-				body,
-			});
+			global.fetch = jest.fn().mockReturnValue(
+				Promise.resolve({
+					status: 200,
+					json: () => body,
+				}),
+			);
+
 			const editionsList = await fetchEditions(
 				defaultSettings.editionsUrl,
 			);
 			expect(editionsList).toEqual(body);
 		});
 		it('should return null if there is not a 200 response from the endpoint', async () => {
-			fetchMock.getOnce(
-				defaultSettings.editionsUrl,
-				{
+			global.fetch = jest.fn().mockReturnValue(
+				Promise.resolve({
 					status: 500,
-				},
-				{ overwriteRoutes: false },
+				}),
 			);
+
 			const editionsList = await fetchEditions(
 				defaultSettings.editionsUrl,
 			);
@@ -182,13 +183,11 @@ describe('useEditions', () => {
 		it('should return the editions list from the endpoint in the happy path', async () => {
 			const body = DEFAULT_EDITIONS_LIST;
 
-			fetchMock.getOnce(
-				defaultSettings.editionsUrl,
-				{
+			global.fetch = jest.fn().mockReturnValue(
+				Promise.resolve({
 					status: 200,
-					body,
-				},
-				{ overwriteRoutes: false },
+					json: () => body,
+				}),
 			);
 
 			const editions = await getEditions(IS_CONNECTED);
@@ -197,25 +196,22 @@ describe('useEditions', () => {
 			expect(editionsListInCache).toEqual(body);
 		});
 		it('should return the editions list from the cache if endpoint is not avaialble', async () => {
-			fetchMock.getOnce(
-				defaultSettings.editionsUrl,
-				{
+			global.fetch = jest.fn().mockReturnValue(
+				Promise.resolve({
 					status: 500,
-				},
-				{ overwriteRoutes: false },
+				}),
 			);
+
 			await editionsListCache.set(DEFAULT_EDITIONS_LIST);
 
 			const editions = await getEditions(IS_CONNECTED);
 			expect(editions).toEqual(DEFAULT_EDITIONS_LIST);
 		});
 		it('should return the default editions list if there is nothing from the endpoint and no cache', async () => {
-			fetchMock.getOnce(
-				defaultSettings.editionsUrl,
-				{
+			global.fetch = jest.fn().mockReturnValue(
+				Promise.resolve({
 					status: 500,
-				},
-				{ overwriteRoutes: false },
+				}),
 			);
 
 			const editions = await getEditions(IS_CONNECTED);
