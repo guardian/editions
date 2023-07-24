@@ -93,10 +93,10 @@ const fetchIssueWithFrontsFromAPI = async (
 const fetchIssueWithFrontsFromFS = async (
 	id: string,
 ): Promise<IssueWithFronts> => {
-	const issue = await readFileAsJSON<Issue>(FSPaths.issue(id));
+	const issue = await readFileAsJSON(FSPaths.issue(id));
 	const fronts = await Promise.all(
-		issue.fronts.map((frontId) =>
-			readFileAsJSON<Front>(FSPaths.front(id, frontId)),
+		issue.fronts.map((frontId: string) =>
+			readFileAsJSON(FSPaths.front(id, frontId)),
 		),
 	);
 	return {

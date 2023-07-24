@@ -25,9 +25,7 @@ export const nestProviders = (
 		({ children }) => <>{children}</>,
 	);
 
-const useContextAsHook = <C extends unknown>(
-	Context: React.Context<C | null>,
-): C => {
+const useContextAsHook = (Context: React.Context<any | null>): any => {
 	const ctx = useContext(Context);
 	if (ctx === null) {
 		console.error(Context);

@@ -71,8 +71,9 @@ const fromResponse = async <T>(
 	if (res.status >= 500) return ErrorResultCons(error);
 	const data = await res.json();
 	if (res.ok) return ValidResultCons(valid(data));
-	if (res.status >= 401 && res.status <= 403)
+	if (res.status >= 401 && res.status <= 403) {
 		return InvalidResultCons(invalid(data));
+	}
 	return ErrorResultCons(error);
 };
 

@@ -5,10 +5,7 @@ import { articlePillars, ArticleType } from 'src/common';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { metrics } from 'src/theme/spacing';
 
-const getFirstLast = <T extends any>(arr: T[]): T[] => [
-	arr[0],
-	arr.slice(-1)[0],
-];
+const getFirstLast = (arr: any[]): any[] => [arr[0], arr.slice(-1)[0]];
 
 const styles = StyleSheet.create({
 	devTools: {

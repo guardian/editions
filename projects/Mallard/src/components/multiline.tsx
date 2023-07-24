@@ -1,5 +1,4 @@
 import React from 'react';
-import type { StyleProp } from 'react-native';
 import Svg, { Rect } from 'react-native-svg';
 import { color as themeColor } from 'src/theme/color';
 
@@ -13,7 +12,7 @@ const Multiline = ({
 }: {
 	color: string;
 	count: number;
-	style?: StyleProp<{}>;
+	style?: any;
 	width?: string | number;
 }) => {
 	const gap = count < 4 ? 2 : 3;

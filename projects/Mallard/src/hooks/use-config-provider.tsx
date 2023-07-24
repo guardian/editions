@@ -140,7 +140,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		try {
 			await notificationsEnabledCache.set(setting);
 			setNotificationsEnabled(setting);
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e);
 			e.message = `Unable to Set Notifications Enabled: ${e.message}`;
 			errorService.captureException(e);
@@ -151,7 +151,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		try {
 			await wifiOnlyDownloadsCache.set(setting);
 			setWifiOnlyDownload(setting);
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e);
 			e.message = `Unable to Set Wifi Downloads: ${e.message}`;
 			errorService.captureException(e);
@@ -162,7 +162,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		try {
 			await maxAvailableEditionsCache.set(setting);
 			setMaxAvailableEditions(setting);
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e);
 			e.message = `Unable to Set Max Available Editions: ${e.message}`;
 			errorService.captureException(e);
@@ -173,7 +173,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		try {
 			await isUsingProdDevtoolsCache.set(setting);
 			setIsUsingProdDevtools(setting);
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e);
 			e.message = `Unable to set "Is Using Prod Dev Tools": ${e.message}`;
 			errorService.captureException(e);
@@ -184,7 +184,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 		try {
 			await apiUrlCache.set(setting);
 			setApiUrl(setting);
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e);
 			e.message = `Unable to set "Is Using Prod Dev Tools": ${e.message}`;
 			errorService.captureException(e);

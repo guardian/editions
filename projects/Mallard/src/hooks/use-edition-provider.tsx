@@ -133,7 +133,7 @@ export const fetchEditions = async (
 		}
 		const json = await response.json();
 		return json;
-	} catch (e) {
+	} catch (e: any) {
 		e.message = `Unable to fetch ${apiUrl} : ${e.message}`;
 		errorService.captureException(e);
 		return null;
@@ -344,7 +344,7 @@ export const EditionProvider = ({
 	useEffect(() => {
 		seenEditionsCache.get().then((seen) => {
 			const unseenEditions = editionsList.specialEditions.filter(
-				(e) => !seen || !seen.includes(e.edition),
+				(e) => !seen || !seen?.includes(e.edition),
 			);
 			if (unseenEditions.length > 0) {
 				setShowNewEditionCard(true);

@@ -16,7 +16,7 @@ class CannotFetchError extends Error {}
 const tryFetch = async (url: string): Promise<Response> => {
 	try {
 		return await fetch(url);
-	} catch (error) {
+	} catch (error: any) {
 		throw new CannotFetchError(error.message);
 	}
 };

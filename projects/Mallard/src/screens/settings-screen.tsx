@@ -174,7 +174,7 @@ const SettingsScreen = () => {
 
 	const versionClickHandler = oktaData
 		? () => {
-				if (!isUsingProdDevtools && isStaffMemberOkta(oktaData))
+				if (!isUsingProdDevtools && isStaffMemberOkta(oktaData)) {
 					setVersionClickedTimes((t) => {
 						if (t < 7) return t + 1;
 						Alert.alert(
@@ -198,6 +198,7 @@ const SettingsScreen = () => {
 						);
 						return 0;
 					});
+				}
 		  }
 		: () => {};
 

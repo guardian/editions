@@ -48,7 +48,7 @@ export const prepFileSystem = async (): Promise<void> => {
 	);
 };
 
-export const readFileAsJSON = <T extends any>(path: string): Promise<T> =>
+export const readFileAsJSON = (path: string): Promise<any> =>
 	RNFS.readFile(path, 'utf8').then((d) => JSON.parse(d));
 
 export const downloadNamedIssueArchive = async ({
@@ -99,7 +99,7 @@ export const unzipNamedIssueArchive = async (zipFilePath: string) => {
 	try {
 		await unzip(zipFilePath, outputPath);
 		return RNFS.unlink(zipFilePath);
-	} catch (e) {
+	} catch (e: any) {
 		e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`;
 		errorService.captureException(e);
 		console.log('Unzip Error: ' + JSON.stringify(e));
@@ -198,7 +198,7 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> => {
 		.then((data) => {
 			try {
 				return JSON.parse(data);
-			} catch (e) {
+			} catch (e: any) {
 				e.message = `readIssueSummary: ${e.message} - with: ${data}`;
 				console.log(e.message);
 				errorService.captureException(e);
@@ -244,7 +244,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 
 		// The above saves it locally, if successful we return it
 		return issueSummary;
-	} catch (e) {
+	} catch (e: any) {
 		const issueSummary = await readIssueSummary();
 		if (!issueSummary && e.message !== 'Network request failed') {
 			e.message = `Failed to fetch valid issue summary and empty cache: ${e.message}`;

@@ -73,10 +73,13 @@ export const flattenCollectionsToCards = (
 				 * happen to be in first position of their collection.
 				 */
 				if (index === 0) {
-					if (appearance === FrontCardAppearance.twoStoryPage)
+					if (appearance === FrontCardAppearance.twoStoryPage) {
 						appearance = FrontCardAppearance.twoStoryStarter;
-					else if (appearance === FrontCardAppearance.threeStoryPage)
+					} else if (
+						appearance === FrontCardAppearance.threeStoryPage
+					) {
 						appearance = FrontCardAppearance.threeStoryStarter;
+					}
 				}
 				return {
 					articles: Object.values(articles || {}),
