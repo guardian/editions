@@ -78,7 +78,8 @@ const WebviewWithArticle = ({
 			bounces={largeDeviceMemory ? true : false}
 			originWhitelist={['*']}
 			scrollEnabled={true}
-			source={isReady ? { uri } : undefined}
+			// @ts-expect-error: https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-1520393422
+			source={isReady ? { uri } : { uri: undefined }}
 			ref={_ref}
 			onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
 			allowFileAccess={true}
