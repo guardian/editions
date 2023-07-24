@@ -8,6 +8,7 @@ import { logEvent } from 'src/helpers/analytics';
 import { useIssueDate } from 'src/helpers/issues';
 import { useEditions } from 'src/hooks/use-edition-provider';
 import { RouteNames } from 'src/navigation/NavigationModels';
+import { remoteConfigService } from 'src/services/remote-config';
 import { IssueMenuButton } from '../../Button/IssueMenuButton';
 import { EditionsMenuButton } from '../../EditionsMenu/EditionsMenuButton/EditionsMenuButton';
 
@@ -70,12 +71,19 @@ const IssueScreenHeader = React.memo(
 
 		const { title, subTitle, titleStyle } = getTitles();
 
+		const isEditionsMenuEnabled = remoteConfigService.getBoolean(
+			'is_editions_menu_enabled',
+		);
+
 		return (
 			<Header
 				onPress={goToIssueList}
 				action={<IssueMenuButton onPress={goToIssueList} />}
 				leftAction={
-					<EditionsMenuButton onPress={handleEditionMenuPress} />
+					<EditionsMenuButton
+						disabled={!isEditionsMenuEnabled}
+						onPress={handleEditionMenuPress}
+					/>
 				}
 				headerStyles={headerStyles}
 			>
