@@ -426,7 +426,7 @@ PODS:
     - React
   - react-native-splash-screen (3.3.0):
     - React-Core
-  - react-native-webview (11.23.1):
+  - react-native-webview (13.2.3):
     - React-Core
   - React-perflogger (0.70.12)
   - React-RCTActionSheet (0.70.12):
@@ -902,7 +902,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
-  react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
+  react-native-webview: b85dfe0bf95bef83e82fc354d6987c80fed5e7ad
   React-perflogger: c0b9c0ab8cbaf732694cd776645b3161d128784d
   React-RCTActionSheet: c2b26d0be4e6e48ed6b4666345da16c8f7933b7b
   React-RCTAnimation: cc36ff278cd41365c98eeec3c8d1fa86e2fc2392
