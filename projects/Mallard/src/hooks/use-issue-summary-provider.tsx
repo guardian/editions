@@ -50,7 +50,7 @@ export const getIssueSummary = async (
 	try {
 		const trimmedSummary = issueSummary.slice(0, maxAvailableEditions);
 		return trimmedSummary;
-	} catch (e) {
+	} catch (e: any) {
 		e.message = `getIssueSummary error: maxAvailableEditions: ${maxAvailableEditions} & issueSummary: ${JSON.stringify(
 			issueSummary,
 		)}`;

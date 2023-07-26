@@ -52,8 +52,9 @@ export const useNavPositionChange = (
 	const state = useContext(NavPositionContext);
 	useEffect(() => {
 		if (state === undefined) return () => {};
-		if (state.current != null)
+		if (state.current != null) {
 			throw new Error('cannot subscribe to nav position change twice');
+		}
 		state.current = handler;
 		return () => (state.current = undefined);
 	}, [state, ...deps]);

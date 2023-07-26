@@ -101,7 +101,7 @@ export const WeatherProvider = ({
 			try {
 				await isWeatherShownCache.set(setting);
 				setIsWeatherShown(setting);
-			} catch (e) {
+			} catch (e: any) {
 				e.message = `Unable to Set Is Weather Shown: ${e.message}`;
 				errorService.captureException(e);
 			}

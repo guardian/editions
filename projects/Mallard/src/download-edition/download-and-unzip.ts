@@ -164,10 +164,10 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
 		await pushTracking('downloadAndUnzip', 'complete');
 		updateListeners(localId, { type: 'success' }); // null is unstarted or end
-	} catch (error) {
+	} catch (error: any) {
 		await pushTracking('downloadAndUnzipError', JSON.stringify(error));
 		errorService.captureException(error);
-		updateListeners(localId, { type: 'failure', data: error });
+		updateListeners(localId, { type: 'failure' });
 		console.log('Download error: ', error);
 
 		// To avoid having part of issue data on the device (i.e. when image bundle failed to unzip)

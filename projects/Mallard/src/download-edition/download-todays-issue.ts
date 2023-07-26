@@ -33,7 +33,7 @@ const downloadTodaysIssue = async (downloadBlocked: DownloadBlockedStatus) => {
 				downloadBlocked,
 			);
 		}
-	} catch (e) {
+	} catch (e: any) {
 		e.message = `Unable to download todays issue: ${e.message}`;
 		errorService.captureException(e);
 		console.log(e.message);

@@ -55,7 +55,7 @@ export const getArticleDataFromNavigator = (
 			currentArticle.article === article &&
 			currentArticle.front === front,
 	);
-	if (startingPoint < 0)
+	if (startingPoint < 0) {
 		return {
 			startingPoint: 0,
 			appearance: { type: 'pillar', name: 'neutral' } as const,
@@ -69,6 +69,7 @@ export const getArticleDataFromNavigator = (
 				...flattenedArticles,
 			],
 		};
+	}
 	return {
 		startingPoint,
 		appearance: flattenedArticles[startingPoint].appearance,

@@ -6,7 +6,7 @@ import type { GdprSwitchSetting } from 'src/hooks/use-gdpr';
 
 interface ErrorService {
 	init({ hasConsent }: { hasConsent: GdprSwitchSetting }): void;
-	captureException(err: Error): void;
+	captureException(err: unknown): void;
 }
 
 export class ErrorServiceImpl implements ErrorService {

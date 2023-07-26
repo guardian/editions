@@ -452,12 +452,13 @@ const IssueListFetchContainer = () => {
 		setTimeout(() => setIsShown(true), 0);
 	}, []);
 
-	if (!isShown)
+	if (!isShown) {
 		return (
 			<View style={styles.loadingScreen}>
 				<Spinner />
 			</View>
 		);
+	}
 
 	return currentIssue !== null ? (
 		<IssueListViewWithDelay
