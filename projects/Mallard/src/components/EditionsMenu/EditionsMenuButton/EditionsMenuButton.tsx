@@ -33,13 +33,16 @@ const styles = (selected: boolean) =>
 	});
 
 const EditionsMenuButton = ({
+	disabled = false,
 	onPress,
 	selected = false,
 }: {
+	disabled?: boolean;
 	onPress: () => void;
 	selected?: boolean;
 }) => (
 	<TouchableOpacity
+		disabled={disabled}
 		accessibilityRole="button"
 		accessibilityLabel="Regions and specials editions menu"
 		onPress={onPress}
