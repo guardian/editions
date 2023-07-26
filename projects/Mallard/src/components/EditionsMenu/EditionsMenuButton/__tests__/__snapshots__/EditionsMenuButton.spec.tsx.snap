@@ -4,6 +4,11 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
 <View
   accessibilityLabel="Regions and specials editions menu"
   accessibilityRole="button"
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
@@ -175,6 +180,11 @@ exports[`EditionsMenuButton should display a selected EditionsMenuButton with co
 <View
   accessibilityLabel="Regions and specials editions menu"
   accessibilityRole="button"
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
