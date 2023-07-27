@@ -60,7 +60,6 @@ const getDiagnosticInfo = async (
 	const buildNumber = DeviceInfo.getBuildNumber();
 	const version = DeviceInfo.getVersion();
 	const deviceId = DeviceInfo.getDeviceId();
-	const uniqueId = DeviceInfo.getUniqueId();
 
 	const bytesToMb = (bytes: number) =>
 		Math.floor(bytes / 1024 / 1024).toLocaleString('en');
@@ -75,6 +74,7 @@ const getDiagnosticInfo = async (
 		pushTracking,
 		edition,
 		registeredPushTokens,
+		uniqueId,
 	] = await Promise.all([
 		DeviceInfo.getFirstInstallTime(),
 		DeviceInfo.getLastUpdateTime(),
@@ -85,6 +85,7 @@ const getDiagnosticInfo = async (
 		getDiagnosticPushTracking(),
 		getSelectedEditionSlug(),
 		pushRegisteredTokens.get(),
+		DeviceInfo.getUniqueId(),
 	]);
 
 	return `
