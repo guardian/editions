@@ -96,16 +96,16 @@ describe('use-issue-summary-provider', () => {
 		it('should trim the issue summary based on the number of editions chosen', async () => {
 			const issueSummary = await getIssueSummary();
 			expect(issueSummary).toMatchInlineSnapshot(`
-			Array [
-			  Object {
-			    "assets": Object {
+			[
+			  {
+			    "assets": {
 			      "data": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/data.zip",
 			      "phone": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/phone.zip",
 			      "tablet": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/tablet.zip",
 			      "tabletL": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/tabletL.zip",
 			      "tabletXL": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/tabletXL.zip",
 			    },
-			    "assetsSSR": Object {
+			    "assetsSSR": {
 			      "data": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/data.zip",
 			      "html": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/ssr/html.zip",
 			      "phone": "zips/daily-edition/2021-10-05/2021-10-05T01:02:01.008Z/ssr/phone.zip",

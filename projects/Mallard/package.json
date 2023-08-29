@@ -103,8 +103,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
     "@babel/helper-validator-identifier": "^7.10.4",
+    "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@guardian/eslint-config-typescript": "^6.0.1",
     "@guardian/prettier": "^0.5.0",
@@ -144,9 +144,6 @@
     "@types/react": "16.9.1",
     "@types/react-native": "0.60.5",
     "jsdom": "16.2.1"
-  },
-  "jest": {
-    "preset": "react-native"
   },
   "reactNativePermissionsIOS": [
     "LocationWhenInUse"

@@ -12,12 +12,12 @@ exports[`BurgerMenu should display a BurgerMenu icon in SVG 1`] = `
   minX={0}
   minY={0}
   style={
-    Array [
-      Object {
+    [
+      {
         "backgroundColor": "transparent",
         "borderWidth": 0,
       },
-      Object {
+      {
         "flex": 0,
         "height": 40,
         "width": 40,
@@ -31,7 +31,7 @@ exports[`BurgerMenu should display a BurgerMenu icon in SVG 1`] = `
   <RNSVGGroup
     fill={null}
     propList={
-      Array [
+      [
         "fill",
       ]
     }
@@ -40,13 +40,13 @@ exports[`BurgerMenu should display a BurgerMenu icon in SVG 1`] = `
       cx="41"
       cy="41"
       fill={
-        Object {
+        {
           "payload": 4294960384,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -54,14 +54,14 @@ exports[`BurgerMenu should display a BurgerMenu icon in SVG 1`] = `
     />
     <RNSVGRect
       fill={
-        Object {
+        {
           "payload": 4278528354,
           "type": 0,
         }
       }
       height="3.90478"
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -71,14 +71,14 @@ exports[`BurgerMenu should display a BurgerMenu icon in SVG 1`] = `
     />
     <RNSVGRect
       fill={
-        Object {
+        {
           "payload": 4278528354,
           "type": 0,
         }
       }
       height="3.90477"
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -88,14 +88,14 @@ exports[`BurgerMenu should display a BurgerMenu icon in SVG 1`] = `
     />
     <RNSVGRect
       fill={
-        Object {
+        {
           "payload": 4278528354,
           "type": 0,
         }
       }
       height="3.90476"
       propList={
-        Array [
+        [
           "fill",
         ]
       }

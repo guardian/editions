@@ -3,7 +3,7 @@
 exports[`RightChevron should display a RightChevron icon using the icon font 1`] = `
 <Text
   style={
-    Object {
+    {
       "color": "#121212",
       "fontFamily": "GuardianIcons-Regular",
       "fontSize": 20,

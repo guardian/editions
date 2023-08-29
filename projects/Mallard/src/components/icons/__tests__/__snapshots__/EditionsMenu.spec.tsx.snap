@@ -12,12 +12,12 @@ exports[`EditionsMenu should display an EditionsMenu icon in SVG 1`] = `
   minX={0}
   minY={0}
   style={
-    Array [
-      Object {
+    [
+      {
         "backgroundColor": "transparent",
         "borderWidth": 0,
       },
-      Object {
+      {
         "flex": 0,
         "height": 40,
         "width": 40,
@@ -31,7 +31,7 @@ exports[`EditionsMenu should display an EditionsMenu icon in SVG 1`] = `
   <RNSVGGroup
     fill={null}
     propList={
-      Array [
+      [
         "fill",
       ]
     }
@@ -40,20 +40,20 @@ exports[`EditionsMenu should display an EditionsMenu icon in SVG 1`] = `
       cx="21"
       cy="21"
       fill={
-        Object {
+        {
           "payload": 4278528354,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
           "stroke",
         ]
       }
       r="20.5"
       stroke={
-        Object {
+        {
           "payload": 4294967295,
           "type": 0,
         }
@@ -63,13 +63,13 @@ exports[`EditionsMenu should display an EditionsMenu icon in SVG 1`] = `
       cx="14.1751"
       cy="13.125"
       fill={
-        Object {
+        {
           "payload": 4294967295,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -79,13 +79,13 @@ exports[`EditionsMenu should display an EditionsMenu icon in SVG 1`] = `
       cx="14.1751"
       cy="27.825"
       fill={
-        Object {
+        {
           "payload": 4294934287,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -95,13 +95,13 @@ exports[`EditionsMenu should display an EditionsMenu icon in SVG 1`] = `
       cx="28.875"
       cy="13.125"
       fill={
-        Object {
+        {
           "payload": 4294949576,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -111,13 +111,13 @@ exports[`EditionsMenu should display an EditionsMenu icon in SVG 1`] = `
       cx="28.875"
       cy="27.825"
       fill={
-        Object {
+        {
           "payload": 4287683839,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }

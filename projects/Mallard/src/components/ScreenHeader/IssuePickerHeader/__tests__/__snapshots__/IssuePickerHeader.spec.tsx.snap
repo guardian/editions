@@ -3,7 +3,7 @@
 exports[`IssuePickerHeader should match the altered style by the prop headerStyles 1`] = `
 <View
   style={
-    Object {
+    {
       "flex": 1,
     }
   }
@@ -11,8 +11,8 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
   <RNCSafeAreaProvider
     onInsetsChange={[Function]}
     style={
-      Array [
-        Object {
+      [
+        {
           "flex": 1,
         },
         undefined,
@@ -23,7 +23,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
       collapsable={false}
       pointerEvents="box-none"
       style={
-        Object {
+        {
           "zIndex": 1,
         }
       }
@@ -39,7 +39,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           collapsable={false}
           pointerEvents="box-none"
           style={
-            Object {
+            {
               "bottom": 0,
               "left": 0,
               "opacity": 1,
@@ -53,12 +53,12 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           <View
             collapsable={false}
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(255, 255, 255)",
                 "borderBottomColor": "rgb(216, 216, 216)",
                 "flex": 1,
                 "shadowColor": "rgb(216, 216, 216)",
-                "shadowOffset": Object {
+                "shadowOffset": {
                   "height": 0.5,
                   "width": 0,
                 },
@@ -72,7 +72,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           collapsable={false}
           pointerEvents="box-none"
           style={
-            Object {
+            {
               "height": 64,
               "maxHeight": undefined,
               "minHeight": undefined,
@@ -84,7 +84,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           <View
             pointerEvents="none"
             style={
-              Object {
+              {
                 "height": 20,
               }
             }
@@ -92,7 +92,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           <View
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "flex": 1,
                 "flexDirection": "row",
@@ -104,7 +104,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
               collapsable={false}
               pointerEvents="box-none"
               style={
-                Object {
+                {
                   "marginHorizontal": 16,
                   "opacity": 1,
                 }
@@ -117,7 +117,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
-                  Object {
+                  {
                     "color": "rgb(28, 28, 30)",
                     "fontSize": 17,
                     "fontWeight": "600",
@@ -134,7 +134,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
     <View
       onLayout={[Function]}
       style={
-        Object {
+        {
           "flex": 1,
         }
       }
@@ -142,7 +142,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
       <View
         pointerEvents="box-none"
         style={
-          Object {
+          {
             "bottom": 0,
             "left": 0,
             "position": "absolute",
@@ -154,7 +154,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
         <View
           collapsable={false}
           style={
-            Object {
+            {
               "opacity": 1,
             }
           }
@@ -172,11 +172,11 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
           onTransition={[Function]}
           pointerEvents="box-none"
           style={
-            Array [
-              Object {
+            [
+              {
                 "overflow": undefined,
               },
-              Object {
+              {
                 "bottom": 0,
                 "left": 0,
                 "position": "absolute",
@@ -186,10 +186,10 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
             ]
           }
           transitionSpec={
-            Object {
-              "close": Object {
+            {
+              "close": {
                 "animation": "spring",
-                "config": Object {
+                "config": {
                   "damping": 500,
                   "mass": 3,
                   "overshootClamping": true,
@@ -198,9 +198,9 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                   "stiffness": 1000,
                 },
               },
-              "open": Object {
+              "open": {
                 "animation": "spring",
-                "config": Object {
+                "config": {
                   "damping": 500,
                   "mass": 3,
                   "overshootClamping": true,
@@ -217,7 +217,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "flex": 1,
               }
             }
@@ -230,13 +230,13 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
-                Object {
+                {
                   "flex": 1,
-                  "transform": Array [
-                    Object {
+                  "transform": [
+                    {
                       "translateX": 0,
                     },
-                    Object {
+                    {
                       "translateX": 0,
                     },
                   ],
@@ -247,13 +247,13 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                 collapsable={false}
                 pointerEvents="none"
                 style={
-                  Object {
+                  {
                     "backgroundColor": "rgb(242, 242, 242)",
                     "bottom": 0,
                     "left": 0,
                     "position": "absolute",
                     "shadowColor": "#000",
-                    "shadowOffset": Object {
+                    "shadowOffset": {
                       "height": 1,
                       "width": -1,
                     },
@@ -266,13 +266,13 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
               />
               <View
                 style={
-                  Array [
-                    Object {
+                  [
+                    {
                       "flex": 1,
                       "overflow": "hidden",
                     },
-                    Array [
-                      Object {
+                    [
+                      {
                         "backgroundColor": "rgb(242, 242, 242)",
                       },
                       undefined,
@@ -282,7 +282,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
               >
                 <View
                   style={
-                    Object {
+                    {
                       "flex": 1,
                       "flexDirection": "column-reverse",
                     }
@@ -290,15 +290,15 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                 >
                   <View
                     style={
-                      Object {
+                      {
                         "flex": 1,
                       }
                     }
                   >
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "backgroundColor": "#052962",
                             "flexDirection": "row",
                             "justifyContent": "flex-end",
@@ -310,18 +310,18 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                     >
                       <View
                         style={
-                          Array [
-                            Object {
+                          [
+                            {
                               "alignSelf": "flex-end",
                               "flexDirection": "row",
                               "justifyContent": "space-between",
                               "width": "100%",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "marginTop": 20,
                               },
-                              Object {
+                              {
                                 "height": 49,
                               },
                             ],
@@ -332,7 +332,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                         <View>
                           <View
                             style={
-                              Object {
+                              {
                                 "paddingLeft": 14,
                                 "width": 90,
                                 "zIndex": 2,
@@ -343,11 +343,28 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                               accessibilityHint="Navigates to the settings screen"
                               accessibilityLabel="Settings button"
                               accessibilityRole="button"
+                              accessibilityState={
+                                {
+                                  "busy": undefined,
+                                  "checked": undefined,
+                                  "disabled": undefined,
+                                  "expanded": undefined,
+                                  "selected": undefined,
+                                }
+                              }
+                              accessibilityValue={
+                                {
+                                  "max": undefined,
+                                  "min": undefined,
+                                  "now": undefined,
+                                  "text": undefined,
+                                }
+                              }
                               accessible={true}
                               collapsable={false}
                               focusable={true}
                               hitSlop={
-                                Object {
+                                {
                                   "bottom": 10,
                                   "left": 10,
                                   "right": 10,
@@ -362,27 +379,27 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                               onResponderTerminationRequest={[Function]}
                               onStartShouldSetResponder={[Function]}
                               style={
-                                Object {
+                                {
                                   "opacity": 1,
                                 }
                               }
                             >
                               <View
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "alignItems": "center",
                                       "borderRadius": 999,
                                       "height": 42,
                                       "justifyContent": "center",
                                       "paddingHorizontal": 21,
                                     },
-                                    Object {
+                                    {
                                       "backgroundColor": undefined,
                                       "borderColor": "#FFFFFF",
                                       "borderWidth": 1,
                                     },
-                                    Object {
+                                    {
                                       "alignItems": "center",
                                       "aspectRatio": 1,
                                       "justifyContent": "center",
@@ -396,14 +413,14 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                 <Text
                                   allowFontScaling={false}
                                   style={
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "fontFamily": "GuardianIcons-Regular",
                                         "fontSize": 20,
                                         "lineHeight": 20,
                                       },
-                                      Array [
-                                        Object {
+                                      [
+                                        {
                                           "color": "#FFFFFF",
                                         },
                                         undefined,
@@ -419,13 +436,13 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                         </View>
                         <View
                           style={
-                            Array [
-                              Object {
+                            [
+                              {
                                 "flex": 1,
                                 "flexDirection": "row",
                                 "justifyContent": "flex-start",
                               },
-                              Object {
+                              {
                                 "width": 0,
                               },
                             ]
@@ -433,12 +450,12 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                         >
                           <View
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "flex": 1,
                                   "flexDirection": "row",
                                 },
-                                Object {
+                                {
                                   "justifyContent": "space-between",
                                 },
                               ]
@@ -446,7 +463,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                           >
                             <View
                               style={
-                                Object {
+                                {
                                   "marginRight": 14,
                                 }
                               }
@@ -469,7 +486,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                   accessible={true}
                                   collapsable={false}
                                   style={
-                                    Object {
+                                    {
                                       "opacity": 1,
                                     }
                                   }
@@ -480,7 +497,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                             </View>
                             <View
                               style={
-                                Object {
+                                {
                                   "paddingRight": 14,
                                 }
                               }
@@ -489,11 +506,28 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                 accessibilityHint="Returns to the edition"
                                 accessibilityLabel="Close button"
                                 accessibilityRole="button"
+                                accessibilityState={
+                                  {
+                                    "busy": undefined,
+                                    "checked": undefined,
+                                    "disabled": undefined,
+                                    "expanded": undefined,
+                                    "selected": undefined,
+                                  }
+                                }
+                                accessibilityValue={
+                                  {
+                                    "max": undefined,
+                                    "min": undefined,
+                                    "now": undefined,
+                                    "text": undefined,
+                                  }
+                                }
                                 accessible={true}
                                 collapsable={false}
                                 focusable={true}
                                 hitSlop={
-                                  Object {
+                                  {
                                     "bottom": 10,
                                     "left": 10,
                                     "right": 10,
@@ -508,25 +542,25 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                 onResponderTerminationRequest={[Function]}
                                 onStartShouldSetResponder={[Function]}
                                 style={
-                                  Object {
+                                  {
                                     "opacity": 1,
                                   }
                                 }
                               >
                                 <View
                                   style={
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "alignItems": "center",
                                         "borderRadius": 999,
                                         "height": 42,
                                         "justifyContent": "center",
                                         "paddingHorizontal": 21,
                                       },
-                                      Object {
+                                      {
                                         "backgroundColor": "#ffe500",
                                       },
-                                      Object {
+                                      {
                                         "alignItems": "center",
                                         "aspectRatio": 1,
                                         "justifyContent": "center",
@@ -540,14 +574,14 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                   <Text
                                     allowFontScaling={false}
                                     style={
-                                      Array [
-                                        Object {
+                                      [
+                                        {
                                           "fontFamily": "GuardianIcons-Regular",
                                           "fontSize": 20,
                                           "lineHeight": 20,
                                         },
-                                        Array [
-                                          Object {
+                                        [
+                                          {
                                             "color": "#121212",
                                           },
                                           undefined,
@@ -579,7 +613,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
 exports[`IssuePickerHeader should match the default style 1`] = `
 <View
   style={
-    Object {
+    {
       "flex": 1,
     }
   }
@@ -587,8 +621,8 @@ exports[`IssuePickerHeader should match the default style 1`] = `
   <RNCSafeAreaProvider
     onInsetsChange={[Function]}
     style={
-      Array [
-        Object {
+      [
+        {
           "flex": 1,
         },
         undefined,
@@ -599,7 +633,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
       collapsable={false}
       pointerEvents="box-none"
       style={
-        Object {
+        {
           "zIndex": 1,
         }
       }
@@ -615,7 +649,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           collapsable={false}
           pointerEvents="box-none"
           style={
-            Object {
+            {
               "bottom": 0,
               "left": 0,
               "opacity": 1,
@@ -629,12 +663,12 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           <View
             collapsable={false}
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(255, 255, 255)",
                 "borderBottomColor": "rgb(216, 216, 216)",
                 "flex": 1,
                 "shadowColor": "rgb(216, 216, 216)",
-                "shadowOffset": Object {
+                "shadowOffset": {
                   "height": 0.5,
                   "width": 0,
                 },
@@ -648,7 +682,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           collapsable={false}
           pointerEvents="box-none"
           style={
-            Object {
+            {
               "height": 64,
               "maxHeight": undefined,
               "minHeight": undefined,
@@ -660,7 +694,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           <View
             pointerEvents="none"
             style={
-              Object {
+              {
                 "height": 20,
               }
             }
@@ -668,7 +702,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           <View
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "flex": 1,
                 "flexDirection": "row",
@@ -680,7 +714,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
               collapsable={false}
               pointerEvents="box-none"
               style={
-                Object {
+                {
                   "marginHorizontal": 16,
                   "opacity": 1,
                 }
@@ -693,7 +727,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
-                  Object {
+                  {
                     "color": "rgb(28, 28, 30)",
                     "fontSize": 17,
                     "fontWeight": "600",
@@ -710,7 +744,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
     <View
       onLayout={[Function]}
       style={
-        Object {
+        {
           "flex": 1,
         }
       }
@@ -718,7 +752,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
       <View
         pointerEvents="box-none"
         style={
-          Object {
+          {
             "bottom": 0,
             "left": 0,
             "position": "absolute",
@@ -730,7 +764,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
         <View
           collapsable={false}
           style={
-            Object {
+            {
               "opacity": 1,
             }
           }
@@ -748,11 +782,11 @@ exports[`IssuePickerHeader should match the default style 1`] = `
           onTransition={[Function]}
           pointerEvents="box-none"
           style={
-            Array [
-              Object {
+            [
+              {
                 "overflow": undefined,
               },
-              Object {
+              {
                 "bottom": 0,
                 "left": 0,
                 "position": "absolute",
@@ -762,10 +796,10 @@ exports[`IssuePickerHeader should match the default style 1`] = `
             ]
           }
           transitionSpec={
-            Object {
-              "close": Object {
+            {
+              "close": {
                 "animation": "spring",
-                "config": Object {
+                "config": {
                   "damping": 500,
                   "mass": 3,
                   "overshootClamping": true,
@@ -774,9 +808,9 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                   "stiffness": 1000,
                 },
               },
-              "open": Object {
+              "open": {
                 "animation": "spring",
-                "config": Object {
+                "config": {
                   "damping": 500,
                   "mass": 3,
                   "overshootClamping": true,
@@ -793,7 +827,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "flex": 1,
               }
             }
@@ -806,13 +840,13 @@ exports[`IssuePickerHeader should match the default style 1`] = `
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
-                Object {
+                {
                   "flex": 1,
-                  "transform": Array [
-                    Object {
+                  "transform": [
+                    {
                       "translateX": 0,
                     },
-                    Object {
+                    {
                       "translateX": 0,
                     },
                   ],
@@ -823,13 +857,13 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                 collapsable={false}
                 pointerEvents="none"
                 style={
-                  Object {
+                  {
                     "backgroundColor": "rgb(242, 242, 242)",
                     "bottom": 0,
                     "left": 0,
                     "position": "absolute",
                     "shadowColor": "#000",
-                    "shadowOffset": Object {
+                    "shadowOffset": {
                       "height": 1,
                       "width": -1,
                     },
@@ -842,13 +876,13 @@ exports[`IssuePickerHeader should match the default style 1`] = `
               />
               <View
                 style={
-                  Array [
-                    Object {
+                  [
+                    {
                       "flex": 1,
                       "overflow": "hidden",
                     },
-                    Array [
-                      Object {
+                    [
+                      {
                         "backgroundColor": "rgb(242, 242, 242)",
                       },
                       undefined,
@@ -858,7 +892,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
               >
                 <View
                   style={
-                    Object {
+                    {
                       "flex": 1,
                       "flexDirection": "column-reverse",
                     }
@@ -866,15 +900,15 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                 >
                   <View
                     style={
-                      Object {
+                      {
                         "flex": 1,
                       }
                     }
                   >
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "backgroundColor": "#052962",
                             "flexDirection": "row",
                             "justifyContent": "flex-end",
@@ -886,18 +920,18 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                     >
                       <View
                         style={
-                          Array [
-                            Object {
+                          [
+                            {
                               "alignSelf": "flex-end",
                               "flexDirection": "row",
                               "justifyContent": "space-between",
                               "width": "100%",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "marginTop": 20,
                               },
-                              Object {
+                              {
                                 "height": 49,
                               },
                             ],
@@ -908,7 +942,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                         <View>
                           <View
                             style={
-                              Object {
+                              {
                                 "paddingLeft": 14,
                                 "width": 90,
                                 "zIndex": 2,
@@ -919,11 +953,28 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                               accessibilityHint="Navigates to the settings screen"
                               accessibilityLabel="Settings button"
                               accessibilityRole="button"
+                              accessibilityState={
+                                {
+                                  "busy": undefined,
+                                  "checked": undefined,
+                                  "disabled": undefined,
+                                  "expanded": undefined,
+                                  "selected": undefined,
+                                }
+                              }
+                              accessibilityValue={
+                                {
+                                  "max": undefined,
+                                  "min": undefined,
+                                  "now": undefined,
+                                  "text": undefined,
+                                }
+                              }
                               accessible={true}
                               collapsable={false}
                               focusable={true}
                               hitSlop={
-                                Object {
+                                {
                                   "bottom": 10,
                                   "left": 10,
                                   "right": 10,
@@ -938,27 +989,27 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                               onResponderTerminationRequest={[Function]}
                               onStartShouldSetResponder={[Function]}
                               style={
-                                Object {
+                                {
                                   "opacity": 1,
                                 }
                               }
                             >
                               <View
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "alignItems": "center",
                                       "borderRadius": 999,
                                       "height": 42,
                                       "justifyContent": "center",
                                       "paddingHorizontal": 21,
                                     },
-                                    Object {
+                                    {
                                       "backgroundColor": undefined,
                                       "borderColor": "#FFFFFF",
                                       "borderWidth": 1,
                                     },
-                                    Object {
+                                    {
                                       "alignItems": "center",
                                       "aspectRatio": 1,
                                       "justifyContent": "center",
@@ -972,14 +1023,14 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                 <Text
                                   allowFontScaling={false}
                                   style={
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "fontFamily": "GuardianIcons-Regular",
                                         "fontSize": 20,
                                         "lineHeight": 20,
                                       },
-                                      Array [
-                                        Object {
+                                      [
+                                        {
                                           "color": "#FFFFFF",
                                         },
                                         undefined,
@@ -995,13 +1046,13 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                         </View>
                         <View
                           style={
-                            Array [
-                              Object {
+                            [
+                              {
                                 "flex": 1,
                                 "flexDirection": "row",
                                 "justifyContent": "flex-start",
                               },
-                              Object {
+                              {
                                 "width": 0,
                               },
                             ]
@@ -1009,12 +1060,12 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                         >
                           <View
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "flex": 1,
                                   "flexDirection": "row",
                                 },
-                                Object {
+                                {
                                   "justifyContent": "space-between",
                                 },
                               ]
@@ -1022,7 +1073,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                           >
                             <View
                               style={
-                                Object {
+                                {
                                   "marginRight": 14,
                                 }
                               }
@@ -1045,7 +1096,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                   accessible={true}
                                   collapsable={false}
                                   style={
-                                    Object {
+                                    {
                                       "opacity": 1,
                                     }
                                   }
@@ -1056,7 +1107,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                             </View>
                             <View
                               style={
-                                Object {
+                                {
                                   "paddingRight": 14,
                                 }
                               }
@@ -1065,11 +1116,28 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                 accessibilityHint="Returns to the edition"
                                 accessibilityLabel="Close button"
                                 accessibilityRole="button"
+                                accessibilityState={
+                                  {
+                                    "busy": undefined,
+                                    "checked": undefined,
+                                    "disabled": undefined,
+                                    "expanded": undefined,
+                                    "selected": undefined,
+                                  }
+                                }
+                                accessibilityValue={
+                                  {
+                                    "max": undefined,
+                                    "min": undefined,
+                                    "now": undefined,
+                                    "text": undefined,
+                                  }
+                                }
                                 accessible={true}
                                 collapsable={false}
                                 focusable={true}
                                 hitSlop={
-                                  Object {
+                                  {
                                     "bottom": 10,
                                     "left": 10,
                                     "right": 10,
@@ -1084,25 +1152,25 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                 onResponderTerminationRequest={[Function]}
                                 onStartShouldSetResponder={[Function]}
                                 style={
-                                  Object {
+                                  {
                                     "opacity": 1,
                                   }
                                 }
                               >
                                 <View
                                   style={
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "alignItems": "center",
                                         "borderRadius": 999,
                                         "height": 42,
                                         "justifyContent": "center",
                                         "paddingHorizontal": 21,
                                       },
-                                      Object {
+                                      {
                                         "backgroundColor": "#ffe500",
                                       },
-                                      Object {
+                                      {
                                         "alignItems": "center",
                                         "aspectRatio": 1,
                                         "justifyContent": "center",
@@ -1116,14 +1184,14 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                   <Text
                                     allowFontScaling={false}
                                     style={
-                                      Array [
-                                        Object {
+                                      [
+                                        {
                                           "fontFamily": "GuardianIcons-Regular",
                                           "fontSize": 20,
                                           "lineHeight": 20,
                                         },
-                                        Array [
-                                          Object {
+                                        [
+                                          {
                                             "color": "#121212",
                                           },
                                           undefined,
@@ -1155,7 +1223,7 @@ exports[`IssuePickerHeader should match the default style 1`] = `
 exports[`IssuePickerHeader should match the default style with a subTitle 1`] = `
 <View
   style={
-    Object {
+    {
       "flex": 1,
     }
   }
@@ -1163,8 +1231,8 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
   <RNCSafeAreaProvider
     onInsetsChange={[Function]}
     style={
-      Array [
-        Object {
+      [
+        {
           "flex": 1,
         },
         undefined,
@@ -1175,7 +1243,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
       collapsable={false}
       pointerEvents="box-none"
       style={
-        Object {
+        {
           "zIndex": 1,
         }
       }
@@ -1191,7 +1259,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           collapsable={false}
           pointerEvents="box-none"
           style={
-            Object {
+            {
               "bottom": 0,
               "left": 0,
               "opacity": 1,
@@ -1205,12 +1273,12 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           <View
             collapsable={false}
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(255, 255, 255)",
                 "borderBottomColor": "rgb(216, 216, 216)",
                 "flex": 1,
                 "shadowColor": "rgb(216, 216, 216)",
-                "shadowOffset": Object {
+                "shadowOffset": {
                   "height": 0.5,
                   "width": 0,
                 },
@@ -1224,7 +1292,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           collapsable={false}
           pointerEvents="box-none"
           style={
-            Object {
+            {
               "height": 64,
               "maxHeight": undefined,
               "minHeight": undefined,
@@ -1236,7 +1304,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           <View
             pointerEvents="none"
             style={
-              Object {
+              {
                 "height": 20,
               }
             }
@@ -1244,7 +1312,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           <View
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "flex": 1,
                 "flexDirection": "row",
@@ -1256,7 +1324,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
               collapsable={false}
               pointerEvents="box-none"
               style={
-                Object {
+                {
                   "marginHorizontal": 16,
                   "opacity": 1,
                 }
@@ -1269,7 +1337,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                 numberOfLines={1}
                 onLayout={[Function]}
                 style={
-                  Object {
+                  {
                     "color": "rgb(28, 28, 30)",
                     "fontSize": 17,
                     "fontWeight": "600",
@@ -1286,7 +1354,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
     <View
       onLayout={[Function]}
       style={
-        Object {
+        {
           "flex": 1,
         }
       }
@@ -1294,7 +1362,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
       <View
         pointerEvents="box-none"
         style={
-          Object {
+          {
             "bottom": 0,
             "left": 0,
             "position": "absolute",
@@ -1306,7 +1374,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
         <View
           collapsable={false}
           style={
-            Object {
+            {
               "opacity": 1,
             }
           }
@@ -1324,11 +1392,11 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
           onTransition={[Function]}
           pointerEvents="box-none"
           style={
-            Array [
-              Object {
+            [
+              {
                 "overflow": undefined,
               },
-              Object {
+              {
                 "bottom": 0,
                 "left": 0,
                 "position": "absolute",
@@ -1338,10 +1406,10 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
             ]
           }
           transitionSpec={
-            Object {
-              "close": Object {
+            {
+              "close": {
                 "animation": "spring",
-                "config": Object {
+                "config": {
                   "damping": 500,
                   "mass": 3,
                   "overshootClamping": true,
@@ -1350,9 +1418,9 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                   "stiffness": 1000,
                 },
               },
-              "open": Object {
+              "open": {
                 "animation": "spring",
-                "config": Object {
+                "config": {
                   "damping": 500,
                   "mass": 3,
                   "overshootClamping": true,
@@ -1369,7 +1437,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
             needsOffscreenAlphaCompositing={false}
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "flex": 1,
               }
             }
@@ -1382,13 +1450,13 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
               style={
-                Object {
+                {
                   "flex": 1,
-                  "transform": Array [
-                    Object {
+                  "transform": [
+                    {
                       "translateX": 0,
                     },
-                    Object {
+                    {
                       "translateX": 0,
                     },
                   ],
@@ -1399,13 +1467,13 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                 collapsable={false}
                 pointerEvents="none"
                 style={
-                  Object {
+                  {
                     "backgroundColor": "rgb(242, 242, 242)",
                     "bottom": 0,
                     "left": 0,
                     "position": "absolute",
                     "shadowColor": "#000",
-                    "shadowOffset": Object {
+                    "shadowOffset": {
                       "height": 1,
                       "width": -1,
                     },
@@ -1418,13 +1486,13 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
               />
               <View
                 style={
-                  Array [
-                    Object {
+                  [
+                    {
                       "flex": 1,
                       "overflow": "hidden",
                     },
-                    Array [
-                      Object {
+                    [
+                      {
                         "backgroundColor": "rgb(242, 242, 242)",
                       },
                       undefined,
@@ -1434,7 +1502,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
               >
                 <View
                   style={
-                    Object {
+                    {
                       "flex": 1,
                       "flexDirection": "column-reverse",
                     }
@@ -1442,15 +1510,15 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                 >
                   <View
                     style={
-                      Object {
+                      {
                         "flex": 1,
                       }
                     }
                   >
                     <View
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "backgroundColor": "#052962",
                             "flexDirection": "row",
                             "justifyContent": "flex-end",
@@ -1462,18 +1530,18 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                     >
                       <View
                         style={
-                          Array [
-                            Object {
+                          [
+                            {
                               "alignSelf": "flex-end",
                               "flexDirection": "row",
                               "justifyContent": "space-between",
                               "width": "100%",
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "marginTop": 20,
                               },
-                              Object {
+                              {
                                 "height": 49,
                               },
                             ],
@@ -1484,7 +1552,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                         <View>
                           <View
                             style={
-                              Object {
+                              {
                                 "paddingLeft": 14,
                                 "width": 90,
                                 "zIndex": 2,
@@ -1495,11 +1563,28 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                               accessibilityHint="Navigates to the settings screen"
                               accessibilityLabel="Settings button"
                               accessibilityRole="button"
+                              accessibilityState={
+                                {
+                                  "busy": undefined,
+                                  "checked": undefined,
+                                  "disabled": undefined,
+                                  "expanded": undefined,
+                                  "selected": undefined,
+                                }
+                              }
+                              accessibilityValue={
+                                {
+                                  "max": undefined,
+                                  "min": undefined,
+                                  "now": undefined,
+                                  "text": undefined,
+                                }
+                              }
                               accessible={true}
                               collapsable={false}
                               focusable={true}
                               hitSlop={
-                                Object {
+                                {
                                   "bottom": 10,
                                   "left": 10,
                                   "right": 10,
@@ -1514,27 +1599,27 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                               onResponderTerminationRequest={[Function]}
                               onStartShouldSetResponder={[Function]}
                               style={
-                                Object {
+                                {
                                   "opacity": 1,
                                 }
                               }
                             >
                               <View
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "alignItems": "center",
                                       "borderRadius": 999,
                                       "height": 42,
                                       "justifyContent": "center",
                                       "paddingHorizontal": 21,
                                     },
-                                    Object {
+                                    {
                                       "backgroundColor": undefined,
                                       "borderColor": "#FFFFFF",
                                       "borderWidth": 1,
                                     },
-                                    Object {
+                                    {
                                       "alignItems": "center",
                                       "aspectRatio": 1,
                                       "justifyContent": "center",
@@ -1548,14 +1633,14 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                 <Text
                                   allowFontScaling={false}
                                   style={
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "fontFamily": "GuardianIcons-Regular",
                                         "fontSize": 20,
                                         "lineHeight": 20,
                                       },
-                                      Array [
-                                        Object {
+                                      [
+                                        {
                                           "color": "#FFFFFF",
                                         },
                                         undefined,
@@ -1571,13 +1656,13 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                         </View>
                         <View
                           style={
-                            Array [
-                              Object {
+                            [
+                              {
                                 "flex": 1,
                                 "flexDirection": "row",
                                 "justifyContent": "flex-start",
                               },
-                              Object {
+                              {
                                 "width": 0,
                               },
                             ]
@@ -1585,12 +1670,12 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                         >
                           <View
                             style={
-                              Array [
-                                Object {
+                              [
+                                {
                                   "flex": 1,
                                   "flexDirection": "row",
                                 },
-                                Object {
+                                {
                                   "justifyContent": "space-between",
                                 },
                               ]
@@ -1598,7 +1683,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                           >
                             <View
                               style={
-                                Object {
+                                {
                                   "marginRight": 14,
                                 }
                               }
@@ -1621,7 +1706,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                   accessible={true}
                                   collapsable={false}
                                   style={
-                                    Object {
+                                    {
                                       "opacity": 1,
                                     }
                                   }
@@ -1632,7 +1717,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                             </View>
                             <View
                               style={
-                                Object {
+                                {
                                   "paddingRight": 14,
                                 }
                               }
@@ -1641,11 +1726,28 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                 accessibilityHint="Returns to the edition"
                                 accessibilityLabel="Close button"
                                 accessibilityRole="button"
+                                accessibilityState={
+                                  {
+                                    "busy": undefined,
+                                    "checked": undefined,
+                                    "disabled": undefined,
+                                    "expanded": undefined,
+                                    "selected": undefined,
+                                  }
+                                }
+                                accessibilityValue={
+                                  {
+                                    "max": undefined,
+                                    "min": undefined,
+                                    "now": undefined,
+                                    "text": undefined,
+                                  }
+                                }
                                 accessible={true}
                                 collapsable={false}
                                 focusable={true}
                                 hitSlop={
-                                  Object {
+                                  {
                                     "bottom": 10,
                                     "left": 10,
                                     "right": 10,
@@ -1660,25 +1762,25 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                 onResponderTerminationRequest={[Function]}
                                 onStartShouldSetResponder={[Function]}
                                 style={
-                                  Object {
+                                  {
                                     "opacity": 1,
                                   }
                                 }
                               >
                                 <View
                                   style={
-                                    Array [
-                                      Object {
+                                    [
+                                      {
                                         "alignItems": "center",
                                         "borderRadius": 999,
                                         "height": 42,
                                         "justifyContent": "center",
                                         "paddingHorizontal": 21,
                                       },
-                                      Object {
+                                      {
                                         "backgroundColor": "#ffe500",
                                       },
-                                      Object {
+                                      {
                                         "alignItems": "center",
                                         "aspectRatio": 1,
                                         "justifyContent": "center",
@@ -1692,14 +1794,14 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                   <Text
                                     allowFontScaling={false}
                                     style={
-                                      Array [
-                                        Object {
+                                      [
+                                        {
                                           "fontFamily": "GuardianIcons-Regular",
                                           "fontSize": 20,
                                           "lineHeight": 20,
                                         },
-                                        Array [
-                                          Object {
+                                        [
+                                          {
                                             "color": "#121212",
                                           },
                                           undefined,

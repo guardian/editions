@@ -5,11 +5,28 @@ exports[`CloseButton should display a CloseButton with an alternative appearance
   accessibilityHint="Accessibility Hint"
   accessibilityLabel="Accessibility Label"
   accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
   hitSlop={
-    Object {
+    {
       "bottom": 10,
       "left": 10,
       "right": 10,
@@ -24,25 +41,25 @@ exports[`CloseButton should display a CloseButton with an alternative appearance
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "opacity": 1,
     }
   }
 >
   <View
     style={
-      Array [
-        Object {
+      [
+        {
           "alignItems": "center",
           "borderRadius": 999,
           "height": 42,
           "justifyContent": "center",
           "paddingHorizontal": 21,
         },
-        Object {
+        {
           "backgroundColor": "#41A9E0",
         },
-        Object {
+        {
           "alignItems": "center",
           "aspectRatio": 1,
           "justifyContent": "center",
@@ -56,14 +73,14 @@ exports[`CloseButton should display a CloseButton with an alternative appearance
     <Text
       allowFontScaling={false}
       style={
-        Array [
-          Object {
+        [
+          {
             "fontFamily": "GuardianIcons-Regular",
             "fontSize": 20,
             "lineHeight": 20,
           },
-          Array [
-            Object {
+          [
+            {
               "color": "white",
             },
             undefined,
@@ -82,11 +99,28 @@ exports[`CloseButton should display a default CloseButton 1`] = `
   accessibilityHint="Accessibility Hint"
   accessibilityLabel="Accessibility Label"
   accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
   hitSlop={
-    Object {
+    {
       "bottom": 10,
       "left": 10,
       "right": 10,
@@ -101,25 +135,25 @@ exports[`CloseButton should display a default CloseButton 1`] = `
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "opacity": 1,
     }
   }
 >
   <View
     style={
-      Array [
-        Object {
+      [
+        {
           "alignItems": "center",
           "borderRadius": 999,
           "height": 42,
           "justifyContent": "center",
           "paddingHorizontal": 21,
         },
-        Object {
+        {
           "backgroundColor": "#ffe500",
         },
-        Object {
+        {
           "alignItems": "center",
           "aspectRatio": 1,
           "justifyContent": "center",
@@ -133,14 +167,14 @@ exports[`CloseButton should display a default CloseButton 1`] = `
     <Text
       allowFontScaling={false}
       style={
-        Array [
-          Object {
+        [
+          {
             "fontFamily": "GuardianIcons-Regular",
             "fontSize": 20,
             "lineHeight": 20,
           },
-          Array [
-            Object {
+          [
+            {
               "color": "#121212",
             },
             undefined,

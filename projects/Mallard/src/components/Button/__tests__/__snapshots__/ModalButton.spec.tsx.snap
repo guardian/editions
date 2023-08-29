@@ -4,11 +4,28 @@ exports[`ModalButton should display a ModalButton with accessible text 1`] = `
 <View
   accessibilityHint="This button signs you out"
   accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
   hitSlop={
-    Object {
+    {
       "bottom": 10,
       "left": 10,
       "right": 10,
@@ -23,7 +40,7 @@ exports[`ModalButton should display a ModalButton with accessible text 1`] = `
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "marginRight": 10,
       "marginTop": 10,
       "opacity": 1,
@@ -32,15 +49,15 @@ exports[`ModalButton should display a ModalButton with accessible text 1`] = `
 >
   <View
     style={
-      Array [
-        Object {
+      [
+        {
           "alignItems": "center",
           "borderRadius": 999,
           "height": 42,
           "justifyContent": "center",
           "paddingHorizontal": 21,
         },
-        Object {
+        {
           "backgroundColor": "#ffffff",
         },
         false,
@@ -50,27 +67,27 @@ exports[`ModalButton should display a ModalButton with accessible text 1`] = `
   >
     <Text
       style={
-        Array [
-          Object {
+        [
+          {
             "flexShrink": 0,
             "fontFamily": "GuardianTextSans-Regular",
             "fontSize": 17,
             "lineHeight": 21,
           },
-          Object {
+          {
             "color": "#121212",
           },
-          Array [
-            Object {
+          [
+            {
               "flexShrink": 0,
               "fontFamily": "GuardianTextSans-Bold",
               "fontSize": 17,
               "lineHeight": 21,
             },
-            Object {
+            {
               "textAlign": "auto",
             },
-            Object {
+            {
               "color": "#052962",
             },
             undefined,
@@ -88,11 +105,28 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
 <View
   accessibilityHint="Sign out"
   accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
   hitSlop={
-    Object {
+    {
       "bottom": 10,
       "left": 10,
       "right": 10,
@@ -107,7 +141,7 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "marginRight": 10,
       "marginTop": 10,
       "opacity": 1,
@@ -116,15 +150,15 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
 >
   <View
     style={
-      Array [
-        Object {
+      [
+        {
           "alignItems": "center",
           "borderRadius": 999,
           "height": 42,
           "justifyContent": "center",
           "paddingHorizontal": 21,
         },
-        Object {
+        {
           "backgroundColor": "#FF7F0F",
         },
         false,
@@ -134,27 +168,27 @@ exports[`ModalButton should display a ModalButton with an alternative appearance
   >
     <Text
       style={
-        Array [
-          Object {
+        [
+          {
             "flexShrink": 0,
             "fontFamily": "GuardianTextSans-Regular",
             "fontSize": 17,
             "lineHeight": 21,
           },
-          Object {
+          {
             "color": "#121212",
           },
-          Array [
-            Object {
+          [
+            {
               "flexShrink": 0,
               "fontFamily": "GuardianTextSans-Bold",
               "fontSize": 17,
               "lineHeight": 21,
             },
-            Object {
+            {
               "textAlign": "auto",
             },
-            Object {
+            {
               "color": "#ffffff",
             },
             undefined,
@@ -172,11 +206,28 @@ exports[`ModalButton should display a default ModalButton 1`] = `
 <View
   accessibilityHint="Sign out"
   accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
   hitSlop={
-    Object {
+    {
       "bottom": 10,
       "left": 10,
       "right": 10,
@@ -191,7 +242,7 @@ exports[`ModalButton should display a default ModalButton 1`] = `
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "marginRight": 10,
       "marginTop": 10,
       "opacity": 1,
@@ -200,15 +251,15 @@ exports[`ModalButton should display a default ModalButton 1`] = `
 >
   <View
     style={
-      Array [
-        Object {
+      [
+        {
           "alignItems": "center",
           "borderRadius": 999,
           "height": 42,
           "justifyContent": "center",
           "paddingHorizontal": 21,
         },
-        Object {
+        {
           "backgroundColor": "#ffffff",
         },
         false,
@@ -218,27 +269,27 @@ exports[`ModalButton should display a default ModalButton 1`] = `
   >
     <Text
       style={
-        Array [
-          Object {
+        [
+          {
             "flexShrink": 0,
             "fontFamily": "GuardianTextSans-Regular",
             "fontSize": 17,
             "lineHeight": 21,
           },
-          Object {
+          {
             "color": "#121212",
           },
-          Array [
-            Object {
+          [
+            {
               "flexShrink": 0,
               "fontFamily": "GuardianTextSans-Bold",
               "fontSize": 17,
               "lineHeight": 21,
             },
-            Object {
+            {
               "textAlign": "auto",
             },
-            Object {
+            {
               "color": "#052962",
             },
             undefined,

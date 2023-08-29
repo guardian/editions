@@ -5,8 +5,20 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
   accessibilityLabel="Regions and specials editions menu"
   accessibilityRole="button"
   accessibilityState={
-    Object {
+    {
+      "busy": undefined,
+      "checked": undefined,
       "disabled": false,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
     }
   }
   accessible={true}
@@ -20,7 +32,7 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "backgroundColor": "transparent",
       "borderRadius": 24,
       "height": 42,
@@ -32,7 +44,7 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
 >
   <View
     style={
-      Object {
+      {
         "flex": 1,
         "justifyContent": "space-around",
         "marginRight": 14,
@@ -47,12 +59,12 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
       focusable={false}
       height={42}
       style={
-        Array [
-          Object {
+        [
+          {
             "backgroundColor": "transparent",
             "borderWidth": 0,
           },
-          Object {
+          {
             "flex": 0,
             "height": 42,
             "width": 42,
@@ -64,27 +76,27 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
       <RNSVGGroup
         fill={null}
         propList={
-          Array [
+          [
             "fill",
           ]
         }
       >
         <RNSVGRect
           fill={
-            Object {
+            {
               "payload": 4278190080,
               "type": 0,
             }
           }
           height="41"
           propList={
-            Array [
+            [
               "stroke",
             ]
           }
           rx="20.5"
           stroke={
-            Object {
+            {
               "payload": 4294967295,
               "type": 0,
             }
@@ -97,13 +109,13 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
           cx="29"
           cy="14"
           fill={
-            Object {
+            {
               "payload": 4294949576,
               "type": 0,
             }
           }
           propList={
-            Array [
+            [
               "fill",
             ]
           }
@@ -113,13 +125,13 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
           cx="14"
           cy="14"
           fill={
-            Object {
+            {
               "payload": 4294967295,
               "type": 0,
             }
           }
           propList={
-            Array [
+            [
               "fill",
             ]
           }
@@ -129,13 +141,13 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
           cx="29"
           cy="29"
           fill={
-            Object {
+            {
               "payload": 4287683839,
               "type": 0,
             }
           }
           propList={
-            Array [
+            [
               "fill",
             ]
           }
@@ -145,13 +157,13 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
           cx="14"
           cy="29"
           fill={
-            Object {
+            {
               "payload": 4294934287,
               "type": 0,
             }
           }
           propList={
-            Array [
+            [
               "fill",
             ]
           }
@@ -161,7 +173,7 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
     </RNSVGSvgView>
     <Text
       style={
-        Object {
+        {
           "color": "white",
           "fontFamily": "GuardianTextSans-Regular",
           "fontSize": 12,
@@ -181,8 +193,20 @@ exports[`EditionsMenuButton should display a selected EditionsMenuButton with co
   accessibilityLabel="Regions and specials editions menu"
   accessibilityRole="button"
   accessibilityState={
-    Object {
+    {
+      "busy": undefined,
+      "checked": undefined,
       "disabled": false,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
     }
   }
   accessible={true}
@@ -196,7 +220,7 @@ exports[`EditionsMenuButton should display a selected EditionsMenuButton with co
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "backgroundColor": "#90dcff",
       "borderRadius": 24,
       "height": 42,
@@ -208,7 +232,7 @@ exports[`EditionsMenuButton should display a selected EditionsMenuButton with co
 >
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#333333",
         "fontFamily": "GuardianIcons-Regular",

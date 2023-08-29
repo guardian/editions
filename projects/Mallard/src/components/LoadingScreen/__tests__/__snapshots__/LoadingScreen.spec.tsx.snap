@@ -3,7 +3,7 @@
 exports[`LoadingScreen should show a LoadingScreen with default styling 1`] = `
 <View
   style={
-    Object {
+    {
       "alignItems": "center",
       "backgroundColor": "white",
       "height": 1334,

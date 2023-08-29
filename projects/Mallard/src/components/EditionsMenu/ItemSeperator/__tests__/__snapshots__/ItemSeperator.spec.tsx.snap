@@ -3,7 +3,7 @@
 exports[`ItemSeperator should display a default ItemSeperator with correct styling used for RegionButton seperation 1`] = `
 <View
   style={
-    Object {
+    {
       "height": 10,
     }
   }
