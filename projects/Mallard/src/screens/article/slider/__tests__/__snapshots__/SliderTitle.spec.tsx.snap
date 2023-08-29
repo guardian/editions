@@ -3,7 +3,7 @@
 exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the correct styles 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": undefined,
       "paddingLeft": 10,
@@ -13,14 +13,14 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 28,
@@ -32,7 +32,7 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 28,
@@ -45,7 +45,7 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
   </View>
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
         "paddingVertical": 2,
       }
@@ -54,7 +54,7 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -66,7 +66,7 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -78,7 +78,7 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -94,7 +94,7 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
 exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a subtitle different to the title 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": 740,
       "paddingLeft": 0,
@@ -104,14 +104,14 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -123,7 +123,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -137,7 +137,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
   </View>
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
         "paddingVertical": 2,
       }
@@ -146,7 +146,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -158,7 +158,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -170,7 +170,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -186,7 +186,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
 exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a subtitle the same as the title 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": 740,
       "paddingLeft": 0,
@@ -196,14 +196,14 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -216,7 +216,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
   </View>
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
         "paddingVertical": 2,
       }
@@ -225,7 +225,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -237,7 +237,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -249,7 +249,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -265,7 +265,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
 exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with the correct styles 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": 740,
       "paddingLeft": 0,
@@ -275,14 +275,14 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -294,7 +294,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -307,7 +307,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
   </View>
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
         "paddingVertical": 2,
       }
@@ -316,7 +316,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -328,7 +328,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -340,7 +340,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -356,7 +356,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
 exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a subtitle different to the title 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": undefined,
       "paddingLeft": 10,
@@ -366,14 +366,14 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 28,
@@ -385,7 +385,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 28,
@@ -399,7 +399,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
   </View>
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
         "paddingVertical": 2,
       }
@@ -408,7 +408,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -420,7 +420,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -432,7 +432,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -448,7 +448,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
 exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a subtitle the same as the title 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": undefined,
       "paddingLeft": 10,
@@ -458,14 +458,14 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 28,
@@ -478,7 +478,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
   </View>
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
         "paddingVertical": 2,
       }
@@ -487,7 +487,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -499,7 +499,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -511,7 +511,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "rgba(220, 220, 220, 1)",
           "borderRadius": 5,
           "height": 10,
@@ -527,7 +527,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
 exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a prescribed start index 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": 740,
       "paddingLeft": 0,
@@ -537,14 +537,14 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -556,7 +556,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -569,7 +569,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
   </View>
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
         "paddingVertical": 2,
       }
@@ -578,7 +578,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -590,7 +590,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -602,7 +602,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
     <View
       collapsable={false}
       style={
-        Object {
+        {
           "backgroundColor": "#DCDCDC",
           "borderRadius": 4,
           "height": 8,
@@ -618,7 +618,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
 exports[`SliderTitle - iOS - Mobile should display no dots when numOfItems is 1 or less 1`] = `
 <View
   style={
-    Object {
+    {
       "alignSelf": "center",
       "maxWidth": 740,
       "paddingLeft": 0,
@@ -628,14 +628,14 @@ exports[`SliderTitle - iOS - Mobile should display no dots when numOfItems is 1 
 >
   <View
     style={
-      Object {
+      {
         "flexDirection": "row",
       }
     }
   >
     <Text
       style={
-        Object {
+        {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,
@@ -647,7 +647,7 @@ exports[`SliderTitle - iOS - Mobile should display no dots when numOfItems is 1 
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 20,

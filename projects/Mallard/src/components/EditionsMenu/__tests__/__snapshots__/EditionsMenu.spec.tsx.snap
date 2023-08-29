@@ -4,11 +4,11 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
 <RCTScrollView
   ItemSeparatorComponent={[Function]}
   data={
-    Array [
-      Object {
+    [
+      {
         "edition": "daily-edition",
         "editionType": "Regional",
-        "header": Object {
+        "header": {
           "subTitle": "Daily",
           "title": "UK Daily",
         },
@@ -18,10 +18,10 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
         "title": "UK Daily",
         "topic": "au",
       },
-      Object {
+      {
         "edition": "australian-edition",
         "editionType": "Regional",
-        "header": Object {
+        "header": {
           "subTitle": "Weekend",
           "title": "Austraila",
         },
@@ -46,31 +46,33 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling and alt
   removeClippedSubviews={false}
   renderItem={[Function]}
   scrollEventThrottle={50}
-  stickyHeaderIndices={Array []}
+  stickyHeaderIndices={[]}
   style={
-    Object {
+    {
       "height": 1334,
       "paddingHorizontal": 14,
       "paddingTop": 17,
     }
   }
-  viewabilityConfigCallbackPairs={Array []}
+  viewabilityConfigCallbackPairs={[]}
 >
   <View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
       EditionButton
       <View
         style={
-          Object {
+          {
             "height": 10,
           }
         }
       />
     </View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
@@ -84,11 +86,11 @@ exports[`EditionsMenu should display a EditionsMenu with correct styling default
 <RCTScrollView
   ItemSeparatorComponent={[Function]}
   data={
-    Array [
-      Object {
+    [
+      {
         "edition": "daily-edition",
         "editionType": "Regional",
-        "header": Object {
+        "header": {
           "subTitle": "Daily",
           "title": "UK",
         },
@@ -99,10 +101,10 @@ morning by 6am (GMT)",
         "title": "UK Daily",
         "topic": "uk",
       },
-      Object {
+      {
         "edition": "australian-edition",
         "editionType": "Regional",
-        "header": Object {
+        "header": {
           "subTitle": "Weekend",
           "title": "Australia",
         },
@@ -113,27 +115,27 @@ Saturday by 6 am (AEST)",
         "title": "Australia Weekend",
         "topic": "au",
       },
-      Object {
+      {
         "buttonImageUri": "https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png",
-        "buttonStyle": Object {
+        "buttonStyle": {
           "backgroundColor": "#FEEEF7",
-          "expiry": Object {
+          "expiry": {
             "color": "#7D0068",
             "font": "GuardianTextSans-Regular",
             "lineHeight": 16,
             "size": 15,
           },
-          "image": Object {
+          "image": {
             "height": 134,
             "width": 87,
           },
-          "subTitle": Object {
+          "subTitle": {
             "color": "#7D0068",
             "font": "GuardianTextSans-Bold",
             "lineHeight": 20,
             "size": 17,
           },
-          "title": Object {
+          "title": {
             "color": "#121212",
             "font": "GHGuardianHeadline-Regular",
             "lineHeight": 34,
@@ -143,7 +145,7 @@ Saturday by 6 am (AEST)",
         "edition": "special-edition",
         "editionType": "Special",
         "expiry": "1998-02-01T00:00:00.000Z",
-        "header": Object {
+        "header": {
           "subTitle": "Monthly",
           "title": "Food",
         },
@@ -168,44 +170,47 @@ Monthly",
   removeClippedSubviews={false}
   renderItem={[Function]}
   scrollEventThrottle={50}
-  stickyHeaderIndices={Array []}
+  stickyHeaderIndices={[]}
   style={
-    Object {
+    {
       "height": 1334,
       "paddingHorizontal": 14,
       "paddingTop": 17,
     }
   }
-  viewabilityConfigCallbackPairs={Array []}
+  viewabilityConfigCallbackPairs={[]}
 >
   <View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
       EditionButton
       <View
         style={
-          Object {
+          {
             "height": 10,
           }
         }
       />
     </View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
       EditionButton
       <View
         style={
-          Object {
+          {
             "height": 10,
           }
         }
       />
     </View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
@@ -219,11 +224,11 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
 <RCTScrollView
   ItemSeparatorComponent={[Function]}
   data={
-    Array [
-      Object {
+    [
+      {
         "edition": "daily-edition",
         "editionType": "Regional",
-        "header": Object {
+        "header": {
           "subTitle": "Daily",
           "title": "UK",
         },
@@ -234,10 +239,10 @@ morning by 6am (GMT)",
         "title": "UK Daily",
         "topic": "uk",
       },
-      Object {
+      {
         "edition": "australian-edition",
         "editionType": "Regional",
-        "header": Object {
+        "header": {
           "subTitle": "Weekend",
           "title": "Australia",
         },
@@ -263,31 +268,33 @@ Saturday by 6 am (AEST)",
   removeClippedSubviews={false}
   renderItem={[Function]}
   scrollEventThrottle={50}
-  stickyHeaderIndices={Array []}
+  stickyHeaderIndices={[]}
   style={
-    Object {
+    {
       "height": 1334,
       "paddingHorizontal": 14,
       "paddingTop": 17,
     }
   }
-  viewabilityConfigCallbackPairs={Array []}
+  viewabilityConfigCallbackPairs={[]}
 >
   <View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
       EditionButton
       <View
         style={
-          Object {
+          {
             "height": 10,
           }
         }
       />
     </View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >

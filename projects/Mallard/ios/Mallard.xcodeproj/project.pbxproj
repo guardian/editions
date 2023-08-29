@@ -367,7 +367,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				D08E489E00D6E9F7C44AFFE5 /* [CP] Copy Pods Resources */,
-				A520C3CB9A2603F7FB00B1CE /* [CP] Embed Pods Frameworks */,
+				6CE81E7BF95170799C97ED99 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -391,7 +391,7 @@
 				B2C2068495DC306BC77F077D /* [CP-User] [RNFB] Core Configuration */,
 				28CB8F63718EE011238949F5 /* [CP-User] [RNFB] Crashlytics Configuration */,
 				4A9A2E12651C1C60C27DCCBD /* [CP] Copy Pods Resources */,
-				72D43E872D46ED433067C9C7 /* [CP] Embed Pods Frameworks */,
+				F2ABFDB1510D5463C911227E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -671,14 +671,14 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		72D43E872D46ED433067C9C7 /* [CP] Embed Pods Frameworks */ = {
+		6CE81E7BF95170799C97ED99 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/hermes.framework/hermes",
+				"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -686,7 +686,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		86CD86BD7397778E7A670A31 /* [CP] Check Pods Manifest.lock */ = {
@@ -709,24 +709,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A520C3CB9A2603F7FB00B1CE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B2C2068495DC306BC77F077D /* [CP-User] [RNFB] Core Configuration */ = {
@@ -758,6 +740,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard-MallardTests/Pods-Mallard-MallardTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F2ABFDB1510D5463C911227E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

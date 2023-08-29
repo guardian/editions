@@ -5,11 +5,28 @@ exports[`SettingsButton should display a SettingsButton 1`] = `
   accessibilityHint="Navigates to the settings screen"
   accessibilityLabel="Settings button"
   accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
   hitSlop={
-    Object {
+    {
       "bottom": 10,
       "left": 10,
       "right": 10,
@@ -24,27 +41,27 @@ exports[`SettingsButton should display a SettingsButton 1`] = `
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    Object {
+    {
       "opacity": 1,
     }
   }
 >
   <View
     style={
-      Array [
-        Object {
+      [
+        {
           "alignItems": "center",
           "borderRadius": 999,
           "height": 42,
           "justifyContent": "center",
           "paddingHorizontal": 21,
         },
-        Object {
+        {
           "backgroundColor": undefined,
           "borderColor": "#121212",
           "borderWidth": 1,
         },
-        Object {
+        {
           "alignItems": "center",
           "aspectRatio": 1,
           "justifyContent": "center",
@@ -58,14 +75,14 @@ exports[`SettingsButton should display a SettingsButton 1`] = `
     <Text
       allowFontScaling={false}
       style={
-        Array [
-          Object {
+        [
+          {
             "fontFamily": "GuardianIcons-Regular",
             "fontSize": 20,
             "lineHeight": 20,
           },
-          Array [
-            Object {
+          [
+            {
               "color": "#121212",
             },
             undefined,

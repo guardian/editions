@@ -8,12 +8,12 @@ exports[`Editions should display a Editions icon in SVG 1`] = `
   focusable={false}
   height={42}
   style={
-    Array [
-      Object {
+    [
+      {
         "backgroundColor": "transparent",
         "borderWidth": 0,
       },
-      Object {
+      {
         "flex": 0,
         "height": 42,
         "width": 42,
@@ -25,27 +25,27 @@ exports[`Editions should display a Editions icon in SVG 1`] = `
   <RNSVGGroup
     fill={null}
     propList={
-      Array [
+      [
         "fill",
       ]
     }
   >
     <RNSVGRect
       fill={
-        Object {
+        {
           "payload": 4278190080,
           "type": 0,
         }
       }
       height="41"
       propList={
-        Array [
+        [
           "stroke",
         ]
       }
       rx="20.5"
       stroke={
-        Object {
+        {
           "payload": 4294967295,
           "type": 0,
         }
@@ -58,13 +58,13 @@ exports[`Editions should display a Editions icon in SVG 1`] = `
       cx="29"
       cy="14"
       fill={
-        Object {
+        {
           "payload": 4294949576,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -74,13 +74,13 @@ exports[`Editions should display a Editions icon in SVG 1`] = `
       cx="14"
       cy="14"
       fill={
-        Object {
+        {
           "payload": 4294967295,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -90,13 +90,13 @@ exports[`Editions should display a Editions icon in SVG 1`] = `
       cx="29"
       cy="29"
       fill={
-        Object {
+        {
           "payload": 4287683839,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }
@@ -106,13 +106,13 @@ exports[`Editions should display a Editions icon in SVG 1`] = `
       cx="14"
       cy="29"
       fill={
-        Object {
+        {
           "payload": 4294934287,
           "type": 0,
         }
       }
       propList={
-        Array [
+        [
           "fill",
         ]
       }

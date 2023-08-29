@@ -3,7 +3,7 @@
 exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] = `
 <View
   style={
-    Object {
+    {
       "backgroundColor": "#121212",
       "bottom": 0,
       "fontFamily": "GuardianTextEgyptian-Reg",
@@ -17,7 +17,7 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
 >
   <View
     style={
-      Object {
+      {
         "display": "flex",
         "flex": 1,
         "flexDirection": "row",
@@ -38,15 +38,15 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
       minY={0}
       rotation={0}
       style={
-        Array [
-          Object {
+        [
+          {
             "backgroundColor": "transparent",
             "borderWidth": 0,
           },
-          Object {
+          {
             "marginTop": 4,
           },
-          Object {
+          {
             "flex": 0,
             "height": 9,
             "width": 11,
@@ -60,14 +60,14 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
       <RNSVGGroup
         fill={null}
         propList={
-          Array [
+          [
             "fill",
           ]
         }
       >
         <RNSVGGroup
           fill={
-            Object {
+            {
               "payload": 4278190080,
               "type": 0,
             }
@@ -77,13 +77,13 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
           <RNSVGPath
             d="M5.5 0L10.5 9H0.5L5.5 0Z"
             fill={
-              Object {
+              {
                 "payload": 4278190335,
                 "type": 0,
               }
             }
             propList={
-              Array [
+              [
                 "fill",
               ]
             }
@@ -93,7 +93,7 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
     </RNSVGSvgView>
     <View
       style={
-        Object {
+        {
           "color": "#FFFFFF",
           "paddingLeft": 2,
           "paddingRight": 13,
@@ -102,8 +102,8 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
     >
       <View
         style={
-          Array [
-            Object {},
+          [
+            {},
             undefined,
             undefined,
           ]
@@ -112,8 +112,8 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
       >
         <View
           style={
-            Array [
-              Object {},
+            [
+              {},
               undefined,
               undefined,
             ]
@@ -124,8 +124,8 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
             allowFontScaling={true}
             selectable={false}
             style={
-              Array [
-                Object {
+              [
+                {
                   "color": "#FFFFFF",
                   "fontSize": 14,
                 },

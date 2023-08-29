@@ -31,7 +31,7 @@ const RemoteConfigProperties = [
 	'is_editions_menu_enabled',
 ] as const;
 
-type RemoteConfigProperty = typeof RemoteConfigProperties[number];
+type RemoteConfigProperty = (typeof RemoteConfigProperties)[number];
 
 const configValues = {
 	// fetch config, cache for 5mins. This cache persists when app is reloaded

@@ -26,8 +26,5 @@ const SettingsOverlayProvider = ({ children }: Props) => {
 	);
 };
 
-export {
-	SettingsOverlayProvider,
-	SettingsOverlayContext,
-	SettingsOverlayInterface,
-};
+export { SettingsOverlayProvider, SettingsOverlayContext };
+export type { SettingsOverlayInterface };

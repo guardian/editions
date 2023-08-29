@@ -115,4 +115,5 @@ const SliderTitle = React.memo(
 	},
 );
 
-export { SliderTitle, SLIDER_FRONT_HEIGHT, SliderTitleProps };
+export { SliderTitle, SLIDER_FRONT_HEIGHT };
+export type { SliderTitleProps };

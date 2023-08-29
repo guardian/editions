@@ -4,8 +4,8 @@ exports[`Stars should show a Stars with default styling 1`] = `
 <View
   accessibilityLabel="5 stars"
   style={
-    Array [
-      Object {
+    [
+      {
         "backgroundColor": "#ffe500",
         "padding": 0,
         "paddingBottom": 2,
@@ -18,7 +18,7 @@ exports[`Stars should show a Stars with default styling 1`] = `
   <Text
     accessible={false}
     style={
-      Object {
+      {
         "fontFamily": "GuardianIcons-Regular",
         "fontSize": 20,
         "letterSpacing": 0.25,
@@ -35,14 +35,14 @@ exports[`Stars should show a Stars with smallItems styling 1`] = `
 <View
   accessibilityLabel="5 stars"
   style={
-    Array [
-      Object {
+    [
+      {
         "backgroundColor": "#ffe500",
         "padding": 0,
         "paddingBottom": 2,
         "paddingHorizontal": 4.666666666666667,
       },
-      Object {
+      {
         "flex": 0,
       },
     ]
@@ -51,7 +51,7 @@ exports[`Stars should show a Stars with smallItems styling 1`] = `
   <Text
     accessible={false}
     style={
-      Object {
+      {
         "fontFamily": "GuardianIcons-Regular",
         "fontSize": 20,
         "letterSpacing": 0.25,
@@ -68,14 +68,14 @@ exports[`Stars should show a Stars with trailImage styling 1`] = `
 <View
   accessibilityLabel="5 stars"
   style={
-    Array [
-      Object {
+    [
+      {
         "backgroundColor": "#ffe500",
         "padding": 0,
         "paddingBottom": 2,
         "paddingHorizontal": 4.666666666666667,
       },
-      Object {
+      {
         "bottom": 0,
         "left": 0,
         "position": "absolute",
@@ -86,7 +86,7 @@ exports[`Stars should show a Stars with trailImage styling 1`] = `
   <Text
     accessible={false}
     style={
-      Object {
+      {
         "fontFamily": "GuardianIcons-Regular",
         "fontSize": 20,
         "letterSpacing": 0.25,
