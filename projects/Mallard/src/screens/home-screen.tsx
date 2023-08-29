@@ -162,7 +162,7 @@ const IssueRowContainer = React.memo(
 		]);
 
 		const onPressFront = useCallback(
-			(frontKey) => {
+			(frontKey: string) => {
 				if (
 					issueId != null &&
 					issueId.publishedIssueId === publishedId &&
@@ -296,7 +296,7 @@ const IssueListView = React.memo(
 
 		// We pass down the issue details only for the selected issue.
 		const renderItem = useCallback(
-			({ item, index }) => (
+			({ item, index }: { item: IssueSummary; index: number }) => (
 				<IssueRowContainer
 					issue={item}
 					issueDetails={index === currentIssueIndex ? details : null}
@@ -312,7 +312,7 @@ const IssueListView = React.memo(
 		// Changing the current issue will affect the layout, so that's
 		// indeed a dependency of the callback.
 		const getItemLayout = useCallback(
-			(_, index) => {
+			(_: unknown, index: number) => {
 				return {
 					length:
 						ISSUE_ROW_HEADER_HEIGHT +

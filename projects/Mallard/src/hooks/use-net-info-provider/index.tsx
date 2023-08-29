@@ -5,7 +5,8 @@ import {
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { NetInfoDevOverlay } from 'src/components/NetInfoDevOverlay';
 import { useWifiOnlyDownloads } from '../use-config-provider';
-import { DownloadBlockedStatus, NetInfoState } from './types';
+import type { NetInfoState } from './types';
+import { DownloadBlockedStatus } from './types';
 import { isDisconnectedState, stateResolver } from './utils';
 
 const defaultState: NetInfoState = {
@@ -125,8 +126,8 @@ export const NetInfoProvider = ({
 
 export const useNetInfo = () => useContext(NetInfoContext);
 export {
-	NetInfoStateType,
 	isDisconnectedState,
-	DownloadBlockedStatus,
 	NetInfoState,
+	NetInfoStateType,
+	DownloadBlockedStatus,
 };

@@ -20,4 +20,5 @@ enum AnalyticsScreenTracking {
 	TermsAndConditions = 'terms_conditions',
 }
 
-export { AnalyticsUserId, AnalyticsEvent, AnalyticsScreenTracking };
+export { AnalyticsScreenTracking };
+export type { AnalyticsUserId, AnalyticsEvent };

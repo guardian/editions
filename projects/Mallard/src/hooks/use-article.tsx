@@ -1,4 +1,5 @@
 import type { PillarColours } from '@guardian/pasteup/palette';
+import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState } from 'react';
 import { getPillarColors } from 'src/helpers/transform';
 import { DevTools } from 'src/hooks/article/dev-tools';
@@ -18,7 +19,7 @@ export const WithArticleType = ArticleTypeContext.Provider;
 interface PropTypes {
 	type: ArticleType;
 	pillar: ArticlePillar;
-	children: Element;
+	children: ReactNode;
 }
 
 const Providers = ({ type, pillar, children }: PropTypes) => (

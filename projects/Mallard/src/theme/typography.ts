@@ -391,8 +391,8 @@ const scale = {
 	},
 };
 
-export type FontSizes<F extends FontFamily> = keyof typeof scale[F];
-type FontWeights<F extends FontFamily> = keyof typeof families[F];
+export type FontSizes<F extends FontFamily> = keyof (typeof scale)[F];
+type FontWeights<F extends FontFamily> = keyof (typeof families)[F];
 
 export const getUnscaledFont = <F extends FontFamily>(
 	family: F,

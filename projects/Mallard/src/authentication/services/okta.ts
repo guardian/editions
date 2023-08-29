@@ -53,4 +53,5 @@ const oktaSignOut = async () => {
 	}
 };
 
-export { oktaInitialisation, oktaAuth, oktaSignOut, OktaUser };
+export { oktaInitialisation, oktaAuth, oktaSignOut };
+export type { OktaUser };
