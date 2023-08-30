@@ -16,6 +16,10 @@ buildscript {
         ndkVersion = "23.1.7779620"
         FLIPPER_VERSION = "0.103.0"
     }
+    configurations {
+        all*.exclude group: 'com.google.firebase', module: 'firebase-core'
+        all*.exclude group: 'com.google.firebase', module: 'firebase-iid'
+    }
     repositories {
         google()
         mavenCentral()
