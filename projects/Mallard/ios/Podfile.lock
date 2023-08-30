@@ -11,8 +11,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.71.12)
   - Firebase (10.12.0):
     - Firebase/Core (= 10.12.0)
-  - Firebase/Analytics (10.12.0):
-    - Firebase/Core
+  - Firebase/AnalyticsWithoutAdIdSupport (10.12.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics/WithoutAdIdSupport (~> 10.12.0)
   - Firebase/Core (10.12.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (~> 10.12.0)
@@ -39,6 +40,15 @@ PODS:
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
     - GoogleAppMeasurement (= 10.12.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
+    - GoogleUtilities/MethodSwizzler (~> 7.11)
+    - GoogleUtilities/Network (~> 7.11)
+    - "GoogleUtilities/NSData+zlib (~> 7.11)"
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseAnalytics/WithoutAdIdSupport (10.12.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.12.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
@@ -549,7 +559,7 @@ PODS:
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
   - RNFBAnalytics (18.3.0):
-    - Firebase/Analytics (= 10.12.0)
+    - Firebase/AnalyticsWithoutAdIdSupport (= 10.12.0)
     - React-Core
     - RNFBApp
   - RNFBApp (18.3.0):
@@ -955,7 +965,7 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNDeviceInfo: 5795b418ed3451ebcaf39384e6cf51f60cb931c9
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNFBAnalytics: 72da412180980160a7648e2ce8e2fe5d6d1f837f
+  RNFBAnalytics: d9b2e4e7f48db483d3dee78714a49db80220dc6e
   RNFBApp: f0b5cf917b0b91a0ae890fbbaec0fb5d3285ea46
   RNFBCrashlytics: 7bb4840e45b15b56859c03afd8c3707e7a0eb2eb
   RNFBRemoteConfig: 2ecd5950c328ba414d26d38d23b6f6ed9d0c8bc2
@@ -977,6 +987,6 @@ SPEC CHECKSUMS:
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: 39310a10944fc864a7550700de349183450f8aaa
 
-PODFILE CHECKSUM: 2db4460d3b0591d6c9085277ba03e25a58b5e0f0
+PODFILE CHECKSUM: 2dbc46989920a9cfdab6c6432cc90789c703e26f
 
 COCOAPODS: 1.11.3
