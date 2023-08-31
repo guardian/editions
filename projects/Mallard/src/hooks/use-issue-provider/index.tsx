@@ -92,18 +92,25 @@ const fetchIssueWithFrontsFromAPI = async (
 
 const fetchIssueWithFrontsFromFS = async (
 	id: string,
+	publishedIssueId: string,
+	apiUrl: string,
 ): Promise<IssueWithFronts> => {
-	const issue = await readFileAsJSON(FSPaths.issue(id));
-	const fronts = await Promise.all(
-		issue.fronts.map((frontId: string) =>
-			readFileAsJSON(FSPaths.front(id, frontId)),
-		),
-	);
-	return {
-		...issue,
-		origin: 'filesystem',
-		fronts,
-	};
+	try {
+		const issue = await readFileAsJSON(FSPaths.issue(id));
+		const fronts = await Promise.all(
+			issue.fronts.map((frontId: string) =>
+				readFileAsJSON(FSPaths.front(id, frontId)),
+			),
+		);
+		return {
+			...issue,
+			origin: 'filesystem',
+			fronts,
+		};
+	} catch {
+		// If there is a problem with the downloaded files, then read from the API
+		return await fetchIssueWithFrontsFromAPI(publishedIssueId, apiUrl);
+	}
 };
 
 export const fetchIssue = async (issueId: PathToIssue, apiUrl: string) => {
@@ -111,7 +118,11 @@ export const fetchIssue = async (issueId: PathToIssue, apiUrl: string) => {
 	if (localIssueId && publishedIssueId) {
 		const issueOnDevice = await isIssueOnDevice(localIssueId);
 		if (issueOnDevice) {
-			return await fetchIssueWithFrontsFromFS(localIssueId);
+			return await fetchIssueWithFrontsFromFS(
+				localIssueId,
+				publishedIssueId,
+				apiUrl,
+			);
 		}
 
 		return await fetchIssueWithFrontsFromAPI(publishedIssueId, apiUrl);
@@ -145,7 +156,11 @@ export const IssueProvider = ({ children }: { children: React.ReactNode }) => {
 
 				const issueOnDevice = await isIssueOnDevice(localIssueId);
 				if (issueOnDevice) {
-					return await fetchIssueWithFrontsFromFS(localIssueId);
+					return await fetchIssueWithFrontsFromFS(
+						localIssueId,
+						publishedIssueId,
+						apiUrl,
+					);
 				}
 
 				return await fetchIssueWithFrontsFromAPI(
