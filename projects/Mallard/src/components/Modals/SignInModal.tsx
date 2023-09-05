@@ -13,7 +13,7 @@ const SignInModal = () => {
 			<SignInModalCard
 				onDismiss={() => navigate(RouteNames.Issue)}
 				onLoginPress={signIn}
-				close={() => navigate(RouteNames.Article)}
+				close={() => navigate(RouteNames.Issue)}
 			/>
 		</CenterWrapper>
 	);
