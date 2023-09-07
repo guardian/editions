@@ -20,7 +20,10 @@ const prepareAndDownloadTodaysIssue = async (
 	// Check to see if the device has a decent amount of memory before doing intensive tasks
 	const largeRAM = await largeDeviceMemory();
 	if (largeRAM) {
-		return await downloadTodaysIssue(downloadBlocked);
+		return setTimeout(
+			async () => await downloadTodaysIssue(downloadBlocked),
+			5000,
+		);
 	}
 	return;
 };
