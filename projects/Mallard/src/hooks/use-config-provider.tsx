@@ -90,6 +90,9 @@ const getIsUsingProdDevToolsSetting = async (): Promise<
 	ConfigState['isUsingProdDevtools']
 > => {
 	try {
+		if (__DEV__) {
+			return true;
+		}
 		const isUsingProdDevtools = await isUsingProdDevtoolsCache.get();
 		return isUsingProdDevtools ?? initialState.isUsingProdDevtools;
 	} catch {
