@@ -30,7 +30,7 @@ jobs:
 
     - name: set build number
       run: |
-        echo "BUILD_NUMBER=$((${{github.run_number}}+894))" >> "$GITHUB_ENV"
+        echo "BUILD_NUMBER=$(($NUM+894))" >> "$GITHUB_ENV"
       env:
         NUM: ${{ github.run_number }}
 
