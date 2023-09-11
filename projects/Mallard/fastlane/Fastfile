@@ -39,7 +39,7 @@ platform :ios do
         duration: 1200, # optional
         in_house: false # optional but may be required if using match/sigh
     )
-    
+
     create_keychain(
       name: "CI",
       password: ENV["FASTLANE_PASSWORD"],
@@ -108,6 +108,14 @@ end
 platform :android do
   desc "Push a new internal testing build to Google Play"
   lane :beta do
+    google_play_track_version(
+        package_name: "com.guardian.editions",
+        track: "internal"
+    )
+    version_code = lane_context[SharedValues::GOOGLE_PLAY_LATEST_VERSION_CODE]
+    new_version_code = (version_code.to_i + 1).to_s
+    puts("::set-output name=buildnumber::#{new_version_code}")
+
     gradle(task: 'assemble',
            build_type: 'Release',
            project_dir: 'android/'
@@ -116,12 +124,21 @@ platform :android do
       track: 'internal',
       package_name: 'com.guardian.editions'
     )
+
   end
 end
 
 platform :android do
   desc "Push a new production build to Google Play's release track"
   lane :release_to_production do
+    google_play_track_version(
+        package_name: "com.guardian.editions",
+        track: "internal"
+    )
+    version_code = lane_context[SharedValues::GOOGLE_PLAY_LATEST_VERSION_CODE]
+    new_version_code = (version_code.to_i + 1).to_s
+    puts("::set-output name=buildnumber::#{new_version_code}")
+    
     gradle(task: 'assemble',
            build_type: 'Release',
            project_dir: 'android/'
