@@ -28,16 +28,11 @@ jobs:
         echo -e "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
         echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > projects/Mallard/android/app/editions-release.keystore
 
-    - name: check credential files
+    - name: set build number
       run: |
-        echo "ls -al projects/Mallard/android/"
-        ls -al projects/Mallard/android/
-        echo "ls -al projects/Mallard/android/app/"
-        ls -al projects/Mallard/android/app/
-        echo "cat projects/Mallard/android/gradle.properties"
-        cat projects/Mallard/android/gradle.properties
-        echo "cat projects/Mallard/android/app/editions-release.keystore"
-        cat projects/Mallard/android/app/editions-release.keystore
+        echo "BUILD_NUMBER=$((${{github.run_number}}+894 }}" >> "$GITHUB_ENV"
+      env:
+        NUM: ${{ github.run_number }}
 
     - name: install
       run:  make install
@@ -84,6 +79,7 @@ jobs:
         MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
         MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
+        BUILD_NUMBER: ${{ github.run_number + 1000 }}
 
     - uses: actions/setup-node@v2
       with:
