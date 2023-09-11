@@ -79,7 +79,7 @@ jobs:
         MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
         MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
-        BUILD_NUMBER: ${{ github.run_number + 1000 }}
+        BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
     - uses: actions/setup-node@v2
       with:
