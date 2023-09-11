@@ -99,7 +99,7 @@ platform :ios do
             contact_email: "Editions.coreteam@guardian.co.uk",
             contact_first_name: "Editions",
             contact_last_name: "Team",
-            contact_phone: "03303336767"
+            contact_phone: "+443303336767"
     },
     )
   end
