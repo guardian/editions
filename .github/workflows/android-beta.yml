@@ -83,6 +83,7 @@ jobs:
         MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
         MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
         MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
+        SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
 
     - uses: actions/setup-node@v2
       with:
@@ -91,3 +92,5 @@ jobs:
     - name: tag release on github
       working-directory: script
       run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.buildnumber }} android
+      env:
+        REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
