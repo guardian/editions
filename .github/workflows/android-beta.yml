@@ -25,8 +25,8 @@ jobs:
 
     - name: inject credentials
       run: |
-        echo "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
-        echo -e "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > projects/Mallard/android/app/editions-release.keystore
+        echo -e "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
+        echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > projects/Mallard/android/app/editions-release.keystore
 
     - name: check credential files
       run: |
