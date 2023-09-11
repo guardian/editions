@@ -1,0 +1,74 @@
+name: android-beta
+
+on:
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v2
+      with:
+            node-version: "14.18"
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.3
+        bundler-cache: true
+
+    - name: inject credentials
+      run: |
+        echo ${{ secrets.ANDROID_GRADLE_PROPERTIES }} >> projects/Mallard/android/gradle.properties
+        echo ${{ secrets.ANDROID_KEYSTORE_BASE64 }} | base64 --decode > projects/Mallard/android/app/editions-release.keystore
+
+    - name: install
+      run:  make install
+
+    - name: validate
+      run: make validate-Mallard
+
+    - uses: actions/setup-node@v2
+      with:
+            node-version: "16.16"
+
+    - name: Build APK
+      run: ./build_apk.sh BETA
+      env:
+        ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
+        ID_API_URL: ${{ secrets.ID_API_URL }}
+        LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
+        MEMBERS_DATA_API_URL: ${{ secrets.MEMBERS_DATA_API_URL }}
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_CLI_EXECUTABLE: ${{ secrets.SENTRY_CLI_EXECUTABLE }}
+        SENTRY_DEFAULTS_ORG: ${{ secrets.SENTRY_DEFAULTS_ORG }}
+        SENTRY_DEFAULTS_PROJECT: ${{ secrets.SENTRY_DEFAULTS_PROJECT }}
+        SENTRY_DEFAULTS_URL: ${{ secrets.SENTRY_DEFAULTS_URL }}
+        SENTRY_DSN_URL: ${{ secrets.SENTRY_DSN_URL }}
+        FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+        FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+        ANDROID_RELEASE_STREAM: ${{ secrets.ANDROID_RELEASE_STREAM }}
+        USE_SANDBOX_IAP: 'true'
+        FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+        MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
+        MATCH_STORAGE_MODE: git
+        MATCH_KEYCHAIN_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+        MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+        MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+        MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+        # S3 credentials are not currently used but might be in future
+        MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
+        MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
+        MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
+        MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: "14.18"
+
+    - name: tag release on github
+      working-directory: script
+      run: node make-release.js ${{ github.run_number }} ${{ github.ref_name }} 0 android
