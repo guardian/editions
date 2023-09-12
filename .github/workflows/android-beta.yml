@@ -40,9 +40,9 @@ jobs:
     - name: validate
       run: make validate-Mallard
 
-    - uses: actions/setup-node@v2
-      with:
-        node-version: "16.16"
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: "16.16"
 
     - name: Build APK
       id: build_app
@@ -81,9 +81,15 @@ jobs:
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
         BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
-    - uses: actions/setup-node@v2
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: "14.18"
+    - uses: actions/upload-artifact@v2
+      if: always()
       with:
-        node-version: "14.18"
+        name: internal-apks
+        path: |
+          projects/Mallard/android/app/build/outputs/apk/release/app-release.apk          
 
     - name: tag release on github
       working-directory: script
