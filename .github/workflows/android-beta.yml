@@ -46,7 +46,11 @@ jobs:
 
     - name: Build APK
       id: build_app
-      run: ./build_apk.sh BETA
+      run: |
+        ./build_apk.sh BETA
+        pwd
+        ls
+        ls projects/Mallard/android/app/build/outputs/apk/release/
       env:
         APPSTORE_CONNECT_KEY_ID: ${{ secrets.APPSTORE_CONNECT_KEY_ID }}
         APPSTORE_CONNECT_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_ISSUER_ID }}
