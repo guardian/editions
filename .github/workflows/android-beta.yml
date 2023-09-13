@@ -61,13 +61,13 @@ jobs:
         ls
         ls projects/Mallard/android/app/build/outputs/apk/release/
       env:
-        APPSTORE_CONNECT_KEY_ID: ${{ secrets.APPSTORE_CONNECT_KEY_ID }}
-        APPSTORE_CONNECT_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_ISSUER_ID }}
-        APPSTORE_CONNECT_API_KEY: ${{ secrets.APPSTORE_CONNECT_API_KEY }}
+        #APPSTORE_CONNECT_KEY_ID: ${{ secrets.APPSTORE_CONNECT_KEY_ID }}
+        #APPSTORE_CONNECT_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_ISSUER_ID }}
+        #APPSTORE_CONNECT_API_KEY: ${{ secrets.APPSTORE_CONNECT_API_KEY }}
         ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
         ID_API_URL: ${{ secrets.ID_API_URL }}
         LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
-        ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
+        #ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
         MEMBERS_DATA_API_URL: ${{ secrets.MEMBERS_DATA_API_URL }}
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         SENTRY_CLI_EXECUTABLE: ${{ secrets.SENTRY_CLI_EXECUTABLE }}
@@ -80,17 +80,17 @@ jobs:
         ANDROID_RELEASE_STREAM: ${{ secrets.ANDROID_RELEASE_STREAM }}
         USE_SANDBOX_IAP: 'true'
         FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
-        MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
-        MATCH_STORAGE_MODE: git
-        MATCH_KEYCHAIN_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+        #MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
+        #MATCH_STORAGE_MODE: git
+        #MATCH_KEYCHAIN_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+        #MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+        #MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+        #MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
         # S3 credentials are not currently used but might be in future
-        MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
-        MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
-        MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
-        MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
+        #MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
+        #MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
+        #MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
+        #MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
         BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
