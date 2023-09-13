@@ -113,7 +113,6 @@ platform :android do
            project_dir: 'android/'
     )
     supply(
-      skip_upload_apk: true,
       track: 'internal',
       package_name: 'com.guardian.editions'
     )
@@ -123,7 +122,7 @@ end
 
 platform :android do
   desc "Push a new production build to Google Play's release track"
-  lane :release_to_production do   
+  lane :release_to_production do
     gradle(task: 'assemble',
            build_type: 'Release',
            project_dir: 'android/'
