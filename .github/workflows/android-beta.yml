@@ -77,7 +77,7 @@ jobs:
         SENTRY_DSN_URL: ${{ secrets.SENTRY_DSN_URL }}
         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        ANDROID_RELEASE_STREAM: ${{ secrets.ANDROID_RELEASE_STREAM }}
+        ANDROID_RELEASE_STREAM: 'DEBUG'
         USE_SANDBOX_IAP: 'true'
         FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
         #MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
