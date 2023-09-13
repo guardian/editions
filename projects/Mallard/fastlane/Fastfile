@@ -129,6 +129,7 @@ platform :android do
            project_dir: 'android/'
     )
     supply(
+      skip_upload_apk: true, # TODO: Remove when new upload key approved
       track: 'production',
       package_name: 'com.guardian.editions'
     )
