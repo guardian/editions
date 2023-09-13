@@ -28,9 +28,11 @@ jobs:
         echo -e "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
         echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > projects/Mallard/android/app/editions-release-2023.keystore
 
+    # For legacy reason we are adding last version code pre-team city (14001358) from Play Store
+    # We are adding 894 so that beta build number is higher than production build number
     - name: set build number
       run: |
-        echo "BUILD_NUMBER=$(($NUM+894))" >> "$GITHUB_ENV"
+        echo "BUILD_NUMBER=$(($NUM+14001358+894))" >> "$GITHUB_ENV"
       env:
         NUM: ${{ github.run_number }}
 
@@ -93,10 +95,10 @@ jobs:
       with:
         name: internal-apks
         path: |
-          projects/Mallard/android/app/build/outputs/apk/release/app-release.apk          
+          projects/Mallard/android/app/build/outputs/apk/release/app-release.apk
 
     - name: tag release on github
       working-directory: script
-      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.buildnumber }} android
+      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ env.BUILD_NUMBER }} android
       env:
         REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
