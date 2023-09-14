@@ -22,7 +22,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-          node-version-file: 'projects/Mallard/.nvmrc'
+        node-version-file: 'projects/Mallard/.nvmrc'
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
@@ -76,7 +76,7 @@ jobs:
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
         BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: internal-apks
