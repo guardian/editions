@@ -81,7 +81,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: internal-apks
+        name: internal-apk
         path: |
           projects/Mallard/android/app/build/outputs/apk/release/app-release.apk
 
