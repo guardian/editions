@@ -89,7 +89,7 @@ const updateRelease = async (commitSha, branch, appStoreId, os) => {
         const release = await post('releases', {
             tag_name: tagNameFromSha(commitSha),
             prerelease: true,
-            target_commitish: branch,
+            target_commitish: commitSha,
             name: releaseName,
             body: releaseMessage,
         })
