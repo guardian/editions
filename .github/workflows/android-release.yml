@@ -55,9 +55,6 @@ jobs:
       id: build_app
       run: |
         ./build_apk.sh RELEASE
-        pwd
-        ls
-        ls projects/Mallard/android/app/build/outputs/apk/release/
       env:
         ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
         ID_API_URL: ${{ secrets.ID_API_URL }}
