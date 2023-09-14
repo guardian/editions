@@ -44,7 +44,6 @@ jobs:
 
     - name: install
       run: |
-          echo ${{ github.ref }}
           make install
 
     - name: validate
