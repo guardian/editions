@@ -38,9 +38,7 @@ jobs:
     # We are adding 60 because that was the last build number to run in TeamCity
     - name: set build number
       run: |
-        echo "BUILD_NUMBER=$(($NUM+14001358+60))" >> "$GITHUB_ENV"
-      env:
-        NUM: ${{ github.run_number }}
+        echo "BUILD_NUMBER=$(($GITHUB_RUN_NUMBER + 50))" >> "$GITHUB_ENV"
 
     - run: echo $BUILD_NUMBER
 
@@ -84,6 +82,6 @@ jobs:
 
     - name: tag release on github
       working-directory: script
-      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ env.BUILD_NUMBER }} android production
+      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.VERSION_CODE }} android production
       env:
         REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

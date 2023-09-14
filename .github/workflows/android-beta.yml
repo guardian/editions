@@ -38,9 +38,7 @@ jobs:
     # We are adding 894 so that beta build number is higher than production build number
     - name: set build number
       run: |
-        echo "BUILD_NUMBER=$(($NUM+14001358+894))" >> "$GITHUB_ENV"
-      env:
-        NUM: ${{ github.run_number }}
+        echo "BUILD_NUMBER=$(($GITHUB_RUN_NUMBER + 894))" >> "$GITHUB_ENV"
 
     - run: echo $BUILD_NUMBER
 
@@ -84,6 +82,6 @@ jobs:
 
     - name: tag release on github
       working-directory: script
-      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ env.BUILD_NUMBER }} android internal
+      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.VERSION_CODE }} android internal
       env:
         REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
