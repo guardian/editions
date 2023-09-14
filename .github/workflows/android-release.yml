@@ -84,6 +84,6 @@ jobs:
 
     - name: tag release on github
       working-directory: script
-      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ env.BUILD_NUMBER }} android
+      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ env.BUILD_NUMBER }} android production
       env:
         REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
