@@ -69,7 +69,9 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 //For legacy reason we are adding current build number (14001358) from Play Store
-def appVersionCode = buildNumber()
+def appVersionCode = 14001358 + buildNumber()
+
+println("##teamcity[setParameter name='VERSION_CODE' value='${appVersionCode}']")
 
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
@@ -185,14 +187,14 @@ def minorAppVersion() {
     // 2.0.7
     // 2.0.8
     // 2.1.9
-    def seedNumber = 14001358 + 7
+    def seedNumber = 7
     int diff = (buildNumber() - seedNumber) / 2
     return Math.max(0, diff)
 }
 
 dependencies {
-
-
+    
+    
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     // These should be auto linked. TODO: TEST THIS
