@@ -39,7 +39,7 @@ platform :ios do
         duration: 1200, # optional
         in_house: false # optional but may be required if using match/sigh
     )
-    
+
     create_keychain(
       name: "CI",
       password: ENV["FASTLANE_PASSWORD"],
@@ -113,9 +113,11 @@ platform :android do
            project_dir: 'android/'
     )
     supply(
+      skip_upload_apk: true, # TODO: Remove when new upload key approved
       track: 'internal',
       package_name: 'com.guardian.editions'
     )
+
   end
 end
 
@@ -127,6 +129,7 @@ platform :android do
            project_dir: 'android/'
     )
     supply(
+      skip_upload_apk: true, # TODO: Remove when new upload key approved
       track: 'production',
       package_name: 'com.guardian.editions'
     )

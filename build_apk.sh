@@ -23,13 +23,6 @@ case $1 in
              ;;
      esac
 
-npm cache clean -f
-npm install -g n
-n 16.16
-PATH="$PATH"
-echo "NEW NODE VERSION"
-node --version
-
 npm install -g yarn npx --force
 cd projects/Mallard
 echo "building APK with command 'make $TARGET'"

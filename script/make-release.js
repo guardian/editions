@@ -51,16 +51,21 @@ const makeReleaseName = (name, os, appStoreId) => `${name}--${os}:${appStoreId}`
 
 const cleanBranch = branch => branch.replace('refs/heads/', '')
 
-const updateRelease = async (commitSha, branch, appStoreId, os) => {
+const updateRelease = async (commitSha, branch, appStoreId, os, track) => {
     console.log(
-        `Updating github release tags with sha: ${commitSha} branch: ${branch} appStoreId: ${appStoreId} os: ${os}`,
+        `Updating github release tags with sha: ${commitSha} branch: ${branch} appStoreId: ${appStoreId} os: ${os} track: ${track}`,
     )
     const shortBranch = cleanBranch(branch)
     const releases = await get('releases')
     const matchingRelease = findReleaseForCommit(commitSha, releases)
 
     const appStoreName = os === 'ios' ? 'Apple App Store' : 'Google Play Store'
-    const releaseMessage = `Released to ${appStoreName}, version ${appStoreId}. Built from branch ${branch}.`
+    let releaseMessage = `Released to ${appStoreName}, version ${appStoreId}. Built from branch ${branch}.`
+
+    // On android this is internal or production
+    if (track) {
+        releaseMessage += ` Track: ${track}`
+    }
 
     if (matchingRelease) {
         console.log(
@@ -102,9 +107,10 @@ const params = {
     branch: 3,
     appStoreId: 4,
     os: 5,
+    track: 6,
 }
 
-if (process.argv.length - 2 < Object.keys(params).length) {
+if (process.argv.length - 2 < Object.keys(params).length - 1) {
     console.error('Invalid arguments to release script')
     console.log(
         `Usage: node ${process.argv[1]} <${Object.keys(params).join('> <')}>`,
@@ -116,5 +122,6 @@ if (process.argv.length - 2 < Object.keys(params).length) {
         process.argv[params.branch],
         process.argv[params.appStoreId],
         process.argv[params.os],
+        process.argv[params.track],
     )
 }
