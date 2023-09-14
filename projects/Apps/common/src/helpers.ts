@@ -1,7 +1,10 @@
 import { EditionId, EditionsList, IssueSummary } from '.'
 import { defaultRegionalEditions } from './editions-defaults'
 
-export const issueSummaryComparator = (a: IssueSummary, b: IssueSummary) => {
+export const issueSummaryComparator = (
+    a: IssueSummary,
+    b: IssueSummary,
+): number => {
     return a.date.localeCompare(b.date)
 }
 

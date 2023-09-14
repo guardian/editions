@@ -458,23 +458,23 @@ export interface IssueCompositeKey {
     localId: string
 }
 
-export const issueDir = (issueId: string) => {
+export const issueDir = (issueId: string): string => {
     return issueId
 }
 
-export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
+export const issuePath = (issue: string): string => `${issueDir(issue)}/issue`
 
-export const frontPath = (issue: string, frontId: string) =>
+export const frontPath = (issue: string, frontId: string): string =>
     `${issueDir(issue)}/front/${frontId}`
 
-export const htmlDirPath = (issue: string) => `${issueDir(issue)}/html`
+export const htmlDirPath = (issue: string): string => `${issueDir(issue)}/html`
 
-export const htmlRootPath = (issue: string) => `${issueDir(issue)}/html`
+export const htmlRootPath = (issue: string): string => `${issueDir(issue)}/html`
 
-export const htmlPath = (issue: string, internalPageCode: number) =>
+export const htmlPath = (issue: string, internalPageCode: number): string =>
     `${htmlRootPath(issue)}/${internalPageCode}.html`
 
-export const mediaDir = (issue: string, size?: ImageSize) => {
+export const mediaDir = (issue: string, size?: ImageSize): string => {
     // `size` only used to contstruct web url
     if (size) {
         return `${issueDir(issue)}/media/${size}/` // used by old articles and its clients
@@ -487,9 +487,9 @@ export const mediaPath = (
     issue: string,
     { source, path }: Image,
     size?: ImageSize,
-) => `${mediaDir(issue, size)}${source}/${path}`
+): string => `${mediaDir(issue, size)}${source}/${path}`
 
-export const issueSummaryPath = (edition: string) => `${edition}/issues`
+export const issueSummaryPath = (edition: string): string => `${edition}/issues`
 export interface Image {
     source: string
     path: string
@@ -524,7 +524,7 @@ export interface TrailImage extends Image {
     use: ImageDeviceUses
 }
 
-export const thumbsDir = (issue: string, size?: ImageSize) => {
+export const thumbsDir = (issue: string, size?: ImageSize): string => {
     // `size` only used to contstruct web url
     if (size) {
         return `${issueDir(issue)}/thumbs/${size}/`
@@ -538,9 +538,9 @@ export const thumbsPath = (
     image: Image,
     use: ImageThumbnailUse,
     size?: ImageSize,
-) => `${thumbsDir(issue, size)}${use}/${image.source}/${image.path}`
+): string => `${thumbsDir(issue, size)}${use}/${image.source}/${image.path}`
 
-export const getImageQueryString = (image: Image) =>
+export const getImageQueryString = (image: Image): string =>
     image.role ? `?role=${image.role}` : ''
 
 export const imagePath = (
@@ -548,7 +548,7 @@ export const imagePath = (
     image: Image,
     use: ImageUse = 'full-size',
     size?: ImageSize,
-) => {
+): string => {
     const baseUrl =
         use == 'full-size'
             ? mediaPath(issue, image, size)
