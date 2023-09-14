@@ -2,10 +2,12 @@ name: android-release
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
-    permissions: write-all
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +21,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-          node-version-file: 'projects/Mallard/.nvmrc'
+        node-version-file: 'projects/Mallard/.nvmrc'
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
@@ -33,22 +35,19 @@ jobs:
         echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > projects/Mallard/android/app/editions-release-2023.keystore
 
     # For legacy reason we are adding last version code pre-team city (14001358) from Play Store
-    # We are adding 894 so that beta build number is higher than production build number
+    # We are adding 60 because that was the last build number to run in TeamCity
     - name: set build number
       run: |
-        echo "BUILD_NUMBER=$(($NUM+14001358+894))" >> "$GITHUB_ENV"
+        echo "BUILD_NUMBER=$(($NUM+14001358+60))" >> "$GITHUB_ENV"
       env:
         NUM: ${{ github.run_number }}
 
     - name: install
-      run:  make install
+      run: |
+          make install
 
     - name: validate
       run: make validate-Mallard
-
-    # - uses: actions/setup-node@v2
-    #   with:
-    #     node-version: "16.16"
 
     - name: Build APK
       id: build_app
@@ -58,9 +57,6 @@ jobs:
         ls
         ls projects/Mallard/android/app/build/outputs/apk/release/
       env:
-        #APPSTORE_CONNECT_KEY_ID: ${{ secrets.APPSTORE_CONNECT_KEY_ID }}
-        #APPSTORE_CONNECT_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_ISSUER_ID }}
-        #APPSTORE_CONNECT_API_KEY: ${{ secrets.APPSTORE_CONNECT_API_KEY }}
         ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
         ID_API_URL: ${{ secrets.ID_API_URL }}
         LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
@@ -77,24 +73,10 @@ jobs:
         ANDROID_RELEASE_STREAM: 'RELEASE'
         USE_SANDBOX_IAP: 'true'
         FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
-        #MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
-        #MATCH_STORAGE_MODE: git
-        #MATCH_KEYCHAIN_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        #MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        #MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        #MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
-        # S3 credentials are not currently used but might be in future
-        #MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
-        #MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
-        #MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
-        #MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
         BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
-    # - uses: actions/setup-node@v2
-    #   with:
-    #     node-version: "14.18"
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: internal-apks
