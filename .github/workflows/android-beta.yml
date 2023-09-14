@@ -2,9 +2,7 @@ name: android-beta
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - master
+  push:
 
 jobs:
   build:
@@ -45,7 +43,9 @@ jobs:
         NUM: ${{ github.run_number }}
 
     - name: install
-      run:  make install
+      run: |
+          echo ${{ github.ref }}
+          make install
 
     - name: validate
       run: make validate-Mallard
