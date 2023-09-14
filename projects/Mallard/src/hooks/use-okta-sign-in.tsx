@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { oktaSignOut } from 'src/authentication/services/okta';
