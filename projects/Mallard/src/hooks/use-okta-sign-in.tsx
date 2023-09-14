@@ -1,5 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
+import { Platform } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { oktaSignOut } from 'src/authentication/services/okta';
@@ -13,6 +16,16 @@ const useOkta = () => {
 	const [error, setError] = useState<string | null>(null);
 
 	const signIn = async () => {
+		// Okta signin doesnt work on older Android devices, so we push users to use their
+		// subscriber id instead on the CAS sign in screen
+		if (Platform.OS === 'android') {
+			const androidAPILevel = await DeviceInfo.getApiLevel();
+			// 27 === Android 8.1
+			if (androidAPILevel < 27) {
+				navigation.navigate(RouteNames.CasSignIn);
+			}
+		}
+
 		setIsLoading(true);
 		try {
 			const { attempt, accessAttempt } = await authOkta();
