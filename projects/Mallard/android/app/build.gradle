@@ -185,7 +185,7 @@ def minorAppVersion() {
     // 2.0.7
     // 2.0.8
     // 2.1.9
-    def seedNumber = 7
+    def seedNumber = 14001358 + 7
     int diff = (buildNumber() - seedNumber) / 2
     return Math.max(0, diff)
 }
