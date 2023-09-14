@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 
 const BASE_URL = 'https://api.github.com/repos/guardian/editions'
 
-const tagNameFromSha = (sha) => sha.slice(0, 8)
+const tagNameFromSha = sha => sha.slice(0, 8)
 
 const headers = {
     'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ const headers = {
 }
 
 const doFetch = async (url, params) => {
-    const resp = await fetch(url, params).catch((e) => {
+    const resp = await fetch(url, params).catch(e => {
         console.error(`request to ${url} failed`, e), process.exit(1)
     })
     if (resp.status >= 200 && resp.status < 300) {
@@ -23,7 +23,7 @@ const doFetch = async (url, params) => {
     }
 }
 
-const get = async (path) => {
+const get = async path => {
     return doFetch(`${BASE_URL}/${path}`, { headers: headers })
 }
 
@@ -44,12 +44,12 @@ const patch = async (path, body) => {
 }
 
 const findReleaseForCommit = (commit, releases) => {
-    return releases.find((r) => r.tag_name == tagNameFromSha(commit))
+    return releases.find(r => r.tag_name == tagNameFromSha(commit))
 }
 
 const makeReleaseName = (name, os, appStoreId) => `${name}--${os}:${appStoreId}`
 
-const cleanBranch = (branch) => branch.replace('refs/heads/', '')
+const cleanBranch = branch => branch.replace('refs/heads/', '')
 
 const updateRelease = async (commitSha, branch, appStoreId, os, track) => {
     console.log(
