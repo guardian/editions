@@ -19,26 +19,24 @@ jobs:
         with:
           node-version: '14.16'
 
-      - name: build
+      - name: make install, yarn, yarn validate, yarn build
         run: |
           make install
           yarn
           yarn validate
           yarn build
-
         env:
           exclude: 'Mallard'
 
-      - name: test
+      - name: yarn test
         run: |
           yarn test
-          ./script/ci
         env:
           exclude: 'Mallard'
 
-      - name: zip
+      - name: script to create zipfile
         run: |
-          ./script/ci
+          ./script/ci.sh
 
       - name: Upload to riff-raff
         uses: guardian/actions-riff-raff@v2
