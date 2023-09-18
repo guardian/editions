@@ -32,7 +32,6 @@ jobs:
       run: |
         gem install fastlane
         fastlane -v
-        exit 1
 
     - name: inject credentials
       run: |
