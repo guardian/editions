@@ -26,5 +26,24 @@ jobs:
           yarn validate
           yarn build
           yarn test
+          ./script/ci
         env:
           exclude: 'Mallard'
+
+      - name: Upload to riff-raff
+        uses: guardian/actions-riff-raff@v2
+        with:
+          app: editions
+          projectName: editions
+          configPath: riff-raff.yaml
+          contentDirectories: |
+            cloudformation:
+              - projects/aws/cloudformation.yaml
+            logging-cloudformation:
+              - projects/aws/logging-cloudformation.yaml
+            editions-backend:
+              - zipfiles/editions-backend.zip
+            editions-archiver:
+              - zipfiles/editions-archiver.zip
+            editions-logging:
+              - zipfiles/editions-logging.zip
