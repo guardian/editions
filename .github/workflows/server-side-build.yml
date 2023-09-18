@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '14.16'
 
-      - name: make install, yarn, yarn validate, yarn build
+      - name: Run make install, yarn, yarn validate, yarn build
         run: |
           make install
           yarn
@@ -28,15 +28,23 @@ jobs:
         env:
           exclude: 'Mallard'
 
-      - name: yarn test
+      - name: Run yarn test
         run: |
           yarn test
         env:
           exclude: 'Mallard'
 
-      - name: script to create zipfile
+      - name: Run script ci.sh to create zipfiles
         run: |
           ./script/ci.sh
+
+      # Setup AWS credentials to enable uploading to S3 for Riff-Raff.
+      # See https://github.com/aws-actions/configure-aws-credentials
+      - name: Setup aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
 
       - name: Upload to riff-raff
         uses: guardian/actions-riff-raff@v2
