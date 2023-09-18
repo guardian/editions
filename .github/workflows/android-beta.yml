@@ -28,6 +28,12 @@ jobs:
         ruby-version: 2.7.3
         bundler-cache: true
 
+    - name: update fastlane
+      run: |
+        gem install fastlane
+        fastlane -v
+        exit 1
+
     - name: inject credentials
       run: |
         echo -e "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
