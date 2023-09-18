@@ -28,6 +28,11 @@ jobs:
         ruby-version: 2.7.3
         bundler-cache: true
 
+    - name: update fastlane
+      run: |
+        gem install fastlane
+        fastlane -v
+
     - name: inject credentials
       run: |
         echo -e "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
@@ -70,6 +75,7 @@ jobs:
         FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
         BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
+        SUPPLY_UPLOAD_MAX_RETRIES: 5
 
     - uses: actions/upload-artifact@v3
       if: always()
