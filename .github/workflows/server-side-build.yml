@@ -24,3 +24,5 @@ jobs:
           make install
           yarn
           yarn validate
+        env:
+          exclude: 'Mallard'
