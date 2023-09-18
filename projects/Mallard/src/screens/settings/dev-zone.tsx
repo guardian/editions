@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import type { ReactNode } from 'react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, Clipboard, Platform, View } from 'react-native';
 import { Switch } from 'react-native-gesture-handler';
 import { AccessContext } from 'src/authentication/AccessContext';
@@ -32,6 +32,7 @@ import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { INTERACTIONS_THRESHOLD, useRating } from 'src/hooks/use-rating';
 import { useToast } from 'src/hooks/use-toast';
 import { RouteNames } from 'src/navigation/NavigationModels';
+import type { Tracking } from 'src/notifications/push-tracking';
 import {
 	clearPushTracking,
 	getPushTracking,
@@ -103,6 +104,22 @@ const DevZone = () => {
 	const [imageSize, setImageSize] = useState('fetching...');
 	const [pushTokens, setPushTokens] = useState('fetching...');
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
+
+	const notificationTracking: string = useMemo(() => {
+		if (pushTrackingInfo === 'fetching...') {
+			return '';
+		}
+		try {
+			const pushTrackingAsArray: Tracking[] =
+				JSON.parse(pushTrackingInfo);
+			const foundNotifications = pushTrackingAsArray.filter(
+				(tracker: Tracking) => tracker.id === 'notification',
+			);
+			return JSON.stringify(foundNotifications);
+		} catch {
+			return '';
+		}
+	}, [pushTrackingInfo]);
 
 	const isRatingFFOn = remoteConfigService.getBoolean('rating');
 
@@ -354,6 +371,11 @@ const DevZone = () => {
 								key: 'Push Tokens',
 								title: 'Registered push tokens',
 								explainer: pushTokens,
+							},
+							{
+								key: 'Notifications Received',
+								title: 'Notifications Received',
+								explainer: notificationTracking,
 							},
 							{
 								key: 'All Downloaded Issues',

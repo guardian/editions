@@ -34,7 +34,7 @@ export type PushTrackingId =
 	| 'backgroundFetchStatus'
 	| 'backgroundFetchError';
 
-interface Tracking {
+export interface Tracking {
 	time: string;
 	id: string;
 	value: string;
