@@ -133,6 +133,7 @@ platform :android do
       package_name: 'com.guardian.editions'
     )
   end
+end
 
   platform :android do
     desc "Push a new production build to Amazon Store's release track"
