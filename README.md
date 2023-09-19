@@ -4,7 +4,7 @@ The Guardian Editions app includes the UK Daily edition, Australia Weekend and o
 
 ## Setup
 
-If you haven't already it's worth running [strap](https://macos-strap.herokuapp.com/) & then installing [`gu-base`](https://github.com/guardian/homebrew-devtools) which adds a [load of useful stuff](https://github.com/guardian/homebrew-devtools/blob/master/Casks/gu-base.rb) including VSCode - the editor used by the editions team.
+If you haven't already it's worth running [strap](https://macos-strap.herokuapp.com/) & then installing [`gu-base`](https://github.com/guardian/homebrew-devtools) which adds a [load of useful stuff](https://github.com/guardian/homebrew-devtools/blob/main/Casks/gu-base.rb) including VSCode - the editor used by the editions team.
 
 The project uses [nvm](https://github.com/nvm-sh/nvm) so this will need to be installed before if it's not already. Do not install it using brew.
 
@@ -16,7 +16,7 @@ You will need `mobile` and `cmsFronts.s3Read` credentials loaded. (NOTE: At pres
 
 ## App setup
 
-To run the client-side app, cd into `projects/Mallard` and check out it's [README](https://github.com/guardian/editions/tree/master/projects/Mallard).
+To run the client-side app, cd into `projects/Mallard` and check out it's [README](https://github.com/guardian/editions/tree/main/projects/Mallard).
 
 ## Subprojects
 
@@ -40,23 +40,23 @@ To run a make target against one project only, follow it with `-` and the projec
 
 To exclude one or more projects, set the `EXCLUDE` environment variable to the names of the project seperated by spaces. This is used on CI to produce backend only builds.
 
-### [Mallard](https://github.com/guardian/editions/tree/master/projects/Mallard)
+### [Mallard](https://github.com/guardian/editions/tree/main/projects/Mallard)
 
 This is the mobile app for downloading and viewing Editions. It runs on Android and iOS via react-native.
 
-### [backend](https://github.com/guardian/editions/tree/master/projects/backend)
+### [backend](https://github.com/guardian/editions/tree/main/projects/backend)
 
 This is the lambda which turns CAPI, fronts data and images into a format the app can use, it can be run as a local http service for development.
 
-### [archiver](https://github.com/guardian/editions/tree/master/projects/archiver)
+### [archiver](https://github.com/guardian/editions/tree/main/projects/archiver)
 
 This is a collection of lambdas which form a step function which uses the backend to generate the contents of the S3 buckets which the app reads from.
 
-### [aws](https://github.com/guardian/editions/tree/master/projects/aws)
+### [aws](https://github.com/guardian/editions/tree/main/projects/aws)
 
 This is the Amazon architecture for the backend and archiver, expressed as cdk.
 
-### [Apps](https://github.com/guardian/editions/tree/master/projects/Apps)
+### [Apps](https://github.com/guardian/editions/tree/main/projects/Apps)
 
 This contains `common` which is the code shared between app and backends and `crosswords` which is the crossword.
 
@@ -64,7 +64,7 @@ This contains `common` which is the code shared between app and backends and `cr
 
 ### backend, archiver and aws
 
-These all deploy in one go. The default github branch is `master` which automatically triggers CI deployment once someone merges code changes into it. If you need to deploy from a different branch (i.e. from a PR branch) first make sure it builds ok in teamcity job (Editions > Build) and make sure you choose the right branch before you press the `run` button in teamcity. Once the build completes successfully, make a note of the build number, go to [riffraff](https://riffraff.gutools.co.uk), type/find the `editions` project and choose the build number you noted from teamcity. As usual, you can choose CODE or PROD to deploy depending on your needs.
+These all deploy in one go. The default github branch is `main` which automatically triggers CI deployment once someone merges code changes into it. If you need to deploy from a different branch (i.e. from a PR branch) first make sure it builds ok in teamcity job (Editions > Build) and make sure you choose the right branch before you press the `run` button in teamcity. Once the build completes successfully, make a note of the build number, go to [riffraff](https://riffraff.gutools.co.uk), type/find the `editions` project and choose the build number you noted from teamcity. As usual, you can choose CODE or PROD to deploy depending on your needs.
 
 ## Uploading iOS internal beta to testflight
 
@@ -118,3 +118,4 @@ until the complete issue is ready to publish, when it is copied to
 
 -   the s3 bucket `editions-published-$STAGE`
     -   owned by the `mobile` account
+
