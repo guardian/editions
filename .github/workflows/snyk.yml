@@ -14,3 +14,15 @@ jobs:
       EXCLUDE: Mallard
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  android-scan:
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
+    with:
+      DEBUG: false
+      ORG: guardian-mobile
+      SKIP_NODE: false
+      PROJECT_FILE: ./projects/Mallard/android/app/build.gradle
+    secrets:
+       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+
