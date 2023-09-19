@@ -2,15 +2,13 @@ name: Snyk
 
 on:
   push:
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
   security:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
-      DEBUG: true
+      DEBUG: false
       ORG: guardian-mobile
       SKIP_NODE: false
       NODE_PACKAGE_JSON_FILES_MISSING_LOCK: projects/Mallard/package.json # not missing lock but seemingly needs to be installed for gradle build to work
