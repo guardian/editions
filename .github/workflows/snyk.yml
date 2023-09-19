@@ -11,7 +11,6 @@ jobs:
       DEBUG: false
       ORG: guardian-mobile
       SKIP_NODE: false
-      EXCLUDE: Mallard,Apps
-      NODE_PACKAGE_JSON_FILES_MISSING_LOCK: projects/Mallard/package.json # not missing lock but seemingly needs to be installed for gradle build to work
+      EXCLUDE: Mallard
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
