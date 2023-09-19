@@ -19,7 +19,6 @@
 #  git_pull
 # end
 
-import_from_git(url:"https://github.com/ugroupmedia/fastlane-plugin-amazon-app-store-submission.git", path:"fastlane/Fastfile")
 fastlane_require 'base64'
 
 platform :ios do
