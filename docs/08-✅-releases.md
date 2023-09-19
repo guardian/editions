@@ -14,9 +14,9 @@ We need a consistent and battle tested process for releasing the app on both And
 
 Our internal Beta is managed through testflight on the Guardian developer account. The group which this beta is sent to is labelled `GNM`. This includes the team and internal stakeholders within the organisation. We build this automatically through Fastlane and Github Actions once a day. Occasionally we will set off builds to test things on a number of devices.
 
-In github actions we have a [scheduled build](https://github.com/guardian/editions/actions?query=workflow%3Ascheduled-ios-beta) and an [ad-hoc one](https://github.com/guardian/editions/actions?query=workflow%3A%22Upload+ios-beta%22) triggered by a [script](https://github.com/guardian/editions/blob/master/script/upload-ios-build.sh)
+In github actions we have a [scheduled build](https://github.com/guardian/editions/actions?query=workflow%3Ascheduled-ios-beta) and an [ad-hoc one](https://github.com/guardian/editions/actions?query=workflow%3A%22Upload+ios-beta%22) triggered by a [script](https://github.com/guardian/editions/blob/main/script/upload-ios-build.sh)
 
-All builds generate a ['release' in github](https://github.com/guardian/editions/releases) to help us keep track of build numbers against certain commits. This is handled by the [make-release script](https://github.com/guardian/editions/blob/master/script/make-release.js).
+All builds generate a ['release' in github](https://github.com/guardian/editions/releases) to help us keep track of build numbers against certain commits. This is handled by the [make-release script](https://github.com/guardian/editions/blob/main/script/make-release.js).
 
 #### External Beta
 
