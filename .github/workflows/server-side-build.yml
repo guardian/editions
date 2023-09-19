@@ -18,7 +18,6 @@ jobs:
       - name: Run make install, yarn, yarn validate, yarn build
         run: |
           make install
-          yarn
           yarn validate
           yarn build
         env:
