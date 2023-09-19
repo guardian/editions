@@ -2,6 +2,7 @@ name: amazon-release
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
