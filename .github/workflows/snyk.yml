@@ -11,7 +11,7 @@ jobs:
       DEBUG: false
       ORG: guardian-mobile
       SKIP_NODE: false
-      EXCLUDE: Mallard
+      EXCLUDE: android
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   androidscan:
