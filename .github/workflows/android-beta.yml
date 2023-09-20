@@ -91,6 +91,8 @@ jobs:
 
     - name: tag release on github
       working-directory: script
-      run: echo node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.publish_apk.outputs.VERSION_CODE }} android internal
+      run: |
+        echo "### Version code: ${{ steps.publish_apk.outputs.VERSION_CODE }}" >> $GITHUB_STEP_SUMMARY
+        echo node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.publish_apk.outputs.VERSION_CODE }} android internal
       env:
         REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
