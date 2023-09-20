@@ -20,6 +20,6 @@ jobs:
 
     - name: Create Tag
       run: |
-        git tag v1.0.actionsnouser
-        git push origin v1.0.actionsnouser
+        git tag v1.0.ja
+        git push origin v1.0.ja
 
