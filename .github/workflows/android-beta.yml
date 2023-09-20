@@ -56,8 +56,8 @@ jobs:
     - name: validate
       run: make validate-Mallard
 
-    - name: Build APK
-      id: build_app
+    - name: Publish APK
+      id: publish_apk
       working-directory: projects/Mallard
       run: |
         make beta-android
@@ -91,6 +91,6 @@ jobs:
 
     - name: tag release on github
       working-directory: script
-      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.VERSION_CODE }} android internal
+      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.publish_apk.outputs.VERSION_CODE }} android internal
       env:
         REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
