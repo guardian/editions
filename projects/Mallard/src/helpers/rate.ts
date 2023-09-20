@@ -7,6 +7,7 @@ export const rateApp = () => {
 	const options = {
 		AppleAppID: APPLE_ID,
 		GooglePackageName: GOOGLE_PACKAGE_NAME,
+		AmazonPackageName: GOOGLE_PACKAGE_NAME,
 		preferredAndroidMarket: AndroidMarket.Google,
 		preferInApp: true,
 		openAppStoreIfInAppFails: false,
