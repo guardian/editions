@@ -89,3 +89,20 @@ jobs:
       run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.VERSION_CODE }} android internal
       env:
         REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    #first attempt to add a version tag to a commit
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Git
+      run: |
+        git config --global user.name 'Julia'
+        git config --global user.email 'Julia.Branke@guardian.co.uk'
+
+    - name: Create Tag
+      run: |
+        git tag v1.0.juliatest
+        git push origin v1.0.juliatest
+
