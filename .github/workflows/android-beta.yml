@@ -25,6 +25,6 @@ jobs:
 
     - name: Create Tag
       run: |
-        git tag v1.0.actions[bot]
-        git push origin v1.0.actions[bot]
+        git tag v1.0.actionsbot
+        git push origin v1.0.actionsbot
 
