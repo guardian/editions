@@ -145,8 +145,9 @@ end
         client_id: ENV["AMAZON_CLIENT_ID"],
         client_secret: ENV["AMAZON_CLIENT_SECRET"],
         app_id: ENV["AMAZON_APP_ID"],
+        apk_path: 'android/app/build/outputs/apk/release/app-release.apk',
         upload_apk: true,
-        changelogs_path: 'fastlane/changelog'
+        changelogs_path: 'fastlane/changelog',
         upload_changelogs: true,
         submit_for_review: false
       )
