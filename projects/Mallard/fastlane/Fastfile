@@ -112,10 +112,10 @@ platform :android do
            build_type: 'Release',
            project_dir: 'android/'
     )
-    supply(
-      track: 'internal',
-      package_name: 'com.guardian.editions'
-    )
+#     supply(
+#       track: 'internal',
+#       package_name: 'com.guardian.editions'
+#     )
 
   end
 end
