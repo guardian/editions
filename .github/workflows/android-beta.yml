@@ -97,5 +97,5 @@ jobs:
       #add a version tag to a commit
     - name: Create Tag
       run: |
-        git tag v${{ steps.build_app.outputs.VERSION_CODE }}
-        git push origin v${{ steps.build_app.outputs.VERSION_CODE }}    
+        git tag v${{ steps.build_app.outputs.VERSION_NAME }}.${{ steps.build_app.outputs.VERSION_CODE }}
+        git push origin v${{ steps.build_app.outputs.VERSION_NAME }}.${{ steps.build_app.outputs.VERSION_CODE }}
