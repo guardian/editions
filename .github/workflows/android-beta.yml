@@ -18,13 +18,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set up Git
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-
     - name: Create Tag
       run: |
-        git tag v1.0.actionsbot
-        git push origin v1.0.actionsbot
+        git tag v1.0.actionsnouser
+        git push origin v1.0.actionsnouser
 
