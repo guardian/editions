@@ -137,14 +137,14 @@ end
   platform :android do
     desc "Push a new production build to Amazon Store's release track"
     lane :release_to_amazon do
-      # gradle(tasks: ['clean', 'assemble'],
+      # gradle(task: 'assemble',
       #        build_type: 'Release',
       #        project_dir: 'android/'
       # )
       amazon_app_submission(
-        client_id: "11111",
-        client_secret: "11111",
-        app_id: "1111",
+        client_id: ENV["AMAZON_CLIENT_ID"],
+        client_secret: ENV["AMAZON_CLIENT_SECRET"],
+        app_id: ENV["AMAZON_APP_ID"],
         upload_apk: false,
         upload_changelogs: false,
         submit_for_review: false

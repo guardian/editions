@@ -56,6 +56,9 @@ jobs:
         bundle install
         bundle exec fastlane android release_to_amazon
       env:
+        AMAZON_CLIENT_ID: ${{ secrets.AMAZON_CLIENT_ID }}
+        AMAZON_CLIENT_SECRET: ${{ secrets.AMAZON_CLIENT_SECRET }}
+        AMAZON_APP_ID: ${{ secrets.AMAZON_APP_ID }}
         ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
         ID_API_URL: ${{ secrets.ID_API_URL }}
         LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
