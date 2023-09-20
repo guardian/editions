@@ -2,7 +2,7 @@
 
 ## Installling
 
-Follow the steps in the project [readme](https://github.com/guardian/editions/blob/master/README.md).
+Follow the steps in the project [readme](https://github.com/guardian/editions/blob/main/README.md).
 
 ## Running locally
 
@@ -33,4 +33,4 @@ The routing is done in `application.ts` - go and find some routes to hit!
 
 ## Deploying to AWS
 
-Follow the steps in the `Deployment` section of this [ReadMe](https://github.com/guardian/editions/blob/master/README.md).
+Follow the steps in the `Deployment` section of this [ReadMe](https://github.com/guardian/editions/blob/main/README.md).
