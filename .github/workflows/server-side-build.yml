@@ -1,0 +1,61 @@
+name: server-side-build
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      # required by aws-actions/configure-aws-credentials
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Run make install, yarn, yarn validate, yarn build
+        run: |
+          make install
+          yarn validate
+          yarn build
+        env:
+          exclude: 'Mallard'
+
+      - name: Run yarn test
+        run: |
+          yarn test
+        env:
+          exclude: 'Mallard'
+
+      - name: Run script ci.sh to create zipfiles
+        run: |
+          ./script/ci.sh
+
+      # Setup AWS credentials to enable uploading to S3 for Riff-Raff.
+      # See https://github.com/aws-actions/configure-aws-credentials
+      - name: Setup aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Upload to riff-raff
+        uses: guardian/actions-riff-raff@v2
+        with:
+          buildNumberOffset: 20986
+          app: editions
+          projectName: editions
+          configPath: riff-raff.yaml
+          contentDirectories: |
+            cloudformation:
+              - projects/aws/cloudformation.yaml
+            logging-cloudformation:
+              - projects/aws/logging-cloudformation.yaml
+            editions-backend:
+              - zipfiles/editions-backend.zip
+            editions-archiver:
+              - zipfiles/editions-archiver.zip
+            editions-logging:
+              - zipfiles/editions-logging.zip
