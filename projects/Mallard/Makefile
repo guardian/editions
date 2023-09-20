@@ -18,10 +18,8 @@ beta-ios:
 	fastlane ios beta
 
 beta-android:
-	mkdir -p android/app/src/main/assets
 	yarn jetify
 	yarn bundle-android
-	cd android && ./gradlew clean && cd ..
 	fastlane android beta
 
 release-android:
