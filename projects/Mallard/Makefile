@@ -20,7 +20,6 @@ beta-ios:
 beta-android:
 	yarn jetify
 	yarn bundle-android
-	cd android && ./gradlew clean && cd ..
 	fastlane android beta
 
 release-android:
