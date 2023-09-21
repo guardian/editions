@@ -1,11 +1,8 @@
-import { handleAndNotifyInternal } from '../../src/services/task-handler'
+import { handleAndNotifyInternal } from '../task-handler'
 import moment = require('moment')
-import {
-    createPublishEvent,
-    PublishEvent,
-} from '../../src/services/pub-status-notifier'
-import { IssuePublicationIdentifier } from '../../common'
-import { Bucket } from '../../src/utils/s3'
+import { createPublishEvent, PublishEvent } from '../pub-status-notifier'
+import { IssuePublicationIdentifier } from '../../../common'
+import { Bucket } from '../../utils/s3'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dontCare = {} as any

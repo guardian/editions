@@ -1,5 +1,5 @@
-import { parseIssueActionRecordInternal } from '../../src/invoke/parser'
-import { hasFailed } from '../../common'
+import { parseIssueActionRecordInternal } from '../../invoke/parser'
+import { hasFailed } from '../../../common'
 
 describe('parseRecord', () => {
     it('should parse correct json', async () => {

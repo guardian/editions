@@ -1,4 +1,4 @@
-import { Front } from '../../common'
+import { Front } from '../../../common'
 
 const frontJson: any = {
     id: 'id1',
