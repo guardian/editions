@@ -19,6 +19,9 @@ jobs:
               with:
                   node-version: '18.18'
 
+            - name: install deps
+              run: yarn install
+
             - name: install mallard
               run: cd projects/Mallard && yarn install
 
