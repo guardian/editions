@@ -20,7 +20,8 @@ jobs:
                   node-version: '18.18'
 
             - name: install mallard
-              run: yarn install-mallard
+              run: cd projects/Mallard
+                  yarn install
 
             - name: validate Mallard project
               run: make PROJECT=Mallard validate
