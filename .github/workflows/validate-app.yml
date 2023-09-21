@@ -17,16 +17,13 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
-                  node-version: '18.18'
-
-            - name: install deps
-              run: yarn install
+                  node-version-file: '.nvmrc'
 
             - name: install mallard
-              run: cd projects/Mallard && yarn install
+              run: make install
 
             - name: validate Mallard project
-              run: cd projects/Mallard && yarn validate
+              run: make PROJECT=Mallard validate
 
             - name: test Mallard project
-              run: cd projects/Mallard && yarn test
+              run: make PROJECT=Mallard test
