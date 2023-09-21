@@ -26,9 +26,6 @@
         },
         {
             "path": "projects/Apps"
-        },
-        {
-            "path": "projects/logging"
         }
     ],
     "settings": {
