@@ -36,7 +36,7 @@ export type Attempt<T extends Exclude<unknown, string | Failure>> = Failure | T
  * So Promise<?> would meet this, but then you won't get anything useful out.
  */
 export const hasFailed = <T>(attempt: Attempt<T>): attempt is Failure =>
-    typeof attempt === 'object' && '__failure' in attempt
+    typeof attempt === 'object' && attempt && '__failure' in attempt
 
 /**
  *
