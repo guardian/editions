@@ -16,8 +16,5 @@ mkdir $ROOT_DIR/zipfiles
   echo "create editions-archiver.zip"
   cd "$ROOT_DIR/projects/archiver/dist/"
   zip -r "$ROOT_DIR/zipfiles/editions-archiver.zip" .
-  echo "create editions-logging.zip"
-  cd "$ROOT_DIR/projects/logging/dist/"
-  zip -r "$ROOT_DIR/zipfiles/editions-logging.zip" .
   echo "finished zipping"
 )
