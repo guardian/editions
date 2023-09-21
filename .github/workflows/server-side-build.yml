@@ -51,11 +51,7 @@ jobs:
           contentDirectories: |
             cloudformation:
               - projects/aws/cloudformation.yaml
-            logging-cloudformation:
-              - projects/aws/logging-cloudformation.yaml
             editions-backend:
               - zipfiles/editions-backend.zip
             editions-archiver:
               - zipfiles/editions-archiver.zip
-            editions-logging:
-              - zipfiles/editions-logging.zip
