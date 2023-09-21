@@ -225,7 +225,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
             <View
               collapsable={false}
               forwardedRef={[Function]}
-              handlerTag={5}
+              handlerTag={7}
               handlerType="PanGestureHandler"
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
@@ -473,7 +473,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                 delayLongPress={600}
                                 enabled={true}
                                 exclusive={true}
-                                handlerTag={6}
+                                handlerTag={8}
                                 handlerType="NativeViewGestureHandler"
                                 onGestureEvent={[Function]}
                                 onGestureHandlerEvent={[Function]}
@@ -1445,7 +1445,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
             <View
               collapsable={false}
               forwardedRef={[Function]}
-              handlerTag={3}
+              handlerTag={4}
               handlerType="PanGestureHandler"
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
@@ -1693,7 +1693,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                 delayLongPress={600}
                                 enabled={true}
                                 exclusive={true}
-                                handlerTag={4}
+                                handlerTag={5}
                                 handlerType="NativeViewGestureHandler"
                                 onGestureEvent={[Function]}
                                 onGestureHandlerEvent={[Function]}

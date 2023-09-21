@@ -4,6 +4,17 @@ jest.mock('src/helpers/release-stream', () => ({
 	isInBeta: () => false,
 }));
 
+const mockLog = jest.fn();
+const mockRecordError = jest.fn();
+
+jest.mock('@react-native-firebase/crashlytics', () =>
+	jest.fn().mockImplementation(() => ({
+		log: mockLog,
+		recordError: mockRecordError,
+		setCrashlyticsCollectionEnabled: jest.fn(),
+	})),
+);
+
 describe('errorService', () => {
 	let errorService: ErrorServiceImpl;
 
