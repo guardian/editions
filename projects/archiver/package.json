@@ -39,8 +39,5 @@
         "ts-optchain": "^0.1.8",
         "uuidv4": "5.0.1",
         "moment": "^2.24.0"
-    },
-    "resolutions": {
-        "handlebars": "4.6.0"
     }
 }
