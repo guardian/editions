@@ -23,7 +23,7 @@ jobs:
               run: cd projects/Mallard && yarn install
 
             - name: validate Mallard project
-              run: make PROJECT=Mallard validate
+              run: cd projects/Mallard && yarn validate
 
             - name: test Mallard project
-              run: make PROJECT=Mallard test
+              run: cd projects/Mallard && yarn test
