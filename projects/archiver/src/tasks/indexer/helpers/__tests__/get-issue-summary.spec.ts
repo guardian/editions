@@ -1,5 +1,5 @@
-import { IssuePublicationIdentifier, IssueSummary } from '../../../../common'
-import { getIssueSummaryInternal } from '../../../../src/tasks/indexer/helpers/get-issue-summary'
+import { IssuePublicationIdentifier, IssueSummary } from '../../../../../common'
+import { getIssueSummaryInternal } from '../../../../tasks/indexer/helpers/get-issue-summary'
 
 describe('getIssueSummaryInternal', () => {
     const assetKeys = [

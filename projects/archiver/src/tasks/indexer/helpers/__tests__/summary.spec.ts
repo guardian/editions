@@ -1,5 +1,8 @@
-import { IssuePublicationIdentifier, IssueIdentifier } from '../../../../common'
-import { getOtherRecentIssues } from '../../../../src/tasks/indexer/helpers/summary'
+import {
+    IssuePublicationIdentifier,
+    IssueIdentifier,
+} from '../../../../../common'
+import { getOtherRecentIssues } from '../../../../tasks/indexer/helpers/summary'
 
 describe('getOtherRecentIssues', () => {
     const usEdition = 'american-edition'

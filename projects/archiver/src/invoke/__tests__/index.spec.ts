@@ -1,10 +1,10 @@
-import { internalHandler, Record, InvokerDependencies } from '../../src/invoke'
-import { GetS3ObjParams } from '../../src/utils/s3'
+import { internalHandler, Record, InvokerDependencies } from '../../invoke'
+import { GetS3ObjParams } from '../../utils/s3'
 import {
     withFailureMessage,
     failure,
     IssuePublicationIdentifier,
-} from '../../common'
+} from '../../../common'
 
 describe('state machine invoker', () => {
     const objectsContentsInput =

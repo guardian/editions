@@ -1,6 +1,6 @@
-import { getPublishedVersionInternal } from '../../../../src/tasks/indexer/helpers/get-published-version'
-import { IssuePublicationWithStatus } from '../../../../src/services/status'
-import { IssueIdentifier } from '../../../../common'
+import { getPublishedVersionInternal } from '../../../../tasks/indexer/helpers/get-published-version'
+import { IssuePublicationWithStatus } from '../../../../services/status'
+import { IssueIdentifier } from '../../../../../common'
 import moment = require('moment')
 
 const dt = '2019-09-30T16:45:23.699Z'

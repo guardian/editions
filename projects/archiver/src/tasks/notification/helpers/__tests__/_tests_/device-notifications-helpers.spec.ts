@@ -2,8 +2,8 @@ import {
     createScheduleTime,
     shouldSchedule,
     prepareScheduleDeviceNotificationRequest,
-} from '../../../../../src/tasks/notification/helpers/device-notifications-helpers'
-import { IssueNotificationData } from '../../../../../src/tasks/notification/helpers/device-notifications'
+} from '../../device-notifications-helpers'
+import { IssueNotificationData } from '../../device-notifications'
 import { RequestInit, RequestInfo } from 'node-fetch'
 
 describe('prepareScheduleDeviceNotificationRequest', () => {
