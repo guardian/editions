@@ -225,7 +225,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
             <View
               collapsable={false}
               forwardedRef={[Function]}
-              handlerTag={3}
+              handlerTag={4}
               handlerType="PanGestureHandler"
               onGestureHandlerEvent={[Function]}
               onGestureHandlerStateChange={[Function]}
@@ -565,7 +565,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                                 delayLongPress={600}
                                 enabled={true}
                                 exclusive={true}
-                                handlerTag={4}
+                                handlerTag={5}
                                 handlerType="NativeViewGestureHandler"
                                 onGestureEvent={[Function]}
                                 onGestureHandlerEvent={[Function]}

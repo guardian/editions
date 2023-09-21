@@ -8,6 +8,10 @@ jest.mock('src/helpers/analytics', () => ({
 	logEvent: jest.fn,
 }));
 
+jest.mock('@delightfulstudio/react-native-safe-area-insets', () => ({
+	currentInsets: () => Promise.resolve({ top: 10 }),
+}));
+
 const issue = {
 	name: 'Daily Edition',
 	date: '2020-06-25',
