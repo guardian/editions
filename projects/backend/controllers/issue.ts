@@ -81,16 +81,21 @@ export const getIssuesSummary = async (
 
     const issues = Object.values(
         groupBy((_) => _.issueDate, issuePublications),
-    ).map((versions) =>
-        versions.reduce((a, b) =>
-            new Date(a.version).getTime() > new Date(b.version).getTime() // Version is always a date. This is obscene. This controller should also never be hit. Fix after launch.
-                ? a
-                : b,
-        ),
+    ).map(
+        (versions) =>
+            versions &&
+            versions.reduce((a, b) =>
+                new Date(a.version).getTime() > new Date(b.version).getTime() // Version is always a date. This is obscene. This controller should also never be hit. Fix after launch.
+                    ? a
+                    : b,
+            ),
     )
 
     return issues
         .map((issuePublication) => {
+            if (!issuePublication?.issueDate) {
+                return null
+            }
             const date = new Date(issuePublication.issueDate)
             if (isNaN(date.getTime())) {
                 console.warn(
