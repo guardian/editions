@@ -108,15 +108,12 @@ end
 platform :android do
   desc "Push a new internal testing build to Google Play"
   lane :beta do
-    gradle(task: 'assemble',
-           build_type: 'Release',
-           project_dir: 'android/'
+    supply(
+      skip_upload_apk: true,
+      apk: 'android/app/build/outputs/apk/release/app-release.apk',
+      track: 'internal',
+      package_name: 'com.guardian.editions'
     )
-    # supply(
-    #   track: 'internal',
-    #   package_name: 'com.guardian.editions'
-    # )
-
   end
 end
 
