@@ -6,9 +6,9 @@ on:
 
 jobs:
   build:
-    ermissions:
+    permissions:
       contents: write
-    uns-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
