@@ -8,7 +8,7 @@ jobs:
   build:
     ermissions:
       contents: write
-    runs-on: ubuntu-latest
+    uns-on: ubuntu-latest
 
     steps:
     - name: Checkout code
