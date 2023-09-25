@@ -84,9 +84,3 @@ jobs:
         name: release-apk
         path: |
           projects/Mallard/android/app/build/outputs/apk/release/app-release.apk
-
-    # - name: tag release on github
-    #   working-directory: script
-    #   run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.VERSION_CODE }} android production
-    #   env:
-    #     REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
