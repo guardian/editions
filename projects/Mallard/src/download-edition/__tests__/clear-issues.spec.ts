@@ -1,5 +1,7 @@
 import { editionDirsToClean } from '../clear-issues-and-editions';
 
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+
 describe('clear-issues-and-editions', () => {
 	describe('editionDirsToClean', () => {
 		it('should never return the download folder', () => {

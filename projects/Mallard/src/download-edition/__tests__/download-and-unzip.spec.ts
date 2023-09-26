@@ -1,6 +1,8 @@
 import { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
 import { downloadAndUnzipIssue } from '../download-and-unzip';
 
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+
 const createIssueSummary = (localId: string) => ({
 	key: 'de/1-1-1',
 	name: 'any',

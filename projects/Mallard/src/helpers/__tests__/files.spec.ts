@@ -1,6 +1,8 @@
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary';
 import { findIssueSummaryByKey } from '../../helpers/files';
 
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+
 describe('helpers/files', () => {
 	describe('findIssueSummaryByKey', () => {
 		it('should return an IssueSummary if the key matches', () => {
