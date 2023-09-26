@@ -179,6 +179,8 @@ def appVersionName() {
     return majorVersion + "." + minorAppVersion() + "." + buildNumber()
 }
 
+println("::set-output name=VERSION_NAME::${appVersionName()}")
+
 def minorAppVersion() {
     // Update the minor version after every 2nd build.
     // Update seedNumber if major number changes that will be equal to the
