@@ -4,6 +4,8 @@ import {
 	issueSummaryToLatestPath,
 } from '../use-issue-summary-provider';
 
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+
 jest.mock('react-native-fs', () => ({
 	readFile: () => Promise.resolve(JSON.stringify(exampleIssueSummary)),
 }));
