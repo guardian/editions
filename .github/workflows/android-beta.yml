@@ -23,7 +23,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version-file: 'projects/Mallard/.nvmrc'
+        node-version-file: '.nvmrc'
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
