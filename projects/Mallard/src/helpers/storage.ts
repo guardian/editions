@@ -128,6 +128,8 @@ const numberOfInteractionsCache = createAsyncCache<number>(
 const hasShownRatingCache = createAsyncCache<boolean>(
 	'@Setting_hasShownRating',
 );
+
+const issueSummaryCache = createAsyncCache<string>('issueSummary');
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -206,4 +208,5 @@ export {
 	numberOfInteractionsCache,
 	hasShownRatingCache,
 	oktaDataCache,
+	issueSummaryCache,
 };

@@ -2,7 +2,7 @@ import RNFS from 'react-native-fs';
 import { unzip } from 'react-native-zip-archive';
 import type { Issue, IssueSummary } from 'src/common';
 import { updateListeners } from 'src/download-edition/download-and-unzip';
-import { editionsListCache } from 'src/helpers/storage';
+import { editionsListCache, issueSummaryCache } from 'src/helpers/storage';
 import {
 	getApiUrlSetting,
 	getMaxAvailableEditions,
@@ -13,7 +13,6 @@ import { errorService } from 'src/services/errors';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { londonTime } from './date';
 import { imageForScreenSize } from './screen';
-import { defaultSettings } from './settings/defaults';
 
 // matches the issue date, i.e. 2020-02-01
 const ISSUE_DATE_REGEX = /\d{4}-\d{2}-\d{2}/gm;
@@ -192,12 +191,14 @@ export const findIssueSummaryByKey = (
 };
 
 export const readIssueSummary = async (): Promise<IssueSummary[]> => {
-	const editionSlug = await getSelectedEditionSlug();
-	const editionDirectory = FSPaths.editionDir(editionSlug);
-	return RNFS.readFile(editionDirectory + defaultSettings.issuesPath, 'utf8')
+	return issueSummaryCache
+		.get()
 		.then((data) => {
 			try {
-				return JSON.parse(data);
+				if (data) {
+					return JSON.parse(data);
+				}
+				return [];
 			} catch (e: any) {
 				e.message = `readIssueSummary: ${e.message} - with: ${data}`;
 				console.log(e.message);
@@ -210,21 +211,13 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> => {
 		});
 };
 
-const silentlyDeleteFile = async (filePath: string) => {
-	try {
-		await RNFS.unlink(filePath);
-	} catch (error) {
-		console.log('Silent file deletion failed: ' + JSON.stringify(error));
-	}
-};
-
 export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 	// @TODO: This value in future needs to come from React
 	const apiUrl = await getApiUrlSetting();
 	const edition = await getSelectedEditionSlug();
-	const editionDirectory = FSPaths.editionDir(edition);
 
 	const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`;
+	console.log(fetchIssueSummaryUrl);
 
 	try {
 		const issueSummaryRequest = await fetch(fetchIssueSummaryUrl);
@@ -234,24 +227,21 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 		}
 
 		const issueSummaryString = JSON.stringify(issueSummary);
-		// There is a known issue with this fs library where it append content of the file
-		// rather than overwrite it and result in malfomed json content. As a workaround we
-		// are deleting the file first before writing it.
-		// https://github.com/itinance/react-native-fs/issues/700
-		const filePath = editionDirectory + defaultSettings.issuesPath;
-		silentlyDeleteFile(filePath);
-		await RNFS.writeFile(filePath, issueSummaryString, 'utf8');
-
+		issueSummaryCache.set(issueSummaryString);
 		// The above saves it locally, if successful we return it
 		return issueSummary;
 	} catch (e: any) {
-		const issueSummary = await readIssueSummary();
-		if (!issueSummary && e.message !== 'Network request failed') {
-			e.message = `Failed to fetch valid issue summary and empty cache: ${e.message}`;
-			errorService.captureException(e);
+		try {
+			const issueSummary = await readIssueSummary();
+			if (!issueSummary && e.message !== 'Network request failed') {
+				e.message = `Failed to fetch valid issue summary and empty cache: ${e.message}`;
+				errorService.captureException(e);
+			}
+			// Got a problem with the endpoint, return the last saved version
+			return issueSummary;
+		} catch {
+			return [];
 		}
-		// Got a problem with the endpoint, return the last saved version
-		return issueSummary;
 	}
 };
 

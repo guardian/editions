@@ -19,6 +19,7 @@ import { locale } from 'src/helpers/locale';
 import { isInBeta, isInTestFlight } from 'src/helpers/release-stream';
 import { imageForScreenSize } from 'src/helpers/screen';
 import {
+	issueSummaryCache,
 	pushRegisteredTokens,
 	showAllEditionsCache,
 } from 'src/helpers/storage';
@@ -127,6 +128,15 @@ const DevZone = () => {
 		identity: identityData?.userDetails.primaryEmailAddress !== undefined,
 		okta: oktaData?.userDetails.preferred_username !== undefined,
 	});
+
+	const clearIssueSummaryCache = async () => {
+		try {
+			await issueSummaryCache.reset();
+			Alert.alert('Cache cleared!');
+		} catch {
+			Alert.alert('Failed to clear');
+		}
+	};
 
 	// initialise local showAllEditions property
 	useEffect(() => {
@@ -266,6 +276,9 @@ const DevZone = () => {
 						</Button>
 						<Button onPress={rateUserFlow}>Rate the app</Button>
 						<Button onPress={clearAll}>Clear Rating Cache</Button>
+						<Button onPress={clearIssueSummaryCache}>
+							Clear Issue Summary Cache
+						</Button>
 					</ButtonList>
 					<List
 						data={[
