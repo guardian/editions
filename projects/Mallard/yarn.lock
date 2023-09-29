@@ -1706,21 +1706,21 @@
   dependencies:
     nanoid "^3.3.1"
 
-"@guardian/eslint-config-typescript@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@guardian/eslint-config-typescript/-/eslint-config-typescript-6.0.1.tgz#47eac1ec8b61a9f14d041610b2c78cfedef403a4"
-  integrity sha512-ZFJDRF0FMNjqBqyslde35mpBakQc1xNys1ph/PLUhAlZT5NPqS+vMWw+WaHephWvtrQO6wMsZi/axR4/GhNC9Q==
+"@guardian/eslint-config-typescript@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/eslint-config-typescript/-/eslint-config-typescript-7.0.0.tgz#b16fab129fb6e7fe9343143d9bdcbe1867117ab8"
+  integrity sha512-2XsjhVRmIK0nvjGHDcvTjMd4DNHsSHIkqDRc4cGEAUcKdPgXEtuWyxQeWEdBBvqLo0aNj6PH3ekyWpPsgZKo8g==
   dependencies:
-    "@guardian/eslint-config" "4.1.0"
+    "@guardian/eslint-config" "5.0.0"
     "@typescript-eslint/eslint-plugin" "5.59.9"
     "@typescript-eslint/parser" "5.59.9"
     eslint-import-resolver-typescript "3.5.5"
     eslint-plugin-import "2.27.5"
 
-"@guardian/eslint-config@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@guardian/eslint-config/-/eslint-config-4.1.0.tgz#5f838a6d03d3146c79d0f3e40695ff9c826f2f72"
-  integrity sha512-nJxPbdQ02dgXHrQxY95hhDqZ+NGbK1r2w52g6B+tbug7FAqi1bbETW9gZLPArM5kBl/1R1125jEBNB+GC61bAQ==
+"@guardian/eslint-config@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/eslint-config/-/eslint-config-5.0.0.tgz#a9652f78f057fa4f35420fea8f8e807737ae15d1"
+  integrity sha512-llm15aCWBFJQbMg/Douqf+fjvMC9qrcc2AfievoAoiHD/VGQf8ouR4ss2/X1i+2r3gcwYDZlvCOarXeXnIbZ+w==
   dependencies:
     eslint-config-prettier "8.8.0"
     eslint-plugin-eslint-comments "3.2.0"
@@ -1731,10 +1731,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.11.tgz#a1e442b6dba4540fce1273eff74abb74c0652f2d"
   integrity sha512-MLzUhb0+oaMS1g9FQ8nL3G3cdEsQTzC8/Hq1vdrIV/ufbu/6u7sult/AXXk602WodE4ugRZoJMZ5N90Z0WCfBg==
 
-"@guardian/prettier@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-0.5.0.tgz#d8ea25cc396f31bd4baedb8f6d7d3727a9af1fa7"
-  integrity sha512-IYXMdqW6vg9mVnAXbbWCm0R9AZfWlAjfJ668TnCx3ypX5/u4AYAXdOfrWWX+uWvFvs3Ulub+E8vEm+eUkxi6rQ==
+"@guardian/prettier@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-5.0.0.tgz#0cd36b105512510192ea9fd18da3d3df2d7b3b72"
+  integrity sha512-gJSQuuP7JVDOWQj4EUrwyJTnMt+frLkw0D2sLg70nHn76L3LmH2xTQtYMPUsqyqn37qocDPzgdvBdmATi50zRQ==
 
 "@guardian/renditions@^0.2.0":
   version "0.2.0"
