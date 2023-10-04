@@ -2,6 +2,7 @@ import retry from 'async-retry';
 import type { DLStatus } from 'src/helpers/files';
 import {
 	downloadNamedIssueArchive,
+	isIssueOnDevice,
 	unzipNamedIssueArchive,
 } from 'src/helpers/files';
 import { localIssueListStore } from 'src/hooks/use-issue-on-device';
@@ -154,6 +155,51 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 				);
 
 				await pushTracking('unzipImages', 'end');
+
+				await setTimeout(() => Promise.resolve(), 10000);
+
+				// --- Check if Data did download, and if not then download again ---
+
+				const dataFailsafe = await isIssueOnDevice(
+					localId,
+					// This assumes these folders never change their names
+					['issue', 'front'],
+				);
+				if (!dataFailsafe) {
+					// --- Data Download ---
+
+					await pushTracking(
+						'attemptDataDownload',
+						JSON.stringify({ localId, assets: assets.data }),
+					);
+
+					// We are not asking for progress update during Data bundle download (to avoid false visual completion)
+					// So, instead we are artificially triggering a small progress update to render some visual change
+					updateListeners(localId, {
+						type: 'download',
+						data: 0.5,
+					});
+					const dataDownloadResult = await downloadNamedIssueArchive({
+						localIssueId: localId,
+						assetPath: assets.data,
+						filename: 'data.zip',
+						withProgress: false,
+					});
+					console.log(
+						`Data download completed with status: ${dataDownloadResult.statusCode}`,
+					);
+
+					await pushTracking('attemptDataDownload', 'completed');
+					// --- Data Unzip ---
+
+					await pushTracking('unzipData', 'start');
+
+					await unzipNamedIssueArchive(
+						`${FSPaths.downloadIssueLocation(localId)}/data.zip`,
+					);
+
+					await pushTracking('unzipData', 'end');
+				}
 
 				return 'success';
 			},
