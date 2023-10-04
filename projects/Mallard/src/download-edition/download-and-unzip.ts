@@ -209,7 +209,11 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 		);
 
 		await pushTracking('downloadAndUnzip', 'complete');
-		updateListeners(localId, { type: 'success' }); // null is unstarted or end
+		// Checks for any silent errors
+		const checkIssueDidComplete = await isIssueOnDevice(localId);
+		updateListeners(localId, {
+			type: checkIssueDidComplete ? 'success' : 'failure',
+		}); // null is unstarted or end
 	} catch (error: any) {
 		await pushTracking('downloadAndUnzipError', JSON.stringify(error));
 		errorService.captureException(error);
