@@ -113,14 +113,16 @@ export const isIssueOnDevice = async (
 	// Please note, this makes an assumption on the location of filenames which is not the case throughout the code
 	// However, at this stage in the project, this is unlikely to change and therefore the performance optimisation
 	// that this currently provides is a greater benefit than maintenance.
-	expectedFolders = 'issue_front_thumbs_media_html',
+	expectedFolders = ['issue', 'front', 'thumbs', 'media', 'html'],
 ): Promise<boolean> => {
 	try {
 		const folders = await RNFS.readdir(FSPaths.issueRoot(localIssueId));
 		if (folders.length === 0) {
 			return false;
 		}
-		return folders.every((item) => expectedFolders.includes(item));
+		return expectedFolders.every((item) => {
+			return folders.includes(item);
+		});
 	} catch {
 		return false;
 	}

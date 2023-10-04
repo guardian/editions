@@ -156,12 +156,14 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
 				await pushTracking('unzipImages', 'end');
 
+				await setTimeout(() => Promise.resolve(), 10000);
+
 				// --- Check if Data did download, and if not then download again ---
 
 				const dataFailsafe = await isIssueOnDevice(
 					localId,
 					// This assumes these folders never change their names
-					'issue_front',
+					['issue', 'front'],
 				);
 				if (!dataFailsafe) {
 					// --- Data Download ---
