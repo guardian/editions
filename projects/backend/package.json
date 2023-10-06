@@ -11,7 +11,7 @@
         "@types/express": "^4.17.0",
         "@types/express-list-endpoints": "^6.0.0",
         "@zeit/ncc": "^0.22.3",
-        "chai": "^4.3.8",
+        "chai": "^4.3.10",
         "chai-http": "^4.4.0",
         "dotenv": "^16.3.1",
         "ts-jest": "^29.1.1",
