@@ -20,6 +20,7 @@
 # end
 
 fastlane_require 'base64'
+fastlane_version '2.216.0'
 
 platform :ios do
   desc "Push a new beta build to TestFlight"
