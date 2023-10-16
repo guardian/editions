@@ -41,7 +41,7 @@ export enum HeaderType {
     LargeByline = 'largebyline',
     RegularByline = 'regularbyline',
 }
-export type ArticlePillar = typeof articlePillars[number]
+export type ArticlePillar = (typeof articlePillars)[number]
 
 export interface ColorAppearance {
     type: 'custom'
@@ -212,7 +212,7 @@ export type CAPIArticle =
     | GalleryArticle
     | PictureArticle
 export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
-export type ImageSize = typeof imageSizes[number]
+export type ImageSize = (typeof imageSizes)[number]
 
 export const sizeDescriptions: { [k in ImageSize]: number } = {
     phone: 375,
@@ -499,8 +499,8 @@ export interface Image {
 export const imageThumbnailUses = ['thumb', 'thumb-large', 'not-used'] as const
 export const imageUses = [...imageThumbnailUses, 'full-size'] as const
 
-export type ImageThumbnailUse = typeof imageThumbnailUses[number]
-export type ImageUse = typeof imageUses[number]
+export type ImageThumbnailUse = (typeof imageThumbnailUses)[number]
+export type ImageUse = (typeof imageUses)[number]
 
 /**
  * Note that not all of these roles are respected by this project - they are here for completeness.
@@ -515,7 +515,7 @@ export const imageRoles = [
     'supporting',
     'halfWidth',
 ] as const
-export type ImageRole = typeof imageRoles[number]
+export type ImageRole = (typeof imageRoles)[number]
 export interface ImageDeviceUses {
     mobile: ImageUse
     tablet: ImageUse

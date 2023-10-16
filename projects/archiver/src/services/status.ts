@@ -24,7 +24,7 @@ export const statuses = [
     'assembled', // assembled assets into S3
     'errored',
 ] as const
-export type Status = typeof statuses[number]
+export type Status = (typeof statuses)[number]
 
 export const isPublished = (status: Status): boolean => {
     return (publishedStatuses as readonly Status[]).includes(status)
