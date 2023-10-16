@@ -44,7 +44,8 @@ jobs:
     - run: echo $BUILD_NUMBER
 
     - name: install
-      run: make install
+      run: |
+          yarn install-mallard
 
     - name: validate
       run: make validate-Mallard
