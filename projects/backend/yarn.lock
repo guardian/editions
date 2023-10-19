@@ -304,18 +304,18 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@guardian/content-api-models@^15.9.16":
-  version "15.9.16"
-  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-15.9.16.tgz#76bd2a3c05c1c0dddd1c8695fd2a94ff76412ee8"
-  integrity sha512-vlC4IGfv+W62OklszZZRFKc87jbgvOuczrefloKRuU9C4UqlylwTB2FIPI4G39DlyOkeLUdNRrRjdzySCo3Kgw==
+"@guardian/content-api-models@^17.8.0":
+  version "17.8.0"
+  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-17.8.0.tgz#ef42d8d0d6c9afe896c3a34880f02ebfe8ab2f6d"
+  integrity sha512-qfYCnrWupF3CncBioFwqxiFAgZt/hD+ax1XH0kMWm1IhkxZXBVV06ZZyk7eUcDUYYyakAgQxIjS8Z0LXy3nHYw==
   dependencies:
-    "@guardian/content-atom-model" "^3.2.4"
-    "@guardian/content-entity-model" "^2.0.6"
-    "@guardian/story-packages-model" "^2.0.4"
+    "@guardian/content-atom-model" "^3.4.2"
+    "@guardian/content-entity-model" "^2.2.1"
+    "@guardian/story-packages-model" "^2.2.0"
     "@types/node-int64" "^0.4.29"
-    "@types/thrift" "^0.10.9"
+    "@types/thrift" "^0.10.11"
     node-int64 "^0.4.0"
-    thrift "^0.12.0"
+    thrift "^0.15.0"
 
 "@guardian/content-atom-model@^3.2.4":
   version "3.2.4"
@@ -328,6 +328,17 @@
     node-int64 "^0.4.0"
     thrift "^0.12.0"
 
+"@guardian/content-atom-model@^3.4.2":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@guardian/content-atom-model/-/content-atom-model-3.4.4.tgz#289c9c0d2ff1c889787667c2c08cf30bbf72356d"
+  integrity sha512-OeLqmQODJPqSa9Y/RhLhJOTIYj0BK07tSZBn71QZ3OstQhcW2nZGxSCN9tbYLYHhj30Uzn6fsLwZcv4JlNTbtg==
+  dependencies:
+    "@guardian/content-entity-model" "^2.2.1"
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.11"
+    node-int64 "^0.4.0"
+    thrift "^0.15.0"
+
 "@guardian/content-entity-model@^2.0.6":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@guardian/content-entity-model/-/content-entity-model-2.0.6.tgz#5a5a3dec91f6f4744a2c04843eb0272424e54f81"
@@ -338,15 +349,25 @@
     node-int64 "^0.4.0"
     thrift "^0.12.0"
 
-"@guardian/story-packages-model@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@guardian/story-packages-model/-/story-packages-model-2.0.4.tgz#f05f73c5c0e1eb6d6658f5d3c29cf30260e63328"
-  integrity sha512-i16vtZqYkNYGIr3VUdnpcIDphMRqfWhHzEKaB//idEPUlFJuSqhDoJIo2CkBQYWQYN9XmEJInkcUZSNhJz7CcA==
+"@guardian/content-entity-model@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@guardian/content-entity-model/-/content-entity-model-2.2.1.tgz#580dfb42e3c76cf41446655a51bb1714981dc504"
+  integrity sha512-ywFYEmwvM8LcLxKbP321KqRGzd4lD40MNUCxS7V38eLbo6emgIJDmPl4rpNMgznR79BL5S1Q0FOhhRqChSVv/g==
   dependencies:
     "@types/node-int64" "^0.4.29"
-    "@types/thrift" "^0.10.9"
+    "@types/thrift" "^0.10.11"
     node-int64 "^0.4.0"
-    thrift "^0.12.0"
+    thrift "^0.15.0"
+
+"@guardian/story-packages-model@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@guardian/story-packages-model/-/story-packages-model-2.2.0.tgz#9624cb88dc1b72fd44591c155d66e4cc1523ec93"
+  integrity sha512-tZWBvoBTfR9K7AGlhsiPYAefIjfA5NsU/65OhcZjBEiFN6J+ay37D1dH6uIghYZbd+fB0mQ0I9kT/ac4Lgx0yQ==
+  dependencies:
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.11"
+    node-int64 "^0.4.0"
+    thrift "^0.15.0"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -852,6 +873,15 @@
   dependencies:
     "@types/cookiejar" "*"
     "@types/node" "*"
+
+"@types/thrift@^0.10.11":
+  version "0.10.14"
+  resolved "https://registry.yarnpkg.com/@types/thrift/-/thrift-0.10.14.tgz#2e7c626110b931ac91ded4c4c6aba6b757be5eab"
+  integrity sha512-o6622m6PLLJKGTIBOva9QKOpPXVJRjGaz/Y53kvsFs3VjOZcdVUJ8tLl5SYgL+DGKlc/q2D6iyQc6W1Z7CQvIQ==
+  dependencies:
+    "@types/node" "*"
+    "@types/node-int64" "*"
+    "@types/q" "*"
 
 "@types/thrift@^0.10.9":
   version "0.10.10"
@@ -3156,6 +3186,17 @@ thrift@^0.12.0:
     q "^1.5.0"
     ws "^5.0.0"
 
+thrift@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/thrift/-/thrift-0.15.0.tgz#9c502ab3763e12b93e33c8b4e5c1e0e12ed864cf"
+  integrity sha512-RvuFCwHD8bAHIh0Evlr+8QJui/zzistIj9k668jX6jGvDF1OyOmI5TvY+YnqI/VQxpiE2OCGucYJs/nz/CfldA==
+  dependencies:
+    browser-or-node "^1.2.1"
+    isomorphic-ws "^4.0.1"
+    node-int64 "^0.4.0"
+    q "^1.5.0"
+    ws "^5.2.2"
+
 thrift@^0.19.0:
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/thrift/-/thrift-0.19.0.tgz#340545555ea74cd129457963aa300967afcb038c"
@@ -3402,7 +3443,7 @@ write-file-atomic@^4.0.2:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
 
-ws@^5.0.0, ws@^5.2.3:
+ws@^5.0.0, ws@^5.2.2, ws@^5.2.3:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/ws/-/ws-5.2.3.tgz#05541053414921bc29c63bee14b8b0dd50b07b3d"
   integrity sha512-jZArVERrMsKUatIdnLzqvcfydI85dvd/Fp1u/VOpfdDWQ4c9qWXe+VIeAbQ5FrDwciAkr+lzofXLz3Kuf26AOA==
