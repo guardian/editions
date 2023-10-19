@@ -6,11 +6,11 @@ import { ContentType } from '@guardian/content-api-models/v1/contentType'
 import { CapiDateTime } from '@guardian/content-api-models/v1/capiDateTime'
 import {
     Article,
-    GalleryArticle,
-    CrosswordArticle,
-    PictureArticle,
     CapiDateTime as CapiDateTime32,
+    CrosswordArticle,
+    GalleryArticle,
     MediaAtomElement,
+    PictureArticle,
     TrailImage,
 } from '../common'
 import { elementParser } from './elements'
@@ -27,6 +27,7 @@ import {
     generateCapiEndpoint,
     getPreviewHeaders,
 } from '../utils/article'
+import { maybeImageElementsFromCartoon } from './cartoons'
 
 type NotInCAPI =
     | 'key'
@@ -130,6 +131,8 @@ const parseArticleResult = async (
         throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
     }
 
+    const cartoonImageElements = maybeImageElementsFromCartoon(result)
+
     if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
 
     const webUrl = !isFromPrint ? result.webUrl : undefined
@@ -201,7 +204,7 @@ const parseArticleResult = async (
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
-                    elements,
+                    elements: cartoonImageElements ?? elements,
                     isFromPrint,
                     webUrl,
                     internalPageCode,
