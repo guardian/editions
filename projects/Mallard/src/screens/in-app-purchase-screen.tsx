@@ -24,7 +24,7 @@ export const InAppPurchaseScreen = () => {
 			(purchase: any) => {
 				const receipt = purchase.transactionReceipt;
 				if (receipt) {
-					RNIAP.finishTransactionIOS(purchase);
+					RNIAP.finishTransaction(purchase);
 					setReceipt(receipt);
 				}
 			},
@@ -48,7 +48,9 @@ export const InAppPurchaseScreen = () => {
 								<Text>{localizedPrice}</Text>
 								<Button
 									onPress={() =>
-										RNIAP.requestSubscription(productId)
+										RNIAP.requestSubscription({
+											sku: productId,
+										})
 									}
 								>
 									Subscribe
