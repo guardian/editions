@@ -16,15 +16,15 @@ export const InAppPurchaseScreen = () => {
 	const [receipt, setReceipt] = useState('');
 
 	useEffect(() => {
-		RNIAP.getProducts(['uk.co.guardian.gce.sevenday.1monthsub2']).then(
-			(p) => setProducts(p),
-		);
+		RNIAP.getProducts({
+			skus: ['uk.co.guardian.gce.sevenday.1monthsub2'],
+		}).then((p) => setProducts(p));
 
 		const purchaseSubscription = RNIAP.purchaseUpdatedListener(
 			(purchase: any) => {
 				const receipt = purchase.transactionReceipt;
 				if (receipt) {
-					RNIAP.finishTransactionIOS(purchase);
+					RNIAP.finishTransaction(purchase);
 					setReceipt(receipt);
 				}
 			},
@@ -48,7 +48,9 @@ export const InAppPurchaseScreen = () => {
 								<Text>{localizedPrice}</Text>
 								<Button
 									onPress={() =>
-										RNIAP.requestSubscription(productId)
+										RNIAP.requestSubscription({
+											sku: productId,
+										})
 									}
 								>
 									Subscribe
