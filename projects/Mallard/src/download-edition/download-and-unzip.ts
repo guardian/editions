@@ -18,7 +18,7 @@ import { deleteIssue } from './clear-issues-and-editions';
 const dlCache: Record<
 	string,
 	{
-		promise: Promise<void>;
+		promise: Promise<boolean>;
 		progressListeners: Array<(status: DLStatus) => void>;
 	}
 > = {};
@@ -250,7 +250,12 @@ export const downloadAndUnzipIssue = async (
 	const createDownloadPromise = async () => {
 		try {
 			await run(issue, imageSize);
-			localIssueListStore.add(localId);
+			const onDevice = await isIssueOnDevice(issue.localId);
+			if (onDevice) {
+				localIssueListStore.add(localId);
+				return true;
+			}
+			return false;
 		} finally {
 			await pushTracking('completeAndDeleteCache', 'completed');
 			delete dlCache[localId];

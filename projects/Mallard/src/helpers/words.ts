@@ -50,6 +50,8 @@ export const PRIVACY_POLICY_HEADER_TITLE = 'Privacy Policy';
 export const BETA_PROGRAMME_FAQ_HEADER_TITLE = 'Beta Programme FAQ';
 export const REFRESH_BUTTON_TEXT = 'Refresh';
 export const DOWNLOAD_ISSUE_MESSAGE_OFFLINE = `You're currently offline. You can download it when you go online`;
+export const DOWNLOAD_ISSUE_MESSAGE_FAILED =
+	'There was a problem downloading your issue, please try again';
 
 export const USER_EMAIL_BODY_INTRO = `\n \nThanks for taking the time to send us feedback or report an issue.\n \nIf you are reporting a bug in the app, it will be very helpful if you could describe what you were doing in the app and let us know which screen you were on when the issue occurred. Is this an issue you have seen previously? The more detail you can provide the better and screenshots of these issues are always appreciated.\n \nIf you need a hand with taking a screenshot on your device, you can use this guide: http://www.take-a-screenshot.org/ \n \nThe Guardian Editions team`;
 

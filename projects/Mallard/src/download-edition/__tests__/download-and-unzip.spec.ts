@@ -1,7 +1,12 @@
 import { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
 import { downloadAndUnzipIssue } from '../download-and-unzip';
 
+const mockIsIssueOnDevice = jest.fn();
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+jest.mock('src/helpers/files', () => ({
+	...jest.requireActual('src/helpers/files'),
+	isIssueOnDevice: () => mockIsIssueOnDevice,
+}));
 
 const createIssueSummary = (localId: string) => ({
 	key: 'de/1-1-1',
@@ -15,6 +20,7 @@ const createIssueSummary = (localId: string) => ({
 describe('download', () => {
 	describe('downloadAndUnzipIssue', () => {
 		it('should resolve the outer promise when the download runner resolves', async () => {
+			mockIsIssueOnDevice.mockResolvedValue;
 			const localId = '1';
 			const p = downloadAndUnzipIssue(
 				createIssueSummary(localId),
@@ -27,7 +33,7 @@ describe('download', () => {
 				// this is not part of the main API but passing it in tests is much easier than mocking
 				// all the downloads
 			);
-			await expect(p).resolves.toBeUndefined();
+			await expect(p).resolves.toEqual(true);
 		});
 		it('should not set any statuses without the passed promise calling an updater', async () => {
 			const updateStatus = jest.fn(() => {});

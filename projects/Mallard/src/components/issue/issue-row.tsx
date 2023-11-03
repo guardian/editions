@@ -28,6 +28,7 @@ import type { Loaded } from 'src/helpers/Loaded';
 import { imageForScreenSize } from 'src/helpers/screen';
 import { getPillarColors } from 'src/helpers/transform';
 import {
+	DOWNLOAD_ISSUE_MESSAGE_FAILED,
 	DOWNLOAD_ISSUE_MESSAGE_OFFLINE,
 	NOT_CONNECTED,
 	WIFI_ONLY_DOWNLOAD,
@@ -160,12 +161,16 @@ const IssueButton = ({
 		if (isConnected) {
 			if (!dlStatus) {
 				const imageSize = await imageForScreenSize();
-				downloadAndUnzipIssue(
+				const isDownloaded = await downloadAndUnzipIssue(
 					issue,
 					imageSize,
 					downloadBlocked,
 					handleUpdate,
 				);
+				if (!isDownloaded) {
+					setDlStatus(null);
+					showToast(DOWNLOAD_ISSUE_MESSAGE_FAILED);
+				}
 			}
 		} else {
 			showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE);
