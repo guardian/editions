@@ -4,7 +4,7 @@
 		"crosswords": {
 			"key": "crosswords",
 			"project": "Apps/crosswords",
-			"watchPort": 1234,
+			"watchPort": 8001,
 			"watchScript": "yarn watch",
 			"buildScript": "yarn build",
 			"buildPath": "dist"
