@@ -13,7 +13,7 @@ import {
     MediaAtomElement,
     TrailImage,
 } from '../common'
-import { elementParser } from './elements'
+import { elementParser, parseCartoonImagesToImageElements } from './elements'
 import fetch from 'node-fetch'
 import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
@@ -125,6 +125,13 @@ const parseArticleResult = async (
     if (body == null) throw new Error(`Body was undefined in ${path}!`)
 
     const elements = await attempt(Promise.all(body.map(parser)))
+
+    const cartoonImages = getCartoonImages(result) ?? []
+
+    // required for lightbox to work in the app
+    const cartoonImageElements =
+        parseCartoonImagesToImageElements(cartoonImages)
+
     if (hasFailed(elements)) {
         console.error(elements)
         throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
@@ -198,11 +205,11 @@ const parseArticleResult = async (
                     articleType,
                     headerType,
                     ...images,
-                    cartoonImages: getCartoonImages(result),
+                    cartoonImages,
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
-                    elements,
+                    elements: [...elements, ...cartoonImageElements],
                     isFromPrint,
                     webUrl,
                     internalPageCode,
