@@ -1,14 +1,17 @@
 import { Content } from '@guardian/content-api-models/v1/content'
 import {
+    ArticleType,
     CreditedImage,
-    TrailImage,
+    Image,
     ImageRole,
     imageRoles,
+    TrailImage,
 } from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
-import { getImage, getCreditedImage } from './assets'
-import { ArticleType } from '../../Apps/common/src'
+import { getCreditedImage, getImage } from './assets'
 import { ContentType } from '@guardian/content-api-models/v1/contentType'
+import { ElementType } from '@guardian/content-api-models/v1/elementType'
+import { CartoonVariant } from '@guardian/content-api-models/v1/cartoonVariant'
 
 /**
  * This function exploits the 'role'field that is passed to the backend when generating image urls
@@ -89,6 +92,37 @@ const getTrailImage = (
         : undefined
 }
 
+const getCartoonImages = (result: Content): Image[] | undefined => {
+    const maybeMainElement = oc(result).blocks.main.elements[0]()
+    if (maybeMainElement && maybeMainElement.type === ElementType.CARTOON) {
+        const variants: CartoonVariant | undefined =
+            maybeMainElement.cartoonTypeData?.variants &&
+            maybeMainElement.cartoonTypeData.variants.find(
+                (v) => v.viewportSize === 'small',
+            )
+        if (variants) {
+            return variants.images
+                .map((image) => {
+                    try {
+                        const parsed = new URL(image.file)
+                        const path = parsed.pathname.slice(1) //remove leading slash
+                        return {
+                            source: image.file,
+                            path,
+                        }
+                    } catch (e) {
+                        console.error(
+                            `Encountered error parsing cartoon ${image.file}`,
+                        )
+                        console.error(JSON.stringify(e))
+                    }
+                })
+                .filter((item): item is Image => !!item)
+        }
+    }
+    return undefined
+}
+
 interface ImageAndTrailImage {
     image: CreditedImage | undefined
     trailImage: TrailImage | undefined
@@ -105,4 +139,4 @@ const getImages = (
     return images
 }
 
-export { getImages, ImageAndTrailImage }
+export { getImages, getCartoonImages, ImageAndTrailImage }

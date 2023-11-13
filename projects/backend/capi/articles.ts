@@ -20,7 +20,7 @@ import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
 import { articleTypePicker, headerTypePicker } from './articleTypePicker'
-import { getImages } from './articleImgPicker'
+import { getCartoonImages, getImages } from './articleImgPicker'
 import { capiSearchDecoder } from './decoders'
 import {
     CAPIEndpoint,
@@ -198,6 +198,7 @@ const parseArticleResult = async (
                     articleType,
                     headerType,
                     ...images,
+                    cartoonImages: getCartoonImages(result),
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
