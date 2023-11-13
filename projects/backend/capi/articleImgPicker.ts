@@ -12,6 +12,7 @@ import { getCreditedImage, getImage } from './assets'
 import { ContentType } from '@guardian/content-api-models/v1/contentType'
 import { ElementType } from '@guardian/content-api-models/v1/elementType'
 import { CartoonVariant } from '@guardian/content-api-models/v1/cartoonVariant'
+import { getImageFromURL } from '../image'
 
 /**
  * This function exploits the 'role'field that is passed to the backend when generating image urls
@@ -102,21 +103,7 @@ const getCartoonImages = (result: Content): Image[] | undefined => {
             )
         if (variants) {
             return variants.images
-                .map((image) => {
-                    try {
-                        const parsed = new URL(image.file)
-                        const path = parsed.pathname.slice(1) //remove leading slash
-                        return {
-                            source: image.file,
-                            path,
-                        }
-                    } catch (e) {
-                        console.error(
-                            `Encountered error parsing cartoon ${image.file}`,
-                        )
-                        console.error(JSON.stringify(e))
-                    }
-                })
+                .map((image) => getImageFromURL(image.file))
                 .filter((item): item is Image => !!item)
         }
     }
