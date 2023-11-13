@@ -2,35 +2,27 @@
     "name": "@guardian/crosswords",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
     "scripts": {
-        "watch": "webpack serve --mode development",
-        "build": "webpack --mode production",
+        "watch": "parcel src/index.html -p 8001",
+        "build": "parcel build src/index.html",
         "test": "echo \"Info: no test specified for crosswords\""
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@babel/core": "^7.21.8",
-        "@babel/preset-env": "^7.10.4",
-        "@babel/preset-react": "^7.10.4",
-        "@webpack-cli/serve": "^2.0.5",
-        "babel-loader": "^8.0.6",
-        "html-loader": "^4.2.0",
-        "html-webpack-plugin": "^5.5.1",
-        "webpack": "^5.84.1",
-        "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^4.15.1"
+        "@parcel/transformer-sass": "^2.10.2",
+        "parcel": "^2.10.2",
+        "process": "^0.11.10"
     },
     "dependencies": {
         "@guardian/react-crossword": "^0.2.3",
         "chalk": "^3.0.0",
         "kill-port": "^1.6.0",
-        "react": "16.14.0",
-        "react-dom": "16.13.0"
+        "react": "18.2.0",
+        "react-dom": "18.2.0"
     },
     "resolutions": {
-        "jsdom": "16.2.1"
+        "jsdom": "18.2.0"
     }
 }
