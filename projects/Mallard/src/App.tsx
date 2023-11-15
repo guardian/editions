@@ -90,7 +90,6 @@ const App = () => {
 						/>
 						<View style={styles.appContainer}>
 							<AppNavigation />
-							<NetInfoAutoToast />
 						</View>
 						<BugButtonHandler />
 					</AccessProvider>
