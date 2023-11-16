@@ -45,7 +45,6 @@ export const getImagesFromArticle = (
     console.log('Images are: ' + JSON.stringify(images))
 
     const cartoonImages = article.cartoonImages || []
-    console.log('Cartoon images are: ' + JSON.stringify(cartoonImages))
 
     const requiredImages = [
         ...images,
