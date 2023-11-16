@@ -10,17 +10,16 @@ import {
 import { oc } from 'ts-optchain'
 import { getCreditedImage, getImage } from './assets'
 import { ContentType } from '@guardian/content-api-models/v1/contentType'
-import { ElementType } from '@guardian/content-api-models/v1/elementType'
-import { CartoonVariant } from '@guardian/content-api-models/v1/cartoonVariant'
 import { getImageFromURL } from '../image'
 
 /**
  * This function exploits the 'role'field that is passed to the backend when generating image urls
  * to add some image quality overrides in certain scenarios. Any content with displayhint or articleType 'immersive'
  * gets it's images bumped to 'immersive' quality. The same happens to 'picture' content
+ * @param articleType
  * @param displayHint
  * @param capiRole the image role specified in the content API (if any)
- * @param contetnType e.g. gallery/picture/article - we want big pictures for the picture type
+ * @param contentType e.g. gallery/picture/article - we want big pictures for the picture type
  */
 export const getImageRole = (
     articleType: ArticleType,
@@ -94,15 +93,20 @@ const getTrailImage = (
 }
 
 const getCartoonImages = (result: Content): Image[] | undefined => {
-    const maybeMainElement = oc(result).blocks.main.elements[0]()
-    if (maybeMainElement && maybeMainElement.type === ElementType.CARTOON) {
-        const variants: CartoonVariant | undefined =
-            maybeMainElement.cartoonTypeData?.variants &&
-            maybeMainElement.cartoonTypeData.variants.find(
-                (v) => v.viewportSize === 'small',
-            )
-        if (variants) {
-            return variants.images
+    const data = oc(result).blocks.main.elements[0].cartoonTypeData()
+    if (data) {
+        const mobileImages = data.variants?.find(
+            (v) => v.viewportSize === 'small',
+        )?.images
+        const desktopImages = data?.variants?.find(
+            (v) => v.viewportSize === 'large',
+        )?.images
+        if (mobileImages && mobileImages.length > 0) {
+            return mobileImages
+                .map((image) => getImageFromURL(image.file))
+                .filter((item): item is Image => !!item)
+        } else if (desktopImages && desktopImages.length > 0) {
+            return desktopImages
                 .map((image) => getImageFromURL(image.file))
                 .filter((item): item is Image => !!item)
         }
@@ -119,11 +123,10 @@ const getImages = (
     result: Content,
     articleType: ArticleType,
 ): ImageAndTrailImage => {
-    const images = {
+    return {
         image: getMainImage(result, articleType),
         trailImage: getTrailImage(result, articleType),
     }
-    return images
 }
 
 export { getImages, getCartoonImages, ImageAndTrailImage }
