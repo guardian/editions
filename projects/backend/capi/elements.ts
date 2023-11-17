@@ -1,7 +1,7 @@
 import { BlockElement } from '@guardian/content-api-models/v1/blockElement'
 import { ElementType } from '@guardian/content-api-models/v1/elementType'
 import { Atom } from '@guardian/content-atom-model/atom'
-import { BlockElement as EditionsBlockElement } from '../common'
+import { BlockElement as EditionsBlockElement, Image } from '../common'
 import { getImage } from './assets'
 import { renderAtomElement } from './atoms'
 
@@ -21,6 +21,17 @@ const parseImageElement = (
             role: element.imageTypeData.role,
         }
     }
+}
+
+const parseCartoonImagesToImageElements = (
+    images: Image[],
+): EditionsBlockElement[] => {
+    return images.map((image) => {
+        return {
+            id: 'image',
+            src: image,
+        }
+    })
 }
 
 const elementParser =
@@ -80,4 +91,4 @@ const elementParser =
         return { id: 'unknown' }
     }
 
-export { parseImageElement, elementParser }
+export { parseImageElement, parseCartoonImagesToImageElements, elementParser }
