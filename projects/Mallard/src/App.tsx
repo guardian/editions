@@ -15,7 +15,6 @@ import { isValid } from './authentication/lib/Attempt';
 import { oktaInitialisation } from './authentication/services/okta';
 import { BugButtonHandler } from './components/Button/BugButtonHandler';
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary';
-import { NetInfoAutoToast } from './components/toast/net-info-auto-toast';
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
 import { AppStateProvider } from './hooks/use-app-state-provider';
@@ -90,7 +89,6 @@ const App = () => {
 						/>
 						<View style={styles.appContainer}>
 							<AppNavigation />
-							<NetInfoAutoToast />
 						</View>
 						<BugButtonHandler />
 					</AccessProvider>
