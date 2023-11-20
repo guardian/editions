@@ -17,8 +17,10 @@ fs.readFile(filePath, 'utf8', (err, data) => {
         'type="text/javascript"',
     )
 
+    const updateAgain = updatedContent.replace('src="/', 'src="')
+
     // Overwrite the file with the updated content
-    fs.writeFile(filePath, updatedContent, 'utf8', (err) => {
+    fs.writeFile(filePath, updateAgain, 'utf8', (err) => {
         if (err) {
             console.error(`Error writing file ${filePath}: ${err}`)
             return
