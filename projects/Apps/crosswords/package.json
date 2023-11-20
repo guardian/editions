@@ -4,8 +4,9 @@
     "description": "",
     "scripts": {
         "watch": "parcel src/index.html -p 8001",
-        "build": "parcel build src/index.html",
-        "test": "echo \"Info: no test specified for crosswords\""
+        "build": "parcel build src/index.html --public-url './'",
+        "test": "echo \"Info: no test specified for crosswords\"",
+        "html-update": "node scripts/html-update"
     },
     "keywords": [],
     "author": "",
@@ -21,8 +22,5 @@
         "kill-port": "^1.6.0",
         "react": "18.2.0",
         "react-dom": "18.2.0"
-    },
-    "resolutions": {
-        "jsdom": "18.2.0"
     }
 }
