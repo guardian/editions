@@ -11,6 +11,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     }
 
     // Replace "type='module'" with "type='text/javascript'"
+    // This is because 'module' doesnt work when running a file without a browser
     const updatedContent = data.replace(
         'type="module"',
         'type="text/javascript"',
