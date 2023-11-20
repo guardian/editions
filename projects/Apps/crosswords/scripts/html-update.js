@@ -12,15 +12,16 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
     // Replace "type='module'" with "type='text/javascript'"
     // This is because 'module' doesnt work when running a file without a browser
-    const updatedContent = data.replace(
+    const replaceModule = data.replace(
         'type="module"',
         'type="text/javascript"',
     )
 
-    const updateAgain = updatedContent.replace('src="/', 'src="')
+    // Gives a path that works on both iOS and Android
+    const correctPath = replaceModule.replace('src="/', 'src="')
 
     // Overwrite the file with the updated content
-    fs.writeFile(filePath, updateAgain, 'utf8', (err) => {
+    fs.writeFile(filePath, correctPath, 'utf8', (err) => {
         if (err) {
             console.error(`Error writing file ${filePath}: ${err}`)
             return
