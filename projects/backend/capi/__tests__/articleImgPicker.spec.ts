@@ -2,7 +2,6 @@ import {
     getImages,
     ImageAndTrailImage,
     getImageRole,
-    getCartoonImages,
 } from '../articleImgPicker'
 import { Asset } from '@guardian/content-api-models/v1/asset'
 import { AssetType } from '@guardian/content-api-models/v1/assetType'
@@ -13,7 +12,6 @@ import { ElementType } from '@guardian/content-api-models/v1/elementType'
 import { ContentType } from '@guardian/content-api-models/v1/contentType'
 import { articleTypePicker } from '../articleTypePicker'
 import { ArticleType } from '../../../Apps/common/src'
-import { CartoonVariant } from '@guardian/content-api-models/v1/cartoonVariant'
 
 const masterAsset: Asset = {
     type: AssetType.IMAGE,
@@ -29,28 +27,16 @@ const blockImgEleme: BlockElement = {
     assets: [masterAsset],
 }
 
-const blockCartoonElem = (variants?: CartoonVariant[]): BlockElement => {
-    return {
-        type: ElementType.CARTOON,
-        cartoonTypeData: {
-            variants: variants ?? [],
-        },
-        assets: [],
-    }
-}
-
-const blocks = (element?: BlockElement): Blocks => {
-    return {
-        main: {
-            id: '1',
-            bodyHtml: '',
-            bodyTextSummary: '',
-            elements: [element ?? blockImgEleme],
-            contributors: [],
-            published: true,
-            attributes: {},
-        },
-    }
+const blocks: Blocks = {
+    main: {
+        id: '1',
+        bodyHtml: '',
+        bodyTextSummary: '',
+        elements: [blockImgEleme],
+        contributors: [],
+        published: true,
+        attributes: {},
+    },
 }
 
 const thumbnailElem = {
@@ -91,7 +77,7 @@ describe('articleImgPicker.getImages', () => {
     it('should extract both images', () => {
         const given: Content = {
             ...sharedGiven,
-            blocks: blocks(),
+            blocks: blocks,
             elements: [thumbnailElem],
         }
 
@@ -138,7 +124,7 @@ describe('articleImgPicker.getImages', () => {
     it('should extract only main image', () => {
         const given: Content = {
             ...sharedGiven,
-            blocks: blocks(),
+            blocks: blocks,
         }
 
         const actual = getImages(given, articleType)
@@ -196,132 +182,5 @@ describe('getImageRole', () => {
             ContentType.PICTURE,
         )
         expect(role).toBe('immersive')
-    })
-})
-
-describe('articleImgPicker.getCartoonImages', () => {
-    const mobileVariant = {
-        viewportSize: 'small',
-        images: [
-            {
-                file: 'https://media.guim.co.uk/63425e0763eb1acf30ad10dc4cdbc5963f3e0944/27_16_951_842/master/951.jpg',
-                mimeType: 'image/jpeg',
-            },
-            {
-                file: 'https://media.guim.co.uk/63425e0763eb1acf30ad10dc4cdbc5963f3e0944/982_24_946_837/master/946.jpg',
-                mimeType: 'image/jpeg',
-            },
-        ],
-    }
-    const desktopVariant = {
-        viewportSize: 'large',
-        images: [
-            {
-                file: 'https://media.guim.co.uk/63425e0763eb1acf30ad10dc4cdbc5963f3e0944/0_0_1974_3413/master/1974.jpg',
-                mimeType: 'image/jpeg',
-            },
-        ],
-    }
-
-    it('should return mobile images from cartoon main media', () => {
-        const variants: CartoonVariant[] = [mobileVariant, desktopVariant]
-
-        const given: Content = {
-            ...sharedGiven,
-            blocks: blocks(blockCartoonElem(variants)),
-        }
-
-        const cartoonImages = getCartoonImages(given)
-
-        const expected = [
-            {
-                path: '63425e0763eb1acf30ad10dc4cdbc5963f3e0944/27_16_951_842/master/951.jpg',
-                source: 'media',
-            },
-            {
-                path: '63425e0763eb1acf30ad10dc4cdbc5963f3e0944/982_24_946_837/master/946.jpg',
-                source: 'media',
-            },
-        ]
-
-        expect(cartoonImages).toEqual(expected)
-    })
-
-    it('should default to desktop images if mobile variant is absent', () => {
-        const variants: CartoonVariant[] = [desktopVariant]
-
-        const given: Content = {
-            ...sharedGiven,
-            blocks: blocks(blockCartoonElem(variants)),
-        }
-
-        const cartoonImages = getCartoonImages(given)
-
-        const expected = [
-            {
-                path: '63425e0763eb1acf30ad10dc4cdbc5963f3e0944/0_0_1974_3413/master/1974.jpg',
-                source: 'media',
-            },
-        ]
-
-        expect(cartoonImages).toEqual(expected)
-    })
-
-    it('should default to desktop images if a mobile variant is present but has no images', () => {
-        const variants: CartoonVariant[] = [
-            { viewportSize: 'small', images: [] },
-            desktopVariant,
-        ]
-
-        const given: Content = {
-            ...sharedGiven,
-            blocks: blocks(blockCartoonElem(variants)),
-        }
-
-        const cartoonImages = getCartoonImages(given)
-
-        const expected = [
-            {
-                path: '63425e0763eb1acf30ad10dc4cdbc5963f3e0944/0_0_1974_3413/master/1974.jpg',
-                source: 'media',
-            },
-        ]
-
-        expect(cartoonImages).toEqual(expected)
-    })
-
-    it('should return undefined if there are no variants', () => {
-        const given: Content = {
-            ...sharedGiven,
-            blocks: blocks(blockCartoonElem()),
-        }
-
-        const cartoonImages = getCartoonImages(given)
-
-        expect(cartoonImages).toEqual(undefined)
-    })
-
-    it('should return undefined if there variants but no images', () => {
-        const given: Content = {
-            ...sharedGiven,
-            blocks: blocks(
-                blockCartoonElem([{ viewportSize: 'small', images: [] }]),
-            ),
-        }
-
-        const cartoonImages = getCartoonImages(given)
-
-        expect(cartoonImages).toEqual(undefined)
-    })
-
-    it('should return undefined if there is no cartoon data', () => {
-        const given: Content = {
-            ...sharedGiven,
-            blocks: blocks(),
-        }
-
-        const cartoonImages = getCartoonImages(given)
-
-        expect(cartoonImages).toEqual(undefined)
     })
 })

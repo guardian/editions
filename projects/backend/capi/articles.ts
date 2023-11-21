@@ -13,14 +13,14 @@ import {
     MediaAtomElement,
     TrailImage,
 } from '../common'
-import { elementParser, parseCartoonImagesToImageElements } from './elements'
+import { elementParser } from './elements'
 import fetch from 'node-fetch'
 import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
 import { articleTypePicker, headerTypePicker } from './articleTypePicker'
-import { getCartoonImages, getImages } from './articleImgPicker'
+import { getImages } from './articleImgPicker'
 import { capiSearchDecoder } from './decoders'
 import {
     CAPIEndpoint,
@@ -125,13 +125,6 @@ const parseArticleResult = async (
     if (body == null) throw new Error(`Body was undefined in ${path}!`)
 
     const elements = await attempt(Promise.all(body.map(parser)))
-
-    const cartoonImages = getCartoonImages(result) ?? []
-
-    // required for lightbox to work in the app
-    const cartoonImageElements =
-        parseCartoonImagesToImageElements(cartoonImages)
-
     if (hasFailed(elements)) {
         console.error(elements)
         throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
@@ -205,11 +198,10 @@ const parseArticleResult = async (
                     articleType,
                     headerType,
                     ...images,
-                    cartoonImages,
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
-                    elements: [...elements, ...cartoonImageElements],
+                    elements,
                     isFromPrint,
                     webUrl,
                     internalPageCode,

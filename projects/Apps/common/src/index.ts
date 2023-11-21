@@ -178,7 +178,6 @@ export interface Content extends WithKey {
     webUrl?: string
     displayHint?: string
     internalPageCode: number
-    cartoonImages?: Image[]
 }
 export interface Article extends Content {
     type: 'article'

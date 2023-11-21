@@ -1,25 +1,22 @@
 import { Content } from '@guardian/content-api-models/v1/content'
 import {
-    ArticleType,
     CreditedImage,
-    Image,
+    TrailImage,
     ImageRole,
     imageRoles,
-    TrailImage,
 } from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
-import { getCreditedImage, getImage } from './assets'
+import { getImage, getCreditedImage } from './assets'
+import { ArticleType } from '../../Apps/common/src'
 import { ContentType } from '@guardian/content-api-models/v1/contentType'
-import { getImageFromURL } from '../image'
 
 /**
  * This function exploits the 'role'field that is passed to the backend when generating image urls
  * to add some image quality overrides in certain scenarios. Any content with displayhint or articleType 'immersive'
  * gets it's images bumped to 'immersive' quality. The same happens to 'picture' content
- * @param articleType
  * @param displayHint
  * @param capiRole the image role specified in the content API (if any)
- * @param contentType e.g. gallery/picture/article - we want big pictures for the picture type
+ * @param contetnType e.g. gallery/picture/article - we want big pictures for the picture type
  */
 export const getImageRole = (
     articleType: ArticleType,
@@ -92,28 +89,6 @@ const getTrailImage = (
         : undefined
 }
 
-const getCartoonImages = (result: Content): Image[] | undefined => {
-    const data = oc(result).blocks.main.elements[0].cartoonTypeData()
-    if (data) {
-        const mobileImages = data.variants?.find(
-            (v) => v.viewportSize === 'small',
-        )?.images
-        const desktopImages = data?.variants?.find(
-            (v) => v.viewportSize === 'large',
-        )?.images
-        if (mobileImages && mobileImages.length > 0) {
-            return mobileImages
-                .map((image) => getImageFromURL(image.file))
-                .filter((item): item is Image => !!item)
-        } else if (desktopImages && desktopImages.length > 0) {
-            return desktopImages
-                .map((image) => getImageFromURL(image.file))
-                .filter((item): item is Image => !!item)
-        }
-    }
-    return undefined
-}
-
 interface ImageAndTrailImage {
     image: CreditedImage | undefined
     trailImage: TrailImage | undefined
@@ -123,10 +98,11 @@ const getImages = (
     result: Content,
     articleType: ArticleType,
 ): ImageAndTrailImage => {
-    return {
+    const images = {
         image: getMainImage(result, articleType),
         trailImage: getTrailImage(result, articleType),
     }
+    return images
 }
 
-export { getImages, getCartoonImages, ImageAndTrailImage }
+export { getImages, ImageAndTrailImage }

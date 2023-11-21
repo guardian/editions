@@ -44,15 +44,12 @@ export const getImagesFromArticle = (
     const images = elements.map(getImageFromElement)
     console.log('Images are: ' + JSON.stringify(images))
 
-    const cartoonImages = article.cartoonImages || []
-
     const requiredImages = [
         ...images,
         ...cardImages,
         ...bylineImages,
         image,
         trailImage,
-        ...cartoonImages,
     ].filter(notNull)
     console.log('Required images are: ' + JSON.stringify(requiredImages))
 
