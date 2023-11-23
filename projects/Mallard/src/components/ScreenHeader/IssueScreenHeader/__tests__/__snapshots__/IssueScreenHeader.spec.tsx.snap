@@ -11,12 +11,9 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
   <RNCSafeAreaProvider
     onInsetsChange={[Function]}
     style={
-      [
-        {
-          "flex": 1,
-        },
-        undefined,
-      ]
+      {
+        "flex": 1,
+      }
     }
   >
     <View
@@ -766,12 +763,9 @@ exports[`IssueScreenHeader should match the default style 1`] = `
   <RNCSafeAreaProvider
     onInsetsChange={[Function]}
     style={
-      [
-        {
-          "flex": 1,
-        },
-        undefined,
-      ]
+      {
+        "flex": 1,
+      }
     }
   >
     <View

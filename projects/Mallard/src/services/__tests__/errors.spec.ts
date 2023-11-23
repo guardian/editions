@@ -4,6 +4,18 @@ jest.mock('src/helpers/release-stream', () => ({
 	isInBeta: () => false,
 }));
 
+jest.mock('src/helpers/storage', () => ({
+	userDataCache: {
+		get: () => jest.fn().mockResolvedValue(null),
+	},
+	legacyCASUsernameCache: {
+		get: () => jest.fn().mockResolvedValue(null),
+	},
+	casCredentialsKeychain: {
+		get: () => jest.fn().mockResolvedValue(null),
+	},
+}));
+
 const mockLog = jest.fn();
 const mockRecordError = jest.fn();
 
@@ -12,6 +24,7 @@ jest.mock('@react-native-firebase/crashlytics', () =>
 		log: mockLog,
 		recordError: mockRecordError,
 		setCrashlyticsCollectionEnabled: jest.fn(),
+		setAttributes: jest.fn(),
 	})),
 );
 
