@@ -10,6 +10,7 @@ const bundleHTML = (location = 'Mallard') => {
             [
                 `cd ../../projects/${project}`,
                 buildScript,
+                'yarn html-update',
                 `rm -rf ../../../projects/${location}/html/${key}.bundle`,
                 `mv ./${buildPath} ../../../projects/${location}/html/${key}.bundle`,
             ].join(' && '),
