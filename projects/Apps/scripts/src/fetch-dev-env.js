@@ -6,7 +6,13 @@
  * - entryBucket: S3 bucket path for the sentry.properties file
  */
 
-const AWS = require('aws-sdk')
+const {
+    fromIni,
+    fromNodeProviderChain,
+} = require('@aws-sdk/credential-providers')
+
+const { S3 } = require('@aws-sdk/client-s3')
+
 const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
@@ -30,7 +36,7 @@ const sentryPropertiesFileWrite = (platform, file) => {
             `${appRelativePath}${platform}/sentry.properties`,
         ),
         file.Body.toString(),
-        e => {
+        (e) => {
             if (e) {
                 console.error(e)
                 process.exit()
@@ -51,10 +57,11 @@ const failureMessage = (path, error) => {
     }
 }
 
-const s3 = new AWS.S3({
+const s3 = new S3({
     region: 'eu-west-1',
-    credentialProvider: new AWS.CredentialProviderChain([
-        new AWS.SharedIniFileCredentials({
+
+    credentialProvider: fromNodeProviderChain([
+        fromIni({
             profile: AWS_PROFILE,
         }),
     ]),
@@ -64,8 +71,7 @@ s3.getObject({
     Bucket: 'editions-app-config',
     Key: envBucket,
 })
-    .promise()
-    .then(file => {
+    .then((file) => {
         fs.writeFileSync(ENV_PATH, file.Body)
     })
     .catch((e) => failureMessage(ENV_PATH, e))
@@ -74,8 +80,7 @@ s3.getObject({
     Bucket: 'editions-app-config',
     Key: sentryBucket,
 })
-    .promise()
-    .then(file => {
+    .then((file) => {
         sentryPropertiesFileWrite('ios', file)
         sentryPropertiesFileWrite('android', file)
     })
