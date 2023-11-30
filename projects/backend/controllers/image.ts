@@ -1,5 +1,10 @@
 import { Request, Response } from 'express'
-import { imageSizes, ImageUse, imageUses } from '../../Apps/common/src/index'
+import {
+    ImageSize,
+    imageSizes,
+    ImageUse,
+    imageUses,
+} from '../../Apps/common/src/index'
 import { Image, ImageRole, imageRoles } from '../common'
 import { getImageURL } from '../image'
 
@@ -26,11 +31,11 @@ export const imageController = (req: Request, res: Response) => {
         imageRoles.find((r) => r === req.query.role) || 'inline'
     const img: Image = { source, path: lastPathParam, role }
 
-    if (!imageSizes.includes(size)) {
+    if (!imageSizes.includes(size as ImageSize)) {
         res.status(500)
         res.send('Invalid size')
     }
-    const redirect = getImageURL(img, size, use)
+    const redirect = getImageURL(img, size as ImageSize, use)
     console.log(
         `Getting image redirect for ${source} ${size} ${lastPathParam} role : ${role} redirect: ${redirect}`,
     )

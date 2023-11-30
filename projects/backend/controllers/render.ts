@@ -325,14 +325,14 @@ export const renderFrontController = async (req: Request, res: Response) => {
 
 export const renderItemController = async (req: Request, res: Response) => {
     console.log(JSON.stringify(req.params))
-    const internalPageCode = req.params[0] as number
-    const frontId: string = req.query['frontId']
+    const internalPageCode = req.params[0] as unknown as number
+    const frontId = req.query['frontId']
     console.log(
         `Rendering single article with internalPageCode=${internalPageCode} within a front: ${frontId}`,
     )
 
     const [date, updater] = lastModified()
-    const front = await fetchPublishedFront(req, frontId, updater)
+    const front = await fetchPublishedFront(req, frontId as string, updater)
     if (hasFailed(front)) {
         sendError(
             `Failed to find front '${frontId}' from the published issue`,
