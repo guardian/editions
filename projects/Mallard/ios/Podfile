@@ -58,6 +58,7 @@ pod 'FirebaseCoreExtension', :modular_headers => true
 pod 'FirebaseInstallations', :modular_headers => true
 pod 'GoogleDataTransport', :modular_headers => true
 pod 'nanopb', :modular_headers => true
+pod 'FirebaseABTesting', :modular_headers => true
 $RNFirebaseAsStaticFramework = true
 
 
