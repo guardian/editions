@@ -24,6 +24,7 @@ jobs:
 
             - name: install mallard
               run: |
+                  yarn
                   cd projects/Mallard
                   yarn
 
