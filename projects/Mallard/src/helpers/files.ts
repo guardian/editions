@@ -256,7 +256,7 @@ const cleanFileDisplay = (stat: RNFS.ReadDirItem | RNFS.StatResult) => ({
 export const getFileList = async () => {
 	const imageFolders: RNFS.ReadDirItem[] = [];
 	const editionSlug = await getSelectedEditionSlug();
-	const editionDirectory = await FSPaths.editionDir(editionSlug);
+	const editionDirectory: string = await FSPaths.editionDir(editionSlug);
 	const files = await RNFS.readDir(editionDirectory);
 
 	const subfolders = await Promise.all(

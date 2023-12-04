@@ -51,7 +51,7 @@ const ApiScreen = () => {
 				<Heading>Presets</Heading>
 				<List
 					data={backends.map(({ title, value }) => ({
-						title: (apiUrl === value ? '✅ ' : '') + title,
+						title: `${apiUrl === value ? '✅ ' : ''}${title}`,
 						explainer: value,
 						key: value,
 						onPress: () => {

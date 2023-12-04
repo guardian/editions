@@ -16,11 +16,6 @@ import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout
 import { NewEditionCard } from 'src/components/onboarding/new-edition';
 import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader';
 import { Spinner } from 'src/components/Spinner/Spinner';
-import {
-	EMPTY_WEATHER_HEIGHT,
-	WEATHER_HEIGHT,
-	WeatherWidget,
-} from 'src/components/weather';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
 import { logPageView } from 'src/helpers/analytics';
 import type { FlatCard } from 'src/helpers/transform';
@@ -49,7 +44,6 @@ import { useIssue } from 'src/hooks/use-issue-provider';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useWeather } from 'src/hooks/use-weather-provider';
-import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { metrics } from 'src/theme/spacing';
 import type {
@@ -57,6 +51,12 @@ import type {
 	SpecialEditionHeaderStyles,
 	Front as TFront,
 } from '../../../Apps/common/src';
+import {
+	EMPTY_WEATHER_HEIGHT,
+	WEATHER_HEIGHT,
+	WeatherWidget,
+} from '../components/weather';
+import { SLIDER_FRONT_HEIGHT } from './article/slider/SliderTitle';
 import type { FrontSpec } from './article-screen';
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size';
 

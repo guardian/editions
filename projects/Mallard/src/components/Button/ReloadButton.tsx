@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useInsets } from 'src/hooks/use-screen';
+import { useInsets } from '../../hooks/use-screen';
 import { Button, ButtonAppearance } from './Button';
 
 export const ReloadButton: React.FC<{

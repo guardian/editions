@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
 const WithProviders = nestProviders(
 	ToastProvider,
 	NavPositionProvider,
-	ActionSheetProvider,
 	ConfigProvider,
 	SettingsOverlayProvider,
 	AppStateProvider,
@@ -78,21 +77,23 @@ const App = () => {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ErrorBoundary>
-				<WithProviders>
-					<AccessProvider
-						onIdentityStatusChange={handleIdStatus}
-						onOktaStatusChange={handleOktaStatus}
-					>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="#041f4a"
-						/>
-						<View style={styles.appContainer}>
-							<AppNavigation />
-						</View>
-						<BugButtonHandler />
-					</AccessProvider>
-				</WithProviders>
+				<ActionSheetProvider>
+					<WithProviders>
+						<AccessProvider
+							onIdentityStatusChange={handleIdStatus}
+							onOktaStatusChange={handleOktaStatus}
+						>
+							<StatusBar
+								barStyle="light-content"
+								backgroundColor="#041f4a"
+							/>
+							<View style={styles.appContainer}>
+								<AppNavigation />
+							</View>
+							<BugButtonHandler />
+						</AccessProvider>
+					</WithProviders>
+				</ActionSheetProvider>
 			</ErrorBoundary>
 		</GestureHandlerRootView>
 	);
