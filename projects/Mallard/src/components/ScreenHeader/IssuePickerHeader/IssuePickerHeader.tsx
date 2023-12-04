@@ -6,9 +6,8 @@ import { SettingsButton } from 'src/components/Button/SettingsButton';
 import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
-import type { SettingsOverlayInterface } from 'src/hooks/use-settings-overlay';
-import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
 import { RouteNames } from 'src/navigation/NavigationModels';
+import { SettingsOverlayContext } from '../../../hooks/use-settings-overlay';
 
 const IssuePickerHeader = ({
 	headerStyles,
@@ -20,9 +19,7 @@ const IssuePickerHeader = ({
 	title: string;
 }) => {
 	const navigation = useNavigation();
-	const { setSettingsModalOpen } = useContext(
-		SettingsOverlayContext,
-	) as SettingsOverlayInterface;
+	const settingsOverlay = useContext(SettingsOverlayContext);
 
 	return (
 		<Header
@@ -38,7 +35,7 @@ const IssuePickerHeader = ({
 			leftAction={
 				<SettingsButton
 					onPress={() => {
-						setSettingsModalOpen(true);
+						settingsOverlay?.setSettingsModalOpen(true);
 						navigation.navigate(RouteNames.Settings);
 					}}
 				/>

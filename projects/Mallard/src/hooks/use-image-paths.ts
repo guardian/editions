@@ -28,7 +28,7 @@ export const selectImagePath = async (
 		imageSize,
 	)}`;
 
-	const fs = getFsPath(localIssueId, image, use);
+	const fs: string = getFsPath(localIssueId, image, use);
 	const fsExists = await RNFS.exists(fs);
 
 	const fsUpdatedPath = Platform.OS === 'android' ? 'file:///' + fs : fs;
