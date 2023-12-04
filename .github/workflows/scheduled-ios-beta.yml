@@ -20,12 +20,28 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
-                  node-version-file: 'projects/Mallard/.nvmrc'
+                  node-version-file: '.nvmrc'
 
-            - name: install mallard
+            - name: install project level dependencies
               run: |
                   yarn
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version-file: 'projects/Mallard/.nvmrc'
+
+            - name: install Mallard dependencies
+              run: |
                   cd projects/Mallard
+                  yarn
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version-file: 'projects/Apps/.nvmrc'
+
+            - name: install Apps dependencies
+              run: |
+                  cd projects/Apps
                   yarn
 
             - name: validate Mallard project
