@@ -19,11 +19,34 @@ jobs:
               with:
                   node-version-file: '.nvmrc'
 
-            - name: install mallard
-              run: make install
+            - name: install project level dependencies
+              run: |
+                  yarn
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version-file: 'projects/Mallard/.nvmrc'
+
+            - name: install Mallard dependencies
+              run: |
+                  cd projects/Mallard
+                  yarn
+
+            - uses: actions/setup-node@v3
+              with:
+                  node-version-file: 'projects/Apps/.nvmrc'
+
+            - name: install Apps dependencies
+              run: |
+                  cd projects/Apps
+                  yarn
 
             - name: validate Mallard project
-              run: make PROJECT=Mallard validate
+              run: |
+                  cd projects/Mallard
+                  yarn validate
 
             - name: test Mallard project
-              run: make PROJECT=Mallard test
+              run: |
+                  cd projects/Mallard
+                  yarn test
