@@ -7115,13 +7115,6 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-pkg-dir@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-5.0.0.tgz#a02d6aebe6ba133a928f74aec20bafdfe6b8e760"
-  integrity sha512-NPE8TDbzl/3YQYY7CSS228s3g2ollTFnc+Qi3tqmqJp9Vg2ovUpixcJEo2HJScN2Ez+kEaal6y70c0ehqJBJeA==
-  dependencies:
-    find-up "^5.0.0"
-
 postcss-value-parser@^4.0.2:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
@@ -7400,13 +7393,10 @@ react-native-pager-view@^5.4.24:
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.25.tgz#cd639d5387a7f3d5581b55a33c5faa1cbc200f97"
   integrity sha512-3drrYwaLat2fYszymZe3nHMPASJ4aJMaxiejfA1V5SK3OygYmdtmV2u5prX7TnjueJzGSyyaCYEr2JlrRt4YPg==
 
-react-native-permissions@^3.8.4:
-  version "3.8.4"
-  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.8.4.tgz#20f203f1dd659c28fb770fc26bbbf0126faa797e"
-  integrity sha512-tJq+5eNqu8Y1PpmuSVMjQtW8E7YJbQ0LSbZ1o9KjgF7etgYmBSZeCR138x715vyZUAtwuecV+ybEM9z8dDs76Q==
-  dependencies:
-    picocolors "^1.0.0"
-    pkg-dir "^5.0.0"
+react-native-permissions@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.0.0.tgz#64eb341993b0d317fb753104bc72f911d253d613"
+  integrity sha512-VWdETvRVf5WWLOKxle88UtB+LNQR99LvWOkg8C/azNTYLhuAqeSI+SYll+og/A0TIepeTsxnBrtX/YNB3hNQ0w==
 
 react-native-push-notification@^7.0.0:
   version "7.4.0"
