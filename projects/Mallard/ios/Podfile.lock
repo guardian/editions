@@ -588,7 +588,7 @@ PODS:
     - React-Core
   - RNLocalize (3.0.4):
     - React-Core
-  - RNPermissions (3.8.4):
+  - RNPermissions (4.0.0):
     - React-Core
   - RNRate (1.2.12):
     - React-Core
@@ -976,7 +976,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
-  RNPermissions: 5e1908f7381d825cbae3215975703a81c598f864
+  RNPermissions: 661b1e170b48d27959dcbc58df3892816dd9ac8c
   RNRate: ef3bcff84f39bb1d1e41c5593d3eea4aab2bd73a
   RNReanimated: f186e85d9f28c9383d05ca39e11dd194f59093ec
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
@@ -987,6 +987,6 @@ SPEC CHECKSUMS:
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Yoga: e71803b4c1fff832ccf9b92541e00f9b873119b9
 
-PODFILE CHECKSUM: 2dbc46989920a9cfdab6c6432cc90789c703e26f
+PODFILE CHECKSUM: 17b547ba86a8bea20dcf8266cd2802607ed37abc
 
 COCOAPODS: 1.11.3
