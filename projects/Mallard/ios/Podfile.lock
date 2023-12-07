@@ -432,9 +432,9 @@ PODS:
   - React-jsinspector (0.71.14)
   - React-logger (0.71.14):
     - glog
-  - react-native-config (1.4.11):
-    - react-native-config/App (= 1.4.11)
-  - react-native-config/App (1.4.11):
+  - react-native-config (1.5.1):
+    - react-native-config/App (= 1.5.1)
+  - react-native-config/App (1.5.1):
     - React-Core
   - react-native-geolocation (3.0.5):
     - React-Core
@@ -552,7 +552,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.10.1):
     - React-Core
-  - RNDeviceInfo (10.8.0):
+  - RNDeviceInfo (10.12.0):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -933,7 +933,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 94cfc1788637ceaf8841ef1f69b10cc0d62baadc
   React-jsinspector: 7bf923954b4e035f494b01ac16633963412660d7
   React-logger: 655ff5db8bd922acfbe76a4983ffab048916343e
-  react-native-config: bcafda5b4c51491ee1b0e1d0c4e3905bc7b56c1b
+  react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-geolocation: 7383cbe9fa75b168bbbe40b566070fd0b44d30d6
   react-native-in-app-utils: 96cdefc90ad74a79a95d19239a183995a6face0b
   react-native-netinfo: fbc23bc2fe217155d85f2f7e0644b1654df8029b
@@ -963,7 +963,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
-  RNDeviceInfo: 5795b418ed3451ebcaf39384e6cf51f60cb931c9
+  RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBAnalytics: d9b2e4e7f48db483d3dee78714a49db80220dc6e
   RNFBApp: f0b5cf917b0b91a0ae890fbbaec0fb5d3285ea46
