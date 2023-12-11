@@ -2,8 +2,8 @@ import { createContext, useContext } from 'react';
 import type { LayoutRectangle } from 'react-native';
 import { Dimensions } from 'react-native';
 import { PageLayoutSizes } from 'src/common';
-import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle';
 import { metrics } from 'src/theme/spacing';
+import { SLIDER_FRONT_HEIGHT } from '../article/slider/SliderTitle';
 
 const BreakpointContext = createContext<[PageLayoutSizes, LayoutRectangle]>([
 	PageLayoutSizes.mobile,
@@ -12,7 +12,7 @@ const BreakpointContext = createContext<[PageLayoutSizes, LayoutRectangle]>([
 
 const useIssueScreenSize = () => {
 	const [size, layout] = useContext(BreakpointContext);
-	const card =
+	const card: { height: number; width: number } =
 		size === PageLayoutSizes.mobile
 			? metrics.fronts.cardSize
 			: metrics.fronts.cardSizeTablet;

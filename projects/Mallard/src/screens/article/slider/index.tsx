@@ -14,7 +14,10 @@ import {
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import { useRating } from 'src/hooks/use-rating';
 import type { PathToArticle } from 'src/paths';
-import type { ArticleNavigator, ArticleSpec } from 'src/screens/article-screen';
+import type {
+	ArticleNavigator,
+	ArticleSpec,
+} from '../../../screens/article-screen';
 import { getArticleDataFromNavigator } from '../../article-screen';
 import type { OnIsAtTopChange } from '../body';
 import { ArticleScreenBody } from '../body';

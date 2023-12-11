@@ -8,9 +8,9 @@ import {
 	View,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { useInsets } from 'src/hooks/use-screen';
 import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
+import { useInsets } from '../../hooks/use-screen';
+import { metrics } from '../../theme/spacing';
 import { ButtonAppearance } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';
 import { Spinner } from '../Spinner/Spinner';

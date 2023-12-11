@@ -7,7 +7,6 @@ import type {
 	Front,
 	FrontCardAppearance,
 	Issue,
-	ItemSizes,
 	PageLayout,
 	PageLayoutSizes,
 	Rectangle,
@@ -112,11 +111,21 @@ const getPageLayout = (
 	}
 };
 
-const isNotRightMostStory = ({ story, layout }: ItemSizes) =>
-	story.left + story.width < getPageLayoutSizeXY(layout).width;
+const isNotRightMostStory = ({
+	story,
+	layout,
+}: {
+	story: { left: number; width: number };
+	layout: PageLayoutSizes;
+}) => story.left + story.width < getPageLayoutSizeXY(layout).width;
 
-const isNotBottomMostStory = ({ story, layout }: ItemSizes) =>
-	story.top + story.height < getPageLayoutSizeXY(layout).height;
+const isNotBottomMostStory = ({
+	story,
+	layout,
+}: {
+	story: { left: number; width: number; top: number; height: number };
+	layout: PageLayoutSizes;
+}) => story.top + story.height < getPageLayoutSizeXY(layout).height;
 
 const Item = React.memo(
 	({

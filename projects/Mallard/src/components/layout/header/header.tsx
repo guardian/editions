@@ -7,9 +7,9 @@ import { useInsets, useMediaQuery } from 'src/hooks/use-screen';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
-import { getFont } from 'src/theme/typography';
 import type { SpecialEditionHeaderStyles } from '../../../../../Apps/common/src';
+import { metrics } from '../../../theme/spacing';
+import { getFont } from '../../../theme/typography';
 
 const styles = StyleSheet.create({
 	background: {

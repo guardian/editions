@@ -19,12 +19,6 @@ import {
 import { isTablet } from 'react-native-device-info';
 import type { IssueSummary } from 'src/common';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
-import {
-	ISSUE_FRONT_ERROR_HEIGHT,
-	ISSUE_FRONT_ROW_HEIGHT,
-	ISSUE_ROW_HEADER_HEIGHT,
-	IssueRow,
-} from 'src/components/issue/issue-row';
 import { GridRowSplit } from 'src/components/issue/issue-title';
 import { FlexCenter } from 'src/components/layout/flex-center';
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
@@ -51,7 +45,6 @@ import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import useOverlayAnimation from 'src/hooks/use-overlay-animation';
 import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
-import type { SettingsOverlayInterface } from 'src/hooks/use-settings-overlay';
 import { navigateToIssue } from 'src/navigation/helpers/base';
 import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -60,6 +53,12 @@ import { WithAppAppearance } from 'src/theme/appearance';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import type { IssueWithFronts } from '../../../Apps/common/src';
+import {
+	ISSUE_FRONT_ERROR_HEIGHT,
+	ISSUE_FRONT_ROW_HEIGHT,
+	ISSUE_ROW_HEADER_HEIGHT,
+	IssueRow,
+} from '../components/issue/issue-row';
 import { ScreenFiller } from './editions-menu-screen';
 import { ApiState } from './settings/api-screen';
 
@@ -488,17 +487,17 @@ export const HomeScreen = () => {
 	const { issueSummary, error } = useIssueSummary();
 	const { selectedEdition } = useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
-	const { settingsModalOpen, setSettingsModalOpen } = useContext(
-		SettingsOverlayContext,
-	) as SettingsOverlayInterface;
-	const { showOverlay, fadeAnim } = useOverlayAnimation(settingsModalOpen);
+	const settingsOverlay = useContext(SettingsOverlayContext);
+	const { showOverlay, fadeAnim } = useOverlayAnimation(
+		settingsOverlay?.settingsModalOpen ?? false,
+	);
 	const isFocused = useIsFocused();
 
 	useEffect(() => {
 		if (isFocused) {
-			setSettingsModalOpen(false);
+			settingsOverlay?.setSettingsModalOpen(false);
 		} else {
-			setSettingsModalOpen(true);
+			settingsOverlay?.setSettingsModalOpen(true);
 		}
 	}, [isFocused]);
 

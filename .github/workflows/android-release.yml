@@ -1,94 +1,114 @@
 name: android-release
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  build:
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
+    build:
+        permissions:
+            contents: write
+        runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
 
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
+            - name: Set up JDK 11
+              uses: actions/setup-java@v3
+              with:
+                  java-version: '11'
+                  distribution: 'temurin'
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
+            - name: Setup Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: 2.7.3
+                  bundler-cache: true
 
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7.3
-        bundler-cache: true
+            - name: inject credentials
+              run: |
+                  echo -e "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
+                  echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > projects/Mallard/android/app/editions-release-2023.keystore
 
-    - name: inject credentials
-      run: |
-        echo -e "\n\n${{ secrets.ANDROID_GRADLE_PROPERTIES }}" >> projects/Mallard/android/gradle.properties
-        echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > projects/Mallard/android/app/editions-release-2023.keystore
+            # We add 50 to the github run number to syncronise it with the last release build number from TeamCity
+            - name: set build number
+              run: |
+                  echo "BUILD_NUMBER=$(($GITHUB_RUN_NUMBER + 50))" >> "$GITHUB_ENV"
 
-    # We add 50 to the github run number to syncronise it with the last release build number from TeamCity
-    - name: set build number
-      run: |
-        echo "BUILD_NUMBER=$(($GITHUB_RUN_NUMBER + 50))" >> "$GITHUB_ENV"
+            - run: echo $BUILD_NUMBER
 
-    - run: echo $BUILD_NUMBER
+            - uses: actions/setup-node@v3
+              with:
+                  node-version-file: '.nvmrc'
 
-    - name: install
-      run: |
-          yarn install-mallard
+            - name: install project level dependencies
+              run: |
+                  yarn
 
-    - name: validate
-      run: make validate-Mallard
+            - uses: actions/setup-node@v3
+              with:
+                  node-version-file: 'projects/Mallard/.nvmrc'
 
-    - name: Build APK
-      id: build_app
-      run: |
-        ./build_apk.sh RELEASE
-      env:
-        ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
-        ID_API_URL: ${{ secrets.ID_API_URL }}
-        LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
-        ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
-        MEMBERS_DATA_API_URL: ${{ secrets.MEMBERS_DATA_API_URL }}
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        SENTRY_CLI_EXECUTABLE: ${{ secrets.SENTRY_CLI_EXECUTABLE }}
-        SENTRY_DEFAULTS_ORG: ${{ secrets.SENTRY_DEFAULTS_ORG }}
-        SENTRY_DEFAULTS_PROJECT: ${{ secrets.SENTRY_DEFAULTS_PROJECT }}
-        SENTRY_DEFAULTS_URL: ${{ secrets.SENTRY_DEFAULTS_URL }}
-        SENTRY_DSN_URL: ${{ secrets.SENTRY_DSN_URL }}
-        FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-        FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-        ANDROID_RELEASE_STREAM: 'RELEASE'
-        USE_SANDBOX_IAP: 'true'
-        FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
-        SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
-        BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
+            - name: install Mallard dependencies
+              run: |
+                  cd projects/Mallard
+                  yarn
 
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: release-apk
-        path: |
-          projects/Mallard/android/app/build/outputs/apk/release/app-release.apk
+            - uses: actions/setup-node@v3
+              with:
+                  node-version-file: 'projects/Apps/.nvmrc'
 
-    - name: tag release on github
-      working-directory: script
-      run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.VERSION_CODE }} android production
-      env:
-        REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: install Apps dependencies
+              run: |
+                  cd projects/Apps
+                  yarn
 
-      #add a version tag to a commit
-    - name: Create Tag
-      run: |
-        git tag v${{ steps.build_app.outputs.VERSION_NAME }}.${{ steps.build_app.outputs.VERSION_CODE }}
-        git push origin v${{ steps.build_app.outputs.VERSION_NAME }}.${{ steps.build_app.outputs.VERSION_CODE }}
+            - name: validate Mallard project
+              run: |
+                  cd projects/Mallard
+                  yarn validate
+
+            - name: Build APK
+              id: build_app
+              run: |
+                  ./build_apk.sh RELEASE
+              env:
+                  ID_ACCESS_TOKEN: ${{ secrets.ID_ACCESS_TOKEN }}
+                  ID_API_URL: ${{ secrets.ID_API_URL }}
+                  LOGGING_API_KEY: ${{ secrets.LOGGING_API_KEY }}
+                  ITUNES_CONNECT_SHARED_SECRET: ${{ secrets.ITUNES_CONNECT_SHARED_SECRET }}
+                  MEMBERS_DATA_API_URL: ${{ secrets.MEMBERS_DATA_API_URL }}
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  SENTRY_CLI_EXECUTABLE: ${{ secrets.SENTRY_CLI_EXECUTABLE }}
+                  SENTRY_DEFAULTS_ORG: ${{ secrets.SENTRY_DEFAULTS_ORG }}
+                  SENTRY_DEFAULTS_PROJECT: ${{ secrets.SENTRY_DEFAULTS_PROJECT }}
+                  SENTRY_DEFAULTS_URL: ${{ secrets.SENTRY_DEFAULTS_URL }}
+                  SENTRY_DSN_URL: ${{ secrets.SENTRY_DSN_URL }}
+                  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+                  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  ANDROID_RELEASE_STREAM: 'RELEASE'
+                  USE_SANDBOX_IAP: 'true'
+                  FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+                  SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
+                  BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
+
+            - uses: actions/upload-artifact@v3
+              if: always()
+              with:
+                  name: release-apk
+                  path: |
+                      projects/Mallard/android/app/build/outputs/apk/release/app-release.apk
+
+            - name: tag release on github
+              working-directory: script
+              run: node make-release.js ${{ github.sha }} ${{ github.ref }} ${{ steps.build_app.outputs.VERSION_CODE }} android production
+              env:
+                  REPO_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+              #add a version tag to a commit
+            - name: Create Tag
+              run: |
+                  git tag v${{ steps.build_app.outputs.VERSION_NAME }}.${{ steps.build_app.outputs.VERSION_CODE }}
+                  git push origin v${{ steps.build_app.outputs.VERSION_NAME }}.${{ steps.build_app.outputs.VERSION_CODE }}

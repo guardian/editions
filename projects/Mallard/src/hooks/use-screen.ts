@@ -9,7 +9,12 @@ const useMediaQuery = (condition: (width: number) => boolean): boolean => {
 	return condition(width);
 };
 
-const useInsets = () => {
+const useInsets = (): {
+	top: number;
+	left: number;
+	bottom: number;
+	right: number;
+} => {
 	const [insets, setInsets] = useState({
 		left: 0,
 		top: getStatusBarHeight(true),
