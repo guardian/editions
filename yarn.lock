@@ -39,10 +39,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.55.0.tgz#b721d52060f369aa259cf97392403cb9ce892ec6"
   integrity sha512-qQfo2mxH5yVom1kacMtZZJFVdW+E70mqHMJvVg6WTLo+VBuQJ4TojZlfWBjK0ve5BdEeNAVxOsl/nvNMpJOaJA==
 
-"@guardian/node-riffraff-artifact@0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.2.2.tgz#ec85c9f37410c844fa4e6343272ae391fe183ed7"
-  integrity sha512-o0tfVEW8iT2G0uKalJT9g1xeEpAKf3nfeJbDy/bCUs+EdybaiLh/y6TN2200J+sH10Rjtf0/DoX8MqT9d2P+8A==
+"@guardian/node-riffraff-artifact@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.3.2.tgz#6a71bdd9a0d9ca95516d838a135daf0906a604fb"
+  integrity sha512-N4A2tnGesFby9Um8BvOo+Q5x2ETReXocveuBULpII53FJUXGjCcnr9PYNcIIExRYkFfMLrX3V6VCob9TfFrSYg==
   dependencies:
     "@mojotech/json-type-validation" "^3.1.0"
     "@types/temp" "^0.8.34"
