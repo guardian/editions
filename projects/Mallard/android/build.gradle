@@ -15,6 +15,7 @@ buildscript {
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
         FLIPPER_VERSION = "0.103.0"
+        kotlin_version = "1.7.10"
     }
     configurations {
         all*.exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -31,6 +32,7 @@ buildscript {
         classpath("com.google.gms:google-services:4.3.8")
 
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -40,14 +42,5 @@ allprojects {
            // react-native-background-fetch
            url("${project(':react-native-background-fetch').projectDir}/libs")
        }
-    }
-
-    configurations.all {
-            resolutionStrategy {
-                force 'com.google.android.gms:play-services-gcm:16.1.0'
-                dependencySubstitution {
-                    substitute module("com.android.support:appcompat-v7:1.0.2") because "this is a simulcrum module because react-native-notifications isn't actively developed any more" with module("androidx.appcompat:appcompat:1.0.2")
-                }
-           }
     }
 }
