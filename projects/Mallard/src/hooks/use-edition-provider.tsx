@@ -3,12 +3,10 @@ import type { Dispatch } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type {
 	EditionsList,
-	Locale,
 	RegionalEdition,
 	SpecialEdition,
 	SpecialEditionHeaderStyles,
 } from 'src/common';
-import { locale } from 'src/helpers/locale';
 import {
 	defaultSettings,
 	editionsEndpoint,

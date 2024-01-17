@@ -9,14 +9,12 @@ import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-de
 import {
 	BASE_EDITION,
 	DEFAULT_EDITIONS_LIST,
-	defaultEditionDecider,
 	fetchEditions,
 	getDefaultEdition,
 	getEditions,
 	getSelectedEditionSlug,
 	removeExpiredSpecialEditions,
 } from '../use-edition-provider';
-import { DownloadBlockedStatus } from '../use-net-info-provider';
 
 const IS_CONNECTED = true;
 

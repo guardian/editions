@@ -3,7 +3,6 @@ import {
 	editionsListCache,
 	selectedEditionCache,
 } from 'src/helpers/storage';
-import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults';
 import { BASE_EDITION, defaultEditionDecider } from '../use-edition-provider';
 import { DownloadBlockedStatus } from '../use-net-info-provider';
 
@@ -25,16 +24,10 @@ describe('useEditions', () => {
 		it('should set the BASE EDITION if locale is not in the list', async () => {
 			const defaultLocalState = jest.fn();
 			const selectedLocalState = jest.fn();
-			const editionsList = {
-				regionalEditions: defaultRegionalEditions,
-				specialEditions: [],
-				trainingEditions: [],
-			};
 
 			await defaultEditionDecider(
 				defaultLocalState,
 				selectedLocalState,
-				editionsList,
 				DownloadBlockedStatus.NotBlocked,
 				() => {},
 			);
