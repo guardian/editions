@@ -15,18 +15,4 @@ morning by 6am (GMT)`,
         notificationUTCOffset: 3,
         locale: 'en_GB',
     },
-    {
-        title: 'Australia Weekend',
-        subTitle: `Published from Sydney every 
-Saturday by 6 am (AEST)`,
-        edition: editions.ausWeekly,
-        header: {
-            title: 'Australia',
-            subTitle: 'Weekend',
-        },
-        editionType: 'Regional',
-        topic: 'au',
-        notificationUTCOffset: -5,
-        locale: 'en_AU',
-    },
 ]
