@@ -60,17 +60,6 @@ export const DEFAULT_EDITIONS_LIST = {
 
 export const BASE_EDITION = defaultRegionalEditions[0];
 
-const localeToEdition = (
-	locale: Locale,
-	editionsList: EditionsList,
-): RegionalEdition => {
-	return (
-		editionsList.regionalEditions.find(
-			(edition) => edition.locale === locale,
-		) ?? BASE_EDITION
-	);
-};
-
 const defaultState: EditionState = {
 	editionsList: DEFAULT_EDITIONS_LIST,
 	selectedEdition: BASE_EDITION, // the current chosen edition
@@ -208,7 +197,6 @@ const setEdition = async (
 export const defaultEditionDecider = async (
 	setDefaultEdition: Dispatch<RegionalEdition>,
 	setSelectedEdition: Dispatch<RegionalEdition | SpecialEdition>,
-	editionsList: EditionsList,
 	downloadBlocked: NetInfoState['downloadBlocked'],
 	setIsWeatherShown: IsWeatherShown['setIsWeatherShown'],
 ): Promise<void> => {
@@ -225,28 +213,34 @@ export const defaultEditionDecider = async (
 		await selectedEditionCache.set(defaultEdition);
 		pushNotificationRegistration(downloadBlocked);
 	} else {
-		// Get the correct edition for the device locale
-		const autoDetectedEdition = localeToEdition(locale, editionsList);
-
-		if (autoDetectedEdition) {
-			await setEdition(
-				autoDetectedEdition,
-				setDefaultEdition,
-				setSelectedEdition,
-				downloadBlocked,
-				setIsWeatherShown,
-			);
-		} else {
-			// auto detected edition was not possible, set default edition
-			await setEdition(
-				BASE_EDITION,
-				setDefaultEdition,
-				setSelectedEdition,
-				downloadBlocked,
-				setIsWeatherShown,
-			);
-		}
+		// otherwise, set default edition
+		await setEdition(
+			BASE_EDITION,
+			setDefaultEdition,
+			setSelectedEdition,
+			downloadBlocked,
+			setIsWeatherShown,
+		);
 	}
+};
+
+/**
+ * This filter is a temporary solution to hide the Australian edition from the list
+ * Currentnly, the editions list is populated by the /editions endpoint, which in turn
+ * is populated by an S3 bucket. To remove the Australian edition, it should be removed from
+ * thge S3 bucket.
+ */
+
+const temporaryFilterEditionsList = (
+	editionsList: EditionsList,
+): EditionsList => {
+	const filteredRegionalEditions = editionsList.regionalEditions.filter(
+		(e) => e.edition !== 'australian-edition',
+	);
+	return {
+		...editionsList,
+		regionalEditions: filteredRegionalEditions,
+	};
 };
 
 export const EditionProvider = ({
@@ -282,7 +276,6 @@ export const EditionProvider = ({
 		defaultEditionDecider(
 			setDefaultEdition,
 			setSelectedEdition,
-			editionsList,
 			downloadBlocked,
 			setIsWeatherShown,
 		);
@@ -306,7 +299,9 @@ export const EditionProvider = ({
 			getEditions(isConnected, fullUrl)
 				.then((ed) => {
 					if (ed) {
-						setEditionsList(ed);
+						const removeAus =
+							temporaryFilterEditionsList(editionsList);
+						setEditionsList(removeAus);
 					}
 				})
 				.finally(() => setIsLoading(false));
@@ -336,7 +331,13 @@ export const EditionProvider = ({
 			setIsLoading(true);
 			const fullUrl = editionsEndpoint(apiUrl);
 			getEditions(isConnected, fullUrl)
-				.then((ed) => ed && setEditionsList(ed))
+				.then((ed) => {
+					if (ed) {
+						const removeAus =
+							temporaryFilterEditionsList(editionsList);
+						setEditionsList(removeAus);
+					}
+				})
 				.finally(() => setIsLoading(false));
 		}
 	}, [isConnected, isActive]);

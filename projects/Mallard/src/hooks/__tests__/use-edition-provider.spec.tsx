@@ -137,12 +137,6 @@ describe('useEditions', () => {
 			const editionSlug = await getSelectedEditionSlug();
 			expect(editionSlug).toEqual(BASE_EDITION.edition);
 		});
-		it('should return "australian-edition" slug when the AU edition is set', async () => {
-			await selectedEditionCache.set(defaultRegionalEditions[1]);
-			await editionsListCache.set(DEFAULT_EDITIONS_LIST);
-			const editionSlug = await getSelectedEditionSlug();
-			expect(editionSlug).toEqual('australian-edition');
-		});
 	});
 
 	describe('fetchEditions', () => {
@@ -219,72 +213,15 @@ describe('useEditions', () => {
 		});
 	});
 
-	describe('defaultEditionDecider', () => {
-		beforeEach(async () => {
-			await defaultEditionCache.reset();
-			await selectedEditionCache.reset();
-		});
-		it('should set default and selected edition local state as well as selected storage if found in default storage', async () => {
-			const defaultLocalState = jest.fn();
-			const selectedLocalState = jest.fn();
-			defaultEditionCache.set(defaultRegionalEditions[1]);
-
-			await defaultEditionDecider(
-				defaultLocalState,
-				selectedLocalState,
-				DEFAULT_EDITIONS_LIST,
-				DownloadBlockedStatus.NotBlocked,
-				() => {},
-			);
-			expect(defaultLocalState).toBeCalledTimes(1);
-			expect(defaultLocalState).toBeCalledWith(
-				defaultRegionalEditions[1],
-			);
-			expect(selectedLocalState).toBeCalledTimes(1);
-			expect(selectedLocalState).toBeCalledWith(
-				defaultRegionalEditions[1],
-			);
-			const selectedEdition = await selectedEditionCache.get();
-			expect(selectedEdition).toEqual(defaultRegionalEditions[1]);
-			const defaultEdition = await defaultEditionCache.get();
-			expect(defaultEdition).toEqual(defaultRegionalEditions[1]);
-		});
-		it('should set a default based on locale if the feature flag is on and nothing in the default edition cache', async () => {
-			// defaultRegionalEditions[1] = AU and locale mock = AU
-			const defaultLocalState = jest.fn();
-			const selectedLocalState = jest.fn();
-
-			await defaultEditionDecider(
-				defaultLocalState,
-				selectedLocalState,
-				DEFAULT_EDITIONS_LIST,
-				DownloadBlockedStatus.NotBlocked,
-				() => {},
-			);
-			expect(defaultLocalState).toBeCalledTimes(1);
-			expect(defaultLocalState).toBeCalledWith(
-				defaultRegionalEditions[1],
-			);
-			expect(selectedLocalState).toBeCalledTimes(1);
-			expect(selectedLocalState).toBeCalledWith(
-				defaultRegionalEditions[1],
-			);
-			const selectedEdition = await selectedEditionCache.get();
-			expect(selectedEdition).toEqual(defaultRegionalEditions[1]);
-			const defaultEdition = await defaultEditionCache.get();
-			expect(defaultEdition).toEqual(defaultRegionalEditions[1]);
-		});
-	});
-
 	describe('getDefaultEdition', () => {
 		beforeEach(async () => {
 			await defaultEditionCache.reset();
 		});
 		it('should return the default edition from storage if its there', async () => {
-			await defaultEditionCache.set(defaultRegionalEditions[1]);
+			await defaultEditionCache.set(defaultRegionalEditions[0]);
 
 			const defaultEdition = await getDefaultEdition();
-			expect(defaultEdition).toEqual(defaultRegionalEditions[1]);
+			expect(defaultEdition).toEqual(defaultRegionalEditions[0]);
 		});
 		it('should return null if default edition is not in storage', async () => {
 			const defaultEdition = await getDefaultEdition();

@@ -102,20 +102,6 @@ morning by 6am (GMT)",
         "topic": "uk",
       },
       {
-        "edition": "australian-edition",
-        "editionType": "Regional",
-        "header": {
-          "subTitle": "Weekend",
-          "title": "Australia",
-        },
-        "locale": "en_AU",
-        "notificationUTCOffset": -5,
-        "subTitle": "Published from Sydney every 
-Saturday by 6 am (AEST)",
-        "title": "Australia Weekend",
-        "topic": "au",
-      },
-      {
         "buttonImageUri": "https://media.guim.co.uk/49cebb0db4a3e4d26d7d190da7be4a2e9bd7534f/0_0_103_158/103.png",
         "buttonStyle": {
           "backgroundColor": "#FEEEF7",
@@ -201,20 +187,6 @@ Monthly",
       style={null}
     >
       EditionButton
-      <View
-        style={
-          {
-            "height": 10,
-          }
-        }
-      />
-    </View>
-    <View
-      onFocusCapture={[Function]}
-      onLayout={[Function]}
-      style={null}
-    >
-      EditionButton
     </View>
   </View>
 </RCTScrollView>
@@ -238,20 +210,6 @@ exports[`EditionsMenu should display a default EditionsMenu with correct styling
 morning by 6am (GMT)",
         "title": "UK Daily",
         "topic": "uk",
-      },
-      {
-        "edition": "australian-edition",
-        "editionType": "Regional",
-        "header": {
-          "subTitle": "Weekend",
-          "title": "Australia",
-        },
-        "locale": "en_AU",
-        "notificationUTCOffset": -5,
-        "subTitle": "Published from Sydney every 
-Saturday by 6 am (AEST)",
-        "title": "Australia Weekend",
-        "topic": "au",
       },
     ]
   }
@@ -279,20 +237,6 @@ Saturday by 6 am (AEST)",
   viewabilityConfigCallbackPairs={[]}
 >
   <View>
-    <View
-      onFocusCapture={[Function]}
-      onLayout={[Function]}
-      style={null}
-    >
-      EditionButton
-      <View
-        style={
-          {
-            "height": 10,
-          }
-        }
-      />
-    </View>
     <View
       onFocusCapture={[Function]}
       onLayout={[Function]}
