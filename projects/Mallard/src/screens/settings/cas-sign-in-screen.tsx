@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 });
 
 const CasSignInScreen = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const { authCAS } = useContext(AccessContext);
 
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);

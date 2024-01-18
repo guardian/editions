@@ -6,7 +6,7 @@ import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { SignInModalCard } from '../sign-in-modal-card';
 
 const SignInModal = () => {
-	const { navigate } = useNavigation();
+	const { navigate } = useNavigation<any>();
 	const { signIn } = useOkta();
 	return (
 		<CenterWrapper>

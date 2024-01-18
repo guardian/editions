@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 });
 
 const OnboardingConsent = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const { enableAllSettings } = useGdprSettings();
 
 	return (

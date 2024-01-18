@@ -288,7 +288,7 @@ const IssueFronts = ({
 
 const PreviewReloadButton = ({ onPress }: { onPress: () => Promise<void> }) => {
 	const { isPreview } = useApiUrl();
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const route = useRoute();
 
 	const onPressReload = async () => {

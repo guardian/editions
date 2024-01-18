@@ -44,7 +44,7 @@ const GdprConsent = ({
 	shouldShowDismissableHeader?: boolean;
 	continueText: string;
 }) => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const { showToast } = useToast();
 
 	const {

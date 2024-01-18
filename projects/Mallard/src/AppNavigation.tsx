@@ -24,7 +24,6 @@ import type {
 	MainStackParamList,
 	OnboardingStackParamList,
 	RootStackParamList,
-	SettingsStackParamList,
 } from './navigation/NavigationModels';
 import { RouteNames } from './navigation/NavigationModels';
 import { ArticleWrapper } from './navigation/navigators/article';
@@ -109,7 +108,6 @@ const cardStyleInterpolator = (props: StackCardInterpolationProps) => {
 
 const Onboarding = createStackNavigator<OnboardingStackParamList>();
 const Root = createStackNavigator<RootStackParamList>();
-const Settings = createStackNavigator<SettingsStackParamList>();
 const Main = createStackNavigator<MainStackParamList>();
 
 const OnboardingStack = () => {
@@ -156,26 +154,115 @@ const MainStack = () => {
 					...TransitionPresets.ModalSlideFromBottomIOS,
 				}}
 			/>
-			<Main.Screen
-				name={RouteNames.IssueList}
-				component={HomeScreen}
-				options={{
-					gestureDirection: 'horizontal',
+			<Main.Group
+				screenOptions={{
+					presentation: 'transparentModal',
 					cardStyle: { backgroundColor: 'transparent' },
 					cardOverlayEnabled: true,
 					cardStyleInterpolator,
 				}}
-			/>
-			<Main.Screen
-				name={RouteNames.EditionsMenu}
-				component={EditionsMenuScreen}
-				options={{
-					gestureDirection: 'horizontal-inverted',
+			>
+				<Main.Screen
+					name={RouteNames.IssueList}
+					component={HomeScreen}
+					options={{
+						gestureDirection: 'horizontal',
+					}}
+				/>
+				<Main.Screen
+					name={RouteNames.EditionsMenu}
+					component={EditionsMenuScreen}
+					options={{
+						gestureDirection: 'horizontal-inverted',
+					}}
+				/>
+			</Main.Group>
+
+			<Main.Group
+				screenOptions={{
+					presentation: 'transparentModal',
 					cardStyle: { backgroundColor: 'transparent' },
 					cardOverlayEnabled: true,
-					cardStyleInterpolator,
 				}}
-			/>
+			>
+				<Main.Screen
+					name={RouteNames.Settings}
+					component={SettingsScreen}
+					options={{
+						...TransitionPresets.ModalSlideFromBottomIOS,
+					}}
+				/>
+				<Main.Screen
+					name={RouteNames.TermsAndConditions}
+					component={TermsAndConditionsScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.SubscriptionDetails}
+					component={SubscriptionDetailsScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.AlreadySubscribed}
+					component={AlreadySubscribedScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.AlreadySubscribedOverlay}
+					component={AlreadySubscribedScreen}
+					options={{
+						cardStyleInterpolator: forFade,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.8)',
+						},
+					}}
+				/>
+
+				<Main.Screen
+					name={RouteNames.GdprConsent}
+					component={GdprConsentScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.PrivacyPolicy}
+					component={PrivacyPolicyScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.ManageEditions}
+					component={ManageEditionsScreen}
+					options={{
+						gestureDirection: 'vertical',
+					}}
+				/>
+				<Main.Screen
+					name={RouteNames.Endpoints}
+					component={ApiScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.Credits}
+					component={CreditsScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.BetaProgrammeFAQs}
+					component={BetaProgrammeFAQsScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.Edition}
+					component={EditionsScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.CasSignIn}
+					component={CasSignInScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.WeatherGeolocationConsent}
+					component={WeatherGeolocationConsentScreen}
+				/>
+				<Main.Screen name={RouteNames.Help} component={HelpScreen} />
+				<Main.Screen name={RouteNames.FAQ} component={FAQScreen} />
+				<Main.Screen name={RouteNames.DevZone} component={DevZone} />
+				<Main.Screen
+					name={RouteNames.InAppPurchase}
+					component={InAppPurchaseScreen}
+				/>
+			</Main.Group>
+
 			<Main.Screen
 				name={RouteNames.Article}
 				component={ArticleWrapper}
@@ -223,155 +310,73 @@ const MainStack = () => {
 					},
 				}}
 			/>
-			<Main.Screen
-				name={RouteNames.SignInModal}
-				component={SignInModal}
-				options={{
-					cardStyleInterpolator: forFadeOnArticleScreen,
-					cardStyle: {
-						backgroundColor: 'rgba(0,0,0,0.6)',
-					},
+			<Main.Group
+				screenOptions={{
+					presentation: 'transparentModal',
+					cardStyle: { backgroundColor: 'transparent' },
+					cardOverlayEnabled: true,
 				}}
-			/>
-			<Main.Screen
-				name={RouteNames.SubFoundModal}
-				component={SubFoundModalCard}
-				options={{
-					cardStyleInterpolator: forFade,
-					cardStyle: {
-						backgroundColor: 'rgba(0,0,0,0.8)',
-					},
-				}}
-			/>
-			<Main.Screen
-				name={RouteNames.SignInFailedModal}
-				component={SignInFailedModal}
-				options={{
-					cardStyleInterpolator: forFade,
-					cardStyle: {
-						backgroundColor: 'rgba(0,0,0,0.8)',
-					},
-				}}
-			/>
+			>
+				<Main.Screen
+					name={RouteNames.SignInModal}
+					component={SignInModal}
+					options={{
+						cardStyleInterpolator: forFadeOnArticleScreen,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.6)',
+						},
+					}}
+				/>
+				<Main.Screen
+					name={RouteNames.SubFoundModal}
+					component={SubFoundModalCard}
+					options={{
+						cardStyleInterpolator: forFade,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.8)',
+						},
+					}}
+				/>
+				<Main.Screen
+					name={RouteNames.SignInFailedModal}
+					component={SignInFailedModal}
+					options={{
+						cardStyleInterpolator: forFade,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.8)',
+						},
+					}}
+				/>
 
-			<Main.Screen
-				name={RouteNames.MissingIAPRestoreError}
-				component={MissingIAPRestoreError}
-				options={{
-					cardStyleInterpolator: forFade,
-					cardStyle: {
-						backgroundColor: 'rgba(0,0,0,0.8)',
-					},
-				}}
-			/>
+				<Main.Screen
+					name={RouteNames.MissingIAPRestoreError}
+					component={MissingIAPRestoreError}
+					options={{
+						cardStyleInterpolator: forFade,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.8)',
+						},
+					}}
+				/>
 
-			<Main.Screen
-				name={RouteNames.MissingIAPRestoreMissing}
-				component={MissingIAPRestoreMissing}
-				options={{
-					cardStyleInterpolator: forFade,
-					cardStyle: {
-						backgroundColor: 'rgba(0,0,0,0.8)',
-					},
-				}}
-			/>
+				<Main.Screen
+					name={RouteNames.MissingIAPRestoreMissing}
+					component={MissingIAPRestoreMissing}
+					options={{
+						cardStyleInterpolator: forFade,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.8)',
+						},
+					}}
+				/>
+			</Main.Group>
 		</Main.Navigator>
-	);
-};
-
-const SettingsStack = () => {
-	return (
-		<Settings.Navigator
-			initialRouteName={RouteNames.Settings}
-			screenOptions={{
-				gestureEnabled: false,
-				headerShown: false,
-				cardStyle: { backgroundColor: 'transparent' },
-				cardOverlayEnabled: true,
-				animationEnabled: false,
-			}}
-		>
-			<Settings.Screen
-				name={RouteNames.Settings}
-				component={SettingsScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.TermsAndConditions}
-				component={TermsAndConditionsScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.SubscriptionDetails}
-				component={SubscriptionDetailsScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.AlreadySubscribed}
-				component={AlreadySubscribedScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.AlreadySubscribedOverlay}
-				component={AlreadySubscribedScreen}
-				options={{
-					cardStyleInterpolator: forFade,
-					cardStyle: {
-						backgroundColor: 'rgba(0,0,0,0.8)',
-					},
-				}}
-			/>
-
-			<Settings.Screen
-				name={RouteNames.GdprConsent}
-				component={GdprConsentScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.PrivacyPolicy}
-				component={PrivacyPolicyScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.ManageEditions}
-				component={ManageEditionsScreen}
-				options={{
-					gestureDirection: 'vertical',
-				}}
-			/>
-			<Settings.Screen
-				name={RouteNames.Endpoints}
-				component={ApiScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.Credits}
-				component={CreditsScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.BetaProgrammeFAQs}
-				component={BetaProgrammeFAQsScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.Edition}
-				component={EditionsScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.CasSignIn}
-				component={CasSignInScreen}
-			/>
-			<Settings.Screen
-				name={RouteNames.WeatherGeolocationConsent}
-				component={WeatherGeolocationConsentScreen}
-			/>
-			<Settings.Screen name={RouteNames.Help} component={HelpScreen} />
-			<Settings.Screen name={RouteNames.FAQ} component={FAQScreen} />
-			<Settings.Screen name={RouteNames.DevZone} component={DevZone} />
-			<Settings.Screen
-				name={RouteNames.InAppPurchase}
-				component={InAppPurchaseScreen}
-			/>
-		</Settings.Navigator>
 	);
 };
 
 const RootStack = () => {
 	return (
 		<Root.Navigator
-			mode="modal"
 			screenOptions={{
 				headerShown: false,
 				cardStyle: { backgroundColor: 'transparent' },
@@ -386,13 +391,6 @@ const RootStack = () => {
 					headerShown: false,
 				}}
 			/>
-			<Root.Screen
-				name={RouteNames.Settings}
-				component={SettingsStack}
-				options={{
-					headerShown: false,
-				}}
-			/>
 		</Root.Navigator>
 	);
 };
@@ -401,7 +399,8 @@ const AppNavigation = () => {
 	const { isOnboarded, isLoading } = useIsOnboarded();
 	// Designed to stop a screen flash as effects are resolving
 	const routeNameRef = useRef<any>();
-	const navigationRef = useRef<NavigationContainerRef | null>(null);
+	const navigationRef =
+		useRef<NavigationContainerRef<MainStackParamList> | null>(null);
 	return (
 		<NavigationContainer
 			ref={navigationRef}

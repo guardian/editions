@@ -18,7 +18,7 @@ const IssuePickerHeader = ({
 	subTitle?: string;
 	title: string;
 }) => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const settingsOverlay = useContext(SettingsOverlayContext);
 
 	return (

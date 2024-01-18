@@ -8,7 +8,7 @@ import {
 import { RouteNames } from 'src/navigation/NavigationModels';
 
 const useLoginOverlay = () => {
-	const { navigate } = useNavigation();
+	const { navigate } = useNavigation<any>();
 	const canAccess = useAccess();
 	const oktaData = useOktaData();
 	const idData = useIdentity();

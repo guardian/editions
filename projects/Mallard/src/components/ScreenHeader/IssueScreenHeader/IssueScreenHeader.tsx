@@ -26,7 +26,7 @@ const IssueScreenHeader = React.memo(
 		headerStyles?: SpecialEditionHeaderStyles;
 		issue?: IssueWithFronts;
 	}) => {
-		const { navigate } = useNavigation();
+		const { navigate } = useNavigation<any>();
 		const { date, weekday } = useIssueDate(issue);
 		const { setNewEditionSeen, selectedEdition } = useEditions();
 

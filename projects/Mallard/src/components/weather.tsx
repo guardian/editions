@@ -198,11 +198,9 @@ const WeatherIconView = ({
 };
 
 const SetLocationButton = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const onSetLocation = useCallback(() => {
-		navigation.navigate(RouteNames.Settings, {
-			screen: RouteNames.WeatherGeolocationConsent,
-		});
+		navigation.navigate(RouteNames.WeatherGeolocationConsent);
 		logEvent({
 			name: 'weather_use_location_button',
 			value: 'weather_use_location',

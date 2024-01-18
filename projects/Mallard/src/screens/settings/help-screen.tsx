@@ -20,6 +20,7 @@ import {
 import { useGdprSettings } from 'src/hooks/use-gdpr';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
+import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
@@ -28,7 +29,7 @@ export interface OnCompletionToast {
 }
 
 const HelpScreen = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<CompositeNavigationStackProps>();
 	const { showToast } = useToast();
 	const { attempt } = useContext(AccessContext);
 

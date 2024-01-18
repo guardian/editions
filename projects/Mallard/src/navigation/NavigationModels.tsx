@@ -1,4 +1,4 @@
-import type { CompositeNavigationProp } from '@react-navigation/core';
+import type { CompositeNavigationProp } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { SignInFailedProps } from 'src/components/Modals/SignInFailedModal';
 import type {
@@ -9,7 +9,6 @@ import type {
 
 export type RootStackParamList = {
 	Home: undefined;
-	Settings: undefined;
 };
 
 export type OnboardingStackParamList = {
@@ -18,7 +17,21 @@ export type OnboardingStackParamList = {
 	OnboardingConsentInline: undefined;
 };
 
-export type SettingsStackParamList = {
+export type MainStackParamList = {
+	Home: undefined;
+	Issue: IssueNavigationProps;
+	Article: ArticleNavigationProps;
+	IssueList: undefined;
+	EditionsMenu: undefined;
+	Lightbox: LightboxNavigationProps;
+	Crossword: ArticleNavigationProps;
+	ExternalSubscription: undefined;
+	SubNotFoundModal: undefined;
+	SignInModal: undefined;
+	SubFoundModal: undefined;
+	SignInFailedModal: SignInFailedProps;
+	MissingIAPRestoreError: undefined;
+	MissingIAPRestoreMissing: undefined;
 	Settings: { screen: RouteNames };
 	Endpoints: undefined;
 	Edition: undefined;
@@ -40,27 +53,10 @@ export type SettingsStackParamList = {
 	AlreadySubscribedOverlay: undefined;
 };
 
-export type MainStackParamList = {
-	Home: undefined;
-	Issue: IssueNavigationProps;
-	Article: ArticleNavigationProps;
-	IssueList: undefined;
-	EditionsMenu: undefined;
-	Lightbox: LightboxNavigationProps;
-	Crossword: ArticleNavigationProps;
-	ExternalSubscription: undefined;
-	SubNotFoundModal: undefined;
-	SignInModal: undefined;
-	SubFoundModal: undefined;
-	SignInFailedModal: SignInFailedProps;
-	MissingIAPRestoreError: undefined;
-	MissingIAPRestoreMissing: undefined;
-};
-
 // This is used on pages which include both main and root stacks
 export type CompositeNavigationStackProps = CompositeNavigationProp<
 	StackNavigationProp<MainStackParamList>,
-	StackNavigationProp<SettingsStackParamList>
+	StackNavigationProp<OnboardingStackParamList>
 >;
 
 export enum RouteNames {
