@@ -17,7 +17,7 @@ const AlreadySubscribedScreen = () => {
 	const canAccess = useAccess();
 	const { authIAP } = useContext(AccessContext);
 	const rightChevronIcon = <RightChevron />;
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const { signIn } = useOkta();
 
 	return (

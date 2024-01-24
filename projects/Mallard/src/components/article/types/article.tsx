@@ -171,7 +171,7 @@ const Article = ({
 	path: PathToArticle;
 	origin: IssueOrigin;
 } & HeaderControlProps) => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const ref = useRef<WebView | null>(null);
 	const [script, setScript] = useState('');
 	const [imagePaths, setImagePaths] = useState(['']);

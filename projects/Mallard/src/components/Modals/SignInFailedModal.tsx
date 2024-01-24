@@ -16,18 +16,14 @@ const SignInFailedModal = ({
 }: {
 	route: RouteProp<MainStackParamList, 'SignInFailedModal'>;
 }) => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const { signIn, signOut } = useOkta();
 	return (
 		<CenterWrapper>
 			<SignInFailedModalCard
 				email={route.params.emailAddress}
 				onDismiss={() => navigation.navigate(RouteNames.Issue)}
-				onOpenCASLogin={() =>
-					navigation.navigate(RouteNames.Settings, {
-						screen: RouteNames.CasSignIn,
-					})
-				}
+				onOpenCASLogin={() => navigation.navigate(RouteNames.CasSignIn)}
 				onLoginPress={async () => {
 					await signOut();
 					await signIn();

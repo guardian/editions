@@ -75,7 +75,7 @@ export const EditionsMenuScreen = () => {
 		selectedEdition,
 		storeSelectedEdition,
 	} = useEditions();
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	return (
 		<WithAppAppearance value="default">
 			<ScreenFiller>

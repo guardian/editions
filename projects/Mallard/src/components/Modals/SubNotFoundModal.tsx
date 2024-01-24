@@ -6,18 +6,14 @@ import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { SubNotFoundModalCard } from '../sub-not-found-modal-card';
 
 const SubNotFoundModal = () => {
-	const { navigate } = useNavigation();
+	const { navigate } = useNavigation<any>();
 	const { signIn } = useOkta();
 	return (
 		<CenterWrapper>
 			<SubNotFoundModalCard
 				close={() => navigate(RouteNames.Issue)}
 				onLoginPress={signIn}
-				onOpenCASLogin={() =>
-					navigate(RouteNames.Settings, {
-						screen: RouteNames.CasSignIn,
-					})
-				}
+				onOpenCASLogin={() => navigate(RouteNames.CasSignIn)}
 				onDismiss={() => navigate(RouteNames.Issue)}
 			/>
 		</CenterWrapper>
