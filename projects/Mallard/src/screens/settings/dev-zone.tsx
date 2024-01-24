@@ -280,6 +280,15 @@ const DevZone = () => {
 						<Button onPress={clearIssueSummaryCache}>
 							Clear Issue Summary Cache
 						</Button>
+						<Button
+							onPress={() =>
+								navigation.navigate(
+									RouteNames.ExternalSubscription,
+								)
+							}
+						>
+							External Subscription Modal
+						</Button>
 					</ButtonList>
 					<List
 						data={[

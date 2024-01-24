@@ -193,74 +193,81 @@ const MainStack = () => {
 					}}
 				/>
 				<Main.Screen
-					name={RouteNames.TermsAndConditions}
-					component={TermsAndConditionsScreen}
-				/>
-				<Main.Screen
-					name={RouteNames.SubscriptionDetails}
-					component={SubscriptionDetailsScreen}
-				/>
-				<Main.Screen
-					name={RouteNames.AlreadySubscribed}
-					component={AlreadySubscribedScreen}
-				/>
-				<Main.Screen
-					name={RouteNames.AlreadySubscribedOverlay}
-					component={AlreadySubscribedScreen}
+					name={RouteNames.ManageEditions}
+					component={ManageEditionsScreen}
 					options={{
-						cardStyleInterpolator: forFade,
-						cardStyle: {
-							backgroundColor: 'rgba(0,0,0,0.8)',
-						},
+						...TransitionPresets.ModalSlideFromBottomIOS,
 					}}
 				/>
 
 				<Main.Screen
-					name={RouteNames.GdprConsent}
-					component={GdprConsentScreen}
+					name={RouteNames.WeatherGeolocationConsent}
+					component={WeatherGeolocationConsentScreen}
 				/>
-				<Main.Screen
-					name={RouteNames.PrivacyPolicy}
-					component={PrivacyPolicyScreen}
-				/>
-				<Main.Screen
-					name={RouteNames.ManageEditions}
-					component={ManageEditionsScreen}
-					options={{
-						gestureDirection: 'vertical',
-					}}
-				/>
-				<Main.Screen
-					name={RouteNames.Endpoints}
-					component={ApiScreen}
-				/>
-				<Main.Screen
-					name={RouteNames.Credits}
-					component={CreditsScreen}
-				/>
-				<Main.Screen
-					name={RouteNames.BetaProgrammeFAQs}
-					component={BetaProgrammeFAQsScreen}
-				/>
-				<Main.Screen
-					name={RouteNames.Edition}
-					component={EditionsScreen}
-				/>
+
 				<Main.Screen
 					name={RouteNames.CasSignIn}
 					component={CasSignInScreen}
 				/>
-				<Main.Screen
-					name={RouteNames.WeatherGeolocationConsent}
-					component={WeatherGeolocationConsentScreen}
-				/>
-				<Main.Screen name={RouteNames.Help} component={HelpScreen} />
-				<Main.Screen name={RouteNames.FAQ} component={FAQScreen} />
-				<Main.Screen name={RouteNames.DevZone} component={DevZone} />
-				<Main.Screen
-					name={RouteNames.InAppPurchase}
-					component={InAppPurchaseScreen}
-				/>
+
+				{/** Lower Level Setttings */}
+				<Main.Group screenOptions={{ animationEnabled: false }}>
+					<Main.Screen
+						name={RouteNames.AlreadySubscribed}
+						component={AlreadySubscribedScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.ManageEditionsFromSettings}
+						component={ManageEditionsScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.SubscriptionDetails}
+						component={SubscriptionDetailsScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.TermsAndConditions}
+						component={TermsAndConditionsScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.GdprConsent}
+						component={GdprConsentScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.PrivacyPolicy}
+						component={PrivacyPolicyScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.Credits}
+						component={CreditsScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.Help}
+						component={HelpScreen}
+					/>
+					<Main.Screen name={RouteNames.FAQ} component={FAQScreen} />
+					<Main.Screen
+						name={RouteNames.BetaProgrammeFAQs}
+						component={BetaProgrammeFAQsScreen}
+					/>
+
+					{/** DEV Related Screens */}
+					<Main.Screen
+						name={RouteNames.DevZone}
+						component={DevZone}
+					/>
+					<Main.Screen
+						name={RouteNames.InAppPurchase}
+						component={InAppPurchaseScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.Endpoints}
+						component={ApiScreen}
+					/>
+					<Main.Screen
+						name={RouteNames.Edition}
+						component={EditionsScreen}
+					/>
+				</Main.Group>
 			</Main.Group>
 
 			<Main.Screen
@@ -299,16 +306,6 @@ const MainStack = () => {
 								gestureDirection: 'vertical',
 						  }
 				}
-			/>
-			<Main.Screen
-				name={RouteNames.SubNotFoundModal}
-				component={SubNotFoundModal}
-				options={{
-					cardStyleInterpolator: forFadeOnArticleScreen,
-					cardStyle: {
-						backgroundColor: 'rgba(0,0,0,0.8)',
-					},
-				}}
 			/>
 			<Main.Group
 				screenOptions={{
@@ -362,6 +359,16 @@ const MainStack = () => {
 				<Main.Screen
 					name={RouteNames.MissingIAPRestoreMissing}
 					component={MissingIAPRestoreMissing}
+					options={{
+						cardStyleInterpolator: forFade,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.8)',
+						},
+					}}
+				/>
+				<Main.Screen
+					name={RouteNames.SubNotFoundModal}
+					component={SubNotFoundModal}
 					options={{
 						cardStyleInterpolator: forFade,
 						cardStyle: {

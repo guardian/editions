@@ -50,7 +50,7 @@ export type MainStackParamList = {
 	WeatherGeolocationConsent: undefined;
 	DevZone: undefined;
 	InAppPurchase: undefined;
-	AlreadySubscribedOverlay: undefined;
+	ManageEditionsFromSettings: undefined;
 };
 
 // This is used on pages which include both main and root stacks
@@ -94,5 +94,5 @@ export enum RouteNames {
 	SignInFailedModal = 'SignInFailedModal',
 	MissingIAPRestoreError = 'MissingIAPRestoreError',
 	MissingIAPRestoreMissing = 'MissingIAPRestoreMissing',
-	AlreadySubscribedOverlay = 'AlreadySubscribedOverlay',
+	ManageEditionsFromSettings = 'ManageEditionsFromSettings',
 }
