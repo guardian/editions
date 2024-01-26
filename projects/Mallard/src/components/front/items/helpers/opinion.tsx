@@ -1,6 +1,6 @@
 import React from 'react';
+import type { ImageStyle } from 'react-native-fast-image';
 import Image from 'react-native-fast-image';
-import type { FastImageProps } from 'react-native-fast-image';
 import type { Image as ImageType } from 'src/common';
 import { useImagePath } from 'src/hooks/use-image-paths';
 
@@ -11,18 +11,12 @@ const cutoutStyles = {
 	},
 };
 
-export const BylineCutout = ({
-	cutout,
-	style,
-}: {
-	cutout: ImageType;
-	style?: FastImageProps['style'];
-}) => (
+export const BylineCutout = ({ cutout }: { cutout: ImageType }) => (
 	<Image
 		resizeMode={'contain'}
 		source={{
 			uri: useImagePath(cutout),
 		}}
-		style={[cutoutStyles.root, style]}
+		style={cutoutStyles.root as ImageStyle}
 	/>
 );

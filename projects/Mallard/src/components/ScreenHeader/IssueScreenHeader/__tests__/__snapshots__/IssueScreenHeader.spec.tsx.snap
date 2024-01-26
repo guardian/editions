@@ -182,7 +182,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
         <RNSScreen
           activityState={2}
           collapsable={false}
-          forwardedRef={[Function]}
           gestureResponseDistance={
             {
               "bottom": -1,
@@ -281,7 +280,6 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
             >
               <View
                 collapsable={false}
-                forwardedRef={[Function]}
                 handlerTag={4}
                 handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}
@@ -976,7 +974,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
         <RNSScreen
           activityState={2}
           collapsable={false}
-          forwardedRef={[Function]}
           gestureResponseDistance={
             {
               "bottom": -1,
@@ -1075,7 +1072,6 @@ exports[`IssueScreenHeader should match the default style 1`] = `
             >
               <View
                 collapsable={false}
-                forwardedRef={[Function]}
                 handlerTag={1}
                 handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}

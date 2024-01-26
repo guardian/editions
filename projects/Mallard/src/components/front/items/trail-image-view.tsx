@@ -1,6 +1,7 @@
 import React from 'react';
-import type { StyleProp } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
+import type { ImageStyle } from 'react-native-fast-image';
 import type { CAPIArticle, ImageUse } from 'src/common';
 import { SportScore } from 'src/components/SportScore/SportScore';
 import { Stars } from 'src/components/Stars/Stars';
@@ -52,7 +53,7 @@ export const TrailImageView = ({
 				? image.use.tablet
 				: image.use.mobile
 			: 'full-size';
-	const frameStyle = [trailImageViewStyles.frame, style];
+	const frameStyle = [trailImageViewStyles.frame, style] as ViewStyle;
 	const starRating = article.type === 'article' && article.starRating;
 	const sportScore =
 		article.articleType === ArticleType.MatchResult && article.sportScore;
@@ -80,6 +81,12 @@ export const TrailImageView = ({
 			</View>
 		);
 	} else {
-		return <ImageResource style={frameStyle} image={image} use={use} />;
+		return (
+			<ImageResource
+				style={frameStyle as StyleProp<ImageStyle>}
+				image={image}
+				use={use}
+			/>
+		);
 	}
 };
