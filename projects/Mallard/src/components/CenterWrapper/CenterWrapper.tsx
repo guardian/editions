@@ -9,8 +9,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const CenterWrapper: React.FC = ({ children }) => (
-	<View style={styles.centerWrapper}>{children}</View>
-);
+const CenterWrapper: React.FC<React.PropsWithChildren<Element>> = ({
+	children,
+}) => <View style={styles.centerWrapper}>{children}</View>;
 
 export { CenterWrapper };
