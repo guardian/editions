@@ -245,7 +245,7 @@ const ArticleSlider = React.memo(
 								},
 							)}
 							getItemLayout={(
-								_: ArticleSpec[] | null | undefined,
+								_: ArrayLike<ArticleSpec> | null | undefined,
 								index: number,
 							) => ({
 								length: width,

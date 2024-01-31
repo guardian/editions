@@ -1,16 +1,15 @@
+import { Dimensions } from 'react-native';
 import { baseTests } from './SliderTitle-BaseTests';
 
 jest.mock('react-native-device-info', () => ({
 	isTablet: () => true,
 }));
 
-jest.mock('react-native/Libraries/Utilities/Dimensions', () => {
-	const Dimensions = {
-		get: () => {
-			return { width: 700, height: 100 };
-		},
-	};
-	return Dimensions;
+jest.spyOn(Dimensions, 'get').mockReturnValue({
+	width: 700,
+	height: 100,
+	scale: 1,
+	fontScale: 1,
 });
 
 baseTests('SliderTitle - iOS - Tablet');

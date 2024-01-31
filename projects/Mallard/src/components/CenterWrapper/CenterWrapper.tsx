@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from 'react';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -10,8 +9,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const CenterWrapper: React.FC<PropsWithChildren> = ({ children }) => (
-	<View style={styles.centerWrapper}>{children}</View>
-);
+const CenterWrapper: React.FC<React.PropsWithChildren<Element>> = ({
+	children,
+}) => <View style={styles.centerWrapper}>{children}</View>;
 
 export { CenterWrapper };
