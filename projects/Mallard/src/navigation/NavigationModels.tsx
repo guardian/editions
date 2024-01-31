@@ -7,6 +7,10 @@ import type {
 	LightboxNavigationProps,
 } from './helpers/base';
 
+type SubFoundModalProps = {
+	closeAction?: () => void;
+};
+
 export type RootStackParamList = {
 	Home: undefined;
 };
@@ -28,7 +32,7 @@ export type MainStackParamList = {
 	ExternalSubscription: undefined;
 	SubNotFoundModal: undefined;
 	SignInModal: undefined;
-	SubFoundModal: undefined;
+	SubFoundModal: SubFoundModalProps | undefined;
 	SignInFailedModal: SignInFailedProps;
 	MissingIAPRestoreError: undefined;
 	MissingIAPRestoreMissing: undefined;

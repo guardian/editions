@@ -108,6 +108,7 @@
 		"@guardian/prettier": "^5.0.0",
 		"@react-native/eslint-config": "^0.72.2",
 		"@react-native/metro-config": "^0.72.11",
+		"@react-navigation/native-stack": "^6.9.17",
 		"@tsconfig/react-native": "^2.0.2",
 		"@types/async-retry": "^1.4.2",
 		"@types/events": "^3.0.0",

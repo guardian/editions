@@ -46,7 +46,9 @@ const CasSignInScreen = () => {
 			password.value,
 		);
 		if (isValid(accessAttempt)) {
-			navigation.navigate(RouteNames.SubFoundModal);
+			navigation.navigate(RouteNames.SubFoundModal, {
+				closeAction: () => navigation.navigate(RouteNames.Issue),
+			});
 		} else {
 			setErrorMessage(accessAttempt.reason ?? 'Something went wrong');
 		}
