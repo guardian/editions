@@ -302,13 +302,5 @@ export const getFileList = async () => {
 		}),
 	);
 
-	const issuesFile = await RNFS.stat(editionDirectory + '/issues');
-
-	const cleanIssuesFile = [
-		{
-			issues: cleanFileDisplay(issuesFile),
-		},
-	];
-
-	return [...cleanSubfolders, ...cleanIssuesFile, ...imageFolderSearch];
+	return [...cleanSubfolders, ...imageFolderSearch];
 };
