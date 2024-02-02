@@ -13,6 +13,7 @@ import {
 	Dimensions,
 	FlatList,
 	Platform,
+	RefreshControl,
 	StyleSheet,
 	View,
 } from 'react-native';
@@ -259,11 +260,19 @@ const IssueListView = React.memo(
 		currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> };
 		setIssueId: Dispatch<PathToIssue>;
 	}) => {
+		const [refreshing, setRefreshing] = useState(false);
+		const { getLatestIssueSummary } = useIssueSummary();
 		const navigation = useNavigation();
 		const { maxAvailableEditions } = useMaxAvailableEditions();
 		const { localIssueId: localId, publishedIssueId: publishedId } =
 			currentIssue.id;
 		const { details } = currentIssue;
+
+		// PTR: We get the latest list of issues but do not change the current issue the user is reading
+		const onRefresh = useCallback(async () => {
+			await getLatestIssueSummary(true);
+			setRefreshing(false);
+		}, [getLatestIssueSummary, setRefreshing]);
 
 		// We want to scroll to the current issue.
 		const currentIssueIndex = issueList.findIndex(
@@ -342,6 +351,14 @@ const IssueListView = React.memo(
 
 		return (
 			<FlatList
+				refreshControl={
+					<RefreshControl
+						onRefresh={onRefresh}
+						refreshing={refreshing}
+						colors={[color.primary]}
+						tintColor={color.primary}
+					/>
+				}
 				// Only render 7 because that is the default number of editions
 				initialNumToRender={maxAvailableEditions}
 				ItemSeparatorComponent={Separator}

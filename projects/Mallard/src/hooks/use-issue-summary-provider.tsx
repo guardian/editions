@@ -24,7 +24,7 @@ interface IssueSummaryState {
 	error: string;
 	initialFrontKey: string | null;
 	setIssueId: Dispatch<PathToIssue>;
-	getLatestIssueSummary: () => Promise<void>;
+	getLatestIssueSummary: (skipSetting?: boolean) => Promise<void>;
 }
 
 const defaultState: IssueSummaryState = {
