@@ -1,4 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { MutableRefObject, ReactElement } from 'react';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -44,6 +45,7 @@ import { useIssue } from 'src/hooks/use-issue-provider';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useWeather } from 'src/hooks/use-weather-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { metrics } from 'src/theme/spacing';
 import type {
@@ -288,7 +290,8 @@ const IssueFronts = ({
 
 const PreviewReloadButton = ({ onPress }: { onPress: () => Promise<void> }) => {
 	const { isPreview } = useApiUrl();
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const route = useRoute();
 
 	const onPressReload = async () => {

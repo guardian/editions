@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ButtonAppearance } from 'src/components/Button/Button';
@@ -10,6 +11,7 @@ import {
 } from 'src/components/onboarding/onboarding-card';
 import { Copy } from 'src/helpers/words';
 import { useGdprSettings } from 'src/hooks/use-gdpr';
+import type { OnboardingStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
@@ -34,7 +36,8 @@ const styles = StyleSheet.create({
 });
 
 const OnboardingConsent = () => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<OnboardingStackParamList>>();
 	const { enableAllSettings } = useGdprSettings();
 
 	return (

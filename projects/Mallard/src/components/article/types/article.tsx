@@ -5,6 +5,7 @@ import type {
 	ShareIconMessage,
 } from '@guardian/renditions';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { PixelRatio, Platform, Share, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -26,6 +27,7 @@ import { useApiUrl } from 'src/hooks/use-config-provider';
 import { selectImagePath } from 'src/hooks/use-image-paths';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { remoteConfigService } from 'src/services/remote-config';
@@ -171,7 +173,8 @@ const Article = ({
 	path: PathToArticle;
 	origin: IssueOrigin;
 } & HeaderControlProps) => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const ref = useRef<WebView | null>(null);
 	const [script, setScript] = useState('');
 	const [imagePaths, setImagePaths] = useState(['']);

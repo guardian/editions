@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
@@ -10,6 +11,7 @@ import { UiBodyCopy } from 'src/components/styled-text';
 import { backends } from 'src/helpers/settings/defaults';
 import { ENDPOINTS_HEADER_TITLE } from 'src/helpers/words';
 import { API_URL_DEFAULT, useApiUrl } from 'src/hooks/use-config-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 
@@ -27,7 +29,8 @@ const ApiState = () => {
 
 const ApiScreen = () => {
 	const { apiUrl, setApiUrl } = useApiUrl();
-	const navigation = useNavigation();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
 	return (
 		<HeaderScreenContainer title={ENDPOINTS_HEADER_TITLE} actionLeft={true}>

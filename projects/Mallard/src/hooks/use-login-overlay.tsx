@@ -1,14 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import {
 	useAccess,
 	useIdentity,
 	useOktaData,
 } from 'src/authentication/AccessContext';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 
 const useLoginOverlay = () => {
-	const { navigate } = useNavigation<any>();
+	const { navigate } =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const canAccess = useAccess();
 	const oktaData = useOktaData();
 	const idData = useIdentity();

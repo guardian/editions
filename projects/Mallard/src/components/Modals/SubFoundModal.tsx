@@ -1,5 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type {
+	NativeStackNavigationProp,
+	NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import React from 'react';
 import { Copy } from 'src/helpers/words';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
@@ -13,7 +16,8 @@ type SubFoundModalCardProps = NativeStackScreenProps<
 >;
 
 const SubFoundModalCard = ({ route }: SubFoundModalCardProps) => {
-	const { goBack } = useNavigation();
+	const { goBack } =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	return (
 		<CenterWrapper>
 			<OnboardingCard

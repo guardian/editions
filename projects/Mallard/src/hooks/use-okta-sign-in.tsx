@@ -1,16 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useContext, useState } from 'react';
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';
 import { oktaSignOut } from 'src/authentication/services/okta';
-import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 
 const useOkta = () => {
 	const { authOkta, signOutOkta } = useContext(AccessContext);
-	const navigation = useNavigation<CompositeNavigationStackProps>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 

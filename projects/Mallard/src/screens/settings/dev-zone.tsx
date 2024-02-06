@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactNode } from 'react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, Clipboard, Platform, View } from 'react-native';
@@ -65,7 +64,7 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
 };
 
 const DevZone = () => {
-	const navigation = useNavigation<StackNavigationProp<any>>();
+	const navigation = useNavigation<any>();
 	const {
 		isDevButtonShown: showNetInfoButton,
 		setIsDevButtonShown: setShowNetInfoButton,

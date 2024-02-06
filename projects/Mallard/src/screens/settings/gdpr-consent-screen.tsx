@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Alert, FlatList, Text, View } from 'react-native';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
@@ -17,6 +18,7 @@ import {
 import type { GdprSwitches } from 'src/hooks/use-gdpr';
 import { useGdprSettings } from 'src/hooks/use-gdpr';
 import { useToast } from 'src/hooks/use-toast';
+import type { OnboardingStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
@@ -44,7 +46,8 @@ const GdprConsent = ({
 	shouldShowDismissableHeader?: boolean;
 	continueText: string;
 }) => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<OnboardingStackParamList>>();
 	const { showToast } = useToast();
 
 	const {

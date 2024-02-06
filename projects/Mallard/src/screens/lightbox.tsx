@@ -1,6 +1,7 @@
 import { palette } from '@guardian/pasteup/palette';
 import type { RouteProp } from '@react-navigation/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -76,7 +77,8 @@ const styles = StyleSheet.create({
 });
 
 const LightboxScreen = () => {
-	const navigation = useNavigation();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const route =
 		useRoute<RouteProp<MainStackParamList, RouteNames.Lightbox>>();
 	const imagePaths = route.params?.imagePaths ?? [];

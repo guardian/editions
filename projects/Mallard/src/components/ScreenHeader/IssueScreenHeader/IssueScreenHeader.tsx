@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 import type { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common';
 import { IssueTitle } from 'src/components/issue/issue-title';
@@ -7,6 +8,7 @@ import { styles } from 'src/components/styled-text';
 import { logEvent } from 'src/helpers/analytics';
 import { useIssueDate } from 'src/helpers/issues';
 import { useEditions } from 'src/hooks/use-edition-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { remoteConfigService } from 'src/services/remote-config';
 import { IssueMenuButton } from '../../Button/IssueMenuButton';
@@ -26,7 +28,8 @@ const IssueScreenHeader = React.memo(
 		headerStyles?: SpecialEditionHeaderStyles;
 		issue?: IssueWithFronts;
 	}) => {
-		const { navigate } = useNavigation<any>();
+		const { navigate } =
+			useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 		const { date, weekday } = useIssueDate(issue);
 		const { setNewEditionSeen, selectedEdition } = useEditions();
 

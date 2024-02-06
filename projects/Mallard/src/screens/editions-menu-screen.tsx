@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
@@ -8,6 +9,7 @@ import { EditionsMenu } from 'src/components/EditionsMenu/EditionsMenu';
 import { EditionsMenuScreenHeader } from 'src/components/ScreenHeader/EditionMenuScreenHeader';
 import { logEvent } from 'src/helpers/analytics';
 import { useEditions } from 'src/hooks/use-edition-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { ApiState } from './settings/api-screen';
@@ -75,7 +77,8 @@ export const EditionsMenuScreen = () => {
 		selectedEdition,
 		storeSelectedEdition,
 	} = useEditions();
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	return (
 		<WithAppAppearance value="default">
 			<ScreenFiller>
