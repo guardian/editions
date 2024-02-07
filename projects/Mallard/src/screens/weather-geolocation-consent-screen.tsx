@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { RESULTS } from 'react-native-permissions';
@@ -10,6 +11,7 @@ import { requestLocationPermission } from 'src/helpers/location-permission';
 import { Copy } from 'src/helpers/words';
 import { useIsWeatherShown, useWeather } from 'src/hooks/use-weather-provider';
 import { getGeolocation } from 'src/hooks/use-weather-provider/utils';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { metrics } from 'src/theme/spacing';
 
 const styles = StyleSheet.create({
@@ -31,7 +33,8 @@ const showIsDisabledAlert = () => {
 };
 
 const WeatherGeolocationConsentScreen = () => {
-	const navigation = useNavigation();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { refreshWeather } = useWeather();
 	const { setIsWeatherShown } = useIsWeatherShown();
 	const onConsentPress = async () => {

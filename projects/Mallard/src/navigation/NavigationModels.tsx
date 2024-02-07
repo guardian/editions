@@ -23,7 +23,7 @@ export type OnboardingStackParamList = {
 
 export type MainStackParamList = {
 	Home: undefined;
-	Issue: IssueNavigationProps;
+	Issue: IssueNavigationProps | undefined;
 	Article: ArticleNavigationProps;
 	IssueList: undefined;
 	EditionsMenu: undefined;
@@ -36,7 +36,7 @@ export type MainStackParamList = {
 	SignInFailedModal: SignInFailedProps;
 	MissingIAPRestoreError: undefined;
 	MissingIAPRestoreMissing: undefined;
-	Settings: { screen: RouteNames };
+	Settings: { screen: RouteNames } | undefined;
 	Endpoints: undefined;
 	Edition: undefined;
 	GdprConsent: undefined;

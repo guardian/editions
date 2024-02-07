@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Image from 'react-native-fast-image';
@@ -8,6 +9,7 @@ import { LoginButton } from 'src/components/login/login-button';
 import { LoginInput } from 'src/components/login/login-input';
 import { LoginLayout } from 'src/components/login/login-layout';
 import { useFormField } from 'src/hooks/use-form-field';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { getFont } from 'src/theme/typography';
 
@@ -18,7 +20,8 @@ const styles = StyleSheet.create({
 });
 
 const CasSignInScreen = () => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { authCAS } = useContext(AccessContext);
 
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);

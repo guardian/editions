@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useContext } from 'react';
 import type { SpecialEditionHeaderStyles } from 'src/common';
 import { CloseButton } from 'src/components/Button/CloseButton';
@@ -6,6 +7,7 @@ import { SettingsButton } from 'src/components/Button/SettingsButton';
 import { IssueTitle } from 'src/components/issue/issue-title';
 import { Header } from 'src/components/layout/header/header';
 import { styles } from 'src/components/styled-text';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { SettingsOverlayContext } from '../../../hooks/use-settings-overlay';
 
@@ -18,7 +20,8 @@ const IssuePickerHeader = ({
 	subTitle?: string;
 	title: string;
 }) => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const settingsOverlay = useContext(SettingsOverlayContext);
 
 	return (

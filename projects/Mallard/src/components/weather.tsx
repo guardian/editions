@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -7,6 +8,7 @@ import { logEvent } from 'src/helpers/analytics';
 import { format } from 'src/helpers/date';
 import { Weather } from 'src/helpers/words';
 import { useWeather } from 'src/hooks/use-weather-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
@@ -198,7 +200,8 @@ const WeatherIconView = ({
 };
 
 const SetLocationButton = () => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const onSetLocation = useCallback(() => {
 		navigation.navigate(RouteNames.WeatherGeolocationConsent);
 		logEvent({

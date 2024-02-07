@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -16,7 +17,8 @@ const SignInFailedModal = ({
 }: {
 	route: RouteProp<MainStackParamList, 'SignInFailedModal'>;
 }) => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { signIn, signOut } = useOkta();
 	return (
 		<CenterWrapper>

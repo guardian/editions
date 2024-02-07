@@ -1,4 +1,5 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { Dispatch } from 'react';
 import React, {
 	useCallback,
@@ -47,7 +48,10 @@ import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import useOverlayAnimation from 'src/hooks/use-overlay-animation';
 import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
 import { navigateToIssue } from 'src/navigation/helpers/base';
-import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
+import type {
+	CompositeNavigationStackProps,
+	MainStackParamList,
+} from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToIssue } from 'src/paths';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -262,7 +266,8 @@ const IssueListView = React.memo(
 	}) => {
 		const [refreshing, setRefreshing] = useState(false);
 		const { getLatestIssueSummary } = useIssueSummary();
-		const navigation = useNavigation();
+		const navigation =
+			useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 		const { maxAvailableEditions } = useMaxAvailableEditions();
 		const { localIssueId: localId, publishedIssueId: publishedId } =
 			currentIssue.id;

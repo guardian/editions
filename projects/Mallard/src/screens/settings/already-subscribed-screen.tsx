@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useContext } from 'react';
 import { Platform } from 'react-native';
 import { AccessContext, useAccess } from 'src/authentication/AccessContext';
@@ -10,6 +11,7 @@ import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { Copy } from 'src/helpers/words';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
@@ -17,7 +19,8 @@ const AlreadySubscribedScreen = () => {
 	const canAccess = useAccess();
 	const { authIAP } = useContext(AccessContext);
 	const rightChevronIcon = <RightChevron />;
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { signIn } = useOkta();
 
 	return (

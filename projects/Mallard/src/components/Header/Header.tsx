@@ -1,7 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { isTablet } from 'react-native-device-info';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { color } from 'src/theme/color';
 import { Button } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';
@@ -39,7 +41,8 @@ const HeaderScreenContainer = ({
 	children: React.ReactNode;
 	title: string;
 }) => {
-	const navigation = useNavigation();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
 	return (
 		<View style={ModalStyles.wrapper}>

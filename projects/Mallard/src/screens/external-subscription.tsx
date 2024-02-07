@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import type { ColorSchemeName, TextStyle, ViewStyle } from 'react-native';
 import {
@@ -12,6 +13,7 @@ import {
 } from 'react-native';
 import { getDeviceId, isTablet } from 'react-native-device-info';
 import { Copy } from 'src/helpers/words';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 
 const isTabletDevice = isTablet();
 
@@ -128,7 +130,8 @@ const subscribe = () =>
 	Linking.openURL('https://support.theguardian.com/uk/subscribe/digital');
 
 export const ExternalSubscriptionScreen = () => {
-	const { goBack } = useNavigation();
+	const { goBack } =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const colorScheme = useColorScheme();
 	const style = styles(colorScheme);
 	return (

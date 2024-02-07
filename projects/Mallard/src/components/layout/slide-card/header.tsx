@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { Chevron } from '../../chevron';
@@ -27,7 +29,8 @@ const styles = StyleSheet.create({
 });
 
 const Header = () => {
-	const navigation = useNavigation();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	return (
 		<View style={styles.headerContainer}>
 			<TouchableWithoutFeedback

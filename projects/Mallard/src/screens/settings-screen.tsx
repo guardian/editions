@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useContext, useState } from 'react';
 import type { AccessibilityRole } from 'react-native';
 import { Alert, Linking, Platform, Switch, Text } from 'react-native';
@@ -24,12 +25,14 @@ import {
 } from 'src/hooks/use-config-provider';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 const MiscSettingsList = () => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { notificationsEnabled, setNotifications } =
 		useNotificationsEnabled();
 	const [settingNotificationsEnabled, setSettingNotificationsEnabled] =
@@ -148,7 +151,8 @@ const SignInButton = ({
 	);
 
 const SettingsScreen = () => {
-	const navigation = useNavigation<any>();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const identityData = useIdentity();
 	const oktaData = useOktaData();
 	const canAccess = useAccess();
