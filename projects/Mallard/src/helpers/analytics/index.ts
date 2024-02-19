@@ -1,21 +1,19 @@
-import analytics from '@react-native-firebase/analytics';
+import {
+	Action,
+	ComponentType,
+	sendAppScreenEvent,
+	sendComponentEvent,
+	sendPageViewEvent,
+	setUserId,
+} from 'src/services/ophan';
 import type { AnalyticsEvent, AnalyticsUserId } from './types';
 
-const toggleAnalyticsRecording = async (enable: boolean): Promise<boolean> => {
+const logScreenView = async (
+	routeName: string,
+	value?: string,
+): Promise<boolean> => {
 	try {
-		await analytics().setAnalyticsCollectionEnabled(enable);
-		return true;
-	} catch {
-		return false;
-	}
-};
-
-const logScreenView = async (routeName: string): Promise<boolean> => {
-	try {
-		await analytics().logScreenView({
-			screen_name: routeName,
-			screen_class: routeName,
-		});
+		await sendAppScreenEvent({ screenName: routeName, value });
 		return true;
 	} catch {
 		return false;
@@ -24,7 +22,12 @@ const logScreenView = async (routeName: string): Promise<boolean> => {
 
 const logEvent = async ({ name, value }: AnalyticsEvent): Promise<boolean> => {
 	try {
-		await analytics().logEvent(name, { value });
+		await sendComponentEvent({
+			componentType: ComponentType.AppButton,
+			action: Action.Click,
+			value,
+			componentId: name,
+		});
 		return true;
 	} catch {
 		return false;
@@ -34,30 +37,20 @@ const logEvent = async ({ name, value }: AnalyticsEvent): Promise<boolean> => {
 // This differs from a screen view as this is a "screen" that has significance to journalism e.g. Article screen view
 const logPageView = async (path: string): Promise<boolean> => {
 	try {
-		await analytics().logEvent('pageView', { path });
+		await sendPageViewEvent({ path });
 		return true;
 	} catch {
 		return false;
 	}
 };
 
-const logUserId = async (
-	userId: AnalyticsUserId,
-	authType: 'identity' | 'okta',
-): Promise<boolean> => {
+const logUserId = async (userId: AnalyticsUserId): Promise<boolean> => {
 	try {
-		await analytics().setUserId(userId);
-		await analytics().setUserProperty('authType', authType);
+		await setUserId(userId);
 		return true;
 	} catch {
 		return false;
 	}
 };
 
-export {
-	logEvent,
-	logPageView,
-	logScreenView,
-	logUserId,
-	toggleAnalyticsRecording,
-};
+export { logEvent, logPageView, logScreenView, logUserId };
