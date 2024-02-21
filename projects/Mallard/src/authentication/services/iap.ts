@@ -1,6 +1,6 @@
 import { NativeModules, Platform } from 'react-native';
 import type { Purchase } from 'react-native-iap';
-import RNIAP from 'react-native-iap';
+import { getAvailablePurchases, validateReceiptIos } from 'react-native-iap';
 import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants';
 import { isInBeta } from 'src/helpers/release-stream';
 import type { AuthResult } from '../lib/Result';
@@ -31,14 +31,14 @@ export interface ReceiptIOS {
 }
 
 const fetchDecodeReceipt = (receipt: string) =>
-	RNIAP.validateReceiptIos(
-		{
+	validateReceiptIos({
+		receiptBody: {
 			'receipt-data': receipt,
 			password: ITUNES_CONNECT_SHARED_SECRET,
 		},
 		// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-		isInBeta() || __DEV__,
-	);
+		isTest: isInBeta() || __DEV__,
+	});
 
 const getMostRecentTransactionReceipt = (purchases: Purchase[]) => {
 	if (!purchases.length) return false;
@@ -74,7 +74,7 @@ const tryRestoreActiveIOSSubscriptionReceipt = async (): Promise<
 > => {
 	try {
 		if (Platform.OS !== 'ios') return InvalidResult();
-		const purchases = await RNIAP.getAvailablePurchases();
+		const purchases = await getAvailablePurchases();
 		const mostRecentReceipt = getMostRecentTransactionReceipt(purchases);
 		if (!mostRecentReceipt) return InvalidResult();
 		const decodedReceipt = await fetchDecodeReceipt(mostRecentReceipt);
