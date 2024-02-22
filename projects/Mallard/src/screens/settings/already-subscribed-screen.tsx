@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useContext } from 'react';
-import { Platform } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { ActivityIndicator, Platform } from 'react-native';
 import { AccessContext, useAccess } from 'src/authentication/AccessContext';
 import { isError, isValid } from 'src/authentication/lib/Attempt';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
@@ -16,9 +16,11 @@ import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
 const AlreadySubscribedScreen = () => {
+	const [loading, setLoading] = useState(false);
 	const canAccess = useAccess();
 	const { authIAP } = useContext(AccessContext);
 	const rightChevronIcon = <RightChevron />;
+	const activityIndicator = <ActivityIndicator />;
 	const navigation =
 		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { signIn } = useOkta();
@@ -74,23 +76,35 @@ const AlreadySubscribedScreen = () => {
 										title: Copy.alreadySubscribed
 											.restoreIapTitle,
 										onPress: async () => {
+											setLoading(true);
 											const { accessAttempt } =
 												await authIAP();
 											if (isValid(accessAttempt)) {
+												setLoading(false);
 												navigation.navigate(
 													RouteNames.SubFoundModal,
+													{
+														closeAction: () =>
+															navigation.navigate(
+																RouteNames.Issue,
+															),
+													},
 												);
 											} else if (isError(accessAttempt)) {
+												setLoading(false);
 												navigation.navigate(
 													RouteNames.MissingIAPRestoreError,
 												);
 											} else {
+												setLoading(false);
 												navigation.navigate(
 													RouteNames.MissingIAPRestoreMissing,
 												);
 											}
 										},
-										proxy: rightChevronIcon,
+										proxy: loading
+											? activityIndicator
+											: rightChevronIcon,
 										linkWeight: 'regular',
 									},
 								]}
