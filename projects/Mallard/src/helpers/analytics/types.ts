@@ -8,7 +8,6 @@ type AnalyticsEvent = {
 enum AnalyticsScreenTracking {
 	AlreadySubscribed = 'im_already_subscribed',
 	CasSignIn = 'activate_with_subscriber_id',
-	Credits = 'credits',
 	Help = 'help',
 	FAQ = 'faqs',
 	GDPRConsent = 'consent_management_options',

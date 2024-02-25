@@ -33,7 +33,6 @@ ${Platform.select({
 		: ``
 }`;
 
-export const CREDITS_HEADER_TITLE = 'Credits';
 export const FAQS_HEADER_TITLE = 'FAQ';
 export const ENDPOINTS_HEADER_TITLE = 'API Endpoints';
 export const HELP_HEADER_TITLE = 'Help';
@@ -136,7 +135,6 @@ export const ConsentOnboarding = {
 
 export const Settings = {
 	alreadySubscribed: "I'm already subscribed",
-	credits: 'Credits',
 	displayWeather: 'Display weather',
 	help: 'Help',
 	manageDownloads: 'Manage downloads',

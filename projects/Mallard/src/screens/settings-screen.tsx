@@ -291,12 +291,6 @@ const SettingsScreen = () => {
 					/>
 					<Separator />
 					<Row
-						title={Copy.settings.credits}
-						onPress={() => navigation.navigate(RouteNames.Credits)}
-						proxy={rightChevronIcon}
-					/>
-					<Separator />
-					<Row
 						title={Copy.settings.version}
 						onPress={versionClickHandler}
 						proxy={
