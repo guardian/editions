@@ -491,7 +491,7 @@ PODS:
     - React-Core
   - react-native-in-app-utils (6.1.0):
     - React
-  - react-native-netinfo (9.5.0):
+  - react-native-netinfo (11.3.0):
     - React-Core
   - react-native-pager-view (5.4.25):
     - React-Core
@@ -1008,7 +1008,7 @@ SPEC CHECKSUMS:
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
   react-native-in-app-utils: 96cdefc90ad74a79a95d19239a183995a6face0b
-  react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
+  react-native-netinfo: 299dad906cdbf3b67bcc6f693c807f98bdd127cc
   react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
