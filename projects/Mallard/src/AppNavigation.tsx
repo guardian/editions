@@ -38,7 +38,6 @@ import { AlreadySubscribedScreen } from './screens/settings/already-subscribed-s
 import { ApiScreen } from './screens/settings/api-screen';
 import { BetaProgrammeFAQsScreen } from './screens/settings/beta-programme-faqs';
 import { CasSignInScreen } from './screens/settings/cas-sign-in-screen';
-import { CreditsScreen } from './screens/settings/credits-screen';
 import { DevZone } from './screens/settings/dev-zone';
 import { EditionsScreen } from './screens/settings/editions-screen';
 import { FAQScreen } from './screens/settings/faq-screen';
@@ -235,10 +234,6 @@ const MainStack = () => {
 					<Main.Screen
 						name={RouteNames.PrivacyPolicy}
 						component={PrivacyPolicyScreen}
-					/>
-					<Main.Screen
-						name={RouteNames.Credits}
-						component={CreditsScreen}
 					/>
 					<Main.Screen
 						name={RouteNames.Help}

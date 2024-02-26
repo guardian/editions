@@ -45,7 +45,6 @@ export type MainStackParamList = {
 	BetaProgrammeFAQs: undefined;
 	Help: undefined;
 	ManageEditions: undefined;
-	Credits: undefined;
 	FAQ: undefined;
 	AlreadySubscribed: undefined;
 	SubscriptionDetails: undefined;
@@ -77,7 +76,6 @@ export enum RouteNames {
 	BetaProgrammeFAQs = 'BetaProgrammeFAQs',
 	Help = 'Help',
 	ManageEditions = 'ManageEditions',
-	Credits = 'Credits',
 	FAQ = 'FAQ',
 	AlreadySubscribed = 'AlreadySubscribed',
 	SubscriptionDetails = 'SubscriptionDetails',
