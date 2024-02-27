@@ -218,6 +218,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
           <View
             accessibilityElementsHidden={false}
             closing={false}
+            collapsable={false}
             gestureVelocityImpact={0.3}
             importantForAccessibility="auto"
             onClose={[Function]}
@@ -1010,6 +1011,7 @@ exports[`IssueScreenHeader should match the default style 1`] = `
           <View
             accessibilityElementsHidden={false}
             closing={false}
+            collapsable={false}
             gestureVelocityImpact={0.3}
             importantForAccessibility="auto"
             onClose={[Function]}
