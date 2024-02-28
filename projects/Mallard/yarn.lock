@@ -1273,10 +1273,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.11.tgz#a1e442b6dba4540fce1273eff74abb74c0652f2d"
   integrity sha512-MLzUhb0+oaMS1g9FQ8nL3G3cdEsQTzC8/Hq1vdrIV/ufbu/6u7sult/AXXk602WodE4ugRZoJMZ5N90Z0WCfBg==
 
-"@guardian/prettier@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-5.0.0.tgz#0cd36b105512510192ea9fd18da3d3df2d7b3b72"
-  integrity sha512-gJSQuuP7JVDOWQj4EUrwyJTnMt+frLkw0D2sLg70nHn76L3LmH2xTQtYMPUsqyqn37qocDPzgdvBdmATi50zRQ==
+"@guardian/prettier@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-8.0.0.tgz#d621f01ad5ae7fa8579a966045ed0e3748beaede"
+  integrity sha512-Q2z9jDTf+38hXpfXSq4whbvfh5CpkB+z7DbL6AvO3O0+Kl6/FOCQLyFJe3YWT1WnnZPf/iF3VvVr/zjtRcBkuA==
 
 "@guardian/renditions@^0.2.0":
   version "0.2.0"
