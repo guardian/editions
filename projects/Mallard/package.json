@@ -104,7 +104,7 @@
 		"@babel/preset-env": "^7.20.0",
 		"@babel/runtime": "^7.20.0",
 		"@guardian/eslint-config-typescript": "^7.0.0",
-		"@guardian/prettier": "^5.0.0",
+		"@guardian/prettier": "^8.0.0",
 		"@react-native/eslint-config": "^0.72.2",
 		"@react-native/metro-config": "^0.72.11",
 		"@react-navigation/native-stack": "^6.9.20",
