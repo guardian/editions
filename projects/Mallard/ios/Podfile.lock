@@ -675,7 +675,7 @@ PODS:
   - RNScreens (3.29.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNSVG (14.1.0):
+  - RNSVG (15.0.0):
     - React-Core
   - RNZipArchive (6.0.9):
     - React-Core
@@ -1055,7 +1055,7 @@ SPEC CHECKSUMS:
   RNRate: ef3bcff84f39bb1d1e41c5593d3eea4aab2bd73a
   RNReanimated: ce6bef77caeee09d7f022532cee0c8d9bad09c9a
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
-  RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
+  RNSVG: 3f65a03e0c61a8495dee92bf82545ed9041cbf3b
   RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
