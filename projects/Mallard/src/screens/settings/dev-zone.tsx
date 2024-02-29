@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Alert, Clipboard, Platform, View } from 'react-native';
+import { Alert, Platform, View } from 'react-native';
 import { Switch } from 'react-native-gesture-handler';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { isValid } from 'src/authentication/lib/Attempt';

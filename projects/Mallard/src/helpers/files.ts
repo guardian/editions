@@ -12,7 +12,6 @@ import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
 import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { londonTime } from './date';
-import { imageForScreenSize } from './screen';
 
 // matches the issue date, i.e. 2020-02-01
 const ISSUE_DATE_REGEX = /\d{4}-\d{2}-\d{2}/gm;
@@ -281,16 +280,10 @@ export const getFileList = async () => {
 		(value) => Object.keys(value).length !== 0,
 	);
 
-	const imageSize = await imageForScreenSize();
-
 	// Grab one images from each image folder to confirm successful unzip
 	const imageFolderSearch = await Promise.all(
 		imageFolders.map(async (file: RNFS.ReadDirItem) => {
-			return await RNFS.readDir(
-				file.name === 'media'
-					? `${file.path}/${imageSize}/media`
-					: `${file.path}/${imageSize}/thumb/media`,
-			)
+			return await RNFS.readDir(file.path)
 				.then((filestat) =>
 					filestat
 						.map((deepfile) => cleanFileDisplay(deepfile))

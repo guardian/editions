@@ -1,5 +1,6 @@
 import { getUserFromIdToken } from '@okta/okta-react-native';
-import { Clipboard, Linking, Platform } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { Linking, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import { canViewEdition, getCASCode } from 'src/authentication/helpers';
@@ -252,4 +253,4 @@ const copyDiagnosticInfo = (
 	),
 });
 
-export { createSupportMailto, createMailtoHandler, copyDiagnosticInfo };
+export { copyDiagnosticInfo, createMailtoHandler, createSupportMailto };

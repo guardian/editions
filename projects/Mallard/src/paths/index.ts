@@ -33,7 +33,6 @@ export const APIPaths = {
 const issuesDir = `${RNFS.DocumentDirectoryPath}/issues`;
 
 const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`;
-const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`;
 const editionDir = (editionSlug: string) => {
 	return `${issuesDir}/${editionSlug}`;
 };
@@ -48,7 +47,6 @@ export const FSPaths = {
 	editionDir,
 	edtionsDirList,
 	issueRoot,
-	mediaRoot,
 	image: (localIssueId: string, image: Image, use: ImageUse) =>
 		imagePath(issueRoot(localIssueId), image, use),
 	zip: (localIssueId: string, filename: string) =>
