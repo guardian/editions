@@ -101,9 +101,9 @@ const MiscSettingsList = () => {
 
 	return (
 		<>
-			{data.map((item) => (
+			{data.map((item, index) => (
 				<>
-					<Row {...item} />
+					<Row {...item} key={index} />
 					<Separator />
 				</>
 			))}

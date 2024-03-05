@@ -622,6 +622,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.21.0):
     - React-Core
+  - RNCClipboard (1.13.2):
+    - React-Core
   - RNCMaskedView (0.2.9):
     - React-Core
   - RNCPicker (2.6.1):
@@ -757,6 +759,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNBackgroundFetch (from `../node_modules/react-native-background-fetch`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
@@ -914,6 +917,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-background-fetch"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
   RNCPicker:
@@ -1035,6 +1040,7 @@ SPEC CHECKSUMS:
   ReactCommon: 38824bfffaf4c51fbe03a2730b4fd874ef34d67b
   RNBackgroundFetch: 501c34ad6e880818ba17e7840b23f20a2d112923
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
+  RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: b18aaf30df596e9b1738e7c1f9ee55402a229dca
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
