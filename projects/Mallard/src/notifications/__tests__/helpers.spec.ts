@@ -1,23 +1,24 @@
-import moment from 'moment';
+import { subDays } from 'date-fns';
+import MockDate from 'mockdate';
 import { shouldReRegister } from '../helpers';
 import type { PushToken } from '../notification-service';
 
-const _today = moment();
-const today = () => _today.clone();
+MockDate.set('2019-08-21');
+const today = new Date();
 
 describe('push-notifications/helpers', () => {
 	describe('shouldReRegister', () => {
 		it('should return false if time is not exceeded, or the tokens are the same or topics match', () => {
 			const registrationCache = {
 				token: 'token',
-				registrationDate: today().toISOString(),
+				registrationDate: today.toISOString(),
 			};
 			const topics = [{ name: 'uk', type: 'editions' }] as PushToken[];
 			expect(
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today().toISOString(),
+					today.toISOString(),
 					topics,
 					topics,
 				),
@@ -26,14 +27,14 @@ describe('push-notifications/helpers', () => {
 		it('should return true if the 14 day period is exceeded but the rest remains the same', () => {
 			const registrationCache = {
 				token: 'token',
-				registrationDate: today().subtract(15, 'days').toISOString(),
+				registrationDate: subDays(today, 15).toISOString(),
 			};
 			const topics = [{ name: 'uk', type: 'editions' }] as PushToken[];
 			expect(
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today().toISOString(),
+					today.toISOString(),
 					topics,
 					topics,
 				),
@@ -42,14 +43,14 @@ describe('push-notifications/helpers', () => {
 		it('should return true if a different token is provided', () => {
 			const registrationCache = {
 				token: 'token',
-				registrationDate: today().toISOString(),
+				registrationDate: today.toISOString(),
 			};
 			const topics = [{ name: 'uk', type: 'editions' }] as PushToken[];
 			expect(
 				shouldReRegister(
 					'different-token',
 					registrationCache,
-					today().toISOString(),
+					today.toISOString(),
 					topics,
 					topics,
 				),
@@ -58,7 +59,7 @@ describe('push-notifications/helpers', () => {
 		it('should return true of the topics do not match', () => {
 			const registrationCache = {
 				token: 'token',
-				registrationDate: today().subtract(15, 'days').toISOString(),
+				registrationDate: subDays(today, 15).toISOString(),
 			};
 			const topics = [{ name: 'uk', type: 'editions' }] as PushToken[];
 			const differentTopics = [
@@ -68,7 +69,7 @@ describe('push-notifications/helpers', () => {
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today().toISOString(),
+					today.toISOString(),
 					topics,
 					differentTopics,
 				),
@@ -77,7 +78,7 @@ describe('push-notifications/helpers', () => {
 		it('should return false if the topics are but in different order', () => {
 			const registrationCache = {
 				token: 'token',
-				registrationDate: today().toISOString(),
+				registrationDate: today.toISOString(),
 			};
 			const topics = [{ name: 'uk', type: 'editions' }] as PushToken[];
 			const topics2 = [{ type: 'editions', name: 'uk' }] as PushToken[];
@@ -85,7 +86,7 @@ describe('push-notifications/helpers', () => {
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today().toISOString(),
+					today.toISOString(),
 					topics,
 					topics2,
 				),
