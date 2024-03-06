@@ -1,6 +1,6 @@
-import { addDays, subDays } from 'date-fns';
 import MockDate from 'mockdate';
 import { receiptIOS } from 'src/authentication/__tests__/fixtures';
+import { addDays, subDays } from 'src/helpers/date';
 import { findValidReceipt, isReceiptValid } from '../iap';
 
 MockDate.set('2019-08-21');

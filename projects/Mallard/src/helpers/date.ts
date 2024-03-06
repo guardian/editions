@@ -1,4 +1,4 @@
-import { format as dfnsFormat } from 'date-fns';
+import { addDays, format as dfnsFormat, subDays } from 'date-fns';
 import moment from 'moment-timezone';
 import { Platform } from 'react-native';
 import { languageLocale } from './locale';
@@ -22,4 +22,4 @@ const localDate = (date: Date): string => {
 const format = (date: Date, fomattedString: string) =>
 	dfnsFormat(date, fomattedString);
 
-export { londonTime, localDate, format };
+export { londonTime, localDate, format, addDays, subDays };
