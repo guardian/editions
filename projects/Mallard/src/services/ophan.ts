@@ -26,7 +26,7 @@ interface TrackComponentEvent {
 
 const ophan = async (urlParams: string): Promise<boolean> => {
 	const viewId = `viewId=${nanoid()}`;
-	const url = `https://ophan.theguardian.com/img/1?platfom=editions&${viewId}&${urlParams}`;
+	const url = `https://ophan.theguardian.com/img/1?v=17&platfom=editions&${viewId}&${urlParams}`;
 	const response = await fetch(url, { method: 'GET' });
 	const { status } = response;
 	return status === 204;
