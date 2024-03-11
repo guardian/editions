@@ -1,4 +1,3 @@
-import moment from 'moment';
 import type { Dispatch } from 'react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type {
@@ -7,6 +6,7 @@ import type {
 	SpecialEdition,
 	SpecialEditionHeaderStyles,
 } from 'src/common';
+import { isLondonTimeBefore } from 'src/helpers/date';
 import {
 	defaultSettings,
 	editionsEndpoint,
@@ -133,7 +133,7 @@ export const removeExpiredSpecialEditions = (
 	return {
 		...editionsList,
 		specialEditions: editionsList.specialEditions.filter((e) =>
-			moment().isBefore(e.expiry),
+			isLondonTimeBefore(new Date(e.expiry)),
 		),
 	};
 };
@@ -297,8 +297,7 @@ export const EditionProvider = ({
 			getEditions(isConnected, fullUrl)
 				.then((ed) => {
 					if (ed) {
-						const removeAus =
-							temporaryFilterEditionsList(editionsList);
+						const removeAus = temporaryFilterEditionsList(ed);
 						setEditionsList(removeAus);
 					}
 				})
