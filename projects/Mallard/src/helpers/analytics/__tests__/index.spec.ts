@@ -16,7 +16,9 @@ describe('analytics', () => {
 			const mockSendPageViewEvent = jest
 				.spyOn(Ophan, 'sendPageViewEvent')
 				.mockResolvedValue(true);
-			await logPageView('test/path/to/article');
+			await logPageView(
+				'http://www.theguardian.com/test/path/to/article',
+			);
 			expect(mockSendPageViewEvent).toHaveBeenCalled();
 		});
 	});

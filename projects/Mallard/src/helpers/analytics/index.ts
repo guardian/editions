@@ -35,9 +35,9 @@ const logEvent = async ({ name, value }: AnalyticsEvent): Promise<boolean> => {
 };
 
 // This differs from a screen view as this is a "screen" that has significance to journalism e.g. Article screen view
-const logPageView = async (path: string): Promise<boolean> => {
+const logPageView = async (url: string): Promise<boolean> => {
 	try {
-		await sendPageViewEvent({ path });
+		await sendPageViewEvent({ url });
 		return true;
 	} catch {
 		return false;

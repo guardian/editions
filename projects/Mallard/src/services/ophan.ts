@@ -83,10 +83,10 @@ const sendComponentEvent = async ({
 	}
 };
 
-const sendPageViewEvent = async ({ path }: { path: string }) => {
+const sendPageViewEvent = async ({ url }: { url: string }) => {
 	try {
-		const stringPath = encodeURIComponent(path);
-		return await ophan(`pageView=${stringPath}`);
+		const stringPath = encodeURIComponent(url);
+		return await ophan(`url=${stringPath}`);
 	} catch (e) {
 		return false;
 	}
