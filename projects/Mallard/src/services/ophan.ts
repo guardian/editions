@@ -1,5 +1,5 @@
 import 'react-native-get-random-values';
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 import type { AnalyticsUserId } from 'src/helpers/analytics/types';
 
 enum ComponentType {
@@ -25,7 +25,8 @@ interface TrackComponentEvent {
 }
 
 const ophan = async (urlParams: string): Promise<boolean> => {
-	const viewId = `viewId=${nanoid()}`;
+	const viewIdString = customAlphabet('qwertyuiopasdfghjklzxcvbnm0123456789');
+	const viewId = `viewId=${viewIdString(17).toLowerCase()}`;
 	const url = `https://ophan.theguardian.com/img/1?v=17&platfom=editions&${viewId}&${urlParams}`;
 	const response = await fetch(url, { method: 'GET' });
 	const { status } = response;
@@ -86,7 +87,9 @@ const sendComponentEvent = async ({
 const sendPageViewEvent = async ({ url }: { url: string }) => {
 	try {
 		const stringPath = encodeURIComponent(url);
-		return await ophan(`url=${stringPath}`);
+		return await ophan(
+			`url=${stringPath}&ref=https%3A%2F%2Fwww.theguardian.com%2Fuk&visibilityState=visible&tz=0&navigationType=reload`,
+		);
 	} catch (e) {
 		return false;
 	}
