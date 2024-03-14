@@ -1,4 +1,10 @@
-import { addDays, format as dfnsFormat, isBefore, subDays } from 'date-fns';
+import {
+	addDays,
+	format as dfnsFormat,
+	differenceInDays,
+	isBefore,
+	subDays,
+} from 'date-fns';
 import moment from 'moment-timezone';
 import { Platform } from 'react-native';
 import { languageLocale } from './locale';
@@ -25,4 +31,15 @@ const format = (date: Date, fomattedString: string) =>
 const isLondonTimeBefore = (date: Date) =>
 	isBefore(londonTime().toDate(), date);
 
-export { addDays, format, isLondonTimeBefore, localDate, londonTime, subDays };
+const now = new Date();
+
+export {
+	addDays,
+	differenceInDays,
+	format,
+	isLondonTimeBefore,
+	localDate,
+	londonTime,
+	now,
+	subDays,
+};

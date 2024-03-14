@@ -18,7 +18,7 @@ describe('push-notifications/helpers', () => {
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today.toISOString(),
+					today,
 					topics,
 					topics,
 				),
@@ -34,7 +34,7 @@ describe('push-notifications/helpers', () => {
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today.toISOString(),
+					today,
 					topics,
 					topics,
 				),
@@ -50,7 +50,7 @@ describe('push-notifications/helpers', () => {
 				shouldReRegister(
 					'different-token',
 					registrationCache,
-					today.toISOString(),
+					today,
 					topics,
 					topics,
 				),
@@ -69,7 +69,7 @@ describe('push-notifications/helpers', () => {
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today.toISOString(),
+					today,
 					topics,
 					differentTopics,
 				),
@@ -86,7 +86,7 @@ describe('push-notifications/helpers', () => {
 				shouldReRegister(
 					'token',
 					registrationCache,
-					today.toISOString(),
+					today,
 					topics,
 					topics2,
 				),
