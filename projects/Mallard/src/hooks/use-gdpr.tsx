@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { toggleAnalyticsRecording } from 'src/helpers/analytics';
 import {
 	gdprAllowFunctionalityCache,
 	gdprAllowPerformanceCache,
@@ -20,8 +19,9 @@ import { errorService } from 'src/services/errors';
  * v8 - Add Firebase Analytics as PERFORMANCE
  * v9 - Remove additional Logging
  * v10 - Remove Sentry from the app
+ * v11 - Enable Ophan as essential
  */
-const CURRENT_CONSENT_VERSION = 10;
+const CURRENT_CONSENT_VERSION = 11;
 
 /*
 Consent switches can be 'unset' or null
@@ -117,9 +117,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		// Local state modifier
 		setGdprAllowPerformance(setting);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
-		setting
-			? toggleAnalyticsRecording(setting)
-			: toggleAnalyticsRecording(false);
 		// Persisted state modifier
 		setting === null
 			? gdprAllowPerformanceCache.reset()

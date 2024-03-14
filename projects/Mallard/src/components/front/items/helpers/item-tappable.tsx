@@ -5,6 +5,7 @@ import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
+import { logPageView } from 'src/helpers/analytics';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
@@ -56,6 +57,7 @@ const ItemTappable = ({
 	const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
 	const handlePress = () => {
+		article?.webUrl && logPageView(article.webUrl);
 		article.type === 'crossword'
 			? navigation.navigate(RouteNames.Crossword, {
 					path,

@@ -358,7 +358,8 @@ const IssueScreenWithPath = ({
 	const { initialFrontKey } = useIssueSummary();
 
 	useEffect(() => {
-		issue && logPageView(`editions/${issue.key}`);
+		issue &&
+			logPageView(`https://www.theguardian.com/editions/${issue.key}`);
 	}, [issue?.key]);
 
 	return (

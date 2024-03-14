@@ -227,7 +227,9 @@ const ArticleSlider = React.memo(
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={1}
 							onMomentumScrollEnd={() => {
-								logPageView(flattenedArticles[current].article);
+								logPageView(
+									`https://www.theguardian.com/${flattenedArticles[current].article}`,
+								);
 							}}
 							onScroll={Animated.event(
 								[
