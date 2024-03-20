@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { NetInfoStateType } from '@react-native-community/netinfo';
 import NetInfo from '@react-native-community/netinfo';
-import { londonTime } from 'src/helpers/date';
+import { londonTimeAsDate } from 'src/helpers/date';
 import { lastNDays } from 'src/helpers/issues';
 
 const PUSH_TRACKING_KEY = '@push-tracking';
@@ -81,7 +81,7 @@ const pushTracking = async (
 		// @TODO: Needs to use the netInfoProvider hook
 		const { type } = await NetInfo.fetch();
 		const tracking: Tracking = {
-			time: londonTime().format(),
+			time: londonTimeAsDate().toISOString(),
 			id,
 			value,
 			networkStatus: type,

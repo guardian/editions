@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { Issue } from 'src/common';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
-import { londonTime } from './date';
+import { londonTime, londonTimeAsDate } from './date';
 
 const months = [
 	'January',
@@ -59,7 +59,7 @@ const dateToFolderConvert = (date: Date): string => {
 
 /** today as folder given */
 export const todayAsFolder = (): string =>
-	dateToFolderConvert(londonTime().toDate());
+	dateToFolderConvert(londonTimeAsDate());
 
 export const todayAsKey = async (): Promise<string> => {
 	const edition = await getSelectedEditionSlug();
@@ -68,7 +68,7 @@ export const todayAsKey = async (): Promise<string> => {
 
 export const lastNDays = (n: number): string[] => {
 	return Array.from({ length: n }, (_, i) => {
-		const d = londonTime().toDate();
+		const d = londonTimeAsDate();
 		d.setDate(d.getDate() - i);
 		return dateToFolderConvert(d);
 	});
