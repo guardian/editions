@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import { Platform } from 'react-native';
 import { languageLocale } from './locale';
 
-const londonTime = (date: Date) => zonedTimeToUtc(date, 'Europe/London');
+const londonTime = (date: Date) => utcToZonedTime(date, 'Europe/London');
 
 const londonTimeAsDate = (): Date =>
 	utcToZonedTime(new Date(), 'Europe/London');
