@@ -1,32 +1,13 @@
 import { useMemo } from 'react';
 import type { Issue } from 'src/common';
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
-import { londonTime, londonTimeAsDate } from './date';
-
-const months = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December',
-];
-
-const days = [
-	'Sunday',
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-];
+import {
+	formatDayNumber,
+	formatMonth,
+	formatWeekday,
+	londonTime,
+	londonTimeAsDate,
+} from './date';
 
 interface IssueDate {
 	date: string;
@@ -34,10 +15,10 @@ interface IssueDate {
 }
 
 export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
-	const date = londonTime(dateString);
+	const date = londonTime(new Date(dateString));
 	return {
-		date: `${date.date()} ${months[date.month()]}`,
-		weekday: days[date.day()],
+		date: `${formatDayNumber(date)} ${formatMonth(date)}`,
+		weekday: formatWeekday(date),
 	};
 };
 
