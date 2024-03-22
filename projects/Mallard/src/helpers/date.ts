@@ -16,7 +16,7 @@ const londonTime = (time?: string | number) => {
 };
 
 const londonTimeAsDate = (): Date =>
-	zonedTimeToUtc(new Date(), 'Europe/London');
+	zonedTimeToUtc(new Date().toISOString(), 'Europe/London');
 
 const localDate = (date: Date): string => {
 	if (Platform.OS === 'ios') {
