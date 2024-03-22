@@ -5,7 +5,7 @@ import {
 	isBefore,
 	subDays,
 } from 'date-fns';
-import { zonedTimeToUtc } from 'date-fns-tz';
+import { utcToZonedTime } from 'date-fns-tz';
 import moment from 'moment-timezone';
 import { Platform } from 'react-native';
 import { languageLocale } from 'src/helpers/locale';
@@ -16,7 +16,7 @@ const londonTime = (time?: string | number) => {
 };
 
 const londonTimeAsDate = (): Date =>
-	zonedTimeToUtc(new Date().toISOString(), 'Europe/London');
+	utcToZonedTime(new Date(), 'Europe/London');
 
 const localDate = (date: Date): string => {
 	if (Platform.OS === 'ios') {
