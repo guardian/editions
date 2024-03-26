@@ -10,10 +10,7 @@ import moment from 'moment-timezone';
 import { Platform } from 'react-native';
 import { languageLocale } from 'src/helpers/locale';
 
-const londonTime = (time?: string | number) => {
-	if (time != null) return moment.tz(time, 'Europe/London');
-	return moment.tz('Europe/London');
-};
+const londonTime = (date: Date) => utcToZonedTime(date, 'Europe/London');
 
 const londonTimeAsDate = (): Date =>
 	utcToZonedTime(new Date(), 'Europe/London');
@@ -35,11 +32,17 @@ const format = (date: Date, fomattedString: string) =>
 const isLondonTimeBefore = (date: Date) => isBefore(londonTimeAsDate(), date);
 
 const now = new Date();
+const formatWeekday = (date: Date) => format(date, 'd');
+const formatDayNumber = (date: Date) => format(date, 'iiii');
+const formatMonth = (date: Date) => format(date, 'LLLL');
 
 export {
 	addDays,
 	differenceInDays,
 	format,
+	formatDayNumber,
+	formatMonth,
+	formatWeekday,
 	isLondonTimeBefore,
 	localDate,
 	londonTime,

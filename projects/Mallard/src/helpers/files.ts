@@ -246,9 +246,9 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 	}
 };
 
-const cleanFileDisplay = (stat: RNFS.ReadDirItem | RNFS.StatResult) => ({
+const cleanFileDisplay = (stat: RNFS.ReadDirItem) => ({
 	path: stat.path.replace(FSPaths.issuesDir, ''),
-	lastModified: londonTime(Number(stat.mtime)).format(),
+	lastModified: stat.mtime ? londonTime(stat.mtime) : '',
 	type: stat.isDirectory() ? 'directory' : 'file',
 });
 
