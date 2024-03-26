@@ -6,7 +6,6 @@ import {
 	subDays,
 } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import moment from 'moment-timezone';
 import { Platform } from 'react-native';
 import { languageLocale } from 'src/helpers/locale';
 
@@ -32,8 +31,8 @@ const format = (date: Date, fomattedString: string) =>
 const isLondonTimeBefore = (date: Date) => isBefore(londonTimeAsDate(), date);
 
 const now = new Date();
-const formatWeekday = (date: Date) => format(date, 'd');
-const formatDayNumber = (date: Date) => format(date, 'iiii');
+const formatWeekday = (date: Date) => format(date, 'EEEE');
+const formatDayNumber = (date: Date) => format(date, 'dd');
 const formatMonth = (date: Date) => format(date, 'LLLL');
 
 export {
