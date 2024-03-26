@@ -1,7 +1,7 @@
 import { addDays, format as dfnsFormat, isBefore, subDays } from 'date-fns';
 import moment from 'moment-timezone';
 import { Platform } from 'react-native';
-import { languageLocale } from './locale';
+import { languageLocale } from 'src/helpers/locale';
 
 const londonTime = (time?: string | number) => {
 	if (time != null) return moment.tz(time, 'Europe/London');
@@ -14,8 +14,8 @@ const localDate = (date: Date): string => {
 	} else {
 		// toLocaleDateString is not a reliable way of getting the format we need on android
 		return languageLocale === 'en-US'
-			? moment(date).format('MM/DD/YYYY')
-			: moment(date).format('DD/MM/YYYY');
+			? dfnsFormat(date, 'MM/dd/yyyy')
+			: dfnsFormat(date, 'dd/MM/yyyy');
 	}
 };
 
