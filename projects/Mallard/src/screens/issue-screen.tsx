@@ -27,7 +27,7 @@ import {
 import {
 	CONNECTION_FAILED_ERROR,
 	CONNECTION_FAILED_SUB_ERROR,
-	NewEditionWords,
+	copy,
 	REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words';
 import {
@@ -439,7 +439,7 @@ export const IssueScreen = React.memo(() => {
 		<Container>
 			{showNewEditionCard && (
 				<NewEditionCard
-					modalText={NewEditionWords}
+					modalText={copy.newEditionWords}
 					onDismissThisCard={setNewEditionSeen}
 				/>
 			)}

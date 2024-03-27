@@ -9,7 +9,7 @@ import {
 	CardAppearance,
 	OnboardingCard,
 } from 'src/components/onboarding/onboarding-card';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { useGdprSettings } from 'src/hooks/use-gdpr';
 import type { OnboardingStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -44,8 +44,8 @@ const OnboardingConsent = () => {
 		<Aligner>
 			<OnboardingCard
 				appearance={CardAppearance.Blue}
-				title={Copy.consentOnboarding.title}
-				explainerTitle={Copy.consentOnboarding.explainerTitle}
+				title={copy.consentOnboarding.title}
+				explainerTitle={copy.consentOnboarding.explainerTitle}
 				bottomExplainerContent={
 					<>
 						<View style={styles.consentButtonContainer}>
@@ -60,7 +60,7 @@ const OnboardingConsent = () => {
 										ButtonAppearance.SkeletonBlue
 									}
 								>
-									{Copy.consentOnboarding.optionsButton}
+									{copy.consentOnboarding.optionsButton}
 								</ModalButton>
 							</View>
 							<View>
@@ -68,7 +68,7 @@ const OnboardingConsent = () => {
 									onPress={enableAllSettings}
 									buttonAppearance={ButtonAppearance.Dark}
 								>
-									{Copy.consentOnboarding.okayButton}
+									{copy.consentOnboarding.okayButton}
 								</ModalButton>
 							</View>
 						</View>

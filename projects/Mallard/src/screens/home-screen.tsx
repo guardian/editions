@@ -31,7 +31,7 @@ import type { Loaded } from 'src/helpers/Loaded';
 import {
 	CONNECTION_FAILED_AUTO_RETRY,
 	CONNECTION_FAILED_ERROR,
-	Copy,
+	copy,
 } from 'src/helpers/words';
 import {
 	useApiUrl,
@@ -218,7 +218,7 @@ const IssueListFooter = () => {
 						navigation.navigate(RouteNames.ManageEditions);
 					}}
 				>
-					{Copy.issueListFooter.manageDownloads}
+					{copy.issueListFooter.manageDownloads}
 				</Button>
 			</GridRowSplit>
 			{isUsingProdDevtools ? (
@@ -237,7 +237,7 @@ const IssueListFooter = () => {
 							});
 						}}
 					>
-						{Copy.issueListFooter.goToLatestButton}
+						{copy.issueListFooter.goToLatestButton}
 					</Button>
 				</GridRowSplit>
 			) : null}

@@ -7,7 +7,7 @@ import { Row, Separator } from 'src/components/layout/ui/row';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { JOIN_BETA_LINK } from 'src/constants';
 import { isInBeta } from 'src/helpers/release-stream';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { remoteConfigService } from 'src/services/remote-config';
@@ -24,7 +24,7 @@ const betaProgrammeFAQs = (
 	navigation: StackNavigationProp<MainStackParamList>,
 ) => ({
 	key: 'Beta Programme FAQs',
-	title: Copy.settings.betaProgrammeFAQs,
+	title: copy.settings.betaProgrammeFAQs,
 	onPress: () => {
 		navigation.navigate(RouteNames.BetaProgrammeFAQs);
 	},

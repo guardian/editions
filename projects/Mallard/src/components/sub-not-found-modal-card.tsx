@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 
@@ -15,19 +15,19 @@ const SubNotFoundModalCard = ({
 	onDismiss: () => void;
 }) => (
 	<OnboardingCard
-		title={Copy.subNotFound.title}
+		title={copy.subNotFound.title}
 		appearance={CardAppearance.Blue}
 		size="small"
-		explainerTitle={Copy.subNotFound.explainer}
+		explainerTitle={copy.subNotFound.explainer}
 		onDismissThisCard={() => {
 			close();
 			onDismiss();
 		}}
-		explainerSubtitle={Copy.subNotFound.explainerSubtitle}
+		explainerSubtitle={copy.subNotFound.explainerSubtitle}
 		bottomContent={
 			<>
 				<ModalButton onPress={onLoginPress}>
-					{Copy.subNotFound.signIn}
+					{copy.subNotFound.signIn}
 				</ModalButton>
 				<ModalButton
 					onPress={() => {
@@ -35,7 +35,7 @@ const SubNotFoundModalCard = ({
 						onOpenCASLogin();
 					}}
 				>
-					{Copy.subNotFound.subscriberButton}
+					{copy.subNotFound.subscriberButton}
 				</ModalButton>
 			</>
 		}

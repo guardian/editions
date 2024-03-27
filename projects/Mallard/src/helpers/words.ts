@@ -55,7 +55,7 @@ export const DOWNLOAD_ISSUE_MESSAGE_FAILED =
 export const USER_EMAIL_BODY_INTRO = `\n \nThanks for taking the time to send us feedback or report an issue.\n \nIf you are reporting a bug in the app, it will be very helpful if you could describe what you were doing in the app and let us know which screen you were on when the issue occurred. Is this an issue you have seen previously? The more detail you can provide the better and screenshots of these issues are always appreciated.\n \nIf you need a hand with taking a screenshot on your device, you can use this guide: http://www.take-a-screenshot.org/ \n \nThe Guardian Editions team`;
 
 // Sign in modal
-const SignIn = {
+const signIn = {
 	title: 'Already a subscriber?',
 	subtitle: 'Sign in with your subscriber details to continue',
 	explainerTitle: 'Not subscribed yet?',
@@ -69,7 +69,7 @@ const SignIn = {
 };
 
 // Failed sign in modal
-const FailedSignIn = {
+const failedSignIn = {
 	appleRelayTitle: 'We are unable to verify your subscription',
 	appleRelayBody: `We are unable to detect your subscription as it seems you chose not to share your email address with us. \n \nPlease try a different sign in method. You will need to use the same email address as your Digital subscription. Alternatively, use your subscriber ID.`,
 	appleRelayRetry: 'Try alternative sign in method',
@@ -79,13 +79,13 @@ const FailedSignIn = {
 };
 
 // Sub found modal
-const SubFound = {
+const subFound = {
 	title: 'Subscription found',
 	subtitle: 'Enjoy the Guardian and thank you for your support',
 };
 
 // Sub not found modal
-const SubNotFound = {
+const subNotFound = {
 	title: 'Already a subscriber?',
 	explainer: 'Not subscribed yet?',
 	explainerSubtitle: `${Platform.select({
@@ -98,7 +98,7 @@ const SubNotFound = {
 };
 
 // Auth switcher screen
-const AuthSwitcherScreen = {
+const authSwitcherScreen = {
 	title: 'Sign in to activate your subscription',
 	nextButton: 'Next',
 	invalidEmail: 'Please enter a valid email',
@@ -110,7 +110,7 @@ const AuthSwitcherScreen = {
 };
 
 // Already Subscribed
-const AlreadySubscribed = {
+const alreadySubscribed = {
 	title: 'Subscription Activation',
 	subscriptionHeading: 'Guardian digital subscription/Digital + Print',
 	appHeading: 'Guardian Editions',
@@ -126,14 +126,14 @@ const AlreadySubscribed = {
 };
 
 // Consent Onboarding
-export const ConsentOnboarding = {
+const consentOnboarding = {
 	title: 'We care about your privacy',
 	explainerTitle: 'This app is free of ads',
 	optionsButton: 'My options',
 	okayButton: "I'm okay with that",
 };
 
-export const Settings = {
+const settings = {
 	alreadySubscribed: "I'm already subscribed",
 	displayWeather: 'Display weather',
 	help: 'Help',
@@ -150,7 +150,7 @@ export const Settings = {
 	betaProgrammeFAQs: 'Beta Programme FAQs',
 };
 
-export const ManageDownloads = {
+const manageDownloads = {
 	wifiOnlyTitle: 'Wifi-only',
 	wifiOnlyExplainer: 'Issues will only be downloaded when Wi-Fi is available',
 	availableDownloads: 'Available downloads',
@@ -164,23 +164,23 @@ export const ManageDownloads = {
 	delete: 'Delete',
 };
 
-export const NewEditionWords = {
+const newEditionWords = {
 	title: 'A new special edition is available',
 	bodyText: 'Tap on the edition icon above to access it',
 	dismissButtonText: 'Got it',
 };
 
-export const HomeScreen = {
+const homeScreen = {
 	issuePickerTitle: 'Recent',
 	issuePickerTitleSubtitle: 'Editions',
 };
 
-export const IssueListFooter = {
+const issueListFooter = {
 	manageDownloads: 'Manage downloads',
 	goToLatestButton: 'Go to latest',
 };
 
-export const SubscriptionDetails = {
+const subscriptionDetails = {
 	title: 'Subscription Details',
 	loggedOutHeading: 'Not logged in',
 	emailAddress: 'Email Address',
@@ -190,7 +190,7 @@ export const SubscriptionDetails = {
 	subscriptionPrefix: 'Subscription prefix',
 };
 
-export const Weather = {
+const weather = {
 	useLocation: 'Use location',
 	disabledLocationAlertTitle: 'Location services',
 	disabledLocationAlertExplainer:
@@ -206,7 +206,7 @@ export const Weather = {
 	cancelButton: 'No thanks',
 };
 
-export const WeatherConsentHtml = {
+const weatherConsentHtml = {
 	content: `<h2>Location-based weather</h2>
 <p>
     This is a 3rd party service provided by AccuWeather. It works by taking
@@ -238,7 +238,7 @@ export const WeatherConsentHtml = {
 `,
 };
 
-const ExternalSubscription = {
+const externalSubscription = {
 	title: "You're about to leave the app and go to an external website. You will no longer be transacting with Apple.",
 	body: 'Any accounts or purchases made outside of this app will be managed by the developer "Guardian News and Media Limited" Your App Store account, stored payment method, and related features, such as subscription management and refund requests, will not be available. Apple is not responsible for the privacy or security of transactions made with this developer.',
 	learnMore: 'Learn More',
@@ -246,20 +246,21 @@ const ExternalSubscription = {
 	cancel: 'Cancel',
 };
 
-export const Copy = {
-	signIn: SignIn,
-	failedSignIn: FailedSignIn,
-	subFound: SubFound,
-	subNotFound: SubNotFound,
-	alreadySubscribed: AlreadySubscribed,
-	consentOnboarding: ConsentOnboarding,
-	settings: Settings,
-	manageDownloads: ManageDownloads,
-	homeScreen: HomeScreen,
-	issueListFooter: IssueListFooter,
-	weather: Weather,
-	subscriptionDetails: SubscriptionDetails,
-	authSwitcherScreen: AuthSwitcherScreen,
-	weatherConsentHtml: WeatherConsentHtml,
-	externalSubscription: ExternalSubscription,
+export const copy = {
+	alreadySubscribed,
+	authSwitcherScreen,
+	consentOnboarding,
+	externalSubscription,
+	failedSignIn,
+	homeScreen,
+	issueListFooter,
+	manageDownloads,
+	newEditionWords,
+	settings,
+	signIn,
+	subFound,
+	subNotFound,
+	subscriptionDetails,
+	weather,
+	weatherConsentHtml,
 };

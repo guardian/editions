@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { logEvent } from 'src/helpers/analytics';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 
@@ -28,8 +28,8 @@ const SignInModalCard = ({
 	return (
 		<OnboardingCard
 			onDismissThisCard={onDismiss}
-			title={Copy.signIn.title}
-			subtitle={Copy.signIn.subtitle}
+			title={copy.signIn.title}
+			subtitle={copy.signIn.subtitle}
 			appearance={CardAppearance.Blue}
 			size="medium"
 			bottomContent={

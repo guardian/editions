@@ -9,7 +9,7 @@ import { RightChevron } from 'src/components/icons/RightChevron';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { useOkta } from 'src/hooks/use-okta-sign-in';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -27,13 +27,13 @@ const AlreadySubscribedScreen = () => {
 
 	return (
 		<HeaderScreenContainer
-			title={Copy.alreadySubscribed.title}
+			title={copy.alreadySubscribed.title}
 			actionLeft={true}
 		>
 			<WithAppAppearance value={'settings'}>
 				<ScrollContainer>
 					<Heading>
-						{Copy.alreadySubscribed.subscriptionHeading}
+						{copy.alreadySubscribed.subscriptionHeading}
 					</Heading>
 					<List
 						data={
@@ -41,7 +41,7 @@ const AlreadySubscribedScreen = () => {
 								? [
 										{
 											key: 'Sign in to activate',
-											title: Copy.alreadySubscribed
+											title: copy.alreadySubscribed
 												.signInTitle,
 											onPress: signIn,
 											proxy: rightChevronIcon,
@@ -49,7 +49,7 @@ const AlreadySubscribedScreen = () => {
 										},
 										{
 											key: 'Activate with subscriber ID',
-											title: Copy.alreadySubscribed
+											title: copy.alreadySubscribed
 												.subscriberIdTitle,
 											onPress: () => {
 												navigation.navigate(
@@ -67,13 +67,13 @@ const AlreadySubscribedScreen = () => {
 						<>
 							<Heading>{``}</Heading>
 							<Heading>
-								{Copy.alreadySubscribed.appHeading}
+								{copy.alreadySubscribed.appHeading}
 							</Heading>
 							<List
 								data={[
 									{
 										key: 'Restore App Store subscription',
-										title: Copy.alreadySubscribed
+										title: copy.alreadySubscribed
 											.restoreIapTitle,
 										onPress: async () => {
 											setLoading(true);
