@@ -88,11 +88,11 @@ const articleTypePicker = (article: Content): ArticleType => {
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
                 else if (isLetter) return ArticleType.Letter
-                else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isEditorial) return ArticleType.Article
                 else if (isComment) return ArticleType.Opinion
+                else if (isSeries) return ArticleType.Article
                 else return ArticleType.Article
 
             case 'lifestyle':
