@@ -11,7 +11,7 @@ import { List } from 'src/components/lists/list';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
 import { logEvent } from 'src/helpers/analytics';
-import { Copy, MANAGE_EDITIONS_TITLE } from 'src/helpers/words';
+import { copy, MANAGE_EDITIONS_TITLE } from 'src/helpers/words';
 import {
 	useMaxAvailableEditions,
 	useWifiOnlyDownloads,
@@ -107,13 +107,13 @@ const ManageEditionsScreen = () => {
 					data={[
 						{
 							key: 'Wifi-only',
-							title: Copy.manageDownloads.wifiOnlyTitle,
-							explainer: Copy.manageDownloads.wifiOnlyExplainer,
+							title: copy.manageDownloads.wifiOnlyTitle,
+							explainer: copy.manageDownloads.wifiOnlyExplainer,
 							proxy: (
 								<Switch
 									accessible={true}
 									accessibilityLabel={
-										Copy.manageDownloads.wifiOnlyTitle
+										copy.manageDownloads.wifiOnlyTitle
 									}
 									accessibilityRole="switch"
 									value={wifiOnlyDownloads}
@@ -129,7 +129,7 @@ const ManageEditionsScreen = () => {
 						},
 						{
 							key: 'Available editions',
-							title: Copy.manageDownloads.availableDownloads,
+							title: copy.manageDownloads.availableDownloads,
 							explainer: (
 								<AvailableEditionsButtons
 									numbers={[7, 14, 30]}
@@ -150,23 +150,23 @@ const ManageEditionsScreen = () => {
 
 						{
 							key: 'Delete all downloads',
-							title: Copy.manageDownloads.deleteDownloadsTitle,
+							title: copy.manageDownloads.deleteDownloadsTitle,
 							explainer:
-								Copy.manageDownloads.deleteDownloadsExplainer,
+								copy.manageDownloads.deleteDownloadsExplainer,
 							onPress: () => {
 								Alert.alert(
-									Copy.manageDownloads
+									copy.manageDownloads
 										.deleteDownloadsAlertTitle,
-									Copy.manageDownloads
+									copy.manageDownloads
 										.deleteDownloadsAlertSubtitle,
 									[
 										{
-											text: Copy.manageDownloads.delete,
+											text: copy.manageDownloads.delete,
 											style: 'destructive',
 											onPress: deleteIssueFiles,
 										},
 										{
-											text: Copy.manageDownloads.cancel,
+											text: copy.manageDownloads.cancel,
 											style: 'cancel',
 										},
 									],

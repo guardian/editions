@@ -6,7 +6,7 @@ import DeviceInfo from 'react-native-device-info';
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary';
 import { logEvent } from 'src/helpers/analytics';
 import { format } from 'src/helpers/date';
-import { Weather } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { useWeather } from 'src/hooks/use-weather-provider';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
@@ -212,7 +212,7 @@ const SetLocationButton = () => {
 
 	return (
 		<Button
-			accessibilityLabel={`${Weather.useLocation} button`}
+			accessibilityLabel={`${copy.weather.useLocation} button`}
 			accessibilityHint="Double tap to open a device location consent screen"
 			accessibilityRole="button"
 			onPress={onSetLocation}
@@ -221,7 +221,7 @@ const SetLocationButton = () => {
 			buttonStyles={styles.setLocationButton}
 			textStyles={styles.setLocationText}
 		>
-			{Weather.useLocation}
+			{copy.weather.useLocation}
 		</Button>
 	);
 };

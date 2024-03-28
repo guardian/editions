@@ -18,7 +18,7 @@ import { Heading, Row, Separator } from 'src/components/layout/ui/row';
 import { DualButton } from 'src/components/lists/DualButton';
 import { FullButton } from 'src/components/lists/FullButton';
 import { logEvent } from 'src/helpers/analytics';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import {
 	useIsUsingProdDevtools,
 	useNotificationsEnabled,
@@ -60,11 +60,11 @@ const MiscSettingsList = () => {
 	const androidItems = [
 		{
 			key: 'notificationEnabled',
-			title: Copy.settings.notifications,
+			title: copy.settings.notifications,
 			proxy: (
 				<Switch
 					accessible={true}
-					accessibilityLabel={Copy.settings.notifications}
+					accessibilityLabel={copy.settings.notifications}
 					accessibilityRole="switch"
 					value={settingNotificationsEnabled}
 					onValueChange={onNotificationChange}
@@ -76,11 +76,11 @@ const MiscSettingsList = () => {
 	const items = [
 		{
 			key: 'isWeatherShown',
-			title: Copy.settings.displayWeather,
+			title: copy.settings.displayWeather,
 			proxy: (
 				<Switch
 					accessible={true}
-					accessibilityLabel={Copy.settings.displayWeather}
+					accessibilityLabel={copy.settings.displayWeather}
 					accessibilityRole="switch"
 					value={componentlIsWeatherShown}
 					onValueChange={onWeatherChange}
@@ -89,7 +89,7 @@ const MiscSettingsList = () => {
 		},
 		{
 			key: 'manageEditions',
-			title: Copy.settings.manageDownloads,
+			title: copy.settings.manageDownloads,
 			onPress: () =>
 				navigation.navigate(RouteNames.ManageEditionsFromSettings),
 			proxy: <RightChevron />,
@@ -129,7 +129,7 @@ const SignInButton = ({
 			accessible={accessible}
 			accessibilityRole={accessibilityRole}
 			textPrimary={username}
-			textSecondary={Copy.settings.signOut}
+			textSecondary={copy.settings.signOut}
 			onPressPrimary={() =>
 				Linking.openURL(
 					'https://manage.theguardian.com/account-settings',
@@ -145,7 +145,7 @@ const SignInButton = ({
 		<FullButton
 			accessible={true}
 			accessibilityRole={accessibilityRole}
-			text={Copy.settings.signIn}
+			text={copy.settings.signIn}
 			onPress={signIn}
 		/>
 	);
@@ -233,7 +233,7 @@ const SettingsScreen = () => {
 					<Separator />
 					{canAccess ? (
 						<Row
-							title={Copy.settings.subscriptionDetails}
+							title={copy.settings.subscriptionDetails}
 							onPress={() =>
 								navigation.navigate(
 									RouteNames.SubscriptionDetails,
@@ -243,7 +243,7 @@ const SettingsScreen = () => {
 						/>
 					) : (
 						<Row
-							title={Copy.settings.alreadySubscribed}
+							title={copy.settings.alreadySubscribed}
 							onPress={() =>
 								navigation.navigate(
 									RouteNames.AlreadySubscribed,
@@ -259,7 +259,7 @@ const SettingsScreen = () => {
 					<Heading>{``}</Heading>
 					<Separator />
 					<Row
-						title={Copy.settings.privacySettings}
+						title={copy.settings.privacySettings}
 						onPress={() =>
 							navigation.navigate(RouteNames.GdprConsent)
 						}
@@ -267,7 +267,7 @@ const SettingsScreen = () => {
 					/>
 					<Separator />
 					<Row
-						title={Copy.settings.privacyPolicy}
+						title={copy.settings.privacyPolicy}
 						onPress={() =>
 							navigation.navigate(RouteNames.PrivacyPolicy)
 						}
@@ -275,7 +275,7 @@ const SettingsScreen = () => {
 					/>
 					<Separator />
 					<Row
-						title={Copy.settings.termsAndConditions}
+						title={copy.settings.termsAndConditions}
 						onPress={() =>
 							navigation.navigate(RouteNames.TermsAndConditions)
 						}
@@ -285,13 +285,13 @@ const SettingsScreen = () => {
 					<Heading>{``}</Heading>
 					<Separator />
 					<Row
-						title={Copy.settings.help}
+						title={copy.settings.help}
 						onPress={() => navigation.navigate(RouteNames.Help)}
 						proxy={rightChevronIcon}
 					/>
 					<Separator />
 					<Row
-						title={Copy.settings.version}
+						title={copy.settings.version}
 						onPress={versionClickHandler}
 						proxy={
 							<Text>

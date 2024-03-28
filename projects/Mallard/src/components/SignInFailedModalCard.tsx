@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { metrics } from 'src/theme/spacing';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
@@ -30,7 +30,7 @@ const SignInFailedModalCard = ({
 	email: string;
 }) => (
 	<OnboardingCard
-		title={Copy.failedSignIn.title}
+		title={copy.failedSignIn.title}
 		appearance={CardAppearance.Blue}
 		onDismissThisCard={() => {
 			close();
@@ -40,7 +40,7 @@ const SignInFailedModalCard = ({
 		bottomContent={
 			<>
 				<UiBodyCopy weight="bold">
-					{Copy.failedSignIn.body.replace('%email%', email)}
+					{copy.failedSignIn.body.replace('%email%', email)}
 				</UiBodyCopy>
 				<View style={styles.bottomContentContainer}>
 					<View>
@@ -50,7 +50,7 @@ const SignInFailedModalCard = ({
 								onLoginPress();
 							}}
 						>
-							{Copy.failedSignIn.retryButtonTitle}
+							{copy.failedSignIn.retryButtonTitle}
 						</ModalButton>
 						<ModalButton
 							onPress={() => {

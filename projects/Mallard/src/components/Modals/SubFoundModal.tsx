@@ -4,7 +4,7 @@ import type {
 	NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React from 'react';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { CardAppearance, OnboardingCard } from '../onboarding/onboarding-card';
@@ -21,12 +21,12 @@ const SubFoundModalCard = ({ route }: SubFoundModalCardProps) => {
 	return (
 		<CenterWrapper>
 			<OnboardingCard
-				title={Copy.subFound.title}
+				title={copy.subFound.title}
 				onDismissThisCard={() => {
 					goBack();
 					route.params?.closeAction?.();
 				}}
-				subtitle={Copy.subFound.subtitle}
+				subtitle={copy.subFound.subtitle}
 				appearance={CardAppearance.Blue}
 				size="small"
 				bottomContent={<></>}

@@ -12,7 +12,7 @@ import {
 	View,
 } from 'react-native';
 import { getDeviceId, isTablet } from 'react-native-device-info';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
 
 const isTabletDevice = isTablet();
@@ -139,22 +139,22 @@ export const ExternalSubscriptionScreen = () => {
 			<View style={style.card}>
 				<ScrollView>
 					<Text style={style.largeTitleBold}>
-						{Copy.externalSubscription.title}
+						{copy.externalSubscription.title}
 					</Text>
 					<Text style={style.body}>
-						{Copy.externalSubscription.body}
+						{copy.externalSubscription.body}
 					</Text>
 					<Text style={style.link} onPress={learnMore}>
-						{Copy.externalSubscription.learnMore}
+						{copy.externalSubscription.learnMore}
 					</Text>
 				</ScrollView>
 
 				<View style={style.buttonGroup}>
 					<IOSButton onPress={subscribe} style={style}>
-						{Copy.externalSubscription.continue}
+						{copy.externalSubscription.continue}
 					</IOSButton>
 					<IOSButton onPress={goBack} style={style}>
-						{Copy.externalSubscription.cancel}
+						{copy.externalSubscription.cancel}
 					</IOSButton>
 				</View>
 			</View>

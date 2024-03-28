@@ -8,7 +8,7 @@ import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { WithAppAppearance } from 'src/theme/appearance';
 import type { CASExpiry } from '../../../../Apps/common/src/cas-expiry';
 
@@ -29,11 +29,11 @@ const IdentityDetails = ({
 		<List
 			data={[
 				keyValueItem(
-					Copy.subscriptionDetails.emailAddress,
+					copy.subscriptionDetails.emailAddress,
 					identityData.userDetails.primaryEmailAddress,
 				),
 				keyValueItem(
-					Copy.subscriptionDetails.userId,
+					copy.subscriptionDetails.userId,
 					identityData.membershipData.userId,
 				),
 			]}
@@ -46,11 +46,11 @@ const OktaDetails = ({ oktaData }: { oktaData: any }) => (
 		<List
 			data={[
 				keyValueItem(
-					Copy.subscriptionDetails.emailAddress,
+					copy.subscriptionDetails.emailAddress,
 					oktaData.userDetails.preferred_username,
 				),
 				keyValueItem(
-					Copy.subscriptionDetails.userId,
+					copy.subscriptionDetails.userId,
 					oktaData.membershipDetails.userId,
 				),
 			]}
@@ -70,15 +70,15 @@ const CASDetails = ({ casData }: { casData: CASExpiry }) => (
 		<List
 			data={[
 				keyValueItem(
-					Copy.subscriptionDetails.subscriptionType,
+					copy.subscriptionDetails.subscriptionType,
 					getCASType(casData),
 				),
 				keyValueItem(
-					Copy.subscriptionDetails.expiryDate,
+					copy.subscriptionDetails.expiryDate,
 					casData.expiryDate,
 				),
 				keyValueItem(
-					Copy.subscriptionDetails.subscriptionPrefix,
+					copy.subscriptionDetails.subscriptionPrefix,
 					casData.provider,
 				),
 			]}
@@ -109,7 +109,7 @@ const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
 );
 
 const LoggedOutDetails = () => (
-	<Heading>{Copy.subscriptionDetails.loggedOutHeading}</Heading>
+	<Heading>{copy.subscriptionDetails.loggedOutHeading}</Heading>
 );
 
 const SubscriptionDetailsScreen = () => {
@@ -118,7 +118,7 @@ const SubscriptionDetailsScreen = () => {
 
 	return (
 		<HeaderScreenContainer
-			title={Copy.subscriptionDetails.title}
+			title={copy.subscriptionDetails.title}
 			actionLeft={true}
 		>
 			<WithAppAppearance value={'settings'}>

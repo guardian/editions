@@ -8,7 +8,7 @@ import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { RenderHTMLwithScrollView } from 'src/components/RenderHTML/RenderHTML';
 import { logEvent } from 'src/helpers/analytics';
 import { requestLocationPermission } from 'src/helpers/location-permission';
-import { Copy } from 'src/helpers/words';
+import { copy } from 'src/helpers/words';
 import { useIsWeatherShown, useWeather } from 'src/hooks/use-weather-provider';
 import { getGeolocation } from 'src/hooks/use-weather-provider/utils';
 import type { MainStackParamList } from 'src/navigation/NavigationModels';
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
 
 const showIsDisabledAlert = () => {
 	Alert.alert(
-		Copy.weather.disabledLocationAlertTitle,
-		Copy.weather.disabledLocationAlertExplainer,
+		copy.weather.disabledLocationAlertTitle,
+		copy.weather.disabledLocationAlertExplainer,
 	);
 };
 
@@ -42,8 +42,8 @@ const WeatherGeolocationConsentScreen = () => {
 		await refreshWeather();
 		if (result === RESULTS.BLOCKED) {
 			Alert.alert(
-				Copy.weather.locationPermissionTitle,
-				Copy.weather.locationPermissionExplainer,
+				copy.weather.locationPermissionTitle,
+				copy.weather.locationPermissionExplainer,
 				[
 					{
 						text: 'OK',
@@ -84,21 +84,21 @@ const WeatherGeolocationConsentScreen = () => {
 
 	return (
 		<HeaderScreenContainer actionLeft={false} actionRight title={''}>
-			<RenderHTMLwithScrollView html={Copy.weatherConsentHtml.content} />
+			<RenderHTMLwithScrollView html={copy.weatherConsentHtml.content} />
 			<View style={styles.buttons}>
 				<Button
 					appearance={ButtonAppearance.SkeletonBlue}
 					onPress={onConsentPress}
 					style={styles.button}
 				>
-					{Copy.weather.acceptLocationButton}
+					{copy.weather.acceptLocationButton}
 				</Button>
 				<Button
 					appearance={ButtonAppearance.SkeletonBlue}
 					onPress={onHidePress}
 					style={styles.button}
 				>
-					{Copy.weather.cancelButton}
+					{copy.weather.cancelButton}
 				</Button>
 			</View>
 		</HeaderScreenContainer>
