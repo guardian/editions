@@ -16,6 +16,7 @@ import { AppLogo } from '../icons/AppLogo';
 
 import { EditionsMenu } from '../icons/EditionsMenu';
 import { Button } from '../Button/Button';
+import { color } from 'src/theme/color';
 
 const customFonts = Object.values(families).reduce(
 	(acc: string[], value) => [...acc, ...Object.values(value)],
@@ -26,6 +27,7 @@ const sysetmFonts = [...defaultSystemFonts, ...customFonts];
 const tagsStyles = {
 	body: {
 		padding: 20,
+		color: color.text,
 	},
 	h2: {
 		fontFamily: 'GuardianTextEgyptian-Reg',
