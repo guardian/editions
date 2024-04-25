@@ -9,7 +9,6 @@ import {
 import React, { useRef } from 'react';
 import { Animated } from 'react-native';
 import { isTablet } from 'react-native-device-info';
-import { LoadingScreen } from './components/LoadingScreen/LoadingScreen';
 import {
 	MissingIAPRestoreError,
 	MissingIAPRestoreMissing,
@@ -19,10 +18,8 @@ import { SignInModal } from './components/Modals/SignInModal';
 import { SubFoundModalCard } from './components/Modals/SubFoundModal';
 import { SubNotFoundModal } from './components/Modals/SubNotFoundModal';
 import { logScreenView } from './helpers/analytics';
-import { useIsOnboarded } from './hooks/use-onboarding';
 import type {
 	MainStackParamList,
-	OnboardingStackParamList,
 	RootStackParamList,
 } from './navigation/NavigationModels';
 import { RouteNames } from './navigation/NavigationModels';
@@ -105,31 +102,8 @@ const cardStyleInterpolator = (props: StackCardInterpolationProps) => {
 	};
 };
 
-const Onboarding = createStackNavigator<OnboardingStackParamList>();
 const Root = createStackNavigator<RootStackParamList>();
 const Main = createStackNavigator<MainStackParamList>();
-
-const OnboardingStack = () => {
-	return (
-		<Onboarding.Navigator
-			initialRouteName={RouteNames.OnboardingConsent}
-			screenOptions={{ gestureEnabled: false, headerShown: false }}
-		>
-			<Onboarding.Screen
-				name={RouteNames.OnboardingConsent}
-				component={OnboardingConsentScreen}
-			/>
-			<Onboarding.Screen
-				name={RouteNames.OnboardingConsentInline}
-				component={GdprConsentScreenForOnboarding}
-			/>
-			<Onboarding.Screen
-				name={RouteNames.PrivacyPolicyInline}
-				component={PrivacyPolicyScreenForOnboarding}
-			/>
-		</Onboarding.Navigator>
-	);
-};
 
 const MainStack = () => {
 	return (
@@ -153,6 +127,27 @@ const MainStack = () => {
 					...TransitionPresets.ModalSlideFromBottomIOS,
 				}}
 			/>
+			<Main.Group
+				screenOptions={{
+					gestureEnabled: false,
+					headerShown: false,
+					animationEnabled: false,
+				}}
+			>
+				<Main.Screen
+					name={RouteNames.OnboardingConsent}
+					component={OnboardingConsentScreen}
+				/>
+				<Main.Screen
+					name={RouteNames.OnboardingConsentInline}
+					component={GdprConsentScreenForOnboarding}
+				/>
+				<Main.Screen
+					name={RouteNames.PrivacyPolicyInline}
+					component={PrivacyPolicyScreenForOnboarding}
+				/>
+			</Main.Group>
+
 			<Main.Group
 				screenOptions={{
 					presentation: 'transparentModal',
@@ -398,7 +393,6 @@ const RootStack = () => {
 };
 
 const AppNavigation = () => {
-	const { isOnboarded, isLoading } = useIsOnboarded();
 	// Designed to stop a screen flash as effects are resolving
 	const routeNameRef = useRef<any>();
 	const navigationRef =
@@ -421,13 +415,7 @@ const AppNavigation = () => {
 				routeNameRef.current = currentRouteName;
 			}}
 		>
-			{isLoading ? (
-				<LoadingScreen />
-			) : isOnboarded ? (
-				<RootStack />
-			) : (
-				<OnboardingStack />
-			)}
+			<RootStack />
 		</NavigationContainer>
 	);
 };

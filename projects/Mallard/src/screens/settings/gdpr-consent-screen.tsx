@@ -16,9 +16,9 @@ import {
 	PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words';
 import type { GdprSwitches } from 'src/hooks/use-gdpr';
-import { useGdprSettings } from 'src/hooks/use-gdpr';
+import { OnboardingStatus, useGdprSettings } from 'src/hooks/use-gdpr';
 import { useToast } from 'src/hooks/use-toast';
-import type { OnboardingStackParamList } from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
@@ -47,8 +47,12 @@ const GdprConsent = ({
 	continueText: string;
 }) => {
 	const navigation =
-		useNavigation<NativeStackNavigationProp<OnboardingStackParamList>>();
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { showToast } = useToast();
+
+	const routes = navigation.getState()?.routes;
+	// -2 because -1 is the current route
+	const prevRoute = routes[routes.length - 2];
 
 	const {
 		enableAllSettings,
@@ -82,11 +86,13 @@ const GdprConsent = ({
 
 	const onEnableAllAndContinue = () => {
 		enableAllSettings();
+		navigation.navigate(RouteNames.Issue);
 		showToast(PREFS_SAVED_MSG);
 	};
 
 	const onDismiss = () => {
-		if (hasSetGdpr()) {
+		if (hasSetGdpr() === OnboardingStatus.Complete) {
+			navigation.navigate(RouteNames.Issue);
 			showToast(PREFS_SAVED_MSG);
 		} else {
 			Alert.alert(
@@ -165,15 +171,21 @@ const GdprConsent = ({
 				ListFooterComponent={() => (
 					<>
 						<Separator></Separator>
-						<Footer>
-							<UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
-								You can change the above settings any time by
-								selecting Privacy Settings from the Settings
-								menu.
-							</UiBodyCopy>
-						</Footer>
-						{__DEV__ ? (
+						{prevRoute.name !== RouteNames.Settings && (
 							<Footer>
+								<UiBodyCopy
+									weight="bold"
+									style={{ fontSize: 14 }}
+								>
+									You can change the above settings any time
+									by selecting Privacy Settings from the
+									Settings menu.
+								</UiBodyCopy>
+							</Footer>
+						)}
+
+						<Footer>
+							{__DEV__ && (
 								<Button
 									onPress={() => {
 										resetAllSettings();
@@ -185,8 +197,9 @@ const GdprConsent = ({
 								>
 									Reset
 								</Button>
-							</Footer>
-						) : null}
+							)}
+							<Button onPress={onDismiss}>Save</Button>
+						</Footer>
 					</>
 				)}
 				ItemSeparatorComponent={Separator}
@@ -204,7 +217,6 @@ const GdprConsent = ({
 								<ThreeWaySwitch
 									onValueChange={(value) => {
 										modifier(value);
-										showToast(PREFS_SAVED_MSG);
 										logEvent({
 											name: `gdpr_${name.toLowerCase()}`,
 											value: value?.toString() ?? 'null',
@@ -243,4 +255,4 @@ const GdprConsentScreenForOnboarding = () => (
 	</WithAppAppearance>
 );
 
-export { GdprConsentScreenForOnboarding, GdprConsentScreen };
+export { GdprConsentScreen, GdprConsentScreenForOnboarding };

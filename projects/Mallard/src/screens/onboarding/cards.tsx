@@ -9,9 +9,10 @@ import {
 	CardAppearance,
 	OnboardingCard,
 } from 'src/components/onboarding/onboarding-card';
-import { copy } from 'src/helpers/words';
+import { copy, PREFS_SAVED_MSG } from 'src/helpers/words';
 import { useGdprSettings } from 'src/hooks/use-gdpr';
-import type { OnboardingStackParamList } from 'src/navigation/NavigationModels';
+import { useToast } from 'src/hooks/use-toast';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
@@ -37,8 +38,9 @@ const styles = StyleSheet.create({
 
 const OnboardingConsent = () => {
 	const navigation =
-		useNavigation<NativeStackNavigationProp<OnboardingStackParamList>>();
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { enableAllSettings } = useGdprSettings();
+	const { showToast } = useToast();
 
 	return (
 		<Aligner>
@@ -65,7 +67,11 @@ const OnboardingConsent = () => {
 							</View>
 							<View>
 								<ModalButton
-									onPress={enableAllSettings}
+									onPress={() => {
+										enableAllSettings();
+										showToast(PREFS_SAVED_MSG);
+										navigation.navigate(RouteNames.Issue);
+									}}
 									buttonAppearance={ButtonAppearance.Dark}
 								>
 									{copy.consentOnboarding.okayButton}

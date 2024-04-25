@@ -35,6 +35,13 @@ export type GdprCoreSettings = {
 	gdprConsentVersion: number | null;
 };
 
+export enum OnboardingStatus {
+	NotStarted = 'NotStarted',
+	InProgress = 'InProgress',
+	Complete = 'Complete',
+	Unknown = 'Unknown',
+}
+
 interface GdprSettings extends GdprCoreSettings {
 	gdprAllowGoogleLogin: GdprSwitchSetting;
 	gdprAllowAppleLogin: GdprSwitchSetting;
@@ -42,7 +49,7 @@ interface GdprSettings extends GdprCoreSettings {
 	setGdprPerformanceBucket: (setting: GdprSwitchSetting) => void;
 	enableAllSettings: () => void;
 	resetAllSettings: () => void;
-	hasSetGdpr: () => boolean;
+	hasSetGdpr: () => OnboardingStatus;
 	isCorrectConsentVersion: () => boolean;
 	loading: boolean;
 }
@@ -63,7 +70,7 @@ const defaultState: GdprSettings = {
 	setGdprPerformanceBucket: () => {},
 	enableAllSettings: () => {},
 	resetAllSettings: () => {},
-	hasSetGdpr: () => false,
+	hasSetGdpr: () => OnboardingStatus.Unknown,
 	isCorrectConsentVersion: () => false,
 	loading: true,
 };
@@ -107,11 +114,27 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		]).finally(() => setLoading(false));
 	}, []);
 
-	const hasSetGdpr = () =>
-		!loading &&
-		gdprAllowFunctionality != null &&
-		gdprAllowPerformance != null &&
-		gdprConsentVersion === CURRENT_CONSENT_VERSION;
+	const hasSetGdpr = () => {
+		if (!loading) {
+			if (
+				gdprAllowFunctionality != null &&
+				gdprAllowPerformance != null &&
+				gdprConsentVersion === CURRENT_CONSENT_VERSION
+			) {
+				return OnboardingStatus.Complete;
+			}
+
+			if (
+				gdprAllowFunctionality != null ||
+				gdprAllowPerformance != null
+			) {
+				return OnboardingStatus.InProgress;
+			}
+
+			return OnboardingStatus.NotStarted;
+		}
+		return OnboardingStatus.Unknown;
+	};
 
 	const setGdprPerformanceBucket = (setting: GdprSwitchSetting) => {
 		// Local state modifier

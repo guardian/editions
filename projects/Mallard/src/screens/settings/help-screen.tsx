@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useContext } from 'react';
 import { AccessContext } from 'src/authentication/AccessContext';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
@@ -20,7 +21,7 @@ import {
 import { useGdprSettings } from 'src/hooks/use-gdpr';
 import { useNetInfo } from 'src/hooks/use-net-info-provider';
 import { useToast } from 'src/hooks/use-toast';
-import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import { WithAppAppearance } from 'src/theme/appearance';
 
@@ -29,7 +30,7 @@ export interface OnCompletionToast {
 }
 
 const HelpScreen = () => {
-	const navigation = useNavigation<CompositeNavigationStackProps>();
+	const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 	const { showToast } = useToast();
 	const { attempt } = useContext(AccessContext);
 
