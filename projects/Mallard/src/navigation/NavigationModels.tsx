@@ -1,5 +1,3 @@
-import type { CompositeNavigationProp } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
 import type { SignInFailedProps } from 'src/components/Modals/SignInFailedModal';
 import type {
 	ArticleNavigationProps,
@@ -13,12 +11,6 @@ type SubFoundModalProps = {
 
 export type RootStackParamList = {
 	Home: undefined;
-};
-
-export type OnboardingStackParamList = {
-	OnboardingConsent: undefined;
-	PrivacyPolicyInline: undefined;
-	OnboardingConsentInline: undefined;
 };
 
 export type MainStackParamList = {
@@ -54,13 +46,10 @@ export type MainStackParamList = {
 	DevZone: undefined;
 	InAppPurchase: undefined;
 	ManageEditionsFromSettings: undefined;
+	OnboardingConsent: undefined;
+	PrivacyPolicyInline: undefined;
+	OnboardingConsentInline: undefined;
 };
-
-// This is used on pages which include both main and root stacks
-export type CompositeNavigationStackProps = CompositeNavigationProp<
-	StackNavigationProp<MainStackParamList>,
-	StackNavigationProp<OnboardingStackParamList>
->;
 
 export enum RouteNames {
 	Home = 'Home',

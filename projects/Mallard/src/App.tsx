@@ -2,7 +2,6 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import SplashScreen from 'react-native-splash-screen';
 import { logUserId } from 'src/helpers/analytics';
 import { ConfigProvider } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
@@ -70,7 +69,6 @@ const handleOktaStatus = (attempt: AnyAttempt<OktaAuthData>) =>
 
 const App = () => {
 	useEffect(() => {
-		SplashScreen.hide();
 		oktaInitialisation();
 	}, []);
 

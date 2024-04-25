@@ -1,6 +1,7 @@
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactElement } from 'react';
 import { logEvent } from 'src/helpers/analytics';
-import type { CompositeNavigationStackProps } from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle, PathToIssue } from 'src/paths';
 import type { ArticleNavigator } from 'src/screens/article-screen';
@@ -58,7 +59,7 @@ export interface IssueNavigationProps {
 }
 
 interface NavigateToIssueProps {
-	navigation: CompositeNavigationStackProps;
+	navigation: StackNavigationProp<MainStackParamList>;
 	navigationProps: IssueNavigationProps;
 	setIssueId: (path: PathToIssue, initialFrontKey?: string | null) => void;
 }

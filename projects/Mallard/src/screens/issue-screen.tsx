@@ -6,6 +6,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Image from 'react-native-fast-image';
 import RNRestart from 'react-native-restart';
+import SplashScreen from 'react-native-splash-screen';
 import { PageLayoutSizes } from 'src/common';
 import { ReloadButton } from 'src/components/Button/ReloadButton';
 import { Front } from 'src/components/front';
@@ -40,12 +41,16 @@ import {
 	getSpecialEditionProps,
 	useEditions,
 } from 'src/hooks/use-edition-provider';
+import { OnboardingStatus, useGdprSettings } from 'src/hooks/use-gdpr';
 import type { IssueState } from 'src/hooks/use-issue-provider';
 import { useIssue } from 'src/hooks/use-issue-provider';
 import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
 import { useNavPositionChange } from 'src/hooks/use-nav-position';
 import { useWeather } from 'src/hooks/use-weather-provider';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import {
+	type MainStackParamList,
+	RouteNames,
+} from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { metrics } from 'src/theme/spacing';
 import type {
@@ -434,6 +439,30 @@ export const IssueScreen = React.memo(() => {
 	const { selectedEdition } = useEditions();
 	const specialEditionProps = getSpecialEditionProps(selectedEdition);
 	const headerStyle = specialEditionProps?.headerStyle;
+	const { hasSetGdpr } = useGdprSettings();
+	const { navigate } =
+		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+
+	// This is only returning true or false so keep reverting. Need an onboarding state
+	const isOnboarded = hasSetGdpr();
+
+	if (isOnboarded === OnboardingStatus.Unknown) {
+		return null;
+	}
+
+	if (isOnboarded === OnboardingStatus.InProgress) {
+		navigate(RouteNames.OnboardingConsentInline);
+		SplashScreen.hide();
+		return null;
+	}
+
+	if (isOnboarded === OnboardingStatus.NotStarted) {
+		navigate(RouteNames.OnboardingConsent);
+		SplashScreen.hide();
+		return null;
+	}
+
+	SplashScreen.hide();
 
 	return (
 		<Container>

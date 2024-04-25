@@ -1,5 +1,6 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { Dispatch } from 'react';
 import React, {
 	useCallback,
@@ -48,10 +49,7 @@ import { useSetNavPosition } from 'src/hooks/use-nav-position';
 import useOverlayAnimation from 'src/hooks/use-overlay-animation';
 import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
 import { navigateToIssue } from 'src/navigation/helpers/base';
-import type {
-	CompositeNavigationStackProps,
-	MainStackParamList,
-} from 'src/navigation/NavigationModels';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToIssue } from 'src/paths';
 import { WithAppAppearance } from 'src/theme/appearance';
@@ -108,7 +106,8 @@ const IssueRowContainer = React.memo(
 		issueDetails: Loaded<IssueWithFronts> | null;
 		setIssueId: Dispatch<PathToIssue>;
 	}) => {
-		const navigation = useNavigation<CompositeNavigationStackProps>();
+		const navigation =
+			useNavigation<StackNavigationProp<MainStackParamList>>();
 		const { issueId, setIssueId } = useIssueSummary();
 		const { localId, publishedId } = issue;
 		const setNavPosition = useSetNavPosition();
@@ -204,7 +203,7 @@ const IssueRowContainer = React.memo(
 );
 
 const IssueListFooter = () => {
-	const navigation = useNavigation<CompositeNavigationStackProps>();
+	const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 	const { isUsingProdDevtools } = useIsUsingProdDevtools();
 	const { setIssueId } = useIssueSummary();
 	return (
