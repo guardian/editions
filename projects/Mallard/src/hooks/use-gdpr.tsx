@@ -50,7 +50,6 @@ interface GdprSettings extends GdprCoreSettings {
 	resetAllSettings: () => void;
 	hasSetGdpr: () => OnboardingStatus;
 	isCorrectConsentVersion: () => boolean;
-	loading: boolean;
 }
 
 export type GdprSwitches = {
@@ -70,7 +69,6 @@ const defaultState: GdprSettings = {
 	resetAllSettings: () => {},
 	hasSetGdpr: () => OnboardingStatus.Unknown,
 	isCorrectConsentVersion: () => false,
-	loading: true,
 };
 
 const GDPRContext = createContext<GdprSettings>(defaultState);
@@ -196,7 +194,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 				resetAllSettings,
 				hasSetGdpr,
 				isCorrectConsentVersion,
-				loading,
 			}}
 		>
 			{children}
