@@ -43,11 +43,10 @@ export enum OnboardingStatus {
 }
 
 interface GdprSettings extends GdprCoreSettings {
-	gdprAllowGoogleLogin: GdprSwitchSetting;
-	gdprAllowAppleLogin: GdprSwitchSetting;
 	setGdprFunctionalityBucket: (setting: GdprSwitchSetting) => void;
 	setGdprPerformanceBucket: (setting: GdprSwitchSetting) => void;
 	enableAllSettings: () => void;
+	rejectAllSettings: () => void;
 	resetAllSettings: () => void;
 	hasSetGdpr: () => OnboardingStatus;
 	isCorrectConsentVersion: () => boolean;
@@ -64,11 +63,10 @@ const defaultState: GdprSettings = {
 	gdprAllowPerformance: null,
 	gdprAllowFunctionality: null,
 	gdprConsentVersion: null,
-	gdprAllowGoogleLogin: null,
-	gdprAllowAppleLogin: null,
 	setGdprFunctionalityBucket: () => {},
 	setGdprPerformanceBucket: () => {},
 	enableAllSettings: () => {},
+	rejectAllSettings: () => {},
 	resetAllSettings: () => {},
 	hasSetGdpr: () => OnboardingStatus.Unknown,
 	isCorrectConsentVersion: () => false,
@@ -87,12 +85,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const [gdprConsentVersion, setGdprConsentVersion] = useState<
 		GdprSettings['gdprConsentVersion']
 	>(defaultState.gdprConsentVersion);
-	const [gdprAllowGoogleLogin, setGdprAllowGoogleLogin] = useState<
-		GdprSettings['gdprAllowGoogleLogin']
-	>(defaultState.gdprAllowGoogleLogin);
-	const [gdprAllowAppleLogin, setGdprAllowAppleLogin] = useState<
-		GdprSettings['gdprAllowAppleLogin']
-	>(defaultState.gdprAllowAppleLogin);
 
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -153,8 +145,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const setGdprFunctionalityBucket = (setting: GdprSwitchSetting) => {
 		// Local state modifier
 		setGdprAllowFunctionality(setting);
-		setGdprAllowGoogleLogin(setting);
-		setGdprAllowAppleLogin(setting);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
 		// Persisted state modifier
 		setting === null
@@ -163,26 +153,26 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		gdprConsentVersionCache.set(CURRENT_CONSENT_VERSION);
 	};
 
-	const enableAllSettings = () => {
+	const allSettings = (modifier: boolean) => {
 		// Local state modifier
-		setGdprAllowPerformance(true);
-		setGdprAllowFunctionality(true);
+		setGdprAllowPerformance(modifier);
+		setGdprAllowFunctionality(modifier);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
-		setGdprAllowGoogleLogin(true);
-		setGdprAllowAppleLogin(true);
 		// Persisted state modifier
-		gdprAllowPerformanceCache.set(true);
-		gdprAllowFunctionalityCache.set(true);
+		gdprAllowPerformanceCache.set(modifier);
+		gdprAllowFunctionalityCache.set(modifier);
 		gdprConsentVersionCache.set(CURRENT_CONSENT_VERSION);
 	};
+
+	const enableAllSettings = () => allSettings(true);
+
+	const rejectAllSettings = () => allSettings(false);
 
 	const resetAllSettings = () => {
 		// Local state modifier
 		setGdprAllowPerformance(defaultState.gdprAllowPerformance);
 		setGdprAllowFunctionality(defaultState.gdprAllowFunctionality);
 		setGdprConsentVersion(defaultState.gdprConsentVersion);
-		setGdprAllowGoogleLogin(defaultState.gdprAllowGoogleLogin);
-		setGdprAllowAppleLogin(defaultState.gdprAllowAppleLogin);
 		// Persisted state modifier
 		gdprAllowPerformanceCache.reset();
 		gdprAllowFunctionalityCache.reset();
@@ -202,12 +192,10 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 				setGdprFunctionalityBucket,
 				setGdprPerformanceBucket,
 				enableAllSettings,
+				rejectAllSettings,
 				resetAllSettings,
 				hasSetGdpr,
 				isCorrectConsentVersion,
-				// The following are not used anywhere as things stand and are therefore not persisted
-				gdprAllowGoogleLogin,
-				gdprAllowAppleLogin,
 				loading,
 			}}
 		>

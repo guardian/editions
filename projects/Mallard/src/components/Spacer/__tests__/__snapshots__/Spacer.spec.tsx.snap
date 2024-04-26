@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Spacer /> should render with default props 1`] = `
+<View
+  style={
+    {
+      "marginRight": 8,
+      "marginTop": 8,
+    }
+  }
+/>
+`;
+
+exports[`<Spacer /> should render with given props 1`] = `
+<View
+  style={
+    {
+      "marginRight": 30,
+      "marginTop": 30,
+    }
+  }
+/>
+`;
