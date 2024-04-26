@@ -9,9 +9,11 @@ import type { ThreeWaySwitchValue } from 'src/components/layout/ui/switch';
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch';
 import { LinkNav } from 'src/components/link';
 import { LoginHeader } from 'src/components/login/login-layout';
+import { Spacer } from 'src/components/Spacer/Spacer';
 import { UiBodyCopy } from 'src/components/styled-text';
 import { logEvent } from 'src/helpers/analytics';
 import {
+	copy,
 	PREFS_SAVED_MSG,
 	PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words';
@@ -41,10 +43,10 @@ const essentials: EssentialGdprSwitch = {
 
 const GdprConsent = ({
 	shouldShowDismissableHeader = false,
-	continueText,
+	withContinue = false,
 }: {
 	shouldShowDismissableHeader?: boolean;
-	continueText: string;
+	withContinue?: boolean;
 }) => {
 	const navigation =
 		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
@@ -56,6 +58,7 @@ const GdprConsent = ({
 
 	const {
 		enableAllSettings,
+		rejectAllSettings,
 		resetAllSettings,
 		gdprAllowPerformance,
 		gdprAllowFunctionality,
@@ -86,9 +89,23 @@ const GdprConsent = ({
 
 	const onEnableAllAndContinue = () => {
 		enableAllSettings();
-		navigation.navigate(RouteNames.Issue);
 		showToast(PREFS_SAVED_MSG);
+		withContinue && navigation.navigate(RouteNames.Issue);
 	};
+
+	const onRejectAllAndContinue = () => {
+		rejectAllSettings();
+		showToast(PREFS_SAVED_MSG);
+		withContinue && navigation.navigate(RouteNames.Issue);
+	};
+
+	const continueText = withContinue
+		? `${copy.enableAll} ${copy.andContinue}`
+		: copy.enableAll;
+
+	const rejectText = withContinue
+		? `${copy.rejectAll} ${copy.andContinue}`
+		: copy.rejectAll;
 
 	const onDismiss = () => {
 		if (hasSetGdpr() === OnboardingStatus.Complete) {
@@ -145,18 +162,33 @@ const GdprConsent = ({
 								</Text>
 							}
 							proxy={
-								<Button
-									appearance={ButtonAppearance.Skeleton}
-									onPress={() => {
-										onEnableAllAndContinue();
-										logEvent({
-											name: 'gdpr_enable_all',
-											value: 'gdpr_enable_all',
-										});
-									}}
-								>
-									{continueText}
-								</Button>
+								<>
+									<Button
+										appearance={ButtonAppearance.Skeleton}
+										onPress={() => {
+											onEnableAllAndContinue();
+											logEvent({
+												name: 'gdpr_enable_all',
+												value: 'gdpr_enable_all',
+											});
+										}}
+									>
+										{continueText}
+									</Button>
+									<Spacer />
+									<Button
+										appearance={ButtonAppearance.Skeleton}
+										onPress={() => {
+											onRejectAllAndContinue();
+											logEvent({
+												name: 'gdpr_reject_all',
+												value: 'gdpr_reject_all',
+											});
+										}}
+									>
+										{rejectText}
+									</Button>
+								</>
 							}
 						></TallRow>
 						<Separator></Separator>
@@ -241,7 +273,7 @@ const GdprConsentScreen = () => (
 		actionLeft={true}
 	>
 		<WithAppAppearance value={'settings'}>
-			<GdprConsent continueText={'Enable all'}></GdprConsent>
+			<GdprConsent />
 		</WithAppAppearance>
 	</HeaderScreenContainer>
 );
@@ -250,7 +282,7 @@ const GdprConsentScreenForOnboarding = () => (
 	<WithAppAppearance value={'settings'}>
 		<GdprConsent
 			shouldShowDismissableHeader={true}
-			continueText={'Enable all and continue'}
+			withContinue
 		></GdprConsent>
 	</WithAppAppearance>
 );

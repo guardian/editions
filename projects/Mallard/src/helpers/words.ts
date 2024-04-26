@@ -246,16 +246,23 @@ const externalSubscription = {
 	cancel: 'Cancel',
 };
 
+const enableAll = 'Enable all';
+const rejectAll = 'Reject all';
+const andContinue = 'and continue';
+
 export const copy = {
 	alreadySubscribed,
+	andContinue,
 	authSwitcherScreen,
 	consentOnboarding,
+	enableAll,
 	externalSubscription,
 	failedSignIn,
 	homeScreen,
 	issueListFooter,
 	manageDownloads,
 	newEditionWords,
+	rejectAll,
 	settings,
 	signIn,
 	subFound,
