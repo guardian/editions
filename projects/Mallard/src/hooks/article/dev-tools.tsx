@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { ArticlePillar } from 'src/common';
-import { articlePillars, ArticleType } from 'src/common';
-import { Button, ButtonAppearance } from 'src/components/Button/Button';
-import { metrics } from 'src/theme/spacing';
+import type { ArticlePillar } from '../../common';
+import { articlePillars, ArticleType } from '../../common';
+import { Button, ButtonAppearance } from '../../components/Button/Button';
+import { metrics } from '../../theme/spacing';
 
 const getFirstLast = (arr: any[]): any[] => [arr[0], arr.slice(-1)[0]];
 

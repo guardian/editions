@@ -1,4 +1,6 @@
 import RNFS from 'react-native-fs';
+import { imagePath } from '../../../Apps/common/src';
+import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
 import type {
 	CAPIArticle,
 	Collection,
@@ -6,10 +8,8 @@ import type {
 	Image,
 	ImageUse,
 	Issue,
-} from 'src/common';
-import { frontPath, issuePath } from 'src/common';
-import { imagePath } from '../../../Apps/common/src';
-import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
+} from '../common';
+import { frontPath, issuePath } from '../common';
 
 export interface PathToIssue {
 	localIssueId: Issue['localId'];

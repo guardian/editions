@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Editions } from 'src/components/icons/Editions';
-import { LeftChevron } from 'src/components/icons/LeftChevron';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
-import { getFont } from 'src/theme/typography';
+import { Editions } from '../../../components/icons/Editions';
+import { LeftChevron } from '../../../components/icons/LeftChevron';
+import { color } from '../../../theme/color';
+import { metrics } from '../../../theme/spacing';
+import { getFont } from '../../../theme/typography';
 
 const styles = (selected: boolean) =>
 	StyleSheet.create({

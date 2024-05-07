@@ -1,10 +1,10 @@
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { Platform } from 'react-native';
 import PushNotification from 'react-native-push-notification';
-import { downloadViaNotification } from 'src/download-edition/download-via-notification';
-import { defaultSettings } from 'src/helpers/settings/defaults';
-import type { NetInfoState } from 'src/hooks/use-net-info-provider';
-import { errorService } from 'src/services/errors';
+import { downloadViaNotification } from '../download-edition/download-via-notification';
+import { defaultSettings } from '../helpers/settings/defaults';
+import type { NetInfoState } from '../hooks/use-net-info-provider';
+import { errorService } from '../services/errors';
 import { maybeRegister } from './helpers';
 import { notificationTracking } from './notification-tracking';
 import { pushTracking } from './push-tracking';

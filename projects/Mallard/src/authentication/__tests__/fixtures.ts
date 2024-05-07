@@ -1,4 +1,4 @@
-import type { ReceiptIOS } from 'src/authentication/services/iap';
+import type { ReceiptIOS } from '../../authentication/services/iap';
 import type { IdentityAuthData } from '../authorizers/IdentityAuthorizer';
 
 const membershipResponse = {

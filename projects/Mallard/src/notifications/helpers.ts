@@ -1,9 +1,9 @@
-import { now as dateNow, differenceInDays } from 'src/helpers/date';
+import { now as dateNow, differenceInDays } from '../helpers/date';
 import {
 	pushNotificationRegistrationCache,
 	pushRegisteredTokens,
-} from 'src/helpers/storage';
-import { getDefaultEdition } from 'src/hooks/use-edition-provider';
+} from '../helpers/storage';
+import { getDefaultEdition } from '../hooks/use-edition-provider';
 import type { PushToken } from './notification-service';
 import { registerWithNotificationService } from './notification-service';
 import type { PushNotificationRegistration } from './push-notifications';

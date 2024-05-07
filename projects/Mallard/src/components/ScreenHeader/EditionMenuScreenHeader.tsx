@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { EditionsMenuButton } from 'src/components/EditionsMenu/EditionsMenuButton/EditionsMenuButton';
-import { IssueTitle } from 'src/components/issue/issue-title';
+import { EditionsMenuButton } from '../../components/EditionsMenu/EditionsMenuButton/EditionsMenuButton';
+import { IssueTitle } from '../../components/issue/issue-title';
 import { Header } from '../layout/header/header';
 
 const styles = StyleSheet.create({

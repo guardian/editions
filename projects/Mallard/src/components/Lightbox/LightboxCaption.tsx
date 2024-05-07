@@ -1,11 +1,11 @@
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import { ArticleTheme } from 'src/components/article/article';
-import { themeColors } from 'src/components/article/helpers/css';
-import { Arrow } from 'src/components/icons/Arrow';
-import { families } from 'src/theme/typography';
 import { Direction } from '../../../../Apps/common/src';
+import { ArticleTheme } from '../../components/article/article';
+import { themeColors } from '../../components/article/helpers/css';
+import { Arrow } from '../../components/icons/Arrow';
+import { families } from '../../theme/typography';
 
 const styles = StyleSheet.create({
 	captionWrapper: {

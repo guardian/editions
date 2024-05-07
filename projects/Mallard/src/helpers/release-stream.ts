@@ -1,5 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
-import { ANDROID_RELEASE_STREAM } from 'src/constants';
+import { ANDROID_RELEASE_STREAM } from '../constants';
 
 export const isInTestFlight = () =>
 	NativeModules.RNReleaseStream.getReleaseStream === 'TESTFLIGHT';

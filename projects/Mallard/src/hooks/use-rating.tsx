@@ -1,12 +1,12 @@
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useEffect, useState } from 'react';
-import { rateApp } from 'src/helpers/rate';
+import { rateApp } from '../helpers/rate';
 import {
 	hasShownRatingCache,
 	numberOfInteractionsCache,
-} from 'src/helpers/storage';
-import { errorService } from 'src/services/errors';
-import { remoteConfigService } from 'src/services/remote-config';
+} from '../helpers/storage';
+import { errorService } from '../services/errors';
+import { remoteConfigService } from '../services/remote-config';
 
 const getFromStorage = async (
 	storage: any,

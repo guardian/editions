@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dimensions, FlatList, StyleSheet } from 'react-native';
-import type { EditionId, RegionalEdition, SpecialEdition } from 'src/common';
-import { logEvent } from 'src/helpers/analytics';
-import { metrics } from 'src/theme/spacing';
 import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults';
+import type { EditionId, RegionalEdition, SpecialEdition } from '../../common';
+import { logEvent } from '../../helpers/analytics';
+import { metrics } from '../../theme/spacing';
 import { EditionButton } from './EditionButton/EditionButton';
 import { ItemSeperator } from './ItemSeperator/ItemSeperator';
 

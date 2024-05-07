@@ -1,10 +1,10 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import MockedNavigator from 'src/__mocks__/@react-navigation';
 import type { IssueOrigin } from '../../../../../../Apps/common/src';
+import MockedNavigator from '../../../../__mocks__/@react-navigation';
 import { IssueScreenHeader } from '../IssueScreenHeader';
 
-jest.mock('src/helpers/analytics', () => ({
+jest.mock('../../../../helpers/analytics', () => ({
 	logEvent: jest.fn,
 }));
 

@@ -8,12 +8,12 @@ import type {
 	GalleryArticle,
 	IssueOrigin,
 	PictureArticle,
-} from 'src/common';
-import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
-import { useNetInfo } from 'src/hooks/use-net-info-provider';
-import type { PathToArticle } from 'src/paths';
-import { FSPaths } from 'src/paths';
-import WebviewError from 'src/screens/webview-error-screen';
+} from '../../../../common';
+import { useLargeDeviceMemory } from '../../../../hooks/use-config-provider';
+import { useNetInfo } from '../../../../hooks/use-net-info-provider';
+import type { PathToArticle } from '../../../../paths';
+import { FSPaths } from '../../../../paths';
+import WebviewError from '../../../../screens/webview-error-screen';
 import { onShouldStartLoadWithRequest } from './helpers';
 
 const WebviewWithArticle = ({

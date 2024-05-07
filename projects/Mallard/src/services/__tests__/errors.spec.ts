@@ -1,10 +1,10 @@
 import type { ErrorServiceImpl } from '../errors';
 
-jest.mock('src/helpers/release-stream', () => ({
+jest.mock('../../helpers/release-stream', () => ({
 	isInBeta: () => false,
 }));
 
-jest.mock('src/helpers/storage', () => ({
+jest.mock('../../helpers/storage', () => ({
 	userDataCache: {
 		get: () => jest.fn().mockResolvedValue(null),
 	},

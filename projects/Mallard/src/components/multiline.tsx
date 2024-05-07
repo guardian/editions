@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, { Rect } from 'react-native-svg';
-import { color as themeColor } from 'src/theme/color';
+import { color as themeColor } from '../theme/color';
 
 const pixel = 1;
 

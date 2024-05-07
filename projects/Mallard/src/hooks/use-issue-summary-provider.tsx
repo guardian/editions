@@ -6,10 +6,10 @@ import React, {
 	useState,
 } from 'react';
 import type { Dispatch } from 'react';
-import type { IssueSummary } from 'src/common';
-import { fetchAndStoreIssueSummary, readIssueSummary } from 'src/helpers/files';
-import type { PathToIssue } from 'src/paths';
-import { errorService } from 'src/services/errors';
+import type { IssueSummary } from '../common';
+import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files';
+import type { PathToIssue } from '../paths';
+import { errorService } from '../services/errors';
 import { useAppState } from './use-app-state-provider';
 import {
 	getMaxAvailableEditions,

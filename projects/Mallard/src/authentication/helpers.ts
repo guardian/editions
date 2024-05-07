@@ -1,7 +1,7 @@
 import {
 	casCredentialsKeychain,
 	legacyCASUsernameCache,
-} from 'src/helpers/storage';
+} from '../helpers/storage';
 import type { IdentityAuthData } from './authorizers/IdentityAuthorizer';
 import type { OktaAuthData } from './authorizers/OktaAuthorizer';
 

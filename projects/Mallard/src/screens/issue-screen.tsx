@@ -7,62 +7,62 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import Image from 'react-native-fast-image';
 import RNRestart from 'react-native-restart';
 import SplashScreen from 'react-native-splash-screen';
-import { PageLayoutSizes } from 'src/common';
-import { ReloadButton } from 'src/components/Button/ReloadButton';
-import { Front } from 'src/components/front';
-import { FlexCenter } from 'src/components/layout/flex-center';
-import { Container } from 'src/components/layout/ui/container';
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
-import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints';
-import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle';
-import { NewEditionCard } from 'src/components/onboarding/new-edition';
-import { IssueScreenHeader } from 'src/components/ScreenHeader/IssueScreenHeader/IssueScreenHeader';
-import { Spinner } from 'src/components/Spinner/Spinner';
-import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
-import { logPageView } from 'src/helpers/analytics';
-import type { FlatCard } from 'src/helpers/transform';
-import {
-	flattenCollectionsToCards,
-	flattenFlatCardsToFront,
-} from 'src/helpers/transform';
-import {
-	CONNECTION_FAILED_ERROR,
-	CONNECTION_FAILED_SUB_ERROR,
-	copy,
-	REFRESH_BUTTON_TEXT,
-} from 'src/helpers/words';
-import {
-	useApiUrl,
-	useDimensions,
-	useLargeDeviceMemory,
-} from 'src/hooks/use-config-provider';
-import {
-	BASE_EDITION,
-	getSpecialEditionProps,
-	useEditions,
-} from 'src/hooks/use-edition-provider';
-import { OnboardingStatus, useGdprSettings } from 'src/hooks/use-gdpr';
-import type { IssueState } from 'src/hooks/use-issue-provider';
-import { useIssue } from 'src/hooks/use-issue-provider';
-import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
-import { useNavPositionChange } from 'src/hooks/use-nav-position';
-import { useWeather } from 'src/hooks/use-weather-provider';
-import {
-	type MainStackParamList,
-	RouteNames,
-} from 'src/navigation/NavigationModels';
-import { Breakpoints } from 'src/theme/breakpoints';
-import { metrics } from 'src/theme/spacing';
 import type {
 	IssueWithFronts,
 	SpecialEditionHeaderStyles,
 	Front as TFront,
 } from '../../../Apps/common/src';
+import { PageLayoutSizes } from '../common';
+import { ReloadButton } from '../components/Button/ReloadButton';
+import { Front } from '../components/front';
+import { FlexCenter } from '../components/layout/flex-center';
+import { Container } from '../components/layout/ui/container';
+import { FlexErrorMessage } from '../components/layout/ui/errors/flex-error-message';
+import { WithBreakpoints } from '../components/layout/ui/sizing/with-breakpoints';
+import { WithLayoutRectangle } from '../components/layout/ui/sizing/with-layout-rectangle';
+import { NewEditionCard } from '../components/onboarding/new-edition';
+import { IssueScreenHeader } from '../components/ScreenHeader/IssueScreenHeader/IssueScreenHeader';
+import { Spinner } from '../components/Spinner/Spinner';
 import {
 	EMPTY_WEATHER_HEIGHT,
 	WEATHER_HEIGHT,
 	WeatherWidget,
 } from '../components/weather';
+import { deleteIssueFiles } from '../download-edition/clear-issues-and-editions';
+import { logPageView } from '../helpers/analytics';
+import type { FlatCard } from '../helpers/transform';
+import {
+	flattenCollectionsToCards,
+	flattenFlatCardsToFront,
+} from '../helpers/transform';
+import {
+	CONNECTION_FAILED_ERROR,
+	CONNECTION_FAILED_SUB_ERROR,
+	copy,
+	REFRESH_BUTTON_TEXT,
+} from '../helpers/words';
+import {
+	useApiUrl,
+	useDimensions,
+	useLargeDeviceMemory,
+} from '../hooks/use-config-provider';
+import {
+	BASE_EDITION,
+	getSpecialEditionProps,
+	useEditions,
+} from '../hooks/use-edition-provider';
+import { OnboardingStatus, useGdprSettings } from '../hooks/use-gdpr';
+import type { IssueState } from '../hooks/use-issue-provider';
+import { useIssue } from '../hooks/use-issue-provider';
+import { useIssueSummary } from '../hooks/use-issue-summary-provider';
+import { useNavPositionChange } from '../hooks/use-nav-position';
+import { useWeather } from '../hooks/use-weather-provider';
+import {
+	type MainStackParamList,
+	RouteNames,
+} from '../navigation/NavigationModels';
+import { Breakpoints } from '../theme/breakpoints';
+import { metrics } from '../theme/spacing';
 import { SLIDER_FRONT_HEIGHT } from './article/slider/SliderTitle';
 import type { FrontSpec } from './article-screen';
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size';
@@ -255,7 +255,7 @@ const IssueFronts = ({
 						<Image
 							style={styles.illustrationImage}
 							resizeMode={'contain'}
-							source={require('src/assets/images/privacy.png')}
+							source={require('../assets/images/privacy.png')}
 						/>
 					)}
 			</View>

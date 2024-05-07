@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { isIssueOnDevice } from 'src/helpers/files';
+import { isIssueOnDevice } from '../helpers/files';
 
 export enum ExistsStatus {
 	Pending,
