@@ -190,38 +190,36 @@ const IssueButton = ({
 	);
 
 	return (
-		<CircularProgressBase
-			value={progressValue}
-			maxValue={100}
-			radius={20}
-			circleBackgroundColor={
-				isOnDevice === ExistsStatus.DoesExist
-					? color.primary
-					: undefined
-			}
-			activeStrokeWidth={2}
-			inActiveStrokeWidth={1}
-			activeStrokeColor={color.primary}
-			inActiveStrokeColor="transparent"
-		>
-			<Button
-				accessibilityLabel="Download edition button"
-				accessibilityHint="Downloads the edition to your device, so you can listen to it when offline"
-				accessibilityRole="button"
-				onPress={onDownloadIssue}
-				icon={
-					isOnDevice === ExistsStatus.DoesExist ? '\uE062' : '\uE077'
-				}
-				alt={'Download'}
-				appearance={ButtonAppearance.SkeletonDownload}
-				textStyles={{
-					color:
-						isOnDevice !== ExistsStatus.DoesExist
-							? color.primary
-							: color.palette.neutral[100],
-				}}
-			/>
-		</CircularProgressBase>
+		// <CircularProgressBase
+		// 	value={progressValue}
+		// 	maxValue={100}
+		// 	radius={20}
+		// 	circleBackgroundColor={
+		// 		isOnDevice === ExistsStatus.DoesExist
+		// 			? color.primary
+		// 			: undefined
+		// 	}
+		// 	activeStrokeWidth={2}
+		// 	inActiveStrokeWidth={1}
+		// 	activeStrokeColor={color.primary}
+		// 	inActiveStrokeColor="transparent"
+		// >
+		<Button
+			accessibilityLabel="Download edition button"
+			accessibilityHint="Downloads the edition to your device, so you can listen to it when offline"
+			accessibilityRole="button"
+			onPress={onDownloadIssue}
+			icon={isOnDevice === ExistsStatus.DoesExist ? '\uE062' : '\uE077'}
+			alt={'Download'}
+			appearance={ButtonAppearance.SkeletonDownload}
+			textStyles={{
+				color:
+					isOnDevice !== ExistsStatus.DoesExist
+						? color.primary
+						: color.palette.neutral[100],
+			}}
+		/>
+		// </CircularProgressBase>
 	);
 };
 
