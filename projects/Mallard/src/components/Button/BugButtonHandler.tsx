@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { AccessContext } from 'src/authentication/AccessContext';
-import { createMailtoHandler } from 'src/helpers/diagnostics';
-import { isInBeta } from 'src/helpers/release-stream';
-import { DIAGNOSTICS_TITLE } from 'src/helpers/words';
-import { useGdprSettings } from 'src/hooks/use-gdpr';
-import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import { AccessContext } from '../../authentication/AccessContext';
+import { createMailtoHandler } from '../../helpers/diagnostics';
+import { isInBeta } from '../../helpers/release-stream';
+import { DIAGNOSTICS_TITLE } from '../../helpers/words';
+import { useGdprSettings } from '../../hooks/use-gdpr';
+import { useNetInfo } from '../../hooks/use-net-info-provider';
 import { BugButton } from './BugButton';
 
 const BugButtonHandler = () => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { CAPIArticle } from 'src/common';
-import { SportScore } from 'src/components/SportScore/SportScore';
-import { Stars } from 'src/components/Stars/Stars';
+import type { CAPIArticle } from '../../../common';
+import { SportScore } from '../../../components/SportScore/SportScore';
+import { Stars } from '../../../components/Stars/Stars';
 import type { PropTypes } from './helpers/item-tappable';
 import { ItemTappable } from './helpers/item-tappable';
 import { TextBlock } from './helpers/text-block';

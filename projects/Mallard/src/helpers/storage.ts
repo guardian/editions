@@ -1,18 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform, Settings } from 'react-native';
 import * as Keychain from 'react-native-keychain';
-import type { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer';
-import type { OktaAuthData } from 'src/authentication/authorizers/OktaAuthorizer';
-import type { ReceiptIOS } from 'src/authentication/services/iap';
-import type { EditionsList, RegionalEdition, SpecialEdition } from 'src/common';
+import type { EditionId } from '../../../Apps/common/src';
+import type { CASExpiry } from '../../../Apps/common/src/cas-expiry';
+import type { IdentityAuthData } from '../authentication/authorizers/IdentityAuthorizer';
+import type { OktaAuthData } from '../authentication/authorizers/OktaAuthorizer';
+import type { ReceiptIOS } from '../authentication/services/iap';
+import type { EditionsList, RegionalEdition, SpecialEdition } from '../common';
 import {
 	LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
 	LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
-} from 'src/constants';
-import type { PushToken } from 'src/notifications/notification-service';
-import type { PushNotificationRegistration } from 'src/notifications/push-notifications';
-import type { EditionId } from '../../../Apps/common/src';
-import type { CASExpiry } from '../../../Apps/common/src/cas-expiry';
+} from '../constants';
+import type { PushToken } from '../notifications/notification-service';
+import type { PushNotificationRegistration } from '../notifications/push-notifications';
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app

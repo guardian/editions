@@ -1,15 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useContext } from 'react';
-import { AccessContext } from 'src/authentication/AccessContext';
-import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { RightChevron } from 'src/components/icons/RightChevron';
-import { ScrollContainer } from 'src/components/layout/ui/container';
-import { Heading, Row, Separator } from 'src/components/layout/ui/row';
+import { AccessContext } from '../../authentication/AccessContext';
+import { HeaderScreenContainer } from '../../components/Header/Header';
+import { RightChevron } from '../../components/icons/RightChevron';
+import { ScrollContainer } from '../../components/layout/ui/container';
+import { Heading, Row, Separator } from '../../components/layout/ui/row';
 import {
 	copyDiagnosticInfo,
 	createSupportMailto,
-} from 'src/helpers/diagnostics';
+} from '../../helpers/diagnostics';
 import {
 	APPS_FEEDBACK_EMAIL,
 	DIAGNOSTICS_TITLE,
@@ -17,13 +17,13 @@ import {
 	ISSUE_EMAIL,
 	READERS_EMAIL,
 	SUBSCRIPTION_EMAIL,
-} from 'src/helpers/words';
-import { useGdprSettings } from 'src/hooks/use-gdpr';
-import { useNetInfo } from 'src/hooks/use-net-info-provider';
-import { useToast } from 'src/hooks/use-toast';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import { WithAppAppearance } from 'src/theme/appearance';
+} from '../../helpers/words';
+import { useGdprSettings } from '../../hooks/use-gdpr';
+import { useNetInfo } from '../../hooks/use-net-info-provider';
+import { useToast } from '../../hooks/use-toast';
+import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { RouteNames } from '../../navigation/NavigationModels';
+import { WithAppAppearance } from '../../theme/appearance';
 
 export interface OnCompletionToast {
 	(msg: string): void;

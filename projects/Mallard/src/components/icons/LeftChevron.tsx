@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { color } from 'src/theme/color';
-import { getFont } from 'src/theme/typography';
+import { color } from '../../theme/color';
+import { getFont } from '../../theme/typography';
 
 const LeftChevron = ({
 	fill = color.palette.neutral[20],

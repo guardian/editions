@@ -3,10 +3,10 @@ import type { RouteProp } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Button, ButtonAppearance } from 'src/components/Button/Button';
-import { Header } from 'src/components/layout/header/header';
-import { ArticleScreen } from 'src/screens/article-screen';
+import { Button, ButtonAppearance } from '../../components/Button/Button';
+import { Header } from '../../components/layout/header/header';
 import { SlideCard } from '../../components/layout/slide-card/index';
+import { ArticleScreen } from '../../screens/article-screen';
 import type { MainStackParamList } from '../NavigationModels';
 
 const FullScreenArticle = () => {

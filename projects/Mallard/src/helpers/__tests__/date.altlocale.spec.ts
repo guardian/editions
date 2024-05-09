@@ -1,6 +1,6 @@
 import { localDate } from '../date';
 
-jest.mock('src/helpers/locale', () => ({
+jest.mock('../locale', () => ({
 	languageLocale: 'en-US',
 }));
 

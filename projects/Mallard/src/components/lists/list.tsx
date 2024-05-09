@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import React from 'react';
 import type { FlatListProps } from 'react-native';
 import { FlatList } from 'react-native';
-import { Row, Separator } from 'src/components/layout/ui/row';
+import { Row, Separator } from '../../components/layout/ui/row';
 /*
 An item is what the list uses to draw its own row –
 See https://facebook.github.io/react-native/docs/using-a-listview

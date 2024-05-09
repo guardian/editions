@@ -2,18 +2,18 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ButtonAppearance } from 'src/components/Button/Button';
-import { ModalButton } from 'src/components/Button/ModalButton';
-import { LinkNav } from 'src/components/link';
+import { ButtonAppearance } from '../../components/Button/Button';
+import { ModalButton } from '../../components/Button/ModalButton';
+import { LinkNav } from '../../components/link';
 import {
 	CardAppearance,
 	OnboardingCard,
-} from 'src/components/onboarding/onboarding-card';
-import { copy, PREFS_SAVED_MSG } from 'src/helpers/words';
-import { useGdprSettings } from 'src/hooks/use-gdpr';
-import { useToast } from 'src/hooks/use-toast';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
+} from '../../components/onboarding/onboarding-card';
+import { copy, PREFS_SAVED_MSG } from '../../helpers/words';
+import { useGdprSettings } from '../../hooks/use-gdpr';
+import { useToast } from '../../hooks/use-toast';
+import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { RouteNames } from '../../navigation/NavigationModels';
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
 	<View

@@ -1,10 +1,10 @@
 import React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
-import { minScreenSize } from 'src/helpers/screen';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
-import { getFont } from 'src/theme/typography';
+import { minScreenSize } from '../../helpers/screen';
+import { color } from '../../theme/color';
+import { metrics } from '../../theme/spacing';
+import { getFont } from '../../theme/typography';
 import { ButtonAppearance } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';
 import { TitlepieceText, UiExplainerCopy } from '../styled-text';

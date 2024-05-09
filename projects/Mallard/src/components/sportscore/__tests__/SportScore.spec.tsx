@@ -1,6 +1,6 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { SportScore } from 'src/components/SportScore/SportScore';
+import { SportScore } from '../../../components/SportScore/SportScore';
 
 const sportScore = 'Luton 3 - 0 Watford';
 

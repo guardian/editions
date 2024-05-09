@@ -1,6 +1,6 @@
 import DeviceInfo from 'react-native-device-info';
-import { CAS_ENDPOINT_URL } from 'src/constants';
 import type { CASExpiry } from '../../../../Apps/common/src/cas-expiry';
+import { CAS_ENDPOINT_URL } from '../../constants';
 import type { AuthResult } from '../lib/Result';
 import { fromResponse } from '../lib/Result';
 

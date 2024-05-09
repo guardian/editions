@@ -7,8 +7,8 @@ import {
 	purchaseUpdatedListener,
 	requestSubscription,
 } from 'react-native-iap';
-import { Button } from 'src/components/Button/Button';
-import { HeaderScreenContainer } from 'src/components/Header/Header';
+import { Button } from '../components/Button/Button';
+import { HeaderScreenContainer } from '../components/Header/Header';
 
 const styles = StyleSheet.create({
 	container: {

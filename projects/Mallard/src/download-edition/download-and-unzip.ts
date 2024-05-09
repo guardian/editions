@@ -1,17 +1,17 @@
 import retry from 'async-retry';
-import type { DLStatus } from 'src/helpers/files';
+import type { ImageSize, IssueSummary } from '../../../Apps/common/src';
+import type { DLStatus } from '../helpers/files';
 import {
 	downloadNamedIssueArchive,
 	isIssueOnDevice,
 	unzipNamedIssueArchive,
-} from 'src/helpers/files';
-import { localIssueListStore } from 'src/hooks/use-issue-on-device';
-import type { NetInfoState } from 'src/hooks/use-net-info-provider';
-import { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
-import { pushTracking } from 'src/notifications/push-tracking';
-import { FSPaths } from 'src/paths';
-import { errorService } from 'src/services/errors';
-import type { ImageSize, IssueSummary } from '../../../Apps/common/src';
+} from '../helpers/files';
+import { localIssueListStore } from '../hooks/use-issue-on-device';
+import type { NetInfoState } from '../hooks/use-net-info-provider';
+import { DownloadBlockedStatus } from '../hooks/use-net-info-provider';
+import { pushTracking } from '../notifications/push-tracking';
+import { FSPaths } from '../paths';
+import { errorService } from '../services/errors';
 import { deleteIssue } from './clear-issues-and-editions';
 
 // Cache of current downloads

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button } from 'src/components/Button/Button';
-import { color } from 'src/theme/color';
+import { Button } from '../../components/Button/Button';
+import { color } from '../../theme/color';
 
 const styles = StyleSheet.create({
 	container: {

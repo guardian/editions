@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import RNFS from 'react-native-fs';
-import { imageForScreenSize } from 'src/helpers/screen';
-import { APIPaths, FSPaths } from 'src/paths';
-import type { Image, ImageUse, Issue } from '../../../Apps/common/src';
+import type { Image, ImageUse, Issue } from '../common';
+import { imageForScreenSize } from '../helpers/screen';
+import { APIPaths, FSPaths } from '../paths';
 import { useApiUrl } from './use-config-provider';
 import { useIssueSummary } from './use-issue-summary-provider';
 

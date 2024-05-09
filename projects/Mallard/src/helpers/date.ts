@@ -7,7 +7,7 @@ import {
 } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { Platform } from 'react-native';
-import { languageLocale } from 'src/helpers/locale';
+import { languageLocale } from '../helpers/locale';
 
 const londonTime = (date: Date) => utcToZonedTime(date, 'Europe/London');
 

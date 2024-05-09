@@ -1,6 +1,6 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import MockedNavigator from 'src/__mocks__/@react-navigation';
+import MockedNavigator from '../../../../__mocks__/@react-navigation';
 import { IssuePickerHeader } from '../IssuePickerHeader';
 
 jest.mock('@delightfulstudio/react-native-safe-area-insets', () => ({

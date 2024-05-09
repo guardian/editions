@@ -1,6 +1,6 @@
 import { Linking, Platform } from 'react-native';
 import Rate, { AndroidMarket } from 'react-native-rate';
-import { APPLE_ID, GOOGLE_PACKAGE_NAME } from 'src/constants';
+import { APPLE_ID, GOOGLE_PACKAGE_NAME } from '../constants';
 
 export const rateApp = () => {
 	// options are chosen as this is an app driven action rather than user driven

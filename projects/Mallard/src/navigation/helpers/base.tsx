@@ -1,15 +1,15 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ReactElement } from 'react';
-import { logEvent } from 'src/helpers/analytics';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import type { PathToArticle, PathToIssue } from 'src/paths';
-import type { ArticleNavigator } from 'src/screens/article-screen';
 import type {
 	ArticlePillar,
 	CreditedImage,
 	Issue,
 } from '../../../../Apps/common/src';
+import { logEvent } from '../../helpers/analytics';
+import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { RouteNames } from '../../navigation/NavigationModels';
+import type { PathToArticle, PathToIssue } from '../../paths';
+import type { ArticleNavigator } from '../../screens/article-screen';
 
 export interface ArticleNavigationProps {
 	path: PathToArticle;
