@@ -93,6 +93,7 @@ const WebviewWithArticle = ({
 			onError={() => {
 				setUri(BACKUP_URI);
 			}}
+			webviewDebuggingEnabled
 		/>
 	);
 };

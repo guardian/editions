@@ -1,3 +1,4 @@
+/* eslint-disable */
 import type {
 	LightboxMessage,
 	PlatformMessage,
@@ -130,17 +131,17 @@ const useUpdateWebviewVariable = (
 		if (webviewRef.current == null) return;
 		if (value === valueInWebview.current) return;
 		valueInWebview.current = value;
-		webviewRef.current.injectJavaScript(`window.${name} = ${value};`);
+		// webviewRef.current.injectJavaScript(`window.${name} = ${value};`);
 	}, [value]);
 	return valueInWebview;
 };
 
 const injectJavascript = (
 	webviewRef: React.MutableRefObject<WebView | null>,
-	script: string,
+	// script: string,
 ): void => {
 	if (webviewRef?.current) {
-		webviewRef.current.injectJavaScript(script);
+		// webviewRef.current.injectJavaScript(script);
 	}
 };
 
@@ -251,7 +252,7 @@ const Article = ({
 	// an article has no webUrl
 	useEffect(() => {
 		if (ref) {
-			injectJavascript(ref, script);
+			// injectJavascript(ref, script);
 		}
 	}, [script]);
 
@@ -383,9 +384,9 @@ const Article = ({
 				ref.current = r;
 			}}
 			origin={origin}
-			onMessage={(event) => {
-				handlePing(event.nativeEvent.data);
-			}}
+			// onMessage={(event) => {
+			// 	handlePing(event.nativeEvent.data);
+			// }}
 			decelerationRate={'normal'}
 		/>
 	);
