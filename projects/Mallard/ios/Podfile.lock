@@ -1087,7 +1087,7 @@ PODS:
     - React
   - react-native-splash-screen (3.3.0):
     - React-Core
-  - react-native-webview (13.8.1):
+  - react-native-webview (13.10.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1694,7 +1694,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
-  react-native-webview: 05fa0e766f1c408e8c293cbcb84b2c199711cfd1
+  react-native-webview: d2116987f3a75ba677a9f49565bae6834d0e12c4
   React-nativeconfig: 2e44d0d2dd222b12a5183f4bcaa4a91881497acb
   React-NativeModulesApple: 8aa032fe6c92c1a3c63e4809d42816284a56a9b0
   React-perflogger: f9367428cf475f4606b5965c1d5a71781bb95299
