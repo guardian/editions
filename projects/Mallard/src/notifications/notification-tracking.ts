@@ -1,4 +1,4 @@
-import { notificationTrackingUrl } from '../helpers/settings/defaults';
+import { notificationTrackingUrl } from 'src/helpers/settings/defaults';
 
 const notificationTracking = (
 	notificationId: string,

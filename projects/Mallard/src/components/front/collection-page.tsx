@@ -11,15 +11,15 @@ import type {
 	PageLayoutSizes,
 	Rectangle,
 	Size,
-} from '../../common';
-import { ArticleType, defaultCardAppearances, layouts } from '../../common';
-import { FlexErrorMessage } from '../../components/layout/ui/errors/flex-error-message';
-import { Multiline } from '../../components/multiline';
-import { WithArticleType } from '../../hooks/use-article';
+} from 'src/common';
+import { ArticleType, defaultCardAppearances, layouts } from 'src/common';
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
+import { Multiline } from 'src/components/multiline';
+import { WithArticleType } from 'src/hooks/use-article';
+import { useIssueScreenSize } from 'src/screens/issue/use-size';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
 import type { ArticleNavigator } from '../../screens/article-screen';
-import { useIssueScreenSize } from '../../screens/issue/use-size';
-import { color } from '../../theme/color';
-import { metrics } from '../../theme/spacing';
 import type { Item as TItem } from './helpers/helpers';
 import {
 	getItemRectanglePerc,

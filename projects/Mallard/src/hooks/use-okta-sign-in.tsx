@@ -3,11 +3,11 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useContext, useState } from 'react';
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { AccessContext } from '../authentication/AccessContext';
-import { isValid } from '../authentication/lib/Attempt';
-import { oktaSignOut } from '../authentication/services/okta';
-import type { MainStackParamList } from '../navigation/NavigationModels';
-import { RouteNames } from '../navigation/NavigationModels';
+import { AccessContext } from 'src/authentication/AccessContext';
+import { isValid } from 'src/authentication/lib/Attempt';
+import { oktaSignOut } from 'src/authentication/services/okta';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
 
 const useOkta = () => {
 	const { authOkta, signOutOkta } = useContext(AccessContext);

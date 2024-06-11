@@ -3,7 +3,7 @@ import {
 	membershipAccessTokenKeychain,
 	userAccessTokenKeychain,
 	userDataCache,
-} from '../../helpers/storage';
+} from 'src/helpers/storage';
 import { canViewEdition } from '../helpers';
 import { Authorizer } from '../lib/Authorizer';
 import { InvalidResult } from '../lib/Result';

@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { bundles } from '../html-bundle-info.json';
+import { bundles } from 'src/html-bundle-info.json';
 
 export const getBundleUri = (
 	key: keyof typeof bundles,

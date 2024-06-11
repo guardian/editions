@@ -8,8 +8,8 @@ import {
 	View,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { color } from 'src/theme/color';
 import { useInsets } from '../../hooks/use-screen';
-import { color } from '../../theme/color';
 import { metrics } from '../../theme/spacing';
 import { ButtonAppearance } from '../Button/Button';
 import { CloseButton } from '../Button/CloseButton';

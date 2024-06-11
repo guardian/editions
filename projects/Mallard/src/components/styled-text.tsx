@@ -1,9 +1,9 @@
 import React from 'react';
 import type { StyleProp, TextProps, TextStyle } from 'react-native';
 import { StyleSheet, Text } from 'react-native';
-import { useAppAppearance } from '../theme/appearance';
-import { color } from '../theme/color';
-import { getFont } from '../theme/typography';
+import { useAppAppearance } from 'src/theme/appearance';
+import { color } from 'src/theme/color';
+import { getFont } from 'src/theme/typography';
 
 export const styles = StyleSheet.create({
 	headlineText: {

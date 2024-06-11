@@ -1,14 +1,11 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Button } from '../../../../components/Button/Button';
-import {
-	UiBodyCopy,
-	UiExplainerCopy,
-} from '../../../../components/styled-text';
-import { GENERIC_ERROR } from '../../../../helpers/words';
-import { WithAppAppearance } from '../../../../theme/appearance';
-import { metrics } from '../../../../theme/spacing';
+import { Button } from 'src/components/Button/Button';
+import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text';
+import { GENERIC_ERROR } from 'src/helpers/words';
+import { WithAppAppearance } from 'src/theme/appearance';
+import { metrics } from 'src/theme/spacing';
 
 export interface PropTypes {
 	title?: string;

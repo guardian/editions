@@ -5,44 +5,44 @@ import type { ReactNode } from 'react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, Platform, View } from 'react-native';
 import { Switch } from 'react-native-gesture-handler';
-import { AccessContext } from '../../authentication/AccessContext';
-import { isValid } from '../../authentication/lib/Attempt';
-import { DEV_getLegacyIAPReceipt } from '../../authentication/services/iap';
-import { Button } from '../../components/Button/Button';
-import { HeaderScreenContainer } from '../../components/Header/Header';
-import { ScrollContainer } from '../../components/layout/ui/container';
-import { Footer, Heading } from '../../components/layout/ui/row';
-import { List } from '../../components/lists/list';
-import { UiBodyCopy } from '../../components/styled-text';
-import { deleteIssueFiles } from '../../download-edition/clear-issues-and-editions';
-import { getFileList, getIssuesCountStrings } from '../../helpers/files';
-import { locale } from '../../helpers/locale';
-import { isInBeta, isInTestFlight } from '../../helpers/release-stream';
-import { imageForScreenSize } from '../../helpers/screen';
+import { AccessContext } from 'src/authentication/AccessContext';
+import { isValid } from 'src/authentication/lib/Attempt';
+import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap';
+import { Button } from 'src/components/Button/Button';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
+import { ScrollContainer } from 'src/components/layout/ui/container';
+import { Footer, Heading } from 'src/components/layout/ui/row';
+import { List } from 'src/components/lists/list';
+import { UiBodyCopy } from 'src/components/styled-text';
+import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
+import { getFileList, getIssuesCountStrings } from 'src/helpers/files';
+import { locale } from 'src/helpers/locale';
+import { isInBeta, isInTestFlight } from 'src/helpers/release-stream';
+import { imageForScreenSize } from 'src/helpers/screen';
 import {
 	issueSummaryCache,
 	pushRegisteredTokens,
 	showAllEditionsCache,
-} from '../../helpers/storage';
+} from 'src/helpers/storage';
 import {
 	useApiUrl,
 	useIsUsingProdDevtools,
-} from '../../hooks/use-config-provider';
-import { useEditions } from '../../hooks/use-edition-provider';
-import { useNetInfo } from '../../hooks/use-net-info-provider';
-import { useOkta } from '../../hooks/use-okta-sign-in';
-import { INTERACTIONS_THRESHOLD, useRating } from '../../hooks/use-rating';
-import { useToast } from '../../hooks/use-toast';
-import { RouteNames } from '../../navigation/NavigationModels';
-import type { Tracking } from '../../notifications/push-tracking';
+} from 'src/hooks/use-config-provider';
+import { useEditions } from 'src/hooks/use-edition-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import { useOkta } from 'src/hooks/use-okta-sign-in';
+import { INTERACTIONS_THRESHOLD, useRating } from 'src/hooks/use-rating';
+import { useToast } from 'src/hooks/use-toast';
+import { RouteNames } from 'src/navigation/NavigationModels';
+import type { Tracking } from 'src/notifications/push-tracking';
 import {
 	clearPushTracking,
 	getPushTracking,
-} from '../../notifications/push-tracking';
-import { FSPaths } from '../../paths';
-import { remoteConfigService } from '../../services/remote-config';
-import { WithAppAppearance } from '../../theme/appearance';
-import { metrics } from '../../theme/spacing';
+} from 'src/notifications/push-tracking';
+import { FSPaths } from 'src/paths';
+import { remoteConfigService } from 'src/services/remote-config';
+import { WithAppAppearance } from 'src/theme/appearance';
+import { metrics } from 'src/theme/spacing';
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
 	return (

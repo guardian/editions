@@ -1,8 +1,8 @@
 import React from 'react';
 import type { ImageStyle } from 'react-native-fast-image';
 import Image from 'react-native-fast-image';
-import type { Image as ImageType } from '../../../../common';
-import { useImagePath } from '../../../../hooks/use-image-paths';
+import type { Image as ImageType } from 'src/common';
+import { useImagePath } from 'src/hooks/use-image-paths';
 
 const cutoutStyles = {
 	root: {

@@ -1,8 +1,8 @@
 import type { FunctionComponent } from 'react';
-import type { Rectangle, Size } from '../../../common';
-import { PageLayoutSizes } from '../../../common';
-import { useArticle } from '../../../hooks/use-article';
-import { useAppAppearance } from '../../../theme/appearance';
+import type { Rectangle, Size } from 'src/common';
+import { PageLayoutSizes } from 'src/common';
+import { useArticle } from 'src/hooks/use-article';
+import { useAppAppearance } from 'src/theme/appearance';
 import type { PropTypes } from '../items/helpers/item-tappable';
 
 export type Item = FunctionComponent<PropTypes>;

@@ -3,9 +3,9 @@ import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import { getTemperatureUnit } from 'react-native-localize';
 import { RESULTS } from 'react-native-permissions';
-import type { AccuWeatherLocation, Forecast } from '../../common';
-import { locale } from '../../helpers/locale';
-import { resolveLocationPermissionStatus } from '../../helpers/location-permission';
+import type { AccuWeatherLocation, Forecast } from 'src/common';
+import { locale } from 'src/helpers/locale';
+import { resolveLocationPermissionStatus } from 'src/helpers/location-permission';
 
 class CannotFetchError extends Error {}
 

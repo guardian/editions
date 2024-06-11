@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
-import { color } from '../../../../theme/color';
+import { color } from 'src/theme/color';
 
 const styles = StyleSheet.create({
 	card: {

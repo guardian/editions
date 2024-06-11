@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import React, { Component } from 'react';
-import { FlexErrorMessage } from '../../../../components/layout/ui/errors/flex-error-message';
-import { GENERIC_FATAL_ERROR } from '../../../../helpers/words';
-import { errorService } from '../../../../services/errors';
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
+import { GENERIC_FATAL_ERROR } from 'src/helpers/words';
+import { errorService } from 'src/services/errors';
 
 type Props = {
 	children: ReactNode;

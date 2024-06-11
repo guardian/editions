@@ -1,7 +1,7 @@
 import React from 'react';
 import type { TextProps } from 'react-native';
 import { Linking, StyleSheet, Text } from 'react-native';
-import { color } from '../theme/color';
+import { color } from 'src/theme/color';
 
 const styles = StyleSheet.create({
 	link: {

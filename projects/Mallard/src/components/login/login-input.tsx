@@ -6,9 +6,9 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native';
-import { color } from '../../theme/color';
-import { metrics } from '../../theme/spacing';
-import { getFont } from '../../theme/typography';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
+import { getFont } from 'src/theme/typography';
 import { UiBodyCopy } from '../styled-text';
 
 const loginInputStyles = StyleSheet.create({

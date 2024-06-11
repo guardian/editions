@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Quote } from 'src/components/icons/Quote';
+import { useArticle } from 'src/hooks/use-article';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
+import { getFont } from 'src/theme/typography';
 import { PageLayoutSizes } from '../../../common';
-import { Quote } from '../../../components/icons/Quote';
-import { useArticle } from '../../../hooks/use-article';
-import { color } from '../../../theme/color';
-import { metrics } from '../../../theme/spacing';
-import { getFont } from '../../../theme/typography';
 import type { PropTypes } from './helpers/item-tappable';
 import { ItemTappable, tappablePadding } from './helpers/item-tappable';
 import { BylineCutout } from './helpers/opinion';

@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, TextProps, TextStyle } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import { ariaHidden } from '../../helpers/a11y';
-import { MINIMUM_BREAKPOINT } from '../../theme/breakpoints';
-import type { getUnscaledFont } from '../../theme/typography';
-import { applyScale } from '../../theme/typography';
+import { ariaHidden } from 'src/helpers/a11y';
+import { MINIMUM_BREAKPOINT } from 'src/theme/breakpoints';
+import type { getUnscaledFont } from 'src/theme/typography';
+import { applyScale } from 'src/theme/typography';
 
 interface Icon {
 	width: number;

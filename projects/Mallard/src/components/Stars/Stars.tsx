@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { color } from '../../theme/color';
-import { metrics } from '../../theme/spacing';
-import { getFont } from '../../theme/typography';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
+import { getFont } from 'src/theme/typography';
 
 const styles = StyleSheet.create({
 	background: {

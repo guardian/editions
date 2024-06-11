@@ -1,11 +1,11 @@
 import { Platform } from 'react-native';
-import { isInBeta } from '../helpers/release-stream';
+import { isInBeta } from 'src/helpers/release-stream';
 import {
 	defaultSettings,
 	notificationEdition,
-} from '../helpers/settings/defaults';
-import { getDefaultEdition } from '../hooks/use-edition-provider';
-import { errorService } from '../services/errors';
+} from 'src/helpers/settings/defaults';
+import { getDefaultEdition } from 'src/hooks/use-edition-provider';
+import { errorService } from 'src/services/errors';
 
 export interface PushToken {
 	name: 'uk' | 'us' | 'au';

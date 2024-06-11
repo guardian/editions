@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useContext } from 'react';
-import { AccessContext } from '../../authentication/AccessContext';
-import { copy } from '../../helpers/words';
-import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { AccessContext } from 'src/authentication/AccessContext';
+import { copy } from 'src/helpers/words';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { MissingIAPModalCard } from '../missing-iap-modal-card';
 

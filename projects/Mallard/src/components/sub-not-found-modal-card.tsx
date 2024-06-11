@@ -1,5 +1,5 @@
 import React from 'react';
-import { copy } from '../helpers/words';
+import { copy } from 'src/helpers/words';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 

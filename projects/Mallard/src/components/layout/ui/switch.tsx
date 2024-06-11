@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, ButtonAppearance } from '../../../components/Button/Button';
-import { metrics } from '../../../theme/spacing';
+import { Button, ButtonAppearance } from 'src/components/Button/Button';
+import { metrics } from 'src/theme/spacing';
 
 export type ThreeWaySwitchValue = null | boolean;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { Spinner } from '../../components/Spinner/Spinner';
+import { Spinner } from 'src/components/Spinner/Spinner';
 
 const styles = StyleSheet.create({
 	loadingScreen: {

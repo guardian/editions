@@ -3,7 +3,7 @@ import {
 	casDataCache,
 	legacyCASPasswordCache,
 	legacyCASUsernameCache,
-} from '../../helpers/storage';
+} from 'src/helpers/storage';
 import { Authorizer } from '../lib/Authorizer';
 import { ErrorResult, flat, ValidResult } from '../lib/Result';
 import { fetchCASSubscription } from '../services/cas';

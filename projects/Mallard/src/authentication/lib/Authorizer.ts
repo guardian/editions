@@ -1,5 +1,5 @@
-import { validAttemptCache } from '../../helpers/storage';
-import { errorService } from '../../services/errors';
+import { validAttemptCache } from 'src/helpers/storage';
+import { errorService } from 'src/services/errors';
 import type { AnyAttempt, Connectivity, ResolvedAttempt } from './Attempt';
 import {
 	ErrorAttempt,

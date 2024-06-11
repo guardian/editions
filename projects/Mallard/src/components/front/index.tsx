@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import type { FlatList } from 'react-native';
-import type { ArticlePillar, Front as FrontType, Issue } from '../../common';
-import { ArticleType } from '../../common';
-import { clamp } from '../../helpers/math';
-import type { FlatCard } from '../../helpers/transform';
-import { getColor } from '../../helpers/transform';
+import type { ArticlePillar, Front as FrontType, Issue } from 'src/common';
+import { ArticleType } from 'src/common';
+import { clamp } from 'src/helpers/math';
+import type { FlatCard } from 'src/helpers/transform';
+import { getColor } from 'src/helpers/transform';
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
+import { useIssue } from 'src/hooks/use-issue-provider';
+import { issueDateFromId } from 'src/screens/article/slider/slider-helpers';
+import { SliderTitle } from 'src/screens/article/slider/SliderTitle';
+import type { ArticleNavigator } from 'src/screens/article-screen';
+import { useIssueScreenSize } from 'src/screens/issue/use-size';
 import {
 	getAppearancePillar,
 	getCollectionPillarOverride,
 	WithArticle,
 } from '../../hooks/use-article';
-import { useLargeDeviceMemory } from '../../hooks/use-config-provider';
-import { useIssue } from '../../hooks/use-issue-provider';
-import { issueDateFromId } from '../../screens/article/slider/slider-helpers';
-import { SliderTitle } from '../../screens/article/slider/SliderTitle';
-import type { ArticleNavigator } from '../../screens/article-screen';
-import { useIssueScreenSize } from '../../screens/issue/use-size';
 import type { PropTypes } from './collection-page';
 import { CollectionPage } from './collection-page';
 import { FrontWrapper } from './helpers/front-wrapper';

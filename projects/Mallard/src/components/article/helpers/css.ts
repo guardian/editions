@@ -1,4 +1,4 @@
-import { color } from '../../../theme/color';
+import { color } from 'src/theme/color';
 import { ArticleTheme } from '../article';
 
 export const themeColors = (theme: ArticleTheme) => {

@@ -6,18 +6,18 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import { HeaderScreenContainer } from '../../components/Header/Header';
-import { List } from '../../components/lists/list';
-import { UiBodyCopy } from '../../components/styled-text';
-import { deleteIssueFiles } from '../../download-edition/clear-issues-and-editions';
-import { logEvent } from '../../helpers/analytics';
-import { copy, MANAGE_EDITIONS_TITLE } from '../../helpers/words';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
+import { List } from 'src/components/lists/list';
+import { UiBodyCopy } from 'src/components/styled-text';
+import { deleteIssueFiles } from 'src/download-edition/clear-issues-and-editions';
+import { logEvent } from 'src/helpers/analytics';
+import { copy, MANAGE_EDITIONS_TITLE } from 'src/helpers/words';
 import {
 	useMaxAvailableEditions,
 	useWifiOnlyDownloads,
-} from '../../hooks/use-config-provider';
-import { getIssueSummary } from '../../hooks/use-issue-summary-provider';
-import { WithAppAppearance } from '../../theme/appearance';
+} from 'src/hooks/use-config-provider';
+import { getIssueSummary } from 'src/hooks/use-issue-summary-provider';
+import { WithAppAppearance } from 'src/theme/appearance';
 
 const buttonStyles = StyleSheet.create({
 	background: {

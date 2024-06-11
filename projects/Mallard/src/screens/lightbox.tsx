@@ -5,22 +5,22 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { ArticleTheme } from '../components/article/article';
-import { themeColors } from '../components/article/helpers/css';
+import { ArticleTheme } from 'src/components/article/article';
+import { themeColors } from 'src/components/article/helpers/css';
 import {
 	getNewWindowStart,
 	getWindowStart,
 	ProgressIndicator,
-} from '../components/article/progress-indicator';
-import { ButtonAppearance } from '../components/Button/Button';
-import { CloseButton } from '../components/Button/CloseButton';
-import { LightboxCaption } from '../components/Lightbox/LightboxCaption';
-import { getPillarColors } from '../helpers/transform';
-import { useDimensions } from '../hooks/use-config-provider';
+} from 'src/components/article/progress-indicator';
+import { ButtonAppearance } from 'src/components/Button/Button';
+import { CloseButton } from 'src/components/Button/CloseButton';
+import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption';
+import { getPillarColors } from 'src/helpers/transform';
+import { useDimensions } from 'src/hooks/use-config-provider';
 import type {
 	MainStackParamList,
 	RouteNames,
-} from '../navigation/NavigationModels';
+} from 'src/navigation/NavigationModels';
 
 const styles = StyleSheet.create({
 	lightboxPage: {

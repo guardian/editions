@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { Issue } from '../common';
-import { getSelectedEditionSlug } from '../hooks/use-edition-provider';
+import type { Issue } from 'src/common';
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
 import {
 	formatDayNumber,
 	formatMonth,

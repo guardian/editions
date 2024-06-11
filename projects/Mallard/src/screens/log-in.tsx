@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Image from 'react-native-fast-image';
 import type { Source } from 'react-native-fast-image';
-import { Button } from '../components/Button/Button';
-import { Link, LinkNav } from '../components/link';
-import { LoginButton } from '../components/login/login-button';
-import { EmailInput, PasswordInput } from '../components/login/login-input';
-import { LoginLayout } from '../components/login/login-layout';
-import { TitlepieceText } from '../components/styled-text';
-import { iosMajorVersion } from '../helpers/platform';
-import type { FormField } from '../hooks/use-form-field';
-import { color } from '../theme/color';
-import { metrics } from '../theme/spacing';
-import { getFont } from '../theme/typography';
+import { Button } from 'src/components/Button/Button';
+import { Link, LinkNav } from 'src/components/link';
+import { LoginButton } from 'src/components/login/login-button';
+import { EmailInput, PasswordInput } from 'src/components/login/login-input';
+import { LoginLayout } from 'src/components/login/login-layout';
+import { TitlepieceText } from 'src/components/styled-text';
+import { iosMajorVersion } from 'src/helpers/platform';
+import type { FormField } from 'src/hooks/use-form-field';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
+import { getFont } from 'src/theme/typography';
 
 const socialButtonStyles = StyleSheet.create({
 	button: {
@@ -132,14 +132,14 @@ const Login = ({
 					<View>
 						<SocialButton
 							onPress={onGooglePress}
-							iconRequire={require('../assets/images/google.png')}
+							iconRequire={require('src/assets/images/google.png')}
 						>
 							Continue with Google
 						</SocialButton>
 						{iosMajorVersion >= 13 && (
 							<SocialButton
 								onPress={onApplePress}
-								iconRequire={require('../assets/images/apple.png')}
+								iconRequire={require('src/assets/images/apple.png')}
 							>
 								Continue with Apple
 							</SocialButton>
@@ -148,7 +148,7 @@ const Login = ({
 						{iosMajorVersion < 13 && (
 							<SocialButton
 								onPress={onAppleOAuthPress}
-								iconRequire={require('../assets/images/apple.png')}
+								iconRequire={require('src/assets/images/apple.png')}
 							>
 								Continue with Apple
 							</SocialButton>

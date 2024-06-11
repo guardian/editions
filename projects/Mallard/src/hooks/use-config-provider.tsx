@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Dimensions, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { backends, isPreview } from '../helpers/settings/defaults';
+import { backends, isPreview } from 'src/helpers/settings/defaults';
 import {
 	apiUrlCache,
 	isUsingProdDevtoolsCache,
 	maxAvailableEditionsCache,
 	notificationsEnabledCache,
 	wifiOnlyDownloadsCache,
-} from '../helpers/storage';
-import { errorService } from '../services/errors';
-import { Breakpoints } from '../theme/breakpoints';
+} from 'src/helpers/storage';
+import { errorService } from 'src/services/errors';
+import { Breakpoints } from 'src/theme/breakpoints';
 
 const oneGB = 1073741824;
 

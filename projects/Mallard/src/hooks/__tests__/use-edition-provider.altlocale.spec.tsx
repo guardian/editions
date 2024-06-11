@@ -2,17 +2,17 @@ import {
 	defaultEditionCache,
 	editionsListCache,
 	selectedEditionCache,
-} from '../../helpers/storage';
+} from 'src/helpers/storage';
 import { BASE_EDITION, defaultEditionDecider } from '../use-edition-provider';
 import { DownloadBlockedStatus } from '../use-net-info-provider';
 
-jest.mock('../../services/remote-config', () => ({
+jest.mock('src/services/remote-config', () => ({
 	remoteConfigService: {
 		getBoolean: jest.fn().mockReturnValue(true),
 	},
 }));
 
-jest.mock('../../helpers/locale', () => ({
+jest.mock('src/helpers/locale', () => ({
 	locale: 'fr_FR',
 }));
 

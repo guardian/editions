@@ -4,12 +4,12 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
-import type { CAPIArticle, Issue, ItemSizes } from '../../../../common';
-import type { MainStackParamList } from '../../../../navigation/NavigationModels';
-import { RouteNames } from '../../../../navigation/NavigationModels';
-import type { PathToArticle } from '../../../../paths';
-import type { ArticleNavigator } from '../../../../screens/article-screen';
-import { metrics } from '../../../../theme/spacing';
+import type { CAPIArticle, Issue, ItemSizes } from 'src/common';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
+import type { PathToArticle } from 'src/paths';
+import type { ArticleNavigator } from 'src/screens/article-screen';
+import { metrics } from 'src/theme/spacing';
 import { useCardBackgroundStyle } from '../../helpers/helpers';
 
 interface TappablePropTypes {

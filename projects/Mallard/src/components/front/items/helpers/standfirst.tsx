@@ -1,8 +1,8 @@
 import React from 'react';
 import type { StyleProp, TextStyle } from 'react-native';
 import { StyleSheet, Text } from 'react-native';
-import { color } from '../../../../theme/color';
-import { getFont } from '../../../../theme/typography';
+import { color } from 'src/theme/color';
+import { getFont } from 'src/theme/typography';
 
 const styles = StyleSheet.create({
 	standfirst: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { metrics } from '../../../../theme/spacing';
+import { metrics } from 'src/theme/spacing';
 import { FlexCenter } from '../../flex-center';
 import type { PropTypes } from './error-message';
 import { ErrorMessage } from './error-message';

@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import type { MainStackParamList } from '../../../navigation/NavigationModels';
-import { color } from '../../../theme/color';
-import { metrics } from '../../../theme/spacing';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
 import { Chevron } from '../../chevron';
 
 const styles = StyleSheet.create({

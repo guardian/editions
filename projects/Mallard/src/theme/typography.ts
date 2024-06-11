@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native';
-import type { BreakpointList } from '../theme/breakpoints';
+import type { BreakpointList } from 'src/theme/breakpoints';
 import { Breakpoints, pickClosestBreakpoint } from './breakpoints';
 
 export const families = {

@@ -1,6 +1,6 @@
 import { brand, neutral } from '@guardian/src-foundations';
 import { StyleSheet } from 'react-native';
-import { families } from '../../../theme/typography';
+import { families } from 'src/theme/typography';
 
 const EDITIONS_MENU_TEXT_LEFT_PADDING = 75;
 const imageWidth = 75;
