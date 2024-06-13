@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { color } from '../../theme/color';
+import { color } from 'src/theme/color';
 
 const width = 37;
 const height = 21;

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { useAppAppearance } from '../../../theme/appearance';
+import { useAppAppearance } from 'src/theme/appearance';
 
 const styles = StyleSheet.create({
 	container: { flex: 1 },

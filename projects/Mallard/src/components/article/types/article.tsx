@@ -1,9 +1,9 @@
+import { MessageKind, Platform as PlatformType } from '@guardian/renditions';
 import type {
 	LightboxMessage,
 	PlatformMessage,
 	ShareIconMessage,
 } from '@guardian/renditions';
-import { MessageKind, Platform as PlatformType } from '@guardian/renditions';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,33 +11,33 @@ import { PixelRatio, Platform, Share, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import type WebView from 'react-native-webview';
 import type {
+	Article as ArticleT,
+	GalleryArticle,
+	Image,
+	PictureArticle,
+} from 'src/common';
+import {
+	defaultSettings,
+	htmlEndpoint,
+	isPreview,
+} from 'src/helpers/settings/defaults';
+import { parsePing } from 'src/helpers/webview';
+import { useArticle } from 'src/hooks/use-article';
+import { useApiUrl } from 'src/hooks/use-config-provider';
+import { selectImagePath } from 'src/hooks/use-image-paths';
+import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
+import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
+import type { PathToArticle } from 'src/paths';
+import { remoteConfigService } from 'src/services/remote-config';
+import { metrics } from 'src/theme/spacing';
+import type {
 	BlockElement,
 	CreditedImage,
 	ImageElement,
 	IssueOrigin,
 } from '../../../../../Apps/common/src';
-import type {
-	Article as ArticleT,
-	GalleryArticle,
-	Image,
-	PictureArticle,
-} from '../../../common';
-import {
-	defaultSettings,
-	htmlEndpoint,
-	isPreview,
-} from '../../../helpers/settings/defaults';
-import { parsePing } from '../../../helpers/webview';
-import { useArticle } from '../../../hooks/use-article';
-import { useApiUrl } from '../../../hooks/use-config-provider';
-import { selectImagePath } from '../../../hooks/use-image-paths';
-import { useIssueSummary } from '../../../hooks/use-issue-summary-provider';
-import { useNetInfo } from '../../../hooks/use-net-info-provider';
-import type { MainStackParamList } from '../../../navigation/NavigationModels';
-import { RouteNames } from '../../../navigation/NavigationModels';
-import type { PathToArticle } from '../../../paths';
-import { remoteConfigService } from '../../../services/remote-config';
-import { metrics } from '../../../theme/spacing';
 import { isSuccessOrRedirect } from './article/helpers';
 import { WebviewWithArticle } from './article/webview';
 

@@ -3,17 +3,17 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { HeaderScreenContainer } from '../../components/Header/Header';
-import { ScrollContainer } from '../../components/layout/ui/container';
-import { Footer, Heading } from '../../components/layout/ui/row';
-import { List } from '../../components/lists/list';
-import { UiBodyCopy } from '../../components/styled-text';
-import { backends } from '../../helpers/settings/defaults';
-import { ENDPOINTS_HEADER_TITLE } from '../../helpers/words';
-import { API_URL_DEFAULT, useApiUrl } from '../../hooks/use-config-provider';
-import type { MainStackParamList } from '../../navigation/NavigationModels';
-import { color } from '../../theme/color';
-import { metrics } from '../../theme/spacing';
+import { HeaderScreenContainer } from 'src/components/Header/Header';
+import { ScrollContainer } from 'src/components/layout/ui/container';
+import { Footer, Heading } from 'src/components/layout/ui/row';
+import { List } from 'src/components/lists/list';
+import { UiBodyCopy } from 'src/components/styled-text';
+import { backends } from 'src/helpers/settings/defaults';
+import { ENDPOINTS_HEADER_TITLE } from 'src/helpers/words';
+import { API_URL_DEFAULT, useApiUrl } from 'src/hooks/use-config-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
 
 const ApiState = () => {
 	const { apiUrl } = useApiUrl();

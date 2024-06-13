@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import { HeadlineText, UiBodyCopy } from '../../components/styled-text';
-import { safeInterpolation } from '../../helpers/math';
-import { useMediaQuery } from '../../hooks/use-screen';
-import { useToastList } from '../../hooks/use-toast';
-import { Breakpoints } from '../../theme/breakpoints';
-import { color } from '../../theme/color';
-import { metrics } from '../../theme/spacing';
-import { getFont } from '../../theme/typography';
+import { HeadlineText, UiBodyCopy } from 'src/components/styled-text';
+import { safeInterpolation } from 'src/helpers/math';
+import { useMediaQuery } from 'src/hooks/use-screen';
+import { useToastList } from 'src/hooks/use-toast';
+import { Breakpoints } from 'src/theme/breakpoints';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
+import { getFont } from 'src/theme/typography';
 
 export interface ToastProps {
 	title: string;

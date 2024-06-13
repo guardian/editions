@@ -3,9 +3,9 @@ import type { ImageStyle as RNImageStyle, StyleProp } from 'react-native';
 import { Platform, Image as RNImage, View } from 'react-native';
 import type { ImageStyle } from 'react-native-fast-image';
 import FastImage from 'react-native-fast-image';
+import { useAspectRatio } from 'src/hooks/use-aspect-ratio';
+import { useImagePath } from 'src/hooks/use-image-paths';
 import type { Image as IImage, ImageUse } from '../../../../Apps/common/src';
-import { useAspectRatio } from '../../hooks/use-aspect-ratio';
-import { useImagePath } from '../../hooks/use-image-paths';
 
 /**
  * This component abstracts away the endpoint for images

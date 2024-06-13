@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { ArticlePillar } from '../../common';
-import { ArticleType } from '../../common';
-import { ArticleController } from '../../components/article';
-import type { HeaderControlInnerProps } from '../../components/article/types/article';
-import { FlexErrorMessage } from '../../components/layout/ui/errors/flex-error-message';
-import { UiBodyCopy } from '../../components/styled-text';
+import type { ArticlePillar } from 'src/common';
+import { ArticleType } from 'src/common';
+import { ArticleController } from 'src/components/article';
+import type { HeaderControlInnerProps } from 'src/components/article/types/article';
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
+import { UiBodyCopy } from 'src/components/styled-text';
 import {
 	getCollectionPillarOverride,
 	WithArticle,
-} from '../../hooks/use-article';
-import { useApiUrl } from '../../hooks/use-config-provider';
-import { useIssue } from '../../hooks/use-issue-provider';
-import type { PathToArticle } from '../../paths';
-import { color } from '../../theme/color';
+} from 'src/hooks/use-article';
+import { useApiUrl } from 'src/hooks/use-config-provider';
+import { useIssue } from 'src/hooks/use-issue-provider';
+import type { PathToArticle } from 'src/paths';
+import { color } from 'src/theme/color';
 
 const styles = StyleSheet.create({
 	flex: { flexGrow: 1 },

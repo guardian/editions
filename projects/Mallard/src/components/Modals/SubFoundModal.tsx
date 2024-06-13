@@ -4,8 +4,8 @@ import type {
 	NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React from 'react';
-import { copy } from '../../helpers/words';
-import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { copy } from 'src/helpers/words';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
 import { CenterWrapper } from '../CenterWrapper/CenterWrapper';
 import { CardAppearance, OnboardingCard } from '../onboarding/onboarding-card';
 

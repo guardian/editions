@@ -1,8 +1,8 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { LoadingScreen } from '../../../components/LoadingScreen/LoadingScreen';
+import { LoadingScreen } from 'src/components/LoadingScreen/LoadingScreen';
 
-jest.mock('../../../components/Spinner/Spinner', () => ({
+jest.mock('src/components/Spinner/Spinner', () => ({
 	Spinner: () => '<Spinner />',
 }));
 

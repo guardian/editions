@@ -3,18 +3,18 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { Linking, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
-import { canViewEdition, getCASCode } from '../authentication/helpers';
-import type { AnyAttempt } from '../authentication/lib/Attempt';
-import { isValid } from '../authentication/lib/Attempt';
-import { getSelectedEditionSlug } from '../hooks/use-edition-provider';
-import type { GdprCoreSettings } from '../hooks/use-gdpr';
+import { canViewEdition, getCASCode } from 'src/authentication/helpers';
+import type { AnyAttempt } from 'src/authentication/lib/Attempt';
+import { isValid } from 'src/authentication/lib/Attempt';
+import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
+import type { GdprCoreSettings } from 'src/hooks/use-gdpr';
 import type {
 	NetInfoCalculated,
 	NetInfoCore,
-} from '../hooks/use-net-info-provider/types';
+} from 'src/hooks/use-net-info-provider/types';
+import { FSPaths } from 'src/paths';
+import type { OnCompletionToast } from 'src/screens/settings/help-screen';
 import { getDiagnosticPushTracking } from '../notifications/push-tracking';
-import { FSPaths } from '../paths';
-import type { OnCompletionToast } from '../screens/settings/help-screen';
 import { runActionSheet } from './action-sheet';
 import { getFileList } from './files';
 import { locale } from './locale';

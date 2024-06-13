@@ -1,10 +1,10 @@
 import type { PillarColours } from '@guardian/pasteup/palette';
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState } from 'react';
+import { getPillarColors } from 'src/helpers/transform';
+import { DevTools } from 'src/hooks/article/dev-tools';
 import type { Appearance, ArticlePillar, Collection } from '../common';
 import { ArticleType } from '../common';
-import { getPillarColors } from '../helpers/transform';
-import { DevTools } from '../hooks/article/dev-tools';
 import { useIsUsingProdDevtools } from './use-config-provider';
 
 /*

@@ -1,9 +1,9 @@
-import { findIssueSummaryByKey } from '../helpers/files';
-import { imageForScreenSize } from '../helpers/screen';
-import { getIssueSummary } from '../hooks/use-issue-summary-provider';
-import type { NetInfoState } from '../hooks/use-net-info-provider';
-import { pushTracking } from '../notifications/push-tracking';
-import { errorService } from '../services/errors';
+import { findIssueSummaryByKey } from 'src/helpers/files';
+import { imageForScreenSize } from 'src/helpers/screen';
+import { getIssueSummary } from 'src/hooks/use-issue-summary-provider';
+import type { NetInfoState } from 'src/hooks/use-net-info-provider';
+import { pushTracking } from 'src/notifications/push-tracking';
+import { errorService } from 'src/services/errors';
 import { clearOldIssues } from './clear-issues-and-editions';
 import { downloadAndUnzipIssue } from './download-and-unzip';
 

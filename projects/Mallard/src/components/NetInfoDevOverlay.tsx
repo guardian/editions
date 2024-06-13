@@ -15,7 +15,7 @@ import {
 	isDisconnectedState,
 	NetInfoStateType,
 	useNetInfo,
-} from '../hooks/use-net-info-provider';
+} from 'src/hooks/use-net-info-provider';
 
 const devToggleStyles = StyleSheet.create({
 	bg: {

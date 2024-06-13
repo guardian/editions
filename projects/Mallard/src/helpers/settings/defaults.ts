@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import type { ConfigState } from '../../hooks/use-config-provider';
+import type { ConfigState } from 'src/hooks/use-config-provider';
 
 interface Settings {
 	notificationServiceRegister: string;

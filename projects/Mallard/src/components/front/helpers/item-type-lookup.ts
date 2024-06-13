@@ -1,4 +1,4 @@
-import { ItemType } from '../../../common';
+import { ItemType } from 'src/common';
 import { StarterItem } from '../items/image-items';
 import {
 	ImageItem,

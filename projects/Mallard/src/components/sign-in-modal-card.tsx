@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { logEvent } from '../helpers/analytics';
-import { copy } from '../helpers/words';
+import { logEvent } from 'src/helpers/analytics';
+import { copy } from 'src/helpers/words';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 

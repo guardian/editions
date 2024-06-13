@@ -2,7 +2,7 @@ import React from 'react';
 import type { Animated } from 'react-native';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { getFont } from '../../../theme/typography';
+import { getFont } from 'src/theme/typography';
 import { SliderDots } from './SliderDots';
 
 const getSliderHeight = (): number => {

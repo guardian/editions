@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useArticle } from '../../../hooks/use-article';
-import { metrics } from '../../../theme/spacing';
+import { useArticle } from 'src/hooks/use-article';
+import { metrics } from 'src/theme/spacing';
 import { ImageResource } from '../image-resource';
 import type { PropTypes } from './helpers/item-tappable';
 import { ItemTappable, tappablePadding } from './helpers/item-tappable';

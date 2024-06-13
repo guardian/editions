@@ -1,6 +1,6 @@
 import BackgroundFetch from 'react-native-background-fetch';
-import { prepareAndDownloadTodaysIssue } from '../download-edition/prepare-and-download-issue';
-import type { NetInfoState } from '../hooks/use-net-info-provider';
+import { prepareAndDownloadTodaysIssue } from 'src/download-edition/prepare-and-download-issue';
+import type { NetInfoState } from 'src/hooks/use-net-info-provider';
 import { pushTracking } from '../notifications/push-tracking';
 
 const pushDownloadFailsafe = (

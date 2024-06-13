@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { copy } from '../helpers/words';
-import { metrics } from '../theme/spacing';
+import { copy } from 'src/helpers/words';
+import { metrics } from 'src/theme/spacing';
 import { ModalButton } from './Button/ModalButton';
 import { CardAppearance, OnboardingCard } from './onboarding/onboarding-card';
 import { UiBodyCopy } from './styled-text';

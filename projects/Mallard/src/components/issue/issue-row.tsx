@@ -8,49 +8,46 @@ import React, {
 } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { CircularProgressBase } from 'react-native-circular-progress-indicator';
-import type {
-	Appearance,
-	Front,
-	IssueWithFronts,
-} from '../../../../Apps/common/src';
-import type { IssueSummary } from '../../common';
-import { Highlight } from '../../components/highlight';
+import type { IssueSummary } from 'src/common';
+import { Highlight } from 'src/components/highlight';
 import {
 	GridRowSplit,
 	IssueTitle,
 	IssueTitleAppearance,
-} from '../../components/issue/issue-title';
-import { styles as textStyles, UiBodyCopy } from '../../components/styled-text';
+} from 'src/components/issue/issue-title';
+import { styles as textStyles, UiBodyCopy } from 'src/components/styled-text';
 import {
 	downloadAndUnzipIssue,
 	maybeListenToExistingDownload,
 	stopListeningToExistingDownload,
-} from '../../download-edition/download-and-unzip';
-import { logEvent } from '../../helpers/analytics';
-import type { DLStatus } from '../../helpers/files';
-import { renderIssueDate } from '../../helpers/issues';
-import type { Loaded } from '../../helpers/Loaded';
-import { imageForScreenSize } from '../../helpers/screen';
-import { getPillarColors } from '../../helpers/transform';
+} from 'src/download-edition/download-and-unzip';
+import { logEvent } from 'src/helpers/analytics';
+import type { DLStatus } from 'src/helpers/files';
+import { renderIssueDate } from 'src/helpers/issues';
+import type { Loaded } from 'src/helpers/Loaded';
+import { imageForScreenSize } from 'src/helpers/screen';
+import { getPillarColors } from 'src/helpers/transform';
 import {
 	DOWNLOAD_ISSUE_MESSAGE_FAILED,
 	DOWNLOAD_ISSUE_MESSAGE_OFFLINE,
 	NOT_CONNECTED,
 	WIFI_ONLY_DOWNLOAD,
-} from '../../helpers/words';
-import { useEditions } from '../../hooks/use-edition-provider';
-import {
-	ExistsStatus,
-	useIssueOnDevice,
-} from '../../hooks/use-issue-on-device';
+} from 'src/helpers/words';
+import { useEditions } from 'src/hooks/use-edition-provider';
+import { ExistsStatus, useIssueOnDevice } from 'src/hooks/use-issue-on-device';
 import {
 	DownloadBlockedStatus,
 	useNetInfo,
-} from '../../hooks/use-net-info-provider';
-import { useToast } from '../../hooks/use-toast';
-import { color } from '../../theme/color';
-import { metrics } from '../../theme/spacing';
-import { getFont } from '../../theme/typography';
+} from 'src/hooks/use-net-info-provider';
+import { useToast } from 'src/hooks/use-toast';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
+import { getFont } from 'src/theme/typography';
+import type {
+	Appearance,
+	Front,
+	IssueWithFronts,
+} from '../../../../Apps/common/src';
 import { Button, ButtonAppearance } from '../Button/Button';
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25);

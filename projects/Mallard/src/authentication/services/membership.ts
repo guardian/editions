@@ -1,4 +1,4 @@
-import { MEMBERS_DATA_API_URL } from '../../constants';
+import { MEMBERS_DATA_API_URL } from 'src/constants';
 import type { AuthResult } from '../lib/Result';
 import { fromResponse } from '../lib/Result';
 

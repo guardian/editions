@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { toggleAnalyticsRecording } from '../helpers/analytics';
+import { toggleAnalyticsRecording } from 'src/helpers/analytics';
 import {
 	gdprAllowFunctionalityCache,
 	gdprAllowPerformanceCache,
 	gdprConsentVersionCache,
-} from '../helpers/storage';
-import { errorService } from '../services/errors';
+} from 'src/helpers/storage';
+import { errorService } from 'src/services/errors';
 
 /**
  * History of Consent Management

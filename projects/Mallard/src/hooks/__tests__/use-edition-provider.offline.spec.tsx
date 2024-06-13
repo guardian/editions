@@ -1,4 +1,4 @@
-import { editionsListCache } from '../../helpers/storage';
+import { editionsListCache } from 'src/helpers/storage';
 import { DEFAULT_EDITIONS_LIST, getEditions } from '../use-edition-provider';
 
 const isConnected = false;

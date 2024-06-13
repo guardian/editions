@@ -1,19 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
-import type {
-	IssueWithFronts,
-	SpecialEditionHeaderStyles,
-} from '../../../common';
-import { IssueTitle } from '../../../components/issue/issue-title';
-import { Header } from '../../../components/layout/header/header';
-import { styles } from '../../../components/styled-text';
-import { logEvent } from '../../../helpers/analytics';
-import { useIssueDate } from '../../../helpers/issues';
-import { useEditions } from '../../../hooks/use-edition-provider';
-import type { MainStackParamList } from '../../../navigation/NavigationModels';
-import { RouteNames } from '../../../navigation/NavigationModels';
-import { remoteConfigService } from '../../../services/remote-config';
+import type { IssueWithFronts, SpecialEditionHeaderStyles } from 'src/common';
+import { IssueTitle } from 'src/components/issue/issue-title';
+import { Header } from 'src/components/layout/header/header';
+import { styles } from 'src/components/styled-text';
+import { logEvent } from 'src/helpers/analytics';
+import { useIssueDate } from 'src/helpers/issues';
+import { useEditions } from 'src/hooks/use-edition-provider';
+import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { RouteNames } from 'src/navigation/NavigationModels';
+import { remoteConfigService } from 'src/services/remote-config';
 import { IssueMenuButton } from '../../Button/IssueMenuButton';
 import { EditionsMenuButton } from '../../EditionsMenu/EditionsMenuButton/EditionsMenuButton';
 

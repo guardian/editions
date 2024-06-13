@@ -1,9 +1,9 @@
-import { findIssueSummaryByKey, isIssueOnDevice } from '../helpers/files';
-import { todayAsKey } from '../helpers/issues';
-import { imageForScreenSize } from '../helpers/screen';
-import { getIssueSummary } from '../hooks/use-issue-summary-provider';
-import type { DownloadBlockedStatus } from '../hooks/use-net-info-provider';
-import { errorService } from '../services/errors';
+import { findIssueSummaryByKey, isIssueOnDevice } from 'src/helpers/files';
+import { todayAsKey } from 'src/helpers/issues';
+import { imageForScreenSize } from 'src/helpers/screen';
+import { getIssueSummary } from 'src/hooks/use-issue-summary-provider';
+import type { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
+import { errorService } from 'src/services/errors';
 import { downloadAndUnzipIssue } from './download-and-unzip';
 
 const downloadTodaysIssue = async (downloadBlocked: DownloadBlockedStatus) => {

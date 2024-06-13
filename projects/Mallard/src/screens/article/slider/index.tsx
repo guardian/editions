@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, FlatList, Platform, StyleSheet, View } from 'react-native';
 import ViewPagerAndroid from 'react-native-pager-view';
-import { PreviewControls } from '../../../components/article/preview-controls';
-import { logPageView } from '../../../helpers/analytics';
-import { clamp } from '../../../helpers/math';
-import { getColor } from '../../../helpers/transform';
-import { getAppearancePillar } from '../../../hooks/use-article';
+import { PreviewControls } from 'src/components/article/preview-controls';
+import { logPageView } from 'src/helpers/analytics';
+import { clamp } from 'src/helpers/math';
+import { getColor } from 'src/helpers/transform';
+import { getAppearancePillar } from 'src/hooks/use-article';
 import {
 	useApiUrl,
 	useDimensions,
 	useLargeDeviceMemory,
-} from '../../../hooks/use-config-provider';
-import { useSetNavPosition } from '../../../hooks/use-nav-position';
-import { useRating } from '../../../hooks/use-rating';
-import type { PathToArticle } from '../../../paths';
+} from 'src/hooks/use-config-provider';
+import { useSetNavPosition } from 'src/hooks/use-nav-position';
+import { useRating } from 'src/hooks/use-rating';
+import type { PathToArticle } from 'src/paths';
 import type {
 	ArticleNavigator,
 	ArticleSpec,

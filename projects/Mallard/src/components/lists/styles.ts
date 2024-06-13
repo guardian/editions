@@ -1,8 +1,8 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { color } from '../../theme/color';
-import { metrics } from '../../theme/spacing';
-import { getFont } from '../../theme/typography';
+import { color } from 'src/theme/color';
+import { metrics } from 'src/theme/spacing';
+import { getFont } from 'src/theme/typography';
 
 const styles = StyleSheet.create({
 	buttonContainer: {

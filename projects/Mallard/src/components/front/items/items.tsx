@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { Image } from '../../../common';
-import { PageLayoutSizes } from '../../../common';
-import { HeadlineCardText } from '../../../components/styled-text';
+import type { Image } from 'src/common';
+import { PageLayoutSizes } from 'src/common';
+import { HeadlineCardText } from 'src/components/styled-text';
 import { ImageResource } from '../image-resource';
 import type { PropTypes } from './helpers/item-tappable';
 import { ItemTappable } from './helpers/item-tappable';
