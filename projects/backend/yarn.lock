@@ -304,10 +304,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@guardian/content-api-models@20.1.0":
-  version "20.1.0"
-  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-20.1.0.tgz#4f0d0c0d2a74f59a6951e8b2e09a74e5edc9f005"
-  integrity sha512-Xi4Fl7I1A9/YRv0wRDzb4j3T5kTlDh+i9xmUNQG30vYqOk5CKcjBlmIgpDbLoi1hQHpOnD10wlEQUmOZUy/6FQ==
+"@guardian/content-api-models@23.0.0":
+  version "23.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-23.0.0.tgz#8c8390ca9f027fba94fe01f9e421a31b0235c864"
+  integrity sha512-1WL7b61p1O0E0GMeU9MRKsIIQvd+FDg4JWXYj2nOqxogUuIZZDxj5Sxz/69VvxDELuvbAKHpYoP0spTJ1Ljsfg==
   dependencies:
     "@guardian/content-atom-model" "^4.0.0"
     "@guardian/content-entity-model" "^2.2.1"
