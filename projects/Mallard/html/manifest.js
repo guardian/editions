@@ -18,10 +18,10 @@
 module.exports = {
     crosswords: {
         key: 'crosswords',
-        project: 'Apps/crosswords',
-        watchPort: 8001,
-        watchScript: 'yarn watch',
+        project: 'Apps/crosswords-bundle',
+        watchPort: 3000,
+        watchScript: 'yarn start',
         buildScript: 'yarn build',
-        buildPath: 'dist',
+        buildPath: 'build',
     },
 }
