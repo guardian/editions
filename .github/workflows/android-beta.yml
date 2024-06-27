@@ -27,9 +27,10 @@ jobs:
                   ruby-version: 2.7.3
                   bundler-cache: true
 
-            - name: update fastlane
+            - name: install gems
               run: |
-                  gem install fastlane
+                  cd projects/Mallard
+                  bundle install
 
             - name: inject credentials
               run: |
