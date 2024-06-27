@@ -27,6 +27,7 @@ const Crossword = ({
 			javaScriptEnabled={true}
 			style={styles.flex}
 			webviewDebuggingEnabled
+			bounces={false}
 		/>
 	);
 };

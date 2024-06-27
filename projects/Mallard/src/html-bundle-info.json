@@ -4,7 +4,7 @@
 		"crosswords": {
 			"key": "crosswords",
 			"project": "Apps/editions-crossword-renderer-app",
-			"watchPort": 8001,
+			"watchPort": 3000,
 			"watchScript": "yarn watch",
 			"buildScript": "yarn build",
 			"buildPath": "dist"
