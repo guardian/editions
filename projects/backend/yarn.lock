@@ -304,20 +304,20 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@guardian/content-api-models@23.0.0":
-  version "23.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-23.0.0.tgz#8c8390ca9f027fba94fe01f9e421a31b0235c864"
-  integrity sha512-1WL7b61p1O0E0GMeU9MRKsIIQvd+FDg4JWXYj2nOqxogUuIZZDxj5Sxz/69VvxDELuvbAKHpYoP0spTJ1Ljsfg==
+"@guardian/content-api-models@25.0.0":
+  version "25.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/content-api-models/-/content-api-models-25.0.0.tgz#0bf63850b798c9dcaaa662ae824730d02d8b7820"
+  integrity sha512-6QlboykRlvfo2vR2N9Z9mWjkTzuplPVEsMvkkwEZqbA21iGr1XkoIrGGlGUvLM+i67KCABMQsTki3JLEVa7EGQ==
   dependencies:
-    "@guardian/content-atom-model" "^4.0.0"
-    "@guardian/content-entity-model" "^2.2.1"
+    "@guardian/content-atom-model" "^4.0.4"
+    "@guardian/content-entity-model" "^3.0.3"
     "@guardian/story-packages-model" "^2.2.0"
     "@types/node-int64" "^0.4.29"
     "@types/thrift" "^0.10.11"
     node-int64 "^0.4.0"
     thrift "^0.15.0"
 
-"@guardian/content-atom-model@4.0.1", "@guardian/content-atom-model@^4.0.0":
+"@guardian/content-atom-model@4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@guardian/content-atom-model/-/content-atom-model-4.0.1.tgz#e4bb784cfbe3fee13f998680734d1f9b53e3e9d4"
   integrity sha512-c2biKd9SPbXiCmN9ZOyYdaiPlwLCJNEzRGqWW0hISq3ELOzqndhTG6/vYrQMp0+7CmDEeQ+4pSzZxPfvIN10Tw==
@@ -328,10 +328,31 @@
     node-int64 "^0.4.0"
     thrift "^0.15.0"
 
+"@guardian/content-atom-model@^4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@guardian/content-atom-model/-/content-atom-model-4.0.4.tgz#eb4f52bfd61851f60c50224cb79bbfba3c61ed2c"
+  integrity sha512-B/2oe4h6wYoygKEdcvycgRw4keKglvRu/ma81Ad+Gb5OnBcRTqIoeRmgO2V8BEbrHxPLSjBMI3SimcgbUccBzg==
+  dependencies:
+    "@guardian/content-entity-model" "^3.0.3"
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.11"
+    node-int64 "^0.4.0"
+    thrift "^0.15.0"
+
 "@guardian/content-entity-model@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@guardian/content-entity-model/-/content-entity-model-2.2.1.tgz#580dfb42e3c76cf41446655a51bb1714981dc504"
   integrity sha512-ywFYEmwvM8LcLxKbP321KqRGzd4lD40MNUCxS7V38eLbo6emgIJDmPl4rpNMgznR79BL5S1Q0FOhhRqChSVv/g==
+  dependencies:
+    "@types/node-int64" "^0.4.29"
+    "@types/thrift" "^0.10.11"
+    node-int64 "^0.4.0"
+    thrift "^0.15.0"
+
+"@guardian/content-entity-model@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@guardian/content-entity-model/-/content-entity-model-3.0.3.tgz#e1cd98d1f776094f49f67fa4572c37a44458716d"
+  integrity sha512-Eu45IhbJk2/JfWrJjwmEQDcQjYm+EgTPIbaSGVVy6TAipD8t2i08VStnOYgXXRHgRvQU4QyiZSmaW6Rpjrao7w==
   dependencies:
     "@types/node-int64" "^0.4.29"
     "@types/thrift" "^0.10.11"
