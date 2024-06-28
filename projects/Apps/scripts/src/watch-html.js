@@ -1,3 +1,4 @@
-const watchHTML = require('../../crosswords/scripts/watch-html').watchHTML
+const watchHTML =
+    require('../../crosswords-bundle/scripts/watch-html').watchHTML
 
 watchHTML()

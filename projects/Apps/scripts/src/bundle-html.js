@@ -1,3 +1,4 @@
-const bundleHTML = require('../../crosswords/scripts/bundle-html').bundleHTML
+const bundleHTML =
+    require('../../crosswords-bundle/scripts/bundle-html').bundleHTML
 
 bundleHTML()
