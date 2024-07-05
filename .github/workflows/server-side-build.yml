@@ -22,6 +22,7 @@ jobs:
           yarn build
         env:
           exclude: 'Mallard'
+          exclude: 'Apps'
 
       - name: Run yarn test
         run: |
