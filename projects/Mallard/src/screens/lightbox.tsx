@@ -3,7 +3,7 @@ import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import type { RouteProp } from '@react-navigation/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
 	Animated,
 	FlatList,
@@ -100,36 +100,45 @@ const LightboxScreen = () => {
 	);
 	const [currentIndex, setCurrentIndex] = useState(index);
 
-	const [captionVisible, setCaptionVisible] = useState(true);
+	const showProgressIndicator = images.length > 1;
 
-	const [dotsVisible, setDotsVisible] = useState(true);
-
-	const showProgressIndicator = images.length > 1 ? dotsVisible : false;
-
-	const [closeButtonVisible, setCloseButtonVisible] = useState(true);
+	const [showControls, setShowControls] = useState(true);
 
 	const [scrollInProgress, setScrollInProgress] = useState(false);
 
 	const { width } = useDimensions();
 
-	const [sliderPosition] = useState(new Animated.Value(0));
+	const sliderPosition = useRef(new Animated.Value(0)).current;
+
+	const fadeAnim = useRef(new Animated.Value(1)).current;
+
+	const toggleControls = useCallback(
+		(toggle: boolean) => {
+			if (toggle) {
+				Animated.timing(fadeAnim, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true,
+				}).start();
+			} else {
+				Animated.timing(fadeAnim, {
+					toValue: 0,
+					duration: 100,
+					useNativeDriver: true,
+				}).start();
+			}
+			setShowControls(toggle);
+		},
+		[fadeAnim],
+	);
 
 	const handleScrollStartEvent = useCallback(() => {
 		setScrollInProgress(true);
 	}, [setScrollInProgress]);
 
 	const focusOnImageComponent = useCallback(() => {
-		setCaptionVisible(!captionVisible);
-		setDotsVisible(!dotsVisible);
-		setCloseButtonVisible(!closeButtonVisible);
-	}, [
-		setCaptionVisible,
-		setDotsVisible,
-		setCloseButtonVisible,
-		captionVisible,
-		dotsVisible,
-		closeButtonVisible,
-	]);
+		toggleControls(!showControls);
+	}, [toggleControls, showControls]);
 
 	const onScrollListener = useCallback(
 		(ev: any) => {
@@ -155,17 +164,17 @@ const LightboxScreen = () => {
 			<StatusBar hidden={true} />
 			<View style={styles.lightboxPage}>
 				<View style={styles.closeButton}>
-					{closeButtonVisible && (
+					<Animated.View style={{ opacity: fadeAnim }}>
 						<CloseButton
 							onPress={() => {
-								navigation.goBack();
+								showControls && navigation.goBack();
 							}}
 							accessibilityLabel="Close Image Gallery"
 							accessibilityHint="This will close the Image Gallery which is currently open"
 							appearance={ButtonAppearance.Pillar}
 							pillar={pillar}
 						/>
-					)}
+					</Animated.View>
 				</View>
 				<View style={styles.imageWrapper}>
 					<FlatList
@@ -217,16 +226,18 @@ const LightboxScreen = () => {
 					<View>
 						<View style={styles.progressWrapper}>
 							{showProgressIndicator && (
-								<ProgressIndicator
-									currentIndex={currentIndex}
-									imageCount={images.length}
-									windowSize={numDots}
-									windowStart={windowStart}
-									scrollInProgress={scrollInProgress}
-								/>
+								<Animated.View style={{ opacity: fadeAnim }}>
+									<ProgressIndicator
+										currentIndex={currentIndex}
+										imageCount={images.length}
+										windowSize={numDots}
+										windowStart={windowStart}
+										scrollInProgress={scrollInProgress}
+									/>
+								</Animated.View>
 							)}
 						</View>
-						{captionVisible && (
+						<Animated.View style={{ opacity: fadeAnim }}>
 							<LightboxCaption
 								caption={images[currentIndex].caption ?? ''}
 								pillarColor={
@@ -239,7 +250,7 @@ const LightboxScreen = () => {
 								}
 								credit={images[currentIndex].credit}
 							/>
-						)}
+						</Animated.View>
 					</View>
 				</View>
 			</View>
