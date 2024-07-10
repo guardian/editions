@@ -1,10 +1,17 @@
 import { palette } from '@guardian/pasteup/palette';
+import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import type { RouteProp } from '@react-navigation/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
-import ImageViewer from 'react-native-image-zoom-viewer';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+	Animated,
+	FlatList,
+	SafeAreaView,
+	StatusBar,
+	StyleSheet,
+	View,
+} from 'react-native';
 import { ArticleTheme } from 'src/components/article/article';
 import { themeColors } from 'src/components/article/helpers/css';
 import {
@@ -15,6 +22,7 @@ import {
 import { ButtonAppearance } from 'src/components/Button/Button';
 import { CloseButton } from 'src/components/Button/CloseButton';
 import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption';
+import { clamp } from 'src/helpers/math';
 import { getPillarColors } from 'src/helpers/transform';
 import { useDimensions } from 'src/hooks/use-config-provider';
 import type {
@@ -63,8 +71,8 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		zIndex: 1,
 		right: 0,
-		paddingTop: 20,
-		paddingRight: 20,
+		paddingVertical: 10,
+		paddingHorizontal: 10,
 		top: 0,
 	},
 	progressWrapper: {
@@ -85,130 +93,168 @@ const LightboxScreen = () => {
 	const images = route.params?.images ?? [];
 	const index = route.params?.index ?? 0;
 	const pillar = route.params?.pillar ?? 'news';
+	const numDots = images.length < 6 ? images.length : 6;
 	const pillarColors = getPillarColors(pillar);
-	const [windowStart, setWindowsStart] = useState(0);
+	const [windowStart, setWindowsStart] = useState(
+		getWindowStart(index, numDots, images.length),
+	);
 	const [currentIndex, setCurrentIndex] = useState(index);
 
-	const numDots = images.length < 6 ? images.length : 6;
+	const showProgressIndicator = images.length > 1;
 
-	const [captionVisible, setCaptionVisible] = useState(false);
-
-	const [dotsVisible, setDotsVisible] = useState(false);
-
-	const showProgressIndicator = images.length > 1 ? dotsVisible : false;
-
-	const [closeButtonVisible, setCloseButtonVisible] = useState(false);
+	const [showControls, setShowControls] = useState(true);
 
 	const [scrollInProgress, setScrollInProgress] = useState(false);
 
 	const { width } = useDimensions();
 
-	const handleScrollStartEvent = () => {
+	const sliderPosition = useRef(new Animated.Value(0)).current;
+
+	const fadeAnim = useRef(new Animated.Value(1)).current;
+
+	const toggleControls = useCallback(
+		(toggle: boolean) => {
+			if (toggle) {
+				Animated.timing(fadeAnim, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true,
+				}).start();
+			} else {
+				Animated.timing(fadeAnim, {
+					toValue: 0,
+					duration: 100,
+					useNativeDriver: true,
+				}).start();
+			}
+			setShowControls(toggle);
+		},
+		[fadeAnim],
+	);
+
+	const handleScrollStartEvent = useCallback(() => {
 		setScrollInProgress(true);
-	};
-	const handleOnMoveEvent = (index: number) => {
-		setCurrentIndex(index);
-		setWindowsStart(
-			getNewWindowStart(index, windowStart, images.length, numDots),
-		);
-		setScrollInProgress(false);
-	};
+	}, [setScrollInProgress]);
 
-	const focusOnImageComponent = () => {
-		setCaptionVisible(!captionVisible);
-		setDotsVisible(!dotsVisible);
-		setCloseButtonVisible(!closeButtonVisible);
-	};
+	const focusOnImageComponent = useCallback(() => {
+		toggleControls(!showControls);
+	}, [toggleControls, showControls]);
 
-	const lightboxImages = [];
-	for (let i = 0; i < images.length; i++) {
-		lightboxImages.push({
-			url: imagePaths[i],
-			props: {
-				alignSelf: 'center',
-				height: '100%',
-				width: '100%',
-				resizeMode: 'contain',
-			},
-		});
-	}
-
-	useEffect(() => {
-		setCaptionVisible(true);
-		setDotsVisible(true);
-		setCloseButtonVisible(true);
-		setCurrentIndex(index);
-		setWindowsStart(getWindowStart(index, numDots, images.length));
-	}, [index, numDots, images.length]);
+	const onScrollListener = useCallback(
+		(ev: any) => {
+			const newPos = ev.nativeEvent.contentOffset.x / width;
+			const newIndex = clamp(Math.round(newPos), 0, images.length - 1);
+			if (currentIndex !== newIndex) {
+				setCurrentIndex(newIndex);
+				setWindowsStart(
+					getNewWindowStart(
+						newIndex,
+						windowStart,
+						images.length,
+						numDots,
+					),
+				);
+			}
+		},
+		[setCurrentIndex, currentIndex, windowStart, numDots, images.length],
+	);
 
 	return (
-		<View style={styles.background}>
+		<SafeAreaView style={styles.background}>
 			<StatusBar hidden={true} />
 			<View style={styles.lightboxPage}>
 				<View style={styles.closeButton}>
-					{closeButtonVisible && (
+					<Animated.View style={{ opacity: fadeAnim }}>
 						<CloseButton
 							onPress={() => {
-								navigation.goBack();
+								showControls && navigation.goBack();
 							}}
 							accessibilityLabel="Close Image Gallery"
 							accessibilityHint="This will close the Image Gallery which is currently open"
 							appearance={ButtonAppearance.Pillar}
 							pillar={pillar}
 						/>
-					)}
+					</Animated.View>
 				</View>
 				<View style={styles.imageWrapper}>
-					<ImageViewer
-						imageUrls={lightboxImages}
-						index={index}
-						renderIndicator={() => <View />} // empty indicator
-						onClick={focusOnImageComponent}
-						onMove={handleScrollStartEvent}
-						onChange={(index) => handleOnMoveEvent(index ?? 0)} // seems that first index is nil?
-						saveToLocalByLongPress={false}
-						maxOverflow={width}
-						enablePreload={true}
-						footerContainerStyle={{
-							position: 'absolute',
-							bottom: 0,
-							width: '100%',
+					<FlatList
+						initialScrollIndex={index}
+						contentContainerStyle={{
+							alignItems: 'center',
 						}}
-						renderFooter={() => (
-							<View>
-								<View style={styles.progressWrapper}>
-									{showProgressIndicator && (
-										<ProgressIndicator
-											currentIndex={currentIndex}
-											imageCount={images.length}
-											windowSize={numDots}
-											windowStart={windowStart}
-											scrollInProgress={scrollInProgress}
-										/>
-									)}
-								</View>
-								{captionVisible && (
-									<LightboxCaption
-										caption={
-											images[currentIndex].caption ?? ''
-										}
-										pillarColor={
-											pillar === 'neutral'
-												? palette.neutral[100]
-												: pillarColors.bright //bright since always on a dark background
-										}
-										displayCredit={
-											images[currentIndex].displayCredit
-										}
-										credit={images[currentIndex].credit}
-									/>
-								)}
-							</View>
+						onScroll={Animated.event(
+							[
+								{
+									nativeEvent: {
+										contentOffset: {
+											x: sliderPosition,
+										},
+									},
+								},
+							],
+							{
+								useNativeDriver: false,
+								listener: onScrollListener,
+							},
 						)}
+						horizontal
+						pagingEnabled
+						onScrollBeginDrag={handleScrollStartEvent}
+						onScrollEndDrag={() => setScrollInProgress(false)}
+						renderItem={({ item }) => {
+							console.log(item);
+							return (
+								<View style={{ width, height: '100%' }}>
+									<ImageZoom
+										uri={item}
+										onSingleTap={focusOnImageComponent}
+										isSingleTapEnabled
+										isDoubleTapEnabled
+									/>
+								</View>
+							);
+						}}
+						data={imagePaths}
+						getItemLayout={(_, index) => ({
+							length: width,
+							offset: width * index,
+							index,
+						})}
+						keyExtractor={(item) => item}
 					/>
+
+					<View>
+						<View style={styles.progressWrapper}>
+							{showProgressIndicator && (
+								<Animated.View style={{ opacity: fadeAnim }}>
+									<ProgressIndicator
+										currentIndex={currentIndex}
+										imageCount={images.length}
+										windowSize={numDots}
+										windowStart={windowStart}
+										scrollInProgress={scrollInProgress}
+									/>
+								</Animated.View>
+							)}
+						</View>
+						<Animated.View style={{ opacity: fadeAnim }}>
+							<LightboxCaption
+								caption={images[currentIndex].caption ?? ''}
+								pillarColor={
+									pillar === 'neutral'
+										? palette.neutral[100]
+										: pillarColors.bright //bright since always on a dark background
+								}
+								displayCredit={
+									images[currentIndex].displayCredit
+								}
+								credit={images[currentIndex].credit}
+							/>
+						</Animated.View>
+					</View>
 				</View>
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 };
 

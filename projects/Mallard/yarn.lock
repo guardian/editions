@@ -1686,6 +1686,11 @@
   resolved "https://registry.yarnpkg.com/@jsamr/react-native-li/-/react-native-li-2.3.1.tgz#12a5b5f6e3971cec77b96bee58104eed0ae9314a"
   integrity sha512-Qbo4NEj48SQ4k8FZJHFE2fgZDKTWaUGmVxcIQh3msg5JezLdTMMHuRRDYctfdHI6L0FZGObmEv3haWbIvmol8w==
 
+"@likashefqet/react-native-image-zoom@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@likashefqet/react-native-image-zoom/-/react-native-image-zoom-3.0.0.tgz#e7bc652238c1acb36c87663b29268556ecb037a0"
+  integrity sha512-vDg7j9wIYiMsYM8qymdPIC9+ZHJGZ3FvcN8Ob1zTlNSaEFybH9+7Qw7AbO4MaNEAFqhF7C8j09jw7BPGpXI29w==
+
 "@native-html/css-processor@1.11.0":
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/@native-html/css-processor/-/css-processor-1.11.0.tgz#27d02e5123b0849f4986d44060ba3f235a15f552"
