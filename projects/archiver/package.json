@@ -4,14 +4,14 @@
     "main": "main.js",
     "license": "MIT",
     "engines": {
-        "node": "^14.16"
+        "node": "^18"
     },
     "devDependencies": {
         "@types/archiver": "^3.0.0",
         "@types/aws-lambda": "^8.10.25",
         "@types/node-fetch": "^2.6.1",
         "@types/ramda": "^0.26.15",
-        "@zeit/ncc": "^0.20.4",
+        "@vercel/ncc": "^0.38.1",
         "dotenv": "^16.3.1",
         "jest": "^29.7.0",
         "ts-jest": "^29.1.1",
@@ -29,7 +29,6 @@
     },
     "dependencies": {
         "@types/jest": "^29.5.5",
-        "@zeit/ncc": "^0.20.4",
         "archiver": "5.3.2",
         "aws-sdk": "2.814.0",
         "encoding": "^0.1.12",
