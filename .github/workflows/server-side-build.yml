@@ -21,8 +21,7 @@ jobs:
           yarn validate
           yarn build
         env:
-          exclude: 'Mallard'
-          exclude: 'Apps'
+          exclude: 'Mallard, Apps'
 
       - name: Run yarn test
         run: |
