@@ -1,7 +1,8 @@
 import type { ReactElement, ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Highlight } from 'src/components/highlight';
 import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text';
 import { useAppAppearance } from 'src/theme/appearance';

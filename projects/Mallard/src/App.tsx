@@ -2,6 +2,7 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { logUserId } from 'src/helpers/analytics';
 import { ConfigProvider } from 'src/hooks/use-config-provider';
 import { NavPositionProvider } from 'src/hooks/use-nav-position';
@@ -76,21 +77,23 @@ const App = () => {
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ErrorBoundary>
 				<ActionSheetProvider>
-					<WithProviders>
-						<AccessProvider
-							onIdentityStatusChange={handleIdStatus}
-							onOktaStatusChange={handleOktaStatus}
-						>
-							<StatusBar
-								barStyle="light-content"
-								backgroundColor="#041f4a"
-							/>
-							<View style={styles.appContainer}>
-								<AppNavigation />
-							</View>
-							<BugButtonHandler />
-						</AccessProvider>
-					</WithProviders>
+					<SafeAreaProvider>
+						<WithProviders>
+							<AccessProvider
+								onIdentityStatusChange={handleIdStatus}
+								onOktaStatusChange={handleOktaStatus}
+							>
+								<StatusBar
+									barStyle="light-content"
+									backgroundColor="#041f4a"
+								/>
+								<View style={styles.appContainer}>
+									<AppNavigation />
+								</View>
+								<BugButtonHandler />
+							</AccessProvider>
+						</WithProviders>
+					</SafeAreaProvider>
 				</ActionSheetProvider>
 			</ErrorBoundary>
 		</GestureHandlerRootView>
