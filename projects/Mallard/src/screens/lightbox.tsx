@@ -4,14 +4,8 @@ import type { RouteProp } from '@react-navigation/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useRef, useState } from 'react';
-import {
-	Animated,
-	FlatList,
-	SafeAreaView,
-	StatusBar,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { Animated, FlatList, StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArticleTheme } from 'src/components/article/article';
 import { themeColors } from 'src/components/article/helpers/css';
 import {
