@@ -13,7 +13,6 @@ jobs:
       DEBUG: true
       ORG: guardian-editions
       SKIP_NODE: false
-      # NODE_PACKAGE_JSON_FILES_MISSING_LOCK: projects/Mallard/package.json # not missing lock but seemingly needs to be installed for gradle build to work
       EXCLUDE: Mallard
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
