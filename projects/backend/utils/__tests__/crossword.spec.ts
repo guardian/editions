@@ -1,5 +1,5 @@
 import { CrosswordType, CrosswordEntry } from '../../../Apps/common/src'
-import { patchCrossword } from '../crossword'
+import { getCrosswordType, patchCrossword } from '../crossword'
 
 const createCrossword = (type: CrosswordType = CrosswordType.QUICK) => ({
     name: '',
@@ -44,5 +44,13 @@ describe('getCrosswordArticleOverrides', () => {
                 expect(out.solutionAvailable).toBe(true)
             }
         }
+    })
+})
+
+describe('checking Quick cryptics', () => {
+    it('getCrosswordType', () => {
+        expect(getCrosswordType('crosswords/quick-cryptic/15')).toBe(
+            CrosswordType.QUICK_CRYPTIC,
+        )
     })
 })

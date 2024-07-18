@@ -12,9 +12,9 @@ import { omit } from 'ramda'
 
 const enumKeyToKebabCase = (key: string) => key.toLowerCase().replace(/_/g, '-')
 
-const getCrosswordType = (path: string): CrosswordType => {
+export const getCrosswordType = (path: string): CrosswordType => {
     for (const [key, type] of Object.entries(CrosswordType)) {
-        if (path.includes(enumKeyToKebabCase(key))) return type
+        if (path.includes('/' + enumKeyToKebabCase(key) + '/')) return type
     }
     return CrosswordType.QUICK // default to something sensible as this is largely used for rendering
 }
