@@ -6,6 +6,7 @@ import type {
 	SpecialEdition,
 	SpecialEditionHeaderStyles,
 } from 'src/common';
+import { defaultRegionalEditions, getEditionIds } from 'src/common';
 import { isLondonTimeBefore } from 'src/helpers/date';
 import {
 	defaultSettings,
@@ -21,8 +22,6 @@ import {
 import { weatherHider } from 'src/helpers/weather-hider';
 import { pushNotificationRegistration } from 'src/notifications/push-notifications';
 import { errorService } from 'src/services/errors';
-import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
-import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { useAppState } from './use-app-state-provider';
 import { useApiUrl } from './use-config-provider';
 import type { NetInfoState } from './use-net-info-provider';

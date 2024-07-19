@@ -4,7 +4,7 @@ import { Atoms } from '@guardian/content-api-models/v1/atoms'
 import { Atom } from '@guardian/content-atom-model/atom'
 import { ContentAtomElementFields } from '@guardian/content-api-models/v1/contentAtomElementFields'
 import { MediaAtom } from '@guardian/content-atom-model/media/mediaAtom'
-import { BlockElement } from '../../Apps/common/src'
+import { BlockElement } from '../common'
 import { attempt, hasFailed } from '../utils/try'
 
 import { oc } from 'ts-optchain'

@@ -1,6 +1,12 @@
 import { Request, Response } from 'express'
-import { imageSizes, ImageUse, imageUses } from '../../Apps/common/src/index'
-import { Image, ImageRole, imageRoles } from '../common'
+import {
+    imageSizes,
+    ImageUse,
+    imageUses,
+    Image,
+    ImageRole,
+    imageRoles,
+} from '../common'
 import { getImageURL } from '../image'
 
 const getUse = (use: string | undefined): ImageUse | undefined => {

@@ -16,7 +16,7 @@ import {
     hasFailed,
     withFailureMessage,
 } from '../../../backend/utils/try'
-import { RenderedArticle } from '../../../Apps/common/src'
+import { RenderedArticle } from '../../common'
 
 export const URL =
     process.env.backend !== undefined

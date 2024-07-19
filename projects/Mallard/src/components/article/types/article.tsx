@@ -12,8 +12,12 @@ import DeviceInfo from 'react-native-device-info';
 import type WebView from 'react-native-webview';
 import type {
 	Article as ArticleT,
+	BlockElement,
+	CreditedImage,
 	GalleryArticle,
 	Image,
+	ImageElement,
+	IssueOrigin,
 	PictureArticle,
 } from 'src/common';
 import {
@@ -32,12 +36,6 @@ import { RouteNames } from 'src/navigation/NavigationModels';
 import type { PathToArticle } from 'src/paths';
 import { remoteConfigService } from 'src/services/remote-config';
 import { metrics } from 'src/theme/spacing';
-import type {
-	BlockElement,
-	CreditedImage,
-	ImageElement,
-	IssueOrigin,
-} from '../../../../../Apps/common/src';
 import { isSuccessOrRedirect } from './article/helpers';
 import { WebviewWithArticle } from './article/webview';
 

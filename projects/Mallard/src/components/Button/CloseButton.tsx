@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ArticlePillar } from '../../../../Apps/common/src';
+import type { ArticlePillar } from 'src/common';
 import { Button, ButtonAppearance } from './Button';
 
 const CloseButton = ({

@@ -1,4 +1,5 @@
 import retry from 'async-retry';
+import type { ImageSize, IssueSummary } from 'src/common';
 import type { DLStatus } from 'src/helpers/files';
 import {
 	downloadNamedIssueArchive,
@@ -11,7 +12,6 @@ import { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
 import { pushTracking } from 'src/notifications/push-tracking';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
-import type { ImageSize, IssueSummary } from '../../../Apps/common/src';
 import { deleteIssue } from './clear-issues-and-editions';
 
 // Cache of current downloads

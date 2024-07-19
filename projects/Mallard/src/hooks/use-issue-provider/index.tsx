@@ -11,6 +11,7 @@ import type {
 	Collection,
 	Front,
 	Issue,
+	IssueOrigin,
 	IssueWithFronts,
 } from 'src/common';
 import { isIssueOnDevice, readFileAsJSON } from 'src/helpers/files';
@@ -22,7 +23,6 @@ import { ERR_404_REMOTE } from 'src/helpers/words';
 import { APIPaths, FSPaths } from 'src/paths';
 import type { PathToArticle, PathToIssue } from 'src/paths';
 import { errorService } from 'src/services/errors';
-import type { IssueOrigin } from '../../../../Apps/common/src';
 import { useAppState } from '../use-app-state-provider';
 import { useApiUrl } from '../use-config-provider';
 import { useIssueSummary } from '../use-issue-summary-provider';

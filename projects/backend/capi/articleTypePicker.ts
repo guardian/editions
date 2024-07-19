@@ -1,5 +1,5 @@
 import { Content } from '@guardian/content-api-models/v1/content'
-import { ArticleType, HeaderType } from '../../Apps/common/src/index'
+import { ArticleType, HeaderType } from '../common'
 import { ElementType } from '@guardian/content-api-models/v1/elementType'
 import { Element } from '@guardian/content-api-models/v1/element'
 import { TagType } from '@guardian/content-api-models/v1/tagType'

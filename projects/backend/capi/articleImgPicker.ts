@@ -6,7 +6,7 @@ import {
     ImageRole,
     imageRoles,
     TrailImage,
-} from '../../Apps/common/src'
+} from '../common'
 import { oc } from 'ts-optchain'
 import { getCreditedImage, getImage } from './assets'
 import { ContentType } from '@guardian/content-api-models/v1/contentType'

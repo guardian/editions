@@ -8,7 +8,7 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
  */
 
 const config = {
-	watchFolders: [resolve(__dirname, '.'), resolve(__dirname, '../Apps')],
+	watchFolders: [resolve(__dirname, '.'), resolve(__dirname, '../Apps'), resolve(__dirname, '../common')],
 };
 
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);

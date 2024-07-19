@@ -2,7 +2,7 @@ import { BlockElement } from '@guardian/content-api-models/v1/blockElement'
 import { Asset } from '@guardian/content-api-models/v1/asset'
 import { Image } from '../common'
 import { getImageFromURL } from '../image'
-import { CreditedImage } from '../../Apps/common/src'
+import { CreditedImage } from '../common'
 import { oc } from 'ts-optchain'
 
 const extractImage: (assetArray: Asset[]) => Asset | undefined = (

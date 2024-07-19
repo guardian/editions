@@ -1,5 +1,5 @@
 import DeviceInfo from 'react-native-device-info';
-import type { CASExpiry } from '../../../Apps/common/src/cas-expiry';
+import type { CASExpiry } from 'src/common';
 import { CAS_ENDPOINT_URL } from '../constants';
 
 interface CasErrorResponse {

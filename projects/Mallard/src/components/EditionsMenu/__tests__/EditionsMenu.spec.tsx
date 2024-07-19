@@ -1,10 +1,6 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { editions } from 'src/common';
-import {
-	regionalEditions,
-	specialEditions,
-} from '../../../../../Apps/common/src/__tests__/fixtures/editions-fixtures';
+import { editions, regionalEditions, specialEditions } from 'src/common';
 import { EditionsMenu } from '../EditionsMenu';
 
 jest.mock('src/components/EditionsMenu/EditionButton/EditionButton', () => ({

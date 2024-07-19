@@ -1,4 +1,4 @@
-import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary';
+import { issueSummaries } from 'src/common';
 import { findIssueSummaryByKey } from '../../helpers/files';
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');

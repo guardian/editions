@@ -1,11 +1,11 @@
+import type { EditionId, SpecialEdition } from 'src/common';
+import { defaultRegionalEditions } from 'src/common';
 import { defaultSettings } from 'src/helpers/settings/defaults';
 import {
 	defaultEditionCache,
 	editionsListCache,
 	selectedEditionCache,
 } from 'src/helpers/storage';
-import type { EditionId, SpecialEdition } from '../../../../Apps/common/src';
-import { defaultRegionalEditions } from '../../../../Apps/common/src/editions-defaults';
 import {
 	BASE_EDITION,
 	DEFAULT_EDITIONS_LIST,

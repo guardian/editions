@@ -7,9 +7,12 @@ import type {
 	ImageUse,
 	Issue,
 } from 'src/common';
-import { frontPath, issuePath } from 'src/common';
-import { imagePath } from '../../../Apps/common/src';
-import { defaultRegionalEditions } from '../../../Apps/common/src/editions-defaults';
+import {
+	defaultRegionalEditions,
+	frontPath,
+	imagePath,
+	issuePath,
+} from 'src/common';
 
 export interface PathToIssue {
 	localIssueId: Issue['localId'];

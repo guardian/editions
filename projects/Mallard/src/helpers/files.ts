@@ -1,6 +1,7 @@
 import RNFS from 'react-native-fs';
 import { unzip } from 'react-native-zip-archive';
 import type { Issue, IssueSummary } from 'src/common';
+import { getEditionIds } from 'src/common';
 import { updateListeners } from 'src/download-edition/download-and-unzip';
 import { editionsListCache, issueSummaryCache } from 'src/helpers/storage';
 import {
@@ -10,7 +11,6 @@ import {
 import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
-import { getEditionIds } from '../../../Apps/common/src/helpers';
 import { londonTime } from './date';
 
 // matches the issue date, i.e. 2020-02-01

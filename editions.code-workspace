@@ -13,10 +13,10 @@
             "path": "projects/aws"
         },
         {
-            "path": "projects/Apps/common"
+            "path": "projects/common"
         },
         {
-            "path": "projects/Apps/crosswords"
+            "path": "projects/Apps/crosswords-bundle"
         },
         {
             "path": "projects/archiver"

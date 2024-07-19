@@ -1,4 +1,6 @@
 import RNFS from 'react-native-fs';
+import { getEditionIds } from 'src/common';
+import type { EditionId } from 'src/common';
 import {
 	getIssuesToDelete,
 	getLocalIssues,
@@ -11,8 +13,6 @@ import type { PushTrackingId } from 'src/notifications/push-tracking';
 import { pushTracking } from 'src/notifications/push-tracking';
 import { FSPaths } from 'src/paths';
 import { errorService } from 'src/services/errors';
-import type { EditionId } from '../../../Apps/common/src';
-import { getEditionIds } from '../../../Apps/common/src/helpers';
 
 const clearDownloadsDirectory = async () => {
 	try {

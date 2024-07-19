@@ -1,5 +1,5 @@
 import { createHash } from 'crypto'
-import { ImageUse, imageUseSizes } from '../Apps/common/src'
+import { ImageUse, imageUseSizes } from './common'
 import { Image, ImageSize, ImageRole, imageRoles } from './common'
 import { AssetFields } from '@guardian/content-api-models/v1/assetFields'
 

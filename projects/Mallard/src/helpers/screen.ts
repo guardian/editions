@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import type { ImageSize } from 'src/common';
+import { imageSizes, sizeDescriptions } from 'src/common';
 import { largeDeviceMemory } from 'src/hooks/use-config-provider';
-import type { ImageSize } from '../../../Apps/common/src';
-import { imageSizes, sizeDescriptions } from '../../../Apps/common/src';
 
 const maxScreenSize = (): number => {
 	const { width, height } = Dimensions.get('window');

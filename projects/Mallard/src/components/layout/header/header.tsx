@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
+import type { SpecialEditionHeaderStyles } from 'src/common';
 import { Highlight } from 'src/components/highlight';
 import { GridRowSplit } from 'src/components/issue/issue-title';
 import { useInsets, useMediaQuery } from 'src/hooks/use-screen';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
-import type { SpecialEditionHeaderStyles } from '../../../../../Apps/common/src';
 import { metrics } from '../../../theme/spacing';
 import { getFont } from '../../../theme/typography';
 

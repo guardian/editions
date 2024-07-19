@@ -8,7 +8,12 @@ import React, {
 } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { CircularProgressBase } from 'react-native-circular-progress-indicator';
-import type { IssueSummary } from 'src/common';
+import type {
+	Appearance,
+	Front,
+	IssueSummary,
+	IssueWithFronts,
+} from 'src/common';
 import { Highlight } from 'src/components/highlight';
 import {
 	GridRowSplit,
@@ -43,11 +48,6 @@ import { useToast } from 'src/hooks/use-toast';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { getFont } from 'src/theme/typography';
-import type {
-	Appearance,
-	Front,
-	IssueWithFronts,
-} from '../../../../Apps/common/src';
 import { Button, ButtonAppearance } from '../Button/Button';
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25);

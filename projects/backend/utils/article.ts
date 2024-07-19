@@ -1,4 +1,4 @@
-import { ArticleType, BlockElement, HTMLElement } from '../../Apps/common/src'
+import { ArticleType, BlockElement, HTMLElement } from '../common'
 import { SharedIniFileCredentials, STS } from 'aws-sdk'
 import { RequestSigner } from 'aws4'
 

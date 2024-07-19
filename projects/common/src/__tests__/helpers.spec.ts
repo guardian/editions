@@ -1,6 +1,6 @@
 import { defaultRegionalEditions } from '../editions-defaults'
 import { getEditionIds, issueSummarySort } from '../helpers'
-import { editionsListFixture } from './fixtures/editions-fixtures'
+import { editionsListFixture } from '../fixtures/editions-fixtures'
 
 describe('issueSummarySort', () => {
     it('should sort issues', () => {
