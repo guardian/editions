@@ -41,6 +41,11 @@ jobs:
                   cd projects/Apps
                   yarn
 
+            - name: install common dependencies
+              run: |
+                  cd projects/common
+                  yarn
+
             - name: validate Mallard project
               run: |
                   cd projects/Mallard
@@ -48,4 +53,5 @@ jobs:
 
             - name: test Mallard project
               run: |
-                  yarn test-mallard
+                  cd projects/Mallard
+                  yarn test
