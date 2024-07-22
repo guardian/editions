@@ -48,5 +48,4 @@ jobs:
 
             - name: test Mallard project
               run: |
-                  cd projects/Mallard
-                  yarn test
+                  yarn test-mallard
