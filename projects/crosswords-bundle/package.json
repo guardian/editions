@@ -22,7 +22,7 @@
     "scripts": {
         "start": "BROWSER=none react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test",
+        "test": "echo 'no tests are defined for project crosswords-bundle'",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
