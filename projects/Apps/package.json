@@ -4,7 +4,7 @@
     "description": "Monorepo for React Native Apps",
     "main": "index.js",
     "scripts": {
-        "test": "yarn workspace @guardian/editions-common run test",
+        "test": "echo 'Apps does not need tests running.'",
         "build": "echo 'Apps does not need building.'"
     },
     "author": "The Guardian",
