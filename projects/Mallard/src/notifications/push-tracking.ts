@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { NetInfoStateType } from '@react-native-community/netinfo';
 import NetInfo from '@react-native-community/netinfo';
-import { londonTimeAsDate } from 'src/helpers/date';
-import { lastNDays } from 'src/helpers/issues';
+import { londonTimeAsDate } from '../helpers/date';
+import { lastNDays } from '../helpers/issues';
 
 const PUSH_TRACKING_KEY = '@push-tracking';
 

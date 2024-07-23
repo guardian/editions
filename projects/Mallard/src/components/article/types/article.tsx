@@ -19,23 +19,23 @@ import type {
 	ImageElement,
 	IssueOrigin,
 	PictureArticle,
-} from 'src/common';
+} from '../../../common';
 import {
 	defaultSettings,
 	htmlEndpoint,
 	isPreview,
-} from 'src/helpers/settings/defaults';
-import { parsePing } from 'src/helpers/webview';
-import { useArticle } from 'src/hooks/use-article';
-import { useApiUrl } from 'src/hooks/use-config-provider';
-import { selectImagePath } from 'src/hooks/use-image-paths';
-import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
-import { useNetInfo } from 'src/hooks/use-net-info-provider';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import type { PathToArticle } from 'src/paths';
-import { remoteConfigService } from 'src/services/remote-config';
-import { metrics } from 'src/theme/spacing';
+} from '../../../helpers/settings/defaults';
+import { parsePing } from '../../../helpers/webview';
+import { useArticle } from '../../../hooks/use-article';
+import { useApiUrl } from '../../../hooks/use-config-provider';
+import { selectImagePath } from '../../../hooks/use-image-paths';
+import { useIssueSummary } from '../../../hooks/use-issue-summary-provider';
+import { useNetInfo } from '../../../hooks/use-net-info-provider';
+import type { MainStackParamList } from '../../../navigation/NavigationModels';
+import { RouteNames } from '../../../navigation/NavigationModels';
+import type { PathToArticle } from '../../../paths';
+import { remoteConfigService } from '../../../services/remote-config';
+import { metrics } from '../../../theme/spacing';
 import { isSuccessOrRedirect } from './article/helpers';
 import { WebviewWithArticle } from './article/webview';
 

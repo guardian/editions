@@ -6,13 +6,13 @@ import type {
 	ViewStyle,
 } from 'react-native';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import type { ArticlePillar } from 'src/common';
-import { getPillarColors } from 'src/helpers/transform';
-import type { AppAppearanceStyles } from 'src/theme/appearance';
-import { useAppAppearance } from 'src/theme/appearance';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
-import { getFont } from 'src/theme/typography';
+import type { ArticlePillar } from '../../common';
+import { getPillarColors } from '../../helpers/transform';
+import type { AppAppearanceStyles } from '../../theme/appearance';
+import { useAppAppearance } from '../../theme/appearance';
+import { color } from '../../theme/color';
+import { metrics } from '../../theme/spacing';
+import { getFont } from '../../theme/typography';
 import { UiBodyCopy } from '../styled-text';
 
 export enum ButtonAppearance {

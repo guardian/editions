@@ -13,16 +13,16 @@ import type {
 	Issue,
 	IssueOrigin,
 	IssueWithFronts,
-} from 'src/common';
-import { isIssueOnDevice, readFileAsJSON } from 'src/helpers/files';
+} from '../../common';
+import { isIssueOnDevice, readFileAsJSON } from '../../helpers/files';
 import {
 	flattenCollectionsToCards,
 	flattenFlatCardsToFront,
-} from 'src/helpers/transform';
-import { ERR_404_REMOTE } from 'src/helpers/words';
-import { APIPaths, FSPaths } from 'src/paths';
-import type { PathToArticle, PathToIssue } from 'src/paths';
-import { errorService } from 'src/services/errors';
+} from '../../helpers/transform';
+import { ERR_404_REMOTE } from '../../helpers/words';
+import { APIPaths, FSPaths } from '../../paths';
+import type { PathToArticle, PathToIssue } from '../../paths';
+import { errorService } from '../../services/errors';
 import { useAppState } from '../use-app-state-provider';
 import { useApiUrl } from '../use-config-provider';
 import { useIssueSummary } from '../use-issue-summary-provider';

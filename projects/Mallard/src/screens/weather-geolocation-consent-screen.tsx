@@ -3,16 +3,16 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { RESULTS } from 'react-native-permissions';
-import { Button, ButtonAppearance } from 'src/components/Button/Button';
-import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { RenderHTMLwithScrollView } from 'src/components/RenderHTML/RenderHTML';
-import { logEvent } from 'src/helpers/analytics';
-import { requestLocationPermission } from 'src/helpers/location-permission';
-import { copy } from 'src/helpers/words';
-import { useIsWeatherShown, useWeather } from 'src/hooks/use-weather-provider';
-import { getGeolocation } from 'src/hooks/use-weather-provider/utils';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { metrics } from 'src/theme/spacing';
+import { Button, ButtonAppearance } from '../components/Button/Button';
+import { HeaderScreenContainer } from '../components/Header/Header';
+import { RenderHTMLwithScrollView } from '../components/RenderHTML/RenderHTML';
+import { logEvent } from '../helpers/analytics';
+import { requestLocationPermission } from '../helpers/location-permission';
+import { copy } from '../helpers/words';
+import { useIsWeatherShown, useWeather } from '../hooks/use-weather-provider';
+import { getGeolocation } from '../hooks/use-weather-provider/utils';
+import type { MainStackParamList } from '../navigation/NavigationModels';
+import { metrics } from '../theme/spacing';
 
 const styles = StyleSheet.create({
 	button: {

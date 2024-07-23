@@ -1,5 +1,5 @@
 import MockDate from 'mockdate';
-import { subDays } from 'src/helpers/date';
+import { subDays } from '../../helpers/date';
 import { shouldReRegister } from '../helpers';
 import type { PushToken } from '../notification-service';
 

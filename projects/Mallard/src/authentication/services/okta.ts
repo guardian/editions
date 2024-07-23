@@ -4,7 +4,7 @@ import {
 	signOut,
 } from '@okta/okta-react-native';
 import { Platform } from 'react-native';
-import { errorService } from 'src/services/errors';
+import { errorService } from '../../services/errors';
 
 type OktaUser = {
 	legacy_identity_id: string;

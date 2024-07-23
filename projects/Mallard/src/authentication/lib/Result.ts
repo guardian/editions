@@ -1,4 +1,4 @@
-import { GENERIC_AUTH_ERROR } from 'src/helpers/words';
+import { GENERIC_AUTH_ERROR } from '../../helpers/words';
 
 type ValidResult<T> = { type: 'valid-result'; data: T };
 /**

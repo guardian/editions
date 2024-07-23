@@ -1,11 +1,11 @@
-import type { EditionId, SpecialEdition } from 'src/common';
-import { defaultRegionalEditions } from 'src/common';
-import { defaultSettings } from 'src/helpers/settings/defaults';
+import type { EditionId, SpecialEdition } from '../../common';
+import { defaultRegionalEditions } from '../../common';
+import { defaultSettings } from '../../helpers/settings/defaults';
 import {
 	defaultEditionCache,
 	editionsListCache,
 	selectedEditionCache,
-} from 'src/helpers/storage';
+} from '../../helpers/storage';
 import {
 	BASE_EDITION,
 	DEFAULT_EDITIONS_LIST,
@@ -18,7 +18,7 @@ import {
 
 const IS_CONNECTED = true;
 
-jest.mock('src/services/remote-config', () => ({
+jest.mock('../../services/remote-config', () => ({
 	remoteConfigService: {
 		getBoolean: jest.fn().mockReturnValue(true),
 	},

@@ -1,8 +1,8 @@
 import type { FirebaseCrashlyticsTypes } from '@react-native-firebase/crashlytics';
 import crashlytics from '@react-native-firebase/crashlytics';
-import { getCASCode } from 'src/authentication/helpers';
-import { userDataCache } from 'src/helpers/storage';
-import type { GdprSwitchSetting } from 'src/hooks/use-gdpr';
+import { getCASCode } from '../authentication/helpers';
+import { userDataCache } from '../helpers/storage';
+import type { GdprSwitchSetting } from '../hooks/use-gdpr';
 
 interface ErrorService {
 	init({ hasConsent }: { hasConsent: GdprSwitchSetting }): void;

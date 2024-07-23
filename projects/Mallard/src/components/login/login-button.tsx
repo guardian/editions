@@ -1,8 +1,8 @@
 import { palette } from '@guardian/pasteup/palette';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
+import { color } from '../../theme/color';
+import { metrics } from '../../theme/spacing';
 import { Button } from '../Button/Button';
 
 const baseButtonStyles = StyleSheet.create({

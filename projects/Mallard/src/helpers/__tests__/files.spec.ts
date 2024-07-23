@@ -1,4 +1,4 @@
-import { issueSummaries } from 'src/common';
+import { issueSummaries } from '../../common';
 import { findIssueSummaryByKey } from '../../helpers/files';
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
@@ -24,7 +24,7 @@ describe('helpers/files', () => {
 		});
 
 		it('should return items outside of the 7 latest issues', async () => {
-			jest.mock('src/hooks/use-config-provider', () => ({
+			jest.mock('../../hooks/use-config-provider', () => ({
 				getMaxAvailableEditions: () => 7,
 			}));
 			const { getIssuesToDelete } = await require('../../helpers/files');
@@ -51,7 +51,7 @@ describe('helpers/files', () => {
 		});
 
 		it('should return items outside of the 3 latest issues', async () => {
-			jest.mock('src/hooks/use-config-provider', () => ({
+			jest.mock('../../hooks/use-config-provider', () => ({
 				getMaxAvailableEditions: () => 3,
 			}));
 			const { getIssuesToDelete } = await require('../../helpers/files');

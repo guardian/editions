@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
-import { AccessContext } from 'src/authentication/AccessContext';
-import type { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer';
-import { isValid } from 'src/authentication/lib/Attempt';
-import type { ReceiptIOS } from 'src/authentication/services/iap';
-import type { CASExpiry } from 'src/common';
-import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { ScrollContainer } from 'src/components/layout/ui/container';
-import { Heading } from 'src/components/layout/ui/row';
-import { List } from 'src/components/lists/list';
-import { copy } from 'src/helpers/words';
-import { WithAppAppearance } from 'src/theme/appearance';
+import { AccessContext } from '../../authentication/AccessContext';
+import type { IdentityAuthData } from '../../authentication/authorizers/IdentityAuthorizer';
+import { isValid } from '../../authentication/lib/Attempt';
+import type { ReceiptIOS } from '../../authentication/services/iap';
+import type { CASExpiry } from '../../common';
+import { HeaderScreenContainer } from '../../components/Header/Header';
+import { ScrollContainer } from '../../components/layout/ui/container';
+import { Heading } from '../../components/layout/ui/row';
+import { List } from '../../components/lists/list';
+import { copy } from '../../helpers/words';
+import { WithAppAppearance } from '../../theme/appearance';
 
 const keyValueItem = (key: string, value: string) =>
 	({

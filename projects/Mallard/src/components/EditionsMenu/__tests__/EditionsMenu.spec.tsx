@@ -1,13 +1,16 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { editions, regionalEditions, specialEditions } from 'src/common';
+import { editions, regionalEditions, specialEditions } from '../../../common';
 import { EditionsMenu } from '../EditionsMenu';
 
-jest.mock('src/components/EditionsMenu/EditionButton/EditionButton', () => ({
-	EditionButton: () => 'EditionButton',
-}));
+jest.mock(
+	'../../../components/EditionsMenu/EditionButton/EditionButton',
+	() => ({
+		EditionButton: () => 'EditionButton',
+	}),
+);
 
-jest.mock('src/helpers/analytics', () => ({
+jest.mock('../../../helpers/analytics', () => ({
 	logEvent: jest.fn,
 }));
 

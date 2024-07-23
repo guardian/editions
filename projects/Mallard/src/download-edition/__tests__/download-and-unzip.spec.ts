@@ -1,10 +1,10 @@
-import { DownloadBlockedStatus } from 'src/hooks/use-net-info-provider';
+import { DownloadBlockedStatus } from '../../hooks/use-net-info-provider';
 import { downloadAndUnzipIssue } from '../download-and-unzip';
 
 const mockIsIssueOnDevice = jest.fn();
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
-jest.mock('src/helpers/files', () => ({
-	...jest.requireActual('src/helpers/files'),
+jest.mock('../../helpers/files', () => ({
+	...jest.requireActual('../../helpers/files'),
 	isIssueOnDevice: () => mockIsIssueOnDevice,
 }));
 

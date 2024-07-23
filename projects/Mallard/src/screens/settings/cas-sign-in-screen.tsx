@@ -3,15 +3,15 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Image from 'react-native-fast-image';
-import { AccessContext } from 'src/authentication/AccessContext';
-import { isValid } from 'src/authentication/lib/Attempt';
-import { LoginButton } from 'src/components/login/login-button';
-import { LoginInput } from 'src/components/login/login-input';
-import { LoginLayout } from 'src/components/login/login-layout';
-import { useFormField } from 'src/hooks/use-form-field';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import { getFont } from 'src/theme/typography';
+import { AccessContext } from '../../authentication/AccessContext';
+import { isValid } from '../../authentication/lib/Attempt';
+import { LoginButton } from '../../components/login/login-button';
+import { LoginInput } from '../../components/login/login-input';
+import { LoginLayout } from '../../components/login/login-layout';
+import { useFormField } from '../../hooks/use-form-field';
+import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { RouteNames } from '../../navigation/NavigationModels';
+import { getFont } from '../../theme/typography';
 
 const styles = StyleSheet.create({
 	image: { height: 200, width: undefined },
@@ -95,7 +95,7 @@ const CasSignInScreen = () => {
 				<Image
 					resizeMode="contain"
 					style={styles.image}
-					source={require(`src/assets/images/cas-voucher.jpg`)}
+					source={require('../../assets/images/cas-voucher.jpg')}
 				/>
 			</View>
 		</LoginLayout>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Image } from 'react-native';
-import { useMediaQuery } from 'src/hooks/use-screen';
-import { Breakpoints } from 'src/theme/breakpoints';
+import { useMediaQuery } from '../hooks/use-screen';
+import { Breakpoints } from '../theme/breakpoints';
 
 const useAspectRatio = (path?: string) => {
 	const isLandscape = useMediaQuery(

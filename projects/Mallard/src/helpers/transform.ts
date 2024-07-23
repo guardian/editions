@@ -1,12 +1,12 @@
 import type { PillarColours } from '@guardian/pasteup/palette';
 import { palette } from '@guardian/pasteup/palette';
-import { FrontCardAppearance } from 'src/common';
+import { FrontCardAppearance } from '../common';
 import type {
 	Appearance,
 	ArticlePillar,
 	CAPIArticle,
 	Collection,
-} from 'src/common';
+} from '../common';
 
 export interface FlatCard {
 	collection: Collection;

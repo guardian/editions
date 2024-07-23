@@ -12,8 +12,8 @@ import {
 	View,
 } from 'react-native';
 import { getDeviceId, isTablet } from 'react-native-device-info';
-import { copy } from 'src/helpers/words';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { copy } from '../helpers/words';
+import type { MainStackParamList } from '../navigation/NavigationModels';
 
 const isTabletDevice = isTablet();
 

@@ -20,47 +20,47 @@ import {
 	View,
 } from 'react-native';
 import { isTablet } from 'react-native-device-info';
-import type { IssueSummary, IssueWithFronts } from 'src/common';
-import { Button, ButtonAppearance } from 'src/components/Button/Button';
-import { GridRowSplit } from 'src/components/issue/issue-title';
-import { FlexCenter } from 'src/components/layout/flex-center';
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
-import { Separator } from 'src/components/layout/ui/row';
-import { IssuePickerHeader } from 'src/components/ScreenHeader/IssuePickerHeader/IssuePickerHeader';
-import { Spinner } from 'src/components/Spinner/Spinner';
-import type { Loaded } from 'src/helpers/Loaded';
-import {
-	CONNECTION_FAILED_AUTO_RETRY,
-	CONNECTION_FAILED_ERROR,
-	copy,
-} from 'src/helpers/words';
-import {
-	useApiUrl,
-	useIsUsingProdDevtools,
-	useMaxAvailableEditions,
-} from 'src/hooks/use-config-provider';
-import {
-	getSpecialEditionProps,
-	useEditions,
-} from 'src/hooks/use-edition-provider';
-import { fetchIssue, useIssue } from 'src/hooks/use-issue-provider';
-import { useIssueSummary } from 'src/hooks/use-issue-summary-provider';
-import { useSetNavPosition } from 'src/hooks/use-nav-position';
-import useOverlayAnimation from 'src/hooks/use-overlay-animation';
-import { SettingsOverlayContext } from 'src/hooks/use-settings-overlay';
-import { navigateToIssue } from 'src/navigation/helpers/base';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import type { PathToIssue } from 'src/paths';
-import { WithAppAppearance } from 'src/theme/appearance';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
+import type { IssueSummary, IssueWithFronts } from '../common';
+import { Button, ButtonAppearance } from '../components/Button/Button';
 import {
 	ISSUE_FRONT_ERROR_HEIGHT,
 	ISSUE_FRONT_ROW_HEIGHT,
 	ISSUE_ROW_HEADER_HEIGHT,
 	IssueRow,
 } from '../components/issue/issue-row';
+import { GridRowSplit } from '../components/issue/issue-title';
+import { FlexCenter } from '../components/layout/flex-center';
+import { FlexErrorMessage } from '../components/layout/ui/errors/flex-error-message';
+import { Separator } from '../components/layout/ui/row';
+import { IssuePickerHeader } from '../components/ScreenHeader/IssuePickerHeader/IssuePickerHeader';
+import { Spinner } from '../components/Spinner/Spinner';
+import type { Loaded } from '../helpers/Loaded';
+import {
+	CONNECTION_FAILED_AUTO_RETRY,
+	CONNECTION_FAILED_ERROR,
+	copy,
+} from '../helpers/words';
+import {
+	useApiUrl,
+	useIsUsingProdDevtools,
+	useMaxAvailableEditions,
+} from '../hooks/use-config-provider';
+import {
+	getSpecialEditionProps,
+	useEditions,
+} from '../hooks/use-edition-provider';
+import { fetchIssue, useIssue } from '../hooks/use-issue-provider';
+import { useIssueSummary } from '../hooks/use-issue-summary-provider';
+import { useSetNavPosition } from '../hooks/use-nav-position';
+import useOverlayAnimation from '../hooks/use-overlay-animation';
+import { SettingsOverlayContext } from '../hooks/use-settings-overlay';
+import { navigateToIssue } from '../navigation/helpers/base';
+import type { MainStackParamList } from '../navigation/NavigationModels';
+import { RouteNames } from '../navigation/NavigationModels';
+import type { PathToIssue } from '../paths';
+import { WithAppAppearance } from '../theme/appearance';
+import { color } from '../theme/color';
+import { metrics } from '../theme/spacing';
 import { ScreenFiller } from './editions-menu-screen';
 import { ApiState } from './settings/api-screen';
 

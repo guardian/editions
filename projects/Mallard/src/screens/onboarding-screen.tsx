@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
+import { color } from '../theme/color';
+import { metrics } from '../theme/spacing';
 import { OnboardingConsent } from './onboarding/cards';
 
 const styles = StyleSheet.create({
