@@ -56,13 +56,14 @@ jobs:
                   cd projects/Mallard
                   yarn
 
-            - uses: actions/setup-node@v3
-              with:
-                  node-version-file: 'projects/Apps/.nvmrc'
-
-            - name: install Apps dependencies
+            - name: install scripts dependencies
               run: |
-                  cd projects/Apps
+                  cd projects/scripts
+                  yarn
+
+            - name: install crosswords-bundle dependencies
+              run: |
+                  cd projects/crosswords-bundle
                   yarn
 
             - name: validate Mallard project

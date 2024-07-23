@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { EditionsList, SpecialEdition } from '../../Apps/common/src'
+import { EditionsList, SpecialEdition } from '../common'
 import {
     s3Put,
     s3fetch,

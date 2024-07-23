@@ -1,4 +1,4 @@
-import { EditionId, editions, RegionalEdition, SpecialEdition } from '../..'
+import { EditionId, editions, RegionalEdition, SpecialEdition } from '../types'
 
 export const regionalEditions: RegionalEdition[] = [
     {

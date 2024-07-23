@@ -9,7 +9,7 @@ import {
     PublishedImage,
     PublishedCardImage,
 } from '../fronts/issue'
-import { CreditedImage, ArticleType, TrailImage } from '../../Apps/common/src'
+import { CreditedImage, ArticleType, TrailImage } from '../common'
 
 const notUsed = {
     use: {

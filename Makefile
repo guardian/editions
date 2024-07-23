@@ -33,7 +33,11 @@ validate-Mallard:
 	@echo "\n👟🚂 $@ TSC 🦆\n"
 	cd projects/Mallard && yarn tsc --noEmit --skipLibCheck
 
-validate-Apps:
+validate-scripts:
+	@echo "\n👟 $@ 🦆\n"
+	@echo "\nThis is not yet handled by make\n"
+
+validate-crosswords-bundle:
 	@echo "\n👟 $@ 🦆\n"
 	@echo "\nThis is not yet handled by make\n"
 #

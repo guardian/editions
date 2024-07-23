@@ -5,7 +5,7 @@ import {
 } from '../../common'
 import { GetS3ObjParams } from '../utils/s3'
 import { Record } from '.'
-import { EditionListPublicationAction } from '../../../Apps/common/src'
+import { EditionListPublicationAction } from '../../common'
 
 const isValidJSON = (s: string): boolean => {
     try {

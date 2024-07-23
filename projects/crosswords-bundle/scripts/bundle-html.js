@@ -10,8 +10,8 @@ const bundleHTML = (location = 'Mallard') => {
             [
                 `cd ../../projects/${project}`,
                 buildScript,
-                `rm -rf ../../../projects/${location}/html/${key}.bundle`,
-                `mv ./${buildPath} ../../../projects/${location}/html/${key}.bundle`,
+                `rm -rf ../../projects/${location}/html/${key}.bundle`,
+                `mv ./${buildPath} ../../projects/${location}/html/${key}.bundle`,
             ].join(' && '),
             (err) => {
                 if (err) {

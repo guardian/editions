@@ -7,7 +7,7 @@ import { BlockElement } from '@guardian/content-api-models/v1/blockElement'
 import {
     BlockElement as EditionsBlockElement,
     ImageElement,
-} from '../../../Apps/common/src'
+} from '../../common'
 
 const createImageAssetLike: Asset = {
     type: AssetType.IMAGE,

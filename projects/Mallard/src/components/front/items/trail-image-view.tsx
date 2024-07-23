@@ -3,11 +3,11 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import type { ImageStyle } from 'react-native-fast-image';
 import type { CAPIArticle, ImageUse } from 'src/common';
+import { ArticleType } from 'src/common';
 import { SportScore } from 'src/components/SportScore/SportScore';
 import { Stars } from 'src/components/Stars/Stars';
 import { useMediaQuery } from 'src/hooks/use-screen';
 import { Breakpoints } from 'src/theme/breakpoints';
-import { ArticleType } from '../../../../../Apps/common/src';
 import { ImageResource } from '../image-resource';
 
 const trailImageViewStyles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import { Content as IContent, WithKey } from '../../../Apps/common/src'
+import { Content as IContent, WithKey } from '../../common'
 import { CArticle } from '../../capi/articles'
 import { PublishedFurniture as IPublishedFurniture } from '../../fronts/issue'
 

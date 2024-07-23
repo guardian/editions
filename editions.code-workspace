@@ -13,10 +13,7 @@
             "path": "projects/aws"
         },
         {
-            "path": "projects/Apps/common"
-        },
-        {
-            "path": "projects/Apps/crosswords"
+            "path": "projects/common"
         },
         {
             "path": "projects/archiver"
@@ -25,7 +22,10 @@
             "path": "docs"
         },
         {
-            "path": "projects/Apps"
+            "path": "projects/scripts"
+        },
+        {
+            "path": "projects/crosswords-bundle"
         }
     ],
     "settings": {

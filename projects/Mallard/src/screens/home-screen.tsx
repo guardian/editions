@@ -20,7 +20,7 @@ import {
 	View,
 } from 'react-native';
 import { isTablet } from 'react-native-device-info';
-import type { IssueSummary } from 'src/common';
+import type { IssueSummary, IssueWithFronts } from 'src/common';
 import { Button, ButtonAppearance } from 'src/components/Button/Button';
 import { GridRowSplit } from 'src/components/issue/issue-title';
 import { FlexCenter } from 'src/components/layout/flex-center';
@@ -55,7 +55,6 @@ import type { PathToIssue } from 'src/paths';
 import { WithAppAppearance } from 'src/theme/appearance';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
-import type { IssueWithFronts } from '../../../Apps/common/src';
 import {
 	ISSUE_FRONT_ERROR_HEIGHT,
 	ISSUE_FRONT_ROW_HEIGHT,

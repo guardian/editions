@@ -2,11 +2,11 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
+import type { SpecialEditionHeaderStyles } from 'src/common';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { color } from 'src/theme/color';
 import { metrics } from 'src/theme/spacing';
 import { families } from 'src/theme/typography';
-import type { SpecialEditionHeaderStyles } from '../../../../Apps/common/src';
 import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints';
 import { IssueTitleText } from '../styled-text';
 

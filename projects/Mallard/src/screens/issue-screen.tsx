@@ -8,6 +8,11 @@ import Image from 'react-native-fast-image';
 import RNRestart from 'react-native-restart';
 import SplashScreen from 'react-native-splash-screen';
 import { PageLayoutSizes } from 'src/common';
+import type {
+	IssueWithFronts,
+	SpecialEditionHeaderStyles,
+	Front as TFront,
+} from 'src/common';
 import { ReloadButton } from 'src/components/Button/ReloadButton';
 import { Front } from 'src/components/front';
 import { FlexCenter } from 'src/components/layout/flex-center';
@@ -53,11 +58,6 @@ import {
 } from 'src/navigation/NavigationModels';
 import { Breakpoints } from 'src/theme/breakpoints';
 import { metrics } from 'src/theme/spacing';
-import type {
-	IssueWithFronts,
-	SpecialEditionHeaderStyles,
-	Front as TFront,
-} from '../../../Apps/common/src';
 import {
 	EMPTY_WEATHER_HEIGHT,
 	WEATHER_HEIGHT,

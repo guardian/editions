@@ -4,13 +4,13 @@ import { AccessContext } from 'src/authentication/AccessContext';
 import type { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer';
 import { isValid } from 'src/authentication/lib/Attempt';
 import type { ReceiptIOS } from 'src/authentication/services/iap';
+import type { CASExpiry } from 'src/common';
 import { HeaderScreenContainer } from 'src/components/Header/Header';
 import { ScrollContainer } from 'src/components/layout/ui/container';
 import { Heading } from 'src/components/layout/ui/row';
 import { List } from 'src/components/lists/list';
 import { copy } from 'src/helpers/words';
 import { WithAppAppearance } from 'src/theme/appearance';
-import type { CASExpiry } from '../../../../Apps/common/src/cas-expiry';
 
 const keyValueItem = (key: string, value: string) =>
 	({

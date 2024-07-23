@@ -9,7 +9,7 @@ import {
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
-import { htmlDirPath, thumbsDir } from '../../../../Apps/common/src'
+import { htmlDirPath, thumbsDir } from '../../../common'
 import { getBucket } from '../../utils/s3'
 import { sleep } from '../../utils/sleep'
 

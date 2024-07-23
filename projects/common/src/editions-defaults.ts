@@ -1,4 +1,4 @@
-import { RegionalEdition, editions } from './index'
+import { RegionalEdition, editions } from './types'
 
 export const defaultRegionalEditions: RegionalEdition[] = [
     {

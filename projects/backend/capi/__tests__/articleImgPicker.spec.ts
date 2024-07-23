@@ -12,7 +12,7 @@ import { Blocks } from '@guardian/content-api-models/v1/blocks'
 import { ElementType } from '@guardian/content-api-models/v1/elementType'
 import { ContentType } from '@guardian/content-api-models/v1/contentType'
 import { articleTypePicker } from '../articleTypePicker'
-import { ArticleType } from '../../../Apps/common/src'
+import { ArticleType } from '../../common'
 import { CartoonVariant } from '@guardian/content-api-models/v1/cartoonVariant'
 
 const masterAsset: Asset = {
