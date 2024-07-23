@@ -7,4 +7,4 @@ projects/backend/dist*
 projects/aws/cloudformation.yaml
 projects/aws/logging-cloudformation.yaml
 .idea
-projects/Apps/.parcel-cache
+projects/.parcel-cache

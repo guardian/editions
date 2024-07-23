@@ -16,16 +16,16 @@
             "path": "projects/common"
         },
         {
-            "path": "projects/Apps/crosswords-bundle"
-        },
-        {
             "path": "projects/archiver"
         },
         {
             "path": "docs"
         },
         {
-            "path": "projects/Apps"
+            "path": "projects/scripts"
+        },
+        {
+            "path": "projects/crosswords-bundle"
         }
     ],
     "settings": {
