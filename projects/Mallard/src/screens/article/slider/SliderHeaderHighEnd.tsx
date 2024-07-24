@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
+import { color } from '../../../theme/color';
+import { metrics } from '../../../theme/spacing';
 import type { SliderTitleProps } from './SliderTitle';
 import { SliderTitle } from './SliderTitle';
 

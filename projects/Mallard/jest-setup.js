@@ -1,8 +1,8 @@
-jest.mock('src/helpers/locale', () => ({
+jest.mock('./src/helpers/locale', () => ({
     locale: 'en_AU',
 }))
 
-jest.mock('src/notifications/push-notifications', () => ({
+jest.mock('./src/notifications/push-notifications', () => ({
     pushNotificationRegistration: () => jest.fn(),
 }))
 

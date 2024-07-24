@@ -3,7 +3,7 @@ import {
 	NetInfoStateType,
 } from '@react-native-community/netinfo';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { NetInfoDevOverlay } from 'src/components/NetInfoDevOverlay';
+import { NetInfoDevOverlay } from '../../components/NetInfoDevOverlay';
 import { useWifiOnlyDownloads } from '../use-config-provider';
 import type { NetInfoState } from './types';
 import { DownloadBlockedStatus } from './types';

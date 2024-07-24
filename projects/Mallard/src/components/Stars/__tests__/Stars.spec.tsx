@@ -1,6 +1,6 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { Stars } from 'src/components/Stars/Stars';
+import { Stars } from '../../../components/Stars/Stars';
 
 const rating = 5;
 

@@ -2,27 +2,27 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Alert, FlatList, Text, View } from 'react-native';
-import { Button, ButtonAppearance } from 'src/components/Button/Button';
-import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { Footer, Separator, TallRow } from 'src/components/layout/ui/row';
-import type { ThreeWaySwitchValue } from 'src/components/layout/ui/switch';
-import { ThreeWaySwitch } from 'src/components/layout/ui/switch';
-import { LinkNav } from 'src/components/link';
-import { LoginHeader } from 'src/components/login/login-layout';
-import { Spacer } from 'src/components/Spacer/Spacer';
-import { UiBodyCopy } from 'src/components/styled-text';
-import { logEvent } from 'src/helpers/analytics';
+import { Button, ButtonAppearance } from '../../components/Button/Button';
+import { HeaderScreenContainer } from '../../components/Header/Header';
+import { Footer, Separator, TallRow } from '../../components/layout/ui/row';
+import type { ThreeWaySwitchValue } from '../../components/layout/ui/switch';
+import { ThreeWaySwitch } from '../../components/layout/ui/switch';
+import { LinkNav } from '../../components/link';
+import { LoginHeader } from '../../components/login/login-layout';
+import { Spacer } from '../../components/Spacer/Spacer';
+import { UiBodyCopy } from '../../components/styled-text';
+import { logEvent } from '../../helpers/analytics';
 import {
 	copy,
 	PREFS_SAVED_MSG,
 	PRIVACY_SETTINGS_HEADER_TITLE,
-} from 'src/helpers/words';
-import type { GdprSwitches } from 'src/hooks/use-gdpr';
-import { OnboardingStatus, useGdprSettings } from 'src/hooks/use-gdpr';
-import { useToast } from 'src/hooks/use-toast';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import { WithAppAppearance } from 'src/theme/appearance';
+} from '../../helpers/words';
+import type { GdprSwitches } from '../../hooks/use-gdpr';
+import { OnboardingStatus, useGdprSettings } from '../../hooks/use-gdpr';
+import { useToast } from '../../hooks/use-toast';
+import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { RouteNames } from '../../navigation/NavigationModels';
+import { WithAppAppearance } from '../../theme/appearance';
 
 interface GdprSwitch {
 	name: string;

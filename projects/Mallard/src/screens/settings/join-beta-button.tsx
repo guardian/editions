@@ -2,16 +2,16 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Linking, StyleSheet } from 'react-native';
-import { RightChevron } from 'src/components/icons/RightChevron';
-import { Row, Separator } from 'src/components/layout/ui/row';
-import { UiBodyCopy } from 'src/components/styled-text';
-import { JOIN_BETA_LINK } from 'src/constants';
-import { isInBeta } from 'src/helpers/release-stream';
-import { copy } from 'src/helpers/words';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import { remoteConfigService } from 'src/services/remote-config';
-import { metrics } from 'src/theme/spacing';
+import { RightChevron } from '../../components/icons/RightChevron';
+import { Row, Separator } from '../../components/layout/ui/row';
+import { UiBodyCopy } from '../../components/styled-text';
+import { JOIN_BETA_LINK } from '../../constants';
+import { isInBeta } from '../../helpers/release-stream';
+import { copy } from '../../helpers/words';
+import type { MainStackParamList } from '../../navigation/NavigationModels';
+import { RouteNames } from '../../navigation/NavigationModels';
+import { remoteConfigService } from '../../services/remote-config';
+import { metrics } from '../../theme/spacing';
 
 const betaButtonStyle = StyleSheet.create({
 	thanksText: {

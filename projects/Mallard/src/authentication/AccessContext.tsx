@@ -5,9 +5,9 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import type { CASExpiry } from 'src/common';
-import { validAttemptCache } from 'src/helpers/storage';
-import { useNetInfo } from 'src/hooks/use-net-info-provider';
+import type { CASExpiry } from '../common';
+import { validAttemptCache } from '../helpers/storage';
+import { useNetInfo } from '../hooks/use-net-info-provider';
 import cas from './authorizers/CASAuthorizer';
 import iap from './authorizers/IAPAuthorizer';
 import type {

@@ -7,8 +7,8 @@ import RenderHTMLasNative, {
 	useInternalRenderer,
 } from 'react-native-render-html';
 
-import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { families } from 'src/theme/typography';
+import { HeaderScreenContainer } from '../../components/Header/Header';
+import { families } from '../../theme/typography';
 
 import { BurgerMenu } from '../icons/BurgerMenu';
 import { SettingsCog } from '../icons/SettingsCog';
@@ -16,7 +16,7 @@ import { AppLogo } from '../icons/AppLogo';
 
 import { EditionsMenu } from '../icons/EditionsMenu';
 import { Button } from '../Button/Button';
-import { color } from 'src/theme/color';
+import { color } from '../../theme/color';
 
 const customFonts = Object.values(families).reduce(
 	(acc: string[], value) => [...acc, ...Object.values(value)],

@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, { G, Path } from 'react-native-svg';
-import type { Direction } from 'src/common';
+import type { Direction } from '../../common';
 
 export const Arrow = ({
 	fill,

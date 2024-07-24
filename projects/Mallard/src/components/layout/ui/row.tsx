@@ -3,10 +3,10 @@ import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Highlight } from 'src/components/highlight';
-import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text';
-import { useAppAppearance } from 'src/theme/appearance';
-import { metrics } from 'src/theme/spacing';
+import { Highlight } from '../../../components/highlight';
+import { UiBodyCopy, UiExplainerCopy } from '../../../components/styled-text';
+import { useAppAppearance } from '../../../theme/appearance';
+import { metrics } from '../../../theme/spacing';
 
 const styles = StyleSheet.create({
 	heading: {

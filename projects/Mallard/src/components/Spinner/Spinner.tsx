@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import { ariaHidden } from 'src/helpers/a11y';
-import { safeInterpolation } from 'src/helpers/math';
-import { useLargeDeviceMemory } from 'src/hooks/use-config-provider';
-import { color } from 'src/theme/color';
+import { ariaHidden } from '../../helpers/a11y';
+import { safeInterpolation } from '../../helpers/math';
+import { useLargeDeviceMemory } from '../../hooks/use-config-provider';
+import { color } from '../../theme/color';
 
 const styles = StyleSheet.create({
 	ball: {

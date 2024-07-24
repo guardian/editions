@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { ScrollContainer } from 'src/components/layout/ui/container';
-import { Heading } from 'src/components/layout/ui/row';
-import { List } from 'src/components/lists/list';
-import { EDITIONS_HEADER_TITLE } from 'src/helpers/words';
-import { useEditions } from 'src/hooks/use-edition-provider';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
+import { HeaderScreenContainer } from '../../components/Header/Header';
+import { ScrollContainer } from '../../components/layout/ui/container';
+import { Heading } from '../../components/layout/ui/row';
+import { List } from '../../components/lists/list';
+import { EDITIONS_HEADER_TITLE } from '../../helpers/words';
+import { useEditions } from '../../hooks/use-edition-provider';
+import type { MainStackParamList } from '../../navigation/NavigationModels';
 
 const EditionsScreen = () => {
 	const navigation =

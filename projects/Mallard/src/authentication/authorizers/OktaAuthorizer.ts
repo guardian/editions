@@ -3,7 +3,7 @@ import {
 	getUserFromIdToken,
 	isAuthenticated,
 } from '@okta/okta-react-native';
-import { oktaDataCache } from 'src/helpers/storage';
+import { oktaDataCache } from '../../helpers/storage';
 import { canViewEditionOkta } from '../helpers';
 import { Authorizer } from '../lib/Authorizer';
 import type { AuthResult } from '../lib/Result';

@@ -5,10 +5,10 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import type { Forecast } from 'src/common';
-import { initisaliseLocationPermission } from 'src/helpers/location-permission';
-import { isWeatherShownCache } from 'src/helpers/storage';
-import { errorService } from 'src/services/errors';
+import type { Forecast } from '../../common';
+import { initisaliseLocationPermission } from '../../helpers/location-permission';
+import { isWeatherShownCache } from '../../helpers/storage';
+import { errorService } from '../../services/errors';
 import { useAppState } from '../use-app-state-provider';
 import type { Weather } from './utils';
 import { getWeather } from './utils';

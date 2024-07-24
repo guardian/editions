@@ -5,9 +5,9 @@ import {
 	useAccess,
 	useIdentity,
 	useOktaData,
-} from 'src/authentication/AccessContext';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
+} from '../authentication/AccessContext';
+import type { MainStackParamList } from '../navigation/NavigationModels';
+import { RouteNames } from '../navigation/NavigationModels';
 
 const useLoginOverlay = () => {
 	const { navigate } =

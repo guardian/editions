@@ -6,13 +6,13 @@ import type {
 	Image,
 	ImageUse,
 	Issue,
-} from 'src/common';
+} from '../common';
 import {
 	defaultRegionalEditions,
 	frontPath,
 	imagePath,
 	issuePath,
-} from 'src/common';
+} from '../common';
 
 export interface PathToIssue {
 	localIssueId: Issue['localId'];

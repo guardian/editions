@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
-import { useIssueScreenSize } from 'src/screens/issue/use-size';
-import { metrics } from 'src/theme/spacing';
+import { useIssueScreenSize } from '../../../screens/issue/use-size';
+import { metrics } from '../../../theme/spacing';
 
 const styles = StyleSheet.create({
 	outer: {

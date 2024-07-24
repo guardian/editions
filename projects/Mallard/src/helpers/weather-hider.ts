@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { largeDeviceMemory } from 'src/hooks/use-config-provider';
-import { getDefaultEditionSlug } from 'src/hooks/use-edition-provider';
-import type { IsWeatherShown } from 'src/hooks/use-weather-provider';
-import { errorService } from 'src/services/errors';
+import { largeDeviceMemory } from '../hooks/use-config-provider';
+import { getDefaultEditionSlug } from '../hooks/use-edition-provider';
+import type { IsWeatherShown } from '../hooks/use-weather-provider';
+import { errorService } from '../services/errors';
 
 // Purpose: To hide the weather on the first load unless the user turns it on
 // Intended for use on lower powered devices and for users who do not use the UK Daily edition as their default edition

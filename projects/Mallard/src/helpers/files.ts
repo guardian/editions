@@ -1,16 +1,16 @@
 import RNFS from 'react-native-fs';
 import { unzip } from 'react-native-zip-archive';
-import type { Issue, IssueSummary } from 'src/common';
-import { getEditionIds } from 'src/common';
-import { updateListeners } from 'src/download-edition/download-and-unzip';
-import { editionsListCache, issueSummaryCache } from 'src/helpers/storage';
+import type { Issue, IssueSummary } from '../common';
+import { getEditionIds } from '../common';
+import { updateListeners } from '../download-edition/download-and-unzip';
+import { editionsListCache, issueSummaryCache } from '../helpers/storage';
 import {
 	getApiUrlSetting,
 	getMaxAvailableEditions,
-} from 'src/hooks/use-config-provider';
-import { getSelectedEditionSlug } from 'src/hooks/use-edition-provider';
-import { FSPaths } from 'src/paths';
-import { errorService } from 'src/services/errors';
+} from '../hooks/use-config-provider';
+import { getSelectedEditionSlug } from '../hooks/use-edition-provider';
+import { FSPaths } from '../paths';
+import { errorService } from '../services/errors';
 import { londonTime } from './date';
 
 // matches the issue date, i.e. 2020-02-01

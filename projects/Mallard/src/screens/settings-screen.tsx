@@ -9,26 +9,26 @@ import {
 	useAccess,
 	useIdentity,
 	useOktaData,
-} from 'src/authentication/AccessContext';
-import { isStaffMemberOkta } from 'src/authentication/helpers';
-import { HeaderScreenContainer } from 'src/components/Header/Header';
-import { RightChevron } from 'src/components/icons/RightChevron';
-import { ScrollContainer } from 'src/components/layout/ui/container';
-import { Heading, Row, Separator } from 'src/components/layout/ui/row';
-import { DualButton } from 'src/components/lists/DualButton';
-import { FullButton } from 'src/components/lists/FullButton';
-import { logEvent } from 'src/helpers/analytics';
-import { copy } from 'src/helpers/words';
+} from '../authentication/AccessContext';
+import { isStaffMemberOkta } from '../authentication/helpers';
+import { HeaderScreenContainer } from '../components/Header/Header';
+import { RightChevron } from '../components/icons/RightChevron';
+import { ScrollContainer } from '../components/layout/ui/container';
+import { Heading, Row, Separator } from '../components/layout/ui/row';
+import { DualButton } from '../components/lists/DualButton';
+import { FullButton } from '../components/lists/FullButton';
+import { logEvent } from '../helpers/analytics';
+import { copy } from '../helpers/words';
 import {
 	useIsUsingProdDevtools,
 	useNotificationsEnabled,
-} from 'src/hooks/use-config-provider';
-import { useOkta } from 'src/hooks/use-okta-sign-in';
-import { useIsWeatherShown } from 'src/hooks/use-weather-provider';
-import type { MainStackParamList } from 'src/navigation/NavigationModels';
-import { RouteNames } from 'src/navigation/NavigationModels';
-import { BetaButtonOption } from 'src/screens/settings/join-beta-button';
-import { WithAppAppearance } from 'src/theme/appearance';
+} from '../hooks/use-config-provider';
+import { useOkta } from '../hooks/use-okta-sign-in';
+import { useIsWeatherShown } from '../hooks/use-weather-provider';
+import type { MainStackParamList } from '../navigation/NavigationModels';
+import { RouteNames } from '../navigation/NavigationModels';
+import { BetaButtonOption } from '../screens/settings/join-beta-button';
+import { WithAppAppearance } from '../theme/appearance';
 
 const MiscSettingsList = () => {
 	const navigation =

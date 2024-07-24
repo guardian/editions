@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
-import type { CrosswordArticle } from 'src/common';
-import { getBundleUri } from 'src/helpers/webview';
+import type { CrosswordArticle } from '../../../common';
+import { getBundleUri } from '../../../helpers/webview';
 
 const styles = StyleSheet.create({ flex: { flex: 1 } });
 

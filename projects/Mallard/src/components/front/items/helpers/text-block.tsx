@@ -1,15 +1,19 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { Text, View } from 'react-native';
-import type { ItemSizes } from 'src/common';
-import { PageLayoutSizes } from 'src/common';
-import { Quote } from 'src/components/icons/Quote';
-import { TextWithIcon } from 'src/components/layout/text-with-icon';
-import { useArticle } from 'src/hooks/use-article';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
-import type { FontSizes } from 'src/theme/typography';
-import { applyScale, getFont, getUnscaledFont } from 'src/theme/typography';
+import type { ItemSizes } from '../../../../common';
+import { PageLayoutSizes } from '../../../../common';
+import { Quote } from '../../../../components/icons/Quote';
+import { TextWithIcon } from '../../../../components/layout/text-with-icon';
+import { useArticle } from '../../../../hooks/use-article';
+import { color } from '../../../../theme/color';
+import { metrics } from '../../../../theme/spacing';
+import type { FontSizes } from '../../../../theme/typography';
+import {
+	applyScale,
+	getFont,
+	getUnscaledFont,
+} from '../../../../theme/typography';
 import { HeadlineCardText, HeadlineKickerText } from '../../../styled-text';
 import { useIsOpinionCard } from './types';
 

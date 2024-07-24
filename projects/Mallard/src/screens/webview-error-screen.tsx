@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { SvgOfflineCloud } from 'src/components/icons/OfflineCloud';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
-import { getFont } from 'src/theme/typography';
+import { SvgOfflineCloud } from '../components/icons/OfflineCloud';
+import { color } from '../theme/color';
+import { metrics } from '../theme/spacing';
+import { getFont } from '../theme/typography';
 
 const WebviewError = () => {
 	const copy =

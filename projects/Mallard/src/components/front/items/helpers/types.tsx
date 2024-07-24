@@ -1,5 +1,5 @@
-import { ArticleType } from 'src/common';
-import { useArticle } from 'src/hooks/use-article';
+import { ArticleType } from '../../../../common';
+import { useArticle } from '../../../../hooks/use-article';
 
 export const useIsOpinionCard = () => {
 	const [, { pillar, type }] = useArticle();

@@ -1,8 +1,8 @@
 import { NativeModules, Platform } from 'react-native';
 import type { Purchase } from 'react-native-iap';
 import { getAvailablePurchases, validateReceiptIos } from 'react-native-iap';
-import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants';
-import { isInBeta } from 'src/helpers/release-stream';
+import { ITUNES_CONNECT_SHARED_SECRET } from '../../constants';
+import { isInBeta } from '../../helpers/release-stream';
 import type { AuthResult } from '../lib/Result';
 import { ErrorResult, InvalidResult, ValidResult } from '../lib/Result';
 

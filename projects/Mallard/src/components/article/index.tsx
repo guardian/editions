@@ -1,8 +1,8 @@
 import React from 'react';
-import type { CAPIArticle, IssueOrigin } from 'src/common';
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
-import type { PathToArticle } from 'src/paths';
-import { color } from 'src/theme/color';
+import type { CAPIArticle, IssueOrigin } from '../../common';
+import { FlexErrorMessage } from '../../components/layout/ui/errors/flex-error-message';
+import type { PathToArticle } from '../../paths';
+import { color } from '../../theme/color';
 import { ErrorBoundary } from '../layout/ui/errors/error-boundary';
 import type { HeaderControlProps } from './types/article';
 import { Article } from './types/article';

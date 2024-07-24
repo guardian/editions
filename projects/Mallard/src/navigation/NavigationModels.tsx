@@ -1,4 +1,4 @@
-import type { SignInFailedProps } from 'src/components/Modals/SignInFailedModal';
+import type { SignInFailedProps } from '../components/Modals/SignInFailedModal';
 import type {
 	ArticleNavigationProps,
 	IssueNavigationProps,

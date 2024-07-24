@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import React, { useState } from 'react';
-import type { ToastList, ToastProps } from 'src/components/toast/toast';
-import { ToastRootHolder } from 'src/components/toast/toast';
-import { createProviderFromHook, providerHook } from 'src/helpers/provider';
+import type { ToastList, ToastProps } from '../components/toast/toast';
+import { ToastRootHolder } from '../components/toast/toast';
+import { createProviderFromHook, providerHook } from '../helpers/provider';
 
 /*
   Exports

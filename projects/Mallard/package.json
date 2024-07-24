@@ -26,8 +26,8 @@
 		"write-prod-env": "node ../scripts/src/.env.production.js",
 		"update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
 		"install-pods": "cd ios && bundle install && bundle exec pod install",
-		"lint": "node_modules/eslint/bin/eslint.js 'src/**/*.{ts,tsx}'",
-		"lint:fix": "node_modules/eslint/bin/eslint.js 'src/**/*.{ts,tsx}' --fix",
+		"lint": "node_modules/eslint/bin/eslint.js './src/**/*.{ts,tsx}'",
+		"lint:fix": "node_modules/eslint/bin/eslint.js './src/**/*.{ts,tsx}' --fix",
 		"prettier": "prettier . --write",
 		"prettier:check": "prettier . --check",
 		"postinstall": "patch-package"

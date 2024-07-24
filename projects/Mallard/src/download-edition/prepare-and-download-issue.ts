@@ -1,7 +1,7 @@
-import { downloadTodaysIssue } from 'src/download-edition/download-todays-issue';
-import { largeDeviceMemory } from 'src/hooks/use-config-provider';
-import type { NetInfoState } from 'src/hooks/use-net-info-provider';
+import { downloadTodaysIssue } from '../download-edition/download-todays-issue';
 import { prepFileSystem } from '../helpers/files';
+import { largeDeviceMemory } from '../hooks/use-config-provider';
+import type { NetInfoState } from '../hooks/use-net-info-provider';
 import { cleanPushTrackingByDays } from '../notifications/push-tracking';
 import {
 	cleanOldEditions,

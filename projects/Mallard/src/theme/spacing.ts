@@ -1,6 +1,6 @@
 import { Platform, StatusBar } from 'react-native';
-import { toSize } from 'src/common';
-import { iosMajorVersion } from 'src/helpers/platform';
+import { toSize } from '../common';
+import { iosMajorVersion } from '../helpers/platform';
 import { getFont } from './typography';
 
 const spacing = [0, 3, 6, 12, 18, 30];

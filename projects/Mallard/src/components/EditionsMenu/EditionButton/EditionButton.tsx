@@ -2,8 +2,11 @@ import { brand } from '@guardian/src-foundations/palette';
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import Image from 'react-native-fast-image';
-import { TitlepieceText, UiExplainerCopy } from 'src/components/styled-text';
-import { localDate } from 'src/helpers/date';
+import {
+	TitlepieceText,
+	UiExplainerCopy,
+} from '../../../components/styled-text';
+import { localDate } from '../../../helpers/date';
 import { styles } from './styles';
 
 interface Props {

@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
 import type { LayoutRectangle } from 'react-native';
 import { Dimensions } from 'react-native';
-import { PageLayoutSizes } from 'src/common';
-import { metrics } from 'src/theme/spacing';
+import { PageLayoutSizes } from '../../common';
+import { metrics } from '../../theme/spacing';
 import { SLIDER_FRONT_HEIGHT } from '../article/slider/SliderTitle';
 
 const BreakpointContext = createContext<[PageLayoutSizes, LayoutRectangle]>([
