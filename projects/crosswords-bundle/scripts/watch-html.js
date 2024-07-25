@@ -38,7 +38,7 @@ const watchHTML = () => {
 
     const main = async () => {
         fs.writeFileSync(
-            resolve(__dirname, 'src', 'html-bundle-info.json'),
+            resolve(__dirname, '..', 'src', 'html-bundle-info.json'),
             JSON.stringify(
                 {
                     'hey!': `this file is generated at build time. do not edit manually. Bump up the version by editing ./VERSION`,
