@@ -1312,12 +1312,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.0.tgz#a5417ae8427873f1dd08b70b3574b453e67b5f7f"
   integrity sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==
 
-"@guardian/react-crossword@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-2.0.1.tgz#de3b1608208bab266535fda950e672414401f386"
-  integrity sha512-edR/sCVSpA5iHdg2VxCJvTotRMGihLCUaM93+FHPYohkweenUHKAuPffqZG2NYF3FpeMGHgqoWcKcjt7m7ticQ==
+"@guardian/react-crossword@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-2.0.2.tgz#1833f3576e3260efc2eeaed394af81b94920f5ad"
+  integrity sha512-pFvCpuUH+GKz12uUzW4+Lck/ZhDWvqLodr1UwXIE7qjJCz8V4NEfuiGZkkIpVoPh+dEHTkiDQ6Ks4653KdH01g==
   dependencies:
-    bean "~1.0.14"
     bonzo "~2.0.0"
     fastdom "1.0.12"
     lodash "^4.17.21"
@@ -3027,11 +3026,6 @@ batch@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
   integrity sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==
-
-bean@~1.0.14:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/bean/-/bean-1.0.15.tgz#b4a9fff82618b071471676c8b190868048c34775"
-  integrity sha512-/X7mF8caOC3qZYSJu62wEJ7AO5/ZIKwwvjBFded5s8IDdRLJSAXfYLJaNPIa/ALThJIWtqtJbbfGbGOjISX1bw==
 
 bfj@^7.0.2:
   version "7.1.0"
