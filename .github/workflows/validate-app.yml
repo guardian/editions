@@ -30,16 +30,25 @@ jobs:
             - name: install Mallard dependencies
               run: |
                   cd projects/Mallard
+                  corepack enable
+                  corepack prepare yarn@3.6.4 --activate
+                  yarn set version 3.6.4 
                   yarn
 
             - name: install scripts dependencies
               run: |
                   cd projects/scripts
+                  corepack enable
+                  corepack prepare yarn@3.6.4 --activate
+                  yarn set version 3.6.4 
                   yarn
 
             - name: install crosswords-bundle dependencies
               run: |
                   cd projects/crosswords-bundle
+                  corepack enable
+                  corepack prepare yarn@3.6.4 --activate
+                  yarn set version 3.6.4 
                   yarn
 
             - name: install common dependencies

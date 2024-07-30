@@ -1,6 +1,5 @@
 const { exec } = require('child_process')
 const bundles = require('./manifest')
-const chalk = require('chalk')
 
 const bundleHTML = (location = 'Mallard') => {
     for (const { project, buildScript, buildPath, key } of Object.values(
@@ -19,7 +18,15 @@ const bundleHTML = (location = 'Mallard') => {
                     console.error('err:', err)
                     return
                 }
-                console.log(chalk.green(`Bundled ${key}`))
+                ;(async () => {
+                    try {
+                        const chalk = await import('chalk')
+
+                        console.log(chalk.default.green(`Bundled ${key}`))
+                    } catch (error) {
+                        console.error('Error loading module:', error)
+                    }
+                })()
             },
         )
     }

@@ -1,9 +1,32 @@
 const { exec } = require('child_process')
 const bundles = require('./manifest')
 const fs = require('fs')
-const chalk = require('chalk')
 const { resolve } = require('path')
 const kill = require('kill-port')
+
+const chalkMessage = (message, colour) => {
+    ;(async () => {
+        try {
+            const chalk = await import('chalk')
+            switch (colour) {
+                case 'green':
+                    console.log(chalk.default.green(message))
+                    break
+                case 'red':
+                    console.log(chalk.default.red(message))
+                    break
+                case 'yellow':
+                    console.log(chalk.default.yellow(message))
+                    break
+                default:
+                    console.log(chalk.default.white(message))
+                    break
+            }
+        } catch (error) {
+            console.error('Error loading module:', error)
+        }
+    })()
+}
 
 const watchHTML = () => {
     const startWatchers = async () => {
@@ -12,7 +35,7 @@ const watchHTML = () => {
         )) {
             await kill(watchPort, 'tcp').catch(() => {})
             setTimeout(() => {
-                console.log(chalk.green(`Watching ${key}`))
+                chalkMessage(`Watching ${key}`, 'green')
                 exec(
                     [`cd ../../${project}`, watchScript].join(' && '),
                     (err, stdout, stderr) => {
@@ -22,7 +45,10 @@ const watchHTML = () => {
                                 process.exit(0)
                             }
                             console.error(
-                                chalk.red('Failed watching bundle ' + key),
+                                chalkMessage(
+                                    'Failed watching bundle ' + key,
+                                    'red',
+                                ),
                             )
                             console.error(stderr)
 

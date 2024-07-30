@@ -15,7 +15,6 @@ const { S3 } = require('@aws-sdk/client-s3')
 
 const path = require('path')
 const fs = require('fs')
-const chalk = require('chalk')
 const argv = require('yargs').argv
 
 const appRelativePath = argv.appRelativePath || '../../Mallard/'
@@ -29,6 +28,24 @@ const SENTRY_PATH = path.join(
     `${appRelativePath}ios/sentry.properties`,
 )
 
+const chalkMessage = (message, colour) => {
+    ;(async () => {
+        try {
+            const chalk = await import('chalk')
+            switch (colour) {
+                case 'green':
+                    console.log(chalk.default.green(message))
+                case 'red':
+                    console.log(chalk.default.red(message))
+                case 'yellow':
+                    console.log(chalk.default.yellow(message))
+            }
+        } catch (error) {
+            console.error('Error loading module:', error)
+        }
+    })()
+}
+
 const sentryPropertiesFileWrite = (platform, file) => {
     fs.writeFile(
         path.resolve(
@@ -41,7 +58,7 @@ const sentryPropertiesFileWrite = (platform, file) => {
                 console.error(e)
                 process.exit()
             }
-            console.log(chalk.green(`${platform} sentry.properties file added`))
+            chalkMessage(`${platform} sentry.properties file added`, 'green')
         },
     )
 }
@@ -49,10 +66,10 @@ const sentryPropertiesFileWrite = (platform, file) => {
 const failureMessage = (path, error) => {
     const message = `Unable to update environment variables, check you have \`${AWS_PROFILE}\` credentials and your args are correct.`
     if (fs.existsSync(path)) {
-        console.log(chalk.yellow(message))
+        chalkMessage(message, 'yellow')
     } else {
         console.error(error)
-        console.log(chalk.red(message))
+        chalkMessage(message, 'red')
         process.exit(1)
     }
 }

@@ -134,5 +134,6 @@
 	],
 	"engines": {
 		"node": "18"
-	}
+	},
+	"packageManager": "yarn@3.6.4"
 }
