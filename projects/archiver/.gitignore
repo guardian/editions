@@ -3,3 +3,4 @@
 !types/*.d.ts
 !jest.config.js
 coverage
+.yarn

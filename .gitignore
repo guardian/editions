@@ -8,3 +8,4 @@ projects/aws/cloudformation.yaml
 projects/aws/logging-cloudformation.yaml
 .idea
 projects/.parcel-cache
+.yarn
