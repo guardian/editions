@@ -25,6 +25,5 @@
     "private": true,
     "dependencies": {
         "node-fetch": "^2.6.7"
-    },
-    "packageManager": "yarn@3.6.4"
+    }
 }

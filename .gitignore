@@ -8,12 +8,3 @@ projects/aws/cloudformation.yaml
 projects/aws/logging-cloudformation.yaml
 .idea
 projects/.parcel-cache
-
-# yarn package manager ignores: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
