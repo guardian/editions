@@ -14,5 +14,6 @@
         "yargs": "^15.0.2"
     },
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "packageManager": "yarn@3.6.4"
 }

@@ -21,6 +21,7 @@ jobs:
 
             - name: install project level dependencies
               run: |
+                  yarn set version 3.6.4
                   yarn
 
             - uses: actions/setup-node@v3
@@ -30,16 +31,19 @@ jobs:
             - name: install scripts dependencies
               run: |
                   cd projects/scripts
+                  yarn set version 3.6.4
                   yarn
 
             - name: install crosswords-bundle dependencies
               run: |
                   cd projects/crosswords-bundle
+                  yarn set version 3.6.4
                   yarn
 
             - name: install common dependencies
               run: |
                   cd projects/common
+                  yarn set version 3.6.4
                   yarn
 
             - name: install Mallard dependencies
