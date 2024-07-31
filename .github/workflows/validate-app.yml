@@ -48,12 +48,6 @@ jobs:
                   cd projects/common
                   yarn
 
-            - name: install Mallard dependencies
-              run: |
-                  cd projects/Mallard
-                  yarn set version 3.6.4
-                  yarn
-
             - name: validate Mallard project
               run: |
                   cd projects/Mallard
