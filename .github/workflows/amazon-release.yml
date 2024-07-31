@@ -54,6 +54,7 @@ jobs:
             - name: install Mallard dependencies
               run: |
                   cd projects/Mallard
+                  yarn set version 3.6.4
                   yarn
 
             - name: install scripts dependencies
