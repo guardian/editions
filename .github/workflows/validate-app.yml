@@ -27,11 +27,6 @@ jobs:
               with:
                   node-version-file: 'projects/Mallard/.nvmrc'
 
-            - name: install Mallard dependencies
-              run: |
-                  cd projects/Mallard
-                  yarn
-
             - name: install scripts dependencies
               run: |
                   cd projects/scripts
@@ -45,6 +40,12 @@ jobs:
             - name: install common dependencies
               run: |
                   cd projects/common
+                  yarn
+
+            - name: install Mallard dependencies
+              run: |
+                  cd projects/Mallard
+                  yarn set version 3.6.4
                   yarn
 
             - name: validate Mallard project
