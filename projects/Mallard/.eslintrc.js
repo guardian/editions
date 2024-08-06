@@ -136,6 +136,11 @@ module.exports = {
 			// Tells eslint-plugin-react to automatically detect the version of React to use
 			version: 'detect',
 		},
+		'import/resolver': {
+			typescript: {
+				alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+			},
+		},
 	},
 	root: true,
 };
