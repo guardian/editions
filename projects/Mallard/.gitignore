@@ -21,7 +21,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-ios/.xcode.env.local
+**/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -73,7 +73,7 @@ html/crosswords.bundle/
 coverage
 
 # CocoaPods
-/ios/Pods/
+**/Pods/
 /ios/vendor/
 /vendor/bundle/
 
