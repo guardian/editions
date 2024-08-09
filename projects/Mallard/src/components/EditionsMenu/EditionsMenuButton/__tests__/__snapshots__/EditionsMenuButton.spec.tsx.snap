@@ -53,8 +53,8 @@ exports[`EditionsMenuButton should display a default EditionsMenuButton with cor
     }
   >
     <RNSVGSvgView
-      bbHeight="42"
-      bbWidth="42"
+      bbHeight={42}
+      bbWidth={42}
       fill="none"
       focusable={false}
       height={42}

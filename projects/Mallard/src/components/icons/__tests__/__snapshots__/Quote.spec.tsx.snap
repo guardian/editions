@@ -2,8 +2,8 @@
 
 exports[`Quote should display a Quote icon in SVG 1`] = `
 <RNSVGSvgView
-  bbHeight="21"
-  bbWidth="37"
+  bbHeight={21}
+  bbWidth={37}
   fill="none"
   focusable={false}
   height={21}

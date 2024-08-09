@@ -22,8 +22,10 @@ const FullButton = ({
 		accessible={accessible}
 		accessibilityRole={accessibilityRole}
 	>
-		<UiBodyCopy weight="bold">{text}</UiBodyCopy>
-		<RightChevron />
+		<>
+			<UiBodyCopy weight="bold">{text}</UiBodyCopy>
+			<RightChevron />
+		</>
 	</Highlight>
 );
 

@@ -2,8 +2,8 @@
 
 exports[`Editions should display a Editions icon in SVG 1`] = `
 <RNSVGSvgView
-  bbHeight="42"
-  bbWidth="42"
+  bbHeight={42}
+  bbWidth={42}
   fill="none"
   focusable={false}
   height={42}

@@ -1,21 +1,17 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     ext {
-        buildToolsVersion = "33.0.0"
+        buildToolsVersion = "34.0.0"
         minSdkVersion = 30
-        compileSdkVersion = 33
-        targetSdkVersion = 33
+        compileSdkVersion = 34
+        targetSdkVersion = 34
         supportLibVersion = '1.0.2' // Use '28.0.0' or don't specify for old libraries, '1.0.2' or similar for AndroidX
         androidXVersion = '1.0.2' // This is for react-native-inappbrowser-reborn
         mediaCompatVersion = '1.0.1' // Do not specify if using old libraries, specify '1.0.1' or similar for androidx.media:media dependency
         supportV4Version = '1.0.0' // Do not specify if using old libraries, specify '1.0.0' or similar for androidx.legacy:legacy-support-v4 dependency
         androidXAnnotation = "1.1.0"
         androidXBrowser = "1.0.0"
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-        ndkVersion = "23.1.7779620"
-        FLIPPER_VERSION = "0.103.0"
-        kotlin_version = "1.7.10"
+        ndkVersion = "26.1.10909125"
+        kotlin_version = "1.9.22"
     }
     configurations {
         all*.exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -28,11 +24,9 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        
         classpath("com.google.gms:google-services:4.3.8")
-
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
 }
 
@@ -44,3 +38,5 @@ allprojects {
        }
     }
 }
+
+apply plugin: "com.facebook.react.rootproject"

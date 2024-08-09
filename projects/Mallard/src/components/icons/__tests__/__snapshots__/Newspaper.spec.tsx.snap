@@ -2,8 +2,8 @@
 
 exports[`Newspaper should display a Newspaper icon in SVG 1`] = `
 <RNSVGSvgView
-  bbHeight="26"
-  bbWidth="18"
+  bbHeight={26}
+  bbWidth={18}
   fill="none"
   focusable={false}
   height={26}

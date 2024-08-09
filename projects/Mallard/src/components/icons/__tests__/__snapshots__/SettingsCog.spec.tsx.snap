@@ -3,8 +3,8 @@
 exports[`SettingsCog should display a SettingsCog icon in SVG 1`] = `
 <RNSVGSvgView
   align="xMidYMid"
-  bbHeight="40"
-  bbWidth="40"
+  bbHeight={40}
+  bbWidth={40}
   fill="none"
   focusable={false}
   height={40}

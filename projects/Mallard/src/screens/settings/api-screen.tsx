@@ -1,8 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { StyleSheet, TextInput } from 'react-native';
 import { HeaderScreenContainer } from '../../components/Header/Header';
 import { ScrollContainer } from '../../components/layout/ui/container';
 import { Footer, Heading } from '../../components/layout/ui/row';

@@ -4,11 +4,7 @@ import type {
 	TouchableWithoutFeedbackProps,
 	ViewStyle,
 } from 'react-native';
-import { Platform } from 'react-native';
-import {
-	TouchableNativeFeedback,
-	TouchableOpacity,
-} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
 const Highlight: React.FC<
 	{
@@ -17,11 +13,7 @@ const Highlight: React.FC<
 		style?: StyleProp<ViewStyle>;
 	} & TouchableWithoutFeedbackProps
 > = ({ onPress, children, style }) => {
-	return Platform.OS === 'android' ? (
-		<TouchableNativeFeedback {...{ style }} onPress={onPress}>
-			{children}
-		</TouchableNativeFeedback>
-	) : (
+	return (
 		<TouchableOpacity {...{ style }} onPress={onPress}>
 			{children}
 		</TouchableOpacity>

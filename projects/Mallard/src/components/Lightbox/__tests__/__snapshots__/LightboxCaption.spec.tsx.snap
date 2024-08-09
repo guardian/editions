@@ -28,8 +28,8 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
   >
     <RNSVGSvgView
       align="xMidYMid"
-      bbHeight="9"
-      bbWidth="11"
+      bbHeight={9}
+      bbWidth={11}
       fill="none"
       focusable={false}
       height={9}

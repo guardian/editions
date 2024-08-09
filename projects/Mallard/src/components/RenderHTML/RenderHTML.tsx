@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 import type { CustomBlockRenderer } from 'react-native-render-html';
 import RenderHTMLasNative, {
 	defaultSystemFonts,
