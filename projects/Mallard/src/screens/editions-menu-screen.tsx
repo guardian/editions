@@ -2,9 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import {
+	Dimensions,
+	StyleSheet,
+	TouchableWithoutFeedback,
+	View,
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { EditionsMenu } from '../components/EditionsMenu/EditionsMenu';
 import { EditionsMenuScreenHeader } from '../components/ScreenHeader/EditionMenuScreenHeader';
 import { logEvent } from '../helpers/analytics';
@@ -53,10 +57,9 @@ export const ScreenFiller = ({
 			]}
 		>
 			{DeviceInfo.isTablet() && (
-				<TouchableWithoutFeedback
-					onPress={navigation.goBack}
-					style={styles.touchable}
-				/>
+				<TouchableWithoutFeedback onPress={navigation.goBack}>
+					<View style={styles.touchable} />
+				</TouchableWithoutFeedback>
 			)}
 
 			<View
