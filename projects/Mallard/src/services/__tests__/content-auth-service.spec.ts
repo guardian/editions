@@ -3,7 +3,6 @@ import { fetchCasSubscription } from '../content-auth-service';
 describe('content-auth-service', () => {
 	describe('fetchCasSubscription', () => {
 		it('throws an error on non-200 responses', async () => {
-			// @ts-ignore
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 419,

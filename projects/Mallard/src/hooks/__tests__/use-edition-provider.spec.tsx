@@ -140,7 +140,6 @@ describe('useEditions', () => {
 	describe('fetchEditions', () => {
 		it('should return json if there is a 200 response from the endpoint', async () => {
 			const body = DEFAULT_EDITIONS_LIST;
-			// @ts-expect-error global doesnt exist, however the test should mock the function not the fetch
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 200,
@@ -154,7 +153,6 @@ describe('useEditions', () => {
 			expect(editionsList).toEqual(body);
 		});
 		it('should return null if there is not a 200 response from the endpoint', async () => {
-			// @ts-expect-error global doesnt exist, however the test should mock the function not the fetch
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 500,
@@ -175,7 +173,6 @@ describe('useEditions', () => {
 		});
 		it('should return the editions list from the endpoint in the happy path', async () => {
 			const body = DEFAULT_EDITIONS_LIST;
-			// @ts-expect-error global doesnt exist, however the test should mock the function not the fetch
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 200,
@@ -189,7 +186,6 @@ describe('useEditions', () => {
 			expect(editionsListInCache).toEqual(body);
 		});
 		it('should return the editions list from the cache if endpoint is not avaialble', async () => {
-			// @ts-expect-error global doesnt exist, however the test should mock the function not the fetch
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 500,
@@ -202,7 +198,6 @@ describe('useEditions', () => {
 			expect(editions).toEqual(DEFAULT_EDITIONS_LIST);
 		});
 		it('should return the default editions list if there is nothing from the endpoint and no cache', async () => {
-			// @ts-expect-error global doesnt exist, however the test should mock the function not the fetch
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 500,
