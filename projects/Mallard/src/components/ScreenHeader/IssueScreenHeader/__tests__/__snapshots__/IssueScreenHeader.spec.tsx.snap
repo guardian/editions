@@ -281,7 +281,7 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
             >
               <View
                 collapsable={false}
-                handlerTag={4}
+                handlerTag={2}
                 handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}
                 onGestureHandlerEvent={[Function]}
@@ -597,87 +597,96 @@ exports[`IssueScreenHeader should match the altered style by the prop headerStyl
                                   }
                                 }
                               >
-                                <RNGestureHandlerButton
-                                  collapsable={false}
-                                  delayLongPress={600}
-                                  enabled={true}
-                                  exclusive={true}
-                                  handlerTag={5}
-                                  handlerType="NativeViewGestureHandler"
-                                  innerRef={null}
-                                  onGestureEvent={[Function]}
-                                  onGestureHandlerEvent={[Function]}
-                                  onGestureHandlerStateChange={[Function]}
-                                  onHandlerStateChange={[Function]}
-                                  rippleColor={0}
-                                  touchSoundDisabled={false}
-                                >
-                                  <View
-                                    accessible={true}
-                                    collapsable={false}
-                                    style={
-                                      {
-                                        "opacity": 1,
-                                      }
+                                <View
+                                  accessibilityState={
+                                    {
+                                      "busy": undefined,
+                                      "checked": undefined,
+                                      "disabled": undefined,
+                                      "expanded": undefined,
+                                      "selected": undefined,
                                     }
-                                  >
-                                    <View>
-                                      <Text
-                                        style={
+                                  }
+                                  accessibilityValue={
+                                    {
+                                      "max": undefined,
+                                      "min": undefined,
+                                      "now": undefined,
+                                      "text": undefined,
+                                    }
+                                  }
+                                  accessible={true}
+                                  collapsable={false}
+                                  focusable={true}
+                                  onClick={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
+                                  style={
+                                    {
+                                      "opacity": 1,
+                                    }
+                                  }
+                                >
+                                  <View>
+                                    <Text
+                                      style={
+                                        [
+                                          {
+                                            "flexShrink": 0,
+                                            "fontFamily": "GTGuardianTitlepiece-Bold",
+                                            "fontSize": 24,
+                                            "lineHeight": 26,
+                                          },
                                           [
                                             {
+                                              "color": "#FFFFFF",
+                                              "marginTop": -2,
+                                            },
+                                            undefined,
+                                            {
                                               "flexShrink": 0,
-                                              "fontFamily": "GTGuardianTitlepiece-Bold",
+                                              "fontFamily": "GHGuardianHeadline-Regular",
                                               "fontSize": 24,
                                               "lineHeight": 26,
                                             },
-                                            [
-                                              {
-                                                "color": "#FFFFFF",
-                                                "marginTop": -2,
-                                              },
-                                              undefined,
-                                              {
-                                                "flexShrink": 0,
-                                                "fontFamily": "GHGuardianHeadline-Regular",
-                                                "fontSize": 24,
-                                                "lineHeight": 26,
-                                              },
-                                              {},
-                                            ],
-                                          ]
-                                        }
-                                      >
-                                        UK Daily
-                                      </Text>
-                                      <Text
-                                        style={
+                                            {},
+                                          ],
+                                        ]
+                                      }
+                                    >
+                                      UK Daily
+                                    </Text>
+                                    <Text
+                                      style={
+                                        [
+                                          {
+                                            "flexShrink": 0,
+                                            "fontFamily": "GTGuardianTitlepiece-Bold",
+                                            "fontSize": 24,
+                                            "lineHeight": 26,
+                                          },
                                           [
                                             {
-                                              "flexShrink": 0,
-                                              "fontFamily": "GTGuardianTitlepiece-Bold",
-                                              "fontSize": 24,
-                                              "lineHeight": 26,
+                                              "color": "#FFFFFF",
+                                              "marginTop": -2,
                                             },
-                                            [
-                                              {
-                                                "color": "#FFFFFF",
-                                                "marginTop": -2,
-                                              },
-                                              {
-                                                "color": "#ffe500",
-                                              },
-                                              undefined,
-                                              {},
-                                            ],
-                                          ]
-                                        }
-                                      >
-                                         
-                                      </Text>
-                                    </View>
+                                            {
+                                              "color": "#ffe500",
+                                            },
+                                            undefined,
+                                            {},
+                                          ],
+                                        ]
+                                      }
+                                    >
+                                       
+                                    </Text>
                                   </View>
-                                </RNGestureHandlerButton>
+                                </View>
                               </View>
                               <View
                                 style={
@@ -1391,87 +1400,96 @@ exports[`IssueScreenHeader should match the default style 1`] = `
                                   }
                                 }
                               >
-                                <RNGestureHandlerButton
-                                  collapsable={false}
-                                  delayLongPress={600}
-                                  enabled={true}
-                                  exclusive={true}
-                                  handlerTag={2}
-                                  handlerType="NativeViewGestureHandler"
-                                  innerRef={null}
-                                  onGestureEvent={[Function]}
-                                  onGestureHandlerEvent={[Function]}
-                                  onGestureHandlerStateChange={[Function]}
-                                  onHandlerStateChange={[Function]}
-                                  rippleColor={0}
-                                  touchSoundDisabled={false}
-                                >
-                                  <View
-                                    accessible={true}
-                                    collapsable={false}
-                                    style={
-                                      {
-                                        "opacity": 1,
-                                      }
+                                <View
+                                  accessibilityState={
+                                    {
+                                      "busy": undefined,
+                                      "checked": undefined,
+                                      "disabled": undefined,
+                                      "expanded": undefined,
+                                      "selected": undefined,
                                     }
-                                  >
-                                    <View>
-                                      <Text
-                                        style={
+                                  }
+                                  accessibilityValue={
+                                    {
+                                      "max": undefined,
+                                      "min": undefined,
+                                      "now": undefined,
+                                      "text": undefined,
+                                    }
+                                  }
+                                  accessible={true}
+                                  collapsable={false}
+                                  focusable={true}
+                                  onClick={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
+                                  style={
+                                    {
+                                      "opacity": 1,
+                                    }
+                                  }
+                                >
+                                  <View>
+                                    <Text
+                                      style={
+                                        [
+                                          {
+                                            "flexShrink": 0,
+                                            "fontFamily": "GTGuardianTitlepiece-Bold",
+                                            "fontSize": 24,
+                                            "lineHeight": 26,
+                                          },
                                           [
                                             {
+                                              "color": "#FFFFFF",
+                                              "marginTop": -2,
+                                            },
+                                            undefined,
+                                            {
                                               "flexShrink": 0,
-                                              "fontFamily": "GTGuardianTitlepiece-Bold",
+                                              "fontFamily": "GHGuardianHeadline-Regular",
                                               "fontSize": 24,
                                               "lineHeight": 26,
                                             },
-                                            [
-                                              {
-                                                "color": "#FFFFFF",
-                                                "marginTop": -2,
-                                              },
-                                              undefined,
-                                              {
-                                                "flexShrink": 0,
-                                                "fontFamily": "GHGuardianHeadline-Regular",
-                                                "fontSize": 24,
-                                                "lineHeight": 26,
-                                              },
-                                              {},
-                                            ],
-                                          ]
-                                        }
-                                      >
-                                        UK Daily
-                                      </Text>
-                                      <Text
-                                        style={
+                                            {},
+                                          ],
+                                        ]
+                                      }
+                                    >
+                                      UK Daily
+                                    </Text>
+                                    <Text
+                                      style={
+                                        [
+                                          {
+                                            "flexShrink": 0,
+                                            "fontFamily": "GTGuardianTitlepiece-Bold",
+                                            "fontSize": 24,
+                                            "lineHeight": 26,
+                                          },
                                           [
                                             {
-                                              "flexShrink": 0,
-                                              "fontFamily": "GTGuardianTitlepiece-Bold",
-                                              "fontSize": 24,
-                                              "lineHeight": 26,
+                                              "color": "#FFFFFF",
+                                              "marginTop": -2,
                                             },
-                                            [
-                                              {
-                                                "color": "#FFFFFF",
-                                                "marginTop": -2,
-                                              },
-                                              {
-                                                "color": "#ffe500",
-                                              },
-                                              undefined,
-                                              {},
-                                            ],
-                                          ]
-                                        }
-                                      >
-                                         
-                                      </Text>
-                                    </View>
+                                            {
+                                              "color": "#ffe500",
+                                            },
+                                            undefined,
+                                            {},
+                                          ],
+                                        ]
+                                      }
+                                    >
+                                       
+                                    </Text>
                                   </View>
-                                </RNGestureHandlerButton>
+                                </View>
                               </View>
                               <View
                                 style={
