@@ -281,7 +281,7 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
             >
               <View
                 collapsable={false}
-                handlerTag={7}
+                handlerTag={3}
                 handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}
                 onGestureHandlerEvent={[Function]}
@@ -505,32 +505,40 @@ exports[`IssuePickerHeader should match the altered style by the prop headerStyl
                                   }
                                 }
                               >
-                                <RNGestureHandlerButton
-                                  collapsable={false}
-                                  delayLongPress={600}
-                                  enabled={true}
-                                  exclusive={true}
-                                  handlerTag={8}
-                                  handlerType="NativeViewGestureHandler"
-                                  onGestureEvent={[Function]}
-                                  onGestureHandlerEvent={[Function]}
-                                  onGestureHandlerStateChange={[Function]}
-                                  onHandlerStateChange={[Function]}
-                                  rippleColor={0}
-                                  touchSoundDisabled={false}
-                                >
-                                  <View
-                                    accessible={true}
-                                    collapsable={false}
-                                    style={
-                                      {
-                                        "opacity": 1,
-                                      }
+                                <View
+                                  accessibilityState={
+                                    {
+                                      "busy": undefined,
+                                      "checked": undefined,
+                                      "disabled": undefined,
+                                      "expanded": undefined,
+                                      "selected": undefined,
                                     }
-                                  >
-                                    <View />
-                                  </View>
-                                </RNGestureHandlerButton>
+                                  }
+                                  accessibilityValue={
+                                    {
+                                      "max": undefined,
+                                      "min": undefined,
+                                      "now": undefined,
+                                      "text": undefined,
+                                    }
+                                  }
+                                  accessible={true}
+                                  collapsable={false}
+                                  focusable={true}
+                                  onClick={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
+                                  style={
+                                    {
+                                      "opacity": 1,
+                                    }
+                                  }
+                                />
                               </View>
                               <View
                                 style={
@@ -1153,32 +1161,40 @@ exports[`IssuePickerHeader should match the default style 1`] = `
                                   }
                                 }
                               >
-                                <RNGestureHandlerButton
-                                  collapsable={false}
-                                  delayLongPress={600}
-                                  enabled={true}
-                                  exclusive={true}
-                                  handlerTag={2}
-                                  handlerType="NativeViewGestureHandler"
-                                  onGestureEvent={[Function]}
-                                  onGestureHandlerEvent={[Function]}
-                                  onGestureHandlerStateChange={[Function]}
-                                  onHandlerStateChange={[Function]}
-                                  rippleColor={0}
-                                  touchSoundDisabled={false}
-                                >
-                                  <View
-                                    accessible={true}
-                                    collapsable={false}
-                                    style={
-                                      {
-                                        "opacity": 1,
-                                      }
+                                <View
+                                  accessibilityState={
+                                    {
+                                      "busy": undefined,
+                                      "checked": undefined,
+                                      "disabled": undefined,
+                                      "expanded": undefined,
+                                      "selected": undefined,
                                     }
-                                  >
-                                    <View />
-                                  </View>
-                                </RNGestureHandlerButton>
+                                  }
+                                  accessibilityValue={
+                                    {
+                                      "max": undefined,
+                                      "min": undefined,
+                                      "now": undefined,
+                                      "text": undefined,
+                                    }
+                                  }
+                                  accessible={true}
+                                  collapsable={false}
+                                  focusable={true}
+                                  onClick={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
+                                  style={
+                                    {
+                                      "opacity": 1,
+                                    }
+                                  }
+                                />
                               </View>
                               <View
                                 style={
@@ -1577,7 +1593,7 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
             >
               <View
                 collapsable={false}
-                handlerTag={4}
+                handlerTag={2}
                 handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}
                 onGestureHandlerEvent={[Function]}
@@ -1801,32 +1817,40 @@ exports[`IssuePickerHeader should match the default style with a subTitle 1`] = 
                                   }
                                 }
                               >
-                                <RNGestureHandlerButton
-                                  collapsable={false}
-                                  delayLongPress={600}
-                                  enabled={true}
-                                  exclusive={true}
-                                  handlerTag={5}
-                                  handlerType="NativeViewGestureHandler"
-                                  onGestureEvent={[Function]}
-                                  onGestureHandlerEvent={[Function]}
-                                  onGestureHandlerStateChange={[Function]}
-                                  onHandlerStateChange={[Function]}
-                                  rippleColor={0}
-                                  touchSoundDisabled={false}
-                                >
-                                  <View
-                                    accessible={true}
-                                    collapsable={false}
-                                    style={
-                                      {
-                                        "opacity": 1,
-                                      }
+                                <View
+                                  accessibilityState={
+                                    {
+                                      "busy": undefined,
+                                      "checked": undefined,
+                                      "disabled": undefined,
+                                      "expanded": undefined,
+                                      "selected": undefined,
                                     }
-                                  >
-                                    <View />
-                                  </View>
-                                </RNGestureHandlerButton>
+                                  }
+                                  accessibilityValue={
+                                    {
+                                      "max": undefined,
+                                      "min": undefined,
+                                      "now": undefined,
+                                      "text": undefined,
+                                    }
+                                  }
+                                  accessible={true}
+                                  collapsable={false}
+                                  focusable={true}
+                                  onClick={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
+                                  style={
+                                    {
+                                      "opacity": 1,
+                                    }
+                                  }
+                                />
                               </View>
                               <View
                                 style={

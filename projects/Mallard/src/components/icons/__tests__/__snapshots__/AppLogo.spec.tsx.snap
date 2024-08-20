@@ -51,8 +51,8 @@ exports[`AppLogo should display a AppLogo icon in SVG 1`] = `
       }
       rx="15"
       width="150"
-      x="0"
-      y="0"
+      x={0}
+      y={0}
     />
     <RNSVGCircle
       cx="107.5"

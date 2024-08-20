@@ -150,6 +150,8 @@ const thirdPageCoverLayout = (
 const denseLayout = (): FrontCardsForArticleCount => {
     // Delete this once the client-side changes are running in the released
     // non-beta version of the app.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (process.env.EDITIONS_DENSE_LAYOUT !== 'enabled')
         return defaultLayout(FrontCardAppearance.splashPage)
     return {
