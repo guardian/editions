@@ -15,7 +15,7 @@
 }
 */
 
-module.exports = {
+export const bundles = {
     crosswords: {
         key: 'crosswords',
         project: 'crosswords-bundle',

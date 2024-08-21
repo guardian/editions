@@ -1,11 +1,15 @@
-const { exec } = require('child_process')
-const bundles = require('./manifest')
-const fs = require('fs')
-const chalk = require('chalk')
-const { resolve } = require('path')
-const kill = require('kill-port')
+import { exec } from 'child_process'
+import { bundles } from './manifest.mjs'
+import fs from 'fs'
+import chalk from 'chalk'
+import kill from 'kill-port'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
-const watchHTML = () => {
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+export const watchHTML = () => {
     const startWatchers = async () => {
         for (const { project, watchScript, key, watchPort } of Object.values(
             bundles,
@@ -52,5 +56,3 @@ const watchHTML = () => {
     }
     main()
 }
-
-module.exports = { watchHTML }

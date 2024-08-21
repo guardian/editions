@@ -3,4 +3,4 @@
 # Some kind of bash mutex so this only runs once?
 cd `dirname $0`
 cd ..
-node ./scripts/watch-html.js
+node ./scripts/watch-html.mjs

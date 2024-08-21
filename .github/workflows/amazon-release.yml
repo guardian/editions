@@ -70,6 +70,7 @@ jobs:
             - name: install crosswords-bundle dependencies
               run: |
                   cd projects/crosswords-bundle
+                  yarn set version 3.6.4
                   yarn
 
             - name: validate Mallard project

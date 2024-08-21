@@ -1,8 +1,8 @@
-const { exec } = require('child_process')
-const bundles = require('./manifest')
-const chalk = require('chalk')
+import { exec } from 'child_process'
+import { bundles } from './manifest.mjs'
+import chalk from 'chalk'
 
-const bundleHTML = (location = 'Mallard') => {
+export const bundleHTML = (location = 'Mallard') => {
     for (const { project, buildScript, buildPath, key } of Object.values(
         bundles,
     )) {
@@ -24,5 +24,3 @@ const bundleHTML = (location = 'Mallard') => {
         )
     }
 }
-
-module.exports = { bundleHTML }
