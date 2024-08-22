@@ -107,6 +107,7 @@ jobs:
                   SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
                   BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
                   SUPPLY_UPLOAD_MAX_RETRIES: 5
+                  RUBYOPT: '-rostruct' # TODO: Remove when https://github.com/fastlane/fastlane/pull/21950 gets released
 
             - uses: actions/upload-artifact@v3
               if: always()
