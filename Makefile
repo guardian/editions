@@ -1,5 +1,6 @@
+SET_YARN = yarn set version 3.6.4
 YARN = yarn
-YARNFLAGS= --frozen-lockfile --mutex network
+YARNFLAGS= --mutex network
 EXCLUDE = ${exclude}
 PROJECTS = $(filter-out $(EXCLUDE),$(patsubst projects/%, %, $(patsubst %/package.json, %, $(wildcard projects/*/package.json))))
 .PHONY: list install clean validate-% fix-% test-% build-% validate fix test
@@ -9,10 +10,10 @@ PROJECTS = $(filter-out $(EXCLUDE),$(patsubst projects/%, %, $(patsubst %/packag
 install: $(patsubst %, projects/%/node_modules, $(PROJECTS)) node_modules
 projects/%/node_modules: projects/%/yarn.lock
 	@echo "\n👟 Installing $*\n"
-	cd $(dir $@) && ${YARN} ${YARNFLAGS}
+	cd $(dir $@) && ${SET_YARN} && ${YARN} 
 node_modules: yarn.lock
 	@echo "\n👟 Installing project tools\n"
-	${YARN} ${YARNFLAGS}
+	${SET_YARN} && ${YARN} 
 #
 # Build commands
 validate: $(patsubst %, validate-%, $(PROJECTS))

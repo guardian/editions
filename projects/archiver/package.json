@@ -38,5 +38,6 @@
         "ramda": "^0.26.1",
         "ts-optchain": "^0.1.8",
         "uuidv4": "5.0.1"
-    }
+    },
+    "packageManager": "yarn@3.6.4"
 }

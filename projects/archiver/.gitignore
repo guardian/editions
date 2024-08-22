@@ -3,3 +3,12 @@
 !types/*.d.ts
 !jest.config.js
 coverage
+
+# yarn package manager ignores: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
