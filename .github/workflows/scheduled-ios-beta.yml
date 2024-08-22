@@ -36,6 +36,11 @@ jobs:
                   yarn set version 3.6.4
                   yarn
 
+            - name: install common dependencies
+              run: |
+                  cd projects/common
+                  yarn
+
             - name: install scripts dependencies
               run: |
                   cd projects/scripts
@@ -44,6 +49,7 @@ jobs:
             - name: install crosswords-bundle dependencies
               run: |
                   cd projects/crosswords-bundle
+                  yarn set version 3.6.4
                   yarn
 
             - name: validate Mallard project
