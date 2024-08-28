@@ -2,7 +2,6 @@ import type { ReactElement, ReactNode } from 'react';
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Highlight } from '../../../components/highlight';
 import { UiBodyCopy, UiExplainerCopy } from '../../../components/styled-text';
 import { useAppAppearance } from '../../../theme/appearance';
@@ -44,9 +43,7 @@ const Footer = ({
 
 const Heading = ({ children }: { children: string }) => (
 	<View style={styles.heading}>
-		<SafeAreaView>
-			<UiBodyCopy weight="bold">{children}</UiBodyCopy>
-		</SafeAreaView>
+		<UiBodyCopy weight="bold">{children}</UiBodyCopy>
 	</View>
 );
 
