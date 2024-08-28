@@ -196,7 +196,6 @@ const LightboxScreen = () => {
 						onScrollBeginDrag={handleScrollStartEvent}
 						onScrollEndDrag={() => setScrollInProgress(false)}
 						renderItem={({ item }) => {
-							console.log(item);
 							return (
 								<View style={{ width, height: '100%' }}>
 									<ImageZoom
@@ -233,7 +232,7 @@ const LightboxScreen = () => {
 						</View>
 						<Animated.View style={{ opacity: fadeAnim }}>
 							<LightboxCaption
-								caption={images[currentIndex].caption ?? ''}
+								caption={images[currentIndex]?.caption ?? ''}
 								pillarColor={
 									pillar === 'neutral'
 										? palette.neutral[100]
