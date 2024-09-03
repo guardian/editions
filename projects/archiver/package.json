@@ -30,7 +30,7 @@
     "dependencies": {
         "@types/jest": "^29.5.5",
         "archiver": "5.3.2",
-        "aws-sdk": "2.814.0",
+        "aws-sdk": "2.1687.0",
         "encoding": "^0.1.12",
         "moment": "^2.29.2",
         "node-fetch": "^2.6.7",
