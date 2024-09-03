@@ -37,7 +37,7 @@
         "@types/jest": "^29.5.5",
         "@types/node-fetch": "^2.6.5",
         "@types/ramda": "^0.29.4",
-        "aws-sdk": "2.814.0",
+        "aws-sdk": "2.1687.0",
         "aws-serverless-express": "^3.4.0",
         "aws4": "^1.10.0",
         "encoding": "^0.1.12",
