@@ -427,6 +427,7 @@ export enum CrosswordType {
     DIAN_QUIPTIC_CROSSWORD = 'quiptic-dian',
     WEEKEND = 'weekend',
     QUICK_CRYPTIC = 'quick-cryptic',
+    SPECIAL = 'special',
 }
 
 export interface CapiDateTime {
