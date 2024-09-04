@@ -2866,7 +2866,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@okta/okta-react-native@npm:^2.8.0":
+"@okta/okta-react-native@npm:^2.12.0":
   version: 2.12.0
   resolution: "@okta/okta-react-native@npm:2.12.0"
   dependencies:
@@ -8943,7 +8943,7 @@ __metadata:
     "@guardian/renditions": ^0.2.0
     "@guardian/src-foundations": ^2.5.0-rc.1
     "@likashefqet/react-native-image-zoom": ^3.0.0
-    "@okta/okta-react-native": ^2.8.0
+    "@okta/okta-react-native": ^2.12.0
     "@react-native-async-storage/async-storage": ^1.24.0
     "@react-native-clipboard/clipboard": 1.14.1
     "@react-native-community/geolocation": ^3.0.5
