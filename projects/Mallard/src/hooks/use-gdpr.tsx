@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { toggleAnalyticsRecording } from '../helpers/analytics';
 import {
-	gdprAllowFunctionalityCache,
 	gdprAllowPerformanceCache,
 	gdprConsentVersionCache,
 } from '../helpers/storage';
@@ -20,8 +18,9 @@ import { errorService } from '../services/errors';
  * v8 - Add Firebase Analytics as PERFORMANCE
  * v9 - Remove additional Logging
  * v10 - Remove Sentry from the app
+ * V11 - Make Firebase analytics required, Remove Sentry, Remove Functionality Section
  */
-const CURRENT_CONSENT_VERSION = 10;
+const CURRENT_CONSENT_VERSION = 11;
 
 /*
 Consent switches can be 'unset' or null
@@ -31,7 +30,6 @@ export type GdprSwitchSetting = null | boolean;
 export type GdprCoreSettings = {
 	gdprAllowEssential: GdprSwitchSetting;
 	gdprAllowPerformance: GdprSwitchSetting;
-	gdprAllowFunctionality: GdprSwitchSetting;
 	gdprConsentVersion: number | null;
 };
 
@@ -43,7 +41,6 @@ export enum OnboardingStatus {
 }
 
 interface GdprSettings extends GdprCoreSettings {
-	setGdprFunctionalityBucket: (setting: GdprSwitchSetting) => void;
 	setGdprPerformanceBucket: (setting: GdprSwitchSetting) => void;
 	enableAllSettings: () => void;
 	rejectAllSettings: () => void;
@@ -54,15 +51,12 @@ interface GdprSettings extends GdprCoreSettings {
 
 export type GdprSwitches = {
 	gdprAllowPerformance: GdprSettings['gdprAllowPerformance'];
-	gdprAllowFunctionality: GdprSettings['gdprAllowFunctionality'];
 };
 
 const defaultState: GdprSettings = {
 	gdprAllowEssential: true, // essential defaults to true and not switchable
 	gdprAllowPerformance: null,
-	gdprAllowFunctionality: null,
 	gdprConsentVersion: null,
-	setGdprFunctionalityBucket: () => {},
 	setGdprPerformanceBucket: () => {},
 	enableAllSettings: () => {},
 	rejectAllSettings: () => {},
@@ -77,9 +71,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const [gdprAllowPerformance, setGdprAllowPerformance] = useState<
 		GdprSettings['gdprAllowPerformance']
 	>(defaultState.gdprAllowPerformance);
-	const [gdprAllowFunctionality, setGdprAllowFunctionality] = useState<
-		GdprSettings['gdprAllowFunctionality']
-	>(defaultState.gdprAllowFunctionality);
 	const [gdprConsentVersion, setGdprConsentVersion] = useState<
 		GdprSettings['gdprConsentVersion']
 	>(defaultState.gdprConsentVersion);
@@ -97,28 +88,16 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 				.get()
 				.then((val) => setGdprConsentVersion(val))
 				.catch((e) => errorService.captureException(e)),
-			gdprAllowFunctionalityCache
-				.get()
-				.then((val) => setGdprAllowFunctionality(val))
-				.catch((e) => errorService.captureException(e)),
 		]).finally(() => setLoading(false));
 	}, []);
 
 	const hasSetGdpr = () => {
 		if (!loading) {
 			if (
-				gdprAllowFunctionality != null &&
 				gdprAllowPerformance != null &&
 				gdprConsentVersion === CURRENT_CONSENT_VERSION
 			) {
 				return OnboardingStatus.Complete;
-			}
-
-			if (
-				gdprAllowFunctionality != null ||
-				gdprAllowPerformance != null
-			) {
-				return OnboardingStatus.InProgress;
 			}
 
 			return OnboardingStatus.NotStarted;
@@ -130,9 +109,6 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		// Local state modifier
 		setGdprAllowPerformance(setting);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
-		setting
-			? toggleAnalyticsRecording(setting)
-			: toggleAnalyticsRecording(false);
 		// Persisted state modifier
 		setting === null
 			? gdprAllowPerformanceCache.reset()
@@ -140,25 +116,12 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 		gdprConsentVersionCache.set(CURRENT_CONSENT_VERSION);
 	};
 
-	const setGdprFunctionalityBucket = (setting: GdprSwitchSetting) => {
-		// Local state modifier
-		setGdprAllowFunctionality(setting);
-		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
-		// Persisted state modifier
-		setting === null
-			? gdprAllowFunctionalityCache.reset()
-			: gdprAllowFunctionalityCache.set(setting);
-		gdprConsentVersionCache.set(CURRENT_CONSENT_VERSION);
-	};
-
 	const allSettings = (modifier: boolean) => {
 		// Local state modifier
 		setGdprAllowPerformance(modifier);
-		setGdprAllowFunctionality(modifier);
 		setGdprConsentVersion(CURRENT_CONSENT_VERSION);
 		// Persisted state modifier
 		gdprAllowPerformanceCache.set(modifier);
-		gdprAllowFunctionalityCache.set(modifier);
 		gdprConsentVersionCache.set(CURRENT_CONSENT_VERSION);
 	};
 
@@ -169,11 +132,9 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 	const resetAllSettings = () => {
 		// Local state modifier
 		setGdprAllowPerformance(defaultState.gdprAllowPerformance);
-		setGdprAllowFunctionality(defaultState.gdprAllowFunctionality);
 		setGdprConsentVersion(defaultState.gdprConsentVersion);
 		// Persisted state modifier
 		gdprAllowPerformanceCache.reset();
-		gdprAllowFunctionalityCache.reset();
 		gdprConsentVersionCache.reset();
 	};
 
@@ -185,9 +146,7 @@ export const GDPRProvider = ({ children }: { children: React.ReactNode }) => {
 			value={{
 				gdprAllowEssential: defaultState.gdprAllowEssential,
 				gdprAllowPerformance,
-				gdprAllowFunctionality,
 				gdprConsentVersion,
-				setGdprFunctionalityBucket,
 				setGdprPerformanceBucket,
 				enableAllSettings,
 				rejectAllSettings,

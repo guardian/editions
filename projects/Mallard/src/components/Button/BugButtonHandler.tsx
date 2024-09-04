@@ -24,16 +24,11 @@ const BugButtonHandler = () => {
 		type,
 	};
 
-	const {
-		gdprAllowEssential,
-		gdprAllowPerformance,
-		gdprAllowFunctionality,
-		gdprConsentVersion,
-	} = useGdprSettings();
+	const { gdprAllowEssential, gdprAllowPerformance, gdprConsentVersion } =
+		useGdprSettings();
 	const gdprSettings = {
 		gdprAllowEssential,
 		gdprAllowPerformance,
-		gdprAllowFunctionality,
 		gdprConsentVersion,
 	};
 	return isInBeta() ? (

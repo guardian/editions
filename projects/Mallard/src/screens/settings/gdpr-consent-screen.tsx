@@ -36,7 +36,7 @@ type EssentialGdprSwitch = Omit<GdprSwitch, 'key' | 'modifier' | 'value'>;
 const essentials: EssentialGdprSwitch = {
 	name: 'Essential',
 	services:
-		'YouTube Player - Firebase Cloud Messaging - Firebase Remote Config',
+		'YouTube Player - Firebase Cloud Messaging - Firebase Remote Config - Firebase Analytics',
 	description:
 		'These are essential to provide you with services that you have requested. These services support the ability for you to watch videos, see service-related messages, download content automatically and receive new features without app releases.',
 };
@@ -61,9 +61,7 @@ const GdprConsent = ({
 		rejectAllSettings,
 		resetAllSettings,
 		gdprAllowPerformance,
-		gdprAllowFunctionality,
 		setGdprPerformanceBucket,
-		setGdprFunctionalityBucket,
 		hasSetGdpr,
 		isCorrectConsentVersion,
 	} = useGdprSettings();
@@ -71,19 +69,11 @@ const GdprConsent = ({
 	const switches: { [key in keyof GdprSwitches]: GdprSwitch } = {
 		gdprAllowPerformance: {
 			name: 'Performance',
-			services: 'Sentry - Crashlytics',
+			services: 'Crashlytics',
 			description:
 				'Enabling these allow us to observe and measure how you use our services. We use this information to fix bugs more quickly so that users have a better experience. For example, we would be able to see the journey you have taken and where the error was encountered. Your data will only be stored in our servers for two weeks. If you disable this, we will not be able to observe and measure your use of our services, and we will have less information about their performance and details of any issues encountered.',
 			modifier: setGdprPerformanceBucket,
 			value: gdprAllowPerformance,
-		},
-		gdprAllowFunctionality: {
-			name: 'Functionality',
-			services: 'Apple - Google',
-			description:
-				'Enabling these allow us to provide extra sign-in functionality. It enables us to offer alternative options for you to sign-in to your Guardian account using your Apple or Google credentials. If you disable this, you won’t be able to sign-in with the third-party services above.',
-			modifier: setGdprFunctionalityBucket,
-			value: gdprAllowFunctionality,
 		},
 	};
 
