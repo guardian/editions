@@ -12,7 +12,7 @@ import { isValid } from './authentication/lib/Attempt';
 import { oktaInitialisation } from './authentication/services/okta';
 import { BugButtonHandler } from './components/Button/BugButtonHandler';
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary';
-import { logUserId } from './helpers/analytics';
+import { logUserId, toggleAnalyticsRecording } from './helpers/analytics';
 import { prepFileSystem } from './helpers/files';
 import { nestProviders } from './helpers/provider';
 import { AppStateProvider } from './hooks/use-app-state-provider';
@@ -30,6 +30,7 @@ import { WeatherProvider } from './hooks/use-weather-provider';
 import { remoteConfigService } from './services/remote-config';
 
 remoteConfigService.init();
+toggleAnalyticsRecording(true);
 
 // --- SETUP OPERATIONS ---
 prepFileSystem();

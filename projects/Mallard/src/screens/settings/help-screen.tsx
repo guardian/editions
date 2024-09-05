@@ -51,16 +51,11 @@ const HelpScreen = () => {
 		downloadBlocked,
 		isInternetReachable,
 	};
-	const {
-		gdprAllowEssential,
-		gdprAllowPerformance,
-		gdprAllowFunctionality,
-		gdprConsentVersion,
-	} = useGdprSettings();
+	const { gdprAllowEssential, gdprAllowPerformance, gdprConsentVersion } =
+		useGdprSettings();
 	const gdprSettings = {
 		gdprAllowEssential,
 		gdprAllowPerformance,
-		gdprAllowFunctionality,
 		gdprConsentVersion,
 	};
 

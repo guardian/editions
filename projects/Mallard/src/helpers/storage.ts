@@ -108,9 +108,6 @@ const maxAvailableEditionsCache = createAsyncCache<number>(
 const gdprAllowPerformanceCache = createAsyncCache<boolean>(
 	'@Setting_gdprAllowPerformance',
 );
-const gdprAllowFunctionalityCache = createAsyncCache<boolean>(
-	'@Setting_gdprAllowFunctionality',
-);
 const gdprConsentVersionCache = createAsyncCache<number>(
 	'@Setting_gdprConsentVersion',
 );
@@ -204,7 +201,6 @@ export {
 	wifiOnlyDownloadsCache,
 	maxAvailableEditionsCache,
 	gdprAllowPerformanceCache,
-	gdprAllowFunctionalityCache,
 	gdprConsentVersionCache,
 	isWeatherShownCache,
 	isUsingProdDevtoolsCache,
