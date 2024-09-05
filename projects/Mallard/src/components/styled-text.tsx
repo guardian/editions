@@ -105,10 +105,10 @@ export const getHeadlineTextStyle = (
 	weight === 'regular'
 		? styles.headlineText
 		: weight === 'light'
-		? styles.headlineTextLight
-		: weight === 'bold'
-		? styles.headlineTextBold
-		: styles.headlineTextTitlepiece;
+			? styles.headlineTextLight
+			: weight === 'bold'
+				? styles.headlineTextBold
+				: styles.headlineTextTitlepiece;
 
 export const HeadlineText = ({
 	style,

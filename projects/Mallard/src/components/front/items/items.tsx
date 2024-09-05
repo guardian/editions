@@ -41,11 +41,11 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 			? {
 					source: article?.cardImage?.source || '',
 					path: article?.cardImage?.path || '',
-			  }
+				}
 			: {
 					source: article?.cardImageTablet?.source || '',
 					path: article?.cardImageTablet?.path || '',
-			  };
+				};
 
 	return (
 		<ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>

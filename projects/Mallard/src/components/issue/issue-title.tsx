@@ -139,7 +139,7 @@ const IssueTitle = React.memo(
 					overwriteStyles?.textColorPrimary
 						? {
 								color: overwriteStyles.textColorPrimary,
-						  }
+							}
 						: {},
 				]}
 			>
@@ -154,7 +154,7 @@ const IssueTitle = React.memo(
 						overwriteStyles?.textColorSecondary
 							? {
 									color: overwriteStyles.textColorSecondary,
-							  }
+								}
 							: {},
 					]}
 				>

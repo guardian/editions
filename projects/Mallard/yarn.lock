@@ -2248,13 +2248,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@guardian/prettier@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@guardian/prettier@npm:8.0.0"
+"@guardian/prettier@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "@guardian/prettier@npm:8.0.1"
   peerDependencies:
     prettier: ^3.2.2
     tslib: ^2.6.2
-  checksum: 67c80e73e0685b0401ccb7350b10b5e0689e32c19256546441d1148fd8a9d0e31bf6a603c2ee226606020a4038e514db9887a506bd010b995ab206cb03f07a1e
+  checksum: d65b05eeca35d460310e3ee5510785a7df31aa99292f51147ebe70764d07b409c38e84fa0f9467ef82caaf9b0ece6af7d5c61e587667e6c8a7440c96b61aae70
   languageName: node
   linkType: hard
 
@@ -6108,7 +6108,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.5.0, eslint-config-prettier@npm:^8.8.0":
+"eslint-config-prettier@npm:^8.5.0":
   version: 8.10.0
   resolution: "eslint-config-prettier@npm:8.10.0"
   peerDependencies:
@@ -6116,6 +6116,17 @@ __metadata:
   bin:
     eslint-config-prettier: bin/cli.js
   checksum: 153266badd477e49b0759816246b2132f1dbdb6c7f313ca60a9af5822fd1071c2bc5684a3720d78b725452bbac04bb130878b2513aea5e72b1b792de5a69fec8
+  languageName: node
+  linkType: hard
+
+"eslint-config-prettier@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "eslint-config-prettier@npm:9.1.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  bin:
+    eslint-config-prettier: bin/cli.js
+  checksum: 9229b768c879f500ee54ca05925f31b0c0bafff3d9f5521f98ff05127356de78c81deb9365c86a5ec4efa990cb72b74df8612ae15965b14136044c73e1f6a907
   languageName: node
   linkType: hard
 
@@ -6300,21 +6311,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "eslint-plugin-prettier@npm:3.4.1"
-  dependencies:
-    prettier-linter-helpers: ^1.0.0
-  peerDependencies:
-    eslint: ">=5.0.0"
-    prettier: ">=1.13.0"
-  peerDependenciesMeta:
-    eslint-config-prettier:
-      optional: true
-  checksum: fa6a89f0d7cba1cc87064352f5a4a68dc3739448dd279bec2bced1bfa3b704467e603d13b69dcec853f8fa30b286b8b715912898e9da776e1b016cf0ee48bd99
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-prettier@npm:^4.2.1":
   version: 4.2.1
   resolution: "eslint-plugin-prettier@npm:4.2.1"
@@ -6327,6 +6323,26 @@ __metadata:
     eslint-config-prettier:
       optional: true
   checksum: b9e839d2334ad8ec7a5589c5cb0f219bded260839a857d7a486997f9870e95106aa59b8756ff3f37202085ebab658de382b0267cae44c3a7f0eb0bcc03a4f6d6
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-prettier@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "eslint-plugin-prettier@npm:5.2.1"
+  dependencies:
+    prettier-linter-helpers: ^1.0.0
+    synckit: ^0.9.1
+  peerDependencies:
+    "@types/eslint": ">=8.0.0"
+    eslint: ">=8.0.0"
+    eslint-config-prettier: "*"
+    prettier: ">=3.0.0"
+  peerDependenciesMeta:
+    "@types/eslint":
+      optional: true
+    eslint-config-prettier:
+      optional: true
+  checksum: 812f4d1596dcd3a55963212dfbd818a4b38f880741aac75f6869aa740dc5d934060674d3b85d10ff9fec424defa61967dbdef26b8a893a92c9b51880264ed0d9
   languageName: node
   linkType: hard
 
@@ -8939,7 +8955,7 @@ __metadata:
     "@gorhom/bottom-sheet": ^4.4.5
     "@guardian/eslint-config-typescript": ^7.0.0
     "@guardian/pasteup": ^1.0.0-alpha.11
-    "@guardian/prettier": ^8.0.0
+    "@guardian/prettier": ^8.0.1
     "@guardian/renditions": ^0.2.0
     "@guardian/src-foundations": ^2.5.0-rc.1
     "@likashefqet/react-native-image-zoom": ^3.0.0
@@ -8974,12 +8990,12 @@ __metadata:
     date-fns: ^2.29.3
     date-fns-tz: ^2.0.1
     eslint: ^8.45.0
-    eslint-config-prettier: ^8.8.0
+    eslint-config-prettier: ^9.1.0
     eslint-import-resolver-typescript: ^3.6.1
     eslint-plugin-eslint-comments: ^3.2.0
     eslint-plugin-import: ^2.27.5
     eslint-plugin-jsx-a11y: ^6.7.1
-    eslint-plugin-prettier: ^3.4.1
+    eslint-plugin-prettier: ^5.2.1
     eslint-plugin-react-hooks: ^4.6.0
     events: ^3.0.0
     jest: ^29.7.0
@@ -8988,7 +9004,7 @@ __metadata:
     node-fetch: ^2.6.7
     patch-package: ^8.0.0
     postinstall-postinstall: ^2.1.0
-    prettier: ^2.8.8
+    prettier: ^3.3.3
     react: 18.2.0
     react-native: 0.74.5
     react-native-background-fetch: ^4.2.0
@@ -10230,12 +10246,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.8.8":
-  version: 2.8.8
-  resolution: "prettier@npm:2.8.8"
+"prettier@npm:^3.3.3":
+  version: 3.3.3
+  resolution: "prettier@npm:3.3.3"
   bin:
-    prettier: bin-prettier.js
-  checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
+    prettier: bin/prettier.cjs
+  checksum: bc8604354805acfdde6106852d14b045bb20827ad76a5ffc2455b71a8257f94de93f17f14e463fe844808d2ccc87248364a5691488a3304f1031326e62d9276e
   languageName: node
   linkType: hard
 
@@ -11957,6 +11973,16 @@ __metadata:
     "@pkgr/core": ^0.1.0
     tslib: ^2.6.2
   checksum: 9ed5d33abb785f5f24e2531efd53b2782ca77abf7912f734d170134552b99001915531be5a50297aa45c5701b5c9041e8762e6cd7a38e41e2461c1e7fccdedf8
+  languageName: node
+  linkType: hard
+
+"synckit@npm:^0.9.1":
+  version: 0.9.1
+  resolution: "synckit@npm:0.9.1"
+  dependencies:
+    "@pkgr/core": ^0.1.0
+    tslib: ^2.6.2
+  checksum: 4042941a4d939675f1d7b01124b8405b6ac616f3e3f396d00e46c67f38d0d5b7f9a1de05bc7ceea4ce80d967b450cfa2460e5f6aca81f7cea8f1a28be9392985
   languageName: node
   linkType: hard
 

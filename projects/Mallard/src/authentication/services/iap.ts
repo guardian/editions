@@ -63,7 +63,7 @@ const findValidReceiptFromLatestInfo = (receipt: any) => {
 
 const findValidReceipt = (receipt: any) =>
 	hasLatestReceiptInfo(receipt)
-		? findValidReceiptFromLatestInfo(receipt) ?? null
+		? (findValidReceiptFromLatestInfo(receipt) ?? null)
 		: null;
 
 /**

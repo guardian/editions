@@ -47,9 +47,8 @@ const getPushTracking = async (): Promise<string | null> =>
 // Only get the start and end of the push notification process
 const getDiagnosticPushTracking = async () => {
 	try {
-		const pushTrackingString = await AsyncStorage.getItem(
-			PUSH_TRACKING_KEY,
-		);
+		const pushTrackingString =
+			await AsyncStorage.getItem(PUSH_TRACKING_KEY);
 		if (!pushTrackingString) {
 			return null;
 		}

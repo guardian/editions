@@ -61,11 +61,11 @@ const ItemTappable = ({
 					path,
 					articleNavigator,
 					prefersFullScreen: true,
-			  })
+				})
 			: navigation.navigate(RouteNames.Article, {
 					path,
 					articleNavigator,
-			  });
+				});
 	};
 
 	return (

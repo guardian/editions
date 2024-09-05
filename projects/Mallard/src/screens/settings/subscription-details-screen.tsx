@@ -18,7 +18,7 @@ const keyValueItem = (key: string, value: string) =>
 		key,
 		linkWeight: 'regular',
 		proxy: <Text>{value}</Text>,
-	} as const);
+	}) as const;
 
 const IdentityDetails = ({
 	identityData,

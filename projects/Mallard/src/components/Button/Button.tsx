@@ -141,8 +141,8 @@ const getButtonAppearance = (
 					pillar === 'neutral'
 						? color.palette.neutral[100]
 						: pillarColors
-						? pillarColors.main
-						: color.palette.brand.main,
+							? pillarColors.main
+							: color.palette.brand.main,
 			},
 			text: { color: 'white' },
 		}),

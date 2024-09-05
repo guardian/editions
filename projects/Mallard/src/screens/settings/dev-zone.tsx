@@ -445,7 +445,7 @@ const DevZone = () => {
 												JSON.parse(pushTrackingInfo),
 												null,
 												2,
-										  )
+											)
 										: pushTrackingInfo,
 							},
 						]}

@@ -12,8 +12,8 @@ export const getDownloadBlockedStatus = (
 	return !netInfo.isConnected
 		? DownloadBlockedStatus.Offline
 		: wifiOnlyDownloads && netInfo.type !== 'wifi'
-		? DownloadBlockedStatus.WifiOnly
-		: DownloadBlockedStatus.NotBlocked;
+			? DownloadBlockedStatus.WifiOnly
+			: DownloadBlockedStatus.NotBlocked;
 };
 
 export const isDisconnectedState = (type: NetInfoStateType) =>

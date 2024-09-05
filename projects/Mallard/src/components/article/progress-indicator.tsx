@@ -92,11 +92,11 @@ export const ProgressIndicator = ({
 			scrollInProgress && showStarter && showEnd && index === current
 				? 'big'
 				: (showStarter && index === 0) ||
-				  (showEnd && index === windowSize - 1)
-				? 'small'
-				: index === current
-				? 'current'
-				: 'big',
+					  (showEnd && index === windowSize - 1)
+					? 'small'
+					: index === current
+						? 'current'
+						: 'big',
 		);
 
 	return (
