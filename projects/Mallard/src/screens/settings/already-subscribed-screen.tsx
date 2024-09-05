@@ -59,7 +59,7 @@ const AlreadySubscribedScreen = () => {
 											proxy: rightChevronIcon,
 											linkWeight: 'regular',
 										},
-								  ]
+									]
 								: []
 						}
 					/>

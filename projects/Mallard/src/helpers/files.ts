@@ -271,7 +271,7 @@ export const getFileList = async () => {
 							}
 							return cleanFileDisplay(deepfile);
 						}),
-				  }))
+					}))
 				: {},
 		),
 	);

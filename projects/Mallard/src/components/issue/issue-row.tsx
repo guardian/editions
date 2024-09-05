@@ -185,7 +185,7 @@ const IssueButton = ({
 	};
 
 	const progressValue = useMemo(
-		() => (dlStatus ? getStatusPercentage(dlStatus) ?? 100 : 100),
+		() => (dlStatus ? (getStatusPercentage(dlStatus) ?? 100) : 100),
 		[dlStatus],
 	);
 

@@ -20,8 +20,8 @@ const modalStyles = (backgroundColor: string, textColor: string) =>
 					? '6%'
 					: 80
 				: Platform.OS === 'android'
-				? '8%'
-				: '11.5%',
+					? '8%'
+					: '11.5%',
 			left: isTablet ? 12 : '3%',
 			width: isTablet ? 365 : 300,
 			zIndex: 1,
@@ -67,7 +67,7 @@ const NewEditionCard = ({
 		? modalStyles(
 				headerStyle.backgroundColor,
 				headerStyle.textColorPrimary ?? 'white',
-		  )
+			)
 		: modalStyles(brand[800], color.text);
 	return (
 		<View style={styles.wrapper}>

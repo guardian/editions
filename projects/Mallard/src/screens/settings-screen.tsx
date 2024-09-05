@@ -201,7 +201,7 @@ const SettingsScreen = () => {
 						return 0;
 					});
 				}
-		  }
+			}
 		: () => {};
 
 	const rightChevronIcon = <RightChevron />;

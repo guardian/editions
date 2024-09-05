@@ -195,7 +195,7 @@ class Authorizer<
 						(!isValid(attempt) && attempt.reason) ||
 							'Subscription not found',
 						attempt.time,
-				  );
+					);
 		} catch {
 			return InvalidAttempt(
 				attempt.connectivity,

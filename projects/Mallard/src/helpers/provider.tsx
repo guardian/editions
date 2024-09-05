@@ -16,12 +16,11 @@ export const nestProviders = (
 ) =>
 	providers.reduce(
 		(Prev, Cur) =>
-			({ children }) =>
-				(
-					<Prev>
-						<Cur>{children}</Cur>
-					</Prev>
-				),
+			({ children }) => (
+				<Prev>
+					<Cur>{children}</Cur>
+				</Prev>
+			),
 		({ children }) => <>{children}</>,
 	);
 

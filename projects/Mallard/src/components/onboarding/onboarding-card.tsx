@@ -128,8 +128,8 @@ const OnboardingCard = ({
 									size === 'big'
 										? 2.5
 										: size === 'medium'
-										? 2.25
-										: 2,
+											? 2.25
+											: 2,
 								),
 								{ marginBottom: size === 'big' ? 16 : 8 },
 								appearances[appearance].titleText,

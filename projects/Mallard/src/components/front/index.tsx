@@ -79,12 +79,12 @@ export const Front = React.memo(
 					windowSize: 3,
 					maxToRenderPerBatch: 2,
 					initialNumToRender: 3,
-			  }
+				}
 			: {
 					windowSize: 2,
 					maxToRenderPerBatch: 1,
 					initialNumToRender: 2,
-			  };
+				};
 
 		const [cardIndex, setCardIndex] = useState(0);
 		const [position, setPosition] = useState<

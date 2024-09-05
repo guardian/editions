@@ -52,8 +52,8 @@ const SliderDots = React.memo(
 			location === 'article' && startIndex
 				? Number(position) - startIndex
 				: startIndex
-				? Animated.subtract(position, startIndex)
-				: position;
+					? Animated.subtract(position, startIndex)
+					: position;
 
 		const range = (i: number) => ({
 			inputRange: [
@@ -75,7 +75,7 @@ const SliderDots = React.memo(
 					: newPos.interpolate({
 							...range(i),
 							extrapolate: 'clamp',
-					  });
+						});
 
 			dots.push(
 				<Animated.View

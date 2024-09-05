@@ -288,13 +288,13 @@ const MainStack = () => {
 									backgroundColor: 'rgba(0,0,0,0.6)',
 								},
 								cardStyleInterpolator: forFadeOnArticleScreen,
-						  }
+							}
 						: {
 								cardStyleInterpolator:
 									CardStyleInterpolators.forModalPresentationIOS,
 								gestureEnabled: true,
 								gestureDirection: 'vertical',
-						  }
+							}
 				}
 			/>
 			<Main.Group
