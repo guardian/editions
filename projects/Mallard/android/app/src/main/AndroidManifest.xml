@@ -30,6 +30,7 @@
       android:theme="@style/AppTheme"
       tools:replace="android:appComponentFactory"
       android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+      android:supportsRtl="true"
       >
 
       <meta-data android:name="firebase_analytics_collection_enabled" android:value="false"  tools:replace="android:value" />

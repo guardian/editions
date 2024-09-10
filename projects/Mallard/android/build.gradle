@@ -11,7 +11,7 @@ buildscript {
         androidXAnnotation = "1.1.0"
         androidXBrowser = "1.0.0"
         ndkVersion = "26.1.10909125"
-        kotlin_version = "1.9.22"
+        kotlin_version = "1.9.24"
     }
     configurations {
         all*.exclude group: 'com.google.firebase', module: 'firebase-core'

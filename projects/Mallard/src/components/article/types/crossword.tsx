@@ -18,7 +18,7 @@ const Crossword = ({
 		<WebView
 			key={crosswordArticle.key}
 			originWhitelist={['*']}
-			source={{ uri: getBundleUri('crosswords') }}
+			source={{ uri: getBundleUri('crosswords', 'prod') }}
 			injectedJavaScript={loadCrosswordScript}
 			onMessage={(event) => {
 				console.log(JSON.stringify(event));

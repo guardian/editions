@@ -1,8 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Image from 'react-native-fast-image';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { AccessContext } from '../../authentication/AccessContext';
 import { isValid } from '../../authentication/lib/Attempt';
 import { LoginButton } from '../../components/login/login-button';

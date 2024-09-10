@@ -1,8 +1,7 @@
+import { FasterImageView } from '@candlefinance/faster-image';
 import React from 'react';
 import type { ImageStyle as RNImageStyle, StyleProp } from 'react-native';
 import { Platform, Image as RNImage, View } from 'react-native';
-import type { ImageStyle } from 'react-native-fast-image';
-import FastImage from 'react-native-fast-image';
 import type { Image as IImage, ImageUse } from '../../common';
 import { useAspectRatio } from '../../hooks/use-aspect-ratio';
 import { useImagePath } from '../../hooks/use-image-paths';
@@ -17,7 +16,7 @@ import { useImagePath } from '../../hooks/use-image-paths';
 type ImageResourceProps = {
 	image: IImage;
 	use: ImageUse;
-	style?: StyleProp<ImageStyle>;
+	style?: StyleProp<any>;
 	setAspectRatio?: boolean;
 	accessibilityLabel?: string;
 	isCoverCard?: boolean;
@@ -44,19 +43,19 @@ const ImageResource = ({
 			<RNImage
 				key={imagePath}
 				{...props}
-				resizeMode={FastImage.resizeMode.cover}
+				// resizeMode={FastImage.resizeMode.cover}
 				style={[styles, style] as StyleProp<RNImageStyle>}
 				source={{ uri: imagePath }}
 			/>
 		);
 	} else if (imagePath) {
 		return (
-			<FastImage
+			<FasterImageView
 				key={imagePath}
 				{...props}
-				resizeMode={FastImage.resizeMode.cover}
-				style={[styles, style] as StyleProp<ImageStyle>}
-				source={{ uri: imagePath }}
+				// resizeMode={FastImage.resizeMode.cover}
+				style={[styles, style] as StyleProp<any>}
+				source={{ url: imagePath }}
 			/>
 		);
 	} else {

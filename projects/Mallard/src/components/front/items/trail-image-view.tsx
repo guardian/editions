@@ -1,7 +1,6 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
-import type { ImageStyle } from 'react-native-fast-image';
 import type { CAPIArticle, ImageUse } from '../../../common';
 import { ArticleType } from '../../../common';
 import { SportScore } from '../../../components/SportScore/SportScore';
@@ -83,7 +82,7 @@ export const TrailImageView = ({
 	} else {
 		return (
 			<ImageResource
-				style={frameStyle as StyleProp<ImageStyle>}
+				style={frameStyle as StyleProp<any>}
 				image={image}
 				use={use}
 			/>

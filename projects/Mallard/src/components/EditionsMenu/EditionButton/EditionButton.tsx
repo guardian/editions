@@ -1,7 +1,6 @@
 import { brand } from '@guardian/src-foundations/palette';
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
-import Image from 'react-native-fast-image';
+import { Image, TouchableWithoutFeedback, View } from 'react-native';
 import {
 	TitlepieceText,
 	UiExplainerCopy,
