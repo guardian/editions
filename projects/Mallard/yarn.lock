@@ -9007,7 +9007,7 @@ __metadata:
     prettier: ^3.3.3
     react: 18.2.0
     react-native: 0.74.5
-    react-native-background-fetch: ^4.2.0
+    react-native-background-fetch: ^4.2.5
     react-native-circular-progress-indicator: ^4.4.2
     react-native-config: ^1.5.1
     react-native-device-info: ^10.13.1
@@ -10458,10 +10458,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-background-fetch@npm:^4.2.0":
-  version: 4.2.1
-  resolution: "react-native-background-fetch@npm:4.2.1"
-  checksum: 3c541ee9da0d3fd10da0fc5b36d5ceca82ef620c7e4c48e3c25703eb27fc8e850ce966a89403d2f35259e671e692bdfb17fcafe184081c65f4bbf99954c65d3a
+"react-native-background-fetch@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "react-native-background-fetch@npm:4.2.5"
+  checksum: d124418a69377f0399b72cb86bfea5e801a4dc2d5b8215e6736fd21836a82ad514a3b89fd2915b866c205e6e7f2feddd0486d4893a0261e7d978502773397d45
   languageName: node
   linkType: hard
 
