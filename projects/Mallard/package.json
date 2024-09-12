@@ -91,7 +91,7 @@
 		"react-native-splash-screen": "^3.3.0",
 		"react-native-status-bar-height": "^2.4.0",
 		"react-native-svg": "^15.4.0",
-		"react-native-webview": "^13.10.5",
+		"react-native-webview": "^13.12.2",
 		"react-native-zip-archive": "6.0.9"
 	},
 	"devDependencies": {
