@@ -1972,7 +1972,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@guardian/crosswords-bundle@workspace:."
   dependencies:
-    "@guardian/react-crossword": ^2.0.2
+    "@guardian/react-crossword": ^2.0.0
     "@testing-library/jest-dom": ^5.17.0
     "@testing-library/react": ^13.4.0
     "@testing-library/user-event": ^13.5.0
@@ -1990,7 +1990,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@guardian/react-crossword@npm:^2.0.2":
+"@guardian/react-crossword@npm:^2.0.0":
   version: 2.0.2
   resolution: "@guardian/react-crossword@npm:2.0.2"
   dependencies:
