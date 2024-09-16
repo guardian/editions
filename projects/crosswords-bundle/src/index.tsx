@@ -12,6 +12,7 @@ const root = createRoot(wrapper)
 
 window.loadCrosswordData = (id, crosswordData) => {
     return wrapper
-        ? root.render(<CrosswordView id={id} crosswordData={crosswordData} />)
+        ? // @ts-ignore
+          root.render(<CrosswordView id={id} crosswordData={crosswordData} />)
         : false
 }
