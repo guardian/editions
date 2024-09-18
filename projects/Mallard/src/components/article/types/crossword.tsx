@@ -28,6 +28,8 @@ const Crossword = ({
 			style={styles.flex}
 			webviewDebuggingEnabled
 			bounces={false}
+			cacheEnabled={false}
+			cacheMode={'LOAD_NO_CACHE'}
 		/>
 	);
 };
