@@ -9031,7 +9031,7 @@ __metadata:
     react-native-splash-screen: ^3.3.0
     react-native-status-bar-height: ^2.4.0
     react-native-svg: ^15.4.0
-    react-native-webview: ^13.10.5
+    react-native-webview: ^12.4.0
     react-native-zip-archive: 6.0.9
     react-test-renderer: 18.2.0
     typescript: 5.0.4
@@ -10756,16 +10756,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:^13.10.5":
-  version: 13.10.5
-  resolution: "react-native-webview@npm:13.10.5"
+"react-native-webview@npm:^12.4.0":
+  version: 12.4.0
+  resolution: "react-native-webview@npm:12.4.0"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: fa4bd3885a405236474d2baf455d81bddc024874ec012884fbded02f47303c47c00edaf8ef7072eb52e6fb8c68f1f2fd2abe6ca5890ae217102e7742ab97f3f8
+  checksum: f7bd69b71af6bd2f62ae290aa40d8d7e7191dd7fd451327b2b6fcde7f8035e85de89d9f8f9e6c8ca913850e0efc91e195181f41c17df68516a47ff50977a49a1
   languageName: node
   linkType: hard
 
