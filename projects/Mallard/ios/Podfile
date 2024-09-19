@@ -9,7 +9,7 @@ require Pod::Executable.execute_command('node', ['-p',
 
 $RNFirebaseAnalyticsWithoutAdIdSupport = true
 
-platform :ios, '13.4'
+platform :ios, '15.5'
 prepare_react_native_project!
 
 setup_permissions([
@@ -48,6 +48,7 @@ $RNFirebaseAsStaticFramework = true
     # Pods for testing
   end
 
+
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
@@ -60,6 +61,16 @@ $RNFirebaseAsStaticFramework = true
       config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
     end
    installer.pods_project.targets.each do |target|
+    if target.name == 'BoringSSL-GRPC'
+      target.source_build_phase.files.each do |file|
+        if file.settings && file.settings['COMPILER_FLAGS']
+          flags = file.settings['COMPILER_FLAGS'].split
+          flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+          file.settings['COMPILER_FLAGS'] = flags.join(' ')
+        end
+      end
+    end
+
      if (target.name&.eql?('FBReactNativeSpec'))
        target.build_phases.each do |build_phase|
          if (build_phase.respond_to?(:name) && build_phase.name.eql?('[CP-User] Generate Specs'))
@@ -70,3 +81,6 @@ $RNFirebaseAsStaticFramework = true
    end
   end
 end
+
+
+

@@ -1137,7 +1137,7 @@ PODS:
     - React
   - react-native-splash-screen (3.3.0):
     - React-Core
-  - react-native-webview (13.10.5):
+  - react-native-webview (13.12.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1545,13 +1545,13 @@ PODS:
     - Yoga
   - RNSVG (15.5.0):
     - React-Core
-  - RNZipArchive (6.0.9):
+  - RNZipArchive (7.0.1):
     - React-Core
-    - RNZipArchive/Core (= 6.0.9)
-    - SSZipArchive (~> 2.2)
-  - RNZipArchive/Core (6.0.9):
+    - RNZipArchive/Core (= 7.0.1)
+    - SSZipArchive (~> 2.5.5)
+  - RNZipArchive/Core (7.0.1):
     - React-Core
-    - SSZipArchive (~> 2.2)
+    - SSZipArchive (~> 2.5.5)
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
@@ -1559,7 +1559,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.7.0)
-  - SSZipArchive (2.4.3)
+  - SSZipArchive (2.5.5)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1934,7 +1934,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
-  react-native-webview: 553abd09f58e340fdc7746c9e2ae096839e99911
+  react-native-webview: 8d746f921964c87b87b190bf6a46fa148d40cd0f
   React-nativeconfig: ba9a2e54e2f0882cf7882698825052793ed4c851
   React-NativeModulesApple: 8d11ff8955181540585c944cf48e9e7236952697
   React-perflogger: ed4e0c65781521e0424f2e5e40b40cc7879d737e
@@ -1981,13 +1981,13 @@ SPEC CHECKSUMS:
   RNReanimated: 45553a3ae29a75a76269595f8554d07d4090e392
   RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
   RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
-  RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
+  RNZipArchive: 7bb4c70d6aa2dd235212c0a4a3de0a4e237e2569
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
+  SSZipArchive: c69881e8ac5521f0e622291387add5f60f30f3c4
   Yoga: 2246eea72aaf1b816a68a35e6e4b74563653ae09
 
-PODFILE CHECKSUM: d4d3a3fba6c6ad741007029c7bfa9fb6429eee61
+PODFILE CHECKSUM: 27f1378175150e610127c984db637f685a6102a1
 
 COCOAPODS: 1.14.3

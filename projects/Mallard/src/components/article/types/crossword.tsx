@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { CrosswordArticle } from '../../../common';
 import { getBundleUri } from '../../../helpers/webview';
@@ -28,6 +28,12 @@ const Crossword = ({
 			style={styles.flex}
 			webviewDebuggingEnabled
 			bounces={false}
+			onContentProcessDidTerminate={() => {
+				Alert.alert(
+					'Error',
+					'Content process terminated, please try again',
+				);
+			}}
 		/>
 	);
 };
