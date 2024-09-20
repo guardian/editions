@@ -680,17 +680,7 @@ PODS:
     - React-Core
   - RNRate (1.2.12):
     - React-Core
-  - RNReanimated (3.15.2):
-    - RCT-Folly (= 2021.07.22.00)
-    - React-Core
-    - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.15.2)
-    - RNReanimated/worklets (= 3.15.2)
-  - RNReanimated/reanimated (3.15.2):
-    - RCT-Folly (= 2021.07.22.00)
-    - React-Core
-    - ReactCommon/turbomodule/core
-  - RNReanimated/worklets (3.15.2):
+  - RNReanimated (3.6.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - ReactCommon/turbomodule/core
@@ -1076,7 +1066,7 @@ SPEC CHECKSUMS:
   RNLocalize: 4222a3756cdbe2dc9a5bdf445765a4d2572107cb
   RNPermissions: 633ac98bd1f3c5a6b428982a9971fb5c9ba9cca3
   RNRate: ef3bcff84f39bb1d1e41c5593d3eea4aab2bd73a
-  RNReanimated: 9f7075ae071e1e89fa49e1d9ff6ac2c5405dd000
+  RNReanimated: 60b4fb9d2e86b9e686b309e135e40c7d7eb01d13
   RNScreens: 284fcee9d8d4648851fdb85dd0e200daebedcc14
   RNSVG: 4590aa95758149fa27c5c83e54a6a466349a1688
   RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
