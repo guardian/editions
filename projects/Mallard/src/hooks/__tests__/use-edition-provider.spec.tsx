@@ -140,6 +140,7 @@ describe('useEditions', () => {
 	describe('fetchEditions', () => {
 		it('should return json if there is a 200 response from the endpoint', async () => {
 			const body = DEFAULT_EDITIONS_LIST;
+
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 200,
@@ -173,6 +174,7 @@ describe('useEditions', () => {
 		});
 		it('should return the editions list from the endpoint in the happy path', async () => {
 			const body = DEFAULT_EDITIONS_LIST;
+
 			global.fetch = jest.fn().mockReturnValue(
 				Promise.resolve({
 					status: 200,
