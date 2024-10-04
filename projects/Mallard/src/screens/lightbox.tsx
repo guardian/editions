@@ -239,9 +239,9 @@ const LightboxScreen = () => {
 										: pillarColors.bright //bright since always on a dark background
 								}
 								displayCredit={
-									images[currentIndex].displayCredit
+									images[currentIndex]?.displayCredit ?? false
 								}
-								credit={images[currentIndex].credit}
+								credit={images[currentIndex]?.credit ?? ''}
 							/>
 						</Animated.View>
 					</View>
