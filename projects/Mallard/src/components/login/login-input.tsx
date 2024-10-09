@@ -85,25 +85,4 @@ const LoginInput = ({
 	</View>
 );
 
-const PasswordInput = (
-	props: Omit<
-		LoginInputProps,
-		'secureTextEntry' | 'textContentType' | 'keyboardType'
-	>,
-) => <LoginInput {...props} secureTextEntry textContentType="password" />;
-
-const EmailInput = (
-	props: Omit<
-		LoginInputProps,
-		'secureTextEntry' | 'textContentType' | 'keyboardType'
-	>,
-) => (
-	<LoginInput
-		{...props}
-		secureTextEntry={false}
-		textContentType="emailAddress"
-		keyboardType="email-address"
-	/>
-);
-
-export { LoginInput, PasswordInput, EmailInput };
+export { LoginInput };

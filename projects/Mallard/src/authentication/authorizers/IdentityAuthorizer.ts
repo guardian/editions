@@ -14,28 +14,7 @@ type BasicCreds = {
 	password: string;
 };
 
-type GoogleCreds = {
-	'google-access-token': string;
-};
-
-export type AppleCreds = {
-	authorizationCode: string;
-	idToken: string;
-	givenName: string;
-	familyName: string;
-};
-
-type AppleOauthCreds = {
-	'apple-sign-in-token': string;
-};
-
-export type AuthParams =
-	| BasicCreds
-	| GoogleCreds
-	| AppleCreds
-	| AppleOauthCreds;
-
-type AuthType = 'apple' | 'google' | 'email' | 'apple-oauth' | 'unknown';
+export type AuthParams = BasicCreds;
 
 interface User {
 	id: string;
@@ -74,30 +53,6 @@ interface User {
 export type IdentityAuthData = {
 	userDetails: User;
 	membershipData: MembersDataAPIResponse;
-};
-
-export const getUserName = (authType: AuthType, params: AuthParams): string => {
-	const unknown = 'unknown';
-	switch (authType) {
-		case 'email':
-			if ('email' in params) {
-				return params.email;
-			}
-		case 'google':
-			return 'gu-editions::token::google';
-		case 'apple':
-			return 'gu-editions::token::apple';
-		default:
-			return unknown;
-	}
-};
-
-export const detectAuthType = (params: AuthParams): AuthType => {
-	if ('email' in params) return 'email';
-	if ('google-access-token' in params) return 'google';
-	if ('apple-sign-in-token' in params) return 'apple-oauth';
-	if ('idToken' in params) return 'apple';
-	return 'unknown';
 };
 
 export default new Authorizer({

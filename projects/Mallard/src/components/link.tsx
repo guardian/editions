@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TextProps } from 'react-native';
-import { Linking, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { color } from '../theme/color';
 
 const styles = StyleSheet.create({
@@ -9,25 +9,6 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'underline',
 	},
 });
-
-const Link = ({
-	children,
-	style,
-	href,
-}: {
-	children: string;
-	style?: TextProps['style'];
-	href: string;
-}) => (
-	<Text
-		style={[styles.link, style]}
-		onPress={() => {
-			Linking.openURL(href);
-		}}
-	>
-		{children}
-	</Text>
-);
 
 const LinkNav = ({
 	children,
@@ -43,4 +24,4 @@ const LinkNav = ({
 	</Text>
 );
 
-export { Link, LinkNav };
+export { LinkNav };
