@@ -130,6 +130,10 @@ const hasShownRatingCache = createAsyncCache<boolean>(
 	'@Setting_hasShownRating',
 );
 
+const hasSeenIapMigrationMessage = createAsyncCache<boolean>(
+	'@Setting_hasSeenIapMigrationMessage',
+);
+
 const issueSummaryCache = createAsyncCache<string>('issueSummary');
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -209,4 +213,5 @@ export {
 	hasShownRatingCache,
 	oktaDataCache,
 	issueSummaryCache,
+	hasSeenIapMigrationMessage,
 };

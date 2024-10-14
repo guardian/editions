@@ -250,6 +250,11 @@ const enableAll = 'Enable all';
 const rejectAll = 'Reject all';
 const andContinue = 'and continue';
 
+const iAPMigration = {
+	title: 'The app is changing...',
+	body: 'On XXXXXX, we are moving to a new app. Your subscription will be transferred automatically so you can continue to enjoy The Guardian.',
+};
+
 export const copy = {
 	alreadySubscribed,
 	andContinue,
@@ -259,6 +264,7 @@ export const copy = {
 	externalSubscription,
 	failedSignIn,
 	homeScreen,
+	iAPMigration,
 	issueListFooter,
 	manageDownloads,
 	newEditionWords,

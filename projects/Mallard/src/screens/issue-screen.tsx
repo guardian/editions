@@ -1,18 +1,26 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { MutableRefObject, ReactElement } from 'react';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Image from 'react-native-fast-image';
 import RNRestart from 'react-native-restart';
 import SplashScreen from 'react-native-splash-screen';
-import { PageLayoutSizes } from '../common';
+import { AccessContext } from '../authentication/AccessContext';
 import type {
 	IssueWithFronts,
 	SpecialEditionHeaderStyles,
 	Front as TFront,
 } from '../common';
+import { PageLayoutSizes } from '../common';
 import { ReloadButton } from '../components/Button/ReloadButton';
 import { Front } from '../components/front';
 import { FlexCenter } from '../components/layout/flex-center';
@@ -30,6 +38,7 @@ import {
 } from '../components/weather';
 import { deleteIssueFiles } from '../download-edition/clear-issues-and-editions';
 import { logPageView } from '../helpers/analytics';
+import { hasSeenIapMigrationMessage } from '../helpers/storage';
 import type { FlatCard } from '../helpers/transform';
 import {
 	flattenCollectionsToCards,
@@ -61,6 +70,7 @@ import {
 	type MainStackParamList,
 	RouteNames,
 } from '../navigation/NavigationModels';
+import { remoteConfigService } from '../services/remote-config';
 import { Breakpoints } from '../theme/breakpoints';
 import { metrics } from '../theme/spacing';
 import { SLIDER_FRONT_HEIGHT } from './article/slider/SliderTitle';
@@ -434,6 +444,7 @@ const IssueScreenWithPath = ({
 };
 
 export const IssueScreen = React.memo(() => {
+	const [iapHasSeen, setIapHasSeen] = useState(false);
 	const { showNewEditionCard, setNewEditionSeen } = useEditions();
 	const { issueWithFronts: issue, error, retry } = useIssue();
 	const { selectedEdition } = useEditions();
@@ -442,6 +453,13 @@ export const IssueScreen = React.memo(() => {
 	const { hasSetGdpr } = useGdprSettings();
 	const { navigate } =
 		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+	const { iapData } = useContext(AccessContext);
+
+	useEffect(() => {
+		hasSeenIapMigrationMessage.get().then((hasSeen) => {
+			hasSeen && setIapHasSeen(!!hasSeen);
+		});
+	});
 
 	// This is only returning true or false so keep reverting. Need an onboarding state
 	const isOnboarded = hasSetGdpr();
@@ -463,6 +481,14 @@ export const IssueScreen = React.memo(() => {
 	}
 
 	SplashScreen.hide();
+
+	if (
+		remoteConfigService.getBoolean('is_iap_message_enabled') &&
+		iapData &&
+		!iapHasSeen
+	) {
+		navigate(RouteNames.IAPAppMigrationModal);
+	}
 
 	return (
 		<Container>
