@@ -444,7 +444,6 @@ const IssueScreenWithPath = ({
 };
 
 export const IssueScreen = React.memo(() => {
-	const [iapHasSeen, setIapHasSeen] = useState(false);
 	const { showNewEditionCard, setNewEditionSeen } = useEditions();
 	const { issueWithFronts: issue, error, retry } = useIssue();
 	const { selectedEdition } = useEditions();
@@ -457,9 +456,12 @@ export const IssueScreen = React.memo(() => {
 
 	useEffect(() => {
 		hasSeenIapMigrationMessage.get().then((hasSeen) => {
-			hasSeen && setIapHasSeen(!!hasSeen);
+			!hasSeen &&
+				iapData &&
+				remoteConfigService.getBoolean('is_iap_message_enabled') &&
+				navigate(RouteNames.IAPAppMigrationModal);
 		});
-	});
+	}, []);
 
 	// This is only returning true or false so keep reverting. Need an onboarding state
 	const isOnboarded = hasSetGdpr();
@@ -481,14 +483,6 @@ export const IssueScreen = React.memo(() => {
 	}
 
 	SplashScreen.hide();
-
-	if (
-		remoteConfigService.getBoolean('is_iap_message_enabled') &&
-		iapData &&
-		!iapHasSeen
-	) {
-		navigate(RouteNames.IAPAppMigrationModal);
-	}
 
 	return (
 		<Container>
