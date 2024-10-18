@@ -252,7 +252,7 @@ const andContinue = 'and continue';
 
 const iAPMigration = {
 	title: 'The app is changing...',
-	body: 'On XXXXXX, we are moving to a new app. Your subscription will be transferred automatically so you can continue to enjoy The Guardian.',
+	body: 'On XXXXXXXX, we will be switching to a new app. Your subscription will be transferred automatically, so you don’t need to do anything. The new app will feel more like a digital version of our newspaper, and we hope it delivers an intuitive reading experience you continue to enjoy.\n\n Thank you for your ongoing support.',
 };
 
 export const copy = {

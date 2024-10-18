@@ -65,6 +65,7 @@ export const color = {
 		shark: sport[400],
 		sea: '#279DDC',
 		supportBlue: '#41A9E0',
+		brightYellow: '#FFE500',
 	},
 
 	/*
