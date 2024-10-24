@@ -13,6 +13,7 @@ export enum CardAppearance {
 	Tomato,
 	Apricot,
 	Blue,
+	Clashy,
 }
 
 const styles = StyleSheet.create({
@@ -75,6 +76,11 @@ const appearances: {
 		background: { backgroundColor: color.ui.sea },
 		titleText: { color: color.palette.neutral[100] },
 		subtitleText: { color: color.primary },
+	}),
+	[CardAppearance.Clashy]: StyleSheet.create({
+		background: { backgroundColor: color.ui.sea },
+		titleText: { color: color.ui.brightYellow },
+		subtitleText: { color: color.palette.neutral[100] },
 	}),
 };
 
@@ -144,7 +150,11 @@ const OnboardingCard = ({
 								onPress={onDismissThisCard}
 								accessibilityHint="This will dismiss the onboarding card"
 								accessibilityLabel={`Dismiss the ${title} onboarding card`}
-								appearance={ButtonAppearance.SkeletonBlue}
+								appearance={
+									appearance === CardAppearance.Clashy
+										? ButtonAppearance.SkeletonLight
+										: ButtonAppearance.SkeletonBlue
+								}
 							/>
 						</View>
 					)}

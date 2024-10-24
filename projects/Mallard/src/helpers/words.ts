@@ -250,6 +250,11 @@ const enableAll = 'Enable all';
 const rejectAll = 'Reject all';
 const andContinue = 'and continue';
 
+const iAPMigration = {
+	title: 'The app is changing...',
+	body: 'On 16/12/2024, we will be switching to a new app. Your subscription will be transferred automatically, so you don’t need to do anything. The new app will feel more like a digital version of our newspaper, and we hope it delivers an intuitive reading experience you continue to enjoy.\n\n Thank you for your ongoing support.',
+};
+
 export const copy = {
 	alreadySubscribed,
 	andContinue,
@@ -259,6 +264,7 @@ export const copy = {
 	externalSubscription,
 	failedSignIn,
 	homeScreen,
+	iAPMigration,
 	issueListFooter,
 	manageDownloads,
 	newEditionWords,

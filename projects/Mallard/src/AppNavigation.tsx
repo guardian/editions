@@ -1,5 +1,5 @@
-import { NavigationContainer } from '@react-navigation/native';
 import type { NavigationContainerRef } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import type { StackCardInterpolationProps } from '@react-navigation/stack';
 import {
 	CardStyleInterpolators,
@@ -9,6 +9,7 @@ import {
 import React, { useRef } from 'react';
 import { Animated } from 'react-native';
 import { isTablet } from 'react-native-device-info';
+import { IAPAppMigrationModal } from './components/Modals/IAPAppMigration';
 import {
 	MissingIAPRestoreError,
 	MissingIAPRestoreMissing,
@@ -363,6 +364,16 @@ const MainStack = () => {
 						cardStyleInterpolator: forFade,
 						cardStyle: {
 							backgroundColor: 'rgba(0,0,0,0.8)',
+						},
+					}}
+				/>
+				<Main.Screen
+					name={RouteNames.IAPAppMigrationModal}
+					component={IAPAppMigrationModal}
+					options={{
+						cardStyleInterpolator: forFade,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.6)',
 						},
 					}}
 				/>

@@ -19,6 +19,7 @@ import { locale } from '../../helpers/locale';
 import { isInBeta, isInTestFlight } from '../../helpers/release-stream';
 import { imageForScreenSize } from '../../helpers/screen';
 import {
+	hasSeenIapMigrationMessage,
 	issueSummaryCache,
 	pushRegisteredTokens,
 	showAllEditionsCache,
@@ -243,6 +244,13 @@ const DevZone = () => {
 								Add legacy IAP receipt
 							</Button>
 						)}
+						<Button
+							onPress={() =>
+								hasSeenIapMigrationMessage.set(false)
+							}
+						>
+							Reset IAP migration message
+						</Button>
 						<Button
 							onPress={() => {
 								Alert.alert(
