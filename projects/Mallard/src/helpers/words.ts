@@ -252,7 +252,7 @@ const andContinue = 'and continue';
 
 const iAPMigration = {
 	title: 'This app is changing ...',
-	body: "In December, we will be updating the Guardian Editions app to give an improved experience more like a digital version of our newspaper. Your subscription will be transferred automatically, so you shouldn't need to do anything. More details will be shared soon - thank you for your ongoing support.",
+	body: "In December, we will be updating the Guardian Editions app to give an improved experience more like a digital version of our newspaper. Your subscription will be transferred automatically, so you shouldn't need to do anything. More details will be shared soon – thank you for your ongoing support.",
 };
 
 export const copy = {
