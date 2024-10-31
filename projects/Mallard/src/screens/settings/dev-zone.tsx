@@ -106,7 +106,9 @@ const DevZone = () => {
 	const [imageSize, setImageSize] = useState('fetching...');
 	const [pushTokens, setPushTokens] = useState('fetching...');
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
-	const [iapMessge, setIapMessage] = useState('fetching...');
+	const [iapMessge, setIapMessage] = useState<string | boolean | null>(
+		'fetching...',
+	);
 
 	const notificationTracking: string = useMemo(() => {
 		if (pushTrackingInfo === 'fetching...') {
