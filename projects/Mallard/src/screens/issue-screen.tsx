@@ -7,7 +7,6 @@ import React, {
 	useEffect,
 	useMemo,
 	useRef,
-	useState,
 } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FlatList, StyleSheet, View } from 'react-native';
