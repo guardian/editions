@@ -94,7 +94,7 @@ const DevZone = () => {
 		selectedEdition: { edition },
 	} = useEditions();
 
-	const { attempt, signOutCAS, identityData, oktaData } =
+	const { attempt, signOutCAS, identityData, oktaData, iapData } =
 		useContext(AccessContext);
 	const { showToast } = useToast();
 	const { setIsUsingProdDevTools } = useIsUsingProdDevtools();
@@ -106,6 +106,7 @@ const DevZone = () => {
 	const [imageSize, setImageSize] = useState('fetching...');
 	const [pushTokens, setPushTokens] = useState('fetching...');
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
+	const [iapMessge, setIapMessage] = useState('fetching...');
 
 	const notificationTracking: string = useMemo(() => {
 		if (pushTrackingInfo === 'fetching...') {
@@ -144,6 +145,10 @@ const DevZone = () => {
 		showAllEditionsCache
 			.get()
 			.then((v) => v != null && setShowAllEditions(v));
+	}, []);
+
+	useEffect(() => {
+		hasSeenIapMigrationMessage.get().then((v) => setIapMessage(v));
 	}, []);
 
 	useEffect(() => {
@@ -356,6 +361,11 @@ const DevZone = () => {
 								title: 'Rate the app - Click for interaction',
 								explainer: `No of Interactions: ${numberOfInteractions} \nInteractions threshold: ${INTERACTIONS_THRESHOLD} \nRating native modal shown: ${hasShownRating.toString()} \nRemote feature flag on: ${isRatingFFOn}`,
 								onPress: interaction,
+							},
+							{
+								key: 'IAP Message',
+								title: 'IAP Message',
+								explainer: `Has seen IAP migration message: ${iapMessge}\nIs an IAP customer: ${!!iapData}\nFeature flag: ${remoteConfigService.getBoolean('is_iap_message_enabled')}`,
 							},
 							{
 								key: 'Clear CAS caches',

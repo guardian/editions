@@ -457,7 +457,7 @@ export const IssueScreen = React.memo(() => {
 	useEffect(() => {
 		hasSeenIapMigrationMessage.get().then((hasSeen) => {
 			!hasSeen &&
-				iapData &&
+				!!iapData &&
 				remoteConfigService.getBoolean('is_iap_message_enabled') &&
 				navigate(RouteNames.IAPAppMigrationModal);
 		});
