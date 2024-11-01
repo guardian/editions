@@ -453,13 +453,11 @@ export const IssueScreen = React.memo(() => {
 	const { navigate } =
 		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 	const { iapData } = useContext(AccessContext);
+	const [messageSeen, setMessageSeen] = useState<boolean>(false);
 
 	useEffect(() => {
 		hasSeenIapMigrationMessage.get().then((hasSeen) => {
-			!hasSeen &&
-				iapData &&
-				remoteConfigService.getBoolean('is_iap_message_enabled') &&
-				navigate(RouteNames.IAPAppMigrationModal);
+			setMessageSeen(!!hasSeen);
 		});
 	}, []);
 
@@ -483,6 +481,15 @@ export const IssueScreen = React.memo(() => {
 	}
 
 	SplashScreen.hide();
+
+	if (
+		!messageSeen &&
+		iapData &&
+		remoteConfigService.getBoolean('is_iap_message_enabled')
+	) {
+		navigate(RouteNames.IAPAppMigrationModal);
+		setMessageSeen(true);
+	}
 
 	return (
 		<Container>
