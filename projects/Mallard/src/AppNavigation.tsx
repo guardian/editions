@@ -9,7 +9,7 @@ import {
 import React, { useRef } from 'react';
 import { Animated } from 'react-native';
 import { isTablet } from 'react-native-device-info';
-import { IAPAppMigrationModal } from './components/Modals/IAPAppMigration';
+import { AppMigrationModal } from './components/Modals/AppMigration';
 import {
 	MissingIAPRestoreError,
 	MissingIAPRestoreMissing,
@@ -368,8 +368,8 @@ const MainStack = () => {
 					}}
 				/>
 				<Main.Screen
-					name={RouteNames.IAPAppMigrationModal}
-					component={IAPAppMigrationModal}
+					name={RouteNames.AppMigrationModal}
+					component={AppMigrationModal}
 					options={{
 						cardStyleInterpolator: forFade,
 						cardStyle: {

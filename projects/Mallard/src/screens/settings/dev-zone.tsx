@@ -19,7 +19,7 @@ import { locale } from '../../helpers/locale';
 import { isInBeta, isInTestFlight } from '../../helpers/release-stream';
 import { imageForScreenSize } from '../../helpers/screen';
 import {
-	hasSeenIapMigrationMessage,
+	hasSeenAppMigrationMessage,
 	issueSummaryCache,
 	pushRegisteredTokens,
 	showAllEditionsCache,
@@ -94,7 +94,7 @@ const DevZone = () => {
 		selectedEdition: { edition },
 	} = useEditions();
 
-	const { attempt, signOutCAS, identityData, oktaData, iapData } =
+	const { attempt, signOutCAS, identityData, oktaData } =
 		useContext(AccessContext);
 	const { showToast } = useToast();
 	const { setIsUsingProdDevTools } = useIsUsingProdDevtools();
@@ -106,7 +106,7 @@ const DevZone = () => {
 	const [imageSize, setImageSize] = useState('fetching...');
 	const [pushTokens, setPushTokens] = useState('fetching...');
 	const [downloadedIssues, setDownloadedIssues] = useState('fetching...');
-	const [iapMessge, setIapMessage] = useState<string | boolean | null>(
+	const [appMessage, setAppMessage] = useState<string | boolean | null>(
 		'fetching...',
 	);
 
@@ -150,7 +150,7 @@ const DevZone = () => {
 	}, []);
 
 	useEffect(() => {
-		hasSeenIapMigrationMessage.get().then((v) => setIapMessage(v));
+		hasSeenAppMigrationMessage.get().then((v) => setAppMessage(v));
 	}, []);
 
 	useEffect(() => {
@@ -253,10 +253,10 @@ const DevZone = () => {
 						)}
 						<Button
 							onPress={() =>
-								hasSeenIapMigrationMessage.set(false)
+								hasSeenAppMigrationMessage.set(false)
 							}
 						>
-							Reset IAP migration message
+							Reset app migration message
 						</Button>
 						<Button
 							onPress={() => {
@@ -365,9 +365,9 @@ const DevZone = () => {
 								onPress: interaction,
 							},
 							{
-								key: 'IAP Message',
-								title: 'IAP Message',
-								explainer: `Has seen IAP migration message: ${iapMessge}\nIs an IAP customer: ${!!iapData}\nFeature flag: ${remoteConfigService.getBoolean('is_iap_message_enabled')}`,
+								key: 'App Migration Message',
+								title: 'App Migration Message',
+								explainer: `Has seen App migration message: ${appMessage}\nFeature flag: ${remoteConfigService.getBoolean('is_app_migration_message_enabled')}`,
 							},
 							{
 								key: 'Clear CAS caches',

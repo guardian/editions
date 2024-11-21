@@ -3,7 +3,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { MutableRefObject, ReactElement } from 'react';
 import React, {
 	useCallback,
-	useContext,
 	useEffect,
 	useMemo,
 	useRef,
@@ -14,7 +13,6 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import Image from 'react-native-fast-image';
 import RNRestart from 'react-native-restart';
 import SplashScreen from 'react-native-splash-screen';
-import { AccessContext } from '../authentication/AccessContext';
 import type {
 	IssueWithFronts,
 	SpecialEditionHeaderStyles,
@@ -38,7 +36,7 @@ import {
 } from '../components/weather';
 import { deleteIssueFiles } from '../download-edition/clear-issues-and-editions';
 import { logPageView } from '../helpers/analytics';
-import { hasSeenIapMigrationMessage } from '../helpers/storage';
+import { hasSeenAppMigrationMessage } from '../helpers/storage';
 import type { FlatCard } from '../helpers/transform';
 import {
 	flattenCollectionsToCards,
@@ -452,11 +450,10 @@ export const IssueScreen = React.memo(() => {
 	const { hasSetGdpr } = useGdprSettings();
 	const { navigate } =
 		useNavigation<NativeStackNavigationProp<MainStackParamList>>();
-	const { iapData } = useContext(AccessContext);
 	const [messageSeen, setMessageSeen] = useState<boolean>(false);
 
 	useEffect(() => {
-		hasSeenIapMigrationMessage.get().then((hasSeen) => {
+		hasSeenAppMigrationMessage.get().then((hasSeen) => {
 			setMessageSeen(!!hasSeen);
 		});
 	}, []);
@@ -484,10 +481,9 @@ export const IssueScreen = React.memo(() => {
 
 	if (
 		!messageSeen &&
-		iapData &&
-		remoteConfigService.getBoolean('is_iap_message_enabled')
+		remoteConfigService.getBoolean('is_app_migration_message_enabled')
 	) {
-		navigate(RouteNames.IAPAppMigrationModal);
+		navigate(RouteNames.AppMigrationModal);
 		setMessageSeen(true);
 	}
 
