@@ -130,8 +130,8 @@ const hasShownRatingCache = createAsyncCache<boolean>(
 	'@Setting_hasShownRating',
 );
 
-const hasSeenIapMigrationMessage = createAsyncCache<boolean>(
-	'@Setting_hasSeenIapMigrationMessage',
+const hasSeenAppMigrationMessage = createAsyncCache<boolean>(
+	'@Setting_hasSeenAppMigrationMessage',
 );
 
 const issueSummaryCache = createAsyncCache<string>('issueSummary');
@@ -213,5 +213,5 @@ export {
 	hasShownRatingCache,
 	oktaDataCache,
 	issueSummaryCache,
-	hasSeenIapMigrationMessage,
+	hasSeenAppMigrationMessage,
 };

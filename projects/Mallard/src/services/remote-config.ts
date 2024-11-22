@@ -18,7 +18,7 @@ const remoteConfigDefaults = {
 	download_parallel_ssr_bundle: false,
 	rating: false,
 	is_editions_menu_enabled: true,
-	is_iap_message_enabled: true,
+	is_app_migration_message_enabled: true,
 };
 
 const RemoteConfigProperties = [
@@ -28,7 +28,7 @@ const RemoteConfigProperties = [
 	'download_parallel_ssr_bundle',
 	'rating',
 	'is_editions_menu_enabled',
-	'is_iap_message_enabled',
+	'is_app_migration_message_enabled',
 ] as const;
 
 type RemoteConfigProperty = (typeof RemoteConfigProperties)[number];

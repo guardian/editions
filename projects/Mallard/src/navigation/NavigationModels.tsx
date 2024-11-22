@@ -49,7 +49,7 @@ export type MainStackParamList = {
 	OnboardingConsent: undefined;
 	PrivacyPolicyInline: undefined;
 	OnboardingConsentInline: undefined;
-	IAPAppMigrationModal: undefined;
+	AppMigrationModal: undefined;
 };
 
 export enum RouteNames {
@@ -87,5 +87,5 @@ export enum RouteNames {
 	MissingIAPRestoreError = 'MissingIAPRestoreError',
 	MissingIAPRestoreMissing = 'MissingIAPRestoreMissing',
 	ManageEditionsFromSettings = 'ManageEditionsFromSettings',
-	IAPAppMigrationModal = 'IAPAppMigrationModal',
+	AppMigrationModal = 'AppMigrationModal',
 }

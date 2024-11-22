@@ -11,20 +11,20 @@ const style = StyleSheet.create({
 	},
 });
 
-const IAPAppMigrationModalCard = ({ onDismiss }: { onDismiss: () => void }) => {
+const AppMigrationModalCard = ({ onDismiss }: { onDismiss: () => void }) => {
 	return (
 		<OnboardingCard
 			onDismissThisCard={onDismiss}
-			title={copy.iAPMigration.title}
+			title={copy.appMigration.title}
 			appearance={CardAppearance.Clashy}
 			size="medium"
 			bottomContent={
 				<UiBodyCopy style={style.bodyCopy}>
-					{copy.iAPMigration.body}
+					{copy.appMigration.body}
 				</UiBodyCopy>
 			}
 		/>
 	);
 };
 
-export { IAPAppMigrationModalCard };
+export { AppMigrationModalCard };
